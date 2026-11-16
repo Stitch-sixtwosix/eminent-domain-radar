@@ -156,6 +156,8 @@
   .p-sec { padding: 14px 16px 2px; }
   .p-sec h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; }
   .p-sec p { margin: 0 0 8px; color: var(--ink-2); font-size: 13px; }
+  .p-sec .when { font-size: 13px; margin-bottom: 10px; display: grid; gap: 2px; }
+  .p-sec .when b { font-weight: 600; } .p-sec .when span { color: var(--ink-2); }
   .figs { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: var(--radius); }
   .figs div { padding: 9px 12px; border-left: 1px solid var(--line); }
   .figs div:first-child { border-left: 0; }
@@ -180,6 +182,29 @@
   .basemap button[aria-pressed=true] { background: var(--ink); color: oklch(98.5% 0.004 258); }
   #map { position: relative; }
   #map.aerial .leaflet-tile-pane { filter: none; }
+
+  /* ---- stage list ---- */
+  .stages { list-style: none; margin: 0; padding: 0; display: flex; }
+  .stages li { flex: 1; position: relative; padding: 16px 8px 0 0; font-size: 12.5px; color: var(--ink-3); min-width: 0; }
+  .stages li::before { content: ""; position: absolute; top: 4px; left: 0; right: 0; height: 2px; background: var(--line-strong); }
+  .stages li::after { content: ""; position: absolute; top: 0; left: 0; width: 10px; height: 10px; border-radius: 50%;
+                      background: var(--surface); box-shadow: inset 0 0 0 2px var(--line-strong); }
+  .stages li:last-child::before { right: auto; width: 10px; }
+  .stages li[data-state=done] { color: var(--ink-2); }
+  .stages li[data-state=done]::before, .stages li[data-state=done]::after { background: var(--ink-2); box-shadow: none; }
+  .stages li[data-state=current] { color: var(--ink); font-weight: 600; }
+  .stages li[data-state=current]::after { background: var(--hot-line); box-shadow: 0 0 0 3px var(--hot-bg); }
+  .stages.col { flex-direction: column; }
+  .stages.col li { padding: 0 0 12px 22px; }
+  .stages.col li::before { top: 4px; bottom: -4px; left: 4px; right: auto; width: 2px; height: auto; }
+  .stages.col li::after { top: 3px; }
+  .stages.col li:last-child { padding-bottom: 0; }
+  .stages.col li:last-child::before { display: none; }
+  .stages.col li span { display: block; font-weight: 400; color: var(--ink-2); font-size: 12.5px; }
+  #stagebar { padding: 10px 16px 12px; border-bottom: 1px solid var(--line); }
+  #stagebar .when { font-size: 13px; margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 2px 16px; align-items: baseline; }
+  #stagebar .when b { font-weight: 600; }
+  #stagebar .when span { color: var(--ink-2); }
 
   /* ---- info tips ---- */
   .info { all: unset; display: inline-grid; place-items: center; width: 16px; height: 16px; margin-left: 4px; border-radius: 50%;
@@ -295,6 +320,7 @@
     </div>
     <div id="summary" hidden></div>
     <div id="breakdown" hidden></div>
+    <div id="stagebar" hidden></div>
     <div id="leads-wrap"></div>
   </section>
 </main>
@@ -338,6 +364,22 @@ function leadTip(r) {
     `<div class="row"><span>${esc((REASON_WEIGHT[r.match_reason] || [r.match_reason])[0])}</span><span>${esc((REASON_WEIGHT[r.match_reason] || ["", ""])[1])}</span></div>` +
     `<div class="row sum"><span>Score</span><span>${r.score}</span></div>`;
 }
+
+function lettingText(t) {
+  if (!t || !t.let_date) return "";
+  const d = new Date(t.let_date + "T12:00:00"), m = t.months_to_letting;
+  const when = d.toLocaleDateString(undefined, {month: "short", day: "numeric", year: "numeric"});
+  const away = m <= 0 ? "already let or due now" : m < 12 ? `in about ${m} month${m === 1 ? "" : "s"}` : `in about ${Math.floor(m / 12)} yr${m % 12 ? " " + (m % 12) + " mo" : ""}`;
+  return `Construction contract letting ${when}, ${away}`;
+}
+function stageHead(t) {
+  if (!t) return "";
+  const pos = t.position ? `<b>Stage ${t.position} of ${t.of}: ${esc(t.steps[t.position - 1].label)}</b>` : "<b>Stage not published</b>";
+  const let_ = lettingText(t);
+  return `<div class="when">${pos}${let_ ? `<span>${esc(let_)}</span>` : t.position ? "<span>No construction date published yet</span>" : ""}${t.program ? `<span>PennDOT program: ${esc(t.program)}${t.status ? ", " + esc(t.status.toLowerCase()) : ""}</span>` : ""}</div>`;
+}
+const stageList = (t, col) => !t ? "" : `<ol class="stages${col ? " col" : ""}">${t.steps.map(x =>
+  `<li data-state="${x.state}"${x.state === "current" ? ' aria-current="step"' : ""}${col ? "" : ` data-tip-text="${esc(x.about)}"`}>${esc(x.label)}${col && x.state === "current" ? `<span>${esc(x.about)}</span>` : ""}</li>`).join("")}</ol>`;
 
 const ICON = {
   card: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="1.75" y="3.5" width="12.5" height="9" rx="1.25"/><path d="M8 6v4M10 6.5h2.25M10 8.5h2.25" stroke-linecap="round"/></svg>',
@@ -493,6 +535,8 @@ async function loadLeads() {
   if (p) $("summary").innerHTML = esc(p.summary || "") +
     (p.contact ? `\nAgency contact: ${esc(p.contact)}` : "") +
     (p.url ? ` · <a href="${esc(safeUrl(p.url))}" target="_blank" rel="noopener">Source</a>` : "");
+  $("stagebar").hidden = !p;
+  if (p) $("stagebar").innerHTML = stageHead(p.timeline) + stageList(p.timeline, false);
   $("breakdown").hidden = !p;
   if (p) $("breakdown").innerHTML = `<span class="lead">How this project scored ${p.score}</span>` +
     (p.score_parts || []).map(x => `<span class="part">${esc(x.label)}<b>${signed(x.points)}</b></span>`).join("");
@@ -570,10 +614,15 @@ async function openParcel(leadId) {
     : `<p>${esc(b.why)}</p>`;
   const facts = bg.facts.length ? `<dl class="facts">${bg.facts.map(f => `<dt>${esc(f.label)}</dt><dd>${esc(f.value)}</dd>`).join("")}</dl>`
     : `<p>The county's public file carries no land-use, sale or assessment detail for this parcel.</p>`;
+  const o = d.owner, proj = projects.find(x => x.id === r.project_id);
+  const row = (k, v) => v ? `<dt>${k}</dt><dd>${esc(v)}</dd>` : "";
+  const ownerSec = `<div class="p-sec"><h3>Owner of record</h3><dl class="facts">${row("Name", o.name)}${row("Type", o.kind)}${row("Mailing address", o.mailing_address)}${row("Based in", o.location)}${row("Occupancy", o.occupancy)}${row("Owned since", o.owned_since)}${row("Paid", o.purchase_price)}${row("Parcels on this list", o.parcels_in_list > 1 ? String(o.parcels_in_list) : "")}${row("Combined county value", o.parcels_in_list > 1 && o.holdings_value ? "$" + Math.round(o.holdings_value).toLocaleString() : "")}</dl>
+    <p style="margin-top:8px">${o.kind_key === "company" ? "Use Email on this row to look up decision-makers at this company in Apollo." : o.kind_key === "government" ? "Public bodies are not offered outreach." : o.kind_key === "unknown" ? "This county does not publish owner names online. Look the parcel ID up at the county assessment office." : "County parcel files publish no phone number or email. A postcard reaches the mailing address above."}</p></div>`;
+  const stageSec = proj && proj.timeline ? `<div class="p-sec"><h3>Project stage</h3>${stageHead(proj.timeline)}${stageList(proj.timeline, true)}</div>` : "";
   const rel = d.related.length ? `<div class="p-sec"><h3>Other parcels held by this owner</h3><ul class="plain">${d.related.map(x =>
       `<li>${esc(x.address || "Parcel " + x.apn)}<div class="sub">${[esc(x.project), "score " + x.score, x.market_value ? "$" + Math.round(x.market_value).toLocaleString() : ""].filter(Boolean).join(" · ")}</div></li>`).join("")}</ul></div>` : "";
   const rec = bg.record.length ? `<details class="rec"><summary>Full county record (${bg.record.length} fields, ${esc(d.layer)})</summary><dl class="facts">${bg.record.map(f => `<dt>${esc(f.field)}</dt><dd>${esc(f.value)}</dd>`).join("")}</dl></details>` : "";
-  panel.querySelector(".p-body").innerHTML = why +
+  panel.querySelector(".p-body").innerHTML = why + ownerSec + stageSec +
     `<div class="p-sec"><h3>Boundary</h3>${shape}</div><div class="p-sec"><h3>Land background</h3>${facts}</div>${rel}` +
     `<div class="p-sec" id="p-cases"><h3>Similar cases</h3><p>Searching Pennsylvania appellate opinions…</p></div>${rec}`;
   let c;
@@ -670,6 +719,7 @@ const tip = $("tip");
 let tipTimer, tipWarm = 0, tipFor = null;
 function tipContent(el) {
   if (el.dataset.tipKey) return esc(TIPS[el.dataset.tipKey] || "");
+  if (el.dataset.tipText) return esc(el.dataset.tipText);
   if (el.dataset.tipProject) { const p = projects.find(x => x.id === +el.dataset.tipProject); return p ? projectTip(p) : ""; }
   if (el.dataset.tipLead) { const r = leadRows.find(x => x.id === +el.dataset.tipLead); return r ? leadTip(r) : ""; }
   return "";
@@ -692,7 +742,7 @@ function showTip(el, instant) {
   instant || Date.now() - tipWarm < 400 ? open() : (tipTimer = setTimeout(open, 250));
 }
 function hideTip() { clearTimeout(tipTimer); if (tip.hasAttribute("data-show")) tipWarm = Date.now(); tip.removeAttribute("data-show"); tipFor = null; }
-const tipTarget = e => e.target.closest && e.target.closest("[data-tip-key],[data-tip-project],[data-tip-lead]");
+const tipTarget = e => e.target.closest && e.target.closest("[data-tip-key],[data-tip-project],[data-tip-lead],[data-tip-text]");
 document.addEventListener("mouseover", e => { const el = tipTarget(e); if (el && el !== tipFor) showTip(el); });
 document.addEventListener("mouseout", e => { const el = tipTarget(e); if (el && !el.contains(e.relatedTarget)) hideTip(); });
 document.addEventListener("focusin", e => { const el = tipTarget(e); if (el) showTip(el, true); });

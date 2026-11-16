@@ -70,6 +70,41 @@ STAGE_LABEL = {"planning": "Early stage (planning)", "environmental_review": "Ea
                "unknown": "Stage unknown"}
 
 
+STAGE_ORDER = [
+    ("planning", "Planning", "On the long-range program. No design yet; owners have usually not been approached."),
+    ("environmental_review", "Environmental review", "Alternatives and impacts are studied; the footprint starts to firm up."),
+    ("design", "Design", "Engineering sets the exact right-of-way lines. Plans showing each affected parcel follow."),
+    ("row_acquisition", "Right-of-way acquisition", "Appraisals and written offers go to owners."),
+    ("condemnation_filed", "Condemnation", "A declaration of taking is filed for parcels not settled."),
+    ("construction", "Construction", "The contract is let and work begins."),
+]
+
+
+def timeline(stage: Optional[str], raw: Optional[Dict[str, Any]] = None, today: Optional[Any] = None) -> Dict[str, Any]:
+    """Where a project sits between first planning and construction, plus the letting date when PennDOT publishes one."""
+    from datetime import date, datetime
+
+    keys = [k for k, _, _ in STAGE_ORDER]
+    at = keys.index(stage) if stage in keys else None
+    steps = [{"key": k, "label": label, "about": about,
+              "state": "unknown" if at is None else "done" if i < at else "current" if i == at else "upcoming"}
+             for i, (k, label, about) in enumerate(STAGE_ORDER)]
+    out: Dict[str, Any] = {"steps": steps, "position": None if at is None else at + 1, "of": len(keys),
+                           "program": (raw or {}).get("program"), "status": (raw or {}).get("PROJ_STATUS_DESC"),
+                           "let_date": None, "months_to_letting": None}
+    let = (raw or {}).get("LET_DATE_DISPLAY")
+    if let:
+        try:
+            d = datetime.strptime(let, "%m-%d-%y").date()
+            today = today or date.today()
+            if d.year < 2045:        # PennDOT uses 2050 dates as "not scheduled"
+                out["let_date"] = d.isoformat()
+                out["months_to_letting"] = (d.year - today.year) * 12 + d.month - today.month
+        except ValueError:
+            pass
+    return out
+
+
 def score_breakdown(likelihood: Optional[int], stage: Optional[str], est_cost: Optional[float],
                     score: Optional[int]) -> List[Dict[str, Any]]:
     """The parts of a project score, in the same arithmetic as overall_score, for display."""

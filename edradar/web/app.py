@@ -11,7 +11,7 @@ from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 
 from .. import outreach, parceldetail
-from ..classify import score_breakdown
+from ..classify import score_breakdown, timeline
 from ..db import DB
 
 STATIC = Path(__file__).parent / "static"
@@ -94,7 +94,7 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
         rows = db.rows(
             """SELECT p.id, p.name, p.project_type, p.stage, p.acquisition_likelihood, p.score, p.summary,
                       p.est_cost, p.contact, p.geometry, p.lat, p.lon, p.matched_at, p.engine,
-                      s.source, s.url, s.agency, s.county, s.published,
+                      s.source, s.url, s.agency, s.county, s.published, s.raw,
                       (SELECT COUNT(*) FROM leads l WHERE l.project_id = p.id) AS lead_count
                FROM projects p JOIN signals s ON s.id = p.signal_id
                WHERE %s ORDER BY p.score DESC, p.est_cost DESC LIMIT ?""" % " AND ".join(where),
@@ -102,6 +102,8 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
         )
         for r in rows:
             r["geometry"] = json.loads(r["geometry"]) if r["geometry"] else None
+            raw = json.loads(r.pop("raw") or "{}")
+            r["timeline"] = timeline(r["stage"], raw if isinstance(raw, dict) else {})
             r["score_parts"] = score_breakdown(r["acquisition_likelihood"], r["stage"], r["est_cost"], r["score"])
         return rows
 
@@ -125,8 +127,9 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
         lead = one_lead(lead_id)
         parcel = db.rows("SELECT pa.* FROM parcels pa JOIN leads l ON l.parcel_id = pa.id WHERE l.id = ?", (lead_id,))[0]
         parcel["attributes"] = json.loads(parcel["attributes"] or "{}")
+        bg, others = parceldetail.background(parcel), parceldetail.related(db, lead)
         return {"lead": lead, "layer": parcel["layer"], "boundary": parceldetail.boundary(cfg, db, parcel),
-                "background": parceldetail.background(parcel), "related": parceldetail.related(db, lead)}
+                "background": bg, "related": others, "owner": parceldetail.owner_profile(lead, bg["facts"], others)}
 
     @app.get("/api/leads/{lead_id}/cases")
     def lead_cases(lead_id: int) -> Dict[str, Any]:

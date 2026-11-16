@@ -157,6 +157,40 @@ def background(parcel: Dict[str, Any]) -> Dict[str, Any]:
     return {"facts": facts, "record": record[:80]}
 
 
+def _norm_street(text: Optional[str]) -> str:
+    words = re.sub(r"[^A-Z0-9 ]", " ", (text or "").upper()).split()
+    return " ".join(words[:2])       # house number + first word of the street name
+
+
+def owner_profile(lead: Dict[str, Any], facts: List[Dict[str, str]], others: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """What the public record says about the owner. Parcel files carry no phone numbers or email addresses."""
+    from .outreach import owner_kind, parse_address
+
+    kind = owner_kind(lead.get("owner"))
+    mail = parse_address(lead.get("mailing_address"))
+    occupancy = None
+    if lead.get("mailing_address") and lead.get("address") and re.match(r"\s*\d", lead["address"]):
+        same = _norm_street(lead["address"]) == _norm_street(mail["line1"] if mail else lead["mailing_address"])
+        occupancy = "Tax bills go to the property itself, so the owner likely lives or operates there" if same \
+            else "Tax bills go to a different address, so the owner is likely absentee"
+    values = [lead.get("market_value")] + [o.get("market_value") for o in others]
+    since = next((f["value"] for f in facts if f["label"] == "Last sale date"), None)
+    price = next((f["value"] for f in facts if f["label"] == "Last sale price"), None)
+    return {
+        "name": lead.get("owner"),
+        "kind": {"individual": "Individual", "company": "Company or organization", "government": "Public body",
+                 "unknown": "Not published"}[kind],
+        "kind_key": kind,
+        "mailing_address": lead.get("mailing_address"),
+        "location": None if not mail else ("Pennsylvania" if mail["state"] == "PA" else "Out of state (%s)" % mail["state"]),
+        "occupancy": occupancy,
+        "owned_since": since,
+        "purchase_price": price,
+        "parcels_in_list": 1 + len(others),
+        "holdings_value": sum(v for v in values if v) or None,
+    }
+
+
 def related(db: Any, lead: Dict[str, Any]) -> List[Dict[str, Any]]:
     """Other parcels in the lead list held by the same owner of record."""
     if not lead.get("owner"):

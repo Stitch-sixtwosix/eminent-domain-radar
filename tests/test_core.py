@@ -258,3 +258,22 @@ def test_parcel_detail(tmp_path, monkeypatch):
     lead_id = client.get("/api/leads").json()[0]["id"]
     d = client.get("/api/leads/%d/detail" % lead_id).json()
     assert d["boundary"]["rings"] == square and d["background"]["facts"][0]["value"] == "Farm" and d["related"] == []
+
+
+def test_timeline_and_owner_profile():
+    from datetime import date
+    from edradar import parceldetail as pd
+
+    t = C.timeline("design", {"program": "Four Year Plan", "LET_DATE_DISPLAY": "10-18-29"}, today=date(2026, 11, 16))
+    assert t["position"] == 3 and t["of"] == 6 and t["let_date"] == "2029-10-18" and t["months_to_letting"] == 35
+    assert [s["state"] for s in t["steps"]] == ["done", "done", "current", "upcoming", "upcoming", "upcoming"]
+    assert C.timeline("planning", {"LET_DATE_DISPLAY": "12-25-50"})["let_date"] is None     # placeholder year
+    assert C.timeline("unknown")["position"] is None
+
+    lead = {"owner": "ROE JANE", "address": "12 MAIN ST", "mailing_address": "12 MAIN STREET, ERIE, PA, 16501",
+            "market_value": 100000}
+    o = pd.owner_profile(lead, [{"label": "Last sale date", "value": "Feb 17, 2022"}], [{"market_value": 50000}])
+    assert o["kind"] == "Individual" and o["location"] == "Pennsylvania" and "lives or operates" in o["occupancy"]
+    assert o["owned_since"] == "Feb 17, 2022" and o["parcels_in_list"] == 2 and o["holdings_value"] == 150000
+    away = pd.owner_profile(dict(lead, owner="ROE HOLDINGS LLC", mailing_address="9 OAK AVE, CARY, NC, 27519"), [], [])
+    assert away["kind_key"] == "company" and away["location"] == "Out of state (NC)" and "absentee" in away["occupancy"]
