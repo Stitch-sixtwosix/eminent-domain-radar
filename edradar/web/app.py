@@ -10,6 +10,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 
+from .. import outreach
 from ..db import DB
 
 STATIC = Path(__file__).parent / "static"
@@ -19,10 +20,16 @@ LEAD_SQL = """
 SELECT l.id, l.score, l.match_reason, l.distance_m, l.status, l.notes, l.created_at,
        pa.apn, pa.county AS parcel_county, pa.address, pa.owner, pa.mailing_address, pa.market_value, pa.acres,
        pa.layer, p.id AS project_id, p.name AS project, p.project_type, p.stage, p.score AS project_score,
-       p.est_cost, s.source, s.url, s.agency
+       p.est_cost, s.source, s.url, s.agency,
+       (SELECT MAX(o.created_at) FROM outreach o WHERE o.lead_id = l.id AND o.channel = 'postcard') AS postcard_at,
+       (SELECT MAX(o.created_at) FROM outreach o WHERE o.lead_id = l.id AND o.channel = 'email') AS email_at
 FROM leads l JOIN parcels pa ON pa.id = l.parcel_id JOIN projects p ON p.id = l.project_id
 JOIN signals s ON s.id = p.signal_id
 """
+
+
+class Enroll(BaseModel):
+    person_id: str
 
 
 class LeadUpdate(BaseModel):
@@ -93,6 +100,59 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
         for r in rows:
             r["geometry"] = json.loads(r["geometry"]) if r["geometry"] else None
         return rows
+
+    def one_lead(lead_id: int) -> Dict[str, Any]:
+        rows = db.rows(LEAD_SQL + " WHERE l.id = ?", (lead_id,))
+        if not rows:
+            raise HTTPException(404, "lead not found")
+        return rows[0]
+
+    def guard(fn):
+        """Provider and validation failures become readable 4xx/502 answers, not stack traces."""
+        try:
+            return fn()
+        except ValueError as e:
+            raise HTTPException(409, str(e))
+        except RuntimeError as e:
+            raise HTTPException(502, str(e))
+
+    @app.get("/api/outreach/status")
+    def outreach_status() -> Dict[str, Any]:
+        return outreach.status(cfg)
+
+    @app.get("/api/leads/{lead_id}/postcard")
+    def postcard_preview(lead_id: int) -> Dict[str, Any]:
+        lead = one_lead(lead_id)
+        return dict(outreach.postcard_check(cfg, lead), already_sent=lead["postcard_at"],
+                    owner=lead["owner"], project=lead["project"])
+
+    @app.post("/api/leads/{lead_id}/postcard")
+    def postcard_send(lead_id: int) -> Dict[str, Any]:
+        lead = one_lead(lead_id)
+        if lead["postcard_at"]:
+            raise HTTPException(409, "A postcard was already sent for this lead on %s." % lead["postcard_at"][:10])
+        result = guard(lambda: outreach.send_postcard(cfg, lead))
+        db.log_outreach(lead_id, "postcard", "sent" if result["mode"] == "live" else "test",
+                        result["external_id"], result)
+        return result
+
+    @app.get("/api/leads/{lead_id}/email/contacts")
+    def email_contacts(lead_id: int) -> List[Dict[str, Any]]:
+        lead = one_lead(lead_id)
+        if not outreach.status(cfg)["email"]["enabled"]:
+            raise HTTPException(409, outreach.status(cfg)["email"]["why"])
+        return guard(lambda: outreach.Apollo(cfg).find_contacts(lead))
+
+    @app.post("/api/leads/{lead_id}/email")
+    def email_enroll(lead_id: int, body: Enroll) -> Dict[str, Any]:
+        lead = one_lead(lead_id)
+        if lead["email_at"]:
+            raise HTTPException(409, "This lead is already in the email sequence.")
+        if not outreach.status(cfg)["email"]["enabled"]:
+            raise HTTPException(409, outreach.status(cfg)["email"]["why"])
+        result = guard(lambda: outreach.Apollo(cfg).enroll(lead, body.person_id))
+        db.log_outreach(lead_id, "email", "sent", result["external_id"], result)
+        return result
 
     @app.get("/api/leads")
     def leads(project_id: Optional[int] = None, status: Optional[str] = None, county: Optional[str] = None,

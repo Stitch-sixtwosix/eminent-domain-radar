@@ -75,6 +75,18 @@ CREATE TABLE IF NOT EXISTS leads (
     UNIQUE(project_id, parcel_id)
 );
 
+-- Every postcard or email sent for a lead, so nobody is contacted twice by accident.
+CREATE TABLE IF NOT EXISTS outreach (
+    id INTEGER PRIMARY KEY,
+    lead_id INTEGER NOT NULL REFERENCES leads(id),
+    channel TEXT NOT NULL,       -- postcard, email
+    status TEXT NOT NULL,        -- sent, test
+    external_id TEXT,
+    detail TEXT,                 -- JSON from the provider (proof URL, recipient email...)
+    created_at TEXT DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_outreach_lead ON outreach(lead_id);
+
 CREATE INDEX IF NOT EXISTS idx_leads_score ON leads(score DESC);
 CREATE INDEX IF NOT EXISTS idx_projects_score ON projects(score DESC);
 """
@@ -217,6 +229,14 @@ class DB:
             self.conn.execute("UPDATE leads SET status=? WHERE id=?", (status, lead_id))
         if notes is not None:
             self.conn.execute("UPDATE leads SET notes=? WHERE id=?", (notes, lead_id))
+        self.conn.commit()
+
+    def log_outreach(self, lead_id: int, channel: str, status: str, external_id: Optional[str],
+                     detail: Dict[str, Any]) -> None:
+        self.conn.execute("INSERT INTO outreach (lead_id, channel, status, external_id, detail) VALUES (?,?,?,?,?)",
+                          (lead_id, channel, status, external_id, json.dumps(detail)))
+        self.conn.execute("UPDATE leads SET status='contacted' WHERE id=? AND status IN ('new','reviewing')",
+                          (lead_id,))
         self.conn.commit()
 
     def commit(self) -> None:

@@ -13,6 +13,7 @@ DEFAULTS: Dict[str, Any] = {
     "classifier": {"engine": "auto", "model": "claude-opus-5-5"},
     "geocoder": {"url": "https://nominatim.openstreetmap.org/search", "state": "Pennsylvania"},
     "parcel_layers": [],
+    "outreach": {"firm": {}, "postcard": {"advertising_label": True}, "apollo": {}},
     "matching": {"min_project_score": 60, "abut_m": 20, "buffer_m": 75, "point_buffer_m": 150,
                  "max_parcels_per_project": 400, "projects_per_run": 150},
 }

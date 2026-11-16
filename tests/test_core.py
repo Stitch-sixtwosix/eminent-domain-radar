@@ -119,3 +119,93 @@ def test_static_export(tmp_path):
     data = json.loads((tmp_path / "site" / "data.json").read_text())
     assert data["leads"][0]["owner"] == "Jane Roe" and data["stats"]["generated"]
     assert "EDRADAR_STATIC = true" in (tmp_path / "site" / "index.html").read_text()
+
+
+def test_owner_kind_and_address_parsing():
+    from edradar.outreach import owner_kind, parse_address
+    assert owner_kind("COMMONWEALTH OF PA") == "government"
+    assert owner_kind("FRONT GATE ENTERPRISES LLC") == "company"
+    assert owner_kind("OSMAN DENNE L & TONYA MARIE") == "individual"
+    assert owner_kind(None) == "unknown"
+    assert parse_address("C/O A SMITH, 486 PIKE RD, JOHNSTOWN, PA, 15909") == {
+        "line1": "486 PIKE RD", "line2": "C/O A SMITH", "city": "JOHNSTOWN", "state": "PA", "zip": "15909"}
+    assert parse_address("125 CORNELL RD, BALA CYNWYD PA 19004, 19004")["city"] == "BALA CYNWYD"
+    assert parse_address("221 HOLYOKE RD BUTLER PA 16001")["line1"] == "221 HOLYOKE RD"
+    for bad in ("HARRISBURG, PA, 17100", "1242 CORNWALL RD, LEBANON, PA", "", None,
+                "925 W GEORGIA ST STE 800, VANCOUVER BC, V6C 3L2 CANADA"):
+        assert parse_address(bad) is None
+
+
+def test_postcard_and_email_flows(tmp_path, monkeypatch):
+    import httpx
+    from edradar import outreach
+
+    cfg = {"outreach": {"firm": {"name": "Test Law", "address_line1": "1 Court St", "city": "Erie", "state": "PA",
+                                 "zip": "16501", "phone": "555-0100"},
+                        "postcard": {"advertising_label": True},
+                        "apollo": {"sequence_id": "seq1", "email_account_id": "box1", "from_email": "a@b.test"}}}
+    lead = {"id": 7, "owner": "ROE HOLDINGS LLC", "mailing_address": "9 OAK ST, ERIE, PA, 16501",
+            "address": "12 MAIN ST", "apn": "A-1", "project": "Widen X (MPMS 1)", "stage": "planning"}
+
+    monkeypatch.delenv("LOB_API_KEY", raising=False)
+    monkeypatch.delenv("APOLLO_API_KEY", raising=False)
+    assert outreach.status(cfg)["postcard"]["mode"] == "off" and not outreach.status(cfg)["email"]["enabled"]
+    check = outreach.postcard_check(cfg, lead)
+    assert check["blocker"] is None and "ADVERTISEMENT" in check["back"] and "Widen X is in planning" in check["front"]
+    assert outreach.postcard_check(cfg, dict(lead, owner="CITY OF ERIE"))["blocker"]
+    assert outreach.postcard_check(cfg, dict(lead, mailing_address="ERIE PA"))["blocker"]
+
+    sent = {}
+
+    def lob(request):
+        sent["body"] = request.content.decode()
+        sent["idem"] = request.headers["Idempotency-Key"]
+        return httpx.Response(200, json={"id": "psc_1", "url": "https://lob.test/proof.pdf"})
+
+    monkeypatch.setenv("LOB_API_KEY", "test_abc")
+    out = outreach.send_postcard(cfg, lead, httpx.Client(transport=httpx.MockTransport(lob)))
+    assert out == {"external_id": "psc_1", "mode": "test", "proof_url": "https://lob.test/proof.pdf",
+                   "expected_delivery": None}
+    assert "use_type=marketing" in sent["body"] and "9+OAK+ST" in sent["body"] and sent["idem"] == "edradar-lead-7"
+
+    calls = []
+
+    def apollo(request):
+        calls.append(request.url.path)
+        assert request.headers["X-Api-Key"] == "k"
+        if request.url.path.endswith("/mixed_people/api_search"):
+            return httpx.Response(200, json={"people": [{"id": "p1", "first_name": "Jane", "last_name": "Roe",
+                                                         "title": "Owner", "organization": {"name": "Roe Holdings"}}]})
+        if request.url.path.endswith("/people/match"):
+            return httpx.Response(200, json={"person": {"first_name": "Jane", "last_name": "Roe", "name": "Jane Roe",
+                                                        "email": "jane@roe.test"}})
+        if request.url.path.endswith("/contacts"):
+            return httpx.Response(200, json={"contact": {"id": "c1"}})
+        return httpx.Response(200, json={"contacts": []})
+
+    monkeypatch.setenv("APOLLO_API_KEY", "k")
+    ap = outreach.Apollo(cfg, httpx.Client(transport=httpx.MockTransport(apollo)))
+    assert ap.find_contacts(lead)[0]["name"] == "Jane Roe"
+    assert ap.enroll(lead, "p1")["email"] == "jane@roe.test"
+    assert calls[-1].endswith("/emailer_campaigns/seq1/add_contact_ids")
+    try:
+        ap.find_contacts(dict(lead, owner="SMITH JOHN"))
+        assert False
+    except ValueError:
+        pass
+
+    # API layer: preview works, sending is refused cleanly while the service is off, and sends are logged once.
+    path = str(tmp_path / "t.db")
+    db = seeded_db(path)
+    db.conn.execute("UPDATE parcels SET mailing_address='9 OAK ST, ERIE, PA, 16501'")
+    db.commit()
+    client = TestClient(create_app(dict(cfg, database=path)))
+    lead_id = client.get("/api/leads").json()[0]["id"]
+    assert client.get("/api/leads/%d/postcard" % lead_id).json()["to"]["city"] == "ERIE"
+    monkeypatch.delenv("LOB_API_KEY")
+    r = client.post("/api/leads/%d/postcard" % lead_id)
+    assert r.status_code == 409 and "LOB_API_KEY" in r.json()["detail"]
+    db.log_outreach(lead_id, "postcard", "test", "psc_1", {})
+    row = client.get("/api/leads").json()[0]
+    assert row["postcard_at"] and row["status"] == "contacted"
+    assert client.post("/api/leads/%d/postcard" % lead_id).status_code == 409

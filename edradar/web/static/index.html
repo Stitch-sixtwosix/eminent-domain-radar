@@ -4,77 +4,185 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>edradar · Pennsylvania eminent domain leads</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
-  :root { --ink:#16202b; --muted:#5d6b7a; --line:#dde3ea; --bg:#f5f7f9; --panel:#fff; --accent:#0b5cad;
-          --hot:#b42318; --warm:#b54708; --cool:#3b6b8f; }
-  * { box-sizing: border-box; }
-  html, body { height: 100%; margin: 0; }
-  body { font: 14px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: var(--ink);
-         background: var(--bg); display: grid; grid-template-rows: auto 1fr; }
-  header { display: flex; align-items: baseline; gap: 24px; padding: 10px 16px; background: var(--panel);
-           border-bottom: 1px solid var(--line); flex-wrap: wrap; }
-  header h1 { font-size: 16px; margin: 0; letter-spacing: .01em; }
-  header h1 span { color: var(--muted); font-weight: 400; }
-  .stat { color: var(--muted); font-size: 13px; }
-  .stat b { color: var(--ink); font-variant-numeric: tabular-nums; }
-  main { display: grid; grid-template-columns: 360px 1fr; grid-template-rows: 55% 45%; min-height: 0; }
-  #sidebar { grid-row: 1 / 3; border-right: 1px solid var(--line); background: var(--panel);
-             display: flex; flex-direction: column; min-height: 0; }
-  .filters { padding: 10px 12px; border-bottom: 1px solid var(--line); display: grid;
-             grid-template-columns: 1fr 1fr; gap: 6px; }
-  .filters input[type=search] { grid-column: 1 / 3; }
-  select, input, button { font: inherit; padding: 5px 7px; border: 1px solid var(--line); border-radius: 6px;
-                          background: #fff; color: var(--ink); min-width: 0; }
-  button { cursor: pointer; }
-  button:hover { border-color: var(--accent); color: var(--accent); }
-  :focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
-  #projects { overflow-y: auto; flex: 1; }
-  .proj { padding: 10px 12px; border-bottom: 1px solid var(--line); cursor: pointer; display: grid;
-          grid-template-columns: 38px 1fr; gap: 10px; }
-  .proj:hover { background: #f1f5f9; }
-  .proj.sel { background: #e7f0fa; box-shadow: inset 3px 0 0 var(--accent); }
-  .score { font-weight: 700; font-variant-numeric: tabular-nums; text-align: center; border-radius: 6px;
-           padding: 4px 0; color: #fff; align-self: start; }
-  .s-hot { background: var(--hot); } .s-warm { background: var(--warm); } .s-cool { background: var(--cool); }
-  .proj h3 { margin: 0 0 2px; font-size: 13.5px; font-weight: 600; overflow-wrap: anywhere; }
-  .meta { color: var(--muted); font-size: 12px; }
-  .tag { display: inline-block; padding: 0 6px; border: 1px solid var(--line); border-radius: 10px;
-         font-size: 11px; color: var(--muted); margin-right: 3px; white-space: nowrap; }
-  #map { min-height: 0; }
-  #detail { border-top: 1px solid var(--line); background: var(--panel); display: flex; flex-direction: column;
-            min-height: 0; }
-  #detail-head { padding: 8px 12px; border-bottom: 1px solid var(--line); display: flex; gap: 10px;
-                 align-items: center; flex-wrap: wrap; }
-  #detail-head .title { font-weight: 600; flex: 1; min-width: 200px; }
-  #summary { padding: 6px 12px; color: var(--muted); font-size: 12.5px; border-bottom: 1px solid var(--line);
-             max-height: 4.6em; overflow-y: auto; white-space: pre-line; }
-  #leads-wrap { overflow: auto; flex: 1; }
-  table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
-  th, td { text-align: left; padding: 5px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
-  th { position: sticky; top: 0; background: #f8fafc; font-weight: 600; color: var(--muted); white-space: nowrap; }
-  td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
-  td select { padding: 2px 4px; font-size: 12px; }
-  .empty { padding: 24px; color: var(--muted); text-align: center; }
-  a { color: var(--accent); }
-  @media (max-width: 800px) {
-    main { grid-template-columns: 1fr; grid-template-rows: 40vh 45vh auto; overflow-y: auto; }
-    #sidebar { grid-row: auto; border-right: 0; }
+  :root {
+    --paper: oklch(97.2% 0.006 258);     /* app background, tinted toward the ink hue */
+    --surface: oklch(99.4% 0.002 258);    /* panels and table */
+    --rail: oklch(96.2% 0.007 258);        /* toolbars, table head */
+    --line: oklch(90% 0.01 258);
+    --line-strong: oklch(80% 0.016 258);
+    --ink: oklch(24% 0.03 258);
+    --ink-2: oklch(42% 0.028 258);       /* secondary text, 7.9:1 on surface */
+    --ink-3: oklch(52% 0.024 258);       /* tertiary text, 5.1:1 on surface */
+    --accent: oklch(41% 0.12 258);       /* selection, primary action */
+    --accent-wash: oklch(94.5% 0.025 258);
+    --hot: oklch(47% 0.15 38);           /* score 80+ */
+    --warm: oklch(89% 0.06 62);          /* score 60-79 */
+    --warm-ink: oklch(36% 0.09 50);
+    --ok: oklch(44% 0.1 155);
+    --danger: oklch(46% 0.16 28);
+    --radius: 6px;
+    --ease: cubic-bezier(.16, 1, .3, 1);
   }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { height: 100%; margin: 0; }
+  body { font: 400 14px/1.45 "IBM Plex Sans", system-ui, sans-serif; color: var(--ink); background: var(--paper);
+         display: grid; grid-template-rows: auto 1fr; font-variant-numeric: tabular-nums;
+         -webkit-font-smoothing: antialiased; scrollbar-color: var(--line-strong) transparent; }
+  ::selection { background: var(--accent-wash); color: var(--ink); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 3px; }
+  a { color: var(--accent); text-underline-offset: 2px; }
+  code { font: 500 12.5px ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--rail); padding: 1px 5px; border-radius: 4px; }
+
+  /* ---- top bar ---- */
+  header { display: flex; align-items: center; gap: 28px; padding: 0 20px; height: 52px; background: var(--surface);
+           border-bottom: 1px solid var(--line); }
+  .brand { display: flex; align-items: baseline; gap: 10px; white-space: nowrap; }
+  .brand b { font-size: 17px; font-weight: 600; letter-spacing: -0.015em; }
+  .brand span { color: var(--ink-3); font-size: 13px; }
+  .stats { display: flex; gap: 22px; margin-left: auto; color: var(--ink-2); font-size: 13px; white-space: nowrap; }
+  .stats b { color: var(--ink); font-weight: 600; margin-right: 5px; }
+  .mode { font-size: 12px; color: var(--ink-2); border: 1px solid var(--line-strong); border-radius: 99px;
+          padding: 2px 10px; white-space: nowrap; }
+  .mode[data-live] { color: var(--surface); background: var(--danger); border-color: var(--danger); }
+
+  /* ---- layout ---- */
+  main { display: grid; grid-template-columns: 372px 1fr; grid-template-rows: minmax(0, 46%) minmax(0, 54%); min-height: 0; }
+  #sidebar { grid-row: 1 / 3; border-right: 1px solid var(--line); background: var(--surface); display: flex;
+             flex-direction: column; min-height: 0; }
+
+  /* ---- controls ---- */
+  select, input[type=search], button { font: inherit; color: var(--ink); background: var(--surface);
+          border: 1px solid var(--line-strong); border-radius: var(--radius); height: 32px; padding: 0 10px; min-width: 0; }
+  select { padding-right: 4px; }
+  input[type=search]::placeholder { color: var(--ink-3); }
+  select:hover, input[type=search]:hover { border-color: var(--ink-3); }
+  button { cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+           transition: background .15s var(--ease), border-color .15s var(--ease), color .15s var(--ease); }
+  button:hover:not(:disabled) { border-color: var(--ink-2); background: var(--rail); }
+  button:active:not(:disabled) { background: var(--line); }
+  button:disabled { color: var(--ink-3); cursor: not-allowed; opacity: .7; }
+  button.primary { background: var(--accent); border-color: var(--accent); color: oklch(98.5% 0.01 258); }
+  button.primary:hover:not(:disabled) { background: oklch(35% 0.12 258); border-color: oklch(35% 0.12 258); }
+  button.sm { height: 26px; padding: 0 8px; font-size: 12.5px; }
+  button svg { width: 14px; height: 14px; flex: none; }
+  .filters { padding: 12px; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+             background: var(--rail); }
+  .filters input { grid-column: 1 / 3; }
+
+  /* ---- project list ---- */
+  #projects { overflow-y: auto; flex: 1; }
+  .count { padding: 8px 14px; font-size: 12px; color: var(--ink-3); border-bottom: 1px solid var(--line); }
+  .proj { padding: 11px 14px; border-bottom: 1px solid var(--line); cursor: pointer; display: grid;
+          grid-template-columns: 36px 1fr; gap: 12px; align-items: start; transition: background .15s var(--ease); }
+  .proj:hover { background: var(--rail); }
+  .proj.sel { background: var(--accent-wash); }
+  .proj h3 { margin: 0 0 2px; font-size: 14px; font-weight: 500; line-height: 1.3; overflow-wrap: anywhere; }
+  .proj.sel h3 { font-weight: 600; }
+  .meta { color: var(--ink-2); font-size: 12.5px; }
+  .proj.sel .meta { color: oklch(38% 0.05 258); }
+  .score { font-weight: 600; font-size: 13px; text-align: center; border-radius: 5px; padding: 3px 0; min-width: 34px;
+           display: inline-block; border: 1px solid transparent; }
+  .s-hot { background: var(--hot); color: oklch(98% 0.01 38); }
+  .s-warm { background: var(--warm); color: var(--warm-ink); }
+  .s-cool { background: transparent; color: var(--ink-2); border-color: var(--line-strong); }
+
+  /* ---- map ---- */
+  #map { min-height: 0; background: var(--rail); }
+  .leaflet-container { font: inherit; }
+  .leaflet-tile-pane { filter: saturate(.3) contrast(.94) brightness(1.04); }  /* quiet basemap so project lines lead */
+  .leaflet-tooltip { font: 500 12.5px "IBM Plex Sans", sans-serif; color: var(--ink); border: 1px solid var(--line-strong);
+                     border-radius: 5px; box-shadow: 0 4px 14px oklch(24% 0.03 258 / .14); }
+  .leaflet-bar a { color: var(--ink); }
+
+  /* ---- detail / leads ---- */
+  #detail { border-top: 1px solid var(--line); background: var(--surface); display: flex; flex-direction: column; min-height: 0; }
+  #detail-head { padding: 10px 16px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+  #d-title { font-size: 15px; font-weight: 600; letter-spacing: -0.005em; flex: 1; min-width: 220px; margin: 0; text-wrap: balance; }
+  .check { display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); font-size: 13px; cursor: pointer; }
+  .check input { accent-color: var(--accent); width: 15px; height: 15px; margin: 0; }
+  #summary { padding: 9px 16px; color: var(--ink-2); font-size: 13px; border-bottom: 1px solid var(--line); background: var(--rail);
+             max-height: 5.4em; overflow-y: auto; white-space: pre-line; max-width: none; }
+  #leads-wrap { overflow: auto; flex: 1; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th:first-child, td:first-child { padding-left: 16px; }
+  th { position: sticky; top: 0; z-index: 1; background: var(--rail); font-weight: 500; font-size: 12px; color: var(--ink-2);
+       white-space: nowrap; box-shadow: 0 1px 0 var(--line); }
+  tbody tr { transition: background .12s var(--ease); }
+  tbody tr:hover { background: var(--rail); }
+  td.num, th.num { text-align: right; white-space: nowrap; }
+  td .sub { color: var(--ink-3); font-size: 12px; margin-top: 1px; }
+  td.owner { font-weight: 500; min-width: 180px; }
+  td.owner .sub { font-weight: 400; }
+  .lookup { color: var(--ink-3); font-weight: 400; }
+  td.acts { white-space: nowrap; }
+  td.acts button + button { margin-left: 4px; }
+  .done { color: var(--ok); font-size: 12.5px; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; margin-right: 8px; }
+  .done svg { width: 13px; height: 13px; }
+  td select { height: 26px; font-size: 12.5px; padding: 0 2px 0 6px; }
+  .empty { padding: 36px 24px; color: var(--ink-2); text-align: center; max-width: 52ch; margin: 0 auto; }
+  .skel td div { height: 12px; border-radius: 4px; background: var(--line); animation: pulse 1.1s ease-in-out infinite alternate; }
+  @keyframes pulse { from { opacity: .45; } to { opacity: 1; } }
+
+  /* ---- dialog ---- */
+  dialog { border: 1px solid var(--line-strong); border-radius: 10px; padding: 0; width: min(760px, calc(100vw - 32px));
+           color: var(--ink); background: var(--surface); box-shadow: 0 24px 60px oklch(24% 0.03 258 / .28); }
+  dialog::backdrop { background: oklch(24% 0.03 258 / .38); }
+  dialog[open] { animation: rise .22s var(--ease); }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } }
+  .dlg-head { padding: 16px 20px 12px; border-bottom: 1px solid var(--line); }
+  .dlg-head h2 { margin: 0; font-size: 16px; font-weight: 600; }
+  .dlg-head p { margin: 3px 0 0; color: var(--ink-2); font-size: 13px; }
+  .dlg-body { padding: 16px 20px; max-height: 64vh; overflow-y: auto; }
+  .dlg-foot { padding: 12px 20px; border-top: 1px solid var(--line); background: var(--rail); display: flex; gap: 8px;
+              align-items: center; border-radius: 0 0 10px 10px; }
+  .dlg-foot .note { flex: 1; color: var(--ink-2); font-size: 12.5px; }
+  .to { display: grid; grid-template-columns: 96px 1fr; gap: 4px 12px; font-size: 13px; margin: 0 0 14px; }
+  .to dt { color: var(--ink-3); } .to dd { margin: 0; }
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .card-frame { aspect-ratio: 6.25 / 4.25; border: 1px solid var(--line-strong); border-radius: 4px; overflow: hidden;
+                position: relative; background: #fff; box-shadow: 0 2px 8px oklch(24% 0.03 258 / .1); }
+  .card-frame iframe { position: absolute; top: 0; left: 0; width: 600px; height: 408px; border: 0; transform-origin: 0 0; pointer-events: none; }
+  .cap { font-size: 12px; color: var(--ink-3); margin-top: 5px; }
+  .alert { border: 1px solid var(--line-strong); background: var(--rail); border-radius: var(--radius); padding: 9px 12px;
+           font-size: 13px; margin-bottom: 14px; }
+  .alert.bad { border-color: oklch(80% 0.08 28); background: oklch(96% 0.02 28); color: oklch(36% 0.12 28); }
+  .people { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: var(--radius); }
+  .people li { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  .people li:last-child { border-bottom: 0; }
+  .people .who { flex: 1; } .people .who b { font-weight: 500; display: block; }
+
+  @media (max-width: 900px) {
+    header { height: auto; padding: 10px 16px; flex-wrap: wrap; gap: 6px 18px; }
+    .stats { margin-left: 0; flex-wrap: wrap; gap: 4px 16px; }
+    main { grid-template-columns: 1fr; grid-template-rows: 42vh 40vh auto; overflow-y: auto; }
+    #sidebar { grid-row: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+    #detail { min-height: 60vh; }
+    .cards { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
 </style>
 </head>
 <body>
 <header>
-  <h1>edradar <span>· Pennsylvania eminent domain leads</span></h1>
-  <span class="stat"><b id="st-projects">–</b> projects scoring 60+</span>
-  <span class="stat"><b id="st-leads">–</b> parcel leads</span>
-  <span class="stat"><b id="st-owners">–</b> with owner of record</span>
-  <span class="stat"><b id="st-signals">–</b> signals screened</span>
+  <div class="brand"><b>edradar</b><span>Pennsylvania eminent domain leads</span></div>
+  <div class="stats">
+    <span><b id="st-projects">–</b>projects scoring 60+</span>
+    <span><b id="st-leads">–</b>parcel leads</span>
+    <span><b id="st-owners">–</b>with owner of record</span>
+  </div>
+  <span class="mode" id="mode" hidden></span>
 </header>
 <main>
   <aside id="sidebar">
     <div class="filters">
-      <input id="f-q" type="search" placeholder="Search projects…" aria-label="Search projects">
+      <input id="f-q" type="search" placeholder="Search projects" aria-label="Search projects">
       <select id="f-county" aria-label="County"><option value="">All counties</option></select>
       <select id="f-type" aria-label="Project type"><option value="">All types</option></select>
       <select id="f-source" aria-label="Source">
@@ -83,37 +191,46 @@
       </select>
       <select id="f-score" aria-label="Minimum score">
         <option value="80">Score 80+</option><option value="60" selected>Score 60+</option>
-        <option value="40">Score 40+</option><option value="0">All</option>
+        <option value="40">Score 40+</option><option value="0">Any score</option>
       </select>
     </div>
-    <div id="projects"></div>
+    <div id="projects" aria-live="polite"></div>
   </aside>
-  <div id="map"></div>
+  <div id="map" aria-label="Map of planned projects"></div>
   <section id="detail">
     <div id="detail-head">
-      <span class="title" id="d-title">Top leads across all projects</span>
-      <label class="meta"><input type="checkbox" id="f-owner"> owner known</label>
-      <button id="btn-all" hidden>Show all projects</button>
-      <button id="btn-csv">Export CSV</button>
+      <h2 id="d-title">Top leads across all projects</h2>
+      <label class="check"><input type="checkbox" id="f-owner"> Owner known</label>
+      <button id="btn-all" hidden>All projects</button>
+      <button id="btn-csv"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8m0 0L5 7m3 3 3-3M3 13h10"/></svg>Export CSV</button>
     </div>
     <div id="summary" hidden></div>
     <div id="leads-wrap"></div>
   </section>
 </main>
+<dialog id="dlg" aria-labelledby="dlg-title"></dialog>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 const $ = id => document.getElementById(id);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-const money = n => n == null ? "" : n >= 1e6 ? "$" + (n / 1e6).toFixed(1) + "M" : "$" + Math.round(n).toLocaleString();
+const money = n => n == null ? "" : n >= 1e9 ? "$" + (n / 1e9).toFixed(2) + "B" : n >= 1e6 ? "$" + (n / 1e6).toFixed(1) + "M" : "$" + Math.round(n).toLocaleString();
 const scoreClass = s => s >= 80 ? "s-hot" : s >= 60 ? "s-warm" : "s-cool";
-const scoreColor = s => s >= 80 ? "#b42318" : s >= 60 ? "#b54708" : "#3b6b8f";
+const scoreColor = s => s >= 80 ? "oklch(47% 0.15 38)" : s >= 60 ? "oklch(64% 0.13 55)" : "oklch(52% 0.024 258)";
 const REASON = {named_in_document: "Named in document", abuts_alignment: "Abuts alignment", within_buffer: "Nearby"};
 const safeUrl = u => /^https?:\/\//i.test(u || "") ? u : "#";
+const day = s => s ? new Date(s.replace(" ", "T") + "Z").toLocaleDateString(undefined, {month: "short", day: "numeric"}) : "";
+const ICON = {
+  card: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="1.75" y="3.5" width="12.5" height="9" rx="1.25"/><path d="M8 6v4M10 6.5h2.25M10 8.5h2.25" stroke-linecap="round"/></svg>',
+  mail: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><rect x="1.75" y="3.5" width="12.5" height="9" rx="1.25"/><path d="m2.5 4.75 5.5 4 5.5-4"/></svg>',
+  check: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>',
+};
 
-let STATUSES = [], projects = [], selected = null, layers = {};
-const map = L.map("map", {preferCanvas: true}).setView([40.95, -77.6], 7);
-L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-  {maxZoom: 19, attribution: "&copy; OpenStreetMap contributors"}).addTo(map);
+let STATUSES = [], OUT = null, projects = [], selected = null, layers = {}, leadRows = [];
+const HOME = [[39.72, -80.52], [42.27, -74.69]];
+const map = L.map("map", {preferCanvas: true, zoomSnap: 0.25}).fitBounds(HOME);
+L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19,
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+requestAnimationFrame(() => { map.invalidateSize(); map.fitBounds(HOME); });
 const group = L.featureGroup().addTo(map);
 
 // Two modes: live (FastAPI backend) and static (a published snapshot: data.json, read-only).
@@ -122,7 +239,11 @@ let SNAP = null;
 async function api(path, opts) {
   if (STATIC) return staticApi(path);
   const r = await fetch(path, opts);
-  if (!r.ok) throw new Error(path + " → " + r.status);
+  if (!r.ok) {
+    let detail = "";
+    try { detail = (await r.json()).detail; } catch (e) {}
+    throw new Error(detail || path + " returned " + r.status);
+  }
   return r.json();
 }
 function staticLeads(q) {
@@ -133,7 +254,7 @@ function staticLeads(q) {
     .map(l => { const p = byId[l.project_id] || {}; return {...l, project: p.name, project_type: p.project_type, stage: p.stage, agency: p.agency, source: p.source, url: p.url}; });
 }
 async function staticApi(path) {
-  if (!SNAP) { const r = await fetch("data.json"); if (!r.ok) throw new Error("data.json → " + r.status); SNAP = await r.json(); }
+  if (!SNAP) { const r = await fetch("data.json"); if (!r.ok) throw new Error("data.json returned " + r.status); SNAP = await r.json(); }
   const [route, qs] = path.split("?"), q = new URLSearchParams(qs || "");
   if (route === "/api/stats") return SNAP.stats;
   if (route === "/api/projects") {
@@ -144,7 +265,7 @@ async function staticApi(path) {
       (!text || ((p.name || "") + " " + (p.summary || "")).toLowerCase().includes(text))).slice(0, 500);
   }
   if (route === "/api/leads") return staticLeads(q).slice(0, 300);
-  throw new Error("not available in the published snapshot: " + route);
+  throw new Error("Not available in the published snapshot.");
 }
 function downloadCsv(rows) {
   if (!rows.length) return;
@@ -160,7 +281,6 @@ function projectParams() {
     if ($(id).value) p.set(key, $(id).value);
   return p;
 }
-
 function leadParams() {
   const p = new URLSearchParams();
   if (selected) p.set("project_id", selected.id);
@@ -172,11 +292,11 @@ function leadParams() {
 function drawProject(p) {
   const g = p.geometry, color = scoreColor(p.score);
   let layer = null;
-  if (g && g.paths) layer = L.polyline(g.paths.map(path => path.map(([x, y]) => [y, x])), {color, weight: 4, opacity: .85});
+  if (g && g.paths) layer = L.polyline(g.paths.map(path => path.map(([x, y]) => [y, x])), {color, weight: 4, opacity: .9, lineCap: "round"});
   else if (g && g.points) layer = L.featureGroup(g.points.map(([x, y]) =>
-      L.circleMarker([y, x], {radius: 6, color, fillOpacity: .7, weight: 2})));
+      L.circleMarker([y, x], {radius: 6, color, fillColor: color, fillOpacity: .55, weight: 2})));
   if (!layer) return;
-  layer.bindTooltip(p.name || "Project");
+  layer.bindTooltip(p.name || "Project", {sticky: true});
   layer.on("click", () => select(p.id, false));
   layer.addTo(group);
   layers[p.id] = layer;
@@ -186,35 +306,47 @@ async function loadProjects() {
   projects = await api("/api/projects?" + projectParams());
   group.clearLayers(); layers = {};
   const box = $("projects");
-  if (!projects.length) { box.innerHTML = '<div class="empty">No projects match. Run <code>edradar run</code> or loosen the filters.</div>'; return; }
-  box.innerHTML = projects.map(p => `
-    <div class="proj" data-id="${p.id}" tabindex="0" role="button">
-      <div class="score ${scoreClass(p.score)}">${p.score}</div>
+  if (!projects.length) {
+    box.innerHTML = `<div class="empty">No projects match these filters. Lower the minimum score or clear the search${STATIC ? "" : ", or run <code>edradar run</code> to pull new data"}.</div>`;
+    return;
+  }
+  box.innerHTML = `<div class="count">${projects.length.toLocaleString()} project${projects.length === 1 ? "" : "s"}, highest score first</div>` +
+    projects.map(p => `
+    <div class="proj" data-id="${p.id}" tabindex="0" role="button" aria-label="${esc(p.name)}, score ${p.score}">
+      <span class="score ${scoreClass(p.score)}">${p.score}</span>
       <div><h3>${esc(p.name)}</h3>
-        <div class="meta">${esc(p.county || "")}${p.county ? " · " : ""}${esc(p.agency || p.source)}${p.est_cost ? " · " + money(p.est_cost) : ""}</div>
-        <div><span class="tag">${esc(p.project_type)}</span><span class="tag">${esc((p.stage || "").replace(/_/g, " "))}</span>
-        <span class="tag">${p.matched_at ? p.lead_count + " parcels" : "not matched yet"}</span></div></div>
+        <div class="meta">${[p.county ? esc(p.county[0] + p.county.slice(1).toLowerCase()) + " County" : "", esc(p.agency || p.source), p.est_cost ? money(p.est_cost) : ""].filter(Boolean).join(" · ")}</div>
+        <div class="meta">${[esc(p.project_type), esc((p.stage || "").replace(/_/g, " ")), p.matched_at ? p.lead_count.toLocaleString() + " parcels" : "not matched yet"].filter(Boolean).join(" · ")}</div></div>
     </div>`).join("");
   projects.forEach(drawProject);
   if (selected && !projects.some(p => p.id === selected.id)) selected = null;
   markSelected();
 }
-
 function markSelected() {
-  document.querySelectorAll(".proj").forEach(el => el.classList.toggle("sel", selected && +el.dataset.id === selected.id));
+  document.querySelectorAll(".proj").forEach(el => el.classList.toggle("sel", !!selected && +el.dataset.id === selected.id));
 }
-
-async function select(id, scroll = true) {
+async function select(id, fromList = true) {
   selected = projects.find(p => p.id === id) || null;
   markSelected();
   if (selected) {
     const layer = layers[id];
-    if (layer) map.fitBounds(layer.getBounds().pad(0.6), {maxZoom: 16});
-    if (!scroll) document.querySelector(`.proj[data-id="${id}"]`)?.scrollIntoView({block: "nearest"});
+    if (layer) map.flyToBounds(layer.getBounds().pad(0.6), {maxZoom: 16, duration: 0.6});
+    if (!fromList) document.querySelector(`.proj[data-id="${id}"]`)?.scrollIntoView({block: "nearest"});
   }
   await loadLeads();
 }
 
+function outreachCell(r) {
+  if (STATIC) return "";
+  const done = (at, label) => `<span class="done">${ICON.check}${label} ${esc(day(at))}</span>`;
+  const btn = (kind, label, at, sentLabel) => at ? done(at, sentLabel)
+    : `<button class="sm" data-act="${kind}" data-lead="${r.id}" ${r.owner ? "" : 'disabled title="No owner of record for this parcel"'}>${ICON[kind === "postcard" ? "card" : "mail"]}${label}</button>`;
+  return `<td class="acts">${btn("postcard", "Postcard", r.postcard_at, "Mailed")}${btn("email", "Email", r.email_at, "Emailed")}</td>`;
+}
+function skeleton() {
+  $("leads-wrap").innerHTML = "<table><tbody>" + Array.from({length: 6}, (_, i) =>
+    `<tr class="skel"><td style="width:60px"><div></div></td><td><div style="width:${52 + i * 7 % 30}%"></div></td><td><div style="width:${40 + i * 11 % 35}%"></div></td><td><div style="width:50%"></div></td></tr>`).join("") + "</tbody></table>";
+}
 async function loadLeads() {
   const p = selected;
   $("d-title").textContent = p ? p.name : "Top leads across all projects";
@@ -222,41 +354,122 @@ async function loadLeads() {
   $("summary").hidden = !p;
   if (p) $("summary").innerHTML = esc(p.summary || "") +
     (p.contact ? `\nAgency contact: ${esc(p.contact)}` : "") +
-    (p.url ? ` · <a href="${esc(safeUrl(p.url))}" target="_blank" rel="noopener">source</a>` : "");
-  const rows = await api("/api/leads?" + leadParams());
-  if (!rows.length) {
+    (p.url ? ` · <a href="${esc(safeUrl(p.url))}" target="_blank" rel="noopener">Source</a>` : "");
+  if (!leadRows.length) skeleton();
+  leadRows = await api("/api/leads?" + leadParams());
+  if (!leadRows.length) {
     $("leads-wrap").innerHTML = `<div class="empty">${p && !p.matched_at
-      ? "This project has not been matched to parcels yet. Run <code>edradar match</code>."
-      : "No parcel leads here yet."}</div>`;
+      ? `This project has not been matched to parcels yet.${STATIC ? "" : " Run <code>edradar match</code> to find the parcels along it."}`
+      : "No parcel leads match. Clear the “Owner known” filter or pick another project."}</div>`;
     return;
   }
   $("leads-wrap").innerHTML = `<table><thead><tr><th>Score</th><th>Owner of record</th><th>Property</th>
-    <th>Mailing address</th><th>Parcel</th><th>County value</th><th>Why</th>${p ? "" : "<th>Project</th>"}<th>Status</th></tr></thead><tbody>` +
-    rows.map(r => `<tr>
-      <td class="num"><b>${r.score}</b></td>
-      <td>${r.owner ? esc(r.owner) : '<span class="meta">look up at county</span>'}</td>
-      <td>${esc(r.address || "")}</td><td>${esc(r.mailing_address || "")}</td>
-      <td>${esc(r.apn)}<div class="meta">${esc(r.parcel_county || "")}</div></td>
+    <th class="num">County value</th><th>Match</th>${p ? "" : "<th>Project</th>"}${STATIC ? "" : "<th>Outreach</th>"}<th>Status</th></tr></thead><tbody>` +
+    leadRows.map(r => `<tr>
+      <td><span class="score ${scoreClass(r.score)}">${r.score}</span></td>
+      <td class="owner">${r.owner ? esc(r.owner) : '<span class="lookup">Look up at county</span>'}${r.mailing_address ? `<div class="sub">${esc(r.mailing_address)}</div>` : ""}</td>
+      <td>${esc(r.address || "")}<div class="sub">${esc(r.apn)}${r.parcel_county ? " · " + esc(r.parcel_county[0] + r.parcel_county.slice(1).toLowerCase()) : ""}</div></td>
       <td class="num">${money(r.market_value)}</td>
-      <td>${esc(REASON[r.match_reason] || r.match_reason)}${r.distance_m != null ? `<div class="meta">${Math.round(r.distance_m)} m</div>` : ""}</td>
+      <td>${esc(REASON[r.match_reason] || r.match_reason)}${r.distance_m != null ? `<div class="sub">${Math.round(r.distance_m)} m away</div>` : ""}</td>
       ${p ? "" : `<td><a href="#" data-project="${r.project_id}">${esc(r.project)}</a></td>`}
-      <td><select data-lead="${r.id}" aria-label="Lead status"${STATIC ? " disabled" : ""}>${STATUSES.map(s =>
+      ${outreachCell(r)}
+      <td><select data-status="${r.id}" aria-label="Lead status"${STATIC ? " disabled" : ""}>${STATUSES.map(s =>
         `<option${s === r.status ? " selected" : ""}>${s}</option>`).join("")}</select></td></tr>`).join("") +
     "</tbody></table>";
 }
 
+/* ---- outreach dialogs ---- */
+const dlg = $("dlg");
+function fitCards() {
+  dlg.querySelectorAll(".card-frame").forEach(f => { f.firstElementChild.style.transform = `scale(${f.clientWidth / 600})`; });
+}
+async function openPostcard(leadId) {
+  const lead = leadRows.find(r => r.id === leadId);
+  dlg.innerHTML = `<div class="dlg-head"><h2 id="dlg-title">Postcard to ${esc(lead.owner)}</h2><p>Preparing the proof…</p></div>`;
+  dlg.showModal();
+  let pv;
+  try { pv = await api(`/api/leads/${leadId}/postcard`); }
+  catch (e) { dlg.innerHTML += `<div class="dlg-body"><div class="alert bad">${esc(e.message)}</div></div><div class="dlg-foot"><span class="note"></span><button value="cancel" data-close>Close</button></div>`; return; }
+  const pc = OUT.postcard, blocker = pv.blocker || (pc.enabled ? null : pc.why);
+  const to = pv.to;
+  dlg.innerHTML = `
+    <div class="dlg-head"><h2 id="dlg-title">Postcard to ${esc(lead.owner)}</h2><p>${esc(pv.project || "")}</p></div>
+    <div class="dlg-body">
+      ${blocker ? `<div class="alert bad">${esc(blocker)}</div>` : ""}
+      <dl class="to"><dt>Recipient</dt><dd>${esc(pv.to_name)}</dd>
+        <dt>Mail to</dt><dd>${to ? esc([to.line2, to.line1].filter(Boolean).join(", ")) + "<br>" + esc(`${to.city}, ${to.state} ${to.zip}`) : esc(lead.mailing_address || "No mailing address on file")}</dd></dl>
+      <div class="cards">
+        <div><div class="card-frame"><iframe title="Postcard front" sandbox="allow-same-origin" srcdoc="${esc(pv.front)}"></iframe></div><div class="cap">Front, 6 × 4 in</div></div>
+        <div><div class="card-frame"><iframe title="Postcard back" sandbox="allow-same-origin" srcdoc="${esc(pv.back)}"></iframe></div><div class="cap">Back. The address and postage print on the right half.</div></div>
+      </div>
+    </div>
+    <div class="dlg-foot"><span class="note">${pc.mode === "live" ? "Live mode: this mails a real postcard and bills your Lob account."
+        : pc.mode === "test" ? "Test mode: Lob renders a proof. Nothing is mailed or billed." : esc(pc.why || "")}</span>
+      <button data-close>Cancel</button>
+      <button class="primary" id="dlg-go" ${blocker ? "disabled" : ""}>${pc.mode === "live" ? "Mail postcard" : "Create test proof"}</button></div>`;
+  fitCards();
+  $("dlg-go").addEventListener("click", async ev => {
+    ev.target.disabled = true; ev.target.textContent = "Sending…";
+    try {
+      const res = await api(`/api/leads/${leadId}/postcard`, {method: "POST"});
+      dlg.querySelector(".dlg-body").innerHTML = `<div class="alert">${res.mode === "live" ? "Postcard queued for mailing" : "Test proof created"}${res.expected_delivery ? `, expected delivery ${esc(res.expected_delivery)}` : ""}.
+        ${res.proof_url ? `<a href="${esc(safeUrl(res.proof_url))}" target="_blank" rel="noopener">Open the proof</a>` : ""}</div>`;
+      dlg.querySelector(".dlg-foot").innerHTML = `<span class="note"></span><button data-close class="primary">Done</button>`;
+      await loadLeads();
+    } catch (e) {
+      dlg.querySelector(".dlg-body").insertAdjacentHTML("afterbegin", `<div class="alert bad">${esc(e.message)}</div>`);
+      ev.target.disabled = false; ev.target.textContent = "Try again";
+    }
+  });
+}
+async function openEmail(leadId) {
+  const lead = leadRows.find(r => r.id === leadId), em = OUT.email;
+  const head = `<div class="dlg-head"><h2 id="dlg-title">Email ${esc(lead.owner)}</h2><p>Adds one person to your Apollo sequence, sent from ${esc(em.from || "your connected mailbox")}.</p></div>`;
+  const foot = `<div class="dlg-foot"><span class="note">Searching is free. Adding a person reveals their email, which uses one Apollo credit.</span><button data-close>Close</button></div>`;
+  dlg.innerHTML = head + `<div class="dlg-body"><p class="meta">Looking for decision-makers at this owner…</p></div>` + foot;
+  dlg.showModal();
+  const body = dlg.querySelector(".dlg-body");
+  if (!em.enabled) { body.innerHTML = `<div class="alert bad">${esc(em.why)}</div>`; return; }
+  let people;
+  try { people = await api(`/api/leads/${leadId}/email/contacts`); }
+  catch (e) { body.innerHTML = `<div class="alert bad">${esc(e.message)}</div>`; return; }
+  if (!people.length) { body.innerHTML = `<div class="alert">Apollo has no contacts for this owner. A postcard will reach the mailing address on file.</div>`; return; }
+  body.innerHTML = `<ul class="people">${people.map(p => `<li><div class="who"><b>${esc(p.name)}</b><span class="meta">${esc([p.title, p.organization].filter(Boolean).join(" · "))}</span></div>
+    <button class="sm primary" data-person="${esc(p.person_id)}">Add to sequence</button></li>`).join("")}</ul>`;
+  body.addEventListener("click", async ev => {
+    const id = ev.target.dataset.person;
+    if (!id) return;
+    ev.target.disabled = true; ev.target.textContent = "Adding…";
+    try {
+      const res = await api(`/api/leads/${leadId}/email`, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({person_id: id})});
+      body.innerHTML = `<div class="alert">${esc(res.name || "Contact")} (${esc(res.email)}) was added to the sequence.</div>`;
+      await loadLeads();
+    } catch (e) {
+      body.insertAdjacentHTML("afterbegin", `<div class="alert bad">${esc(e.message)}</div>`);
+      ev.target.disabled = false; ev.target.textContent = "Add to sequence";
+    }
+  });
+}
+dlg.addEventListener("click", e => { if (e.target === dlg || e.target.closest("[data-close]")) dlg.close(); });
+addEventListener("resize", () => dlg.open && fitCards());
+
+/* ---- events ---- */
 $("projects").addEventListener("click", e => { const el = e.target.closest(".proj"); if (el) select(+el.dataset.id); });
-$("projects").addEventListener("keydown", e => { if (e.key === "Enter") { const el = e.target.closest(".proj"); if (el) select(+el.dataset.id); } });
+$("projects").addEventListener("keydown", e => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  const el = e.target.closest(".proj");
+  if (el) { e.preventDefault(); select(+el.dataset.id); }
+});
 $("leads-wrap").addEventListener("change", async e => {
-  const id = e.target.dataset.lead;
-  if (id) await api("/api/leads/" + id, {method: "PATCH", headers: {"Content-Type": "application/json"},
-                                         body: JSON.stringify({status: e.target.value})});
+  const id = e.target.dataset.status;
+  if (id) await api("/api/leads/" + id, {method: "PATCH", headers: {"Content-Type": "application/json"}, body: JSON.stringify({status: e.target.value})});
 });
 $("leads-wrap").addEventListener("click", e => {
-  const id = e.target.dataset.project;
-  if (id) { e.preventDefault(); select(+id, false); }
+  const link = e.target.closest("[data-project]"), act = e.target.closest("[data-act]");
+  if (link) { e.preventDefault(); select(+link.dataset.project, false); }
+  if (act) (act.dataset.act === "postcard" ? openPostcard : openEmail)(+act.dataset.lead);
 });
-$("btn-all").addEventListener("click", () => { selected = null; markSelected(); map.setView([40.95, -77.6], 7); loadLeads(); });
+$("btn-all").addEventListener("click", () => { selected = null; markSelected(); map.flyToBounds(HOME, {duration: 0.6}); loadLeads(); });
 $("btn-csv").addEventListener("click", () => {
   if (STATIC) downloadCsv(staticLeads(leadParams())); else location.href = "/api/leads.csv?" + leadParams();
 });
@@ -266,19 +479,26 @@ for (const id of ["f-county", "f-type", "f-source", "f-score", "f-q"])
   $(id).addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(async () => { await loadProjects(); await loadLeads(); }, 250); });
 
 (async () => {
+  skeleton();
   const s = await api("/api/stats");
   STATUSES = s.statuses;
-  if (STATIC && s.generated) document.querySelector("header").insertAdjacentHTML("beforeend",
-    `<span class="stat">Snapshot of ${esc(s.generated)} · read-only</span>`);
   $("st-projects").textContent = s.projects.toLocaleString();
   $("st-leads").textContent = s.leads.toLocaleString();
   $("st-owners").textContent = s.leads_with_owner.toLocaleString();
-  $("st-signals").textContent = s.signals.toLocaleString();
-  $("f-county").insertAdjacentHTML("beforeend", s.counties.map(c => `<option>${esc(c)}</option>`).join(""));
+  const mode = $("mode");
+  if (STATIC) { mode.textContent = `Snapshot of ${s.generated || "an earlier run"}, read-only`; mode.hidden = false; }
+  else {
+    OUT = await api("/api/outreach/status");
+    mode.textContent = "Postcards: " + ({live: "live", test: "test mode", off: "off"}[OUT.postcard.mode]) + " · Email: " + (OUT.email.enabled ? "on" : "off");
+    if (OUT.postcard.mode === "live") mode.dataset.live = "";
+    mode.hidden = false;
+  }
+  const title = c => c[0] + c.slice(1).toLowerCase();
+  $("f-county").insertAdjacentHTML("beforeend", s.counties.map(c => `<option value="${esc(c)}">${esc(title(c))}</option>`).join(""));
   $("f-type").insertAdjacentHTML("beforeend", s.types.map(c => `<option>${esc(c)}</option>`).join(""));
   await loadProjects();
   await loadLeads();
-})().catch(e => { $("leads-wrap").innerHTML = `<div class="empty">Could not load data: ${esc(e.message)}</div>`; });
+})().catch(e => { $("leads-wrap").innerHTML = `<div class="empty">The data could not be loaded: ${esc(e.message)}. Reload the page to try again.</div>`; });
 </script>
 </body>
 </html>

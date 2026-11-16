@@ -94,3 +94,23 @@ matching:
   point_buffer_m: 150          # radius around point projects (bridges, intersections, geocoded places)
   max_parcels_per_project: 400
   projects_per_run: 150
+
+# Owner outreach. Nothing is sent automatically: each postcard or email is one click in the dashboard.
+# Keys come from the environment, never from this file:
+#   LOB_API_KEY     test_... keys produce proofs without mailing; live_... keys mail and bill (~$1 per 4x6 card)
+#   APOLLO_API_KEY  Apollo API key (people search, contacts, sequences)
+outreach:
+  firm:                         # printed on postcards and used as the return address
+    name: ""                    # e.g. Duerr Law, P.C.
+    address_line1: ""
+    city: ""
+    state: PA
+    zip: ""
+    phone: ""
+    email: ""
+  postcard:
+    advertising_label: true     # prints "ADVERTISEMENT." in the fine print
+  apollo:
+    from_email: ""              # the connected Apollo mailbox to send from
+    email_account_id: ""        # that mailbox's id in Apollo
+    sequence_id: ""             # the Apollo sequence owners are added to

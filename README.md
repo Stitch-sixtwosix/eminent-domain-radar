@@ -65,6 +65,22 @@ To run without a local machine, enable the GitHub Actions workflows: move the tw
 could not write workflow files). **Refresh leads** then runs the pipeline from the Actions tab and
 saves the SQLite database as a downloadable artifact; **CI** runs the tests on every push.
 
+## Owner outreach
+
+Each lead row has **Postcard** and **Email** actions. Nothing is sent automatically: every send is one
+confirmed click, each is logged so an owner is not contacted twice, and both services stay off until
+their key is set in the environment.
+
+| | Service | Turn on | Notes |
+|---|---|---|---|
+| Postcard | [Lob](https://www.lob.com) | `LOB_API_KEY` + firm return address under `outreach.firm` | A `test_` key renders a proof and mails nothing; a `live_` key mails a 4x6 card and bills the Lob account. |
+| Email | [Apollo](https://www.apollo.io) | `APOLLO_API_KEY` + `outreach.apollo.sequence_id`, `email_account_id` | Finds decision-makers at company owners and adds the one you pick to your Apollo sequence. Revealing an email uses one Apollo credit. |
+
+Public bodies (Commonwealth, municipalities, authorities) are never offered outreach. A postcard is
+refused when the mailing address cannot be read reliably (about 1.5% of addresses), rather than guessed.
+Apollo holds business contacts, so email works for company-owned parcels; individual owners get postcards.
+The postcard wording lives in `edradar/outreach.py` and prints "ADVERTISEMENT." by default.
+
 ## Known limits
 
 * In the 32 counties without a public owner layer (listed above), leads carry a parcel ID only.
@@ -85,6 +101,7 @@ Have the firm's ethics counsel approve the outreach method and wording before us
 edradar/sources/     penndot.py, federal_register.py, legistar.py
 edradar/classify.py  scoring rules, keyword engine, Claude engine
 edradar/parcels.py   ArcGIS and Philadelphia parcel lookups
+edradar/outreach.py  Lob postcards and Apollo email sequences
 edradar/pipeline.py  ingest -> classify -> geocode -> match
 edradar/web/         FastAPI app and single-page dashboard
 tests/               offline tests (pytest)
