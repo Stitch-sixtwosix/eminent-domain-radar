@@ -104,6 +104,8 @@ class DB:
         self.conn.row_factory = sqlite3.Row
         self.conn.execute("PRAGMA foreign_keys = ON")
         self.conn.executescript(SCHEMA)
+        if "geometry" not in [r["name"] for r in self.conn.execute("PRAGMA table_info(parcels)")]:
+            self.conn.execute("ALTER TABLE parcels ADD COLUMN geometry TEXT")   # cached boundary rings
 
     # ---- signals ----
     def upsert_signal(self, s: Dict[str, Any]) -> bool:

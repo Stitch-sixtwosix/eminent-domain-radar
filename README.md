@@ -65,6 +65,19 @@ To run without a local machine, enable the GitHub Actions workflows: move the tw
 could not write workflow files). **Refresh leads** then runs the pipeline from the Actions tab and
 saves the SQLite database as a downloadable artifact; **CI** runs the tests on every push.
 
+## Parcel details
+
+Click any lead to open its parcel panel:
+
+* **Boundary**: the county's mapped parcel outline is drawn on the map (with an aerial view) and measured: area,
+  perimeter and the length of each main side. It is the county's GIS line, not a survey.
+* **Land background**: land use, zoning, deeded acres, sale history, assessment and the full county record,
+  as far as that county publishes them.
+* **Other parcels held by this owner** anywhere in the lead list.
+* **Similar cases**: Pennsylvania appellate opinions matching this kind of taking, from
+  [CourtListener](https://www.courtlistener.com). Set `COURTLISTENER_TOKEN` (free account) to list them in the panel;
+  without it the panel links to the same search on CourtListener's site. These are keyword matches, not legal research.
+
 ## Owner outreach
 
 Each lead row has **Postcard** and **Email** actions. Nothing is sent automatically: every send is one

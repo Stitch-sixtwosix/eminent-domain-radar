@@ -10,7 +10,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 
-from .. import outreach
+from .. import outreach, parceldetail
 from ..classify import score_breakdown
 from ..db import DB
 
@@ -119,6 +119,18 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
             raise HTTPException(409, str(e))
         except RuntimeError as e:
             raise HTTPException(502, str(e))
+
+    @app.get("/api/leads/{lead_id}/detail")
+    def lead_detail(lead_id: int) -> Dict[str, Any]:
+        lead = one_lead(lead_id)
+        parcel = db.rows("SELECT pa.* FROM parcels pa JOIN leads l ON l.parcel_id = pa.id WHERE l.id = ?", (lead_id,))[0]
+        parcel["attributes"] = json.loads(parcel["attributes"] or "{}")
+        return {"lead": lead, "layer": parcel["layer"], "boundary": parceldetail.boundary(cfg, db, parcel),
+                "background": parceldetail.background(parcel), "related": parceldetail.related(db, lead)}
+
+    @app.get("/api/leads/{lead_id}/cases")
+    def lead_cases(lead_id: int) -> Dict[str, Any]:
+        return parceldetail.cases(one_lead(lead_id))
 
     @app.get("/api/outreach/status")
     def outreach_status() -> Dict[str, Any]:

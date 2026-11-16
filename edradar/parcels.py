@@ -133,7 +133,8 @@ def arcgis_by_apn(layer, http, apns: List[str]) -> List[Dict[str, Any]]:
 
 # ---------------------------------------------------------------- Philadelphia (Carto SQL API)
 PHL_COLS = ("parcel_number, location, owner_1, owner_2, mailing_care_of, mailing_street, mailing_city_state, "
-            "mailing_zip, market_value, total_area, category_code_description, zoning")
+            "mailing_zip, market_value, total_area, category_code_description, zoning, year_built, sale_date, sale_price, "
+            "taxable_land, taxable_building, total_livable_area, building_code_description")
 
 
 def _phl_row(r: Dict[str, Any], abut_m: float) -> Dict[str, Any]:
@@ -147,7 +148,11 @@ def _phl_row(r: Dict[str, Any], abut_m: float) -> Dict[str, Any]:
             "owner": owner or None, "mailing_address": mailing or None,
             "market_value": _num(r.get("market_value")), "acres": sqft / 43560.0 if sqft else None,
             "distance_m": d, "abuts": d is not None and d <= abut_m,
-            "attributes": {"category": r.get("category_code_description"), "zoning": r.get("zoning")}}
+            "attributes": {"category": r.get("category_code_description"), "zoning": r.get("zoning"),
+                           "building_type": r.get("building_code_description"), "year_built": r.get("year_built"),
+                           "sale_date": (r.get("sale_date") or "")[:10] or None, "sale_price": r.get("sale_price"),
+                           "land_value": r.get("taxable_land"), "building_value": r.get("taxable_building"),
+                           "lot_square_feet": r.get("total_area"), "livable_square_feet": r.get("total_livable_area")}}
 
 
 def phl_near(layer, http, geometry, m_cfg) -> List[Dict[str, Any]]:

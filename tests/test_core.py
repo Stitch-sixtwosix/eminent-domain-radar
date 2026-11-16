@@ -218,3 +218,43 @@ def test_score_breakdown_adds_up():
         parts = C.score_breakdown(likelihood, stage, cost, score)
         assert abs(sum(p["points"] for p in parts) - score) <= 0.5, (likelihood, stage, parts)
     assert C.score_breakdown(90, "planning", None, 0)[-1]["label"] == "Not in Pennsylvania"
+
+
+def test_parcel_detail(tmp_path, monkeypatch):
+    import httpx
+    from edradar import parceldetail as pd
+
+    square = [[[-75.0, 40.0], [-75.0, 40.001], [-74.999, 40.001], [-74.999, 40.0], [-75.0, 40.0]]]
+    m = pd._ring_metrics(square)
+    assert 2.2 < m["acres"] < 2.5 and 1250 < m["perimeter_feet"] < 1300 and len(m["sides"]) == 4
+
+    bg = pd.background({"attributes": {"OBJECTID": 5, "LANDUSE": "Farm", "DEED_ACRES": 8.98, "LastSaleDa": 1645056000000,
+                                        "SALEPRICE": 340556, "ZONING": "A1", "Shape_Area": 9.1}})
+    facts = {f["label"]: f["value"] for f in bg["facts"]}
+    assert facts["Land use"] == "Farm" and facts["Zoning"] == "A1" and facts["Last sale price"] == "$340,556"
+    assert facts["Last sale date"] == "Feb 17, 2022" and all(r["field"] != "OBJECTID" for r in bg["record"])
+
+    lead = {"source": "penndot", "project_type": "highway", "match_reason": "abuts_alignment"}
+    assert '"Department of Transportation"' in pd.case_query(lead) and "widening" in pd.case_query(lead)
+    monkeypatch.delenv("COURTLISTENER_TOKEN", raising=False)
+    off = pd.cases(lead)
+    assert off["results"] == [] and "courtlistener.com/?" in off["search_url"] and "COURTLISTENER_TOKEN" in off["why"]
+
+    def cl(request):
+        assert request.headers["Authorization"] == "Token t"
+        return httpx.Response(200, json={"results": [{"caseName": "Roe v. PennDOT", "court": "Commonwealth Court",
+                                                       "dateFiled": "2019-03-01", "citation": ["203 A.3d 1"],
+                                                       "absolute_url": "/opinion/1/roe/",
+                                                       "opinions": [{"snippet": "a <mark>partial taking</mark> of land"}]}]})
+    monkeypatch.setenv("COURTLISTENER_TOKEN", "t")
+    on = pd.cases(lead, httpx.Client(transport=httpx.MockTransport(cl)))
+    assert on["results"][0]["citation"] == "203 A.3d 1" and on["results"][0]["snippet"] == "a partial taking of land"
+
+    path = str(tmp_path / "t.db")
+    db = seeded_db(path)
+    db.conn.execute("UPDATE parcels SET geometry=?, attributes=?", (json.dumps(square), json.dumps({"LANDUSE": "Farm"})))
+    db.commit()
+    client = TestClient(create_app({"database": path, "parcel_layers": [], "user_agent": "t"}))
+    lead_id = client.get("/api/leads").json()[0]["id"]
+    d = client.get("/api/leads/%d/detail" % lead_id).json()
+    assert d["boundary"]["rings"] == square and d["background"]["facts"][0]["value"] == "Farm" and d["related"] == []

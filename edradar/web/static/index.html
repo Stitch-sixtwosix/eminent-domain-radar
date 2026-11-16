@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Eminent Tracker · Pennsylvania eminent domain leads</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28' fill='none'%3E%3Crect width='28' height='28' rx='6' fill='%23fff'/%3E%3Cpath d='M5.5 7.5 19 4.5l3.5 14.5L8 23Z' stroke='%231b2333' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M2 18.5 26 9.5' stroke='%23b4502a' stroke-width='2.6' stroke-linecap='round'/%3E%3Ccircle cx='14' cy='14' r='3' fill='%23fff' stroke='%23b4502a' stroke-width='2'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
@@ -23,6 +24,7 @@
     --link: oklch(40% 0.11 258);
     --hot: oklch(40% 0.13 38);           /* score 80+ : dark ink on a pale tint of the same hue */
     --hot-bg: oklch(93% 0.045 45);
+    --hot-line: oklch(52% 0.15 40);      /* the alignment line: map, logo */
     --warm: oklch(40% 0.085 75);         /* score 60-79 */
     --warm-bg: oklch(94.5% 0.05 88);
     --ok: oklch(40% 0.1 155);
@@ -46,7 +48,8 @@
   /* ---- top bar ---- */
   header { display: flex; align-items: center; gap: 28px; padding: 0 20px; height: 52px; background: var(--surface);
            border-bottom: 1px solid var(--line); }
-  .brand { display: flex; align-items: baseline; gap: 10px; white-space: nowrap; }
+  .brand { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+  .logo { width: 26px; height: 26px; flex: none; margin-right: -2px; }
   .brand b { font-size: 17px; font-weight: 600; letter-spacing: -0.015em; }
   .brand span { color: var(--ink-3); font-size: 13px; }
   .stats { display: flex; gap: 22px; margin-left: auto; color: var(--ink-2); font-size: 13px; white-space: nowrap; }
@@ -136,6 +139,48 @@
   .skel td div { height: 12px; border-radius: 4px; background: var(--line); animation: pulse 1.1s ease-in-out infinite alternate; }
   @keyframes pulse { from { opacity: .45; } to { opacity: 1; } }
 
+  /* ---- parcel panel ---- */
+  tbody tr { cursor: pointer; }
+  tbody tr.sel { background: var(--active); }
+  tbody tr:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+  #parcel { position: fixed; top: 52px; right: 0; bottom: 0; width: min(440px, 100vw); z-index: 1100; background: var(--surface);
+            border-left: 1px solid var(--line-strong); box-shadow: -12px 0 32px oklch(24% 0.03 258 / .12); display: flex;
+            flex-direction: column; transform: translateX(100%); visibility: hidden;
+            transition: transform 200ms var(--ease-out), visibility 0s 200ms; }
+  #parcel[data-open] { transform: none; visibility: visible; transition: transform 260ms cubic-bezier(.32, .72, 0, 1), visibility 0s; }
+  .p-head { padding: 14px 16px 12px; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; }
+  .p-head h2 { margin: 0; font-size: 16px; line-height: 22px; font-weight: 600; overflow-wrap: anywhere; }
+  .p-head .meta { grid-column: 1; }
+  .p-head button { grid-row: 1 / 3; grid-column: 2; align-self: start; width: 32px; padding: 0; justify-content: center; }
+  .p-body { overflow-y: auto; flex: 1; padding-bottom: 20px; }
+  .p-sec { padding: 14px 16px 2px; }
+  .p-sec h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; }
+  .p-sec p { margin: 0 0 8px; color: var(--ink-2); font-size: 13px; }
+  .figs { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: var(--radius); }
+  .figs div { padding: 9px 12px; border-left: 1px solid var(--line); }
+  .figs div:first-child { border-left: 0; }
+  .figs span { display: block; font-size: 12px; color: var(--ink-2); }
+  .figs b { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+  .facts { display: grid; grid-template-columns: 132px 1fr; gap: 5px 12px; margin: 0; font-size: 13px; }
+  .facts dt { color: var(--ink-2); } .facts dd { margin: 0; overflow-wrap: anywhere; }
+  .plain { list-style: none; margin: 0; padding: 0; font-size: 13px; }
+  .plain li { padding: 8px 0; border-top: 1px solid var(--line); }
+  .plain li:first-child { border-top: 0; padding-top: 0; }
+  .plain a { font-weight: 500; }
+  .plain .sub { color: var(--ink-2); font-size: 12.5px; margin-top: 1px; }
+  details.rec { margin: 14px 16px 0; font-size: 12.5px; }
+  details.rec summary { cursor: pointer; font-weight: 500; font-size: 13px; padding: 4px 0; }
+  details.rec .facts { margin-top: 6px; font-size: 12.5px; }
+  .dim { background: var(--ink); color: oklch(97% 0.004 258); border: 0; border-radius: 4px; padding: 1px 5px; font: 500 11.5px "IBM Plex Sans", sans-serif;
+         box-shadow: none; white-space: nowrap; }
+  .dim::before { display: none; }
+  .basemap { position: absolute; top: 10px; left: 54px; z-index: 500; display: flex; background: var(--surface); border: 1px solid var(--line-strong);
+             border-radius: var(--radius); padding: 2px; gap: 2px; }
+  .basemap button { height: 26px; padding: 0 10px; border: 0; font-size: 12.5px; background: transparent; }
+  .basemap button[aria-pressed=true] { background: var(--ink); color: oklch(98.5% 0.004 258); }
+  #map { position: relative; }
+  #map.aerial .leaflet-tile-pane { filter: none; }
+
   /* ---- info tips ---- */
   .info { all: unset; display: inline-grid; place-items: center; width: 16px; height: 16px; margin-left: 4px; border-radius: 50%;
           color: var(--ink-3); cursor: help; vertical-align: -3px; }
@@ -198,9 +243,11 @@
     #sidebar { grid-row: auto; border-right: 0; border-bottom: 1px solid var(--line); }
     #detail { min-height: 60vh; }
     .cards { grid-template-columns: 1fr; }
+    #parcel { top: 0; }
   }
   @media (prefers-reduced-motion: reduce) {   /* keep the fades that explain state, drop the travel */
     dialog, dialog[open], #tip { transform: none; }
+    #parcel, #parcel[data-open] { transition: none; }
     button:active:not(:disabled) { transform: none; }
     .skel td div { animation: none; }
   }
@@ -208,7 +255,7 @@
 </head>
 <body>
 <header>
-  <div class="brand"><b>Eminent Tracker</b><span>Pennsylvania eminent domain leads</span></div>
+  <div class="brand"><svg class="logo" viewBox="0 0 28 28" fill="none" aria-hidden="true"><path d="M5.5 7.5 19 4.5l3.5 14.5L8 23Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M2 18.5 26 9.5" stroke="var(--hot-line, #b4502a)" stroke-width="2.6" stroke-linecap="round"/><circle cx="14" cy="14" r="3" fill="var(--surface, #fff)" stroke="var(--hot-line, #b4502a)" stroke-width="2"/></svg><b>Eminent Tracker</b><span>Pennsylvania eminent domain leads</span></div>
   <div class="stats">
     <span><b id="st-projects">–</b>projects scoring 60+</span>
     <span><b id="st-leads">–</b>parcel leads</span>
@@ -234,7 +281,11 @@
     </div>
     <div id="projects" aria-live="polite"></div>
   </aside>
-  <div id="map" aria-label="Map of planned projects"></div>
+  <div id="map" aria-label="Map of planned projects">
+    <div class="basemap" role="group" aria-label="Basemap">
+      <button type="button" data-base="map" aria-pressed="true">Map</button><button type="button" data-base="aerial" aria-pressed="false">Aerial</button>
+    </div>
+  </div>
   <section id="detail">
     <div id="detail-head">
       <h2 id="d-title">Top leads across all projects</h2>
@@ -247,6 +298,7 @@
     <div id="leads-wrap"></div>
   </section>
 </main>
+<aside id="parcel" aria-label="Parcel details"></aside>
 <dialog id="dlg" aria-labelledby="dlg-title"></dialog>
 <div id="tip" role="tooltip"></div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -296,8 +348,21 @@ const ICON = {
 let leadTicket = 0, TOTAL_LEADS = 0, STATUSES = [], OUT = null, projects = [], selected = null, layers = {}, leadRows = [];
 const HOME = [[39.72, -80.52], [42.27, -74.69]];
 const map = L.map("map", {preferCanvas: true, zoomSnap: 0.25}).fitBounds(HOME);
-L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19,
-  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+const BASE = {
+  map: L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}),
+  aerial: L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {maxZoom: 19,
+    attribution: "Imagery &copy; Esri, Maxar, Earthstar Geographics"}),
+};
+let baseName = "map", baseChosen = false;
+function setBase(name) {
+  if (name === baseName) return;
+  map.removeLayer(BASE[baseName]); BASE[name].addTo(map).bringToBack(); baseName = name;
+  $("map").classList.toggle("aerial", name === "aerial");
+  document.querySelectorAll(".basemap button").forEach(b => b.setAttribute("aria-pressed", b.dataset.base === name));
+}
+BASE.map.addTo(map);
+const parcelLayer = L.featureGroup().addTo(map);
 requestAnimationFrame(() => { map.invalidateSize(); if (!selected) map.fitBounds(HOME); });  // never undo a selection made first
 const group = L.featureGroup().addTo(map);
 
@@ -394,6 +459,7 @@ function markSelected() {
   document.querySelectorAll(".proj").forEach(el => el.classList.toggle("sel", !!selected && +el.dataset.id === selected.id));
 }
 async function select(id, fromList = true, animate = true) {
+  closeParcel();
   selected = projects.find(p => p.id === id) || null;
   markSelected();
   if (selected) {
@@ -443,7 +509,7 @@ async function loadLeads() {
   }
   $("leads-wrap").innerHTML = `<table><thead><tr>${th("Score", "score")}${th("Owner of record", "owner")}${th("Property", "property")}
     ${th("County value", "value", "num")}${th("Match", "match")}${p ? "" : th("Project", "project")}${STATIC ? "" : th("Outreach", "outreach")}${th("Status", "status")}</tr></thead><tbody>` +
-    leadRows.map(r => `<tr>
+    leadRows.map(r => `<tr data-row="${r.id}" tabindex="0"${openLead === r.id ? ' class="sel"' : ""}>
       <td><span class="score ${scoreClass(r.score)}" data-tip-lead="${r.id}">${r.score}</span></td>
       <td class="owner">${r.owner ? esc(r.owner) : '<span class="lookup">Look up at county</span>'}${r.mailing_address ? `<div class="sub">${esc(r.mailing_address)}</div>` : ""}</td>
       <td>${r.address ? esc(r.address) : '<span class="dash">–</span>'}<div class="sub">${esc(r.apn)}${r.parcel_county ? " · " + esc(r.parcel_county[0] + r.parcel_county.slice(1).toLowerCase()) : ""}</div></td>
@@ -455,6 +521,74 @@ async function loadLeads() {
         `<option${s === r.status ? " selected" : ""}>${s}</option>`).join("")}</select></td></tr>`).join("") +
     "</tbody></table>" + `<div class="total">${p ? `${leadRows.length.toLocaleString()} of ${p.lead_count.toLocaleString()} parcels for this project` : `Top ${leadRows.length.toLocaleString()} of ${TOTAL_LEADS.toLocaleString()} leads`}, highest score first${leadRows.length >= 300 ? ". Export CSV for the full list" : ""}.</div>`;
 }
+
+/* ---- parcel panel: boundary on the map, land background, related parcels, similar cases ---- */
+const panel = $("parcel");
+let openLead = null;
+const X_ICON = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="m4 4 8 8M12 4l-8 8"/></svg>';
+function closeParcel() {
+  if (!openLead) return;
+  openLead = null; panel.removeAttribute("data-open"); parcelLayer.clearLayers();
+  document.querySelectorAll("tbody tr.sel").forEach(tr => tr.classList.remove("sel"));
+  if (!baseChosen) setBase("map");
+}
+function drawBoundary(b) {
+  parcelLayer.clearLayers();
+  if (!b || !b.rings) return;
+  const rings = b.rings.map(r => r.map(([x, y]) => [y, x]));
+  L.polygon(rings, {color: "oklch(24% 0.03 258)", weight: 6, opacity: .9, fill: false, interactive: false}).addTo(parcelLayer);
+  L.polygon(rings, {color: "#fff", weight: 2.5, fillColor: "oklch(62% 0.17 40)", fillOpacity: .22, interactive: false}).addTo(parcelLayer);
+  (b.sides || []).forEach(s => L.tooltip({permanent: true, direction: "center", className: "dim", interactive: false})
+    .setLatLng(s.mid).setContent(s.feet.toLocaleString() + " ft").addTo(parcelLayer));
+  const pad = innerWidth > 900 ? {paddingTopLeft: [40, 40], paddingBottomRight: [panel.offsetWidth - Math.max(0, innerWidth - $("map").getBoundingClientRect().right) + 40, 40]} : {padding: [30, 30]};
+  map.fitBounds(L.latLngBounds(rings.flat()), {...pad, maxZoom: 19, animate: !reduceMotion, duration: 0.45});
+}
+async function openParcel(leadId) {
+  const r = leadRows.find(x => x.id === leadId);
+  if (!r) return;
+  openLead = leadId; hideTip();
+  document.querySelectorAll("tbody tr").forEach(tr => tr.classList.toggle("sel", +tr.dataset.row === leadId));
+  const county = r.parcel_county ? r.parcel_county[0] + r.parcel_county.slice(1).toLowerCase() + " County" : "";
+  const head = `<div class="p-head"><h2>${r.owner ? esc(r.owner) : "Owner not published"}</h2>
+    <div class="meta">${[r.address ? esc(r.address) : "", "Parcel " + esc(r.apn), esc(county)].filter(Boolean).join(" · ")}</div>
+    <button type="button" data-close-parcel aria-label="Close parcel details">${X_ICON}</button></div>`;
+  const why = `<div class="p-sec"><h3>Why it is on the list</h3><p>${esc(REASON[r.match_reason] || r.match_reason)}${r.distance_m != null ? `, ${Math.round(r.distance_m)} m from the alignment` : ""} of ${esc(r.project || "the project")}${r.stage ? `, which is in ${esc(r.stage.replace(/_/g, " "))}` : ""}. Lead score ${r.score}.</p></div>`;
+  panel.innerHTML = head + `<div class="p-body">${why}<div class="p-sec"><p>${STATIC ? "This published snapshot does not carry parcel boundaries, the county record or case lookups. They load in the live app." : "Loading the boundary and county record…"}</p></div></div>`;
+  panel.setAttribute("data-open", "");
+  if (STATIC) return;
+  let d;
+  try { d = await api(`/api/leads/${leadId}/detail`); }
+  catch (e) { if (openLead === leadId) panel.querySelector(".p-body").innerHTML = why + `<div class="p-sec"><div class="alert bad">${esc(e.message)}</div></div>`; return; }
+  if (openLead !== leadId) return;
+  const b = d.boundary, bg = d.background;
+  if (b.rings && !baseChosen) setBase("aerial");
+  drawBoundary(b);
+  const fig = (label, v) => `<div><span>${label}</span><b>${v}</b></div>`;
+  const shape = b.rings
+    ? `<div class="figs">${fig("Area", b.acres >= 0.1 ? b.acres.toFixed(2) + " ac" : Math.round(b.square_feet).toLocaleString() + " sq ft")}${fig("Square feet", Math.round(b.square_feet).toLocaleString())}${fig("Perimeter", Math.round(b.perimeter_feet).toLocaleString() + " ft")}</div>
+       <p style="margin-top:8px">Measured from the county's mapped boundary, outlined on the map with side lengths. A survey governs the legal dimensions.</p>`
+    : `<p>${esc(b.why)}</p>`;
+  const facts = bg.facts.length ? `<dl class="facts">${bg.facts.map(f => `<dt>${esc(f.label)}</dt><dd>${esc(f.value)}</dd>`).join("")}</dl>`
+    : `<p>The county's public file carries no land-use, sale or assessment detail for this parcel.</p>`;
+  const rel = d.related.length ? `<div class="p-sec"><h3>Other parcels held by this owner</h3><ul class="plain">${d.related.map(x =>
+      `<li>${esc(x.address || "Parcel " + x.apn)}<div class="sub">${[esc(x.project), "score " + x.score, x.market_value ? "$" + Math.round(x.market_value).toLocaleString() : ""].filter(Boolean).join(" · ")}</div></li>`).join("")}</ul></div>` : "";
+  const rec = bg.record.length ? `<details class="rec"><summary>Full county record (${bg.record.length} fields, ${esc(d.layer)})</summary><dl class="facts">${bg.record.map(f => `<dt>${esc(f.field)}</dt><dd>${esc(f.value)}</dd>`).join("")}</dl></details>` : "";
+  panel.querySelector(".p-body").innerHTML = why +
+    `<div class="p-sec"><h3>Boundary</h3>${shape}</div><div class="p-sec"><h3>Land background</h3>${facts}</div>${rel}` +
+    `<div class="p-sec" id="p-cases"><h3>Similar cases</h3><p>Searching Pennsylvania appellate opinions…</p></div>${rec}`;
+  let c;
+  try { c = await api(`/api/leads/${leadId}/cases`); } catch (e) { c = {results: [], why: e.message, search_url: null}; }
+  if (openLead !== leadId) return;
+  const link = c.search_url ? `<a href="${esc(safeUrl(c.search_url))}" target="_blank" rel="noopener">Open this search on CourtListener</a>` : "";
+  $("p-cases").innerHTML = `<h3>Similar cases</h3>` + (c.results.length
+    ? `<ul class="plain">${c.results.map(x => `<li><a href="${esc(safeUrl(x.url))}" target="_blank" rel="noopener">${esc(x.name)}</a>
+        <div class="sub">${[esc(x.citation || ""), esc(x.court || ""), esc((x.date || "").slice(0, 4))].filter(Boolean).join(" · ")}</div>${x.snippet ? `<div class="sub">${esc(x.snippet)}</div>` : ""}</li>`).join("")}</ul>
+       <p style="margin-top:10px">Keyword matches for this kind of taking, not legal research. ${link}</p>`
+    : `<p>${esc(c.why || "No matching opinions were found.")}</p><p>${link}${c.query ? `<br>Search used: ${esc(c.query)}` : ""}</p>`);
+}
+panel.addEventListener("click", e => { if (e.target.closest("[data-close-parcel]")) closeParcel(); });
+document.addEventListener("keydown", e => { if (e.key === "Escape" && openLead && !dlg.open) closeParcel(); });
+document.querySelector(".basemap").addEventListener("click", e => { const b = e.target.closest("[data-base]"); if (b) { baseChosen = true; setBase(b.dataset.base); } });
 
 /* ---- outreach dialogs ---- */
 const dlg = $("dlg");
@@ -585,6 +719,11 @@ $("leads-wrap").addEventListener("click", e => {
   const link = e.target.closest("[data-project]"), act = e.target.closest("[data-act]");
   if (link) { e.preventDefault(); select(+link.dataset.project, false); }
   if (act) (act.dataset.act === "postcard" ? openPostcard : openEmail)(+act.dataset.lead);
+  const row = e.target.closest("tr[data-row]");
+  if (row && !link && !act && !e.target.closest("select, button, a")) openParcel(+row.dataset.row);
+});
+$("leads-wrap").addEventListener("keydown", e => {
+  if (e.key === "Enter" && e.target.matches("tr[data-row]")) openParcel(+e.target.dataset.row);
 });
 $("btn-all").addEventListener("click", () => { selected = null; markSelected(); reduceMotion ? map.fitBounds(HOME, {animate: false}) : map.flyToBounds(HOME, {duration: 0.45, easeLinearity: 0.3}); loadLeads(); });
 $("btn-csv").addEventListener("click", () => {
