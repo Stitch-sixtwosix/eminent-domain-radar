@@ -92,3 +92,19 @@ def test_db_and_api(tmp_path):
     assert client.patch("/api/leads/%d" % leads[0]["id"], json={"status": "bogus"}).status_code == 400
     assert client.patch("/api/leads/999", json={"status": "new"}).status_code == 404
     assert "Jane Roe" in client.get("/api/leads.csv", params={"status": "contacted"}).text
+
+
+def test_arcgis_row_joins_fields_and_builtin_catalog_loads():
+    layer = {"counties": ["TEST"], "fields": {"apn": "PIN", "owner": ["O1", "O2"],
+                                               "mailing_address": ["A1", "CITY", "ZIP"], "market_value": "V"}}
+    row = parcels._arcgis_row(layer, {"PIN": " 12-3 ", "O1": "ROE JANE &", "O2": " ROE JOHN ", "A1": "1 MAIN ST  ",
+                                      "CITY": "", "ZIP": 17046.0, "V": " 1200"}, True)
+    assert row["apn"] == "12-3" and row["owner"] == "ROE JANE & ROE JOHN" and row["county"] == "TEST"
+    assert row["mailing_address"] == "1 MAIN ST, 17046" and row["market_value"] == 1200.0
+    assert parcels._arcgis_row(layer, {"PIN": None}, True) is None
+
+    from edradar.config import load_config
+    layers = load_config("config.example.yaml")["parcel_layers"]
+    assert layers[0]["name"] == "Philadelphia OPA" and not layers[-1].get("counties")
+    assert len({l["counties"][0] for l in layers if l.get("counties")}) >= 34
+    assert all(l["fields"].get("apn") and l["fields"].get("owner") for l in layers[1:-1])

@@ -35,6 +35,14 @@ def load_config(path: Optional[str] = None) -> Dict[str, Any]:
         p = Path("config.example.yaml")
     data = yaml.safe_load(p.read_text()) if p.exists() else {}
     cfg = _merge(DEFAULTS, data or {})
+    if cfg.get("use_builtin_pa_layers", True):
+        # Order: the user's county layers, then the built-in county catalog, then statewide fallbacks.
+        builtin = yaml.safe_load((Path(__file__).parent / "data" / "pa_parcel_layers.yaml").read_text())
+        mine = cfg.get("parcel_layers") or []
+        covered = {c.upper() for layer in mine for c in layer.get("counties") or []}
+        builtin = [b for b in builtin if b["counties"][0] not in covered]
+        cfg["parcel_layers"] = ([x for x in mine if x.get("counties")] + builtin
+                                + [x for x in mine if not x.get("counties")])
     if os.environ.get("EDRADAR_DB"):
         cfg["database"] = os.environ["EDRADAR_DB"]
     return cfg

@@ -16,9 +16,24 @@ sources ──► signals ──► scored projects ──► parcels along the 
 | **Federal Register** | NEPA notices (FHWA, FERC pipelines, Army Corps, FRA, FTA) mentioning Pennsylvania | Scoping and environmental review come before any acquisition |
 | **Council legislation (Legistar)** | Ordinances authorizing acquisition or condemnation; Pittsburgh is configured | Often names the exact parcels before filing |
 
-Parcels come from **Philadelphia OPA** (owner, mailing address, market value) and the **PASDA
-statewide parcel layer** (parcel IDs for every county). Any county ArcGIS parcel layer can be added
-in `config.yaml` to get owner names for that county.
+Owner of record, mailing address and county value come from **35 counties' public parcel layers**
+(Philadelphia OPA plus the catalog in `edradar/data/pa_parcel_layers.yaml`). The other 32 counties
+fall back to the **PASDA statewide parcel layer**, which gives a parcel ID only.
+
+Owner data: Beaver, Bedford, Berks, Bradford, Bucks, Butler, Cambria, Cameron, Carbon, Chester, Clinton,
+Columbia, Cumberland, Dauphin, Erie, Fayette, Forest, Huntingdon, Indiana, Juniata, Lancaster, Lebanon,
+Mercer, Montgomery, Northampton, Philadelphia, Potter, Snyder, Sullivan, Susquehanna, Tioga, Union,
+Wayne, Wyoming, York.
+
+Parcel ID only (no public owner layer found, or the county server did not answer): Adams, Allegheny,
+Armstrong, Blair, Centre, Clarion, Clearfield, Crawford, Delaware, Elk, Franklin, Fulton, Greene,
+Jefferson, Lackawanna, Lawrence, Lehigh, Luzerne, Lycoming, McKean, Mifflin, Monroe, Montour,
+Northumberland, Perry, Pike, Schuylkill, Somerset, Venango, Warren, Washington, Westmoreland.
+Add a layer for any of these under `parcel_layers` in `config.yaml` when you find one.
+
+Each catalog entry records its `source`: some are dated snapshots (PASDA) or third-party copies, so
+confirm current ownership at the county before outreach. "County value" is whatever the county
+publishes, usually an assessed value rather than market value.
 
 ## How leads are scored
 
@@ -52,8 +67,7 @@ saves the SQLite database as a downloadable artifact; **CI** runs the tests on e
 
 ## Known limits
 
-* Outside Philadelphia, leads carry a parcel ID and county but no owner name until a county parcel
-  layer with owner fields is added to `parcel_layers`.
+* In the 32 counties without a public owner layer (listed above), leads carry a parcel ID only.
 * "Abuts alignment" is a proximity screen against the existing centerline, not a right-of-way plan.
   Treat leads as a research queue, not a list of confirmed takings.
 * Philadelphia City Council's Legistar API is not publicly readable, so only Pittsburgh is configured.

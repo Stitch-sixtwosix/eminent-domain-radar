@@ -199,7 +199,7 @@ async function loadLeads() {
     return;
   }
   $("leads-wrap").innerHTML = `<table><thead><tr><th>Score</th><th>Owner of record</th><th>Property</th>
-    <th>Mailing address</th><th>Parcel</th><th>Value</th><th>Why</th>${p ? "" : "<th>Project</th>"}<th>Status</th></tr></thead><tbody>` +
+    <th>Mailing address</th><th>Parcel</th><th>County value</th><th>Why</th>${p ? "" : "<th>Project</th>"}<th>Status</th></tr></thead><tbody>` +
     rows.map(r => `<tr>
       <td class="num"><b>${r.score}</b></td>
       <td>${r.owner ? esc(r.owner) : '<span class="meta">look up at county</span>'}</td>

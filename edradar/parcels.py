@@ -48,28 +48,49 @@ def _num(v: Any) -> Optional[float]:
 
 
 # ---------------------------------------------------------------- ArcGIS
+def _field(attrs: Dict[str, Any], spec: Any, sep: str) -> Optional[str]:
+    """Read one field, or join several (a list in the config) while skipping blanks and repeats."""
+    names = spec if isinstance(spec, list) else [spec]
+    parts: List[str] = []
+    for n in names:
+        v = attrs.get(n)
+        if isinstance(v, float) and v.is_integer():
+            v = int(v)
+        v = " ".join(str(v).split()) if v is not None else ""
+        if v and v not in ("0", "None", "<Null>") and v not in parts:
+            parts.append(v)
+    out = sep.join(parts)
+    if "&" in sep:  # "A &" + "B" would otherwise read "A & & B"
+        out = " & ".join(x.strip() for x in out.split("&") if x.strip())
+    return out or None
+
+
 def _arcgis_row(layer: Dict[str, Any], attrs: Dict[str, Any], abuts: bool) -> Optional[Dict[str, Any]]:
     f = layer.get("fields") or {}
-    apn = attrs.get(f.get("apn", ""))
-    if apn in (None, ""):
+    apn = _field(attrs, f["apn"], "-") if f.get("apn") else None
+    if not apn:
         return None
 
-    def get(key: str) -> Any:
-        return attrs.get(f[key]) if f.get(key) else None
+    def get(key: str, sep: str = ", ") -> Optional[str]:
+        return _field(attrs, f[key], sep) if f.get(key) else None
 
     acres = _num(get("acres"))
     if acres is not None:
         acres *= float(layer.get("acres_multiplier", 1))
-    county = get("county")
-    return {"apn": str(apn).strip(), "county": str(county).upper() if county else None,
-            "address": get("address"), "owner": get("owner"), "mailing_address": get("mailing_address"),
-            "market_value": _num(get("market_value")), "acres": acres, "distance_m": None, "abuts": abuts,
-            "attributes": attrs}
+    county = get("county") or (layer["counties"][0] if len(layer.get("counties") or []) == 1 else None)
+    return {"apn": apn, "county": county.upper() if county else None,
+            "address": get("address", " "), "owner": get("owner", f.get("owner_sep", " & ")),
+            "mailing_address": get("mailing_address"), "market_value": _num(get("market_value")),
+            "acres": acres, "distance_m": None, "abuts": abuts, "attributes": attrs}
 
 
 def _arcgis_query(layer: Dict[str, Any], http: Http, extra: Dict[str, Any], limit: int) -> List[Dict[str, Any]]:
-    data = http.post_json(layer["url"].rstrip("/") + "/query", dict(
-        {"outFields": "*", "returnGeometry": "false", "resultRecordCount": limit, "f": "json"}, **extra))
+    params = dict({"outFields": "*", "returnGeometry": "false", "resultRecordCount": limit, "f": "json"}, **extra)
+    url = layer["url"].rstrip("/") + "/query"
+    data = http.post_json(url, params)
+    if "Pagination" in str((data.get("error") or {}).get("message")):  # older servers reject a record limit
+        del params["resultRecordCount"]
+        data = http.post_json(url, params)
     if "error" in data:
         raise RuntimeError("%s: %s" % (layer["name"], data["error"]))
     return [f.get("attributes") or {} for f in data.get("features") or []]
@@ -103,7 +124,7 @@ def arcgis_near(layer, http, geometry, m_cfg) -> List[Dict[str, Any]]:
 
 def arcgis_by_apn(layer, http, apns: List[str]) -> List[Dict[str, Any]]:
     field = (layer.get("fields") or {}).get("apn")
-    if not field or not apns:
+    if not field or isinstance(field, list) or not apns:
         return []
     quoted = ",".join("'%s'" % a.replace("'", "''") for a in apns[:100])
     rows = _arcgis_query(layer, http, {"where": "%s IN (%s)" % (field, quoted)}, 200)

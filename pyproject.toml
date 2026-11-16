@@ -25,4 +25,4 @@ build-backend = "setuptools.build_meta"
 include = ["edradar*"]
 
 [tool.setuptools.package-data]
-edradar = ["web/static/*"]
+edradar = ["web/static/*", "data/*.yaml"]
