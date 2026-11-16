@@ -259,7 +259,10 @@
   .people { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: var(--radius); }
   .people li { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
   .people li:last-child { border-bottom: 0; }
-  .people .who { flex: 1; } .people .who b { font-weight: 500; display: block; }
+  .camp { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  .camp label { display: grid; gap: 4px; font-size: 12.5px; color: var(--ink-2); }
+  .camp input { font: inherit; color: var(--ink); height: 32px; padding: 0 10px; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--surface); }
+  .people .who { flex: 1; min-width: 0; } .people .who b { font-weight: 500; display: block; }
 
   @media (max-width: 900px) {
     header { height: auto; padding: 10px 16px; flex-wrap: wrap; gap: 6px 18px; }
@@ -314,8 +317,14 @@
   <section id="detail">
     <div id="detail-head">
       <h2 id="d-title">Top leads across all projects</h2>
+      <select id="f-outreach" aria-label="Outreach filter">
+        <option value="">All leads</option><option value="email">Email leads (company owners)</option>
+        <option value="postcard">Postcard-ready</option><option value="none">Not contacted yet</option>
+        <option value="contacted">Already contacted</option>
+      </select>
       <label class="check"><input type="checkbox" id="f-owner"> Owner known</label>
       <button id="btn-all" hidden>All projects</button>
+      <button id="btn-campaign" hidden>Postcard campaign</button>
       <button id="btn-csv"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8m0 0L5 7m3 3 3-3M3 13h10"/></svg>Export CSV</button>
     </div>
     <div id="summary" hidden></div>
@@ -421,11 +430,84 @@ async function api(path, opts) {
   }
   return r.json();
 }
+function staticOutreach(l, f) {   // a snapshot has no outreach history, so "contacted" is always empty
+  if (f === "email") return l.owner_kind === "company" && (l.email_contacts ?? 1) > 0;
+  if (f === "postcard") return !!l.mailable && (l.owner_kind === "individual" || l.owner_kind === "company");
+  return f !== "contacted";
+}
+function ringMetrics(rings) {
+  const pts = rings.flat(), lat0 = pts.reduce((a, p) => a + p[1], 0) / pts.length * Math.PI / 180;
+  const kx = 111320 * Math.cos(lat0), ky = 110540, sides = [];
+  let area = 0, per = 0;
+  for (const ring of rings) {
+    let a = 0;
+    for (let i = 0; i < ring.length - 1; i++) {
+      const x1 = ring[i][0] * kx, y1 = ring[i][1] * ky, x2 = ring[i + 1][0] * kx, y2 = ring[i + 1][1] * ky, d = Math.hypot(x2 - x1, y2 - y1);
+      a += x1 * y2 - x2 * y1; per += d;
+      sides.push({feet: Math.round(d * 3.28084), mid: [(ring[i][1] + ring[i + 1][1]) / 2, (ring[i][0] + ring[i + 1][0]) / 2]});
+    }
+    area += a / 2;
+  }
+  sides.sort((a, b) => b.feet - a.feet);
+  return {acres: Math.abs(area) / 4046.8564, square_feet: Math.abs(area) * 10.7639, perimeter_feet: per * 3.28084, sides: sides.filter(x => x.feet >= 15).slice(0, 8)};
+}
+async function staticBoundary(l) {   // the page asks the county's public map server itself
+  const q = l.bq, layer = q && SNAP.layers[q.l];
+  if (!layer) return {rings: null, why: "This county's layer has no parcel ID to look the boundary up by."};
+  const get = async url => { const r = await fetch(url, {signal: AbortSignal.timeout(20000)}); if (!r.ok) throw new Error("status " + r.status); return r.json(); };
+  try {
+    let rings = [];
+    if (layer.provider === "carto_phl") {
+      const d = await get(layer.url + "?q=" + encodeURIComponent(`SELECT ST_AsGeoJSON(the_geom, 6) g FROM pwd_parcels WHERE brt_id='${String(q.v).replace(/\D/g, "")}' LIMIT 1`));
+      const g = d.rows && d.rows[0] && d.rows[0].g && JSON.parse(d.rows[0].g);
+      rings = !g ? [] : g.type === "MultiPolygon" ? g.coordinates.flat() : g.coordinates;
+    } else {
+      const ask = async extra => {
+        const d = await get(layer.url + "/query?" + new URLSearchParams({outFields: layer.field, returnGeometry: "true", outSR: 4326, geometryPrecision: 6, f: "json", ...extra}));
+        if (d.error) throw new Error(d.error.message || "query failed");
+        return d.features || [];
+      };
+      let feats = q.o != null ? (await ask({objectIds: q.o})).filter(f => String(f.attributes[layer.field]).trim() === String(q.v).trim()) : [];
+      if (!feats.length) feats = await ask({where: q.w});
+      rings = feats.flatMap(f => (f.geometry && f.geometry.rings) || []);
+    }
+    rings = rings.map(r => { const a = r[0], b = r[r.length - 1]; return a[0] === b[0] && a[1] === b[1] ? r : [...r, a]; });
+    return rings.length ? {...ringMetrics(rings), rings, why: null} : {rings: null, why: "The county layer has no boundary for this parcel ID."};
+  } catch (e) {
+    return {rings: null, why: `The county map server did not answer (${e.message}). Close and reopen the parcel to try again.`};
+  }
+}
+const KIND = {individual: "Individual", company: "Company or organization", government: "Public body", unknown: "Not published"};
+async function staticDetail(id) {
+  const byId = Object.fromEntries(SNAP.projects.map(p => [p.id, p]));
+  const l = SNAP.leads.find(x => x.id === id), fact = k => (l.facts.find(f => f[0] === k) || [])[1] || null;
+  const others = !l.owner ? [] : SNAP.leads.filter(x => x.owner === l.owner && x.id !== l.id).slice(0, 12)
+    .map(x => ({id: x.id, score: x.score, apn: x.apn, address: x.address, county: x.parcel_county, market_value: x.market_value, project: (byId[x.project_id] || {}).name}));
+  const kind = l.owner_kind || "unknown", vals = [l, ...others].map(x => x.market_value).filter(Boolean);
+  return {lead: l, layer: l.bq ? SNAP.layers[l.bq.l].name : "county parcel file", boundary: await staticBoundary(l),
+    background: {facts: l.facts.map(([label, value]) => ({label, value})), record: []}, related: others,
+    owner: {name: l.owner, kind: KIND[kind], kind_key: kind, mailing_address: l.mailing_address, location: l.own[0], occupancy: l.own[1],
+            owned_since: fact("Last sale date"), purchase_price: fact("Last sale price"), parcels_in_list: 1 + others.length,
+            holdings_value: vals.reduce((a, b) => a + b, 0) || null}};
+}
+function staticCases(id) {
+  const l = SNAP.leads.find(x => x.id === id), p = SNAP.projects.find(x => x.id === l.project_id) || {};
+  const TYPE = {highway: "highway widening", bridge: "bridge replacement", interchange: "interchange", transit: "transit", rail: "railroad",
+    pipeline: "pipeline easement", transmission: '"transmission line" easement', water: "sewer OR water easement", utility: "utility easement",
+    redevelopment: "redevelopment authority blight", airport: "airport"};
+  const terms = ['"eminent domain"'];
+  if (p.source === "penndot") terms.push('"Department of Transportation"');
+  else if ((p.source || "").startsWith("legistar") && p.project_type !== "redevelopment") terms.push("condemnation");
+  terms.push(TYPE[p.project_type] || "condemnation", '"partial taking" OR "just compensation"');
+  const query = terms.join(" ");
+  return {query, results: [], why: "This search runs on CourtListener's own site.",
+    search_url: "https://www.courtlistener.com/?" + new URLSearchParams({q: query, type: "o", court: "pa pacommwct pasuperct", order_by: "score desc"})};
+}
 function staticLeads(q) {
   const pid = q.get("project_id"), min = +(q.get("min_score") || 0), county = q.get("county"), own = q.get("owner_only");
   const byId = Object.fromEntries(SNAP.projects.map(p => [p.id, p]));
   return SNAP.leads.filter(l => (!pid || l.project_id === +pid) && l.score >= min &&
-      (!county || (l.parcel_county || "").toUpperCase() === county) && (!own || l.owner))
+      (!county || (l.parcel_county || "").toUpperCase() === county) && (!own || l.owner) && staticOutreach(l, q.get("outreach")))
     .map(l => { const p = byId[l.project_id] || {}; return {...l, project: p.name, project_type: p.project_type, stage: p.stage, agency: p.agency, source: p.source, url: p.url}; });
 }
 async function staticApi(path) {
@@ -440,6 +522,8 @@ async function staticApi(path) {
       (!text || ((p.name || "") + " " + (p.summary || "")).toLowerCase().includes(text))).slice(0, 500);
   }
   if (route === "/api/leads") return staticLeads(q).slice(0, 300);
+  const m = route.match(/^\/api\/leads\/(\d+)\/(detail|cases)$/);
+  if (m) return m[2] === "detail" ? staticDetail(+m[1]) : staticCases(+m[1]);
   throw new Error("Not available in the published snapshot.");
 }
 function downloadCsv(rows) {
@@ -461,6 +545,7 @@ function leadParams() {
   if (selected) p.set("project_id", selected.id);
   else { p.set("min_score", 60); if ($("f-county").value) p.set("county", $("f-county").value); }
   if ($("f-owner").checked) p.set("owner_only", "true");
+  if ($("f-outreach").value) p.set("outreach", $("f-outreach").value);
   return p;
 }
 
@@ -521,7 +606,11 @@ function outreachCell(r) {
   const done = (at, label) => `<span class="done">${ICON.check}${label} ${esc(day(at))}</span>`;
   const btn = (kind, label, at, sentLabel) => at ? done(at, sentLabel)
     : `<button class="sm" data-act="${kind}" data-lead="${r.id}" ${r.owner ? "" : 'disabled title="No owner of record for this parcel"'}>${ICON[kind === "postcard" ? "card" : "mail"]}${label}</button>`;
-  return `<td class="acts">${btn("postcard", "Postcard", r.postcard_at, "Mailed")}${btn("email", "Email", r.email_at, "Emailed")}</td>`;
+  const emailBtn = r.email_at ? done(r.email_at, "Emailed")
+    : r.owner_kind === "company" && (r.email_contacts ?? 1) > 0
+      ? `<button class="sm" data-act="email" data-lead="${r.id}">${ICON.mail}Email${r.email_contacts ? ` (${r.email_contacts})` : ""}</button>`
+      : `<button class="sm" disabled title="${r.owner_kind === "company" ? "Apollo has no contacts at this owner" : "Email lookup covers company owners. Individual owners get postcards."}">${ICON.mail}Email</button>`;
+  return `<td class="acts">${btn("postcard", "Postcard", r.postcard_at, "Mailed")}${emailBtn}</td>`;
 }
 function skeleton() {
   $("leads-wrap").innerHTML = "<table><tbody>" + Array.from({length: 6}, (_, i) =>
@@ -563,7 +652,7 @@ async function loadLeads() {
       ${outreachCell(r)}
       <td><select data-status="${r.id}" aria-label="Lead status"${STATIC ? " disabled" : ""}>${STATUSES.map(s =>
         `<option${s === r.status ? " selected" : ""}>${s}</option>`).join("")}</select></td></tr>`).join("") +
-    "</tbody></table>" + `<div class="total">${p ? `${leadRows.length.toLocaleString()} of ${p.lead_count.toLocaleString()} parcels for this project` : `Top ${leadRows.length.toLocaleString()} of ${TOTAL_LEADS.toLocaleString()} leads`}, highest score first${leadRows.length >= 300 ? ". Export CSV for the full list" : ""}.</div>`;
+    "</tbody></table>" + `<div class="total">${p ? `${leadRows.length.toLocaleString()} of ${p.lead_count.toLocaleString()} parcels for this project` : ($("f-outreach").value || $("f-owner").checked || $("f-county").value) ? `${leadRows.length >= 300 ? "First 300" : leadRows.length.toLocaleString()} leads matching these filters` : `Top ${leadRows.length.toLocaleString()} of ${TOTAL_LEADS.toLocaleString()} leads`}, highest score first${leadRows.length >= 300 ? ". Export CSV for the full list" : ""}.</div>`;
 }
 
 /* ---- parcel panel: boundary on the map, land background, related parcels, similar cases ---- */
@@ -597,9 +686,8 @@ async function openParcel(leadId) {
     <div class="meta">${[r.address ? esc(r.address) : "", "Parcel " + esc(r.apn), esc(county)].filter(Boolean).join(" · ")}</div>
     <button type="button" data-close-parcel aria-label="Close parcel details">${X_ICON}</button></div>`;
   const why = `<div class="p-sec"><h3>Why it is on the list</h3><p>${esc(REASON[r.match_reason] || r.match_reason)}${r.distance_m != null ? `, ${Math.round(r.distance_m)} m from the alignment` : ""} of ${esc(r.project || "the project")}${r.stage ? `, which is in ${esc(r.stage.replace(/_/g, " "))}` : ""}. Lead score ${r.score}.</p></div>`;
-  panel.innerHTML = head + `<div class="p-body">${why}<div class="p-sec"><p>${STATIC ? "This published snapshot does not carry parcel boundaries, the county record or case lookups. They load in the live app." : "Loading the boundary and county record…"}</p></div></div>`;
+  panel.innerHTML = head + `<div class="p-body">${why}<div class="p-sec"><p>Loading the boundary and county record…</p></div></div>`;
   panel.setAttribute("data-open", "");
-  if (STATIC) return;
   let d;
   try { d = await api(`/api/leads/${leadId}/detail`); }
   catch (e) { if (openLead === leadId) panel.querySelector(".p-body").innerHTML = why + `<div class="p-sec"><div class="alert bad">${esc(e.message)}</div></div>`; return; }
@@ -617,7 +705,7 @@ async function openParcel(leadId) {
   const o = d.owner, proj = projects.find(x => x.id === r.project_id);
   const row = (k, v) => v ? `<dt>${k}</dt><dd>${esc(v)}</dd>` : "";
   const ownerSec = `<div class="p-sec"><h3>Owner of record</h3><dl class="facts">${row("Name", o.name)}${row("Type", o.kind)}${row("Mailing address", o.mailing_address)}${row("Based in", o.location)}${row("Occupancy", o.occupancy)}${row("Owned since", o.owned_since)}${row("Paid", o.purchase_price)}${row("Parcels on this list", o.parcels_in_list > 1 ? String(o.parcels_in_list) : "")}${row("Combined county value", o.parcels_in_list > 1 && o.holdings_value ? "$" + Math.round(o.holdings_value).toLocaleString() : "")}</dl>
-    <p style="margin-top:8px">${o.kind_key === "company" ? "Use Email on this row to look up decision-makers at this company in Apollo." : o.kind_key === "government" ? "Public bodies are not offered outreach." : o.kind_key === "unknown" ? "This county does not publish owner names online. Look the parcel ID up at the county assessment office." : "County parcel files publish no phone number or email. A postcard reaches the mailing address above."}</p></div>`;
+    <p style="margin-top:8px">${o.kind_key === "company" ? (STATIC ? "Company owners can be looked up in Apollo from the live app." : "Use Email on this row to look up decision-makers at this company in Apollo.") : o.kind_key === "government" ? "Public bodies are not offered outreach." : o.kind_key === "unknown" ? "This county does not publish owner names online. Look the parcel ID up at the county assessment office." : "County parcel files publish no phone number or email. A postcard reaches the mailing address above."}</p></div>`;
   const stageSec = proj && proj.timeline ? `<div class="p-sec"><h3>Project stage</h3>${stageHead(proj.timeline)}${stageList(proj.timeline, true)}</div>` : "";
   const rel = d.related.length ? `<div class="p-sec"><h3>Other parcels held by this owner</h3><ul class="plain">${d.related.map(x =>
       `<li>${esc(x.address || "Parcel " + x.apn)}<div class="sub">${[esc(x.project), "score " + x.score, x.market_value ? "$" + Math.round(x.market_value).toLocaleString() : ""].filter(Boolean).join(" · ")}</div></li>`).join("")}</ul></div>` : "";
@@ -711,6 +799,49 @@ async function openEmail(leadId) {
     }
   });
 }
+async function openCampaign() {
+  const pc = OUT.postcard, scope = selected ? selected.name : $("f-county").value ? $("f-county").selectedOptions[0].text + " County" : "all projects";
+  dlg.innerHTML = `<div class="dlg-head"><h2 id="dlg-title">Postcard campaign</h2><p>One card per owner and mailing address, highest score first, for ${esc(scope)}.</p></div>
+    <div class="dlg-body">
+      <div class="camp"><label>Minimum lead score<input id="c-min" type="number" min="0" max="100" value="90"></label>
+        <label>Most cards to mail<input id="c-max" type="number" min="1" max="200" value="25"></label></div>
+      <div id="c-out"><p class="meta">Checking who is eligible…</p></div>
+    </div>
+    <div class="dlg-foot"><span class="note">${pc.mode === "live" ? "Live mode: this mails real postcards and bills your Lob account, about $1 a card."
+        : pc.mode === "test" ? "Test mode: Lob renders proofs. Nothing is mailed or billed." : esc(pc.why || "")}</span>
+      <button data-close>Cancel</button><button class="primary" id="c-go" disabled>Mail postcards</button></div>`;
+  dlg.showModal();
+  const body = () => ({min_score: +$("c-min").value || 0, limit: Math.max(1, Math.min(200, +$("c-max").value || 1)),
+                       project_id: selected ? selected.id : null, county: selected ? null : $("f-county").value || null});
+  let ticket = 0;
+  const preview = async () => {
+    const mine = ++ticket;
+    $("c-go").disabled = true;
+    let res;
+    try { res = await api("/api/postcards/campaign", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({...body(), dry_run: true})}); }
+    catch (e) { if (mine === ticket) $("c-out").innerHTML = `<div class="alert bad">${esc(e.message)}</div>`; return; }
+    if (mine !== ticket) return;
+    const n = res.eligible;
+    $("c-out").innerHTML = n ? `<p class="meta">${n} owner${n === 1 ? "" : "s"} would be mailed. Owners already mailed, public bodies and unreadable addresses are left out.</p>
+      <ul class="people">${res.recipients.slice(0, 8).map(r => `<li><div class="who"><b>${esc(r.owner)}</b><span class="meta">${esc(r.mailing_address)}</span></div><span class="score ${scoreClass(r.score)}">${r.score}</span></li>`).join("")}</ul>
+      ${n > 8 ? `<p class="meta" style="margin-top:8px">and ${n - 8} more.</p>` : ""}`
+      : `<div class="alert">No owners qualify at this score. Lower the minimum score or pick another project.</div>`;
+    $("c-go").textContent = pc.mode === "live" ? `Mail ${n} postcard${n === 1 ? "" : "s"}` : `Create ${n} test proof${n === 1 ? "" : "s"}`;
+    $("c-go").disabled = !n || !pc.enabled;
+  };
+  let t; for (const id of ["c-min", "c-max"]) $(id).addEventListener("input", () => { clearTimeout(t); t = setTimeout(preview, 300); });
+  $("c-go").addEventListener("click", async ev => {
+    ev.target.disabled = true; ev.target.textContent = "Sending…";
+    try {
+      const res = await api("/api/postcards/campaign", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({...body(), dry_run: false})});
+      $("c-out").innerHTML = `<div class="alert">${res.sent.length} ${res.mode === "live" ? "postcard" : "test proof"}${res.sent.length === 1 ? "" : "s"} sent${res.failed.length ? `, ${res.failed.length} failed` : ""}.</div>` +
+        (res.failed.length ? `<ul class="people">${res.failed.map(f => `<li><div class="who"><b>${esc(f.owner)}</b><span class="meta">${esc(f.why)}</span></div></li>`).join("")}</ul>` : "");
+      dlg.querySelector(".dlg-foot").innerHTML = `<span class="note"></span><button data-close class="primary">Done</button>`;
+      await loadLeads();
+    } catch (e) { $("c-out").insertAdjacentHTML("afterbegin", `<div class="alert bad">${esc(e.message)}</div>`); preview(); }
+  });
+  preview();
+}
 dlg.addEventListener("click", e => { if (e.target === dlg || e.target.closest("[data-close]")) dlg.close(); });
 addEventListener("resize", () => dlg.open && fitCards());
 
@@ -780,6 +911,8 @@ $("btn-csv").addEventListener("click", () => {
   if (STATIC) downloadCsv(staticLeads(leadParams())); else location.href = "/api/leads.csv?" + leadParams();
 });
 $("f-owner").addEventListener("change", loadLeads);
+$("f-outreach").addEventListener("change", loadLeads);
+$("btn-campaign").addEventListener("click", openCampaign);
 let timer;
 for (const id of ["f-county", "f-type", "f-source", "f-score", "f-q"])
   $(id).addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(async () => { await loadProjects(); await loadLeads(); }, 250); });
@@ -798,6 +931,7 @@ for (const id of ["f-county", "f-type", "f-source", "f-score", "f-q"])
     OUT = await api("/api/outreach/status");
     mode.textContent = "Postcards: " + ({live: "live", test: "test mode", off: "off"}[OUT.postcard.mode]) + " · Email: " + (OUT.email.enabled ? "on" : "off");
     if (OUT.postcard.mode === "live") mode.dataset.live = "";
+    $("btn-campaign").hidden = false;
     mode.hidden = false;
   }
   const title = c => c[0] + c.slice(1).toLowerCase();

@@ -255,3 +255,72 @@ class Apollo:
             "send_email_from_email_account_id": self.cfg["email_account_id"],
         })
         return {"external_id": contact["id"], "email": email, "name": person.get("name"), "sequence_id": seq}
+
+
+# ---------------------------------------------------------------- postcard campaigns
+POSTCARD_ELIGIBLE = """
+    pa.mailable = 1 AND pa.owner_kind IN ('individual', 'company') AND l.status NOT IN ('rejected', 'retained')
+    AND NOT EXISTS (SELECT 1 FROM outreach o JOIN leads l2 ON l2.id = o.lead_id JOIN parcels p2 ON p2.id = l2.parcel_id
+                    WHERE o.channel = 'postcard' AND p2.owner = pa.owner AND p2.mailing_address = pa.mailing_address)
+"""
+
+
+def campaign_leads(db: Any, min_score: int = 80, project_id: Optional[int] = None, county: Optional[str] = None,
+                   limit: int = 25) -> List[Dict[str, Any]]:
+    """The next owners a campaign would mail: highest score first, one card per owner and address."""
+    from .web.app import LEAD_SQL
+
+    where, params = [POSTCARD_ELIGIBLE, "l.score >= ?"], [min_score]
+    if project_id is not None:
+        where.append("l.project_id = ?"); params.append(project_id)
+    if county:
+        where.append("UPPER(pa.county) = ?"); params.append(county.upper())
+    rows = db.rows(LEAD_SQL + " WHERE " + " AND ".join(where) + " ORDER BY l.score DESC, pa.market_value DESC", params)
+    seen, out = set(), []
+    for r in rows:
+        key = (r["owner"], r["mailing_address"])
+        if key not in seen:
+            seen.add(key)
+            out.append(r)
+    return out[:max(0, limit)] if limit is not None else out
+
+
+def run_campaign(cfg: Dict[str, Any], db: Any, min_score: int = 80, project_id: Optional[int] = None,
+                 county: Optional[str] = None, limit: int = 25, dry_run: bool = True,
+                 client: Optional[httpx.Client] = None) -> Dict[str, Any]:
+    """Mail one postcard to each eligible owner, up to `limit`. A dry run only reports who would be mailed."""
+    leads = campaign_leads(db, min_score, project_id, county, limit)
+    st = status(cfg)["postcard"]
+    out: Dict[str, Any] = {"mode": st["mode"], "dry_run": dry_run, "eligible": len(leads), "sent": [], "failed": [],
+                           "recipients": [{"lead_id": r["id"], "owner": r["owner"], "mailing_address": r["mailing_address"],
+                                           "score": r["score"], "project": r["project"]} for r in leads]}
+    if dry_run:
+        return out
+    if not st["enabled"]:
+        raise ValueError(st["why"])
+    for r in leads:
+        try:
+            res = send_postcard(cfg, r, client)
+            db.log_outreach(r["id"], "postcard", "sent" if res["mode"] == "live" else "test", res["external_id"], res)
+            out["sent"].append({"lead_id": r["id"], "owner": r["owner"], "id": res["external_id"]})
+        except (ValueError, RuntimeError, httpx.HTTPError) as e:
+            out["failed"].append({"lead_id": r["id"], "owner": r["owner"], "why": str(e)[:160]})
+            if len(out["failed"]) >= 3 and not out["sent"]:
+                break        # the account or key is the problem, not the addresses
+    return out
+
+
+def scan_email_leads(cfg: Dict[str, Any], db: Any, limit: int = 50, client: Optional[httpx.Client] = None) -> Dict[str, int]:
+    """Ask Apollo which company owners have reachable contacts. Uses search only, which spends no credits."""
+    owners = db.rows(
+        """SELECT pa.owner, MAX(l.score) score FROM parcels pa JOIN leads l ON l.parcel_id = pa.id
+           WHERE pa.owner_kind = 'company' AND pa.email_contacts IS NULL GROUP BY pa.owner ORDER BY score DESC LIMIT ?""",
+        (limit,))
+    ap = Apollo(cfg, client)
+    found = 0
+    for o in owners:
+        n = len(ap.find_contacts({"owner": o["owner"]}))
+        found += n > 0
+        db.conn.execute("UPDATE parcels SET email_contacts=? WHERE owner=?", (n, o["owner"]))
+        db.conn.commit()
+    return {"owners_checked": len(owners), "owners_with_contacts": found}

@@ -11,6 +11,7 @@ from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 
 from .. import outreach, parceldetail
+from .. import outreach as outreach_mod
 from ..classify import score_breakdown, timeline
 from ..db import DB
 
@@ -21,7 +22,7 @@ LEAD_SQL = """
 SELECT l.id, l.score, l.match_reason, l.distance_m, l.status, l.notes, l.created_at,
        pa.apn, pa.county AS parcel_county, pa.address, pa.owner, pa.mailing_address, pa.market_value, pa.acres,
        pa.layer, p.id AS project_id, p.name AS project, p.project_type, p.stage, p.score AS project_score,
-       p.est_cost, s.source, s.url, s.agency,
+       p.est_cost, s.source, s.url, s.agency, pa.owner_kind, pa.mailable, pa.email_contacts,
        (SELECT MAX(o.created_at) FROM outreach o WHERE o.lead_id = l.id AND o.channel = 'postcard') AS postcard_at,
        (SELECT MAX(o.created_at) FROM outreach o WHERE o.lead_id = l.id AND o.channel = 'email') AS email_at
 FROM leads l JOIN parcels pa ON pa.id = l.parcel_id JOIN projects p ON p.id = l.project_id
@@ -33,12 +34,30 @@ class Enroll(BaseModel):
     person_id: str
 
 
+class Campaign(BaseModel):
+    min_score: int = 90
+    project_id: Optional[int] = None
+    county: Optional[str] = None
+    limit: int = 25
+    dry_run: bool = True
+
+
 class LeadUpdate(BaseModel):
     status: Optional[str] = None
     notes: Optional[str] = None
 
 
-def _lead_filters(project_id, status, county, min_score, owner_only, q):
+OUTREACH_FILTERS = {
+    # company owners Apollo can search; hidden once a scan found nobody there
+    "email": "pa.owner_kind = 'company' AND COALESCE(pa.email_contacts, 1) > 0 "
+             "AND NOT EXISTS (SELECT 1 FROM outreach o WHERE o.lead_id = l.id AND o.channel = 'email')",
+    "postcard": outreach.POSTCARD_ELIGIBLE,
+    "contacted": "EXISTS (SELECT 1 FROM outreach o WHERE o.lead_id = l.id)",
+    "none": "NOT EXISTS (SELECT 1 FROM outreach o WHERE o.lead_id = l.id)",
+}
+
+
+def _lead_filters(project_id, status, county, min_score, owner_only, q, outreach_filter=None):
     where, params = ["l.score >= ?"], [min_score]
     if project_id is not None:
         where.append("l.project_id = ?"); params.append(project_id)
@@ -50,6 +69,8 @@ def _lead_filters(project_id, status, county, min_score, owner_only, q):
         where.append("pa.owner IS NOT NULL")
     if q:
         where.append("(pa.owner LIKE ? OR pa.address LIKE ? OR pa.apn LIKE ?)"); params += ["%%%s%%" % q] * 3
+    if outreach_filter in OUTREACH_FILTERS:
+        where.append(OUTREACH_FILTERS[outreach_filter])
     return " WHERE " + " AND ".join(where), params
 
 
@@ -139,6 +160,13 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
     def outreach_status() -> Dict[str, Any]:
         return outreach.status(cfg)
 
+    @app.post("/api/postcards/campaign")
+    def postcard_campaign(body: Campaign) -> Dict[str, Any]:
+        """Dry run by default: lists who would be mailed. With dry_run false it mails up to `limit` owners."""
+        limit = max(1, min(body.limit, 200))
+        return guard(lambda: outreach.run_campaign(cfg, db, body.min_score, body.project_id, body.county, limit,
+                                                   body.dry_run))
+
     @app.get("/api/leads/{lead_id}/postcard")
     def postcard_preview(lead_id: int) -> Dict[str, Any]:
         lead = one_lead(lead_id)
@@ -176,15 +204,16 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
     @app.get("/api/leads")
     def leads(project_id: Optional[int] = None, status: Optional[str] = None, county: Optional[str] = None,
               min_score: int = 0, owner_only: bool = False, q: Optional[str] = None,
-              limit: int = 300) -> List[Dict[str, Any]]:
-        where, params = _lead_filters(project_id, status, county, min_score, owner_only, q)
+              outreach: Optional[str] = None, limit: int = 300) -> List[Dict[str, Any]]:
+        where, params = _lead_filters(project_id, status, county, min_score, owner_only, q, outreach)
         return db.rows(LEAD_SQL + where + " ORDER BY l.score DESC, pa.market_value DESC LIMIT ?",
                        params + [min(limit, 5000)])
 
     @app.get("/api/leads.csv")
     def leads_csv(project_id: Optional[int] = None, status: Optional[str] = None, county: Optional[str] = None,
-                  min_score: int = 0, owner_only: bool = False, q: Optional[str] = None) -> StreamingResponse:
-        where, params = _lead_filters(project_id, status, county, min_score, owner_only, q)
+                  min_score: int = 0, owner_only: bool = False, q: Optional[str] = None,
+                  outreach: Optional[str] = None) -> StreamingResponse:
+        where, params = _lead_filters(project_id, status, county, min_score, owner_only, q, outreach)
         rows = db.rows(LEAD_SQL + where + " ORDER BY l.score DESC LIMIT 50000", params)
         buf = io.StringIO()
         if rows:
@@ -217,18 +246,37 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40) -> Dic
     stats["generated"] = date.today().isoformat()
     projects = client.get("/api/projects", params={"min_score": min_score, "limit": 2000}).json()
     keep = ("id", "project_id", "project_score", "score", "match_reason", "distance_m", "status", "apn", "parcel_county", "address",
-            "owner", "mailing_address", "market_value", "acres")
-    leads = [{k: r[k] for k in keep} for r in client.get("/api/leads", params={"limit": 5000}).json()]
+            "owner", "mailing_address", "market_value", "acres", "owner_kind", "mailable", "email_contacts")
     db = DB(cfg["database"])
-    if len(leads) == 5000:  # the API caps a page; a snapshot wants every lead
-        leads = [{k: r[k] for k in keep} for r in db.rows(LEAD_SQL + " ORDER BY l.score DESC, pa.market_value DESC")]
+    layer_cfg = {x.get("name"): x for x in cfg.get("parcel_layers") or []}
+    layers: List[Dict[str, Any]] = []      # each lead points at one of these so the page can fetch its own boundary
+    layer_index: Dict[str, int] = {}
+    leads = []
+    extra = {r["lead_id"]: r for r in db.rows(
+        "SELECT l.id AS lead_id, pa.layer, pa.attributes, pa.apn FROM leads l JOIN parcels pa ON pa.id = l.parcel_id")}
+    for r in db.rows(LEAD_SQL + " ORDER BY l.score DESC, pa.market_value DESC"):
+        row = {k: r[k] for k in keep}
+        x = extra[r["id"]]
+        parcel = {"apn": x["apn"], "attributes": json.loads(x["attributes"] or "{}")}
+        facts = parceldetail.background(parcel)["facts"]
+        prof = parceldetail.owner_profile(r, facts, [])
+        row["facts"] = [[f["label"], f["value"]] for f in facts]
+        row["own"] = [prof["location"], prof["occupancy"]]
+        layer = layer_cfg.get(x["layer"])
+        q = parceldetail.boundary_query(layer, parcel) if layer else None
+        if q:
+            if x["layer"] not in layer_index:
+                layer_index[x["layer"]] = len(layers)
+                layers.append({"name": x["layer"], "url": q.pop("url"), "provider": q.pop("provider"), "field": q.pop("field")})
+            row["bq"] = dict({k: v for k, v in q.items() if k not in ("url", "provider", "field")}, l=layer_index[x["layer"]])
+        leads.append(row)
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     html = (STATIC / "index.html").read_text()
     html = html.replace("<script>\nconst $", "<script>window.EDRADAR_STATIC = true;</script>\n<script>\nconst $", 1)
     assert "EDRADAR_STATIC = true" in html
     (out / "index.html").write_text(html)
-    (out / "data.json").write_text(json.dumps({"stats": stats, "projects": projects, "leads": leads},
+    (out / "data.json").write_text(json.dumps({"stats": stats, "projects": projects, "leads": leads, "layers": layers},
                                               separators=(",", ":")))
     (out / ".nojekyll").write_text("")
     return {"projects": len(projects), "leads": len(leads)}

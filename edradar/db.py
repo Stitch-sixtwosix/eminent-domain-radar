@@ -106,6 +106,22 @@ class DB:
         self.conn.executescript(SCHEMA)
         if "geometry" not in [r["name"] for r in self.conn.execute("PRAGMA table_info(parcels)")]:
             self.conn.execute("ALTER TABLE parcels ADD COLUMN geometry TEXT")   # cached boundary rings
+        if "owner_kind" not in [r["name"] for r in self.conn.execute("PRAGMA table_info(parcels)")]:
+            self.conn.execute("ALTER TABLE parcels ADD COLUMN owner_kind TEXT")       # individual, company, government, unknown
+            self.conn.execute("ALTER TABLE parcels ADD COLUMN mailable INTEGER")      # 1 when the mailing address parses
+            self.conn.execute("ALTER TABLE parcels ADD COLUMN email_contacts INTEGER")  # Apollo contacts found; NULL = not looked up
+        self.refresh_outreach_flags()
+
+    def refresh_outreach_flags(self) -> int:
+        """Classify owners and addresses for any parcel that has not been classified yet."""
+        from .outreach import owner_kind, parse_address
+
+        rows = self.conn.execute("SELECT id, owner, mailing_address FROM parcels WHERE owner_kind IS NULL").fetchall()
+        self.conn.executemany("UPDATE parcels SET owner_kind=?, mailable=? WHERE id=?",
+                              [(owner_kind(r["owner"]), 1 if parse_address(r["mailing_address"]) else 0, r["id"])
+                               for r in rows])
+        self.conn.commit()
+        return len(rows)
 
     # ---- signals ----
     def upsert_signal(self, s: Dict[str, Any]) -> bool:
@@ -208,7 +224,9 @@ class DB:
                VALUES (:layer, :apn, :county, :address, :owner, :mailing_address, :market_value, :acres, :attributes)
                ON CONFLICT(layer, apn) DO UPDATE SET county=excluded.county, address=excluded.address,
                  owner=excluded.owner, mailing_address=excluded.mailing_address,
-                 market_value=excluded.market_value, acres=excluded.acres, attributes=excluded.attributes""",
+                 market_value=excluded.market_value, acres=excluded.acres, attributes=excluded.attributes,
+                 owner_kind=CASE WHEN excluded.owner IS parcels.owner AND excluded.mailing_address IS parcels.mailing_address
+                                 THEN parcels.owner_kind END""",
             row,
         )
         return self.conn.execute(

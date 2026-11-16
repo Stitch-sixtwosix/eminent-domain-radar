@@ -23,6 +23,13 @@ def main() -> None:
     p = sub.add_parser("serve", help="start the dashboard")
     p.add_argument("--host", default="127.0.0.1")
     p.add_argument("--port", type=int, default=8000)
+    p = sub.add_parser("postcards", help="mail one postcard per eligible owner (dry run unless --send)")
+    p.add_argument("--min-score", type=int, default=90)
+    p.add_argument("--county")
+    p.add_argument("--limit", type=int, default=25, help="most cards to mail in this batch")
+    p.add_argument("--send", action="store_true", help="actually send; without it the batch is only listed")
+    p = sub.add_parser("find-emails", help="ask Apollo which company owners have contacts (search only, no credits)")
+    p.add_argument("--limit", type=int, default=50)
     p = sub.add_parser("export", help="write a read-only static copy of the dashboard")
     p.add_argument("--out", default="site")
     args = ap.parse_args()
@@ -51,6 +58,22 @@ def main() -> None:
         pipeline.match(cfg, db, args.limit)
     elif args.cmd == "run":
         pipeline.run_all(cfg, db, args.limit)
+    elif args.cmd == "postcards":
+        from . import outreach
+
+        res = outreach.run_campaign(cfg, db, args.min_score, None, args.county, args.limit, dry_run=not args.send)
+        for r in res["recipients"]:
+            print("  %3d  %-40s %s" % (r["score"], (r["owner"] or "")[:40], r["mailing_address"]))
+        if res["dry_run"]:
+            print("%d owners would be mailed (Lob mode: %s). Add --send to mail them." % (res["eligible"], res["mode"]))
+        else:
+            print("%d sent in %s mode, %d failed" % (len(res["sent"]), res["mode"], len(res["failed"])))
+            for f in res["failed"]:
+                print("  failed: %s: %s" % (f["owner"], f["why"]))
+    elif args.cmd == "find-emails":
+        from . import outreach
+
+        print(outreach.scan_email_leads(cfg, db, args.limit))
     elif args.cmd == "stats":
         for table in ("signals", "projects", "parcels", "leads"):
             print("%-9s %d" % (table, db.rows("SELECT COUNT(*) n FROM %s" % table)[0]["n"]))

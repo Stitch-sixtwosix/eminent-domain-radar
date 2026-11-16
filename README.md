@@ -89,6 +89,15 @@ their key is set in the environment.
 | Postcard | [Lob](https://www.lob.com) | `LOB_API_KEY` + firm return address under `outreach.firm` | A `test_` key renders a proof and mails nothing; a `live_` key mails a 4x6 card and bills the Lob account. |
 | Email | [Apollo](https://www.apollo.io) | `APOLLO_API_KEY` + `outreach.apollo.sequence_id`, `email_account_id` | Finds decision-makers at company owners and adds the one you pick to your Apollo sequence. Revealing an email uses one Apollo credit. |
 
+**Finding email leads.** The lead table's outreach filter has "Email leads (company owners)" and
+"Postcard-ready". `edradar find-emails` asks Apollo which company owners actually have contacts (search only,
+no credits) so the filter and the Email button show real availability.
+
+**Postcard campaigns.** "Postcard campaign" in the dashboard, or `edradar postcards --min-score 90 --limit 25`,
+mails one card per owner and address, highest score first. Both preview the batch first; the command mails only
+with `--send`. To mail automatically at the end of every `edradar run`, set `outreach.postcard.auto.enabled: true`
+(with `min_score`, `max_per_run` and optional `counties`). An owner already mailed is never mailed again.
+
 Public bodies (Commonwealth, municipalities, authorities) are never offered outreach. A postcard is
 refused when the mailing address cannot be read reliably (about 1.5% of addresses), rather than guessed.
 Apollo holds business contacts, so email works for company-owned parcels; individual owners get postcards.

@@ -123,3 +123,28 @@ def run_all(cfg: Dict[str, Any], db: DB, limit: Optional[int] = None) -> None:
     print("Classify"); classify(cfg, db)
     print("Geocode"); geocode(cfg, db)
     print("Match"); match(cfg, db, limit)
+    db.refresh_outreach_flags()
+    auto_postcards(cfg, db)
+
+
+def auto_postcards(cfg: Dict[str, Any], db: DB) -> None:
+    """Mail the configured automatic batch. Off unless outreach.postcard.auto.enabled is true and a Lob key is set."""
+    from . import outreach
+
+    auto = ((cfg.get("outreach") or {}).get("postcard") or {}).get("auto") or {}
+    if not auto.get("enabled"):
+        return
+    print("Postcards")
+    counties = auto.get("counties") or [None]
+    cap = int(auto.get("max_per_run", 25))
+    for county in counties:
+        if cap <= 0:
+            break
+        try:
+            res = outreach.run_campaign(cfg, db, int(auto.get("min_score", 90)), None, county, cap, dry_run=False)
+        except ValueError as e:
+            print("  not sent: %s" % e)
+            return
+        cap -= len(res["sent"])
+        print("  %s%d sent in %s mode, %d failed" % ("%s: " % county if county else "", len(res["sent"]), res["mode"],
+                                                      len(res["failed"])))

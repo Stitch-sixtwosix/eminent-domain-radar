@@ -277,3 +277,63 @@ def test_timeline_and_owner_profile():
     assert o["owned_since"] == "Feb 17, 2022" and o["parcels_in_list"] == 2 and o["holdings_value"] == 150000
     away = pd.owner_profile(dict(lead, owner="ROE HOLDINGS LLC", mailing_address="9 OAK AVE, CARY, NC, 27519"), [], [])
     assert away["kind_key"] == "company" and away["location"] == "Out of state (NC)" and "absentee" in away["occupancy"]
+
+
+def test_campaign_filter_and_snapshot(tmp_path, monkeypatch):
+    import httpx
+    from edradar import outreach
+    from edradar.web.app import export_static
+
+    path = str(tmp_path / "t.db")
+    db = seeded_db(path)
+    pid = db.rows("SELECT id FROM projects")[0]["id"]
+    people = [("B-1", "ROE HOLDINGS LLC", "9 OAK ST, ERIE, PA, 16501", 90), ("B-2", "ROE HOLDINGS LLC", "9 OAK ST, ERIE, PA, 16501", 88),
+              ("B-3", "CITY OF ERIE", "1 STATE ST, ERIE, PA, 16501", 95), ("B-4", "DOE JOHN", "ERIE PA", 93),
+              ("B-5", "POE ANN", "4 ELM RD, ERIE, PA, 16502", 70)]
+    for apn, owner, mail, score in people:
+        db.upsert_lead(pid, db.upsert_parcel({"layer": "t", "apn": apn, "owner": owner, "mailing_address": mail}), 5.0,
+                       "abuts_alignment", score)
+    db.conn.execute("UPDATE parcels SET mailing_address='1 MAIN ST, ERIE, PA, 16501' WHERE apn='A-1'")
+    db.commit()
+    assert db.refresh_outreach_flags() >= 5
+    kinds = {r["apn"]: (r["owner_kind"], r["mailable"]) for r in db.rows("SELECT * FROM parcels")}
+    assert kinds["B-1"] == ("company", 1) and kinds["B-3"] == ("government", 1) and kinds["B-4"] == ("individual", 0)
+
+    cfg = {"database": path, "parcel_layers": [], "user_agent": "t",
+           "outreach": {"firm": {"name": "Test Law", "address_line1": "1 Court St", "city": "Erie", "state": "PA", "zip": "16501"},
+                        "postcard": {}, "apollo": {}}}
+    # one card per owner and address; public bodies, unreadable addresses and low scores are left out
+    picked = [r["owner"] for r in outreach.campaign_leads(db, 80)]
+    assert picked == ["ROE HOLDINGS LLC", "Jane Roe"]
+    monkeypatch.delenv("LOB_API_KEY", raising=False)
+    dry = outreach.run_campaign(cfg, db, 80)
+    assert dry["dry_run"] and dry["eligible"] == 2 and dry["sent"] == []
+    try:
+        outreach.run_campaign(cfg, db, 80, dry_run=False)
+        assert False
+    except ValueError:
+        pass
+    monkeypatch.setenv("LOB_API_KEY", "test_x")
+    lob = httpx.Client(transport=httpx.MockTransport(lambda req: httpx.Response(200, json={"id": "psc_9"})))
+    res = outreach.run_campaign(cfg, db, 80, limit=1, dry_run=False, client=lob)
+    assert len(res["sent"]) == 1 and res["sent"][0]["owner"] == "ROE HOLDINGS LLC"
+    # the same owner's second parcel is not mailed again
+    assert [r["owner"] for r in outreach.campaign_leads(db, 80)] == ["Jane Roe"]
+
+    client = TestClient(create_app(cfg))
+    emails = client.get("/api/leads", params={"outreach": "email"}).json()
+    assert {r["owner"] for r in emails} == {"ROE HOLDINGS LLC"}
+    assert {r["owner"] for r in client.get("/api/leads", params={"outreach": "postcard"}).json()} == {"Jane Roe", "POE ANN"}
+    assert len(client.get("/api/leads", params={"outreach": "contacted"}).json()) == 1
+    preview = client.post("/api/postcards/campaign", json={"min_score": 80}).json()
+    assert preview["dry_run"] and preview["eligible"] == 1
+
+    apollo = httpx.Client(transport=httpx.MockTransport(lambda req: httpx.Response(200, json={"people": []})))
+    monkeypatch.setenv("APOLLO_API_KEY", "k")
+    assert outreach.scan_email_leads(cfg, db, client=apollo) == {"owners_checked": 1, "owners_with_contacts": 0}
+    assert client.get("/api/leads", params={"outreach": "email"}).json() == []      # nobody found, so not an email lead
+
+    counts = export_static(cfg, str(tmp_path / "site"))
+    snap = json.loads((tmp_path / "site" / "data.json").read_text())
+    row = next(r for r in snap["leads"] if r["owner"] == "Jane Roe")
+    assert counts["leads"] == 6 and row["owner_kind"] == "individual" and row["own"][0] == "Pennsylvania" and "facts" in row

@@ -110,6 +110,11 @@ outreach:
     email: ""
   postcard:
     advertising_label: true     # prints "ADVERTISEMENT." in the fine print
+    auto:                       # automatic mailing at the end of every `edradar run`
+      enabled: false            # nothing is mailed until this is true AND LOB_API_KEY is set
+      min_score: 90             # only leads at or above this score
+      max_per_run: 25           # hard cap on cards per run (about $1 each with a live key)
+      counties: []              # e.g. [PHILADELPHIA, MONTGOMERY]; empty means every county
   apollo:
     from_email: ""              # the connected Apollo mailbox to send from
     email_account_id: ""        # that mailbox's id in Apollo

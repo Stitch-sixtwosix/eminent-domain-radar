@@ -39,19 +39,12 @@ def _close(ring: List[List[float]]) -> List[List[float]]:
     return ring if ring and ring[0] == ring[-1] else ring + ring[:1]
 
 
-def fetch_boundary(layer: Dict[str, Any], parcel: Dict[str, Any], http: Http) -> Optional[List[List[List[float]]]]:
-    """The parcel polygon as lon/lat rings, straight from the county layer the parcel came from."""
+def boundary_query(layer: Dict[str, Any], parcel: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    """How to ask the county for this parcel's polygon. The server and the published snapshot both follow it."""
     if layer.get("provider") == "carto_phl":
         if not str(parcel["apn"]).isdigit():
             return None
-        data = http.post_json(layer["url"], {
-            "q": "SELECT ST_AsGeoJSON(the_geom, 6) g FROM pwd_parcels WHERE brt_id='%s' LIMIT 1" % parcel["apn"]})
-        rows = data.get("rows") or []
-        if not rows or not rows[0].get("g"):
-            return None
-        geo = json.loads(rows[0]["g"])
-        polys = geo["coordinates"] if geo["type"] == "MultiPolygon" else [geo["coordinates"]]
-        return [_close(r) for poly in polys for r in poly]
+        return {"provider": "carto_phl", "url": layer["url"], "field": "brt_id", "v": str(parcel["apn"])}
     field = (layer.get("fields") or {}).get("apn")
     if not field or isinstance(field, list):
         return None
@@ -62,24 +55,41 @@ def fetch_boundary(layer: Dict[str, Any], parcel: Dict[str, Any], http: Http) ->
     county_field = (layer.get("fields") or {}).get("county")
     if county_field and attrs.get(county_field):   # the statewide layer reuses IDs across counties
         where += " AND %s = '%s'" % (county_field, str(attrs[county_field]).replace("'", "''"))
-    url = layer["url"].rstrip("/") + "/query"
-    base = {"outFields": field, "returnGeometry": "true", "outSR": 4326, "geometryPrecision": 6, "f": "json"}
+    # Large layers answer an object-ID lookup instantly but can take a minute to scan for a text ID.
+    oid = next((attrs[k] for k in ("OBJECTID", "OBJECTID_1", "FID", "objectid") if isinstance(attrs.get(k), int)), None)
+    return {"provider": "arcgis", "url": layer["url"].rstrip("/"), "field": field, "v": raw, "w": where, "o": oid}
+
+
+def fetch_boundary(layer: Dict[str, Any], parcel: Dict[str, Any], http: Http) -> Optional[List[List[List[float]]]]:
+    """The parcel polygon as lon/lat rings, straight from the county layer the parcel came from."""
+    q = boundary_query(layer, parcel)
+    if q is None:
+        return None
+    if q["provider"] == "carto_phl":
+        data = http.post_json(q["url"], {
+            "q": "SELECT ST_AsGeoJSON(the_geom, 6) g FROM pwd_parcels WHERE brt_id='%s' LIMIT 1" % q["v"]})
+        rows = data.get("rows") or []
+        if not rows or not rows[0].get("g"):
+            return None
+        geo = json.loads(rows[0]["g"])
+        polys = geo["coordinates"] if geo["type"] == "MultiPolygon" else [geo["coordinates"]]
+        return [_close(r) for poly in polys for r in poly]
+    url = q["url"] + "/query"
+    base = {"outFields": q["field"], "returnGeometry": "true", "outSR": 4326, "geometryPrecision": 6, "f": "json"}
 
     def rings_of(data: Dict[str, Any], check: bool) -> List[List[List[float]]]:
         if "error" in data:
             raise RuntimeError(str(data["error"].get("message") or data["error"]))
         feats = data.get("features") or []
         if check:   # object IDs are reassigned when a county republishes, so confirm it is still this parcel
-            feats = [f for f in feats if str((f.get("attributes") or {}).get(field)).strip() == str(raw).strip()]
+            feats = [f for f in feats if str((f.get("attributes") or {}).get(q["field"])).strip() == str(q["v"]).strip()]
         return [_close(r) for f in feats for r in (f.get("geometry") or {}).get("rings") or []]
 
-    # Large layers answer an object-ID lookup instantly but can take a minute to scan for a text ID.
-    oid = next((attrs[k] for k in ("OBJECTID", "OBJECTID_1", "FID", "objectid") if isinstance(attrs.get(k), int)), None)
-    if oid is not None:
-        rings = rings_of(http.post_json(url, dict(base, objectIds=oid)), check=True)   # a server that cannot answer this
-        if rings:                                                                      # will not answer the scan either
+    if q["o"] is not None:
+        rings = rings_of(http.post_json(url, dict(base, objectIds=q["o"])), check=True)   # a server that cannot answer
+        if rings:                                                                         # this will not answer the scan
             return rings
-    return rings_of(http.post_json(url, dict(base, where=where)), check=False) or None
+    return rings_of(http.post_json(url, dict(base, where=q["w"])), check=False) or None
 
 
 def boundary(cfg: Dict[str, Any], db: Any, parcel: Dict[str, Any]) -> Dict[str, Any]:
@@ -143,6 +153,8 @@ def background(parcel: Dict[str, Any]) -> Dict[str, Any]:
         for key, value in attrs.items():
             shown = _show(key, value)
             if key not in used and shown and rx.search(key):
+                if label == "Year built" and not re.fullmatch(r"(17|18|19|20)\d\d", shown):
+                    continue                                      # counties reuse this column for codes
                 if "date" in label.lower():
                     if re.fullmatch(r"\d{12,13}", shown):          # epoch milliseconds under a truncated field name
                         shown = datetime.fromtimestamp(int(shown) / 1000, tz=timezone.utc).strftime("%b %-d, %Y")
