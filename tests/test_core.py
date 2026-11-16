@@ -209,3 +209,12 @@ def test_postcard_and_email_flows(tmp_path, monkeypatch):
     row = client.get("/api/leads").json()[0]
     assert row["postcard_at"] and row["status"] == "contacted"
     assert client.post("/api/leads/%d/postcard" % lead_id).status_code == 409
+
+
+def test_score_breakdown_adds_up():
+    for likelihood, stage, cost in ((95, "planning", 60e6), (40, "design", None), (100, "planning", 700e6),
+                                    (30, "construction", 2e6), (85, "row_acquisition", 12e6)):
+        score = C.overall_score(likelihood, stage, cost)
+        parts = C.score_breakdown(likelihood, stage, cost, score)
+        assert abs(sum(p["points"] for p in parts) - score) <= 0.5, (likelihood, stage, parts)
+    assert C.score_breakdown(90, "planning", None, 0)[-1]["label"] == "Not in Pennsylvania"

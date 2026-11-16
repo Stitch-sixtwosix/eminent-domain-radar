@@ -182,7 +182,7 @@ def send_postcard(cfg: Dict[str, Any], lead: Dict[str, Any], client: Optional[ht
     firm = cfg["outreach"]["firm"]
     to = check["to"]
     data = {
-        "description": "edradar lead %s" % lead["id"],
+        "description": "Eminent Tracker lead %s" % lead["id"],
         "to[name]": check["to_name"], "to[address_line1]": to["line1"], "to[address_line2]": to["line2"],
         "to[address_city]": to["city"], "to[address_state]": to["state"], "to[address_zip]": to["zip"],
         "from[name]": firm["name"][:40], "from[address_line1]": firm["address_line1"],
@@ -247,7 +247,7 @@ class Apollo:
         contact = self._post("/contacts", {
             "first_name": person.get("first_name"), "last_name": person.get("last_name"), "email": email,
             "title": person.get("title"), "organization_name": (person.get("organization") or {}).get("name"),
-            "label_names": ["edradar"], "run_dedupe": True,
+            "label_names": ["Eminent Tracker"], "run_dedupe": True,
         }).get("contact") or {}
         seq = str(self.cfg["sequence_id"])
         self._post("/emailer_campaigns/%s/add_contact_ids" % seq, {

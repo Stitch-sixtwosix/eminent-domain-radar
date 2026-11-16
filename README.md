@@ -1,6 +1,6 @@
-# edradar
+# Eminent Tracker
 
-Early-warning lead finder for Pennsylvania eminent domain attorneys. It watches public planning
+Early-warning lead finder for Pennsylvania eminent domain attorneys. (The Python package and command are still named `edradar`.) It watches public planning
 data for projects that will need private land, finds the parcels along each project, and ranks
 them as leads, years before a declaration of taking is filed.
 

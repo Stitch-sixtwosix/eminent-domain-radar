@@ -11,6 +11,7 @@ from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 
 from .. import outreach
+from ..classify import score_breakdown
 from ..db import DB
 
 STATIC = Path(__file__).parent / "static"
@@ -54,7 +55,7 @@ def _lead_filters(project_id, status, county, min_score, owner_only, q):
 
 def create_app(cfg: Dict[str, Any]) -> FastAPI:
     db = DB(cfg["database"])
-    app = FastAPI(title="edradar")
+    app = FastAPI(title="Eminent Tracker")
 
     @app.get("/")
     def index() -> FileResponse:
@@ -101,6 +102,7 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
         )
         for r in rows:
             r["geometry"] = json.loads(r["geometry"]) if r["geometry"] else None
+            r["score_parts"] = score_breakdown(r["acquisition_likelihood"], r["stage"], r["est_cost"], r["score"])
         return rows
 
     def one_lead(lead_id: int) -> Dict[str, Any]:
@@ -175,7 +177,7 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
             w.writeheader()
             w.writerows(rows)
         return StreamingResponse(iter([buf.getvalue()]), media_type="text/csv",
-                                 headers={"Content-Disposition": "attachment; filename=edradar-leads.csv"})
+                                 headers={"Content-Disposition": "attachment; filename=eminent-tracker-leads.csv"})
 
     @app.patch("/api/leads/{lead_id}")
     def update_lead(lead_id: int, body: LeadUpdate) -> Dict[str, Any]:
@@ -199,7 +201,7 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40) -> Dic
     stats = client.get("/api/stats").json()
     stats["generated"] = date.today().isoformat()
     projects = client.get("/api/projects", params={"min_score": min_score, "limit": 2000}).json()
-    keep = ("id", "project_id", "score", "match_reason", "distance_m", "status", "apn", "parcel_county", "address",
+    keep = ("id", "project_id", "project_score", "score", "match_reason", "distance_m", "status", "apn", "parcel_county", "address",
             "owner", "mailing_address", "market_value", "acres")
     leads = [{k: r[k] for k in keep} for r in client.get("/api/leads", params={"limit": 5000}).json()]
     db = DB(cfg["database"])

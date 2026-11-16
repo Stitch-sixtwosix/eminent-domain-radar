@@ -64,6 +64,32 @@ def overall_score(likelihood: int, stage: str, est_cost: Optional[float] = None,
     return clamp(s)
 
 
+STAGE_LABEL = {"planning": "Early stage (planning)", "environmental_review": "Early stage (environmental review)",
+               "design": "In design", "row_acquisition": "Right-of-way acquisition under way",
+               "condemnation_filed": "Condemnation already authorized", "construction": "Under construction",
+               "unknown": "Stage unknown"}
+
+
+def score_breakdown(likelihood: Optional[int], stage: Optional[str], est_cost: Optional[float],
+                    score: Optional[int]) -> List[Dict[str, Any]]:
+    """The parts of a project score, in the same arithmetic as overall_score, for display."""
+    likelihood = likelihood or 0
+    parts: List[Dict[str, Any]] = [
+        {"label": "Likelihood the project needs private land: %d of 100, weighted 85%%" % likelihood,
+         "points": round(likelihood * 0.85, 1)},
+        {"label": STAGE_LABEL.get(stage or "unknown", "Stage unknown"), "points": STAGE_BONUS.get(stage or "unknown", 0)},
+    ]
+    if est_cost and est_cost >= 10e6:
+        parts.append({"label": "Budget over $50M" if est_cost >= 50e6 else "Budget over $10M",
+                      "points": 5 if est_cost >= 50e6 else 3})
+    total = sum(x["points"] for x in parts)
+    if score is not None and clamp(total) != score:
+        parts.append({"label": "Not in Pennsylvania" if score == 0 else "Adjustment", "points": score - round(total)})
+    elif total > 100 or total < 0:
+        parts.append({"label": "Capped to the 0-100 scale", "points": clamp(total) - round(total, 1)})
+    return parts
+
+
 # ---------------------------------------------------------------- PennDOT rules
 def classify_penndot(signal: Dict[str, Any]) -> Dict[str, Any]:
     raw = json.loads(signal["raw"]) if isinstance(signal.get("raw"), str) else (signal.get("raw") or {})
