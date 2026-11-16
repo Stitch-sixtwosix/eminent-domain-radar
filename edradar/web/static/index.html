@@ -156,6 +156,9 @@
   .p-sec { padding: 14px 16px 2px; }
   .p-sec h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; }
   .p-sec p { margin: 0 0 8px; color: var(--ink-2); font-size: 13px; }
+  a.btn { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 8px; font-size: 12.5px; font-weight: 500; color: var(--surface);
+          background: var(--primary); border-radius: var(--radius); text-decoration: none; white-space: nowrap; }
+  a.btn svg { width: 14px; height: 14px; }
   .p-sec .when { font-size: 13px; margin-bottom: 10px; display: grid; gap: 2px; }
   .p-sec .when b { font-weight: 600; } .p-sec .when span { color: var(--ink-2); }
   .figs { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: var(--radius); }
@@ -205,6 +208,29 @@
   #stagebar .when { font-size: 13px; margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 2px 16px; align-items: baseline; }
   #stagebar .when b { font-weight: 600; }
   #stagebar .when span { color: var(--ink-2); }
+
+  /* ---- template editor and letter ---- */
+  .tpl { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+  .tpl h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; }
+  .tpl h3:not(:first-child) { margin-top: 16px; }
+  .tpl .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tpl label { display: grid; gap: 3px; font-size: 12px; color: var(--ink-2); }
+  .tpl label.wide { grid-column: 1 / 3; }
+  .tpl input, .tpl textarea { font: inherit; font-size: 13px; color: var(--ink); padding: 6px 9px; border: 1px solid var(--line-strong);
+          border-radius: var(--radius); background: var(--surface); width: 100%; min-width: 0; }
+  .tpl input { height: 32px; }
+  .tpl textarea { resize: vertical; line-height: 1.45; }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 2px; }
+  .chips button { height: 24px; padding: 0 7px; font: 500 12px ui-monospace, SFMono-Regular, Menlo, monospace; border-color: var(--line); }
+  .letter { white-space: pre-wrap; font-size: 13px; line-height: 1.5; border: 1px solid var(--line); border-radius: var(--radius);
+            padding: 12px 14px; background: var(--paper); max-height: 300px; overflow-y: auto; overflow-wrap: anywhere; }
+  .letter b { font-weight: 600; }
+  .row-acts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .contacts { list-style: none; margin: 8px 0 0; padding: 0; font-size: 13px; }
+  .contacts li { padding: 7px 0; border-top: 1px solid var(--line); }
+  .contacts b { font-weight: 500; }
+  dialog.wide { width: min(1040px, calc(100vw - 32px)); }
+  @media (max-width: 900px) { .tpl { grid-template-columns: 1fr; } }
 
   /* ---- info tips ---- */
   .info { all: unset; display: inline-grid; place-items: center; width: 16px; height: 16px; margin-left: 4px; border-radius: 50%;
@@ -290,6 +316,7 @@
     <span><b id="st-owners">–</b>with owner of record</span>
     <span id="st-updated"></span>
   </div>
+  <button id="btn-template" class="sm" hidden>Outreach template</button>
   <span class="mode" id="mode" hidden></span>
 </header>
 <main>
@@ -486,6 +513,7 @@ async function staticDetail(id) {
   const kind = l.owner_kind || "unknown", vals = [l, ...others].map(x => x.market_value).filter(Boolean);
   return {lead: l, layer: l.bq ? SNAP.layers[l.bq.l].name : "county parcel file", boundary: await staticBoundary(l),
     background: {facts: l.facts.map(([label, value]) => ({label, value})), record: []}, related: others,
+    contacts: (SNAP.contacts || {})[l.owner] || [],
     owner: {name: l.owner, kind: KIND[kind], kind_key: kind, mailing_address: l.mailing_address, location: l.own[0], occupancy: l.own[1],
             owned_since: fact("Last sale date"), purchase_price: fact("Last sale price"), parcels_in_list: 1 + others.length,
             holdings_value: vals.reduce((a, b) => a + b, 0) || null}};
@@ -514,6 +542,7 @@ async function staticApi(path) {
   if (!SNAP) { const r = await fetch("data.json"); if (!r.ok) throw new Error("data.json returned " + r.status); SNAP = await r.json(); }
   const [route, qs] = path.split("?"), q = new URLSearchParams(qs || "");
   if (route === "/api/stats") return SNAP.stats;
+  if (route === "/api/outreach/template") return SNAP.template;
   if (route === "/api/projects") {
     const min = +(q.get("min_score") || 0), text = (q.get("q") || "").toLowerCase();
     return SNAP.projects.filter(p => p.score >= min && (!q.get("county") || p.county === q.get("county")) &&
@@ -655,6 +684,99 @@ async function loadLeads() {
     "</tbody></table>" + `<div class="total">${p ? `${leadRows.length.toLocaleString()} of ${p.lead_count.toLocaleString()} parcels for this project` : ($("f-outreach").value || $("f-owner").checked || $("f-county").value) ? `${leadRows.length >= 300 ? "First 300" : leadRows.length.toLocaleString()} leads matching these filters` : `Top ${leadRows.length.toLocaleString()} of ${TOTAL_LEADS.toLocaleString()} leads`}, highest score first${leadRows.length >= 300 ? ". Export CSV for the full list" : ""}.</div>`;
 }
 
+/* ---- outreach template: one text drives the email, the printed letter and the postcard ---- */
+let TPL = null;
+const titleCase = t => (t || "").split(/\s+/).filter(Boolean).map(w => /[a-z]/.test(w) ? w : w.length > 3 || (/^[A-Z]+$/.test(w) && w.length > 1) ? w[0] + w.slice(1).toLowerCase() : w).join(" ");
+function mergeValues(r, tpl = TPL) {
+  const f = (tpl && tpl.firm) || {}, addr = r.address && /^\s*\d/.test(r.address) ? titleCase(r.address) : "";
+  return {
+    owner_name: titleCase(r.owner) || "the owner of record",
+    property: addr ? "your property at " + addr : "your property (parcel " + r.apn + ")",
+    property_address: addr || "parcel " + r.apn, parcel_id: String(r.apn || ""), county: titleCase(r.parcel_county),
+    project_name: (r.project || "a planned public project").replace(/\s*\(MPMS \d+\)/, ""),
+    project_stage: (r.stage || "planning").replace(/_/g, " "), agency: r.agency || "the sponsoring agency",
+    firm_name: f.name || "[Your firm name]", attorney_name: f.attorney || f.name || "[Attorney name]",
+    firm_phone: f.phone || "[phone]", firm_email: f.email || "[email]", firm_website: f.website || "",
+  };
+}
+const renderTpl = (text, vals) => (text || "").replace(/\{\{\s*(\w+)\s*\}\}/g, (m, k) => k in vals ? vals[k] : m);
+function letterFor(r, tpl = TPL) {
+  const v = mergeValues(r, tpl);
+  return {subject: renderTpl(tpl.email_subject, v), body: renderTpl(tpl.letter, v), values: v};
+}
+function printLetter(r) {
+  const L_ = letterFor(r), f = TPL.firm, w = window.open("", "_blank");
+  if (!w) return;
+  const firmAddr = [f.address_line1, [f.city, f.state].filter(Boolean).join(", ") + (f.zip ? " " + f.zip : "")].filter(x => x && x.trim()).join("<br>");
+  w.document.write(`<!doctype html><title>Letter to ${esc(L_.values.owner_name)}</title><style>
+    body{font:12pt/1.5 Georgia,"Times New Roman",serif;color:#111;max-width:6.5in;margin:1in auto;padding:0 .25in}
+    header{border-bottom:1.5pt solid #111;padding-bottom:10pt;margin-bottom:28pt;font-family:Helvetica,Arial,sans-serif}
+    header b{font-size:15pt;display:block} header span{font-size:9.5pt;color:#333}
+    .to{margin:18pt 0;white-space:pre-line} .body{white-space:pre-wrap} .ad{margin-top:32pt;font:8pt Helvetica,Arial,sans-serif;color:#444}
+    @media print{body{margin:0 auto}}</style>
+    <header><b>${esc(L_.values.firm_name)}</b><span>${[firmAddr, esc(f.phone || ""), esc(f.email || ""), esc(f.website || "")].filter(Boolean).join(" · ")}</span></header>
+    <div>${new Date().toLocaleDateString(undefined, {year: "numeric", month: "long", day: "numeric"})}</div>
+    <div class="to">${esc(titleCase(r.owner) || "Property Owner")}\n${esc((r.mailing_address || "").replace(/,\s*/g, "\n"))}</div>
+    <div><b>Re: ${esc(L_.subject)}</b></div><div class="body">\n${esc(L_.body)}</div>
+    <div class="ad">ADVERTISEMENT. This letter is based on public planning records. No taking of your property has been announced.</div>`);
+  w.document.close(); w.focus(); w.print();
+}
+async function openTemplate() {
+  const t = JSON.parse(JSON.stringify(TPL)), sample = leadRows.find(r => r.owner && r.address) || leadRows.find(r => r.owner) || leadRows[0];
+  const inp = (key, label, wide) => `<label${wide ? ' class="wide"' : ""}>${label}<input data-firm="${key}" value="${esc(t.firm[key] || "")}"></label>`;
+  const area = (key, label, rows) => `<label class="wide">${label}<textarea data-text="${key}" rows="${rows}">${esc(t[key])}</textarea></label>`;
+  dlg.classList.add("wide");
+  dlg.innerHTML = `<div class="dlg-head"><h2 id="dlg-title">Outreach template</h2><p>Enter your firm once. The same text fills the email, the printed letter and the postcard for every owner.</p></div>
+    <div class="dlg-body"><div class="tpl"><div>
+      <h3>Your firm</h3><div class="grid">${inp("name", "Firm name", true)}${inp("attorney", "Attorney signing")}${inp("phone", "Phone")}${inp("email", "Email")}${inp("website", "Website")}
+        ${inp("address_line1", "Return address", true)}${inp("city", "City")}<label>State and ZIP<span style="display:grid;grid-template-columns:70px 1fr;gap:6px"><input data-firm="state" value="${esc(t.firm.state || "")}" aria-label="State"><input data-firm="zip" value="${esc(t.firm.zip || "")}" aria-label="ZIP"></span></label></div>
+      <h3>Letter and email</h3><div class="grid"><label class="wide">Subject<input data-text="email_subject" value="${esc(t.email_subject)}"></label>${area("letter", "Letter", 12)}</div>
+      <div class="meta">Click a field to insert it where the cursor is. It is replaced with each owner's details.</div>
+      <div class="chips">${Object.keys(t.fields).map(k => `<button type="button" data-field="${k}" data-tip-text="${esc(t.fields[k])}">{{${k}}}</button>`).join("")}</div>
+      <h3>Postcard</h3><div class="grid">${area("postcard_headline", "Front headline", 2)}${area("postcard_message", "Front message", 3)}${area("postcard_back", "Back message", 4)}</div>
+    </div><div>
+      <h3>Preview${sample ? " for " + esc(titleCase(sample.owner) || "a sample owner") : ""}</h3>
+      <div class="letter" id="t-prev"></div>
+      <h3>Postcard front</h3><div class="letter" id="t-card"></div>
+      <h3>Postcard back</h3><div class="letter" id="t-back"></div>
+    </div></div></div>
+    <div class="dlg-foot"><span class="note" id="t-note">${STATIC ? "This published snapshot is read-only. Edits here are a preview and are not saved." : "Saved templates apply to every postcard, email and letter from now on."}</span>
+      <button data-close>Cancel</button><button class="primary" id="t-save"${STATIC ? " disabled" : ""}>Save template</button></div>`;
+  dlg.showModal();
+  let last = dlg.querySelector('[data-text="letter"]');
+  const read = () => {
+    dlg.querySelectorAll("[data-firm]").forEach(el => t.firm[el.dataset.firm] = el.value.trim());
+    dlg.querySelectorAll("[data-text]").forEach(el => t[el.dataset.text] = el.value);
+  };
+  const preview = () => {
+    read();
+    if (!sample) return;
+    const v = mergeValues(sample, t);
+    $("t-prev").innerHTML = `<b>${esc(renderTpl(t.email_subject, v))}</b>\n\n${esc(renderTpl(t.letter, v))}`;
+    $("t-card").innerHTML = `<b>${esc(renderTpl(t.postcard_headline, v))}</b>\n${esc(renderTpl(t.postcard_message, v))}`;
+    $("t-back").textContent = renderTpl(t.postcard_back, v);
+  };
+  dlg.querySelector(".tpl").addEventListener("input", preview);
+  dlg.querySelector(".tpl").addEventListener("focusin", e => { if (e.target.matches("[data-text]")) last = e.target; });
+  dlg.querySelector(".chips").addEventListener("click", e => {
+    const b = e.target.closest("[data-field]");
+    if (!b) return;
+    const at = last.selectionStart ?? last.value.length;
+    last.setRangeText(`{{${b.dataset.field}}}`, at, last.selectionEnd ?? at, "end");
+    last.focus(); preview();
+  });
+  $("t-save").addEventListener("click", async ev => {
+    read(); ev.target.disabled = true; ev.target.textContent = "Saving…";
+    try {
+      TPL = await api("/api/outreach/template", {method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(t)});
+      OUT = await api("/api/outreach/status");
+      dlg.close();
+    } catch (e) { $("t-note").textContent = e.message; ev.target.disabled = false; ev.target.textContent = "Save template"; }
+  });
+  preview();
+}
+$("dlg").addEventListener("close", () => $("dlg").classList.remove("wide"));
+
 /* ---- parcel panel: boundary on the map, land background, related parcels, similar cases ---- */
 const panel = $("parcel");
 let openLead = null;
@@ -706,11 +828,26 @@ async function openParcel(leadId) {
   const row = (k, v) => v ? `<dt>${k}</dt><dd>${esc(v)}</dd>` : "";
   const ownerSec = `<div class="p-sec"><h3>Owner of record</h3><dl class="facts">${row("Name", o.name)}${row("Type", o.kind)}${row("Mailing address", o.mailing_address)}${row("Based in", o.location)}${row("Occupancy", o.occupancy)}${row("Owned since", o.owned_since)}${row("Paid", o.purchase_price)}${row("Parcels on this list", o.parcels_in_list > 1 ? String(o.parcels_in_list) : "")}${row("Combined county value", o.parcels_in_list > 1 && o.holdings_value ? "$" + Math.round(o.holdings_value).toLocaleString() : "")}</dl>
     <p style="margin-top:8px">${o.kind_key === "company" ? (STATIC ? "Company owners can be looked up in Apollo from the live app." : "Use Email on this row to look up decision-makers at this company in Apollo.") : o.kind_key === "government" ? "Public bodies are not offered outreach." : o.kind_key === "unknown" ? "This county does not publish owner names online. Look the parcel ID up at the county assessment office." : "County parcel files publish no phone number or email. A postcard reaches the mailing address above."}</p></div>`;
+  const careOf = ((r.mailing_address || "").match(/\b(?:C\/O|ATTN:?|%)\s*([^,]+)/i) || [])[1];
+  const people = d.contacts || [];
+  const canFind = !STATIC && OUT && OUT.email.enabled && o.kind_key === "company";
+  const contactSec = `<div class="p-sec" id="p-contact"><h3>Contact information</h3><dl class="facts">${row("Mail to", o.mailing_address)}${row("Care of", careOf ? titleCase(careOf) : "")}${row("Property", r.address)}${row("Agency contact", proj && proj.contact)}</dl>
+    ${people.length ? `<ul class="contacts">${people.map(c => `<li><b>${esc(c.name || "Contact")}</b>${c.title ? " · " + esc(c.title) : ""}
+        <div class="sub">${[c.email ? `<a href="mailto:${esc(c.email)}">${esc(c.email)}</a>` : "email not revealed yet", c.phone ? esc(c.phone) : "", c.linkedin ? `<a href="${esc(safeUrl(c.linkedin))}" target="_blank" rel="noopener">LinkedIn</a>` : ""].filter(Boolean).join(" · ")}</div></li>`).join("")}</ul>` : ""}
+    ${canFind ? `<div class="row-acts"><button class="sm" data-find-contacts="${r.id}">${people.length ? "Refresh contacts from Apollo" : "Find contacts in Apollo"}</button></div>` : ""}
+    <p style="margin-top:8px">${o.kind_key === "company" ? (people.length ? "People found at this company in Apollo. An email address appears once you add the person to a sequence." : STATIC ? "No Apollo contacts have been stored for this company yet." : OUT && OUT.email.enabled ? "No contacts looked up yet." : "Set an Apollo key to look up the people behind this company.") : o.kind_key === "individual" ? "For individual owners the public record gives a mailing address only. Phone numbers and email addresses are not in county files." : ""}</p></div>`;
+  const L_ = TPL ? letterFor(r) : null, to = (people.find(c => c.email) || {}).email || "";
+  const letterSec = L_ && o.kind_key !== "government" && o.kind_key !== "unknown" ? `<div class="p-sec"><h3>Outreach letter</h3>
+    <div class="letter"><b>${esc(L_.subject)}</b>\n\n${esc(L_.body)}</div>
+    <div class="row-acts"><a class="btn" href="mailto:${esc(to)}?subject=${encodeURIComponent(L_.subject)}&body=${encodeURIComponent(L_.body)}">${ICON.mail}Open as email</a>
+      <button class="sm" data-copy-letter="${r.id}">Copy</button><button class="sm" data-print-letter="${r.id}">Print letter</button>
+      ${STATIC ? "" : `<button class="sm" data-act="postcard" data-lead="${r.id}">${ICON.card}Postcard</button>`}</div>
+    <p style="margin-top:8px">${to ? "The email opens addressed to " + esc(to) + "." : "No email address is on file, so the email opens without a recipient."} Edit the wording under Outreach template.</p></div>` : "";
   const stageSec = proj && proj.timeline ? `<div class="p-sec"><h3>Project stage</h3>${stageHead(proj.timeline)}${stageList(proj.timeline, true)}</div>` : "";
   const rel = d.related.length ? `<div class="p-sec"><h3>Other parcels held by this owner</h3><ul class="plain">${d.related.map(x =>
       `<li>${esc(x.address || "Parcel " + x.apn)}<div class="sub">${[esc(x.project), "score " + x.score, x.market_value ? "$" + Math.round(x.market_value).toLocaleString() : ""].filter(Boolean).join(" · ")}</div></li>`).join("")}</ul></div>` : "";
   const rec = bg.record.length ? `<details class="rec"><summary>Full county record (${bg.record.length} fields, ${esc(d.layer)})</summary><dl class="facts">${bg.record.map(f => `<dt>${esc(f.field)}</dt><dd>${esc(f.value)}</dd>`).join("")}</dl></details>` : "";
-  panel.querySelector(".p-body").innerHTML = why + ownerSec + stageSec +
+  panel.querySelector(".p-body").innerHTML = why + ownerSec + contactSec + letterSec + stageSec +
     `<div class="p-sec"><h3>Boundary</h3>${shape}</div><div class="p-sec"><h3>Land background</h3>${facts}</div>${rel}` +
     `<div class="p-sec" id="p-cases"><h3>Similar cases</h3><p>Searching Pennsylvania appellate opinions…</p></div>${rec}`;
   let c;
@@ -723,7 +860,23 @@ async function openParcel(leadId) {
        <p style="margin-top:10px">Keyword matches for this kind of taking, not legal research. ${link}</p>`
     : `<p>${esc(c.why || "No matching opinions were found.")}</p><p>${link}${c.query ? `<br>Search used: ${esc(c.query)}` : ""}</p>`);
 }
-panel.addEventListener("click", e => { if (e.target.closest("[data-close-parcel]")) closeParcel(); });
+panel.addEventListener("click", async e => {
+  if (e.target.closest("[data-close-parcel]")) return closeParcel();
+  const find = e.target.closest("[data-find-contacts]"), copy = e.target.closest("[data-copy-letter]"), print = e.target.closest("[data-print-letter]"), act = e.target.closest("[data-act]");
+  const lead = id => leadRows.find(x => x.id === +id);
+  if (act) return openPostcard(+act.dataset.lead);
+  if (print) return printLetter(lead(print.dataset.printLetter));
+  if (copy) {
+    const L_ = letterFor(lead(copy.dataset.copyLetter));
+    try { await navigator.clipboard.writeText(L_.subject + "\n\n" + L_.body); copy.textContent = "Copied"; } catch (err) { copy.textContent = "Copy failed"; }
+    setTimeout(() => { copy.textContent = "Copy"; }, 1600);
+  }
+  if (find) {
+    find.disabled = true; find.textContent = "Searching Apollo…";
+    try { await api(`/api/leads/${find.dataset.findContacts}/email/contacts`); await openParcel(+find.dataset.findContacts); }
+    catch (err) { find.disabled = false; find.textContent = "Try again"; find.insertAdjacentHTML("afterend", `<span class="meta">${esc(err.message)}</span>`); }
+  }
+});
 document.addEventListener("keydown", e => { if (e.key === "Escape" && openLead && !dlg.open) closeParcel(); });
 document.querySelector(".basemap").addEventListener("click", e => { const b = e.target.closest("[data-base]"); if (b) { baseChosen = true; setBase(b.dataset.base); } });
 
@@ -913,6 +1066,7 @@ $("btn-csv").addEventListener("click", () => {
 $("f-owner").addEventListener("change", loadLeads);
 $("f-outreach").addEventListener("change", loadLeads);
 $("btn-campaign").addEventListener("click", openCampaign);
+$("btn-template").addEventListener("click", openTemplate);
 let timer;
 for (const id of ["f-county", "f-type", "f-source", "f-score", "f-q"])
   $(id).addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(async () => { await loadProjects(); await loadLeads(); }, 250); });
@@ -934,6 +1088,8 @@ for (const id of ["f-county", "f-type", "f-source", "f-score", "f-q"])
     $("btn-campaign").hidden = false;
     mode.hidden = false;
   }
+  TPL = await api("/api/outreach/template");
+  $("btn-template").hidden = false;
   const title = c => c[0] + c.slice(1).toLowerCase();
   $("f-county").insertAdjacentHTML("beforeend", s.counties.map(c => `<option value="${esc(c)}">${esc(title(c))}</option>`).join(""));
   $("f-type").insertAdjacentHTML("beforeend", s.types.map(c => `<option>${esc(c)}</option>`).join(""));

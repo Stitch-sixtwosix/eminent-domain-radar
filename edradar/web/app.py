@@ -76,6 +76,7 @@ def _lead_filters(project_id, status, county, min_score, owner_only, q, outreach
 
 def create_app(cfg: Dict[str, Any]) -> FastAPI:
     db = DB(cfg["database"])
+    outreach.apply_saved(cfg, db)
     app = FastAPI(title="Eminent Tracker")
 
     @app.get("/")
@@ -150,11 +151,20 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
         parcel["attributes"] = json.loads(parcel["attributes"] or "{}")
         bg, others = parceldetail.background(parcel), parceldetail.related(db, lead)
         return {"lead": lead, "layer": parcel["layer"], "boundary": parceldetail.boundary(cfg, db, parcel),
-                "background": bg, "related": others, "owner": parceldetail.owner_profile(lead, bg["facts"], others)}
+                "background": bg, "related": others, "owner": parceldetail.owner_profile(lead, bg["facts"], others),
+                "contacts": db.contacts_for(lead["owner"])}
 
     @app.get("/api/leads/{lead_id}/cases")
     def lead_cases(lead_id: int) -> Dict[str, Any]:
         return parceldetail.cases(one_lead(lead_id))
+
+    @app.get("/api/outreach/template")
+    def get_template() -> Dict[str, Any]:
+        return outreach.template(cfg)
+
+    @app.put("/api/outreach/template")
+    def put_template(body: Dict[str, Any]) -> Dict[str, Any]:
+        return outreach.save_template(cfg, db, body)
 
     @app.get("/api/outreach/status")
     def outreach_status() -> Dict[str, Any]:
@@ -188,7 +198,9 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
         lead = one_lead(lead_id)
         if not outreach.status(cfg)["email"]["enabled"]:
             raise HTTPException(409, outreach.status(cfg)["email"]["why"])
-        return guard(lambda: outreach.Apollo(cfg).find_contacts(lead))
+        people = guard(lambda: outreach.Apollo(cfg).find_contacts(lead))
+        db.save_contacts(lead["owner"], people)
+        return people
 
     @app.post("/api/leads/{lead_id}/email")
     def email_enroll(lead_id: int, body: Enroll) -> Dict[str, Any]:
@@ -199,6 +211,9 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
             raise HTTPException(409, outreach.status(cfg)["email"]["why"])
         result = guard(lambda: outreach.Apollo(cfg).enroll(lead, body.person_id))
         db.log_outreach(lead_id, "email", "sent", result["external_id"], result)
+        db.save_contacts(lead["owner"], [{"person_id": result["person_id"], "name": result["name"], "title": result["title"],
+                                          "email": result["email"]}] + [c for c in db.contacts_for(lead["owner"])
+                                                                        if c["person_id"] != result["person_id"]])
         return result
 
     @app.get("/api/leads")
@@ -276,7 +291,9 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40) -> Dic
     html = html.replace("<script>\nconst $", "<script>window.EDRADAR_STATIC = true;</script>\n<script>\nconst $", 1)
     assert "EDRADAR_STATIC = true" in html
     (out / "index.html").write_text(html)
-    (out / "data.json").write_text(json.dumps({"stats": stats, "projects": projects, "leads": leads, "layers": layers},
+    (out / "data.json").write_text(json.dumps({"stats": stats, "projects": projects, "leads": leads, "layers": layers, "template": outreach.template(cfg),
+                                               "contacts": {o["owner"]: db.contacts_for(o["owner"]) for o in
+                                                            db.rows("SELECT DISTINCT owner FROM contacts")}},
                                               separators=(",", ":")))
     (out / ".nojekyll").write_text("")
     return {"projects": len(projects), "leads": len(leads)}

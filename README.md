@@ -89,6 +89,16 @@ their key is set in the environment.
 | Postcard | [Lob](https://www.lob.com) | `LOB_API_KEY` + firm return address under `outreach.firm` | A `test_` key renders a proof and mails nothing; a `live_` key mails a 4x6 card and bills the Lob account. |
 | Email | [Apollo](https://www.apollo.io) | `APOLLO_API_KEY` + `outreach.apollo.sequence_id`, `email_account_id` | Finds decision-makers at company owners and adds the one you pick to your Apollo sequence. Revealing an email uses one Apollo credit. |
 
+**Outreach template.** "Outreach template" in the top bar is the one place to set the firm's name, attorney,
+phone, email and return address and to edit the wording. The same text fills the email, the printed letter and
+the postcard for every owner, using merge fields such as `{{owner_name}}`, `{{property}}`, `{{project_name}}`
+and `{{firm_name}}`. Each parcel panel shows the finished letter with Open as email, Copy, Print letter and
+Postcard actions. The template is saved in the database and also applies to command-line sends.
+
+**Contact information.** The parcel panel lists the mailing address, any care-of name, the agency's project
+manager, and for company owners the people Apollo finds there. County files carry no phone or email for
+individual owners, and Pa. R.P.C. 7.3 restricts live telephone solicitation, so none is collected for them.
+
 **Finding email leads.** The lead table's outreach filter has "Email leads (company owners)" and
 "Postcard-ready". `edradar find-emails` asks Apollo which company owners actually have contacts (search only,
 no credits) so the filter and the Email button show real availability.

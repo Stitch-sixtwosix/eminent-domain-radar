@@ -87,6 +87,19 @@ CREATE TABLE IF NOT EXISTS outreach (
 );
 CREATE INDEX IF NOT EXISTS idx_outreach_lead ON outreach(lead_id);
 
+-- Dashboard-editable settings (the outreach template lives here as JSON).
+CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);
+
+-- People found at company owners (Apollo). Email is filled in once it has been revealed.
+CREATE TABLE IF NOT EXISTS contacts (
+    id INTEGER PRIMARY KEY,
+    owner TEXT NOT NULL,
+    person_id TEXT NOT NULL,
+    name TEXT, title TEXT, organization TEXT, email TEXT, phone TEXT, linkedin TEXT,
+    fetched_at TEXT DEFAULT (datetime('now')),
+    UNIQUE(owner, person_id)
+);
+
 CREATE INDEX IF NOT EXISTS idx_leads_score ON leads(score DESC);
 CREATE INDEX IF NOT EXISTS idx_projects_score ON projects(score DESC);
 """
@@ -258,6 +271,34 @@ class DB:
         self.conn.execute("UPDATE leads SET status='contacted' WHERE id=? AND status IN ('new','reviewing')",
                           (lead_id,))
         self.conn.commit()
+
+    def get_setting(self, key: str) -> Optional[Dict[str, Any]]:
+        row = self.conn.execute("SELECT value FROM settings WHERE key=?", (key,)).fetchone()
+        return json.loads(row["value"]) if row else None
+
+    def set_setting(self, key: str, value: Dict[str, Any]) -> None:
+        self.conn.execute("INSERT INTO settings (key, value) VALUES (?,?) ON CONFLICT(key) DO UPDATE SET value=excluded.value",
+                          (key, json.dumps(value)))
+        self.conn.commit()
+
+    def save_contacts(self, owner: str, people: List[Dict[str, Any]]) -> None:
+        for c in people:
+            self.conn.execute(
+                """INSERT INTO contacts (owner, person_id, name, title, organization, email, phone, linkedin)
+                   VALUES (?,?,?,?,?,?,?,?) ON CONFLICT(owner, person_id) DO UPDATE SET name=excluded.name,
+                     title=excluded.title, organization=excluded.organization,
+                     email=COALESCE(excluded.email, contacts.email), phone=COALESCE(excluded.phone, contacts.phone),
+                     linkedin=COALESCE(excluded.linkedin, contacts.linkedin), fetched_at=datetime('now')""",
+                (owner, c.get("person_id"), c.get("name"), c.get("title"), c.get("organization"), c.get("email"),
+                 c.get("phone"), c.get("linkedin")))
+        self.conn.execute("UPDATE parcels SET email_contacts=? WHERE owner=?", (len(people), owner))
+        self.conn.commit()
+
+    def contacts_for(self, owner: Optional[str]) -> List[Dict[str, Any]]:
+        if not owner:
+            return []
+        return self.rows("SELECT person_id, name, title, organization, email, phone, linkedin FROM contacts WHERE owner=? "
+                         "ORDER BY email IS NULL, name", (owner,))
 
     def commit(self) -> None:
         self.conn.commit()

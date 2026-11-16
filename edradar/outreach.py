@@ -77,6 +77,95 @@ def parse_address(text: Optional[str]) -> Optional[Dict[str, str]]:
             "state": m.group("state"), "zip": m.group("zip")}
 
 
+# ---------------------------------------------------------------- the outreach template
+# One template drives the postcard, the email and the printed letter. Text in {{braces}} is filled in per owner.
+FIRM_FIELDS = ("name", "attorney", "phone", "email", "website", "address_line1", "city", "state", "zip")
+MERGE_FIELDS = {
+    "owner_name": "Owner of record", "property": "\"your property at 12 Main St\" (or the parcel ID when no address is published)",
+    "property_address": "Street address of the parcel", "parcel_id": "County parcel ID", "county": "County",
+    "project_name": "Name of the planned project", "project_stage": "Stage the project is in", "agency": "Agency behind the project",
+    "firm_name": "Your firm", "attorney_name": "Attorney signing the letter", "firm_phone": "Firm phone",
+    "firm_email": "Firm email", "firm_website": "Firm website",
+}
+DEFAULT_TEMPLATE = {
+    "email_subject": "About {{property}} and the {{project_name}} project",
+    "letter": (
+        "Dear Property Owner,\n\n"
+        "Public records list {{owner_name}} as the owner of {{property}} in {{county}} County. That parcel lies along the "
+        "planned {{project_name}} project, which {{agency}} currently has in {{project_stage}}.\n\n"
+        "Projects like this can require the government to acquire private land or easements. No taking of your property "
+        "has been announced, and it may never be needed. If it is, Pennsylvania law entitles you to just compensation, "
+        "and the first offer an owner receives is not always the full amount owed.\n\n"
+        "{{firm_name}} represents Pennsylvania property owners in eminent domain matters. We do not represent the agencies "
+        "that take land. If you would like to understand your rights before anyone contacts you about the project, "
+        "a first conversation costs nothing.\n\n"
+        "You can reach us at {{firm_phone}} or {{firm_email}}.\n\n"
+        "Sincerely,\n{{attorney_name}}\n{{firm_name}}"
+    ),
+    "postcard_headline": "A public project is planned near {{property}}.",
+    "postcard_message": ("{{project_name}} is in {{project_stage}}. Projects like this can require the government to acquire "
+                         "private land or easements. Owners are entitled to just compensation, and the first offer is not "
+                         "always the full amount."),
+    "postcard_back": ("Know your rights before you sign. Public records show your parcel ({{parcel_id}}) lies along the planned "
+                      "route. {{firm_name}} represents Pennsylvania property owners, not the agencies taking the land. "
+                      "A first conversation costs nothing: {{firm_phone}}."),
+}
+
+
+def template(cfg: Dict[str, Any]) -> Dict[str, Any]:
+    o = cfg.get("outreach") or {}
+    saved = o.get("template") or {}
+    return {"firm": {k: (o.get("firm") or {}).get(k) or "" for k in FIRM_FIELDS},
+            **{k: saved.get(k) or v for k, v in DEFAULT_TEMPLATE.items()},
+            "fields": MERGE_FIELDS}
+
+
+def apply_saved(cfg: Dict[str, Any], db: Any) -> None:
+    """Lay the template saved from the dashboard over config.yaml."""
+    saved = db.get_setting("outreach_template")
+    if not saved:
+        return
+    o = cfg.setdefault("outreach", {})
+    o["firm"] = dict(o.get("firm") or {}, **{k: v for k, v in (saved.get("firm") or {}).items() if k in FIRM_FIELDS})
+    o["template"] = {k: saved[k] for k in DEFAULT_TEMPLATE if saved.get(k)}
+
+
+def save_template(cfg: Dict[str, Any], db: Any, body: Dict[str, Any]) -> Dict[str, Any]:
+    clean = {"firm": {k: str((body.get("firm") or {}).get(k) or "").strip()[:200] for k in FIRM_FIELDS}}
+    for k in DEFAULT_TEMPLATE:
+        clean[k] = str(body.get(k) or "").strip()[:6000]
+    db.set_setting("outreach_template", clean)
+    apply_saved(cfg, db)
+    return template(cfg)
+
+
+def _title(text: Optional[str]) -> str:
+    return " ".join(w if any(c.islower() for c in w) else w.capitalize() if len(w) > 3 or w.isalpha() and len(w) > 1 else w
+                    for w in (text or "").split())
+
+
+def merge_values(cfg: Dict[str, Any], lead: Dict[str, Any]) -> Dict[str, str]:
+    firm = (cfg.get("outreach") or {}).get("firm") or {}
+    addr = _title(lead.get("address")) if lead.get("address") and re.match(r"\s*\d", lead["address"]) else ""
+    county = _title(lead.get("parcel_county"))
+    return {
+        "owner_name": _title(lead.get("owner")) or "the owner of record",
+        "property": "your property at %s" % addr if addr else "your property (parcel %s)" % lead.get("apn"),
+        "property_address": addr or "parcel %s" % lead.get("apn"),
+        "parcel_id": str(lead.get("apn") or ""), "county": county,
+        "project_name": re.sub(r"\s*\(MPMS \d+\)", "", lead.get("project") or "a planned public project"),
+        "project_stage": (lead.get("stage") or "planning").replace("_", " "),
+        "agency": lead.get("agency") or "the sponsoring agency",
+        "firm_name": firm.get("name") or "[Your firm name]", "attorney_name": firm.get("attorney") or firm.get("name") or "[Attorney name]",
+        "firm_phone": firm.get("phone") or "[phone]", "firm_email": firm.get("email") or "[email]",
+        "firm_website": firm.get("website") or "",
+    }
+
+
+def render(text: str, values: Dict[str, str]) -> str:
+    return re.sub(r"\{\{\s*(\w+)\s*\}\}", lambda m: values.get(m.group(1), m.group(0)), text or "")
+
+
 def status(cfg: Dict[str, Any]) -> Dict[str, Any]:
     """What the dashboard may offer right now, and why not when it may not."""
     o = cfg.get("outreach") or {}
@@ -90,7 +179,7 @@ def status(cfg: Dict[str, Any]) -> Dict[str, Any]:
             "enabled": bool(lob_key) and firm_ready,
             "mode": "live" if lob_key.startswith("live_") else "test" if lob_key else "off",
             "why": None if lob_key and firm_ready else
-            "Add the firm's return address under outreach.firm in config.yaml." if lob_key else
+            "Add the firm's name and return address in the outreach template." if lob_key else
             "Set LOB_API_KEY to turn on postcards.",
         },
         "email": {
@@ -111,27 +200,23 @@ body{width:6.25in;height:4.25in;font-family:Georgia,'Times New Roman',serif;colo
 """
 
 FRONT = """<html><head><style>%(css)s
-body{background:#f6f3ec}
-h1{font-size:25pt;line-height:1.12;font-weight:700;letter-spacing:-0.01em;max-width:4.9in}
-p{font-family:Helvetica,Arial,sans-serif;font-size:11.5pt;line-height:1.4;margin-top:0.16in;max-width:4.7in}
+body{background:#f4f5f7}
+h1{font-size:%(h1)spt;line-height:1.12;font-weight:700;letter-spacing:-0.01em;max-width:5.1in}
+p{font-family:Helvetica,Arial,sans-serif;font-size:11pt;line-height:1.4;margin-top:0.16in;max-width:4.9in}
 .firm{margin-top:auto;font-family:Helvetica,Arial,sans-serif;font-size:10pt;letter-spacing:0.02em;
 border-top:1.5pt solid #14202b;padding-top:0.09in;display:flex;justify-content:space-between}
 </style></head><body><div class="safe">
-<h1>A public project is planned near your property%(place)s.</h1>
-<p>%(project)s is in %(stage)s. Projects like this can require the government to acquire private land or easements. Owners are entitled to just compensation, and the first offer is not always the full amount.</p>
+<h1>%(headline)s</h1>
+<p>%(message)s</p>
 <div class="firm"><span>%(firm)s</span><span>%(phone)s</span></div>
 </div></body></html>"""
 
 BACK = """<html><head><style>%(css)s
 body{background:#fff}
 .msg{width:2.75in;font-family:Helvetica,Arial,sans-serif;font-size:9.5pt;line-height:1.42}
-.msg b{font-family:Georgia,serif;font-size:11.5pt;display:block;margin-bottom:0.08in}
-.msg p{margin-top:0.08in}
 .fine{margin-top:auto;width:2.75in;font-family:Helvetica,Arial,sans-serif;font-size:6.6pt;line-height:1.3;color:#3d4a57}
 </style></head><body><div class="safe">
-<div class="msg"><b>Know your rights before you sign.</b>
-<p>Public records show your parcel (%(apn)s) lies along the planned route. We represent Pennsylvania property owners, not the agencies taking the land.</p>
-<p>A first conversation costs nothing: %(phone)s%(email)s.</p></div>
+<div class="msg">%(back)s</div>
 <div class="fine">%(label)s%(firm)s, %(firm_addr)s. This notice is based on public planning records. No taking of your property has been announced, and receiving this card does not mean one will occur.</div>
 </div></body></html>"""
 
@@ -139,18 +224,17 @@ body{background:#fff}
 def postcard_html(cfg: Dict[str, Any], lead: Dict[str, Any]) -> Dict[str, str]:
     firm = (cfg.get("outreach") or {}).get("firm") or {}
     pc = (cfg.get("outreach") or {}).get("postcard") or {}
+    tpl, values = template(cfg), merge_values(cfg, lead)
     e = lambda v: html.escape(str(v or ""))  # noqa: E731
-    place = lead.get("address") or ""
-    project = re.sub(r"\s*\(MPMS \d+\)", "", lead.get("project") or "A public project")
+    headline = render(tpl["postcard_headline"], values)
     vals = {
         "css": CARD_CSS,
-        "place": " at " + e(place.title()) if place else "",
-        "project": e(project),
-        "stage": e((lead.get("stage") or "planning").replace("_", " ")),
-        "firm": e(firm.get("name") or "Your firm name"),
+        "h1": 25 if len(headline) <= 62 else 21 if len(headline) <= 90 else 17,     # long headlines step down, never overflow
+        "headline": e(headline),
+        "message": e(render(tpl["postcard_message"], values)[:420]),
+        "back": e(render(tpl["postcard_back"], values)[:520]),
+        "firm": e(values["firm_name"]),
         "phone": e(firm.get("phone") or ""),
-        "email": " or " + e(firm["email"]) if firm.get("email") else "",
-        "apn": e(lead.get("apn")),
         "label": "ADVERTISEMENT. " if pc.get("advertising_label", True) else "",
         "firm_addr": e(", ".join(str(firm.get(k)) for k in ("address_line1", "city", "state", "zip") if firm.get(k))),
     }
@@ -236,7 +320,11 @@ class Apollo:
         return [{"person_id": p.get("id"),
                  "name": " ".join(x for x in (p.get("first_name"), p.get("last_name") or p.get("last_name_obfuscated")) if x),
                  "title": p.get("title"), "organization": (p.get("organization") or {}).get("name"),
-                 "has_email": bool(p.get("has_email", True))} for p in people]
+                 "has_email": bool(p.get("has_email", True)), "linkedin": p.get("linkedin_url"),
+                 "phone": ((p.get("organization") or {}).get("primary_phone") or {}).get("number")
+                          or (p.get("organization") or {}).get("phone"),
+                 "email": p.get("email") if p.get("email") and "not_unlocked" not in p.get("email") else None}
+                for p in people]
 
     def enroll(self, lead: Dict[str, Any], person_id: str) -> Dict[str, Any]:
         """Reveal the person's work email (1 Apollo credit), save them as a contact, add them to the sequence."""
@@ -254,7 +342,8 @@ class Apollo:
             "emailer_campaign_id": seq, "contact_ids": [contact["id"]],
             "send_email_from_email_account_id": self.cfg["email_account_id"],
         })
-        return {"external_id": contact["id"], "email": email, "name": person.get("name"), "sequence_id": seq}
+        return {"external_id": contact["id"], "email": email, "name": person.get("name"), "sequence_id": seq,
+                "person_id": person_id, "title": person.get("title")}
 
 
 # ---------------------------------------------------------------- postcard campaigns
@@ -319,8 +408,7 @@ def scan_email_leads(cfg: Dict[str, Any], db: Any, limit: int = 50, client: Opti
     ap = Apollo(cfg, client)
     found = 0
     for o in owners:
-        n = len(ap.find_contacts({"owner": o["owner"]}))
-        found += n > 0
-        db.conn.execute("UPDATE parcels SET email_contacts=? WHERE owner=?", (n, o["owner"]))
-        db.conn.commit()
+        people = ap.find_contacts({"owner": o["owner"]})
+        found += len(people) > 0
+        db.save_contacts(o["owner"], people)
     return {"owners_checked": len(owners), "owners_with_contacts": found}

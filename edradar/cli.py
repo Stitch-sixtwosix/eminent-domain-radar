@@ -48,6 +48,9 @@ def main() -> None:
         print("wrote %s: %s" % (args.out, export_static(cfg, args.out)))
         return
     db = DB(cfg["database"])
+    from . import outreach as _outreach
+
+    _outreach.apply_saved(cfg, db)     # the template edited in the dashboard applies to command-line sends too
     if args.cmd == "ingest":
         pipeline.ingest(cfg, db, args.source)
     elif args.cmd == "classify":

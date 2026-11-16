@@ -337,3 +337,40 @@ def test_campaign_filter_and_snapshot(tmp_path, monkeypatch):
     snap = json.loads((tmp_path / "site" / "data.json").read_text())
     row = next(r for r in snap["leads"] if r["owner"] == "Jane Roe")
     assert counts["leads"] == 6 and row["owner_kind"] == "individual" and row["own"][0] == "Pennsylvania" and "facts" in row
+
+
+def test_outreach_template(tmp_path):
+    from edradar import outreach
+
+    path = str(tmp_path / "t.db")
+    db = seeded_db(path)
+    cfg = {"database": path, "parcel_layers": [], "user_agent": "t", "outreach": {"firm": {}, "postcard": {}, "apollo": {}}}
+    client = TestClient(create_app(cfg))
+    t = client.get("/api/outreach/template").json()
+    assert "{{firm_name}}" in t["letter"] and t["firm"]["name"] == "" and "owner_name" in t["fields"]
+    t["firm"].update(name="Duerr Law, P.C.", attorney="J. Duerr", phone="555-0100", address_line1="1 Court St", city="Erie",
+                     state="PA", zip="16501")
+    t["postcard_headline"] = "{{firm_name}} can help with {{property}}."
+    saved = client.put("/api/outreach/template", json=t).json()
+    assert saved["firm"]["name"] == "Duerr Law, P.C." and outreach.status(cfg)["firm_ready"]
+
+    lead = {"id": 1, "owner": "ROE JANE", "address": "12 MAIN ST", "apn": "A-1", "parcel_county": "ERIE",
+            "project": "Widen X (MPMS 1)", "stage": "design", "agency": "PennDOT District 01",
+            "mailing_address": "12 MAIN ST, ERIE, PA, 16501"}
+    v = outreach.merge_values(cfg, lead)
+    assert v["property"] == "your property at 12 Main St" and v["project_name"] == "Widen X" and v["owner_name"] == "Roe Jane"
+    letter = outreach.render(saved["letter"], v)
+    assert "Duerr Law, P.C. represents" in letter and "{{" not in letter and "J. Duerr" in letter
+    card = outreach.postcard_html(cfg, lead)
+    assert "Duerr Law, P.C. can help with your property at 12 Main St." in card["front"] and "1 Court St" in card["back"]
+    # a reopened app (and the command line) pick the saved template up again
+    fresh = {"database": path, "outreach": {"firm": {}, "postcard": {}, "apollo": {}}}
+    outreach.apply_saved(fresh, DB(path))
+    assert fresh["outreach"]["firm"]["name"] == "Duerr Law, P.C."
+
+    db.save_contacts("Jane Roe", [{"person_id": "p1", "name": "Jane Roe", "title": "Owner", "email": None}])
+    db.save_contacts("Jane Roe", [{"person_id": "p1", "name": "Jane Roe", "title": "Owner", "email": "j@roe.test"}])
+    assert db.contacts_for("Jane Roe")[0]["email"] == "j@roe.test"
+    lead_id = client.get("/api/leads").json()[0]["id"]
+    db.conn.execute("UPDATE parcels SET geometry='[[[0,0],[0,1],[1,1],[0,0]]]'"); db.commit()
+    assert client.get("/api/leads/%d/detail" % lead_id).json()["contacts"][0]["name"] == "Jane Roe"
