@@ -1,0 +1,30 @@
+# Runs the full pipeline on GitHub's servers and saves the database as a downloadable artifact.
+# Manual by default (Actions tab -> Refresh leads -> Run workflow). Uncomment `schedule` to run weekly.
+name: Refresh leads
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: Projects to match to parcels this run
+        default: "150"
+  # schedule:
+  #   - cron: "0 10 * * 1"
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e .
+      - run: edradar run --limit "${{ inputs.limit || '150' }}"
+        env:
+          # Optional. Without it, council and federal notices are scored by keyword rules.
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      - run: edradar stats
+      - uses: actions/upload-artifact@v4
+        with:
+          name: edradar-db
+          path: data/edradar.db
+          retention-days: 30

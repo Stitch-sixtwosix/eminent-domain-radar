@@ -1,0 +1,96 @@
+# Pennsylvania configuration. Copy to config.yaml and edit; every section is optional.
+
+database: data/edradar.db
+
+# Sent as the User-Agent to public APIs. Nominatim's usage policy asks for a contact here.
+user_agent: "edradar/0.1 (eminent-domain lead research)"
+
+sources:
+  # PennDOT's public project map service (MPMS). Projects arrive with their alignment geometry,
+  # years before right-of-way plans are filed.
+  penndot:
+    enabled: true
+    url: https://gis.penndot.gov/arcgis/rest/services/paprojects/paprojects/MapServer
+    # Earliest-stage programs first. "Under Construction" and "Completed" are deliberately excluded.
+    layers:
+      - {id: 18, program: "Twelve Year Program"}
+      - {id: 3,  program: "Twelve Year Program"}
+      - {id: 19, program: "Under Development"}
+      - {id: 4,  program: "Under Development"}
+      - {id: 17, program: "Four Year Plan"}
+      - {id: 2,  program: "Four Year Plan"}
+      - {id: 21, program: "Anticipated"}
+      - {id: 6,  program: "Anticipated"}
+    # Restrict to counties you practice in (upper-case names), or leave empty for statewide.
+    counties: []
+
+  # Federal NEPA notices (FHWA, FERC pipelines, Army Corps, FRA, FTA...) that mention Pennsylvania.
+  federal_register:
+    enabled: true
+    lookback_days: 365
+    terms:
+      - '"environmental impact statement" Pennsylvania'
+      - '"environmental assessment" Pennsylvania "right-of-way"'
+      - 'pipeline Pennsylvania "certificate of public convenience and necessity"'
+      - 'Pennsylvania "transmission line" "environmental"'
+
+  # City/county legislation. Catches ordinances authorizing acquisition or condemnation,
+  # which often list the exact parcels. Add any PA body that uses Legistar.
+  legistar:
+    enabled: true
+    lookback_days: 365
+    clients:
+      # `place` is appended to street addresses when geocoding.
+      - {slug: pittsburgh, name: "City of Pittsburgh", place: Pittsburgh, county: ALLEGHENY}
+    phrases:
+      - eminent domain
+      - condemnation
+      - declaration of taking
+      - acquisition of property
+      - acquisition of real property
+      - right-of-way acquisition
+      - right of way acquisition
+      - Urban Redevelopment Authority
+      - easement
+
+classifier:
+  # auto: Claude for free-text sources when Anthropic credentials are available, keyword rules otherwise.
+  # PennDOT records are structured and always scored by rules (no API cost).
+  engine: auto            # auto | claude | keywords
+  model: claude-opus-5-5
+
+geocoder:
+  url: https://nominatim.openstreetmap.org/search
+  state: Pennsylvania
+
+# Parcel layers, tried in order; the first whose `counties` covers the project's county is used.
+# A layer with no `counties` is a statewide fallback.
+#   provider: carto_phl  - Philadelphia OPA (owner, mailing address, market value)
+#   provider: arcgis     - any ArcGIS REST polygon layer; map its field names under `fields`
+parcel_layers:
+  - name: Philadelphia OPA
+    provider: carto_phl
+    counties: [PHILADELPHIA]
+    url: https://phl.carto.com/api/v2/sql
+
+  # Add county layers that publish owner names here, e.g.:
+  # - name: Example County
+  #   provider: arcgis
+  #   counties: [EXAMPLE]
+  #   url: https://gis.examplecounty.gov/arcgis/rest/services/Parcels/MapServer/0
+  #   fields: {apn: PIN, address: SITUS, owner: OWNER, mailing_address: MAIL_ADDR, market_value: TOTAL_VAL, acres: ACRES}
+
+  # Statewide fallback from PASDA (Penn State). Parcel IDs only: owner names must be looked up
+  # at the county assessment office until a county layer is added above.
+  - name: PASDA statewide parcels
+    provider: arcgis
+    url: https://apps.pasda.psu.edu/arcgis/rest/services/PA_Parcels/MapServer/1
+    fields: {apn: PIN, county: Source}
+
+matching:
+  min_project_score: 60        # only projects at or above this score are matched to parcels
+  abut_m: 20                   # parcels this close to the alignment are flagged "abuts alignment"
+  buffer_m: 75                 # wider ring around linear projects
+  point_buffer_m: 150          # radius around point projects (bridges, intersections, geocoded places)
+  max_parcels_per_project: 400
+  projects_per_run: 150

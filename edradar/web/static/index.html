@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>edradar · Pennsylvania eminent domain leads</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  :root { --ink:#16202b; --muted:#5d6b7a; --line:#dde3ea; --bg:#f5f7f9; --panel:#fff; --accent:#0b5cad;
+          --hot:#b42318; --warm:#b54708; --cool:#3b6b8f; }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { font: 14px/1.4 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; color: var(--ink);
+         background: var(--bg); display: grid; grid-template-rows: auto 1fr; }
+  header { display: flex; align-items: baseline; gap: 24px; padding: 10px 16px; background: var(--panel);
+           border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+  header h1 { font-size: 16px; margin: 0; letter-spacing: .01em; }
+  header h1 span { color: var(--muted); font-weight: 400; }
+  .stat { color: var(--muted); font-size: 13px; }
+  .stat b { color: var(--ink); font-variant-numeric: tabular-nums; }
+  main { display: grid; grid-template-columns: 360px 1fr; grid-template-rows: 55% 45%; min-height: 0; }
+  #sidebar { grid-row: 1 / 3; border-right: 1px solid var(--line); background: var(--panel);
+             display: flex; flex-direction: column; min-height: 0; }
+  .filters { padding: 10px 12px; border-bottom: 1px solid var(--line); display: grid;
+             grid-template-columns: 1fr 1fr; gap: 6px; }
+  .filters input[type=search] { grid-column: 1 / 3; }
+  select, input, button { font: inherit; padding: 5px 7px; border: 1px solid var(--line); border-radius: 6px;
+                          background: #fff; color: var(--ink); min-width: 0; }
+  button { cursor: pointer; }
+  button:hover { border-color: var(--accent); color: var(--accent); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  #projects { overflow-y: auto; flex: 1; }
+  .proj { padding: 10px 12px; border-bottom: 1px solid var(--line); cursor: pointer; display: grid;
+          grid-template-columns: 38px 1fr; gap: 10px; }
+  .proj:hover { background: #f1f5f9; }
+  .proj.sel { background: #e7f0fa; box-shadow: inset 3px 0 0 var(--accent); }
+  .score { font-weight: 700; font-variant-numeric: tabular-nums; text-align: center; border-radius: 6px;
+           padding: 4px 0; color: #fff; align-self: start; }
+  .s-hot { background: var(--hot); } .s-warm { background: var(--warm); } .s-cool { background: var(--cool); }
+  .proj h3 { margin: 0 0 2px; font-size: 13.5px; font-weight: 600; overflow-wrap: anywhere; }
+  .meta { color: var(--muted); font-size: 12px; }
+  .tag { display: inline-block; padding: 0 6px; border: 1px solid var(--line); border-radius: 10px;
+         font-size: 11px; color: var(--muted); margin-right: 3px; white-space: nowrap; }
+  #map { min-height: 0; }
+  #detail { border-top: 1px solid var(--line); background: var(--panel); display: flex; flex-direction: column;
+            min-height: 0; }
+  #detail-head { padding: 8px 12px; border-bottom: 1px solid var(--line); display: flex; gap: 10px;
+                 align-items: center; flex-wrap: wrap; }
+  #detail-head .title { font-weight: 600; flex: 1; min-width: 200px; }
+  #summary { padding: 6px 12px; color: var(--muted); font-size: 12.5px; border-bottom: 1px solid var(--line);
+             max-height: 4.6em; overflow-y: auto; white-space: pre-line; }
+  #leads-wrap { overflow: auto; flex: 1; }
+  table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+  th, td { text-align: left; padding: 5px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th { position: sticky; top: 0; background: #f8fafc; font-weight: 600; color: var(--muted); white-space: nowrap; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  td select { padding: 2px 4px; font-size: 12px; }
+  .empty { padding: 24px; color: var(--muted); text-align: center; }
+  a { color: var(--accent); }
+  @media (max-width: 800px) {
+    main { grid-template-columns: 1fr; grid-template-rows: 40vh 45vh auto; overflow-y: auto; }
+    #sidebar { grid-row: auto; border-right: 0; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>edradar <span>· Pennsylvania eminent domain leads</span></h1>
+  <span class="stat"><b id="st-projects">–</b> projects scoring 60+</span>
+  <span class="stat"><b id="st-leads">–</b> parcel leads</span>
+  <span class="stat"><b id="st-owners">–</b> with owner of record</span>
+  <span class="stat"><b id="st-signals">–</b> signals screened</span>
+</header>
+<main>
+  <aside id="sidebar">
+    <div class="filters">
+      <input id="f-q" type="search" placeholder="Search projects…" aria-label="Search projects">
+      <select id="f-county" aria-label="County"><option value="">All counties</option></select>
+      <select id="f-type" aria-label="Project type"><option value="">All types</option></select>
+      <select id="f-source" aria-label="Source">
+        <option value="">All sources</option><option value="penndot">PennDOT</option>
+        <option value="federal_register">Federal Register</option><option value="legistar">Council legislation</option>
+      </select>
+      <select id="f-score" aria-label="Minimum score">
+        <option value="80">Score 80+</option><option value="60" selected>Score 60+</option>
+        <option value="40">Score 40+</option><option value="0">All</option>
+      </select>
+    </div>
+    <div id="projects"></div>
+  </aside>
+  <div id="map"></div>
+  <section id="detail">
+    <div id="detail-head">
+      <span class="title" id="d-title">Top leads across all projects</span>
+      <label class="meta"><input type="checkbox" id="f-owner"> owner known</label>
+      <button id="btn-all" hidden>Show all projects</button>
+      <button id="btn-csv">Export CSV</button>
+    </div>
+    <div id="summary" hidden></div>
+    <div id="leads-wrap"></div>
+  </section>
+</main>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = n => n == null ? "" : n >= 1e6 ? "$" + (n / 1e6).toFixed(1) + "M" : "$" + Math.round(n).toLocaleString();
+const scoreClass = s => s >= 80 ? "s-hot" : s >= 60 ? "s-warm" : "s-cool";
+const scoreColor = s => s >= 80 ? "#b42318" : s >= 60 ? "#b54708" : "#3b6b8f";
+const REASON = {named_in_document: "Named in document", abuts_alignment: "Abuts alignment", within_buffer: "Nearby"};
+const safeUrl = u => /^https?:\/\//i.test(u || "") ? u : "#";
+
+let STATUSES = [], projects = [], selected = null, layers = {};
+const map = L.map("map", {preferCanvas: true}).setView([40.95, -77.6], 7);
+L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+  {maxZoom: 19, attribution: "&copy; OpenStreetMap contributors"}).addTo(map);
+const group = L.featureGroup().addTo(map);
+
+async function api(path, opts) {
+  const r = await fetch(path, opts);
+  if (!r.ok) throw new Error(path + " → " + r.status);
+  return r.json();
+}
+
+function projectParams() {
+  const p = new URLSearchParams({min_score: $("f-score").value});
+  for (const [id, key] of [["f-county", "county"], ["f-type", "project_type"], ["f-source", "source"], ["f-q", "q"]])
+    if ($(id).value) p.set(key, $(id).value);
+  return p;
+}
+
+function leadParams() {
+  const p = new URLSearchParams();
+  if (selected) p.set("project_id", selected.id);
+  else { p.set("min_score", 60); if ($("f-county").value) p.set("county", $("f-county").value); }
+  if ($("f-owner").checked) p.set("owner_only", "true");
+  return p;
+}
+
+function drawProject(p) {
+  const g = p.geometry, color = scoreColor(p.score);
+  let layer = null;
+  if (g && g.paths) layer = L.polyline(g.paths.map(path => path.map(([x, y]) => [y, x])), {color, weight: 4, opacity: .85});
+  else if (g && g.points) layer = L.featureGroup(g.points.map(([x, y]) =>
+      L.circleMarker([y, x], {radius: 6, color, fillOpacity: .7, weight: 2})));
+  if (!layer) return;
+  layer.bindTooltip(p.name || "Project");
+  layer.on("click", () => select(p.id, false));
+  layer.addTo(group);
+  layers[p.id] = layer;
+}
+
+async function loadProjects() {
+  projects = await api("/api/projects?" + projectParams());
+  group.clearLayers(); layers = {};
+  const box = $("projects");
+  if (!projects.length) { box.innerHTML = '<div class="empty">No projects match. Run <code>edradar run</code> or loosen the filters.</div>'; return; }
+  box.innerHTML = projects.map(p => `
+    <div class="proj" data-id="${p.id}" tabindex="0" role="button">
+      <div class="score ${scoreClass(p.score)}">${p.score}</div>
+      <div><h3>${esc(p.name)}</h3>
+        <div class="meta">${esc(p.county || "")}${p.county ? " · " : ""}${esc(p.agency || p.source)}${p.est_cost ? " · " + money(p.est_cost) : ""}</div>
+        <div><span class="tag">${esc(p.project_type)}</span><span class="tag">${esc((p.stage || "").replace(/_/g, " "))}</span>
+        <span class="tag">${p.matched_at ? p.lead_count + " parcels" : "not matched yet"}</span></div></div>
+    </div>`).join("");
+  projects.forEach(drawProject);
+  if (selected && !projects.some(p => p.id === selected.id)) selected = null;
+  markSelected();
+}
+
+function markSelected() {
+  document.querySelectorAll(".proj").forEach(el => el.classList.toggle("sel", selected && +el.dataset.id === selected.id));
+}
+
+async function select(id, scroll = true) {
+  selected = projects.find(p => p.id === id) || null;
+  markSelected();
+  if (selected) {
+    const layer = layers[id];
+    if (layer) map.fitBounds(layer.getBounds().pad(0.6), {maxZoom: 16});
+    if (!scroll) document.querySelector(`.proj[data-id="${id}"]`)?.scrollIntoView({block: "nearest"});
+  }
+  await loadLeads();
+}
+
+async function loadLeads() {
+  const p = selected;
+  $("d-title").textContent = p ? p.name : "Top leads across all projects";
+  $("btn-all").hidden = !p;
+  $("summary").hidden = !p;
+  if (p) $("summary").innerHTML = esc(p.summary || "") +
+    (p.contact ? `\nAgency contact: ${esc(p.contact)}` : "") +
+    (p.url ? ` · <a href="${esc(safeUrl(p.url))}" target="_blank" rel="noopener">source</a>` : "");
+  const rows = await api("/api/leads?" + leadParams());
+  if (!rows.length) {
+    $("leads-wrap").innerHTML = `<div class="empty">${p && !p.matched_at
+      ? "This project has not been matched to parcels yet. Run <code>edradar match</code>."
+      : "No parcel leads here yet."}</div>`;
+    return;
+  }
+  $("leads-wrap").innerHTML = `<table><thead><tr><th>Score</th><th>Owner of record</th><th>Property</th>
+    <th>Mailing address</th><th>Parcel</th><th>Value</th><th>Why</th>${p ? "" : "<th>Project</th>"}<th>Status</th></tr></thead><tbody>` +
+    rows.map(r => `<tr>
+      <td class="num"><b>${r.score}</b></td>
+      <td>${r.owner ? esc(r.owner) : '<span class="meta">look up at county</span>'}</td>
+      <td>${esc(r.address || "")}</td><td>${esc(r.mailing_address || "")}</td>
+      <td>${esc(r.apn)}<div class="meta">${esc(r.parcel_county || "")}</div></td>
+      <td class="num">${money(r.market_value)}</td>
+      <td>${esc(REASON[r.match_reason] || r.match_reason)}${r.distance_m != null ? `<div class="meta">${Math.round(r.distance_m)} m</div>` : ""}</td>
+      ${p ? "" : `<td><a href="#" data-project="${r.project_id}">${esc(r.project)}</a></td>`}
+      <td><select data-lead="${r.id}" aria-label="Lead status">${STATUSES.map(s =>
+        `<option${s === r.status ? " selected" : ""}>${s}</option>`).join("")}</select></td></tr>`).join("") +
+    "</tbody></table>";
+}
+
+$("projects").addEventListener("click", e => { const el = e.target.closest(".proj"); if (el) select(+el.dataset.id); });
+$("projects").addEventListener("keydown", e => { if (e.key === "Enter") { const el = e.target.closest(".proj"); if (el) select(+el.dataset.id); } });
+$("leads-wrap").addEventListener("change", async e => {
+  const id = e.target.dataset.lead;
+  if (id) await api("/api/leads/" + id, {method: "PATCH", headers: {"Content-Type": "application/json"},
+                                         body: JSON.stringify({status: e.target.value})});
+});
+$("leads-wrap").addEventListener("click", e => {
+  const id = e.target.dataset.project;
+  if (id) { e.preventDefault(); select(+id, false); }
+});
+$("btn-all").addEventListener("click", () => { selected = null; markSelected(); map.setView([40.95, -77.6], 7); loadLeads(); });
+$("btn-csv").addEventListener("click", () => { location.href = "/api/leads.csv?" + leadParams(); });
+$("f-owner").addEventListener("change", loadLeads);
+let timer;
+for (const id of ["f-county", "f-type", "f-source", "f-score", "f-q"])
+  $(id).addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(async () => { await loadProjects(); await loadLeads(); }, 250); });
+
+(async () => {
+  const s = await api("/api/stats");
+  STATUSES = s.statuses;
+  $("st-projects").textContent = s.projects.toLocaleString();
+  $("st-leads").textContent = s.leads.toLocaleString();
+  $("st-owners").textContent = s.leads_with_owner.toLocaleString();
+  $("st-signals").textContent = s.signals.toLocaleString();
+  $("f-county").insertAdjacentHTML("beforeend", s.counties.map(c => `<option>${esc(c)}</option>`).join(""));
+  $("f-type").insertAdjacentHTML("beforeend", s.types.map(c => `<option>${esc(c)}</option>`).join(""));
+  await loadProjects();
+  await loadLeads();
+})().catch(e => { $("leads-wrap").innerHTML = `<div class="empty">Could not load data: ${esc(e.message)}</div>`; });
+</script>
+</body>
+</html>

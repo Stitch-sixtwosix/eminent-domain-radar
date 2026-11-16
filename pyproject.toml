@@ -1,0 +1,28 @@
+[project]
+name = "edradar"
+version = "0.1.0"
+description = "Early-warning lead platform for eminent domain attorneys: finds planned public projects and the parcels they will likely take."
+requires-python = ">=3.9"
+dependencies = [
+  "httpx>=0.27",
+  "pyyaml>=6.0",
+  "fastapi>=0.110",
+  "uvicorn>=0.29",
+  "anthropic>=0.70",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "respx>=0.21"]
+
+[project.scripts]
+edradar = "edradar.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["edradar*"]
+
+[tool.setuptools.package-data]
+edradar = ["web/static/*"]
