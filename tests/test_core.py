@@ -83,6 +83,11 @@ def test_db_and_api(tmp_path):
 
     client = TestClient(create_app({"database": path}))
     assert client.get("/").status_code == 200
+    assert [x["projects"] for x in client.get("/api/stats").json()["stages"]] == [1, 0, 0, 0, 0, 0]
+    assert len(client.get("/api/projects", params={"stage": "planning"}).json()) == 1
+    assert client.get("/api/projects", params={"stage": "design"}).json() == []
+    assert len(client.get("/api/leads", params={"stage": "planning"}).json()) == 1
+    assert client.get("/api/leads", params={"stage": "construction"}).json() == []
     assert client.get("/api/stats").json()["leads_with_owner"] == 1
     projects = client.get("/api/projects").json()
     assert projects[0]["lead_count"] == 1 and projects[0]["geometry"] == LINE

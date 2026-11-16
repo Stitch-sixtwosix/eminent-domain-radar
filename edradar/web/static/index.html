@@ -84,7 +84,7 @@
   button svg { width: 14px; height: 14px; flex: none; }
   .filters { padding: 12px; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
              background: var(--rail); }
-  .filters input { grid-column: 1 / 3; }
+  .filters input, .filters .wide { grid-column: 1 / 3; }
 
   /* ---- project list ---- */
   #projects { overflow-y: auto; flex: 1; }
@@ -329,7 +329,8 @@
         <option value="">All sources</option><option value="penndot">PennDOT</option>
         <option value="federal_register">Federal Register</option><option value="legistar">Council legislation</option>
       </select>
-      <select id="f-score" aria-label="Minimum score">
+      <select id="f-stage" aria-label="Project stage"><option value="">All stages</option></select>
+      <select id="f-score" aria-label="Minimum score" class="wide">
         <option value="80">Score 80+</option><option value="60" selected>Score 60+</option>
         <option value="40">Score 40+</option><option value="0">Any score</option>
       </select>
@@ -532,9 +533,9 @@ function staticCases(id) {
     search_url: "https://www.courtlistener.com/?" + new URLSearchParams({q: query, type: "o", court: "pa pacommwct pasuperct", order_by: "score desc"})};
 }
 function staticLeads(q) {
-  const pid = q.get("project_id"), min = +(q.get("min_score") || 0), county = q.get("county"), own = q.get("owner_only");
+  const pid = q.get("project_id"), min = +(q.get("min_score") || 0), county = q.get("county"), own = q.get("owner_only"), stage = q.get("stage");
   const byId = Object.fromEntries(SNAP.projects.map(p => [p.id, p]));
-  return SNAP.leads.filter(l => (!pid || l.project_id === +pid) && l.score >= min &&
+  return SNAP.leads.filter(l => (!pid || l.project_id === +pid) && l.score >= min && (!stage || (byId[l.project_id] || {}).stage === stage) &&
       (!county || (l.parcel_county || "").toUpperCase() === county) && (!own || l.owner) && staticOutreach(l, q.get("outreach")))
     .map(l => { const p = byId[l.project_id] || {}; return {...l, project: p.name, project_type: p.project_type, stage: p.stage, agency: p.agency, source: p.source, url: p.url}; });
 }
@@ -547,7 +548,7 @@ async function staticApi(path) {
     const min = +(q.get("min_score") || 0), text = (q.get("q") || "").toLowerCase();
     return SNAP.projects.filter(p => p.score >= min && (!q.get("county") || p.county === q.get("county")) &&
       (!q.get("project_type") || p.project_type === q.get("project_type")) &&
-      (!q.get("source") || (p.source || "").startsWith(q.get("source"))) &&
+      (!q.get("source") || (p.source || "").startsWith(q.get("source"))) && (!q.get("stage") || p.stage === q.get("stage")) &&
       (!text || ((p.name || "") + " " + (p.summary || "")).toLowerCase().includes(text))).slice(0, 500);
   }
   if (route === "/api/leads") return staticLeads(q).slice(0, 300);
@@ -565,14 +566,18 @@ function downloadCsv(rows) {
 
 function projectParams() {
   const p = new URLSearchParams({min_score: $("f-score").value});
-  for (const [id, key] of [["f-county", "county"], ["f-type", "project_type"], ["f-source", "source"], ["f-q", "q"]])
+  for (const [id, key] of [["f-county", "county"], ["f-type", "project_type"], ["f-source", "source"], ["f-stage", "stage"], ["f-q", "q"]])
     if ($(id).value) p.set(key, $(id).value);
   return p;
 }
 function leadParams() {
   const p = new URLSearchParams();
   if (selected) p.set("project_id", selected.id);
-  else { p.set("min_score", 60); if ($("f-county").value) p.set("county", $("f-county").value); }
+  else {
+    p.set("min_score", 60);
+    if ($("f-county").value) p.set("county", $("f-county").value);
+    if ($("f-stage").value) p.set("stage", $("f-stage").value);
+  }
   if ($("f-owner").checked) p.set("owner_only", "true");
   if ($("f-outreach").value) p.set("outreach", $("f-outreach").value);
   return p;
@@ -681,7 +686,7 @@ async function loadLeads() {
       ${outreachCell(r)}
       <td><select data-status="${r.id}" aria-label="Lead status"${STATIC ? " disabled" : ""}>${STATUSES.map(s =>
         `<option${s === r.status ? " selected" : ""}>${s}</option>`).join("")}</select></td></tr>`).join("") +
-    "</tbody></table>" + `<div class="total">${p ? `${leadRows.length.toLocaleString()} of ${p.lead_count.toLocaleString()} parcels for this project` : ($("f-outreach").value || $("f-owner").checked || $("f-county").value) ? `${leadRows.length >= 300 ? "First 300" : leadRows.length.toLocaleString()} leads matching these filters` : `Top ${leadRows.length.toLocaleString()} of ${TOTAL_LEADS.toLocaleString()} leads`}, highest score first${leadRows.length >= 300 ? ". Export CSV for the full list" : ""}.</div>`;
+    "</tbody></table>" + `<div class="total">${p ? `${leadRows.length.toLocaleString()} of ${p.lead_count.toLocaleString()} parcels for this project` : ($("f-outreach").value || $("f-owner").checked || $("f-county").value || $("f-stage").value) ? `${leadRows.length >= 300 ? "First 300" : leadRows.length.toLocaleString()} leads matching these filters` : `Top ${leadRows.length.toLocaleString()} of ${TOTAL_LEADS.toLocaleString()} leads`}, highest score first${leadRows.length >= 300 ? ". Export CSV for the full list" : ""}.</div>`;
 }
 
 /* ---- outreach template: one text drives the email, the printed letter and the postcard ---- */
@@ -1068,7 +1073,7 @@ $("f-outreach").addEventListener("change", loadLeads);
 $("btn-campaign").addEventListener("click", openCampaign);
 $("btn-template").addEventListener("click", openTemplate);
 let timer;
-for (const id of ["f-county", "f-type", "f-source", "f-score", "f-q"])
+for (const id of ["f-county", "f-type", "f-source", "f-stage", "f-score", "f-q"])
   $(id).addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(async () => { await loadProjects(); await loadLeads(); }, 250); });
 
 (async () => {
@@ -1093,6 +1098,7 @@ for (const id of ["f-county", "f-type", "f-source", "f-score", "f-q"])
   const title = c => c[0] + c.slice(1).toLowerCase();
   $("f-county").insertAdjacentHTML("beforeend", s.counties.map(c => `<option value="${esc(c)}">${esc(title(c))}</option>`).join(""));
   $("f-type").insertAdjacentHTML("beforeend", s.types.map(c => `<option>${esc(c)}</option>`).join(""));
+  $("f-stage").insertAdjacentHTML("beforeend", (s.stages || []).map((x, i) => `<option value="${esc(x.key)}">${i + 1}. ${esc(x.label)} (${x.projects})</option>`).join(""));
   await loadProjects();
   await loadLeads();
 })().catch(e => { $("leads-wrap").innerHTML = `<div class="empty">The data could not be loaded: ${esc(e.message)}. Reload the page to try again.</div>`; });

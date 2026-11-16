@@ -12,7 +12,7 @@ from pydantic import BaseModel
 
 from .. import outreach, parceldetail
 from .. import outreach as outreach_mod
-from ..classify import score_breakdown, timeline
+from ..classify import STAGE_ORDER, score_breakdown, timeline
 from ..db import DB
 
 STATIC = Path(__file__).parent / "static"
@@ -57,7 +57,7 @@ OUTREACH_FILTERS = {
 }
 
 
-def _lead_filters(project_id, status, county, min_score, owner_only, q, outreach_filter=None):
+def _lead_filters(project_id, status, county, min_score, owner_only, q, outreach_filter=None, stage=None):
     where, params = ["l.score >= ?"], [min_score]
     if project_id is not None:
         where.append("l.project_id = ?"); params.append(project_id)
@@ -71,6 +71,8 @@ def _lead_filters(project_id, status, county, min_score, owner_only, q, outreach
         where.append("(pa.owner LIKE ? OR pa.address LIKE ? OR pa.apn LIKE ?)"); params += ["%%%s%%" % q] * 3
     if outreach_filter in OUTREACH_FILTERS:
         where.append(OUTREACH_FILTERS[outreach_filter])
+    if stage:
+        where.append("p.stage = ?"); params.append(stage)
     return " WHERE " + " AND ".join(where), params
 
 
@@ -99,11 +101,15 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
             "types": [r["project_type"] for r in db.rows(
                 "SELECT DISTINCT project_type FROM projects ORDER BY project_type")],
             "statuses": STATUSES,
+            "stages": [{"key": k, "label": label, "projects": n} for (k, label, _), n in
+                       ((st, one("SELECT COUNT(*) n FROM projects WHERE score >= 60 AND stage = '%s'" % st[0]))
+                        for st in STAGE_ORDER)],
         }
 
     @app.get("/api/projects")
     def projects(min_score: int = 60, county: Optional[str] = None, project_type: Optional[str] = None,
-                 source: Optional[str] = None, q: Optional[str] = None, limit: int = 500) -> List[Dict[str, Any]]:
+                 source: Optional[str] = None, q: Optional[str] = None, stage: Optional[str] = None,
+                 limit: int = 500) -> List[Dict[str, Any]]:
         where, params = ["p.score >= ?"], [min_score]
         if county:
             where.append("s.county = ?"); params.append(county.upper())
@@ -111,6 +117,8 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
             where.append("p.project_type = ?"); params.append(project_type)
         if source:
             where.append("s.source LIKE ?"); params.append(source + "%")
+        if stage:
+            where.append("p.stage = ?"); params.append(stage)
         if q:
             where.append("(p.name LIKE ? OR p.summary LIKE ?)"); params += ["%%%s%%" % q] * 2
         rows = db.rows(
@@ -219,16 +227,16 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
     @app.get("/api/leads")
     def leads(project_id: Optional[int] = None, status: Optional[str] = None, county: Optional[str] = None,
               min_score: int = 0, owner_only: bool = False, q: Optional[str] = None,
-              outreach: Optional[str] = None, limit: int = 300) -> List[Dict[str, Any]]:
-        where, params = _lead_filters(project_id, status, county, min_score, owner_only, q, outreach)
+              outreach: Optional[str] = None, stage: Optional[str] = None, limit: int = 300) -> List[Dict[str, Any]]:
+        where, params = _lead_filters(project_id, status, county, min_score, owner_only, q, outreach, stage)
         return db.rows(LEAD_SQL + where + " ORDER BY l.score DESC, pa.market_value DESC LIMIT ?",
                        params + [min(limit, 5000)])
 
     @app.get("/api/leads.csv")
     def leads_csv(project_id: Optional[int] = None, status: Optional[str] = None, county: Optional[str] = None,
                   min_score: int = 0, owner_only: bool = False, q: Optional[str] = None,
-                  outreach: Optional[str] = None) -> StreamingResponse:
-        where, params = _lead_filters(project_id, status, county, min_score, owner_only, q, outreach)
+                  outreach: Optional[str] = None, stage: Optional[str] = None) -> StreamingResponse:
+        where, params = _lead_filters(project_id, status, county, min_score, owner_only, q, outreach, stage)
         rows = db.rows(LEAD_SQL + where + " ORDER BY l.score DESC LIMIT 50000", params)
         buf = io.StringIO()
         if rows:
