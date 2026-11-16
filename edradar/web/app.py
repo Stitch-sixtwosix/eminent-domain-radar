@@ -58,13 +58,15 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
 
     @app.get("/")
     def index() -> FileResponse:
-        return FileResponse(STATIC / "index.html")
+        # no-cache: the browser revalidates, so an updated dashboard shows up without a hard refresh
+        return FileResponse(STATIC / "index.html", headers={"Cache-Control": "no-cache"})
 
     @app.get("/api/stats")
     def stats() -> Dict[str, Any]:
         one = lambda sql: db.rows(sql)[0]["n"]
         return {
             "signals": one("SELECT COUNT(*) n FROM signals"),
+            "updated": one("SELECT MAX(fetched_at) n FROM signals"),
             "projects": one("SELECT COUNT(*) n FROM projects WHERE score >= 60"),
             "leads": one("SELECT COUNT(*) n FROM leads"),
             "leads_with_owner": one("SELECT COUNT(*) n FROM leads l JOIN parcels p ON p.id=l.parcel_id "
