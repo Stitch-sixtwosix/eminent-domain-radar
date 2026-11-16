@@ -23,6 +23,8 @@ def main() -> None:
     p = sub.add_parser("serve", help="start the dashboard")
     p.add_argument("--host", default="127.0.0.1")
     p.add_argument("--port", type=int, default=8000)
+    p = sub.add_parser("export", help="write a read-only static copy of the dashboard")
+    p.add_argument("--out", default="site")
     args = ap.parse_args()
 
     cfg = load_config(args.config)
@@ -32,6 +34,11 @@ def main() -> None:
         from .web.app import create_app
 
         uvicorn.run(create_app(cfg), host=args.host, port=args.port)
+        return
+    if args.cmd == "export":
+        from .web.app import export_static
+
+        print("wrote %s: %s" % (args.out, export_static(cfg, args.out)))
         return
     db = DB(cfg["database"])
     if args.cmd == "ingest":

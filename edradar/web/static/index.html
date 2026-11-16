@@ -116,10 +116,42 @@ L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png",
   {maxZoom: 19, attribution: "&copy; OpenStreetMap contributors"}).addTo(map);
 const group = L.featureGroup().addTo(map);
 
+// Two modes: live (FastAPI backend) and static (a published snapshot: data.json, read-only).
+const STATIC = !!window.EDRADAR_STATIC;
+let SNAP = null;
 async function api(path, opts) {
+  if (STATIC) return staticApi(path);
   const r = await fetch(path, opts);
   if (!r.ok) throw new Error(path + " → " + r.status);
   return r.json();
+}
+function staticLeads(q) {
+  const pid = q.get("project_id"), min = +(q.get("min_score") || 0), county = q.get("county"), own = q.get("owner_only");
+  const byId = Object.fromEntries(SNAP.projects.map(p => [p.id, p]));
+  return SNAP.leads.filter(l => (!pid || l.project_id === +pid) && l.score >= min &&
+      (!county || (l.parcel_county || "").toUpperCase() === county) && (!own || l.owner))
+    .map(l => { const p = byId[l.project_id] || {}; return {...l, project: p.name, project_type: p.project_type, stage: p.stage, agency: p.agency, source: p.source, url: p.url}; });
+}
+async function staticApi(path) {
+  if (!SNAP) { const r = await fetch("data.json"); if (!r.ok) throw new Error("data.json → " + r.status); SNAP = await r.json(); }
+  const [route, qs] = path.split("?"), q = new URLSearchParams(qs || "");
+  if (route === "/api/stats") return SNAP.stats;
+  if (route === "/api/projects") {
+    const min = +(q.get("min_score") || 0), text = (q.get("q") || "").toLowerCase();
+    return SNAP.projects.filter(p => p.score >= min && (!q.get("county") || p.county === q.get("county")) &&
+      (!q.get("project_type") || p.project_type === q.get("project_type")) &&
+      (!q.get("source") || (p.source || "").startsWith(q.get("source"))) &&
+      (!text || ((p.name || "") + " " + (p.summary || "")).toLowerCase().includes(text))).slice(0, 500);
+  }
+  if (route === "/api/leads") return staticLeads(q).slice(0, 300);
+  throw new Error("not available in the published snapshot: " + route);
+}
+function downloadCsv(rows) {
+  if (!rows.length) return;
+  const cols = Object.keys(rows[0]), cell = v => '"' + String(v ?? "").replace(/"/g, '""') + '"';
+  const blob = new Blob([[cols.join(","), ...rows.map(r => cols.map(c => cell(r[c])).join(","))].join("\n")], {type: "text/csv"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "edradar-leads.csv"; a.click();
 }
 
 function projectParams() {
@@ -208,7 +240,7 @@ async function loadLeads() {
       <td class="num">${money(r.market_value)}</td>
       <td>${esc(REASON[r.match_reason] || r.match_reason)}${r.distance_m != null ? `<div class="meta">${Math.round(r.distance_m)} m</div>` : ""}</td>
       ${p ? "" : `<td><a href="#" data-project="${r.project_id}">${esc(r.project)}</a></td>`}
-      <td><select data-lead="${r.id}" aria-label="Lead status">${STATUSES.map(s =>
+      <td><select data-lead="${r.id}" aria-label="Lead status"${STATIC ? " disabled" : ""}>${STATUSES.map(s =>
         `<option${s === r.status ? " selected" : ""}>${s}</option>`).join("")}</select></td></tr>`).join("") +
     "</tbody></table>";
 }
@@ -225,7 +257,9 @@ $("leads-wrap").addEventListener("click", e => {
   if (id) { e.preventDefault(); select(+id, false); }
 });
 $("btn-all").addEventListener("click", () => { selected = null; markSelected(); map.setView([40.95, -77.6], 7); loadLeads(); });
-$("btn-csv").addEventListener("click", () => { location.href = "/api/leads.csv?" + leadParams(); });
+$("btn-csv").addEventListener("click", () => {
+  if (STATIC) downloadCsv(staticLeads(leadParams())); else location.href = "/api/leads.csv?" + leadParams();
+});
 $("f-owner").addEventListener("change", loadLeads);
 let timer;
 for (const id of ["f-county", "f-type", "f-source", "f-score", "f-q"])
@@ -234,6 +268,8 @@ for (const id of ["f-county", "f-type", "f-source", "f-score", "f-q"])
 (async () => {
   const s = await api("/api/stats");
   STATUSES = s.statuses;
+  if (STATIC && s.generated) document.querySelector("header").insertAdjacentHTML("beforeend",
+    `<span class="stat">Snapshot of ${esc(s.generated)} · read-only</span>`);
   $("st-projects").textContent = s.projects.toLocaleString();
   $("st-leads").textContent = s.leads.toLocaleString();
   $("st-owners").textContent = s.leads_with_owner.toLocaleString();

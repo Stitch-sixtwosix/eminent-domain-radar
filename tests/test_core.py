@@ -108,3 +108,14 @@ def test_arcgis_row_joins_fields_and_builtin_catalog_loads():
     assert layers[0]["name"] == "Philadelphia OPA" and not layers[-1].get("counties")
     assert len({l["counties"][0] for l in layers if l.get("counties")}) >= 34
     assert all(l["fields"].get("apn") and l["fields"].get("owner") for l in layers[1:-1])
+
+
+def test_static_export(tmp_path):
+    path = str(tmp_path / "t.db")
+    seeded_db(path)
+    from edradar.web.app import export_static
+    counts = export_static({"database": path}, str(tmp_path / "site"))
+    assert counts == {"projects": 1, "leads": 1}
+    data = json.loads((tmp_path / "site" / "data.json").read_text())
+    assert data["leads"][0]["owner"] == "Jane Roe" and data["stats"]["generated"]
+    assert "EDRADAR_STATIC = true" in (tmp_path / "site" / "index.html").read_text()

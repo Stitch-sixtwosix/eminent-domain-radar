@@ -125,3 +125,31 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
         return {"ok": True}
 
     return app
+
+
+def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40) -> Dict[str, int]:
+    """Write a read-only copy of the dashboard (index.html + data.json) that any static host can serve."""
+    from datetime import date
+
+    from fastapi.testclient import TestClient
+
+    client = TestClient(create_app(cfg))
+    stats = client.get("/api/stats").json()
+    stats["generated"] = date.today().isoformat()
+    projects = client.get("/api/projects", params={"min_score": min_score, "limit": 2000}).json()
+    keep = ("id", "project_id", "score", "match_reason", "distance_m", "status", "apn", "parcel_county", "address",
+            "owner", "mailing_address", "market_value", "acres")
+    leads = [{k: r[k] for k in keep} for r in client.get("/api/leads", params={"limit": 5000}).json()]
+    db = DB(cfg["database"])
+    if len(leads) == 5000:  # the API caps a page; a snapshot wants every lead
+        leads = [{k: r[k] for k in keep} for r in db.rows(LEAD_SQL + " ORDER BY l.score DESC, pa.market_value DESC")]
+    out = Path(out_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    html = (STATIC / "index.html").read_text()
+    html = html.replace("<script>\nconst $", "<script>window.EDRADAR_STATIC = true;</script>\n<script>\nconst $", 1)
+    assert "EDRADAR_STATIC = true" in html
+    (out / "index.html").write_text(html)
+    (out / "data.json").write_text(json.dumps({"stats": stats, "projects": projects, "leads": leads},
+                                              separators=(",", ":")))
+    (out / ".nojekyll").write_text("")
+    return {"projects": len(projects), "leads": len(leads)}
