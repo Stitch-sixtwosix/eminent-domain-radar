@@ -23,6 +23,11 @@ REVIEW = {
 }
 
 
+# Statewide parcel layers that answered but cannot be used as they are, and why.
+NO_STATEWIDE = {"TX": "the layer refuses area queries; only single-point lookups return owners",
+                "IA": "a 2017 snapshot with the deed holder's name only"}
+
+
 def adopt(code: str) -> str:
     d = json.loads((SRC / ("%s.json" % code)).read_text())
     rev = REVIEW.get(code, {})
@@ -46,6 +51,8 @@ def adopt(code: str) -> str:
         p.setdefault("stage", rev.get("stage", "planning"))
         kept.append(p)
     d["projects"] = kept
+    if code in NO_STATEWIDE and d.get("parcels_statewide"):
+        d["parcels_statewide"] = dict(d["parcels_statewide"], verified=False, held=NO_STATEWIDE[code])
     DST.mkdir(parents=True, exist_ok=True)
     (DST / ("%s.json" % code)).write_text(json.dumps(d, indent=1))
     return "%s: %d project layer(s), statewide owners %s, %d county layer(s)" % (

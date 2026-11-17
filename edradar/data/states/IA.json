@@ -53,7 +53,7 @@
  "parcels_statewide": {
   "name": "Iowa Statewide Parcel Data, 2017 (University of Iowa mirror of the Iowa HSEMD layer)",
   "url": "https://services3.arcgis.com/kd9gaiUExYqUbnoq/arcgis/rest/services/Iowa_Parcels_2017/FeatureServer/0",
-  "verified": true,
+  "verified": false,
   "record_count": 2450589,
   "fields": {
    "apn": "PARCELNUMB",
@@ -61,7 +61,8 @@
    "county": "COUNTYNAME"
   },
   "restrictions": null,
-  "notes": "STALE: snapshot dated 2017-11-02 (layer name Parcels_20171102). Deed holder name only: no mailing address, site address, value or acres; text fields are space-padded. STATEPARID is county number + parcel number; PARCELCLAS is the class (e.g. AGRICULTURAL). No current free statewide layer with owners was found, so use county layers for current ownership."
+  "notes": "STALE: snapshot dated 2017-11-02 (layer name Parcels_20171102). Deed holder name only: no mailing address, site address, value or acres; text fields are space-padded. STATEPARID is county number + parcel number; PARCELCLAS is the class (e.g. AGRICULTURAL). No current free statewide layer with owners was found, so use county layers for current ownership.",
+  "held": "a 2017 snapshot with the deed holder's name only"
  },
  "parcels_counties": [
   {

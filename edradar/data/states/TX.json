@@ -75,7 +75,7 @@
  "parcels_statewide": {
   "name": "TxGIO StratMap Land Parcels (most recent)",
   "url": "https://feature.geographic.texas.gov/arcgis/rest/services/Parcels/stratmap_land_parcels_48_most_recent/MapServer/0",
-  "verified": true,
+  "verified": false,
   "record_count": null,
   "fields": {
    "apn": "prop_id",
@@ -94,7 +94,8 @@
    "county": "county"
   },
   "restrictions": null,
-  "notes": "IMPORTANT LIMIT: the layer's /query operation answers 'Requested operation is not supported by this service' (count and where-queries both fail). What does work, and was verified with real data, is the map service's identify operation: .../MapServer/identify?geometry=<lon,lat>&geometryType=esriGeometryPoint&sr=4326&layers=all&tolerance=2&mapExtent=<bbox>&imageDisplay=800,800,96&returnGeometry=false&f=json returned a Travis County parcel with OWNER_NAME, MAIL_ADDR, SITUS_ADDR, MKT_VALUE (identify returns the field names in upper case). So owners can be looked up point by point along a project line, but not bulk-downloaded through this service. Other fields: geo_id, name_care, land_value, imp_value, legal_desc, fips, tax_year, source (appraisal district). Coverage and currency vary by county. Copyright text: 'TxGIO, Various Counties, Various Vendors'; no use restriction stated in the service."
+  "notes": "IMPORTANT LIMIT: the layer's /query operation answers 'Requested operation is not supported by this service' (count and where-queries both fail). What does work, and was verified with real data, is the map service's identify operation: .../MapServer/identify?geometry=<lon,lat>&geometryType=esriGeometryPoint&sr=4326&layers=all&tolerance=2&mapExtent=<bbox>&imageDisplay=800,800,96&returnGeometry=false&f=json returned a Travis County parcel with OWNER_NAME, MAIL_ADDR, SITUS_ADDR, MKT_VALUE (identify returns the field names in upper case). So owners can be looked up point by point along a project line, but not bulk-downloaded through this service. Other fields: geo_id, name_care, land_value, imp_value, legal_desc, fips, tax_year, source (appraisal district). Coverage and currency vary by county. Copyright text: 'TxGIO, Various Counties, Various Vendors'; no use restriction stated in the service.",
+  "held": "the layer refuses area queries; only single-point lookups return owners"
  },
  "parcels_counties": [
   {
