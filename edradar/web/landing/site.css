@@ -136,10 +136,11 @@ h2 { font-size: var(--s-title); }
 
 /* ---- who built it ---- */
 .about { margin-top: var(--gap); display: grid; grid-template-columns: calc(var(--axis) - var(--m)) 1fr; row-gap: clamp(64px, 8vw, 112px); }
-.about dl { align-self: end; }
-.about dl div + div { margin-top: 20px; }
-.about dt { font-size: var(--s-small); color: var(--muted); }
-.about dd { font-weight: 500; }
+.about .who { padding-right: 56px; }
+.about .portrait { width: min(100%, 340px); aspect-ratio: 4 / 5; overflow: hidden; background: var(--tone); margin-bottom: 20px; }
+.about .portrait img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 20%; }
+.about .name { font: 500 clamp(22px, 1.9vw, 28px)/1.2 var(--serif); letter-spacing: -0.012em; }
+.about .role { margin-top: 8px; font-size: var(--s-small); color: var(--muted); }
 .about .statement { margin-top: 24px; font: 500 clamp(22px, 2.2vw, 34px)/1.26 var(--serif); letter-spacing: -0.012em; max-width: 30ch; }
 .about .more { margin-top: 24px; max-width: 52ch; }
 .about .more + .more { margin-top: 14px; }
@@ -261,10 +262,7 @@ form.narrow { max-width: 480px; }
   .count { row-gap: 32px; }
   .count .big { font-size: 26vw; line-height: 1; }
   .about .lists { grid-template-columns: 1fr; }
-  .about dl { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 24px; order: 2; }
-  .about dl div + div { margin-top: 0; }
-  .about > div:nth-child(2) { order: 1; }
-  .about > h3 { order: 3; } .about .lists { order: 4; }
+  .about .who { padding: 0; }
   .about { display: flex; flex-direction: column; gap: 40px; }
   .close h2 { font-size: 10.6vw; }
   .close .row { flex-direction: column; align-items: stretch; margin-top: 64px; }

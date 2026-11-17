@@ -22,7 +22,7 @@
 <header class="bar">
   <a class="brand" href="./" aria-label="EminentTracker home"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7.5" fill="#1b2333"/><path d="M8 5h16v4.200H12.200v13.600H24V27H8z" fill="#fff"/><path d="M12.200 13.900H32v4.200H12.200z" fill="#e0662e"/></svg><b>Eminent<span>Tracker</span></b></a>
   <nav aria-label="Sections">
-    <a href="#how">How it works</a>
+    <a href="#how">What it does</a>
     <a href="#about">Who built it</a>
     <a href="app/">Live Pennsylvania data</a>
     <a class="auth-only" href="login.html">Sign in</a>
@@ -50,46 +50,27 @@
 
 <section class="how wrap" id="how" aria-labelledby="how-h">
   <div class="axis" data-in>
-    <h2 id="how-h">How it works</h2>
-    <p class="lede">Three steps run every day. You open the list and the work is already done.</p>
+    <h2 id="how-h">What it does for your practice</h2>
   </div>
   <ol class="steps3">
-    <li data-in><h3>It reads the plans.</h3>
-      <p>Agencies publish what they intend to build years before right-of-way plans are filed: PennDOT's Twelve Year Program, federal environmental notices and city legislation.</p></li>
-    <li data-in><h3>It finds every parcel on the route.</h3>
-      <p>Each mapped route is laid over county parcel records. Every parcel it touches becomes a lead, with its boundary, assessed value and owner of record.</p></li>
-    <li data-in><h3>You reach the owner first.</h3>
-      <p>Save the owners you want to a list. One click sends each a postcard or email in your firm's name, marked as attorney advertising.</p></li>
+    <li data-in><h3>Find clients years earlier.</h3>
+      <p>See which owners a road, bridge or pipeline will reach while the project is still on a planning list, long before any notice goes out.</p></li>
+    <li data-in><h3>Know exactly who to call.</h3>
+      <p>Every affected parcel comes with its owner of record, mailing address, boundary and assessed value, ranked by how likely a taking is.</p></li>
+    <li data-in><h3>Reach them before anyone else.</h3>
+      <p>Send postcards and email in your firm's name with one click, marked as attorney advertising.</p></li>
   </ol>
 </section>
 
 <section class="about wrap" id="about" aria-labelledby="about-h">
-  <dl>
-    <div><dt>Owner</dt><dd>William Christopher Duerr</dd></div>
-    <div><dt>Firm</dt><dd>Duerr Law, PC</dd></div>
-    <div><dt>Based in</dt><dd>Fort Washington, Pennsylvania</dd></div>
-    <div><dt>Coverage</dt><dd>Pennsylvania now. Other states are being added.</dd></div>
-  </dl>
-  <div data-in>
-    <h2 id="about-h">Who built it</h2>
-    <p class="statement">The first offer is rarely the last word. An owner should hear that before signing, not after.</p>
-    <p class="more">EminentTracker was built inside an eminent domain practice to answer one question: who is about to lose land, and does anyone know yet? Condemnation filings answer it too late. The planning lists answer it years earlier, but nobody has time to read them and trace every route to a deed.</p>
-    <p class="more">So the software does the reading. It is the tool we wanted for our own practice, and it is now open to other firms that represent property owners.</p>
+  <div class="who">{{photo}}
+    <p class="name">William Christopher Duerr</p>
+    <p class="role">Owner, EminentTracker<br>Duerr Law, PC · Fort Washington, Pennsylvania</p>
   </div>
-  <h3>The record</h3>
-  <div class="lists">
-    <div><h3>Read every day</h3>
-      <ul>
-        <li>PennDOT project map <span>statewide</span></li>
-        <li>Federal Register <span>NEPA notices</span></li>
-        <li>Pittsburgh City Council <span>legislation</span></li>
-      </ul></div>
-    <div><h3>Parcel records</h3>
-      <ul>
-        <li>{{owner_counties}} counties <span>with owner and mailing address</span></li>
-        <li>{{counties}} counties <span>with projects on the list</span></li>
-        <li>Parcel boundaries <span>drawn from county files</span></li>
-      </ul></div>
+  <div data-in>
+    <h2 id="about-h">Built by eminent domain attorneys</h2>
+    <p class="statement">We built EminentTracker for our own practice, to learn who is about to lose land before the condemnation is filed.</p>
+    <p class="more">Planning lists name projects years ahead, but nobody has time to read them and trace every route to a deed. The software does that reading every day. It covers Pennsylvania now, and other states are being added.</p>
   </div>
 </section>
 
@@ -109,7 +90,7 @@
         <a href="app/">Open the live data</a>
       </div>
       <div class="links">
-            <a href="#how">How it works</a>
+            <a href="#how">What it does</a>
         <a href="#about">Who built it</a>
       </div>
       <div class="links">
