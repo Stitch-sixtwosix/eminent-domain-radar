@@ -8,6 +8,8 @@ database: data/edradar.db
 #   # Accounts (email or Google sign-in) switch on when both are set. Use the project's public "anon" key only.
 #   supabase_url: https://YOUR-PROJECT.supabase.co
 #   supabase_anon_key: ""
+#   stripe_monthly_link: ""      # Stripe payment link for $999 a month
+#   stripe_annual_link: ""       # Stripe payment link for $9,590.40 a year (20% off)
 #   supabase_google: false        # true once the Google provider is enabled in Supabase
 
 # Sent as the User-Agent to public APIs. Nominatim's usage policy asks for a contact here.

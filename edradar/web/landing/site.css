@@ -134,6 +134,20 @@ h2 { font-size: var(--s-title); }
 .count .cap { grid-column: 2; max-width: 40ch; }
 .count .side { grid-column: 1; grid-row: 3; align-self: end; font-size: var(--s-small); color: var(--muted); max-width: 26ch; padding-right: 32px; }
 
+/* ---- pricing ---- */
+.pricing { margin-top: var(--gap); }
+.pricing h2 { max-width: 18ch; }
+.pricing .lede { margin-top: 20px; max-width: 46ch; font-size: var(--s-lead); line-height: 1.4; }
+.plans { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin-top: clamp(40px, 5vw, 64px); max-width: 760px; }
+.plan { background: var(--surface); padding: clamp(24px, 2.6vw, 36px); display: flex; flex-direction: column; }
+.plan.best { background: var(--navy); color: var(--on-navy); }
+.plan h3 { font: 500 var(--s-body)/1.3 var(--sans); }
+.plan .price { margin-top: 14px; font-size: var(--s-body); }
+.plan .price b { font: 500 clamp(44px, 4.4vw, 64px)/1 var(--serif); letter-spacing: -0.03em; font-variant-numeric: lining-nums; margin-right: 6px; }
+.plan p + p { margin-top: 12px; }
+.plan .btn { margin-top: 28px; align-self: flex-start; }
+@media (max-width: 900px) { .plans { grid-template-columns: 1fr; } .plan .btn { align-self: stretch; } }
+
 /* ---- who built it ---- */
 .about { margin-top: var(--gap); display: grid; grid-template-columns: calc(var(--axis) - var(--m)) 1fr; row-gap: clamp(64px, 8vw, 112px); }
 .about .who { padding-right: 56px; }
