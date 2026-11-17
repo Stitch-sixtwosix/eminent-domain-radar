@@ -14,8 +14,11 @@ signals_before=$(count signals); leads_before=$(count leads); parcels_before=$(c
 
 if [ "${EDRADAR_PUBLISH:-1}" = "1" ]; then
   remote=$(git remote get-url origin)
-  ( cd site && rm -rf .git && git init -q -b gh-pages && git add -A \
-    && git commit -q -m "Publish dashboard snapshot $(date +%F)" && git push -q -f "$remote" gh-pages; rm -rf .git )
+  # A large snapshot needs a bigger HTTP buffer or the push is rejected. Any failure here must fail the run.
+  ( cd site && rm -rf .git && git init -q -b gh-pages && git config http.postBuffer 157286400 && git add -A \
+    && git commit -q -m "Publish dashboard snapshot $(date +%F)" && git push -q -f "$remote" gh-pages ) \
+    || { rm -rf site/.git; echo "Publishing the snapshot FAILED; the public page was not updated." >&2; exit 1; }
+  rm -rf site/.git
   echo "Published snapshot to the gh-pages branch."
 fi
 
