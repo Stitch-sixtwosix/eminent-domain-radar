@@ -1,0 +1,586 @@
+{
+ "category": "mississippi",
+ "checked": "2026-11-17",
+ "sources": [
+  {
+   "name": "Mississippi Office of State Aid Road Construction (OSARC) - Active Projects",
+   "authority": "Mississippi Office of State Aid Road Construction (county roads and bridges, all 82 counties)",
+   "agency": "Mississippi Office of State Aid Road Construction (county roads and bridges, all 82 counties)",
+   "states": [
+    "MS"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/XkfVdKIauHpBEP4i/arcgis/rest/services/Active_Projects/FeatureServer/1",
+   "verified": true,
+   "records": 535,
+   "record_count": 535,
+   "geometry": "polyline",
+   "fields": {
+    "id": "Project_No",
+    "name": "Rd_NameCmb",
+    "description": "notes_1",
+    "work_type": "type_work",
+    "cost": "Cost_estim",
+    "status": "Const_Status",
+    "date": "award_date",
+    "county": "County"
+   },
+   "planned_filter": "type_work IN ('BRIDGE & APPROACHES','BOX BRIDGE & APPROACHES','BOX CULVERT & APPROACHES','GRADE DRAIN BASE & SURFACING','WIDENING & OVERLAY','BASE & SURFACING','BASE PREPARATION & SURFACING')",
+   "sample": "{\"Project_No\": \"SAP-35(77)\", \"County\": \"Kemper\", \"type_work\": \"BRIDGE & APPROACHES\", \"Const_Status\": \"ACTIVE\", \"award_date\": \"2026-10-05\", \"Cost_estim\": 888881.5, \"start_yr\": \"2026\"}",
+   "restrictions": null,
+   "notes": "ONLY STATEWIDE Mississippi source found. Layer id is 1 (layer 0 does not exist). Edited 2026-11-16, records modified through 2026-11-13. Every row has Const_Status 'ACTIVE' (finished work is moved to the separate Completed_Projects service), so the filter is by work type: it keeps 151 of 535 rows (bridge replacements, box culverts, grade-drain-base and widening) and drops reseal, overlay, striping and maintenance (384) which take no land. CAVEAT: these are projects already awarded to a contractor (award_date filled, Work_begin empty on 534), so right-of-way is normally acquired already; treat as late-stage signal. Site splits one project into several rows; dates are text YYYY-MM-DD. fund_SA gives the programme (SAP, LSBP, SABP). Plans_link points to a SharePoint PDF. Web maps: osarc.maps.arcgis.com webmap e76a418ad3404d23a6faad9da3dc2cc2. No licence text on the item."
+  },
+  {
+   "name": "City of Gulfport Capital Improvement Projects (lines)",
+   "authority": "City of Gulfport",
+   "agency": "City of Gulfport",
+   "states": [
+    "MS"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/pOPaG0zaJUnBvD2F/arcgis/rest/services/COG_CapImpProj26/FeatureServer/1",
+   "verified": true,
+   "records": 37,
+   "record_count": 37,
+   "geometry": "polyline",
+   "fields": {
+    "id": "Project_ID",
+    "name": "Project_Name",
+    "description": "Project_Description",
+    "work_type": "Project_Type",
+    "cost": "Cost",
+    "status": "Phase",
+    "date": "Start_Date",
+    "county": null
+   },
+   "planned_filter": "Phase <> 'Complete'",
+   "sample": "{\"Project_ID\": 2, \"Project_Name\": \"OLD HWY 49 SIDEWALK\", \"Location\": \"West Dedeaux Road to Kenwood Drive (Orange Grove Library)\", \"Project_Type\": \"Transportation\", \"Funding_Source\": \"MDOT - 80%\", \"Phase\": \"Design\", \"Progress\": \"PE\", \"Cost\": 400000}",
+   "restrictions": null,
+   "notes": "Edited 2026-11-16. Filter keeps 26 of 37. Phase values: Design 14, Construction 9, Complete 11, Design/Permitting 1, Design/ROW 1, Property Acquisition 1. For pre-construction only use Phase IN ('Design','Design/Permitting','Design/ROW','Property Acquisition') (17). Project_Type: Transportation 12, Sewer 10, Water 5, Pier 3, Waterways 3, Drainage 2. Layer 0 of the same service is the same 37 projects as points. All in Harrison County (no county field). Location holds the limits."
+  },
+  {
+   "name": "Gulf Regional Planning Commission (Gulf Coast MPO) TIP projects - Roadway / Multimodal lines",
+   "authority": "Gulf Regional Planning Commission (MPO for Hancock, Harrison and Jackson counties)",
+   "agency": "Gulf Regional Planning Commission (MPO for Hancock, Harrison and Jackson counties)",
+   "states": [
+    "MS"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services5.arcgis.com/W19jlmTjXPeixpAm/arcgis/rest/services/Multimodal_polyline1/FeatureServer/0",
+   "verified": true,
+   "records": 19,
+   "record_count": 19,
+   "geometry": "polyline",
+   "fields": {
+    "id": "FID",
+    "name": "Road_Stree",
+    "description": "Terminus",
+    "work_type": "Type",
+    "cost": null,
+    "status": "FY",
+    "date": "FY",
+    "county": "Jurisdicti"
+   },
+   "planned_filter": "1=1 (all programmed; FY is the fiscal year 2027-2030 or 'Illustrative' = unfunded wish list)",
+   "sample": "{\"FID\": 2, \"Type\": \"Multimodal\", \"Jurisdicti\": \"Hancock County\", \"Road_Stree\": \"Texas Flat Rd\", \"Terminus\": \"6.5 Miles east of MS-607 to MS-603\", \"FY\": \"2028\"}",
+   "restrictions": null,
+   "notes": "Edited 2026-07-24; FY values 2027 (6), 2028 (6), 2029 (1), 2030 (4), Illustrative (2), so this is the FY2027-2030 TIP. No cost and no description beyond road and limits; Jurisdicti is the sponsoring city or county, not always a county. Layer 1 of the same service holds 2 polygon projects (intermodal facilities)."
+  },
+  {
+   "name": "Gulf Regional Planning Commission TIP projects - Intersections (points)",
+   "authority": "Gulf Regional Planning Commission (MPO)",
+   "agency": "Gulf Regional Planning Commission (MPO)",
+   "states": [
+    "MS"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services5.arcgis.com/W19jlmTjXPeixpAm/arcgis/rest/services/Intersection_custom_point1/FeatureServer/1",
+   "verified": true,
+   "records": 33,
+   "record_count": 33,
+   "geometry": "point",
+   "fields": {
+    "id": "FID",
+    "name": "Intersecti",
+    "description": "Intersecti",
+    "work_type": "Type",
+    "cost": null,
+    "status": "FY",
+    "date": "FY",
+    "county": "Jurisdicti"
+   },
+   "planned_filter": "FY <> '2025'",
+   "sample": "{\"FID\": 1, \"Type\": \"Intersection\", \"Jurisdicti\": \"Biloxi\", \"Intersecti\": \"Motsie Road & Popps Ferry Rd\", \"FY\": \"2028\"}",
+   "restrictions": null,
+   "notes": "Edited 2026-07-24. Filter keeps 32 of 33 (FY 2027 10, 2028 13, 2029 6, Illustrative 3; one 2025). Layers 0 (1 point) and 2 (1 line, I-10 frontage road at Moss Point) of the same service are extra intersection projects with the same fields."
+  },
+  {
+   "name": "Gulf Regional Planning Commission TIP projects - Bicycle / Pedestrian lines",
+   "authority": "Gulf Regional Planning Commission (MPO)",
+   "agency": "Gulf Regional Planning Commission (MPO)",
+   "states": [
+    "MS"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services5.arcgis.com/W19jlmTjXPeixpAm/arcgis/rest/services/Bike_Ped_polyline1/FeatureServer/0",
+   "verified": true,
+   "records": 12,
+   "record_count": 12,
+   "geometry": "polyline",
+   "fields": {
+    "id": "FID",
+    "name": "Road_Stree",
+    "description": "Terminus",
+    "work_type": "Type",
+    "cost": null,
+    "status": "FY",
+    "date": "FY",
+    "county": "Jurisdicti"
+   },
+   "planned_filter": "1=1 (FY 2026-2030; 5 rows have a blank FY)",
+   "sample": "{\"FID\": 2, \"Type\": \"Bike-Ped\", \"Jurisdicti\": \"Jackson County\", \"Road_Stree\": \"Yellow Jacket Rd\", \"Terminus\": \"Old Fort Bayou Rd to Bridge SA170\", \"FY\": \"2030\"}",
+   "restrictions": null,
+   "notes": "Edited 2026-07-24. Paths and sidewalks; low taking risk but new shared-use paths can need strips of land."
+  },
+  {
+   "name": "Gulf Regional Planning Commission MPO Projects 2025 - Roadway projects (with federal cost)",
+   "authority": "Gulf Regional Planning Commission (MPO)",
+   "agency": "Gulf Regional Planning Commission (MPO)",
+   "states": [
+    "MS"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services5.arcgis.com/W19jlmTjXPeixpAm/arcgis/rest/services/Roadway25/FeatureServer/0",
+   "verified": true,
+   "records": 19,
+   "record_count": 19,
+   "geometry": "polyline",
+   "fields": {
+    "id": "OBJECTID",
+    "name": "Road",
+    "description": "Termini_Be",
+    "work_type": "Type",
+    "cost": "Federal",
+    "status": null,
+    "date": null,
+    "county": "County"
+   },
+   "planned_filter": "1=1 (no status or year field; for widening only: Type = 'Widening')",
+   "sample": "{\"Type\": \"Widening\", \"County\": \"Harrison\", \"Jurisdicti\": \"Long Beach\", \"Federal\": \"$2,110,662.00\", \"Road\": \"Cleveland Ave\", \"Termini_Be\": \"Klondyke Rd\", \"Termini_En\": \"W Railroad St\"}",
+   "restrictions": null,
+   "notes": "Edited 2025-12-03 (previous TIP cycle; the 2026 layers above are newer but carry no cost). Federal is text with $ sign. Termini_Be / Termini_En are the limits. Sister services with the same date: Intersections25/FeatureServer/0 (29 points, field Intersecti) and Bike_Ped25/FeatureServer/0 (24 lines). MPOPROJECTS/FeatureServer/0-2 is an identical copy of the three."
+  },
+  {
+   "name": "Jackson MPO (CMPDD) TIP 2027-2030 - Congestion Mitigation projects (widening, new roads)",
+   "authority": "Central Mississippi Planning and Development District (Jackson MPO)",
+   "agency": "Central Mississippi Planning and Development District (Jackson MPO)",
+   "states": [
+    "MS"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://gis.cmpdd.org/arcgis/rest/services/Hosted/TIP_Viewer_2027_2030/FeatureServer/3",
+   "verified": true,
+   "records": 9,
+   "record_count": 9,
+   "geometry": "polyline",
+   "fields": {
+    "id": "fid",
+    "name": "name",
+    "description": "descriptio",
+    "work_type": "classifica",
+    "cost": "mpofunding",
+    "status": "fiscalyear",
+    "date": "fiscalyear",
+    "county": "county"
+   },
+   "planned_filter": "1=1 (all programmed for FY 2025-2030; fiscalyear is text, sometimes a range)",
+   "sample": "{\"sponsor\": \"City of Brandon\", \"county\": \"Rankin\", \"classifica\": \"Congestion Mitigation\", \"fiscalyear\": \"2027\", \"descriptio\": \"New roadway construction from Paige McDill Road to Trickhambridge Road\", \"name\": \"Grants Ferry Parkway Ext\", \"fundingsou\": \"Earmark / Local\"}",
+   "restrictions": null,
+   "notes": "Newest Jackson TIP (the repo already has TIP_Viewer_2025_2028 layer 5 and MTP 2045 layer 2). This is the layer with real taking risk: new roadways and widenings. pdf field links the project sheet. Other layers in the same service, same field pattern: 0 Bridge Repair points (3), 2 Safety points (5, name in name1, year in 'year'), 8 Safety lines (4, name in name1), 4 MDOT projects (4 lines, mostly grouped line items), 5 Resurfacing (14, skip), 6 Transportation Alternatives (9 paths), 1 Transit (2). mpofunding is text with $."
+  },
+  {
+   "name": "Jackson MPO (CMPDD) TIP 2027-2030 - MDOT projects",
+   "authority": "Central Mississippi PDD (Jackson MPO) / Mississippi DOT",
+   "agency": "Central Mississippi PDD (Jackson MPO) / Mississippi DOT",
+   "states": [
+    "MS"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://gis.cmpdd.org/arcgis/rest/services/Hosted/TIP_Viewer_2027_2030/FeatureServer/4",
+   "verified": true,
+   "records": 4,
+   "record_count": 4,
+   "geometry": "polyline",
+   "fields": {
+    "id": "fid",
+    "name": "name",
+    "description": "descriptio",
+    "work_type": "classifica",
+    "cost": null,
+    "status": "fiscalyear",
+    "date": "fiscalyear",
+    "county": "county"
+   },
+   "planned_filter": "1=1",
+   "sample": "{\"sponsor\": \"MDOT\", \"classifica\": \"Grouped Projects\", \"fiscalyear\": \"2027-2030\", \"descriptio\": \"Bridge Replacement, Operation/Maintenance/Minor Reconstruction, Safety, and TAP/TE/Recreational Trails/SRTS/Scenic Byways\", \"name\": \"Jackson Urbanized Area Grouped Projects\"}",
+   "restrictions": null,
+   "notes": "Only 4 rows and at least one is a grouped line item, so low value alone; pdf field links MDOT's project list for the Jackson area."
+  },
+  {
+   "name": "Jackson MPO (CMPDD) TIP 2025-2028 - Congestion Mitigation projects",
+   "authority": "Central Mississippi PDD (Jackson MPO)",
+   "agency": "Central Mississippi PDD (Jackson MPO)",
+   "states": [
+    "MS"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://gis.cmpdd.org/arcgis/rest/services/Hosted/TIP_Viewer_2025_2028/FeatureServer/4",
+   "verified": true,
+   "records": 10,
+   "record_count": 10,
+   "geometry": "polyline",
+   "fields": {
+    "id": "objectid",
+    "name": "name",
+    "description": "descriptio",
+    "work_type": "classifica",
+    "cost": "mpofunding",
+    "status": "fiscalyear",
+    "date": "fiscalyear",
+    "county": "county"
+   },
+   "planned_filter": "1=1 (fiscalyear 2025-2028 as text or range; drop rows whose range ends before the current year)",
+   "sample": "{\"sponsor\": \"City of Ridgeland\", \"county\": \"Madison\", \"mpofunding\": \"$1,400,000\", \"fiscalyear\": \"2026-2027\", \"descriptio\": \"Widening/New Construction Highland Colony Parkway to Lake Harbour Dr. Ext.\", \"name\": \"Highland Commerce Drive Connector\", \"termini\": \"Highland Colony Parkway to Lake Harbour Dr. Ext.\"}",
+   "restrictions": null,
+   "notes": "Companion to the layer-5 MDOT record already in state_dot_gaps.json. Same service: 1 Bridge Repair points (5), 3 Safety points (21; year numeric 2025-2027), 7 Transportation Alternatives (21). Overlaps the 2027-2030 viewer."
+  },
+  {
+   "name": "Jackson MPO (CMPDD) 2045 Metropolitan Transportation Plan - Visionary (unfunded) Capacity Projects",
+   "authority": "Central Mississippi PDD (Jackson MPO)",
+   "agency": "Central Mississippi PDD (Jackson MPO)",
+   "states": [
+    "MS"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://gis.cmpdd.org/arcgis/rest/services/Hosted/MTP_Plan_2045_Feature_Layer/FeatureServer/5",
+   "verified": true,
+   "records": 339,
+   "record_count": 339,
+   "geometry": "polyline",
+   "fields": {
+    "id": "project_id",
+    "name": "roadway",
+    "description": "improvemen",
+    "work_type": "improvemen",
+    "cost": null,
+    "status": "stage",
+    "date": null,
+    "county": null
+   },
+   "planned_filter": "1=1 (all stage = 'Vision'; improvemen LIKE 'New%' for new-location roads; funding = 'MDOT' for state projects)",
+   "sample": "{\"funding\": \"MDOT\", \"improvemen\": \"Widen to 6 Lanes\", \"route\": \"I-220\", \"stage\": \"Vision\", \"length__mi\": 10.74, \"project_id\": 126, \"location\": \"I-20 to I-55\"}",
+   "restrictions": null,
+   "notes": "Long-range wish list beyond the fiscally constrained list (layer 2, already in state_dot_gaps.json; live count there is now 187, of which 170 have a stage). 339 segments; several segments share one project_id. Earliest possible signal, lowest certainty. Layers 3 and 4 (non-capacity lines and points) have cons_date 2021-2022, i.e. past, and were left out."
+  },
+  {
+   "name": "City of Brandon Transportation Plan 2024 (new roads, expansions, interchanges)",
+   "authority": "City of Brandon (hosted by Central Mississippi PDD)",
+   "agency": "City of Brandon (hosted by Central Mississippi PDD)",
+   "states": [
+    "MS"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://gis.cmpdd.org/arcgis/rest/services/Hosted/Brandon_Planning_Layers/FeatureServer/3",
+   "verified": true,
+   "records": 68,
+   "record_count": 68,
+   "geometry": "polyline",
+   "fields": {
+    "id": "objectid",
+    "name": null,
+    "description": "type",
+    "work_type": "type",
+    "cost": null,
+    "status": null,
+    "date": null,
+    "county": null
+   },
+   "planned_filter": "type IN ('New Road','Road Expansion','New Bridge Location','Interchange Improvements')",
+   "sample": "{\"type\": \"Road Expansion\", \"SHAPE__Length\": 29625.13, \"objectid\": 1}",
+   "restrictions": null,
+   "notes": "Comprehensive-plan road map: geometry and a type only, no names, cost or dates. Filter keeps 33 of 68 (New Road 16, Interchange Improvements 8, Road Expansion 7, New Bridge Location 2); the rest are bike paths. Rankin County. Name must come from intersecting street centrelines."
+  },
+  {
+   "name": "Rankin County Transportation Plan - proposed arterials and collectors",
+   "authority": "Rankin County (hosted by Central Mississippi PDD)",
+   "agency": "Rankin County (hosted by Central Mississippi PDD)",
+   "states": [
+    "MS"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://gis.cmpdd.org/arcgis/rest/services/Hosted/Rankin_County_Feature_Layer/FeatureServer/43",
+   "verified": true,
+   "records": 1147,
+   "record_count": 1147,
+   "geometry": "polyline",
+   "fields": {
+    "id": "objectid",
+    "name": null,
+    "description": "transplan",
+    "work_type": "transplan",
+    "cost": null,
+    "status": "transplan",
+    "date": null,
+    "county": null
+   },
+   "planned_filter": "transplan IN ('CP','PAP','MAP','LP')",
+   "sample": "{\"transplan\": \"CP\", \"id\": 0, \"objectid\": 1}",
+   "restrictions": null,
+   "notes": "Thoroughfare plan with coded classes only: C 610, PA 236, MA 185, IS 69, CP 17, PAP 15, MAP 14, LP 1. The trailing P is read here as 'proposed' (collector / principal arterial / minor arterial / local proposed) - an inference from the code pattern, not documented on the layer. Filter keeps 47 of 1147. No names, costs or dates."
+  },
+  {
+   "name": "Pearl River Valley Water Supply District (Ross Barnett Reservoir) Master Plan - Transportation Improvement Projects",
+   "authority": "Pearl River Valley Water Supply District (hosted by Central Mississippi PDD)",
+   "agency": "Pearl River Valley Water Supply District (hosted by Central Mississippi PDD)",
+   "states": [
+    "MS"
+   ],
+   "coverage": "district",
+   "kind": "arcgis",
+   "url": "https://gis.cmpdd.org/arcgis/rest/services/Hosted/PRVWSD_Master_Plan_Feature_Layer/FeatureServer/4",
+   "verified": true,
+   "records": 11,
+   "record_count": 11,
+   "geometry": "polyline",
+   "fields": {
+    "id": "objectid",
+    "name": "type",
+    "description": "type",
+    "work_type": "type",
+    "cost": null,
+    "status": null,
+    "date": null,
+    "county": null
+   },
+   "planned_filter": "type <> 'Difficult Intersections'",
+   "sample": "{\"type\": \"Turn Lane/Widening of Grants Ferry\", \"objectid\": 7}",
+   "restrictions": null,
+   "notes": "Tiny: 5 named improvements after the filter (Relocation of Bob Anthony Pkwy, Widening of Spillway, Widing of Harbor Dr, Turn Lane/Widening of Grants Ferry, Turn Lane Improvements). type is the only attribute. Madison / Rankin counties."
+  },
+  {
+   "name": "City of Olive Branch Road Projects (5-year, 10-year and long-range road plan)",
+   "authority": "City of Olive Branch (DeSoto County)",
+   "agency": "City of Olive Branch (DeSoto County)",
+   "states": [
+    "MS"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services9.arcgis.com/VGtdH6iTQlVulSnr/arcgis/rest/services/Road_Projects/FeatureServer/0",
+   "verified": true,
+   "records": 60,
+   "record_count": 60,
+   "geometry": "polyline",
+   "fields": {
+    "id": "ID_Number",
+    "name": "Road_Name",
+    "description": "Termini",
+    "work_type": "Project_Type",
+    "cost": "Est_Cost",
+    "status": "Year_Plan",
+    "date": null,
+    "county": null
+   },
+   "planned_filter": "1=1 (all are planned; Year_Plan = '5-yr Plan' for nearest term)",
+   "sample": "{\"Year_Plan\": \"5-yr Plan\", \"ID_Number\": \"100\", \"Road_Name\": \"Pleasant Hill Rd\", \"Termini\": \"Nail Rd to Church Rd\", \"Road_Length\": \"1.2\", \"Funding_Source\": \"MPO\", \"Est_Cost\": 7000000, \"Consultant\": \"HDR\", \"Phase\": \"Design\", \"Status\": \"Design On-Hold\", \"Project_Type\": \"4-lane divided boulevard\"}",
+   "restrictions": null,
+   "notes": "The only DeSoto County / Memphis-MPO-area road plan found. Almost all are widenings or road extensions (5-lane widening, 2-lane road extension, etc.) - high taking relevance. Year_Plan: 5-yr Plan 25, 10-yr Plan 15, Long Range Vision Plan 18, Special Projects 2. STALE: last edited 2022-11-14; Status and Phase are filled on only 2 rows. Same org also publishes design drawings of the Pleasant Hill Rd widening (Pleasant_Hill_Widening_Final, edited 2026-01) as unattributed CAD linework."
+  },
+  {
+   "name": "City of Olive Branch Annexation South Area 1 - utility easements to acquire",
+   "authority": "City of Olive Branch (DeSoto County)",
+   "agency": "City of Olive Branch (DeSoto County)",
+   "states": [
+    "MS"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services9.arcgis.com/VGtdH6iTQlVulSnr/arcgis/rest/services/ANNEX_AREA_EASEMENTS/FeatureServer/1",
+   "verified": true,
+   "records": 213,
+   "record_count": 213,
+   "geometry": "polygon",
+   "fields": {
+    "id": "OBJECTID",
+    "name": "PROJECT_AREA",
+    "description": "EASEMENT_T",
+    "work_type": "EASEMENT_T",
+    "cost": null,
+    "status": null,
+    "date": "CreationDate",
+    "county": null
+   },
+   "planned_filter": "EASEMENT_T = 'PERMANENT EASEMENT'",
+   "sample": "{\"OBJECTID\": 1, \"EASEMENT_T\": \"TEMPORARY EASEMENT\", \"PROJECT_AREA\": \"SOUTH AREA-1\", \"CreationDate\": 1733508385838}",
+   "restrictions": null,
+   "notes": "Parcel-level easement footprints for utility extension into the annexed south area: 38 permanent, 171 temporary. Created 2024-12, edited 2025-03. No field says whether an easement has been obtained yet, so treat all as pending. Layer id is 1."
+  },
+  {
+   "name": "City of Hattiesburg City Projects (engineering capital projects)",
+   "authority": "City of Hattiesburg",
+   "agency": "City of Hattiesburg",
+   "states": [
+    "MS"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/jDD84VOqBEa0haCs/arcgis/rest/services/CityProjects/FeatureServer/0",
+   "verified": true,
+   "records": 95,
+   "record_count": 95,
+   "geometry": "polyline",
+   "fields": {
+    "id": "Project_No",
+    "name": "Title",
+    "description": "Remarks",
+    "work_type": "Project_Ty",
+    "cost": "Total_Cost",
+    "status": "Status",
+    "date": "Date_Autho",
+    "county": null
+   },
+   "planned_filter": "Status IN ('Planning','Design')",
+   "sample": "{\"Project_No\": \"11209\", \"Title\": \"Lake Forgetful Road\", \"Total_Cost\": 884572.3, \"Project_Ty\": \"Roadway\", \"Funding_So\": \"City of Hattiesburg\", \"Status\": \"Record\", \"Date_Autho\": 1498435200000}",
+   "restrictions": null,
+   "notes": "STALE: last edited 2022-07-12, so 'Planning' (7) and 'Design' (13) rows may be built by now; filter keeps 20 of 95. Other Status values: Record 27, Complete 18, Construction 13, Close_Out 1, blank 16. Project_Ty: Water 36, Sewer 33, Roadway 9, Storm_Drainage 7, Bridge 2. Forrest / Lamar counties. The Hattiesburg MPO itself publishes TIP and MTP only as PDF."
+  },
+  {
+   "name": "Mississippi Crossing (MSX) natural gas pipeline - proposed route (digitized by Southern Environmental Law Center)",
+   "authority": "Tennessee Gas Pipeline / Kinder Morgan (FERC docket CP25-514); copy digitized by SELC",
+   "agency": "Tennessee Gas Pipeline / Kinder Morgan (FERC docket CP25-514); copy digitized by SELC",
+   "states": [
+    "MS",
+    "AL"
+   ],
+   "coverage": "corridor",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/JlKIqTDRreahnYR7/arcgis/rest/services/MSX_Route_Alignment_Apr__2025/FeatureServer/1",
+   "verified": true,
+   "records": 112,
+   "record_count": 112,
+   "geometry": "polyline",
+   "fields": {
+    "id": "OBJECTID",
+    "name": "Project",
+    "description": "Description",
+    "work_type": "Section",
+    "cost": null,
+    "status": "SELC_Status",
+    "date": "SELC_Date_Added",
+    "county": null
+   },
+   "planned_filter": "1=1 (whole pipeline is proposed; FERC draft EIS issued January 2026)",
+   "sample": "{\"Project\": \"Mississippi Crossing Project\", \"Section\": \"CGT Lateral\", \"Description\": \"Co-located along TC Energy Corporation (5.1-6.3)\", \"SELC_Notes\": \"Digitized from georeferenced maps in Appendix 1.A.1 Aerials\", \"SELC_Date_Added\": \"2025-06-10\", \"SELC_Status\": \"Best Available\"}",
+   "restrictions": null,
+   "notes": "Interstate gas pipeline across Mississippi (Washington County east to Choctaw County, Alabama); a FERC certificate carries federal eminent domain. THIRD-PARTY copy digitized from the applicant's alignment sheets; item says it does not exactly match surveyed coordinates. Edited 2025-07-14. A few eastern segments lie in Alabama - clip to the state. Description gives milepost ranges. No commercial-use restriction stated."
+  },
+  {
+   "name": "South System Expansion 4 (SSE4) natural gas pipeline loops - draft EIS route (digitized by Southern Environmental Law Center)",
+   "authority": "Southern Natural Gas / Kinder Morgan (FERC docket CP25-517); copy digitized by SELC",
+   "agency": "Southern Natural Gas / Kinder Morgan (FERC docket CP25-517); copy digitized by SELC",
+   "states": [
+    "MS",
+    "AL",
+    "GA"
+   ],
+   "coverage": "corridor",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/JlKIqTDRreahnYR7/arcgis/rest/services/SSE4_DEIS_Route_Feb_2026/FeatureServer/1",
+   "verified": true,
+   "records": 24,
+   "record_count": 24,
+   "geometry": "polyline",
+   "fields": {
+    "id": "OBJECTID",
+    "name": "Description",
+    "description": "SELC_Notes",
+    "work_type": "Project",
+    "cost": null,
+    "status": "SELC_Status",
+    "date": "SELC_Date_Added",
+    "county": null
+   },
+   "planned_filter": "1=1 (all proposed)",
+   "sample": "{\"Project\": \"SSE4 (Southern System Expansion 4)\", \"Company\": \"Southern Natural Gas Co. (a Kinder Morgan company)\", \"Description\": \"South System Expansion IV - Loop G2\", \"Project_Link\": \"https://www.kindermorgan.com/Operations/Projects/SSE4-Project-Page\", \"SELC_Date_Added\": \"2026-01-20\"}",
+   "restrictions": null,
+   "notes": "24 loop segments along the existing Southern Natural line in Mississippi, Alabama and Georgia; which rows fall in Mississippi was NOT checked - clip by state boundary. Third-party digitization from FERC draft EIS appendix maps, 'not survey grade'. Edited 2026-02-20."
+  }
+ ],
+ "unverified": [
+  {
+   "name": "DeSoto County GIS servers",
+   "url": "https://gis.desotocountyms.gov/arcgis/rest/services",
+   "reason": "gis.desotocountyms.gov and maps.desotocountyms.gov both fail the TLS handshake from here (curl exit 35). Search results show a CountyWebMap service with a 'Thoroughfare Plan (2004)' layer, but nothing could be read. The county's 2026 4-year road plan is a PDF."
+  },
+  {
+   "name": "MDOT GeoServer project geometry",
+   "url": "https://geo.mdot.state.ms.us/geoserver/ows",
+   "reason": "Already recorded in state_dot_gaps.json as HTTP 403; not retried. MDOT STIP / Five-Year Plan (mdot.ms.gov/applications/Schedule_of_Proposed_Projects) is an ASPX form and PDF, no API found."
+  }
+ ],
+ "rejected": [
+  {
+   "name": "Legistar (Mississippi cities and counties)",
+   "url": "https://webapi.legistar.com/v1/<client>/matters",
+   "reason": "38 client names tried (jacksonms, jackson, gulfport, gulfportms, biloxi, biloxims, desotocountyms, desotocounty, southaven, hattiesburg, hattiesburgms, madisoncountyms, rankincounty, harrisoncountyms, harrisoncounty, hindscounty, hindscountyms, olivebranch, tupelo, tupeloms, meridian, meridianms, oxfordms, starkville, pascagoula, oceansprings, horn-lake, hornlake, ridgeland, madisonms, pearl, brandon, vicksburg, laurel, columbusms, greenville, clinton, clintonms): all answer HTTP 500 'LegistarConnectionString setting is not set up' = client does not exist (seattle control returned 200). No Mississippi Legistar site found."
+  },
+  {
+   "name": "Memphis MPO TIP / RTP (DeSoto County)",
+   "url": "https://services2.arcgis.com/saWmpKJIUAjyyNVc/arcgis/rest/services",
+   "reason": "The MPO's ArcGIS org (165 services) has crash, congestion, bridge-condition and land-use layers but no TIP or RTP project layer; memphismpo.org map pages link only a crash dashboard. TDOT's TEST/ESTIP_MPO_Project_Locations_Memphis_Test has 8 rows, all Tennessee, STIP_YEAR 2020, OPERATION_STATUS 'Archived'."
+  },
+  {
+   "name": "Hattiesburg-Petal-Forrest-Lamar MPO TIP / MTP",
+   "url": "https://www.hattiesburgms.com/mpo/",
+   "reason": "PDF only. Consultant layers (Neel-Schaffer org YQoQOxGbfm5KFwwS: HCTMP_LT, HCTMP_ST) are transit route concepts with only Route/Direction; the '2050 HPFL MPO PP' service is a public survey. City 'Proposed_Facilities' layer is a 2015 bike plan."
+  },
+  {
+   "name": "GRPC older TIP services",
+   "url": "https://services5.arcgis.com/W19jlmTjXPeixpAm/arcgis/rest/services/TIP_2017_2020/FeatureServer/0",
+   "reason": "TIP_2017_2020 (26 points) and TIP (FY2015-2019, 17 lines) are expired programmes; GRPC_Webupdate_June_2017_TMA likewise. GRPC 'Capacity' is a congestion inventory, not projects."
+  },
+  {
+   "name": "City of Pascagoula Project_Map",
+   "url": "https://services9.arcgis.com/T7Cn0Fs4aa6kGI1x/arcgis/rest/services/Project_Map/FeatureServer",
+   "reason": "Returns error 499 Token Required (login)."
+  },
+  {
+   "name": "City of Olive Branch ENGINEERING_PROJECTS / PROJECT_REVIEW_TRACKER",
+   "url": "https://services9.arcgis.com/VGtdH6iTQlVulSnr/arcgis/rest/services/ENGINEERING_PROJECTS/FeatureServer/0",
+   "reason": "Private development inspections (subdivisions, commercial sites), not public projects."
+  },
+  {
+   "name": "CMPDD local comprehensive-plan road layers (Magee, Richland, Yazoo City, Flora, Pelahatchie)",
+   "url": "https://gis.cmpdd.org/arcgis/rest/services/Hosted",
+   "reason": "Functional-classification maps with no way to tell proposed from existing (Yazoo City has just 2 'Proposed Collector' rows; Richland 5 reclassified collectors); Flora and Pelahatchie are one unnamed line per layer."
+  },
+  {
+   "name": "USACE Vicksburg / Mobile district project layers; Biloxi, Jackson, Southaven, Madison County, Harrison County, Tupelo capital-project layers",
+   "url": "https://www.arcgis.com/sharing/rest/search",
+   "reason": "ArcGIS Online and web searches found no public project layer limited to Mississippi for any of these (Southaven's org has only parcels, roads and code cases; Biloxi publishes a PDF status map). USACE is covered nationally by the Corps Project Notebook already in federal.json."
+  }
+ ],
+ "summary": "Checked 2026-11-17. 18 verified ArcGIS sources for Mississippi. Statewide: OSARC State Aid active county road and bridge projects (535; 151 after the work-type filter) - awarded projects, so late-stage. Gulf Coast: Gulfport capital improvement projects with a Phase field including 'Property Acquisition' and 'Design/ROW', and the Gulf Regional Planning Commission's FY2027-2030 TIP layers (roadway, intersections, bike/ped) plus the 2025 set with federal cost. Jackson area: CMPDD TIP 2027-2030 and 2025-2028 congestion-mitigation and MDOT layers, the MTP 2045 visionary list, and Brandon / Rankin County / reservoir district plan roads (geometry and type only). DeSoto County: Olive Branch road plan (60 widenings and extensions, stale 2022) and annexation easement polygons. Hattiesburg: city projects (stale 2022). Pipelines: Mississippi Crossing and SSE4 proposed routes (third-party digitization of FERC filings). STILL MISSING: any MDOT state-highway source (STIP / Five-Year Plan are PDF or ASPX only; GeoServer 403); Memphis MPO and Hattiesburg MPO programmes (PDF only); DeSoto County server unreachable; no Legistar site in the state."
+}
