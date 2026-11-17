@@ -472,11 +472,22 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40) -> Dic
     html = html.replace("<script>\nconst $", "<script>window.EDRADAR_STATIC = true; window.EDRADAR_BUILD = \"%s\";</script>"
                         "\n<script>\nconst $" % build, 1)
     assert "EDRADAR_STATIC = true" in html
+    if (cfg.get("site") or {}).get("supabase_url"):
+        # Signed-in firms only: the page stays blank until a session is confirmed, otherwise it goes to sign-in.
+        # This keeps visitors out of the screen; the data file itself is still a public file on the host.
+        gate = ('<meta name="robots" content="noindex">\n<style>html.gate body { visibility: hidden; }</style>\n'
+                '<script>document.documentElement.classList.add("gate");</script>\n<script src="../auth-config.js"></script>\n'
+                '<script type="module">import {currentUser} from "../auth.js";\n'
+                'const u = await currentUser().catch(() => null);\n'
+                'if (u) document.documentElement.classList.remove("gate"); else location.replace("../login.html?next=app");</script>\n')
+        html = html.replace("</head>", gate + "</head>", 1)
+        assert "login.html?next=app" in html
     (out / "index.html").write_text(html)
     (out / "data.json").write_text(json.dumps({"stats": stats, "projects": projects, "leads": leads, "layers": layers, "template": outreach.template(cfg), "hub": hub,
                                                "contacts": {}},
                                               separators=(",", ":")))
     (site / ".nojekyll").write_text("")
+    (site / "robots.txt").write_text("User-agent: *\nDisallow: /app/\n")
     domain = (cfg.get("site") or {}).get("domain")
     if domain:                       # GitHub Pages serves the snapshot at this address while the file is present
         (site / "CNAME").write_text(domain.strip() + "\n")

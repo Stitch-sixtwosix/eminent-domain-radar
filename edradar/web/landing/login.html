@@ -19,7 +19,6 @@
   <nav aria-label="Site">
     <a href="./#how">What it does</a>
     <a href="./#pricing">Pricing</a>
-    <a href="app/">Live data</a>
     <a class="auth-only" href="login.html">Sign in</a>
   </nav>
 </header>
@@ -48,7 +47,8 @@
 import {authOn, supa, google, here, currentUser, say, watch, valid, checkField} from "./auth.js";
 const form = document.getElementById("login"), status = document.getElementById("status"), go = document.getElementById("go");
 if (authOn) {
-  if (await currentUser()) location.replace("account.html");
+  const next = new URLSearchParams(location.search).get("next") === "app" ? "app/" : "account.html";
+  if (await currentUser()) location.replace(next);
   watch(form);
   document.getElementById("google").addEventListener("click", async () => { try { await google(); } catch (e) { say(status, "Google sign-in did not start: " + e.message, true); } });
   form.addEventListener("submit", async e => {
@@ -58,7 +58,7 @@ if (authOn) {
     const d = Object.fromEntries(new FormData(form)), s = await supa();
     const {error} = await s.auth.signInWithPassword({email: d.email, password: d.password});
     if (error) { say(status, /confirm/i.test(error.message) ? "Confirm your email first: open the link we sent you." : "That email and password do not match an account.", true); go.disabled = false; return; }
-    location.href = "account.html";
+    location.href = next;
   });
   document.getElementById("forgot").addEventListener("click", async () => {
     const email = form.elements.email;
