@@ -2,17 +2,7 @@
  {
   "state": "NC",
   "name": "Charlotte Capital Improvement Projects (points)",
-  "key": "local_17",
-  "url": "https://gis.charlottenc.gov/arcgis/rest/services/CIP/Capital_Investment_Projects_Points/MapServer/0",
-  "fields": {
-   "id": "Project_ID",
-   "name": "Project_Name",
-   "description": "Public_Project_Description",
-   "work_type": "Project_Type",
-   "cost": "Total_Project_Budget",
-   "status": "Project_Phase",
-   "date": "Anticipated_Start_Date"
-  },
+  "key": "g102a786d3",
   "where": null,
   "unfiltered": true,
   "agency": "City of Charlotte",
@@ -26,17 +16,7 @@
  {
   "state": "NC",
   "name": "Charlotte Capital Improvement Projects (polygons)",
-  "key": "local_18",
-  "url": "https://gis.charlottenc.gov/arcgis/rest/services/CIP/Capital_Improvements_Projects_Polygons/MapServer/0",
-  "fields": {
-   "id": "Project_ID",
-   "name": "Project_Name",
-   "description": "Public_Project_Description",
-   "work_type": "Project_Type",
-   "cost": "Total_Project_Budget",
-   "status": "Project_Phase",
-   "date": "Anticipated_Start_Date"
-  },
+  "key": "g7b8107acd",
   "where": null,
   "unfiltered": true,
   "agency": "City of Charlotte",
@@ -50,17 +30,7 @@
  {
   "state": "NC",
   "name": "Charlotte Capital Improvement Projects (lines)",
-  "key": "local_19",
-  "url": "https://gis.charlottenc.gov/arcgis/rest/services/CIP/Capital_Improvement_Project_Lines/MapServer/0",
-  "fields": {
-   "id": "Project_ID",
-   "name": "Project_Name",
-   "description": "Public_Project_Description",
-   "work_type": "Project_Type",
-   "cost": "Total_Project_Budget",
-   "status": "Project_Phase",
-   "date": "Anticipated_Start_Date"
-  },
+  "key": "g000c65f2a",
   "where": null,
   "unfiltered": true,
   "agency": "City of Charlotte",
@@ -74,18 +44,7 @@
  {
   "state": "TX",
   "name": "Dallas Capital Improvement Program: Active Bond Program - Points",
-  "key": "local_20",
-  "url": "https://services2.arcgis.com/rwnOSbfKSwyTBcwN/arcgis/rest/services/CapitalImprovementProgram/FeatureServer/0",
-  "fields": {
-   "id": "ProjectNum",
-   "name": "Name",
-   "description": "Description",
-   "work_type": "Category",
-   "cost": "BondAmount",
-   "status": "Status",
-   "county": "District",
-   "date": "CnstStartE"
-  },
+  "key": "g0da2ef5cd",
   "where": null,
   "unfiltered": true,
   "agency": "City of Dallas",
@@ -99,18 +58,7 @@
  {
   "state": "TX",
   "name": "Dallas Capital Improvement Program: Active Bond Program - Lines",
-  "key": "local_21",
-  "url": "https://services2.arcgis.com/rwnOSbfKSwyTBcwN/arcgis/rest/services/CapitalImprovementProgram/FeatureServer/3",
-  "fields": {
-   "id": "ProjectNum",
-   "name": "Name",
-   "description": "Description",
-   "work_type": "Category",
-   "cost": "BondAmount",
-   "status": "Status",
-   "county": "District",
-   "date": "CnstStartE"
-  },
+  "key": "g349969f5c",
   "where": null,
   "unfiltered": true,
   "agency": "City of Dallas",
@@ -124,18 +72,7 @@
  {
   "state": "TX",
   "name": "Dallas Capital Improvement Program: 2024 Bond Program - Points",
-  "key": "local_22",
-  "url": "https://services2.arcgis.com/rwnOSbfKSwyTBcwN/arcgis/rest/services/CapitalImprovementProgram/FeatureServer/10",
-  "fields": {
-   "id": "ProjectNum",
-   "name": "Name",
-   "description": "Description",
-   "work_type": "Category",
-   "cost": "BondAmount",
-   "status": "Status",
-   "county": "District",
-   "date": "CnstStartE"
-  },
+  "key": "g98a0993af",
   "where": null,
   "unfiltered": true,
   "agency": "City of Dallas",
@@ -149,18 +86,7 @@
  {
   "state": "TX",
   "name": "Dallas Capital Improvement Program: 2024 Bond Program - Lines",
-  "key": "local_23",
-  "url": "https://services2.arcgis.com/rwnOSbfKSwyTBcwN/arcgis/rest/services/CapitalImprovementProgram/FeatureServer/9",
-  "fields": {
-   "id": "ProjectNum",
-   "name": "Name",
-   "description": "Description",
-   "work_type": "Category",
-   "cost": "BondAmount",
-   "status": "Status",
-   "county": "District",
-   "date": "CnstStartE"
-  },
+  "key": "gd7234b9ba",
   "where": null,
   "unfiltered": true,
   "agency": "City of Dallas",
@@ -174,18 +100,7 @@
  {
   "state": "TX",
   "name": "Dallas Capital Improvement Program: 2017 Bond Program - Points",
-  "key": "local_24",
-  "url": "https://services2.arcgis.com/rwnOSbfKSwyTBcwN/arcgis/rest/services/CapitalImprovementProgram/FeatureServer/1",
-  "fields": {
-   "id": "ProjectNum",
-   "name": "Name",
-   "description": "Description",
-   "work_type": "Category",
-   "cost": "BondAmount",
-   "status": "Status",
-   "county": "District",
-   "date": "CnstStartE"
-  },
+  "key": "g2bdc8e770",
   "where": null,
   "unfiltered": true,
   "agency": "City of Dallas",
@@ -199,18 +114,7 @@
  {
   "state": "TX",
   "name": "Dallas Capital Improvement Program: 2017 Bond Program - Lines",
-  "key": "local_25",
-  "url": "https://services2.arcgis.com/rwnOSbfKSwyTBcwN/arcgis/rest/services/CapitalImprovementProgram/FeatureServer/4",
-  "fields": {
-   "id": "ProjectNum",
-   "name": "Name",
-   "description": "Description",
-   "work_type": "Category",
-   "cost": "BondAmount",
-   "status": "Status",
-   "county": "District",
-   "date": "CnstStartE"
-  },
+  "key": "g828d644f3",
   "where": null,
   "unfiltered": true,
   "agency": "City of Dallas",
@@ -224,14 +128,7 @@
  {
   "state": "NC",
   "name": "Raleigh Capital Improvement Projects (public)",
-  "key": "local_26",
-  "url": "https://services.arcgis.com/v400IkDOw1ad7Yad/arcgis/rest/services/Capital_Improvement_Projects_Public/FeatureServer/0",
-  "fields": {
-   "name": "PROJ_NAME",
-   "status": "STATUS",
-   "work_type": "DEPT",
-   "description": "URL"
-  },
+  "key": "g7e0ce8408",
   "where": null,
   "unfiltered": true,
   "agency": "City of Raleigh",
@@ -245,15 +142,7 @@
  {
   "state": "VA",
   "name": "Virginia Beach CIP Projects",
-  "key": "local_27",
-  "url": "https://services2.arcgis.com/CyVvlIiUfRBmMQuu/arcgis/rest/services/CIP_Projects/FeatureServer/0",
-  "fields": {
-   "id": "Project_Number",
-   "name": "Name",
-   "cost": "Project_Cost",
-   "county": "CouncilDistrict",
-   "work_type": "Section"
-  },
+  "key": "gb4686ee45",
   "where": null,
   "unfiltered": true,
   "agency": "City of Virginia Beach",
@@ -267,16 +156,7 @@
  {
   "state": "WA",
   "name": "Seattle Public Utilities CIP Project Boundaries",
-  "key": "local_29",
-  "url": "https://services.arcgis.com/ZOyb2t4B0UYuYNYH/arcgis/rest/services/SPU_Capital_Improvement_Projects_and_Workorders/FeatureServer/2",
-  "fields": {
-   "name": "CP_PRJCT_NAME",
-   "description": "CP_CMNCTN_DESC",
-   "work_type": "CP_PROGRAM_NAME",
-   "status": "CP_STATUS_TEXT",
-   "date": "CP_EXPCTD_CNST_DATE",
-   "id": "CP_PRJCT_CST_NBR"
-  },
+  "key": "g3ef716ff1",
   "where": null,
   "unfiltered": true,
   "agency": "Seattle Public Utilities",
@@ -290,17 +170,7 @@
  {
   "state": "WA",
   "name": "Seattle Parks and Recreation Capital Project Sites",
-  "key": "local_30",
-  "url": "https://services.arcgis.com/ZOyb2t4B0UYuYNYH/arcgis/rest/services/SPR_Capital_Project_Sites_public/FeatureServer/0",
-  "fields": {
-   "description": "DESCRIPTION",
-   "status": "PHASE",
-   "date": "CONSTR_START",
-   "name": "PROJECTTIT",
-   "id": "PS_DET_PRO",
-   "cost": "TOT_VALUE",
-   "county": "COUNCIL_D"
-  },
+  "key": "g0b7e12920",
   "where": "PHASE IN ('Planning','Design','On Hold')",
   "unfiltered": false,
   "agency": "Seattle Parks and Recreation",
@@ -314,14 +184,7 @@
  {
   "state": "WA",
   "name": "King County Wastewater Treatment Division capital projects",
-  "key": "local_31",
-  "url": "https://services.arcgis.com/Ej0PsM5Aw677QF1W/arcgis/rest/services/WTDwebsiteCIP/FeatureServer/0",
-  "fields": {
-   "id": "Id",
-   "name": "Name",
-   "status": "Status",
-   "description": "MgrateLink"
-  },
+  "key": "gc6c20a90d",
   "where": "Status='Active'",
   "unfiltered": false,
   "agency": "King County WTD",
@@ -335,17 +198,7 @@
  {
   "state": "FL",
   "name": "Miami-Dade Utility Coordination: DTPW capital improvement corridors",
-  "key": "local_32",
-  "url": "https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/MDCPWCorridor_gdb/FeatureServer/0",
-  "fields": {
-   "id": "PROJECTID",
-   "name": "PRJNAME",
-   "description": "PRJSCOPE",
-   "work_type": "FACTYPE",
-   "date": "STARTDATE",
-   "status": "GENPRJSTAT",
-   "county": "AGCYNAME"
-  },
+  "key": "g436085d08",
   "where": null,
   "unfiltered": true,
   "agency": "Miami-Dade Dept. of Transportation and Public Works",
@@ -359,17 +212,7 @@
  {
   "state": "FL",
   "name": "Miami-Dade Utility Coordination: DTPW capital improvement sites",
-  "key": "local_33",
-  "url": "https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/MDCPWSite_gdb/FeatureServer/0",
-  "fields": {
-   "id": "PROJECTID",
-   "name": "PRJNAME",
-   "description": "PRJSCOPE",
-   "work_type": "FACTYPE",
-   "date": "STARTDATE",
-   "status": "GENPRJSTAT",
-   "county": "AGCYNAME"
-  },
+  "key": "gdd74bc573",
   "where": null,
   "unfiltered": true,
   "agency": "Miami-Dade Dept. of Transportation and Public Works",
@@ -383,17 +226,7 @@
  {
   "state": "FL",
   "name": "Miami-Dade Utility Coordination: WASD sewer capital projects",
-  "key": "local_34",
-  "url": "https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/WASDSewer_gdb/FeatureServer/0",
-  "fields": {
-   "id": "PROJECTID",
-   "name": "PRJNAME",
-   "description": "PRJSCOPE",
-   "work_type": "FACTYPE",
-   "date": "STARTDATE",
-   "status": "GENPRJSTAT",
-   "county": "AGCYNAME"
-  },
+  "key": "g0145f13cc",
   "where": null,
   "unfiltered": true,
   "agency": "Miami-Dade Water and Sewer Department",
@@ -407,17 +240,7 @@
  {
   "state": "FL",
   "name": "Miami-Dade Utility Coordination: WASD water capital projects",
-  "key": "local_35",
-  "url": "https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/WASDWater_gdb/FeatureServer/0",
-  "fields": {
-   "id": "PROJECTID",
-   "name": "PRJNAME",
-   "description": "PRJSCOPE",
-   "work_type": "FACTYPE",
-   "date": "STARTDATE",
-   "status": "GENPRJSTAT",
-   "county": "AGCYNAME"
-  },
+  "key": "g02c7ebf77",
   "where": null,
   "unfiltered": true,
   "agency": "Miami-Dade Water and Sewer Department",
@@ -431,16 +254,7 @@
  {
   "state": "FL",
   "name": "Orange County FL Public Works Capital Improvement Projects (lines)",
-  "key": "local_36",
-  "url": "https://services1.arcgis.com/0U8EQ1FrumPeIqDb/arcgis/rest/services/Capital_Improvement_Projects_Map_(Public_-_2026_-_View)/FeatureServer/0",
-  "fields": {
-   "name": "Project_Name",
-   "work_type": "ProjectType",
-   "status": "Phase",
-   "date": "Start_Date",
-   "description": "Project_Detail",
-   "county": "Location"
-  },
+  "key": "g2408f072e",
   "where": null,
   "unfiltered": true,
   "agency": "Orange County Public Works",
@@ -454,17 +268,7 @@
  {
   "state": "FL",
   "name": "Orange County FL CIP Roadways",
-  "key": "local_37",
-  "url": "https://ocgis4.ocfl.net/arcgis/rest/services/AGOL_Open_Data/MapServer/8",
-  "fields": {
-   "id": "CIP_NO",
-   "name": "PROJNAME",
-   "work_type": "FUNDTYPE",
-   "status": "PHASE",
-   "county": "DISTRICT",
-   "description": "STREET",
-   "date": "CONSTART"
-  },
+  "key": "g6713b6c0e",
   "where": null,
   "unfiltered": true,
   "agency": "Orange County Public Works",
@@ -478,17 +282,7 @@
  {
   "state": "VA",
   "name": "Fairfax County DOT Capital Improvement Linear Projects",
-  "key": "local_38",
-  "url": "https://services1.arcgis.com/ioennV6PpG5Xodq0/arcgis/rest/services/DOT_Capital_Improvement_Linear_Projects/FeatureServer/0",
-  "fields": {
-   "id": "ID",
-   "description": "SCOPE",
-   "work_type": "PROJECT_TYPE",
-   "cost": "TOTAL_FUNDING",
-   "status": "STATUS",
-   "county": "DISTRICT",
-   "name": "PROJECT"
-  },
+  "key": "g2dfd51013",
   "where": null,
   "unfiltered": true,
   "agency": "Fairfax County Department of Transportation",
@@ -502,17 +296,7 @@
  {
   "state": "VA",
   "name": "Fairfax County DOT Capital Improvement Spot Projects",
-  "key": "local_39",
-  "url": "https://services1.arcgis.com/ioennV6PpG5Xodq0/arcgis/rest/services/DOT_Capital_Improvement_Spot_Projects/FeatureServer/0",
-  "fields": {
-   "id": "ID",
-   "description": "SCOPE",
-   "work_type": "PROJECT_TYPE",
-   "cost": "TOTAL_FUNDING",
-   "status": "STATUS",
-   "county": "DISTRICT",
-   "name": "PROJECT"
-  },
+  "key": "ge8ea37909",
   "where": null,
   "unfiltered": true,
   "agency": "Fairfax County Department of Transportation",
@@ -526,16 +310,7 @@
  {
   "state": "VA",
   "name": "Fairfax County Capital Improvement Projects (facilities)",
-  "key": "local_40",
-  "url": "https://services1.arcgis.com/ioennV6PpG5Xodq0/arcgis/rest/services/Capital_Improvement_Projects/FeatureServer/0",
-  "fields": {
-   "work_type": "CATEGORY",
-   "status": "STATUS",
-   "date": "FISCALYEAR",
-   "county": "SUPERVISOR_DISTRICT",
-   "name": "PROJECT",
-   "description": "ADDRESS"
-  },
+  "key": "g48fd98b63",
   "where": "STATUS IN ('Proposed','In progress')",
   "unfiltered": false,
   "agency": "Fairfax County",
@@ -549,17 +324,7 @@
  {
   "state": "NY",
   "name": "NYC Capital Projects Database (CPDB) - polygons",
-  "key": "local_41",
-  "url": "https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/Capital_Projects_Database_poly/FeatureServer/0",
-  "fields": {
-   "id": "maprojid",
-   "name": "descript",
-   "description": "descript",
-   "work_type": "typecat",
-   "date": "mindate|maxdate",
-   "cost": "pctotal",
-   "county": "magenname"
-  },
+  "key": "gbf0db9e23",
   "where": null,
   "unfiltered": true,
   "agency": "NYC Department of City Planning (projects of all city agencies)",
@@ -573,17 +338,7 @@
  {
   "state": "NY",
   "name": "NYC Capital Projects Database (CPDB) - points",
-  "key": "local_42",
-  "url": "https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/Capital_Projects_Database_points/FeatureServer/0",
-  "fields": {
-   "id": "maprojid",
-   "name": "descript",
-   "description": "descript",
-   "work_type": "typecat",
-   "date": "mindate|maxdate",
-   "cost": "pctotal",
-   "county": "magenname"
-  },
+  "key": "g78c15a642",
   "where": null,
   "unfiltered": true,
   "agency": "NYC Department of City Planning (projects of all city agencies)",
@@ -597,17 +352,7 @@
  {
   "state": "TX",
   "name": "Austin Watershed Protection CIP projects",
-  "key": "local_43",
-  "url": "https://services.arcgis.com/0L95CJ0VTaxqcmED/arcgis/rest/services/WPD_BenefitsCIP/FeatureServer/0",
-  "fields": {
-   "id": "PROJECT_ID",
-   "name": "PROJECT_NAME",
-   "description": "WPD_PROJECT_TYPE",
-   "work_type": "PROJECT_TYPE",
-   "cost": "ECAPRIS_BUDGET_ESTIMATE",
-   "status": "PROJECT_PHASE",
-   "date": "FIVEYEAR_DESCRIPTION"
-  },
+  "key": "g12f27a42c",
   "where": "PROJECT_PHASE IN ('Preliminary','Preliminary Phase','Design','Design Phase','Bid/Award/Execution Phase')",
   "unfiltered": false,
   "agency": "City of Austin Watershed Protection Department",
@@ -621,18 +366,7 @@
  {
   "state": "TX",
   "name": "Montgomery County TX CIP Project Areas (road bond)",
-  "key": "local_44",
-  "url": "https://services1.arcgis.com/PRoAPGnMSUqvTrzq/arcgis/rest/services/CIP_Project_Areas_View/FeatureServer/0",
-  "fields": {
-   "id": "PROJID",
-   "name": "PROJNAME",
-   "description": "DESCRIPTION",
-   "work_type": "PROJTYPE",
-   "cost": "ESTCOST",
-   "status": "PROJPHASE",
-   "date": "PLANSTARTDT",
-   "county": "PRECINCT"
-  },
+  "key": "gee90129bd",
   "where": null,
   "unfiltered": true,
   "agency": "Montgomery County, Texas",
@@ -646,17 +380,7 @@
  {
   "state": "VA",
   "name": "Prince William County Capital Improvement Projects",
-  "key": "local_45",
-  "url": "https://services2.arcgis.com/0Q7l03Ls62VG0fy4/arcgis/rest/services/CIP_view/FeatureServer/0",
-  "fields": {
-   "id": "ID",
-   "name": "ProjectName",
-   "description": "Description",
-   "work_type": "Category1_CIP_Section",
-   "cost": "Cost",
-   "date": "Completion_Date",
-   "county": "Magisterial_District"
-  },
+  "key": "g13a298bc6",
   "where": null,
   "unfiltered": true,
   "agency": "Prince William County",
@@ -670,16 +394,7 @@
  {
   "state": "MO",
   "name": "St. Louis MSD Active Wastewater Projects",
-  "key": "local_46",
-  "url": "https://services1.arcgis.com/plGX8WiX9ylnkcee/arcgis/rest/services/Capital_Projects/FeatureServer/0",
-  "fields": {
-   "id": "PROJECT_NUMBER",
-   "name": "PROJECT_NAME",
-   "description": "PROJECT_DESCRIPTION",
-   "work_type": "PROJECT_TYPE",
-   "status": "STATUS",
-   "date": "START_DATE"
-  },
+  "key": "g973405c4b",
   "where": null,
   "unfiltered": true,
   "agency": "Metropolitan St. Louis Sewer District",
@@ -693,16 +408,7 @@
  {
   "state": "MO",
   "name": "St. Louis MSD Active Stormwater Projects",
-  "key": "local_47",
-  "url": "https://services1.arcgis.com/plGX8WiX9ylnkcee/arcgis/rest/services/Capital_Projects/FeatureServer/1",
-  "fields": {
-   "id": "PROJECT_NUMBER",
-   "name": "PROJECT_NAME",
-   "description": "PROJECT_DESCRIPTION",
-   "work_type": "PROJECT_TYPE",
-   "status": "STATUS",
-   "date": "START_DATE"
-  },
+  "key": "g199fa75ce",
   "where": null,
   "unfiltered": true,
   "agency": "Metropolitan St. Louis Sewer District",
@@ -716,17 +422,7 @@
  {
   "state": "TN",
   "name": "Chattanooga Capital Projects Tracking (points)",
-  "key": "local_49",
-  "url": "https://services2.arcgis.com/OIAIimblRxPs0xxc/arcgis/rest/services/Capital_Improvements__Public_view/FeatureServer/0",
-  "fields": {
-   "name": "projname",
-   "description": "projdesc",
-   "work_type": "projtype",
-   "cost": "Approved_Budget",
-   "status": "status",
-   "county": "Council_District",
-   "id": "UID"
-  },
+  "key": "g128fd6c81",
   "where": "status IN ('Planning/Design/Bidding','Project On Hold')",
   "unfiltered": false,
   "agency": "City of Chattanooga",
@@ -740,17 +436,7 @@
  {
   "state": "TN",
   "name": "Chattanooga Capital Projects Tracking (lines)",
-  "key": "local_50",
-  "url": "https://services2.arcgis.com/OIAIimblRxPs0xxc/arcgis/rest/services/Capital_Improvements__Public_view/FeatureServer/1",
-  "fields": {
-   "name": "projname",
-   "description": "projdesc",
-   "work_type": "projtype",
-   "cost": "Approved_Budget",
-   "status": "status",
-   "county": "Council_District",
-   "id": "UID"
-  },
+  "key": "g2eede7d6f",
   "where": "status IN ('Planning/Design/Bidding','Project On Hold')",
   "unfiltered": false,
   "agency": "City of Chattanooga",
@@ -764,17 +450,7 @@
  {
   "state": "TN",
   "name": "Chattanooga Capital Projects Tracking (polygons)",
-  "key": "local_51",
-  "url": "https://services2.arcgis.com/OIAIimblRxPs0xxc/arcgis/rest/services/Capital_Improvements__Public_view/FeatureServer/2",
-  "fields": {
-   "name": "projname",
-   "description": "projdesc",
-   "work_type": "projtype",
-   "cost": "Approved_Budget",
-   "status": "status",
-   "county": "Council_District",
-   "id": "UID"
-  },
+  "key": "g02aab4851",
   "where": "status IN ('Planning/Design/Bidding','Project On Hold')",
   "unfiltered": false,
   "agency": "City of Chattanooga",
@@ -788,15 +464,7 @@
  {
   "state": "IL",
   "name": "Chicago RTA Capital Projects (impact areas)",
-  "key": "local_52",
-  "url": "https://services5.arcgis.com/NIHJ1cAxHq972sDH/arcgis/rest/services/Capital_Projects_Dashboard_Sys/FeatureServer/0",
-  "fields": {
-   "name": "PROJ_TITLE",
-   "work_type": "PROJ_TYPE",
-   "id": "PROJ_CODE",
-   "county": "SERV_BRD",
-   "description": "URL_LINK"
-  },
+  "key": "g7f3e9a169",
   "where": null,
   "unfiltered": true,
   "agency": "Regional Transportation Authority (CTA, Metra, Pace)",
@@ -810,16 +478,7 @@
  {
   "state": "CO",
   "name": "Aurora CO Public Works CIP Projects",
-  "key": "local_53",
-  "url": "https://services3.arcgis.com/0Va1ID99NSrNyyPX/arcgis/rest/services/CIP_Projects_PW2/FeatureServer/0",
-  "fields": {
-   "name": "Name",
-   "description": "Description",
-   "work_type": "ProjectType",
-   "cost": "ApproxBudget",
-   "status": "Status",
-   "date": "Year"
-  },
+  "key": "gdc514e0b6",
   "where": null,
   "unfiltered": true,
   "agency": "City of Aurora Public Works",
@@ -833,16 +492,7 @@
  {
   "state": "CO",
   "name": "Aurora Water CIP Projects",
-  "key": "local_54",
-  "url": "https://services3.arcgis.com/0Va1ID99NSrNyyPX/arcgis/rest/services/CIP_Projects_AW2/FeatureServer/0",
-  "fields": {
-   "name": "Name",
-   "description": "Description",
-   "work_type": "ProjectType",
-   "cost": "ApproxBudget",
-   "status": "Status",
-   "date": "Year"
-  },
+  "key": "g4277df350",
   "where": "Status IN ('PL','PREDE','SCOPE','DES','BID')",
   "unfiltered": false,
   "agency": "Aurora Water",
@@ -856,17 +506,7 @@
  {
   "state": "TX",
   "name": "Harris County Precinct 4 Capital Projects",
-  "key": "local_55",
-  "url": "https://services.arcgis.com/su8ic9KbA7PYVxPS/arcgis/rest/services/Precinct_4_Capital_Projects/FeatureServer/0",
-  "fields": {
-   "name": "Name",
-   "description": "Description",
-   "work_type": "Type",
-   "status": "Stage",
-   "date": "Start_Date",
-   "county": "Precinct",
-   "id": "Code"
-  },
+  "key": "gade8229cc",
   "where": "Stage IN ('Scoping','Design')",
   "unfiltered": false,
   "agency": "Harris County Precinct 4",
@@ -880,16 +520,7 @@
  {
   "state": "MI",
   "name": "Great Lakes Water Authority CIP Project Areas",
-  "key": "local_56",
-  "url": "https://utility.arcgis.com/usrsvcs/servers/eadf50d82a9c46afbf993d2eada16144/rest/services/CIP_GLWA/GLWA_Capital_Improvements_Program/MapServer/0",
-  "fields": {
-   "id": "CIPNumber",
-   "name": "CIP_SiteName",
-   "work_type": "ProjectType",
-   "cost": "TotalProjectCost",
-   "status": "ProjectStatus",
-   "date": "StartDate"
-  },
+  "key": "g4f7a587a9",
   "where": "ProjectStatus LIKE 'Future Planned%' OR ProjectStatus LIKE 'Active - Pre-Procurement%' OR ProjectStatus LIKE 'Active - Procurement%' OR ProjectStatus LIKE '%Design'",
   "unfiltered": false,
   "agency": "Great Lakes Water Authority (Detroit region water and sewer)",
@@ -903,17 +534,7 @@
  {
   "state": "OH",
   "name": "Northeast Ohio Regional Sewer District CIP Projects",
-  "key": "local_57",
-  "url": "https://utility.arcgis.com/usrsvcs/servers/a52b9aa24ab74e3e9359719138fcd8b9/rest/services/Public/E_C_CIP_Projects_Dashboard/MapServer/0",
-  "fields": {
-   "name": "PROJECT_NAME",
-   "description": "PROJECT_DESCRIPTION",
-   "work_type": "PROJECT_TYPE",
-   "cost": "CONSTRUCTION_BUDGETS",
-   "status": "PROJECT_PHASE",
-   "date": "CONST_CONTRACT_COMPLETION",
-   "id": "ORACLE_PROJECT_NUMBER"
-  },
+  "key": "g266cd05e8",
   "where": "PROJECT_PHASE IN ('Future','Study','Design')",
   "unfiltered": false,
   "agency": "Northeast Ohio Regional Sewer District (Cleveland area)",
@@ -927,16 +548,7 @@
  {
   "state": "WA",
   "name": "Kirkland CIP Projects",
-  "key": "local_58",
-  "url": "https://services2.arcgis.com/loGMwowmR0OPlOQb/arcgis/rest/services/CIP_Project/FeatureServer/0",
-  "fields": {
-   "id": "CIPID",
-   "name": "PROJ_NAME",
-   "cost": "BUDGET_NUM",
-   "date": "Const_startdate",
-   "description": "PROJ_DES",
-   "work_type": "CIP_TYP"
-  },
+  "key": "gfa9d427af",
   "where": null,
   "unfiltered": true,
   "agency": "City of Kirkland",
@@ -950,17 +562,7 @@
  {
   "state": "CA",
   "name": "Carlsbad Capital Improvement Projects",
-  "key": "local_59",
-  "url": "https://services.arcgis.com/ay9ePoQ2UfAX3U38/arcgis/rest/services/CapitalImprovementProject/FeatureServer/0",
-  "fields": {
-   "name": "PROJNAME",
-   "description": "PROJDESCR",
-   "work_type": "PROJTYPE",
-   "cost": "TTLCOST",
-   "status": "PROJPHASE",
-   "county": "DISTRICT",
-   "date": "CONSTSTART"
-  },
+  "key": "gf8966b293",
   "where": "PROJPHASE IN ('Not Started','Planning','Design','Bid & Award')",
   "unfiltered": false,
   "agency": "City of Carlsbad",
@@ -974,15 +576,7 @@
  {
   "state": "CA",
   "name": "Los Angeles County Public Works Stormwater Projects",
-  "key": "local_60",
-  "url": "https://services.arcgis.com/RmCCgQtiZLDCtblq/arcgis/rest/services/PW_Stormwater_Projects/FeatureServer/0",
-  "fields": {
-   "id": "Id",
-   "name": "ProjName",
-   "description": "Watershed",
-   "status": "Phase",
-   "work_type": "Section"
-  },
+  "key": "ge77906977",
   "where": "Phase IN ('Planning','Design')",
   "unfiltered": false,
   "agency": "Los Angeles County Public Works / LA County Flood Control District",
@@ -996,17 +590,7 @@
  {
   "state": "TX",
   "name": "San Antonio Bond Projects (points)",
-  "key": "local_61",
-  "url": "https://services.arcgis.com/g1fRTDLeMgspWrYp/arcgis/rest/services/BondProject/FeatureServer/0",
-  "fields": {
-   "name": "Project_Name",
-   "description": "Project_Comments",
-   "cost": "Total_Budget",
-   "status": "Phase",
-   "date": "Construction_Start_Date",
-   "county": "Council_District",
-   "work_type": "Proposition"
-  },
+  "key": "gf20d16988",
   "where": null,
   "unfiltered": true,
   "agency": "City of San Antonio",
@@ -1020,18 +604,7 @@
  {
   "state": "TX",
   "name": "San Antonio Bond Projects (lines)",
-  "key": "local_62",
-  "url": "https://services.arcgis.com/g1fRTDLeMgspWrYp/arcgis/rest/services/BondProjectLine/FeatureServer/0",
-  "fields": {
-   "id": "Project_No",
-   "name": "Project_Name",
-   "description": "Scope",
-   "cost": "Total_Budget",
-   "status": "Phase",
-   "date": "Construction_Start_Date",
-   "county": "Council_District",
-   "work_type": "Proposition"
-  },
+  "key": "ge85c52dc9",
   "where": "Phase='Design'",
   "unfiltered": false,
   "agency": "City of San Antonio",
@@ -1045,14 +618,7 @@
  {
   "state": "MA",
   "name": "Boston Coastal Resilience Project Tracking",
-  "key": "local_63",
-  "url": "https://services.arcgis.com/sFnw0xNflSi8J0uh/arcgis/rest/services/coastal_resilience_project_tracking_ViewOnly/FeatureServer/0",
-  "fields": {
-   "name": "title",
-   "description": "Notes",
-   "status": "Status",
-   "county": "Neighborhood"
-  },
+  "key": "gc5549193f",
   "where": "Status IN ('Future Focus Area','Design','Permitting')",
   "unfiltered": false,
   "agency": "City of Boston",
@@ -1066,16 +632,7 @@
  {
   "state": "MI",
   "name": "Detroit Streetscape Projects",
-  "key": "local_64",
-  "url": "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Streetscape_Projects/FeatureServer/41",
-  "fields": {
-   "name": "Road_Name",
-   "description": "Scope",
-   "cost": "Estimated_Cost",
-   "status": "Status",
-   "date": "Year",
-   "county": "District"
-  },
+  "key": "g9f0389825",
   "where": "Status='Design'",
   "unfiltered": false,
   "agency": "City of Detroit DPW",
@@ -1089,17 +646,7 @@
  {
   "state": "AZ",
   "name": "Tucson / Pima RTA Next Roadway Projects",
-  "key": "local_65",
-  "url": "https://services3.arcgis.com/9coHY2fvuFjG9HQX/arcgis/rest/services/RTA_Next__Roadway_Projects_HFL/FeatureServer/1",
-  "fields": {
-   "id": "ProjectID",
-   "name": "ProjectName",
-   "description": "Location_Desc",
-   "work_type": "Type",
-   "status": "Status",
-   "date": "FY_Planned",
-   "county": "Ward"
-  },
+  "key": "gc4f3ef6fe",
   "where": "Status IN ('Planned','Design')",
   "unfiltered": false,
   "agency": "Regional Transportation Authority of Pima County / City of Tucson",
@@ -1113,17 +660,7 @@
  {
   "state": "CA",
   "name": "Fresno capital projects (approximate project location)",
-  "key": "local_66",
-  "url": "https://services2.arcgis.com/WkBUojyNPhsWOk1W/arcgis/rest/services/COF_PROJECTCENTROID_PUBLIC/FeatureServer/17",
-  "fields": {
-   "id": "ProjectID",
-   "name": "ProjectName",
-   "description": "Scope",
-   "work_type": "ProjectType",
-   "status": "ProjectStatus",
-   "date": "NTP_date",
-   "county": "District"
-  },
+  "key": "g8e3e8e0b1",
   "where": null,
   "unfiltered": true,
   "agency": "City of Fresno",
@@ -1137,17 +674,7 @@
  {
   "state": "GA",
   "name": "Atlanta Beltline Trail Sections - project status",
-  "key": "local_67",
-  "url": "https://gis.beltline.org/server/rest/services/ABI_Trails_Sections_public/FeatureServer/0",
-  "fields": {
-   "name": "segmentname",
-   "work_type": "abitrailtype",
-   "status": "projectstatus",
-   "date": "construction_date",
-   "county": "council_district",
-   "id": "segmentid",
-   "description": "extent"
-  },
+  "key": "g622ba1bed",
   "where": "projectstatus IN ('Design','Shovel Ready')",
   "unfiltered": false,
   "agency": "Atlanta Beltline, Inc.",
@@ -1161,14 +688,7 @@
  {
   "state": "MN",
   "name": "Minneapolis 2027 Construction Map (bike/pedestrian layer; 12 layers in service)",
-  "key": "local_68",
-  "url": "https://services.arcgis.com/afSMGVsC7QlRK1kZ/arcgis/rest/services/2027_Mpls_Construction_Map/FeatureServer/9",
-  "fields": {
-   "description": "PROJECT_DESCRIPTION",
-   "work_type": "PROJECT_TYPE",
-   "date": "PROJECT_START_YEAR",
-   "name": "PROJECT_DESCRIPTION"
-  },
+  "key": "g7ebb76f19",
   "where": null,
   "unfiltered": true,
   "agency": "City of Minneapolis Public Works",
@@ -1182,18 +702,7 @@
  {
   "state": "LA",
   "name": "New Orleans DPW Roadwork Projects",
-  "key": "local_69",
-  "url": "https://gis.nola.gov/arcgis/rest/services/Transportation/DPWRoadWorkProjects/MapServer/0",
-  "fields": {
-   "id": "PROJID",
-   "name": "Project_Name",
-   "description": "CONSTTYPE",
-   "work_type": "PROJTYPE",
-   "cost": "Total_Cost",
-   "status": "Current_Phase",
-   "date": "StartQtr",
-   "county": "COUNCILDST"
-  },
+  "key": "g37328a04b",
   "where": "Current_Phase='Planned'",
   "unfiltered": false,
   "agency": "City of New Orleans Department of Public Works",
@@ -1207,17 +716,7 @@
  {
   "state": "FL",
   "name": "Hillsborough County CIP projects",
-  "key": "local_70",
-  "url": "https://services.arcgis.com/apTfC6SUmnNfnxuF/arcgis/rest/services/CIP_Polygons_Final_ListView/FeatureServer/1",
-  "fields": {
-   "id": "CIPNumber",
-   "name": "ProjectName",
-   "description": "Description",
-   "work_type": "ProjectType",
-   "cost": "ProjectCompletionBudget",
-   "status": "CurrentProjectPhase",
-   "date": "DesignLandAcquisitionEndDate"
-  },
+  "key": "gd9fd9b3de",
   "where": null,
   "unfiltered": true,
   "agency": "Hillsborough County, Florida",
@@ -1231,14 +730,7 @@
  {
   "state": "NC",
   "name": "Wake County Public School System Construction Projects",
-  "key": "local_71",
-  "url": "https://services2.arcgis.com/oqISN6Dt6ax5xklN/arcgis/rest/services/wcsfdc_geom_projects_public/FeatureServer/0",
-  "fields": {
-   "name": "schl_name",
-   "description": "loc_desc",
-   "work_type": "prj_type",
-   "id": "schl_code"
-  },
+  "key": "gcb2256483",
   "where": null,
   "unfiltered": true,
   "agency": "Wake County Public School System",
@@ -1252,17 +744,7 @@
  {
   "state": "TX",
   "name": "Travis County CIP: Roads, Sidewalks and Trails",
-  "key": "local_72",
-  "url": "https://services1.arcgis.com/HGcSYZ5bvjRswoCb/arcgis/rest/services/CIP_Project_Overview/FeatureServer/1",
-  "fields": {
-   "id": "ProjectID",
-   "name": "Project_Name",
-   "description": "Scope",
-   "work_type": "Project_Type",
-   "cost": "TotalEstimatedCost",
-   "status": "Project_Status",
-   "county": "Comm_Name_and_Precinct"
-  },
+  "key": "g2ebd78a25",
   "where": "Project_Status IN ('Not Started','Started','Design','Pre-Construction')",
   "unfiltered": false,
   "agency": "Travis County Transportation and Natural Resources",
@@ -1276,17 +758,7 @@
  {
   "state": "TX",
   "name": "Travis County CIP: Bridges, Intersections and Drainage",
-  "key": "local_73",
-  "url": "https://services1.arcgis.com/HGcSYZ5bvjRswoCb/arcgis/rest/services/CIP_Project_Overview/FeatureServer/0",
-  "fields": {
-   "id": "ProjectID",
-   "name": "Project_Name",
-   "description": "Scope",
-   "work_type": "Project_Type",
-   "cost": "TotalEstimatedCost",
-   "status": "Project_Status",
-   "county": "Comm_Name_and_Precinct"
-  },
+  "key": "g4e7e09df9",
   "where": "Project_Status IN ('Not Started','Started','Design','Pre-Construction')",
   "unfiltered": false,
   "agency": "Travis County Transportation and Natural Resources",
@@ -1300,15 +772,7 @@
  {
   "state": "PA",
   "name": "Pittsburgh Water (PWSA) Waterline Installation Projects",
-  "key": "local_74",
-  "url": "https://services5.arcgis.com/jAsbh6V9IpseXByp/arcgis/rest/services/PWSA_Project_Locations/FeatureServer/0",
-  "fields": {
-   "id": "PROJECT_NO",
-   "name": "PROJ_NAME",
-   "status": "STATUS",
-   "date": "START_DATE",
-   "description": "SUMMARY"
-  },
+  "key": "g3f105eed0",
   "where": "STATUS='Planned'",
   "unfiltered": false,
   "agency": "Pittsburgh Water and Sewer Authority",
@@ -1322,15 +786,7 @@
  {
   "state": "PA",
   "name": "Pittsburgh Water (PWSA) Sewer Rehabilitation Projects",
-  "key": "local_75",
-  "url": "https://services5.arcgis.com/jAsbh6V9IpseXByp/arcgis/rest/services/PWSA_Project_Locations/FeatureServer/1",
-  "fields": {
-   "id": "PROJECT_NO",
-   "name": "PROJ_NAME",
-   "status": "STATUS",
-   "date": "START_DATE",
-   "description": "SUMMARY"
-  },
+  "key": "g5e46f240d",
   "where": "STATUS IN ('Planned','On Hold')",
   "unfiltered": false,
   "agency": "Pittsburgh Water and Sewer Authority",
@@ -1344,17 +800,7 @@
  {
   "state": "NC",
   "name": "Durham CIP Projects (points)",
-  "key": "local_76",
-  "url": "https://services2.arcgis.com/G5vR3cOjh6g2Ed8E/arcgis/rest/services/CIP_Projects/FeatureServer/57",
-  "fields": {
-   "name": "FIRST_main_project_title",
-   "description": "project_description",
-   "work_type": "FIRST_Project_Type",
-   "cost": "FIRST_sum_of_budget",
-   "status": "FIRST_current_project_phase",
-   "date": "CurrentPhaseCompletionDate",
-   "id": "project"
-  },
+  "key": "g585cceeb0",
   "where": null,
   "unfiltered": true,
   "agency": "City of Durham",
@@ -1368,14 +814,7 @@
  {
   "state": "TX",
   "name": "Austin Light Rail base design: Proposed ROW lines",
-  "key": "local_77",
-  "url": "https://services7.arcgis.com/BnWSLs6TLD51iZWF/arcgis/rest/services/Draft_Base_Design/FeatureServer/3",
-  "fields": {
-   "name": "Level_File_Category",
-   "work_type": "Level_Existing_Proposed",
-   "date": "ProcessedDate",
-   "description": "igds_level_name"
-  },
+  "key": "gb4227be87",
   "where": null,
   "unfiltered": true,
   "agency": "Austin Transit Partnership",
@@ -1389,14 +828,7 @@
  {
   "state": "TX",
   "name": "Austin Light Rail base design: Proposed Easements",
-  "key": "local_78",
-  "url": "https://services7.arcgis.com/BnWSLs6TLD51iZWF/arcgis/rest/services/Draft_Base_Design/FeatureServer/5",
-  "fields": {
-   "name": "Level_File_Category",
-   "work_type": "Level_Existing_Proposed",
-   "date": "ProcessedDate",
-   "description": "igds_level_name"
-  },
+  "key": "gd0d012bf8",
   "where": null,
   "unfiltered": true,
   "agency": "Austin Transit Partnership",
@@ -1410,14 +842,7 @@
  {
   "state": "TX",
   "name": "Austin Light Rail base design: Station Platform Areas",
-  "key": "local_79",
-  "url": "https://services7.arcgis.com/BnWSLs6TLD51iZWF/arcgis/rest/services/Draft_Base_Design/FeatureServer/7",
-  "fields": {
-   "name": "Level_File_Category",
-   "work_type": "Level_File_Category",
-   "date": "ProcessedDate",
-   "description": "igds_level_name"
-  },
+  "key": "gfdeecfc9f",
   "where": null,
   "unfiltered": true,
   "agency": "Austin Transit Partnership",
@@ -1431,17 +856,7 @@
  {
   "state": "OK",
   "name": "Oklahoma State Flood Plan Stormwater Projects",
-  "key": "local_80",
-  "url": "https://services2.arcgis.com/fI5CUOPa2wdhkCHV/arcgis/rest/services/State_Flood_Plan_Stormwater_Projects/FeatureServer/99",
-  "fields": {
-   "name": "FMP_NAME",
-   "description": "FMP_DESCR",
-   "work_type": "FMP_TYPE",
-   "cost": "FMP_COST",
-   "date": "FMP_COST_YEAR",
-   "county": "COUNTY",
-   "id": "FMP_ID"
-  },
+  "key": "gc34c82e4d",
   "where": null,
   "unfiltered": true,
   "agency": "Oklahoma Water Resources Board (projects sponsored by cities, counties, conservancy districts)",
@@ -1455,16 +870,7 @@
  {
   "state": "NY",
   "name": "NYC DEP/DDC Stormwater and Sewer Capital Projects",
-  "key": "local_81",
-  "url": "https://services.arcgis.com/at3rDjch5X7i9Bag/arcgis/rest/services/Public_Stormwater_Sewer_Capital_Projects/FeatureServer/0",
-  "fields": {
-   "id": "projectid",
-   "name": "description",
-   "description": "webscope",
-   "status": "phase",
-   "date": "projected_compl",
-   "work_type": "division"
-  },
+  "key": "g547d40d7f",
   "where": "phase='Design'",
   "unfiltered": false,
   "agency": "NYC Department of Environmental Protection / Department of Design and Construction",
@@ -1478,15 +884,7 @@
  {
   "state": "TX",
   "name": "Hidalgo County Drainage District No. 1 - 2023 Bond Program",
-  "key": "local_82",
-  "url": "https://services7.arcgis.com/JSUhwVSJhyVkcN3Q/arcgis/rest/services/2023_Bond/FeatureServer/0",
-  "fields": {
-   "name": "Name",
-   "description": "Descript",
-   "cost": "Actual_Cost",
-   "status": "Proj_Status",
-   "county": "Precinct"
-  },
+  "key": "g7c5804251",
   "where": "Proj_Status IN ('Pre-Design','PD')",
   "unfiltered": false,
   "agency": "Hidalgo County Drainage District No. 1",
@@ -1500,12 +898,7 @@
  {
   "state": "OK",
   "name": "Broken Arrow 2026 Proposed Bond Projects",
-  "key": "local_83",
-  "url": "https://services5.arcgis.com/rr6hTHIOPEZnXs66/arcgis/rest/services/All_Projects/FeatureServer/4",
-  "fields": {
-   "name": "Project_Name",
-   "description": "Project_Description"
-  },
+  "key": "g2bdb3ef92",
   "where": null,
   "unfiltered": true,
   "agency": "City of Broken Arrow",
@@ -1519,13 +912,7 @@
  {
   "state": "CO",
   "name": "Denver Storm Drainage Master Plan - proposed storm routing projects",
-  "key": "local_84",
-  "url": "https://services1.arcgis.com/zdB7qR0BtYrg0Xpl/arcgis/rest/services/Denver_Proposed_Storm_Routing_Projects/FeatureServer/68",
-  "fields": {
-   "name": "Project_Name",
-   "description": "Description",
-   "id": "PRP_PROJEC"
-  },
+  "key": "gb6bff48a1",
   "where": null,
   "unfiltered": true,
   "agency": "City and County of Denver (DOTI)",
@@ -1539,14 +926,7 @@
  {
   "state": "CA",
   "name": "California Electric Transmission Lines (CEC)",
-  "key": "local_85",
-  "url": "https://services3.arcgis.com/bWPjFyq029ChCGur/arcgis/rest/services/Transmission_Line/FeatureServer/2",
-  "fields": {
-   "name": "Name",
-   "description": "Comments",
-   "work_type": "Type",
-   "status": "Status"
-  },
+  "key": "g139f7035b",
   "where": null,
   "unfiltered": true,
   "agency": "California Energy Commission (lines owned by utilities)",
@@ -1560,16 +940,7 @@
  {
   "state": "CA",
   "name": "LA Metro Southeast Gateway Line (West Santa Ana Branch): Acquisitions and Displacements",
-  "key": "local_87",
-  "url": "https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/services/Acquisitions_and_Displacements_Final_2/FeatureServer/0",
-  "fields": {
-   "description": "ImpactType",
-   "work_type": "ROWType",
-   "county": "City",
-   "id": "WSABParcel",
-   "name": "APN",
-   "status": "TakeType"
-  },
+  "key": "gdaa3a28e5",
   "where": null,
   "unfiltered": true,
   "agency": "Los Angeles County Metropolitan Transportation Authority (LA Metro)",
@@ -1583,12 +954,7 @@
  {
   "state": "CA",
   "name": "LA Metro: Full Acquisition Boundaries (Southeast Gateway Line)",
-  "key": "local_88",
-  "url": "https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/services/Property_Impacts_Acquisitions_2/FeatureServer/1",
-  "fields": {
-   "id": "APN",
-   "name": "Acquistion"
-  },
+  "key": "geab251d08",
   "where": null,
   "unfiltered": true,
   "agency": "LA Metro",
@@ -1602,14 +968,7 @@
  {
   "state": "CA",
   "name": "LA Metro Planned Stations",
-  "key": "local_89",
-  "url": "https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/services/Metro_Planned_Stations/FeatureServer/0",
-  "fields": {
-   "name": "STOPNAME",
-   "work_type": "Type_",
-   "status": "Status",
-   "description": "LINE2"
-  },
+  "key": "g80109796c",
   "where": null,
   "unfiltered": true,
   "agency": "LA Metro",
@@ -1623,13 +982,7 @@
  {
   "state": "CA",
   "name": "LA Metro Transit Projects (Measure M / LRTP corridors)",
-  "key": "local_90",
-  "url": "https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/services/Metro_Transit_Projects/FeatureServer/0",
-  "fields": {
-   "name": "Name",
-   "work_type": "Mode",
-   "description": "Measure"
-  },
+  "key": "g5e3644ae2",
   "where": null,
   "unfiltered": true,
   "agency": "LA Metro",
@@ -1643,16 +996,7 @@
  {
   "state": "TX",
   "name": "Harris County Flood Control District 2018 Bond: CIP structural channel projects (local-only, lines)",
-  "key": "local_91",
-  "url": "https://services2.arcgis.com/nLl0k0Mja5hnSeSl/arcgis/rest/services/HCFCD_CIP_Structural_Local_Only_Line/FeatureServer/0",
-  "fields": {
-   "id": "ID",
-   "name": "ProjectTitle",
-   "description": "DescriptionBenefits",
-   "work_type": "Type",
-   "cost": "GrantTotalCost",
-   "county": "WTSHNAME"
-  },
+  "key": "gfc7e15435",
   "where": null,
   "unfiltered": true,
   "agency": "Harris County Flood Control District",
@@ -1666,13 +1010,7 @@
  {
   "state": "TX",
   "name": "Harris County Flood Control District 2018 Bond project points",
-  "key": "local_92",
-  "url": "https://services2.arcgis.com/nLl0k0Mja5hnSeSl/arcgis/rest/services/HCFCD_Bond_Points/FeatureServer/0",
-  "fields": {
-   "work_type": "Type",
-   "status": "Status",
-   "id": "BondID"
-  },
+  "key": "g30e59a073",
   "where": "Status='In Progress'",
   "unfiltered": false,
   "agency": "Harris County Flood Control District",
@@ -1686,17 +1024,7 @@
  {
   "state": "TX",
   "name": "Harris County Flood Control District Buyout Areas",
-  "key": "local_93",
-  "url": "https://services2.arcgis.com/nLl0k0Mja5hnSeSl/arcgis/rest/services/HCFCD_Buyout_Areas/FeatureServer/0",
-  "fields": {
-   "name": "Area_Name",
-   "description": "Notes",
-   "cost": "Cost_sqft",
-   "date": "Updated",
-   "county": "Precinct",
-   "id": "Unit_No",
-   "status": "PLN_Aprvd"
-  },
+  "key": "g5c8894694",
   "where": null,
   "unfiltered": true,
   "agency": "Harris County Flood Control District",
@@ -1710,16 +1038,7 @@
  {
   "state": "TX",
   "name": "Harris County Flood Control District Bond Program Status Report projects (polygons)",
-  "key": "local_94",
-  "url": "https://services2.arcgis.com/nLl0k0Mja5hnSeSl/arcgis/rest/services/BPSR_Projects/FeatureServer/1",
-  "fields": {
-   "id": "ProjectID",
-   "name": "COMMONNAME",
-   "work_type": "Category",
-   "status": "PROJECTSTATUS",
-   "date": "EXTRACT_DATE",
-   "description": "StageName"
-  },
+  "key": "g718e049f1",
   "where": null,
   "unfiltered": true,
   "agency": "Harris County Flood Control District",
@@ -1733,15 +1052,7 @@
  {
   "state": "AZ",
   "name": "Valley Metro Light Rail Extensions",
-  "key": "local_98",
-  "url": "https://services2.arcgis.com/2t1927381mhTgWNC/arcgis/rest/services/Light_Rail_Extensions_View/FeatureServer/0",
-  "fields": {
-   "id": "ID",
-   "status": "Status",
-   "county": "City",
-   "name": "PHASE",
-   "work_type": "Service"
-  },
+  "key": "g43c4121ac",
   "where": null,
   "unfiltered": true,
   "agency": "Valley Metro (Phoenix region)",
@@ -1755,13 +1066,7 @@
  {
   "state": "AZ",
   "name": "Valley Metro Light Rail Extension Stations",
-  "key": "local_99",
-  "url": "https://services2.arcgis.com/2t1927381mhTgWNC/arcgis/rest/services/Light_Rail_Extension_Stations_View/FeatureServer/0",
-  "fields": {
-   "name": "Name",
-   "status": "Status",
-   "description": "Extension"
-  },
+  "key": "gdd7daeec7",
   "where": null,
   "unfiltered": true,
   "agency": "Valley Metro (Phoenix region)",
@@ -1775,12 +1080,7 @@
  {
   "state": "CA",
   "name": "California High-Speed Rail Statewide Alignment",
-  "key": "local_100",
-  "url": "https://services3.arcgis.com/rGGp0aiv6Rf11t2H/arcgis/rest/services/HSR_Statewide_Alignment/FeatureServer/1",
-  "fields": {
-   "status": "PHASE",
-   "name": "PROJECT_SECTION"
-  },
+  "key": "gfe85d3c80",
   "where": null,
   "unfiltered": true,
   "agency": "California High-Speed Rail Authority",
@@ -1794,14 +1094,7 @@
  {
   "state": "NC",
   "name": "Charlotte Right-of-Way Tracking for Future Corridors",
-  "key": "local_101",
-  "url": "https://services.arcgis.com/9Nl857LBlQVyzq54/arcgis/rest/services/ROWTrackingFutureCorridors/FeatureServer/0",
-  "fields": {
-   "name": "Project_Name",
-   "description": "Property_Owners",
-   "status": "Segment_Status",
-   "id": "Project_UniqueID_fromPRWP"
-  },
+  "key": "ge8cae1d13",
   "where": null,
   "unfiltered": true,
   "agency": "City of Charlotte (CDOT / Planning)",
@@ -1815,12 +1108,7 @@
  {
   "state": "NC",
   "name": "Charlotte LYNX Red Line Route - Proposed",
-  "key": "local_102",
-  "url": "https://services.arcgis.com/9Nl857LBlQVyzq54/arcgis/rest/services/LYNX_Red_Line_Route___Proposed/FeatureServer/0",
-  "fields": {
-   "status": "Status",
-   "name": "Alignment"
-  },
+  "key": "g1ce98587c",
   "where": "Status='Proposed'",
   "unfiltered": false,
   "agency": "Charlotte Area Transit System (CATS)",
@@ -1834,15 +1122,7 @@
  {
   "state": "NC",
   "name": "Charlotte-Mecklenburg Schools 2023 Bond Projects",
-  "key": "local_103",
-  "url": "https://services.arcgis.com/9Nl857LBlQVyzq54/arcgis/rest/services/CMS_2023_Bond_Projects/FeatureServer/0",
-  "fields": {
-   "description": "Project_Description",
-   "work_type": "ProjectType",
-   "county": "city",
-   "name": "Site",
-   "id": "Project"
-  },
+  "key": "gb57846612",
   "where": null,
   "unfiltered": true,
   "agency": "Charlotte-Mecklenburg Schools",
@@ -1856,15 +1136,7 @@
  {
   "state": "NC",
   "name": "Wake County Public Schools Proposed School Bond Projects 2026",
-  "key": "local_104",
-  "url": "https://services2.arcgis.com/oqISN6Dt6ax5xklN/arcgis/rest/services/bond_projects_2026/FeatureServer/0",
-  "fields": {
-   "name": "school_name",
-   "work_type": "category",
-   "cost": "funding",
-   "id": "schl_code",
-   "description": "projects"
-  },
+  "key": "g29ccaf0d7",
   "where": null,
   "unfiltered": true,
   "agency": "Wake County Public School System",
@@ -1878,16 +1150,7 @@
  {
   "state": "NE",
   "name": "OPPD Transmission Projects",
-  "key": "local_105",
-  "url": "https://services.arcgis.com/VYvz62U0tSeheRDB/arcgis/rest/services/Transmission_Projects/FeatureServer/0",
-  "fields": {
-   "name": "ProjectTitle",
-   "description": "ProjectDescription",
-   "work_type": "ProjectType",
-   "status": "ProjectSTatus",
-   "date": "ProjectStartYear",
-   "county": "ProjectLocation"
-  },
+  "key": "g77dc585dc",
   "where": null,
   "unfiltered": true,
   "agency": "Omaha Public Power District (public utility with eminent domain)",
@@ -1901,14 +1164,7 @@
  {
   "state": "OH",
   "name": "COTA LinkUS BRT Corridors",
-  "key": "local_106",
-  "url": "https://services6.arcgis.com/PyaYYixu3QuadcCe/arcgis/rest/services/BRT_Corridors/FeatureServer/0",
-  "fields": {
-   "name": "name",
-   "work_type": "category",
-   "date": "year",
-   "id": "line_name"
-  },
+  "key": "g04822a4d0",
   "where": null,
   "unfiltered": true,
   "agency": "Central Ohio Transit Authority",
@@ -1922,11 +1178,7 @@
  {
   "state": "VA",
   "name": "Fairfax County Richmond Highway BRT: Proposed Right of Way",
-  "key": "local_107",
-  "url": "https://services1.arcgis.com/ioennV6PpG5Xodq0/arcgis/rest/services/Richmond_Highway_BRT_Features_gdb/FeatureServer/9",
-  "fields": {
-   "name": "DISPLAY"
-  },
+  "key": "gc6eab7ec7",
   "where": null,
   "unfiltered": true,
   "agency": "Fairfax County Department of Transportation",
@@ -1940,11 +1192,7 @@
  {
   "state": "MN",
   "name": "Minnesota route-permit project data: Proposed ROW (Iron Range - St. Louis County - Arrowhead 345 kV)",
-  "key": "local_108",
-  "url": "https://services1.arcgis.com/yfalcTIlueMdl9fz/arcgis/rest/services/ISA_Project_Data/FeatureServer/2",
-  "fields": {
-   "name": "Acres"
-  },
+  "key": "gf1c1977af",
   "where": null,
   "unfiltered": true,
   "agency": "Minnesota Department of Commerce EERA / Minnesota PUC route permit docket",
@@ -1958,16 +1206,7 @@
  {
   "state": "TX",
   "name": "North Harris County Regional Water Authority CIP - distribution lines",
-  "key": "local_109",
-  "url": "https://services7.arcgis.com/J4DUhTE5Ib36d1gd/arcgis/rest/services/NHCRW_CIP/FeatureServer/0",
-  "fields": {
-   "description": "Comments",
-   "work_type": "Type",
-   "status": "STATUS_CON",
-   "date": "dist_date",
-   "name": "PROJECT",
-   "county": "LOCATION"
-  },
+  "key": "g4d4680148",
   "where": null,
   "unfiltered": true,
   "agency": "North Harris County Regional Water Authority",
@@ -1981,18 +1220,7 @@
  {
   "state": "GA",
   "name": "ARC Metropolitan Transportation Plan / TIP projects",
-  "key": "region0",
-  "url": "https://services1.arcgis.com/Ug5xGQbHsD8zuZzM/arcgis/rest/services/ARC_MTP/FeatureServer/1",
-  "fields": {
-   "id": "ARCID",
-   "name": "PRJ_DESC",
-   "description": "EXTENTS",
-   "work_type": "PRJ_TYPE",
-   "cost": null,
-   "status": "STATUS",
-   "date": "last_edited_date",
-   "county": "COUNTY"
-  },
+  "key": "gfcfdba6e6",
   "where": null,
   "unfiltered": true,
   "agency": "Atlanta Regional Commission (Atlanta MPO); sponsors are GDOT, counties, cities, transit agencies",
@@ -2006,18 +1234,7 @@
  {
   "state": "CA",
   "name": "MTC 2027 Transportation Improvement Program projects",
-  "key": "region1",
-  "url": "https://services3.arcgis.com/i2dkYWmb4wHvYPda/arcgis/rest/services/mtc_tip2027_projects_line/FeatureServer/0",
-  "fields": {
-   "id": "tip_id",
-   "name": "Project_Name",
-   "description": "Project_Description",
-   "work_type": "Project_Mode",
-   "cost": "Project_Cost",
-   "status": null,
-   "date": null,
-   "county": "Project_County"
-  },
+  "key": "g17c190cd2",
   "where": null,
   "unfiltered": true,
   "agency": "Metropolitan Transportation Commission (San Francisco Bay Area MPO, 9 counties)",
@@ -2031,18 +1248,7 @@
  {
   "state": "TX",
   "name": "NCTCOG Mobility 2050 roadway recommendations (freeway/tollway segments)",
-  "key": "region2",
-  "url": "https://geospatial.nctcog.org/map/rest/services/Transportation/M2050_Recommendations/MapServer/2",
-  "fields": {
-   "id": "MTPID",
-   "name": "Facility",
-   "description": "Recommendation",
-   "work_type": "CorridorType",
-   "cost": "Cost",
-   "status": "Active",
-   "date": null,
-   "county": "County"
-  },
+  "key": "gc317d4e9d",
   "where": null,
   "unfiltered": true,
   "agency": "North Central Texas Council of Governments (Dallas-Fort Worth MPO); implementing agencies TxDOT, NTTA, counties",
@@ -2056,18 +1262,7 @@
  {
   "state": "UT",
   "name": "WFRC 2023-2050 Regional Transportation Plan projects",
-  "key": "region4",
-  "url": "https://services1.arcgis.com/taguadKoI1XFwivx/arcgis/rest/services/Final_2023_RTP_Projects/FeatureServer/1",
-  "fields": {
-   "id": "plan_id",
-   "name": "name",
-   "description": "description",
-   "work_type": "improvement_type",
-   "cost": "cost",
-   "status": "phase",
-   "date": null,
-   "county": "county"
-  },
+  "key": "gb5ab4807c",
   "where": null,
   "unfiltered": true,
   "agency": "Wasatch Front Regional Council (Salt Lake City-Ogden MPO); UDOT, UTA, cities",
@@ -2081,18 +1276,7 @@
  {
   "state": "UT",
   "name": "WFRC TIP 2026-2031 projects",
-  "key": "region5",
-  "url": "https://services1.arcgis.com/taguadKoI1XFwivx/arcgis/rest/services/TIP_2026_2031_gdb/FeatureServer/1",
-  "fields": {
-   "id": "pin",
-   "name": "pin_desc",
-   "description": "public_desc",
-   "work_type": "proj_typ_nm",
-   "cost": "project_value",
-   "status": "pin_stat_nm",
-   "date": "forecast_st_yr",
-   "county": "cnty_name"
-  },
+  "key": "gb42c72517",
   "where": null,
   "unfiltered": true,
   "agency": "Wasatch Front Regional Council; UDOT ePM project data",
@@ -2106,18 +1290,7 @@
  {
   "state": "UT",
   "name": "Mountainland AOG TIP projects (Utah County)",
-  "key": "region6",
-  "url": "https://services2.arcgis.com/EiGeaCDLpVDPqdJ5/arcgis/rest/services/MAG_TIP_Projects/FeatureServer/0",
-  "fields": {
-   "id": "PIN",
-   "name": "PIN_DESC",
-   "description": "PUBLIC_DESC",
-   "work_type": "PROJ_TYP_NM",
-   "cost": "PROJECT_VALUE",
-   "status": "PIN_STATUS_PHASE_DESC",
-   "date": "FORECAST_ST_YR",
-   "county": null
-  },
+  "key": "g62aa5fa85",
   "where": null,
   "unfiltered": true,
   "agency": "Mountainland Association of Governments (Provo-Orem MPO); UDOT ePM",
@@ -2131,18 +1304,7 @@
  {
   "state": "WA",
   "name": "PSRC Regional TIP projects (October 2026 snapshot)",
-  "key": "region7",
-  "url": "https://services6.arcgis.com/GWxg6t7KXELn1thE/arcgis/rest/services/TIP_Projects_26_10_gdb/FeatureServer/0",
-  "fields": {
-   "id": "projID",
-   "name": "Project_Title",
-   "description": "Description",
-   "work_type": "ImpvType",
-   "cost": "Total_Project_Cost",
-   "status": null,
-   "date": "Estimated_Completion_Year",
-   "county": null
-  },
+  "key": "g18d4535f3",
   "where": null,
   "unfiltered": true,
   "agency": "Puget Sound Regional Council (Seattle-Tacoma MPO); WSDOT, counties, cities, transit",
@@ -2156,18 +1318,7 @@
  {
   "state": "WA",
   "name": "PSRC Regional Transportation Plan 2026 capacity projects",
-  "key": "region8",
-  "url": "https://services6.arcgis.com/GWxg6t7KXELn1thE/arcgis/rest/services/rtp_projects_2026_s2b_final_gdb/FeatureServer/0",
-  "fields": {
-   "id": "MTPID",
-   "name": "Title",
-   "description": "Description",
-   "work_type": "Functional_Class",
-   "cost": "ScaledCost",
-   "status": "MTP_Status",
-   "date": "CompletionYear",
-   "county": "County"
-  },
+  "key": "g480ddfdfb",
   "where": null,
   "unfiltered": true,
   "agency": "Puget Sound Regional Council",
@@ -2181,18 +1332,7 @@
  {
   "state": "MI",
   "name": "SEMCOG TIP FY2026-2029 projects (current after amendment)",
-  "key": "region9",
-  "url": "https://gis.semcog.org/server/rest/services/Hosted/TIP_26_29_Updated_After_Amendment_26_3/FeatureServer/154",
-  "fields": {
-   "id": "jobnet_id",
-   "name": "rpt_loc_de",
-   "description": "rpt_wk_des",
-   "work_type": "projtype",
-   "cost": "tot_prj_co",
-   "status": "phase_type_abbrv",
-   "date": "conyear",
-   "county": "cnty_desc"
-  },
+  "key": "gf3148914c",
   "where": null,
   "unfiltered": true,
   "agency": "Southeast Michigan Council of Governments (Detroit MPO); MDOT, county road commissions, cities",
@@ -2206,18 +1346,7 @@
  {
   "state": "CO",
   "name": "DRCOG 2050 Regional Transportation Plan projects (2025 update)",
-  "key": "region10",
-  "url": "https://services2.arcgis.com/lCUrzfRwZYxmwIse/arcgis/rest/services/2025_RTP_lines/FeatureServer/0",
-  "fields": {
-   "id": "ID",
-   "name": "Name",
-   "description": "Descriptio",
-   "work_type": "Elements",
-   "cost": "Cost",
-   "status": null,
-   "date": "Staging",
-   "county": null
-  },
+  "key": "gc6389cd0a",
   "where": null,
   "unfiltered": true,
   "agency": "Denver Regional Council of Governments; CDOT, RTD, counties, cities",
@@ -2231,18 +1360,7 @@
  {
   "state": "PA",
   "name": "DVRPC Pennsylvania TIP FFY2027-2030",
-  "key": "region12",
-  "url": "https://arcgis.dvrpc.org/portal/rest/services/transportation/patip_ffy2027_2030_line/FeatureServer/0",
-  "fields": {
-   "id": "mpms_id",
-   "name": "road_name",
-   "description": null,
-   "work_type": "descriptio",
-   "cost": null,
-   "status": null,
-   "date": null,
-   "county": "cty"
-  },
+  "key": "g65a7e3c8e",
   "where": null,
   "unfiltered": true,
   "agency": "Delaware Valley Regional Planning Commission (Philadelphia MPO, PA counties); PennDOT, SEPTA, counties",
@@ -2256,18 +1374,7 @@
  {
   "state": "NJ",
   "name": "DVRPC New Jersey TIP FY2026-2029",
-  "key": "region13",
-  "url": "https://arcgis.dvrpc.org/portal/rest/services/transportation/njtip_fy2026_2029_point/FeatureServer/0",
-  "fields": {
-   "id": "dbnum",
-   "name": "projectnam",
-   "description": null,
-   "work_type": "type_desc",
-   "cost": null,
-   "status": null,
-   "date": null,
-   "county": "county"
-  },
+  "key": "g5f1ab99bc",
   "where": null,
   "unfiltered": true,
   "agency": "Delaware Valley Regional Planning Commission (NJ counties: Burlington, Camden, Gloucester, Mercer); NJDOT, NJ Transit, counties",
@@ -2281,18 +1388,7 @@
  {
   "state": "OH",
   "name": "NOACA / Ohio STIP projects in the Cleveland region",
-  "key": "region14",
-  "url": "https://services8.arcgis.com/GqBcgxMu2QWgtftB/arcgis/rest/services/STIP_Projects_(Lines)_view/FeatureServer/0",
-  "fields": {
-   "id": "PID_NBR",
-   "name": "PROJECT_NME",
-   "description": "DESCRIPTION",
-   "work_type": "PRIMARY_WORK_GROUP_NME",
-   "cost": "TOTAL_PROJECT_ESTIMATE_AMT",
-   "status": "STIP_PERIOD_PROJECT_PHASES",
-   "date": "AWARD_SFY",
-   "county": "PROJECT_LOCALES"
-  },
+  "key": "g7a9991d5c",
   "where": null,
   "unfiltered": true,
   "agency": "Northeast Ohio Areawide Coordinating Agency (Cleveland MPO) view of ODOT Ellis STIP data",
@@ -2306,18 +1402,7 @@
  {
   "state": "MA",
   "name": "Boston Region MPO TIP universe of unprogrammed projects",
-  "key": "region15",
-  "url": "https://services1.arcgis.com/jIRgb54Jq9V3BUeD/arcgis/rest/services/TIP_universe_unprogrammed/FeatureServer/0",
-  "fields": {
-   "id": "PROJIS",
-   "name": "Project_Name",
-   "description": "Notes",
-   "work_type": "Project_Type",
-   "cost": "TFPC",
-   "status": "Design_Status",
-   "date": "Date_of_Last_Update",
-   "county": "Municipality"
-  },
+  "key": "g962313649",
   "where": null,
   "unfiltered": true,
   "agency": "Boston Region MPO (CTPS); MassDOT and municipalities",
@@ -2331,18 +1416,7 @@
  {
   "state": "FL",
   "name": "MetroPlan Orlando TIP 2027-2031 projects (on High Injury Network)",
-  "key": "region16",
-  "url": "https://services3.arcgis.com/0gEhw9JctymdZD3f/arcgis/rest/services/TIP_Projects_on_HIN/FeatureServer/0",
-  "fields": {
-   "id": "FPN",
-   "name": "Project_Name",
-   "description": "Work_Description",
-   "work_type": "TIP_Component_Group",
-   "cost": "Total_Cost",
-   "status": "Status",
-   "date": "Adoption_Date",
-   "county": "County"
-  },
+  "key": "gb670e52c9",
   "where": null,
   "unfiltered": true,
   "agency": "MetroPlan Orlando (Orange, Osceola, Seminole counties MPO); FDOT District 5, counties, cities, CFX",
@@ -2356,18 +1430,7 @@
  {
   "state": "FL",
   "name": "MetroPlan Orlando 2050 MTP needs list",
-  "key": "region17",
-  "url": "https://services3.arcgis.com/0gEhw9JctymdZD3f/arcgis/rest/services/MTP_2050_Needs/FeatureServer/0",
-  "fields": {
-   "id": "MTP_ID_2050",
-   "name": "PROJECT_LIMITS",
-   "description": "PROJECT_DESCRIPTION",
-   "work_type": "NEEDS_TYPE_NAME",
-   "cost": "TOTAL_COST_PV",
-   "status": "PROJECT_COST_FEASIBILITY",
-   "date": null,
-   "county": "COUNTY"
-  },
+  "key": "g8286b9420",
   "where": null,
   "unfiltered": true,
   "agency": "MetroPlan Orlando; FDOT, counties, cities",
@@ -2381,18 +1444,7 @@
  {
   "state": "TX",
   "name": "H-GAC TIP 2027-2030 projects",
-  "key": "region18",
-  "url": "https://services1.arcgis.com/Z6SBWLWGRRejblAA/arcgis/rest/services/TIP_2027_2030_update_WFL1/FeatureServer/1",
-  "fields": {
-   "id": "MPOID",
-   "name": "STREET",
-   "description": "PROJ_DESCRIPTION",
-   "work_type": "Proj_Code",
-   "cost": "ESTIMATED_COST",
-   "status": "PHASE",
-   "date": "FISCAL__YR",
-   "county": "COUNTY"
-  },
+  "key": "g8f408d7d6",
   "where": null,
   "unfiltered": true,
   "agency": "Houston-Galveston Area Council (Houston MPO, 8 counties); TxDOT Houston/Beaumont districts, counties, cities, METRO",
@@ -2406,18 +1458,7 @@
  {
   "state": "TX",
   "name": "H-GAC 2045 RTP update projects",
-  "key": "region19",
-  "url": "https://services1.arcgis.com/Z6SBWLWGRRejblAA/arcgis/rest/services/RTP_2045_Update_WFL1/FeatureServer/2",
-  "fields": {
-   "id": "MPOID",
-   "name": "Street",
-   "description": "ProjectDescription",
-   "work_type": null,
-   "cost": "total",
-   "status": "RTP",
-   "date": null,
-   "county": "CountyName"
-  },
+  "key": "gaa4312fff",
   "where": null,
   "unfiltered": true,
   "agency": "Houston-Galveston Area Council",
@@ -2431,18 +1472,7 @@
  {
   "state": "TX",
   "name": "CAMPO 2050 Regional Transportation Plan projects (amended Fall 2026)",
-  "key": "region20",
-  "url": "https://services7.arcgis.com/geMZ3Gks6kWWkgOF/arcgis/rest/services/RTP_2050_amended_Fall_2026/FeatureServer/2",
-  "fields": {
-   "id": "MPO_ID",
-   "name": "Roadway",
-   "description": "Descriptio",
-   "work_type": "RTP_Projec",
-   "cost": "RTP___Proj",
-   "status": "Final_RTP_",
-   "date": "Fiscal_Yea",
-   "county": "County"
-  },
+  "key": "gc25c4365f",
   "where": null,
   "unfiltered": true,
   "agency": "Capital Area MPO (Austin, 6 counties); TxDOT Austin District, CTRMA, counties, cities",
@@ -2456,18 +1486,7 @@
  {
   "state": "VA",
   "name": "HRTPO 2050 LRTP fiscally constrained projects",
-  "key": "region21",
-  "url": "https://services3.arcgis.com/IFfZzsUkSirJaEqg/arcgis/rest/services/2050_LRTP_FC_Projects/FeatureServer/1",
-  "fields": {
-   "id": "ID_2050",
-   "name": "PRJ_NAME",
-   "description": "PRJ_DESC",
-   "work_type": "PRJ_TYPE",
-   "cost": "EST_COST",
-   "status": "FC_STATUS_NEW",
-   "date": null,
-   "county": "LOCALITY"
-  },
+  "key": "g69cd8c462",
   "where": null,
   "unfiltered": true,
   "agency": "Hampton Roads Transportation Planning Organization (Norfolk-Virginia Beach MPO); VDOT, HRTAC, cities",
@@ -2481,18 +1500,7 @@
  {
   "state": "NC",
   "name": "CAMPO (NC) / DCHC 2055 Metropolitan Transportation Plan roadway projects",
-  "key": "region22",
-  "url": "https://services7.arcgis.com/IJkew2K5L57QJsdx/arcgis/rest/services/MTP_2055_Projects_Live/FeatureServer/1",
-  "fields": {
-   "id": "PROJID",
-   "name": "Project_Name",
-   "description": "Proposed_Improvement",
-   "work_type": "Facility_Type_Future",
-   "cost": "Effective_MTP_Cost",
-   "status": "Proj_Complete",
-   "date": "Approved_Horizon_Year",
-   "county": "MPO"
-  },
+  "key": "gd2e406896",
   "where": null,
   "unfiltered": true,
   "agency": "NC Capital Area MPO (Raleigh) with Triangle West TPO (Durham-Chapel Hill); NCDOT, municipalities",
@@ -2506,18 +1514,7 @@
  {
   "state": "NV",
   "name": "RTC Southern Nevada RTP projects (Sept 2024 update)",
-  "key": "region23",
-  "url": "https://services3.arcgis.com/q5Jezm9AgzqyE7Q6/arcgis/rest/services/RTP_Projects_9172024_Update/FeatureServer/4",
-  "fields": {
-   "id": "ProjectID",
-   "name": "Project",
-   "description": null,
-   "work_type": "RTP_Strate",
-   "cost": null,
-   "status": null,
-   "date": "FundingYr",
-   "county": "Muni"
-  },
+  "key": "gf936cd238",
   "where": null,
   "unfiltered": true,
   "agency": "Regional Transportation Commission of Southern Nevada (Las Vegas MPO); Clark County, cities, NDOT",
@@ -2531,18 +1528,7 @@
  {
   "state": "AZ",
   "name": "PAG / RTA Next plan projects (Tucson)",
-  "key": "region24",
-  "url": "https://services7.arcgis.com/c7auENSOuNDDkLeY/arcgis/rest/services/RTANext_Projects_Update2/FeatureServer/1",
-  "fields": {
-   "id": "ProjectID",
-   "name": "Short_Description",
-   "description": "Project_Description",
-   "work_type": "Category",
-   "cost": "RTA_Project_Budgets__000s_",
-   "status": null,
-   "date": "Construction_Start_Period",
-   "county": null
-  },
+  "key": "g5b7ec7028",
   "where": null,
   "unfiltered": true,
   "agency": "Pima Association of Governments / Regional Transportation Authority of Pima County",
@@ -2556,18 +1542,7 @@
  {
   "state": "MD",
   "name": "Baltimore Region TIP 2027-2030 projects",
-  "key": "region25",
-  "url": "https://gis.baltometro.org/arcgis/rest/services/TIP2730/MapServer/2",
-  "fields": {
-   "id": "TIP_ID",
-   "name": "Project_Name",
-   "description": "Description",
-   "work_type": "Project_Type",
-   "cost": "Estimated_Total_Cost",
-   "status": null,
-   "date": "Year_of_Operation",
-   "county": "Location"
-  },
+  "key": "ge62505ef4",
   "where": null,
   "unfiltered": true,
   "agency": "Baltimore Regional Transportation Board at Baltimore Metropolitan Council; MDOT SHA, MDTA, counties, Baltimore City",
@@ -2581,18 +1556,7 @@
  {
   "state": "OH",
   "name": "MORPC TIP 2026-2029 projects",
-  "key": "region26",
-  "url": "https://services1.arcgis.com/EjjnBtwS9ivTGI8x/arcgis/rest/services/MORPC_TIP_segment_2026/FeatureServer/2",
-  "fields": {
-   "id": "PID",
-   "name": "Project_Name",
-   "description": "Project_Description",
-   "work_type": "MORPC_Project_Type",
-   "cost": "Total_Project_Estimate",
-   "status": null,
-   "date": null,
-   "county": null
-  },
+  "key": "g2de1b153e",
   "where": null,
   "unfiltered": true,
   "agency": "Mid-Ohio Regional Planning Commission (Columbus MPO); ODOT, counties, cities",
@@ -2606,18 +1570,7 @@
  {
   "state": "NY",
   "name": "NYMTC TIP 2023-2027 and Plan 2050 projects",
-  "key": "region27",
-  "url": "https://services1.arcgis.com/XYYbHZEGlLw0p2gz/arcgis/rest/services/TIP_biannual_update_2024_again/FeatureServer/3",
-  "fields": {
-   "id": "mpoPIN",
-   "name": "SmDescription",
-   "description": "LgDescription",
-   "work_type": "PTYPE",
-   "cost": "TIPCost",
-   "status": null,
-   "date": null,
-   "county": "County"
-  },
+  "key": "g7a534a428",
   "where": null,
   "unfiltered": true,
   "agency": "New York Metropolitan Transportation Council (NYC, Long Island, lower Hudson Valley MPO); NYSDOT, NYCDOT, MTA, counties",
@@ -2631,18 +1584,7 @@
  {
   "state": "NC",
   "name": "CRTPO 2050 MTP fiscally constrained projects",
-  "key": "region28",
-  "url": "https://services.arcgis.com/9Nl857LBlQVyzq54/arcgis/rest/services/CRTPO_2050MTP_FiscallyConstrained_Alignments/FeatureServer/0",
-  "fields": {
-   "id": "F2050_ID",
-   "name": "Project_Na",
-   "description": "Project_De",
-   "work_type": "Improvemen",
-   "cost": "Total_Proj",
-   "status": "F2050_MTP_",
-   "date": "Horizon_Ye",
-   "county": "County"
-  },
+  "key": "g0d447653f",
   "where": null,
   "unfiltered": true,
   "agency": "Charlotte Regional Transportation Planning Organization; NCDOT, Charlotte, towns",
@@ -2656,18 +1598,7 @@
  {
   "state": "NC",
   "name": "CRTPO STIP 2026-2035 projects",
-  "key": "region29",
-  "url": "https://services.arcgis.com/9Nl857LBlQVyzq54/arcgis/rest/services/CRTPO_STIP_2026_2035_lines/FeatureServer/0",
-  "fields": {
-   "id": "TIP",
-   "name": "Route",
-   "description": "Descriptio",
-   "work_type": "Mode",
-   "cost": "ProjectCos",
-   "status": null,
-   "date": "Constructi",
-   "county": null
-  },
+  "key": "ge73b716a4",
   "where": null,
   "unfiltered": true,
   "agency": "Charlotte Regional TPO; NCDOT STIP",
@@ -2681,18 +1612,7 @@
  {
   "state": "TN",
   "name": "GNRC 2050 Regional Transportation Plan candidate projects",
-  "key": "region30",
-  "url": "https://services3.arcgis.com/pXGyp7DHTIE4RXOJ/arcgis/rest/services/RTP2050_Lines/FeatureServer/1",
-  "fields": {
-   "id": "RTP2050",
-   "name": "Project_Name",
-   "description": "Description",
-   "work_type": "Category",
-   "cost": null,
-   "status": null,
-   "date": null,
-   "county": "Applicant_or_Sponsor"
-  },
+  "key": "g89c1d0a52",
   "where": null,
   "unfiltered": true,
   "agency": "Greater Nashville Regional Council (Nashville Area MPO); TDOT, counties, cities",
@@ -2706,18 +1626,7 @@
  {
   "state": "PA",
   "name": "SPC draft 2027-2030 TIP projects",
-  "key": "region31",
-  "url": "https://services3.arcgis.com/MV5wh5WkCMqlwISp/arcgis/rest/services/TIP_Projects_04_21_26_WFL1/FeatureServer/1",
-  "fields": {
-   "id": "MPMS",
-   "name": "Project__8",
-   "description": "Geograph_1",
-   "work_type": "Invest_Cat",
-   "cost": "Project_Es",
-   "status": "Status_1",
-   "date": null,
-   "county": "County"
-  },
+  "key": "gfae8fbe6b",
   "where": null,
   "unfiltered": true,
   "agency": "Southwestern Pennsylvania Commission (Pittsburgh MPO, 10 counties); PennDOT Districts 10/11/12, counties",
@@ -2731,18 +1640,7 @@
  {
   "state": "NY",
   "name": "GBNRTC TIP 2026-2030 projects",
-  "key": "region32",
-  "url": "https://services6.arcgis.com/9XyqfVdLev2tuM3Q/arcgis/rest/services/Map_TIP_2026_2030_WFL1/FeatureServer/1",
-  "fields": {
-   "id": "PIN_1",
-   "name": "PROJECT_NAME",
-   "description": "DESCRIPTION",
-   "work_type": "PRIMARY_WORK",
-   "cost": "TOTAL_PROJECT_COST_M",
-   "status": null,
-   "date": "FFY_1",
-   "county": "MUNCIPALITY"
-  },
+  "key": "gf83d3ab78",
   "where": null,
   "unfiltered": true,
   "agency": "Greater Buffalo-Niagara Regional Transportation Council; NYSDOT, Erie/Niagara counties, cities, NFTA",
@@ -2756,18 +1654,7 @@
  {
   "state": "OH",
   "name": "MVRPC TIP SFY2026-2029 projects",
-  "key": "region33",
-  "url": "https://services.arcgis.com/3TIUdMHOqnLBrZEH/arcgis/rest/services/TIP_26_29_lines/FeatureServer/5",
-  "fields": {
-   "id": "PID_NUM",
-   "name": "PidDescr_1",
-   "description": "PidDescr_1",
-   "work_type": null,
-   "cost": null,
-   "status": null,
-   "date": "CNSR_YR",
-   "county": null
-  },
+  "key": "g5bf304657",
   "where": null,
   "unfiltered": true,
   "agency": "Miami Valley Regional Planning Commission (Dayton MPO); ODOT, counties, cities",
@@ -2781,18 +1668,7 @@
  {
   "state": "KS",
   "name": "WAMPO TIP 2027-2030 projects",
-  "key": "region35",
-  "url": "https://services6.arcgis.com/Xj5oQOHmqKlB1HVs/arcgis/rest/services/TIP_2027_2030_AllProjects/FeatureServer/0",
-  "fields": {
-   "id": "WAMPO_ID",
-   "name": "ProjectTitle",
-   "description": "ProjectScope",
-   "work_type": "ProjectType",
-   "cost": "Total_Cost",
-   "status": "TIP_Action_27_30",
-   "date": null,
-   "county": null
-  },
+  "key": "g310df95c1",
   "where": null,
   "unfiltered": true,
   "agency": "Wichita Area MPO; KDOT, Sedgwick County, cities",
@@ -2806,18 +1682,7 @@
  {
   "state": "AL",
   "name": "RPCGB Birmingham TIP map 2025",
-  "key": "region36",
-  "url": "https://services1.arcgis.com/WUxqOZ70v5sx9tgs/arcgis/rest/services/TIP_Map_2025/FeatureServer/0",
-  "fields": {
-   "id": "PJ_REF_ID",
-   "name": "PJ_DS",
-   "description": "PJ_DS",
-   "work_type": "SCPE_ID",
-   "cost": "PJ_TOT_OBLG_AM",
-   "status": null,
-   "date": "FY_YR",
-   "county": "CNTY_NA"
-  },
+  "key": "g71072f2eb",
   "where": null,
   "unfiltered": true,
   "agency": "Regional Planning Commission of Greater Birmingham (Birmingham MPO); ALDOT, counties, cities",
@@ -2831,18 +1696,7 @@
  {
   "state": "LA",
   "name": "New Orleans RPC Metropolitan Transportation Plan projects 2026-2052",
-  "key": "region37",
-  "url": "https://services2.arcgis.com/rojlIZfHqM460MaC/arcgis/rest/services/MTP_Projects_2023_to_2052_(RPC_2022)_view/FeatureServer/0",
-  "fields": {
-   "id": "PROJ_NUM",
-   "name": "PROJ_NAME",
-   "description": null,
-   "work_type": "IMPROVEMEN",
-   "cost": "COST",
-   "status": "TIER1",
-   "date": "YEAR1",
-   "county": "PARISH"
-  },
+  "key": "gfd9bd9be5",
   "where": null,
   "unfiltered": true,
   "agency": "Regional Planning Commission (New Orleans MPO); LADOTD, parishes",
@@ -2856,18 +1710,7 @@
  {
   "state": "NJ",
   "name": "SJTPO TIP projects",
-  "key": "region39",
-  "url": "https://services8.arcgis.com/qJBnOryMWeD98jUc/arcgis/rest/services/TIP_Projects/FeatureServer/7",
-  "fields": {
-   "id": "DBNUM",
-   "name": "Project_Na",
-   "description": "Descriptio",
-   "work_type": "TYPE",
-   "cost": "TOTAL",
-   "status": "PHASE",
-   "date": "Year",
-   "county": "COUNTY"
-  },
+  "key": "g47af77a20",
   "where": null,
   "unfiltered": true,
   "agency": "South Jersey Transportation Planning Organization (Atlantic, Cape May, Cumberland, Salem); NJDOT, counties",
@@ -2881,18 +1724,7 @@
  {
   "state": "CO",
   "name": "PPACG regional transportation projects (TIP + 2050 LRTP)",
-  "key": "region40",
-  "url": "https://services1.arcgis.com/0plDVQODvYjBRQXP/arcgis/rest/services/PPACG_Regional_Transportation_Projects/FeatureServer/1",
-  "fields": {
-   "id": "TranProjID",
-   "name": "Proj_Name",
-   "description": "Proj_Desc",
-   "work_type": "ProjType1",
-   "cost": null,
-   "status": "ProjStatus",
-   "date": "PrgmCycle",
-   "county": null
-  },
+  "key": "g4afb58c08",
   "where": null,
   "unfiltered": true,
   "agency": "Pikes Peak Area Council of Governments (Colorado Springs MPO); CDOT, PPRTA, El Paso County, cities",
@@ -2906,18 +1738,7 @@
  {
   "state": "CO",
   "name": "NFRMPO FY2026-2029 TIP projects",
-  "key": "region41",
-  "url": "https://services.arcgis.com/rg9AaGGWmMwctQBj/arcgis/rest/services/2026___2029_TIP_Project_Map_WFL1/FeatureServer/1",
-  "fields": {
-   "id": "TIP_ID",
-   "name": "ProjectNam",
-   "description": null,
-   "work_type": "ProjectTyp",
-   "cost": null,
-   "status": "Status",
-   "date": null,
-   "county": "Sponsor"
-  },
+  "key": "gf1ed6df44",
   "where": null,
   "unfiltered": true,
   "agency": "North Front Range MPO (Fort Collins-Greeley); CDOT Region 4, cities, counties",
@@ -2931,18 +1752,7 @@
  {
   "state": "NV",
   "name": "RTC Washoe 2050 RTP project listing",
-  "key": "region42",
-  "url": "https://services1.arcgis.com/snfDNSrRKzTzlDky/arcgis/rest/services/RTP_Listing_Segment/FeatureServer/0",
-  "fields": {
-   "id": "WR_ID",
-   "name": "Project_1",
-   "description": "Limits_Des",
-   "work_type": "Type_1",
-   "cost": "Cost_Estim",
-   "status": "Funding_Da",
-   "date": null,
-   "county": "Street_Nam"
-  },
+  "key": "g09116aa61",
   "where": null,
   "unfiltered": true,
   "agency": "Regional Transportation Commission of Washoe County (Reno-Sparks MPO and road builder)",
@@ -2956,18 +1766,7 @@
  {
   "state": "FL",
   "name": "Forward Pinellas TIP projects",
-  "key": "region43",
-  "url": "https://services.arcgis.com/f5HgUpxURgEzTccH/arcgis/rest/services/TIP_2025_ANNUAL_FORMAT/FeatureServer/0",
-  "fields": {
-   "id": "PROJECT_ID",
-   "name": "PROJECT_NA",
-   "description": "DESCRIPTIO",
-   "work_type": "TYPE_FORM",
-   "cost": "TOT_COST_N",
-   "status": "PROJECTPHA",
-   "date": "PROJECTSTA",
-   "county": null
-  },
+  "key": "gb278c556d",
   "where": null,
   "unfiltered": true,
   "agency": "Forward Pinellas (Pinellas County MPO); FDOT District 7, county, cities",
@@ -2981,18 +1780,7 @@
  {
   "state": "FL",
   "name": "Sarasota/Manatee MPO TIP 2027-2031",
-  "key": "region44",
-  "url": "https://services8.arcgis.com/xkIkAiBGhCeWE8V7/arcgis/rest/services/TIP_2027_to_2031/FeatureServer/0",
-  "fields": {
-   "id": "ItemSeg",
-   "name": "Title",
-   "description": "Descriptio",
-   "work_type": "Type",
-   "cost": null,
-   "status": null,
-   "date": null,
-   "county": "County"
-  },
+  "key": "gcfe2a8e39",
   "where": null,
   "unfiltered": true,
   "agency": "Sarasota/Manatee MPO; FDOT District 1, counties, cities",
@@ -3006,18 +1794,7 @@
  {
   "state": "NY",
   "name": "CRTC (Albany NY) TIP 2025-2030",
-  "key": "region45",
-  "url": "https://services1.arcgis.com/xorYnnD8F76IMgFJ/arcgis/rest/services/2025_to_2030_Transportation_Improvement_Program/FeatureServer/12",
-  "fields": {
-   "id": "TIP_Number",
-   "name": "Prjct_Name",
-   "description": "Prjct_Desc",
-   "work_type": "Prjct_Typ2",
-   "cost": null,
-   "status": "DOT_Status",
-   "date": null,
-   "county": "County"
-  },
+  "key": "g4f0d19bab",
   "where": null,
   "unfiltered": true,
   "agency": "Capital Region Transportation Council (Albany-Schenectady-Troy MPO); NYSDOT, counties, cities",
@@ -3031,18 +1808,7 @@
  {
   "state": "NE",
   "name": "Lincoln MPO TIP program projects",
-  "key": "region46",
-  "url": "https://services1.arcgis.com/wpJGOi6N4Rq5cqFv/arcgis/rest/services/TIP_Program_Projects/FeatureServer/1",
-  "fields": {
-   "id": "TIP_ID",
-   "name": "PROJECT_NAME",
-   "description": "LOCATION",
-   "work_type": null,
-   "cost": null,
-   "status": "LIFECYCLESTATUS",
-   "date": "TIP_PROGRAM_YEAR",
-   "county": "JURISDICTION"
-  },
+  "key": "g33b630eda",
   "where": null,
   "unfiltered": true,
   "agency": "Lincoln MPO (City of Lincoln / Lancaster County, Nebraska); NDOT",
@@ -3056,18 +1822,7 @@
  {
   "state": "FL",
   "name": "FDOT SIS 2035-2050 Long Range Cost Feasible Plan",
-  "key": "region48",
-  "url": "https://services1.arcgis.com/O1JpcwDW8sjYuddV/arcgis/rest/services/CFP_Published_Web_Map_WFL1/FeatureServer/16",
-  "fields": {
-   "id": "PROJ_ID2",
-   "name": "NAME",
-   "description": "DESCRIPTIO",
-   "work_type": "IMPROVEMEN",
-   "cost": "DM_TOTAL",
-   "status": "HiPh",
-   "date": null,
-   "county": "DISTRICT2"
-  },
+  "key": "gb0ec86579",
   "where": null,
   "unfiltered": true,
   "agency": "Florida DOT Strategic Intermodal System office (includes Florida's Turnpike corridors)",
@@ -3081,18 +1836,7 @@
  {
   "state": "AZ",
   "name": "Maricopa Association of Governments TIP projects",
-  "key": "region49",
-  "url": "https://services1.arcgis.com/MdyCMZnX1raZ7TS3/arcgis/rest/services/TIP_data_gdb/FeatureServer/1",
-  "fields": {
-   "id": "dbo_vwTIPMapData_ProjectTIPCode",
-   "name": "dbo_vwTIPMapData_ProjectName",
-   "description": "dbo_vwTIPMapData_ProjectDescription",
-   "work_type": "dbo_vwTIPMapData_ProjectTypeName",
-   "cost": "dbo_vwTIPMapData_CostEstimate",
-   "status": "dbo_vwTIPMapData_Completed",
-   "date": "dbo_vwTIPMapData_DateActiveYear",
-   "county": "dbo_vwTIPMapData_AgencyName"
-  },
+  "key": "gce631bd5d",
   "where": null,
   "unfiltered": true,
   "agency": "Maricopa Association of Governments (Phoenix MPO); ADOT, Maricopa County, cities, Valley Metro",
@@ -3106,18 +1850,7 @@
  {
   "state": "TX",
   "name": "AAMPO TIP FY2027-2030 projects",
-  "key": "region50",
-  "url": "https://services1.arcgis.com/ZmHtsY5M3DRYt09u/arcgis/rest/services/TIP_2027_2030/FeatureServer/0",
-  "fields": {
-   "id": "MPO_NUM",
-   "name": "NAME",
-   "description": "DESCRIPTION",
-   "work_type": "TYPE_OF_WORK",
-   "cost": "TOTAL_PROJECT",
-   "status": "PHASE",
-   "date": "FisYear",
-   "county": "COUNTY"
-  },
+  "key": "g95cb897ef",
   "where": null,
   "unfiltered": true,
   "agency": "Alamo Area MPO (San Antonio); TxDOT San Antonio District, Bexar County, cities, VIA",
@@ -3131,18 +1864,7 @@
  {
   "state": "TX",
   "name": "AAMPO proposed Metropolitan Transportation Plan projects (May 2026)",
-  "key": "region51",
-  "url": "https://services1.arcgis.com/ZmHtsY5M3DRYt09u/arcgis/rest/services/Proposed_MTP_052026/FeatureServer/0",
-  "fields": {
-   "id": "MPO_NUM",
-   "name": "NAME",
-   "description": "DESCRIPTION",
-   "work_type": "TYPE_OF_WORK_NEW",
-   "cost": null,
-   "status": "Plan_Type",
-   "date": "FisYear",
-   "county": "COUNTY"
-  },
+  "key": "g03def0e53",
   "where": null,
   "unfiltered": true,
   "agency": "Alamo Area MPO",
@@ -3156,18 +1878,7 @@
  {
   "state": "VA",
   "name": "PlanRVA / RRTPO 2050 LRTP constrained plan projects",
-  "key": "region52",
-  "url": "https://services1.arcgis.com/7SazdyBTbp9w1Fga/arcgis/rest/services/Constrained_Plan/FeatureServer/0",
-  "fields": {
-   "id": "Prj_ID",
-   "name": "Project",
-   "description": "Prj_DESC",
-   "work_type": "Category",
-   "cost": "Cost_2030",
-   "status": null,
-   "date": null,
-   "county": null
-  },
+  "key": "gb43db2315",
   "where": null,
   "unfiltered": true,
   "agency": "Richmond Regional TPO (PlanRVA); VDOT, CVTA, counties, City of Richmond",
@@ -3181,18 +1892,7 @@
  {
   "state": "OR",
   "name": "Oregon Metro 2023 Regional Transportation Plan projects",
-  "key": "region53",
-  "url": "https://services2.arcgis.com/McQ0OlIABe29rJJy/arcgis/rest/services/Final2023RTP_projects_ALL_fullattr_View/FeatureServer/0",
-  "fields": {
-   "id": "RTP_ID",
-   "name": "Project_Name",
-   "description": "Description",
-   "work_type": "RTP_Investment_Category",
-   "cost": "Estimated_Cost__in_2023_dollars",
-   "status": "Status",
-   "date": "Time_Period",
-   "county": "County_or_counties"
-  },
+  "key": "g8e637ac39",
   "where": null,
   "unfiltered": true,
   "agency": "Metro (Portland OR MPO); ODOT, TriMet, counties, cities",
@@ -3206,18 +1906,7 @@
  {
   "state": "IN",
   "name": "Indianapolis MPO 2050 MTP projects",
-  "key": "region54",
-  "url": "https://services5.arcgis.com/qVN2o0aio8BMbwcJ/arcgis/rest/services/2050_MTP_Projects/FeatureServer/0",
-  "fields": {
-   "id": "PROJ_ID",
-   "name": "Descriptio",
-   "description": "Imprv_Type",
-   "work_type": "Imprv_Type",
-   "cost": "Total_Cost",
-   "status": null,
-   "date": "Time_Perio",
-   "county": "Sponsor"
-  },
+  "key": "gc838f3da9",
   "where": null,
   "unfiltered": true,
   "agency": "Indianapolis MPO; INDOT, counties, cities",
@@ -3231,18 +1920,7 @@
  {
   "state": "FL",
   "name": "Broward MPO 2050 MTP cost feasible plan projects",
-  "key": "region55",
-  "url": "https://services1.arcgis.com/vEO7zMZKFkKFr1Do/arcgis/rest/services/2050_MTP_CFP_3_25_2025_shp/FeatureServer/0",
-  "fields": {
-   "id": "MTP_ID",
-   "name": "Project_Na",
-   "description": "Project_De",
-   "work_type": "Primary_Wo",
-   "cost": "Total",
-   "status": null,
-   "date": null,
-   "county": "City"
-  },
+  "key": "gd479d9a2c",
   "where": null,
   "unfiltered": true,
   "agency": "Broward Metropolitan Planning Organization; FDOT District 4, Broward County, cities",
@@ -3256,18 +1934,7 @@
  {
   "state": "FL",
   "name": "Broward MPO 2025 TIP projects",
-  "key": "region56",
-  "url": "https://services1.arcgis.com/vEO7zMZKFkKFr1Do/arcgis/rest/services/2025_TIP/FeatureServer/0",
-  "fields": {
-   "id": "FM_",
-   "name": "Project_De",
-   "description": "Extra_De_1",
-   "work_type": "Type_of_Wo",
-   "cost": null,
-   "status": null,
-   "date": null,
-   "county": null
-  },
+  "key": "g3ad2242e5",
   "where": null,
   "unfiltered": true,
   "agency": "Broward Metropolitan Planning Organization",
@@ -3281,18 +1948,7 @@
  {
   "state": "CA",
   "name": "Fresno COG RTP project list (Feb 2025)",
-  "key": "region57",
-  "url": "https://services.arcgis.com/v2YXtBuIb8gr4ywi/arcgis/rest/services/RTP_list_2_18_2025/FeatureServer/0",
-  "fields": {
-   "id": "TIP_ID",
-   "name": "PROJECT_TITLE",
-   "description": "DESCRIPTION",
-   "work_type": "RANK_CATEGORY",
-   "cost": "CURRENT_",
-   "status": "CAPACITY_STATUS",
-   "date": "OPEN_TO_TRAFFIC",
-   "county": "AGENCY"
-  },
+  "key": "ga5bce4bb3",
   "where": null,
   "unfiltered": true,
   "agency": "Fresno Council of Governments; Caltrans District 6, Fresno County, cities",
@@ -3306,18 +1962,7 @@
  {
   "state": "NM",
   "name": "MRCOG TIP map (Albuquerque)",
-  "key": "region59",
-  "url": "https://mrcogmaps.org/server/rest/services/TIP_Map/TIP_Map_20260122/FeatureServer/0",
-  "fields": {
-   "id": "ControlNum",
-   "name": "PrjctTitle",
-   "description": null,
-   "work_type": "PrjctType",
-   "cost": null,
-   "status": null,
-   "date": "last_edited_date",
-   "county": "LeadAgency"
-  },
+  "key": "g5d56377b3",
   "where": null,
   "unfiltered": true,
   "agency": "Mid-Region Council of Governments / Mid-Region MPO; NMDOT, Bernalillo County, Albuquerque, Rio Rancho",
@@ -3331,18 +1976,7 @@
  {
   "state": "OK",
   "name": "Oklahoma Turnpike Authority ACCESS Oklahoma program projects (consultant copy)",
-  "key": "region62",
-  "url": "https://services7.arcgis.com/p6OX6CjG8lXHZvik/arcgis/rest/services/ACCESS_Projects_Public_2/FeatureServer/0",
-  "fields": {
-   "id": "DesignSegment",
-   "name": "Label",
-   "description": "Project",
-   "work_type": "Type",
-   "cost": "PrelimAmt",
-   "status": "ProjectStatus",
-   "date": "ExpStartDt",
-   "county": "Turnpike"
-  },
+  "key": "g0cb623f15",
   "where": null,
   "unfiltered": true,
   "agency": "Oklahoma Turnpike Authority (15-year ACCESS Oklahoma expansion program)",
@@ -3356,18 +1990,7 @@
  {
   "state": "FL",
   "name": "Florida's Turnpike work program 2024-2028 (consultant copy)",
-  "key": "region63",
-  "url": "https://services1.arcgis.com/9lDFdeC4JIBgML6L/arcgis/rest/services/Turnpike_Work_Program__2024_2028_/FeatureServer/4",
-  "fields": {
-   "id": "WPITEM_SEG",
-   "name": "DESCRIPTIO",
-   "description": "PROJECT_TY",
-   "work_type": "PROJECT_TY",
-   "cost": "AMOUNT",
-   "status": "PHASE",
-   "date": "FISCAL_YEA",
-   "county": "COUNTY_NAM"
-  },
+  "key": "gff02c043f",
   "where": null,
   "unfiltered": true,
   "agency": "Florida's Turnpike Enterprise (FDOT District 8)",
@@ -3381,18 +2004,7 @@
  {
   "state": "OH",
   "name": "Ohio Turnpike construction projects (points)",
-  "key": "region64",
-  "url": "https://services3.arcgis.com/i0P1AizjIwwAZiAU/arcgis/rest/services/ConstructionProjects_Points_7_20_26/FeatureServer/0",
-  "fields": {
-   "id": "ProjNO",
-   "name": "Decription",
-   "description": null,
-   "work_type": null,
-   "cost": null,
-   "status": "Status",
-   "date": "Schedule",
-   "county": null
-  },
+  "key": "gb312562fb",
   "where": null,
   "unfiltered": true,
   "agency": "Ohio Turnpike and Infrastructure Commission",
@@ -3406,16 +2018,7 @@
  {
   "state": "NH",
   "name": "NHDOT 10 Year Plan - Planning Projects (copy in The Nature Conservancy's NH_Transportation_Source_Data)",
-  "key": "state_0",
-  "url": "https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/NH_Transportation_Source_Data/FeatureServer/0",
-  "fields": {
-   "id": "L2In_Planning_PROJ_NUMBER",
-   "name": "L2In_Planning_PROJ_NAME",
-   "description": "L2In_Planning_PROJ_DESCRIPTION",
-   "status": "L2In_Planning_PROJECT_TYPE",
-   "cost": "L2In_Planning_PROJECT_DOLLARS",
-   "date": "L2In_Planning_AD_DATE"
-  },
+  "key": "g1ff5cc8e1",
   "where": null,
   "unfiltered": true,
   "agency": "New Hampshire DOT (copy hosted by The Nature Conservancy)",
@@ -3429,18 +2032,7 @@
  {
   "state": "NH",
   "name": "Nashua Regional Planning Commission MPO Projects Map - Ten-Year Plan Projects (Lines)",
-  "key": "state_1",
-  "url": "https://services6.arcgis.com/2ZriDy2NFXltCIFR/arcgis/rest/services/Nashua_MPO_Projects_Map/FeatureServer/5",
-  "fields": {
-   "id": "PROJECTNO",
-   "name": "LOCATION",
-   "description": "SUMMARY",
-   "work_type": "TYPE",
-   "cost": "COST",
-   "status": "STATUS",
-   "date": "YEAR",
-   "county": "MUN"
-  },
+  "key": "g0aa766283",
   "where": null,
   "unfiltered": true,
   "agency": "Nashua Regional Planning Commission (MPO) / NHDOT",
@@ -3454,18 +2046,7 @@
  {
   "state": "AR",
   "name": "ArDOT STIP 2023-2026 lines (STIP_2023_2026_Web_Map, real attribute fields)",
-  "key": "state_2",
-  "url": "https://services.arcgis.com/7cbqsWqMe170dJ3k/arcgis/rest/services/STIP_2023_2026_Web_Map_9_21_2023_WFL1/FeatureServer/1",
-  "fields": {
-   "id": "Job_No",
-   "name": "Job_Name",
-   "description": "Scope_Of_W",
-   "work_type": "Job_Type",
-   "cost": "Cost_Estim",
-   "status": "Status",
-   "date": "Federal_Fi",
-   "county": "County_No"
-  },
+  "key": "ga237c2439",
   "where": null,
   "unfiltered": true,
   "agency": "Arkansas DOT (ArDOT ArcGIS Online org)",
@@ -3479,15 +2060,7 @@
  {
   "state": "AR",
   "name": "ArDOT Highway Study E-Library - study corridors (DISPLAY_LINES)",
-  "key": "state_3",
-  "url": "https://services.arcgis.com/7cbqsWqMe170dJ3k/arcgis/rest/services/HighwayStudy_ELibrary/FeatureServer/10",
-  "fields": {
-   "id": "Library_Nu",
-   "name": "Title",
-   "work_type": "Document_Type",
-   "date": "Date",
-   "county": "County"
-  },
+  "key": "g853670a99",
   "where": null,
   "unfiltered": true,
   "agency": "Arkansas DOT Transportation Planning & Policy",
@@ -3501,17 +2074,7 @@
  {
   "state": "NV",
   "name": "RTC Southern Nevada - All RTC Roadway Projects (Las Vegas valley)",
-  "key": "state_5",
-  "url": "https://webgis.rtcsnv.com/arcgis/rest/services/MPO/ALL_RTC_ROADWAY_PROJECTS/FeatureServer/0",
-  "fields": {
-   "id": "RTC_PROJ_NUM",
-   "name": "PROJECT_NAME",
-   "description": "PROJ_DESCRIPTION",
-   "cost": "PROJECT_COST",
-   "status": "MPO_PHASE",
-   "date": "EST_CONSTR_START",
-   "county": "JURISDICTION"
-  },
+  "key": "g7d0e69071",
   "where": "MPO_STATUS = 'ACTIVE' AND MPO_PHASE IN ('Design','Design Complete','Soon to Advertise','Advertise','Pending Construction'); record_count given is for MPO_STATUS='ACTIVE' (856 lines in total incl. completed).",
   "unfiltered": false,
   "agency": "Regional Transportation Commission of Southern Nevada (funds county/city/NDOT road projects in Clark County)",
@@ -3525,16 +2088,7 @@
  {
   "state": "NV",
   "name": "RTC Southern Nevada Regional Transportation Plan 2025 projects - lines (RTP25 Projects ML1)",
-  "key": "state_6",
-  "url": "https://webgis.rtcsnv.com/arcgis/rest/services/MPO/RTC_RTP_Projects/MapServer/2",
-  "fields": {
-   "id": "ProjectID",
-   "name": "Project_Name",
-   "description": "Project_Description",
-   "work_type": "Strategy",
-   "date": "FundingYear",
-   "county": "Sponsor"
-  },
+  "key": "g2c81b3caf",
   "where": null,
   "unfiltered": true,
   "agency": "Regional Transportation Commission of Southern Nevada (MPO); sponsors include NDOT",
@@ -3548,16 +2102,7 @@
  {
   "state": "NV",
   "name": "RTC Washoe 2050 Regional Transportation Plan project listing - funded lines (Reno/Sparks)",
-  "key": "state_7",
-  "url": "https://services1.arcgis.com/snfDNSrRKzTzlDky/arcgis/rest/services/RTC_2050_Regional_Transportation_Plan_Draft_Project_Listing/FeatureServer/1",
-  "fields": {
-   "id": "WR_ID",
-   "name": "Project",
-   "description": "Descriptio",
-   "work_type": "Type",
-   "cost": "Cost_Estim",
-   "date": "Domain"
-  },
+  "key": "g7b8a1b15d",
   "where": null,
   "unfiltered": true,
   "agency": "Regional Transportation Commission of Washoe County (MPO and road builder)",
@@ -3571,17 +2116,7 @@
  {
   "state": "KS",
   "name": "Wichita Area MPO (WAMPO) TIP 2027-2030 All Projects (carries KDOT project IDs)",
-  "key": "state_10",
-  "url": "https://services6.arcgis.com/Xj5oQOHmqKlB1HVs/arcgis/rest/services/TIP_2027_2030_AllProjects/FeatureServer/0",
-  "fields": {
-   "id": "WAMPO_ID",
-   "name": "ProjectTitle",
-   "description": "ProjectScope",
-   "work_type": "ProjectType",
-   "cost": "Total_Cost",
-   "status": "TIP_Action_27_30",
-   "county": "LeadAgency"
-  },
+  "key": "gb06cac029",
   "where": null,
   "unfiltered": true,
   "agency": "Wichita Area Metropolitan Planning Organization; lead agencies KDOT, Wichita, Sedgwick County and cities",
@@ -3595,16 +2130,7 @@
  {
   "state": "IN",
   "name": "Indianapolis MPO Metropolitan Transportation Plan projects - current (MTP_2024Q3)",
-  "key": "state_11",
-  "url": "https://services5.arcgis.com/qVN2o0aio8BMbwcJ/arcgis/rest/services/MTP_2022Q1/FeatureServer/1",
-  "fields": {
-   "id": "PROJ_ID",
-   "name": "Descriptio",
-   "work_type": "Imprv_Type",
-   "cost": "Total_Cost",
-   "date": "Time_Perio",
-   "county": "Sponsor"
-  },
+  "key": "gee20ba3af",
   "where": null,
   "unfiltered": true,
   "agency": "Indianapolis Metropolitan Planning Organization; sponsors INDOT, counties and cities",
@@ -3618,17 +2144,7 @@
  {
   "state": "IN",
   "name": "INDOT STIP/TIP joined projects FY2026-2030 (INDOT's STIP consultant, partial)",
-  "key": "state_12",
-  "url": "https://services3.arcgis.com/zkfscBHttPaQwR4x/arcgis/rest/services/Total_Projects_tip_stip_joined/FeatureServer/0",
-  "fields": {
-   "id": "Join_DES",
-   "name": "Join_Proje",
-   "description": "Join_Locat",
-   "work_type": "Join_Prima",
-   "cost": "Join_Estim",
-   "status": "Join_Pha_2",
-   "county": "Join_Count"
-  },
+  "key": "g19a643163",
   "where": null,
   "unfiltered": true,
   "agency": "Indiana DOT / Indiana MPOs (hosted by INDOT's STIP consultant)",
@@ -3642,15 +2158,7 @@
  {
   "state": "NE",
   "name": "Lincoln MPO 2050 LRTP roadway project prioritization - linear projects (consultant web map)",
-  "key": "state_15",
-  "url": "https://services1.arcgis.com/bH0ZyWM4JffCJ4P5/arcgis/rest/services/Lincoln_LRTP_Roadway_Project_Prioritization_WebMap/FeatureServer/10",
-  "fields": {
-   "id": "ProjectID",
-   "name": "ProjectStr",
-   "description": "ProjectDes",
-   "status": "ProjStatus",
-   "county": "ProjectLea"
-  },
+  "key": "gea8e795ef",
   "where": null,
   "unfiltered": true,
   "agency": "Lincoln MPO / City of Lincoln, Lancaster County, NDOT (hosted by the plan's consultant)",
@@ -3664,18 +2172,7 @@
  {
   "state": "SC",
   "name": "SCDOT statewide Long Range Transportation Plan projects - corridors (LRTPCorridorProjects)",
-  "key": "state_17",
-  "url": "https://services1.arcgis.com/VaY7cY9pvUYUP1Lf/arcgis/rest/services/LRTPCorridorProjects/FeatureServer/0",
-  "fields": {
-   "id": "ProjectID",
-   "name": "Name",
-   "description": "Descriptio",
-   "work_type": "ProjectTyp",
-   "cost": "Anticipate",
-   "status": "ProjectSta",
-   "date": "ProjectYr",
-   "county": "CountyID"
-  },
+  "key": "gdeb245d10",
   "where": null,
   "unfiltered": true,
   "agency": "South Carolina DOT with the state's MPOs, COGs and sales-tax counties",
@@ -3689,18 +2186,7 @@
  {
   "state": "SC",
   "name": "SCDOT statewide Long Range Transportation Plan projects - intersections (LRTPIntersectionProjects)",
-  "key": "state_18",
-  "url": "https://services1.arcgis.com/VaY7cY9pvUYUP1Lf/arcgis/rest/services/LRTPIntersectionProjects/FeatureServer/0",
-  "fields": {
-   "id": "ProjectID",
-   "name": "Name",
-   "description": "Descriptio",
-   "work_type": "ProjectTyp",
-   "cost": "Anticipate",
-   "status": "ProjectSta",
-   "date": "ProjectYr",
-   "county": "CountyID"
-  },
+  "key": "g17c8df990",
   "where": null,
   "unfiltered": true,
   "agency": "South Carolina DOT with MPOs/COGs/counties",
@@ -3714,17 +2200,7 @@
  {
   "state": "UT",
   "name": "UDOT Right of Way parcels (ROW_UDOTParcels_LIVE)",
-  "key": "state_21",
-  "url": "https://maps.udot.utah.gov/central/rest/services/ROW/UDOT_Parcel_Update/MapServer/0",
-  "fields": {
-   "id": "PARCEL_NUMBER",
-   "name": "PIN_DESCRIPTION",
-   "description": "PROJECT_LOCATION",
-   "work_type": "PROPERTY_TYPE",
-   "status": "PROPERTY_STATUS",
-   "date": "ACQ_DATE",
-   "county": "COUNTY"
-  },
+  "key": "gb97e5e446",
   "where": "PROPERTY_STATUS IN ('Acquisition','Condemnation','Hold For Project','Relocation','Right of Entry')",
   "unfiltered": false,
   "agency": "Utah DOT Right of Way Division",
@@ -3738,16 +2214,7 @@
  {
   "state": "MO",
   "name": "MoDOT NEPA Inventory - environmental study corridors (EIS / EA / PEL)",
-  "key": "state_22",
-  "url": "https://mapping.modot.org/arcgis/rest/services/NEPA/Jobs/MapServer/1",
-  "fields": {
-   "id": "ROOT_JOB_NUMBER",
-   "name": "DOCUMENT_NAME",
-   "description": "LOCATION_DESCRIPTION",
-   "work_type": "NEPA_CLASSIFICATION",
-   "date": "NEPA_APPR_DATE",
-   "county": "COUNTY_NAME"
-  },
+  "key": "g95f1c4efc",
   "where": null,
   "unfiltered": true,
   "agency": "Missouri DOT Environmental",
@@ -3761,18 +2228,7 @@
  {
   "state": "SD",
   "name": "SDDOT STIP - Unprogrammed projects: Construction Reconstruction",
-  "key": "state_23",
-  "url": "https://dotgis.sd.gov/spearfishformation/rest/services/STIP/DOT_STIP_Unprogrammed/MapServer/2",
-  "fields": {
-   "id": "ProjectCtrlNbr",
-   "name": "LocDesc",
-   "description": "ImproveDesc",
-   "work_type": "ImprovTypeList",
-   "cost": "EstCost",
-   "status": "TranspProjectStatusCode",
-   "date": "ConstructionYear",
-   "county": "CountyList"
-  },
+  "key": "g7386d2efe",
   "where": null,
   "unfiltered": true,
   "agency": "South Dakota DOT",
@@ -3786,13 +2242,7 @@
  {
   "state": "MT",
   "name": "MDT Corridor Studies (planning corridor study lines)",
-  "key": "state_24",
-  "url": "https://gis.mtmdt.us/server/rest/services/MDTGIS/Corridor_Studies/MapServer/0",
-  "fields": {
-   "name": "NAME",
-   "status": "TYPE_",
-   "date": "DATE_END"
-  },
+  "key": "gc5d67c088",
   "where": null,
   "unfiltered": true,
   "agency": "Montana Department of Transportation",
@@ -3806,15 +2256,7 @@
  {
   "state": "IL",
   "name": "IDOT Annual Highway Improvement Program - Land Acquisition",
-  "key": "state_25",
-  "url": "https://services2.arcgis.com/aIrBD8yn1TDTEXoz/arcgis/rest/services/Annual_Highway_Improvement_Program/FeatureServer/3",
-  "fields": {
-   "id": "PPSProject",
-   "name": "Location",
-   "work_type": "Improvem_1",
-   "cost": "EstimatedC",
-   "description": "ProjectTam"
-  },
+  "key": "g16774a1fd",
   "where": null,
   "unfiltered": true,
   "agency": "Illinois DOT",
@@ -3828,15 +2270,7 @@
  {
   "state": "IL",
   "name": "IDOT Annual Highway Improvement Program - Engineering (projects in Phase I / Phase II development)",
-  "key": "state_26",
-  "url": "https://services2.arcgis.com/aIrBD8yn1TDTEXoz/arcgis/rest/services/Annual_Highway_Improvement_Program/FeatureServer/1",
-  "fields": {
-   "id": "PPSProject",
-   "name": "Location",
-   "work_type": "Improvem_1",
-   "cost": "EstimatedC",
-   "description": "ProjectTam"
-  },
+  "key": "gc978e8d0d",
   "where": null,
   "unfiltered": true,
   "agency": "Illinois DOT",
@@ -3850,18 +2284,7 @@
  {
   "state": "OH",
   "name": "ODOT (Ohio) STIP Projects - lines, with phases incl. right of way",
-  "key": "state_27",
-  "url": "https://tims.dot.state.oh.us/ags/rest/services/MapViewers/STIP_Projects__Lines_/MapServer/0",
-  "fields": {
-   "id": "PID_NBR",
-   "name": "PROJECT_NME",
-   "description": "DESCRIPTION",
-   "work_type": "PRIMARY_WORK_GROUP_NME",
-   "cost": "TOTAL_PROJECT_ESTIMATE_AMT",
-   "status": "STIP_PERIOD_PROJECT_PHASES",
-   "date": "AWARD_SFY",
-   "county": "PROJECT_LOCALES"
-  },
+  "key": "g5730913f8",
   "where": "CURRENT_STIP_PERIOD_IND = 'Y'",
   "unfiltered": false,
   "agency": "Ohio DOT",
@@ -3875,16 +2298,7 @@
  {
   "state": "MN",
   "name": "MnDOT Corridor Studies",
-  "key": "state_28",
-  "url": "https://services.arcgis.com/qWbGMYB49y8mLbRt/arcgis/rest/services/Del_Corridor_Studies_view/FeatureServer/0",
-  "fields": {
-   "name": "Study_Title",
-   "description": "Study_Description",
-   "work_type": "Classification",
-   "status": "Status",
-   "date": "Fiscal_Year",
-   "county": "County"
-  },
+  "key": "g30e53a62d",
   "where": null,
   "unfiltered": true,
   "agency": "Minnesota DOT",
@@ -3898,14 +2312,7 @@
  {
   "state": "VA",
   "name": "VDOT Potential Project Pipeline corridors (study locations)",
-  "key": "state_29",
-  "url": "https://services.arcgis.com/p5v98VHDX9Atv3l7/arcgis/rest/services/Potential_Project_Pipeline_Study_Locations/FeatureServer/0",
-  "fields": {
-   "id": "Corridor_ID",
-   "name": "Description",
-   "county": "Jurisdiction",
-   "status": "LocationFurtherStudy"
-  },
+  "key": "gf5fa5af4b",
   "where": null,
   "unfiltered": true,
   "agency": "Virginia DOT / Office of Intermodal Planning and Investment",
@@ -3919,12 +2326,7 @@
  {
   "state": "WV",
   "name": "WVDOT Corridor H sections status",
-  "key": "state_30",
-  "url": "https://services2.arcgis.com/xLpB90lOmCXYDAWo/arcgis/rest/services/CorridorH_Sections_Status_082826/FeatureServer/0",
-  "fields": {
-   "name": "Layer",
-   "status": "Status"
-  },
+  "key": "g491a293d4",
   "where": null,
   "unfiltered": true,
   "agency": "West Virginia Division of Highways",
@@ -3938,16 +2340,7 @@
  {
   "state": "GA",
   "name": "GDOT GeoPI Project Hub - Projects (official statewide project lines)",
-  "key": "state_31",
-  "url": "https://enterprisegis.dot.ga.gov/hosting/rest/services/GDOT_Public_Outreach/Project_Hub/MapServer/0",
-  "fields": {
-   "id": "PROJECT_ID",
-   "name": "PROJECT_NAME",
-   "description": "PROJECT_DESCR",
-   "work_type": "PRIMARY_WORK_TYPE",
-   "status": "STATUS",
-   "county": "COUNTIES"
-  },
+  "key": "gfc45efd3e",
   "where": "STATUS IN ('Construction Work Program','Long Range Program') AND GEOMETRY_SOURCE = 'TPRO Web'",
   "unfiltered": false,
   "agency": "Georgia DOT",
@@ -3961,14 +2354,7 @@
  {
   "state": "OK",
   "name": "Oklahoma County Improvements for Roads and Bridges (CIRB) 5-year plan FY2027 - road projects",
-  "key": "state_32",
-  "url": "https://services6.arcgis.com/RBtoEUQ2lmN0K3GY/arcgis/rest/services/CIRB_Projects_FY2027/FeatureServer/1",
-  "fields": {
-   "id": "C_JOB_PIECE",
-   "work_type": "T_PROJ_WORK_DESC",
-   "date": "PROGRAM_FED_YR",
-   "county": "PRIM_COUNTY"
-  },
+  "key": "gb08e85291",
   "where": null,
   "unfiltered": true,
   "agency": "Oklahoma DOT with county commissioners (county roads and bridges)",
@@ -3982,17 +2368,7 @@
  {
   "state": "HI",
   "name": "HDOT Project Status geometries - Design projects (ArcGIS copy of the Highways project system)",
-  "key": "state_33",
-  "url": "https://services.arcgis.com/HQ0xoN0EzDPBOEci/arcgis/rest/services/HIDOTProjectStatusGeometriesView/FeatureServer/9",
-  "fields": {
-   "id": "PROJECT_ID",
-   "name": "PROJECT_TITLE",
-   "description": "SCOPE",
-   "work_type": "category",
-   "cost": "COST_BAND",
-   "status": "CURR_PHASE",
-   "date": "NTP_DATE"
-  },
+  "key": "ge325614db",
   "where": null,
   "unfiltered": true,
   "agency": "Hawaii DOT Highways Division",
@@ -4006,16 +2382,7 @@
  {
   "state": "TX",
   "name": "TxDOT Right of Way - Proposed Parcels (ROW_ODP_Proposed_Parcels)",
-  "key": "state_34",
-  "url": "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/ROW_ODP_Proposed_Parcels/FeatureServer/0",
-  "fields": {
-   "id": "parcelunitid",
-   "name": "prcl_nbr",
-   "work_type": "PROPERTY_TYPE",
-   "status": "PARCEL_STAGE",
-   "county": "COUNTY",
-   "description": "PROJECT_CSJ_NBR"
-  },
+  "key": "g705f1f65b",
   "where": "PARCEL_STATUS = 'Active' AND PARCEL_STAGE IN ('New','Created','Appraised','Appraisal Reviewed','Appraisal Approved','Initial Offer','Final Offer','Pre-Litigation','Special Commissioner Phase','Trial Phase')",
   "unfiltered": false,
   "agency": "Texas DOT Right of Way Division",
