@@ -442,4 +442,7 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40) -> Dic
                                                "contacts": {}},
                                               separators=(",", ":")))
     (out / ".nojekyll").write_text("")
+    domain = (cfg.get("site") or {}).get("domain")
+    if domain:                       # GitHub Pages serves the snapshot at this address while the file is present
+        (out / "CNAME").write_text(domain.strip() + "\n")
     return {"projects": len(projects), "leads": len(leads)}

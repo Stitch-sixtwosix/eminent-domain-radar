@@ -2,6 +2,10 @@
 
 database: data/edradar.db
 
+# The public snapshot's own web address. Written into the published site so the host keeps serving it there.
+# site:
+#   domain: eminenttracker.com
+
 # Sent as the User-Agent to public APIs. Nominatim's usage policy asks for a contact here.
 user_agent: "edradar/0.1 (eminent-domain lead research)"
 

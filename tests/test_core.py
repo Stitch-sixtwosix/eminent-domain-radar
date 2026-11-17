@@ -128,7 +128,8 @@ def test_static_export(tmp_path):
     path = str(tmp_path / "t.db")
     seeded_db(path)
     from edradar.web.app import export_static
-    counts = export_static({"database": path}, str(tmp_path / "site"))
+    counts = export_static({"database": path, "site": {"domain": "example.test"}}, str(tmp_path / "site"))
+    assert (tmp_path / "site" / "CNAME").read_text() == "example.test\n"
     assert counts == {"projects": 1, "leads": 1}
     data = json.loads((tmp_path / "site" / "data.json").read_text())
     assert data["leads"][0]["owner"] == "Jane Roe" and data["stats"]["generated"]
