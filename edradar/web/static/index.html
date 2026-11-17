@@ -386,6 +386,11 @@
   }
   .demo .mode, .demo .done { display: none; }
   #f-state { height: 32px; max-width: 170px; }
+  .acct { flex: none; display: inline-flex; align-items: center; min-height: 32px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 6px;
+          font-size: 13px; font-weight: 500; color: var(--ink); text-decoration: none; white-space: nowrap; }
+  .acct:hover { background: var(--line); }
+  .acct:focus-visible { outline: 2px solid var(--accent, #17607a); outline-offset: 2px; }
+  .demo .acct { display: none; }
   #panes { display: none; }
   @media (max-width: 720px) {
     /* A phone shows one thing at a time: the project list, the map or the lead table, switched from a bar at the foot. */
@@ -472,6 +477,7 @@
   </div>
   <button id="btn-usage" hidden></button><button id="btn-template" hidden></button>
   <span class="mode" id="mode" hidden></span>
+  <a class="acct" id="acct" href="../account.html" hidden>My account</a>
 </header>
 <section id="hub" hidden aria-label="Outreach"></section>
 <main>
@@ -1660,6 +1666,7 @@ for (const id of ["f-county", "f-type", "f-source", "f-stage", "f-score", "f-q"]
   $("st-leads").textContent = s.leads.toLocaleString();
   $("st-owners").textContent = s.leads_with_owner.toLocaleString();
   const mode = $("mode");
+  if (window.ET_TOKEN) $("acct").hidden = false;      // signed-in firms on the published site: plan, billing, sign out
   if (STATIC) { mode.textContent = `Snapshot of ${s.generated || "an earlier run"}, read-only`; mode.hidden = false; }
   else {
     OUT = await api("/api/outreach/status");
