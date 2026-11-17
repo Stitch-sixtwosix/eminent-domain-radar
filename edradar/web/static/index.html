@@ -104,7 +104,9 @@
   /* ---- map ---- */
   #map { min-height: 0; background: var(--rail); }
   .leaflet-container { font: inherit; }
-  .leaflet-tile-pane { filter: saturate(.3) contrast(.94) brightness(1.04); }  /* quiet basemap so project lines lead */
+  /* quiet basemap so project lines lead. The filter sits on each tile image (rendered once and kept), not on the
+     pane: a filtered pane has to be redrawn whole on every frame of a zoom, which shows up as blank flashes. */
+  #map:not(.aerial) img.leaflet-tile { filter: saturate(.3) contrast(.94) brightness(1.04); }
   .leaflet-tooltip { font: 500 12.5px "IBM Plex Sans", sans-serif; color: var(--ink); border: 1px solid var(--line-strong);
                      border-radius: 5px; box-shadow: 0 4px 14px oklch(24% 0.03 258 / .14); }
   .leaflet-bar a { color: var(--ink); }
@@ -184,7 +186,6 @@
   .basemap button { height: 26px; padding: 0 10px; border: 0; font-size: 12.5px; background: transparent; }
   .basemap button[aria-pressed=true] { background: var(--ink); color: oklch(98.5% 0.004 258); }
   #map { position: relative; }
-  #map.aerial .leaflet-tile-pane { filter: none; }
 
   /* ---- stage list ---- */
   .stages { list-style: none; margin: 0; padding: 0; display: flex; }
@@ -447,7 +448,9 @@ const map = L.map("map", {preferCanvas: true, zoomSnap: 0, zoomDelta: 0.5, scrol
     const offset = anchorPoint.subtract(map.getSize().divideBy(2));
     const center = map.unproject(map.project(anchorLatLng, next).subtract(offset), next);
     if (!moving) { map._moveStart(true, false); moving = true; }
-    map._move(center, next);
+    // {pinch: true} is how Leaflet's own touch zoom moves the view: tiles on screen are only rescaled, and nothing
+    // is reloaded or discarded until the gesture ends. Without it every frame cancelled the tiles still loading.
+    map._move(center, next, {pinch: true, round: false});
     if (next === goal) { map._moveEnd(true); moving = false; goal = null; }
     else frame = requestAnimationFrame(step);
   };
@@ -463,20 +466,28 @@ const map = L.map("map", {preferCanvas: true, zoomSnap: 0, zoomDelta: 0.5, scrol
     if (!frame) frame = requestAnimationFrame(step);
   }, {passive: false});
 })();
-const BASE = {
-  map: L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19, keepBuffer: 6,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}),
-  aerial: L.tileLayer("https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", {maxZoom: 19, keepBuffer: 6,
-    attribution: "Imagery &copy; Esri, Maxar, Earthstar Geographics"}),
+// Each basemap is two layers. The sharp one loads tiles for the exact zoom, but only once a zoom gesture ends
+// (updateWhenZooming: false), so a fast zoom never starts and cancels tiles for every level it passes through.
+// Under it sits a coarse copy capped at zoom 7, about a dozen tiles for the whole state, which is always loaded.
+// While zooming, and wherever sharp tiles have not arrived yet, the coarse map shows through instead of a blank.
+const SOURCES = {
+  map: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png", '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'],
+  aerial: ["https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", "Imagery &copy; Esri, Maxar, Earthstar Geographics"],
 };
+const BASE = {}, UNDER = {};
+for (const [name, [url, attribution]] of Object.entries(SOURCES)) {
+  UNDER[name] = L.tileLayer(url, {maxZoom: 19, maxNativeZoom: 7, keepBuffer: 8, zIndex: 1});
+  BASE[name] = L.tileLayer(url, {maxZoom: 19, keepBuffer: 4, zIndex: 2, updateWhenZooming: false, attribution});
+}
 let baseName = "map", baseChosen = false;
 function setBase(name) {
   if (name === baseName) return;
-  map.removeLayer(BASE[baseName]); BASE[name].addTo(map).bringToBack(); baseName = name;
+  map.removeLayer(BASE[baseName]); map.removeLayer(UNDER[baseName]);
+  UNDER[name].addTo(map); BASE[name].addTo(map); baseName = name;
   $("map").classList.toggle("aerial", name === "aerial");
   document.querySelectorAll(".basemap button").forEach(b => b.setAttribute("aria-pressed", b.dataset.base === name));
 }
-BASE.map.addTo(map);
+UNDER.map.addTo(map); BASE.map.addTo(map);
 const parcelLayer = L.featureGroup().addTo(map);
 requestAnimationFrame(() => { map.invalidateSize(); if (!selected) map.fitBounds(HOME); });  // never undo a selection made first
 const group = L.featureGroup().addTo(map);
