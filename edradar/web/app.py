@@ -450,7 +450,8 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40) -> Dic
     # the service key must never be put here.
     web = cfg.get("site") or {}
     (site / "auth-config.js").write_text("window.ET_AUTH = %s;\n" % json.dumps(
-        {"url": web.get("supabase_url") or "", "key": web.get("supabase_anon_key") or ""}))
+        {"url": web.get("supabase_url") or "", "key": web.get("supabase_anon_key") or "",
+         "google": bool(web.get("supabase_google"))}))
     shutil.copytree(landing / "img", site / "img", dirs_exist_ok=True)
     for stale in ("data.json",):                 # the app used to live at the root
         (site / stale).unlink(missing_ok=True)

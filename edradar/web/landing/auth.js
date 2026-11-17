@@ -3,11 +3,12 @@
 const CFG = window.ET_AUTH || {};
 export const authOn = !!(CFG.url && CFG.key);
 if (authOn) document.documentElement.classList.add("auth-on");
+if (authOn && CFG.google) document.documentElement.classList.add("google-on");   // shown once the Google provider is enabled
 let client = null;
 export async function supa() {
   if (!authOn) return null;
   if (!client) {
-    const {createClient} = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm");
+    const {createClient} = await import("https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.57.4/+esm");
     client = createClient(CFG.url, CFG.key);
   }
   return client;

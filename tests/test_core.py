@@ -132,7 +132,7 @@ def test_static_export(tmp_path):
     assert (tmp_path / "site" / "CNAME").read_text() == "example.test\n"
     home = (tmp_path / "site" / "index.html").read_text()
     assert "for eminent domain attorneys" in home and "{{" not in home and (tmp_path / "site" / "signup.html").exists()
-    assert (tmp_path / "site" / "auth-config.js").read_text() == 'window.ET_AUTH = {"url": "", "key": ""};\n'
+    assert (tmp_path / "site" / "auth-config.js").read_text() == 'window.ET_AUTH = {"url": "", "key": "", "google": false};\n'
     assert (tmp_path / "site" / "login.html").exists() and (tmp_path / "site" / "account.html").exists()
     assert (tmp_path / "site" / "site.css").exists() and (tmp_path / "site" / "img" / "overview.jpg").exists()
     assert counts == {"projects": 1, "leads": 1}

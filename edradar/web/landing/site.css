@@ -201,6 +201,7 @@ form [aria-invalid="true"] { border-color: #a3270f; }
 
 /* ---- accounts ---- */
 html:not(.auth-on) .auth-only, html.auth-on .auth-off { display: none !important; }
+html:not(.google-on) .gate { display: none !important; }
 .gate { margin-bottom: 24px; }
 .btn.google { width: 100%; gap: 10px; background: var(--bg); color: var(--ink); border: 1.5px solid #c3c9c5; }
 .btn.google:hover { background: var(--tone); }

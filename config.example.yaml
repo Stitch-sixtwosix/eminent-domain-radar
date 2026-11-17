@@ -8,6 +8,7 @@ database: data/edradar.db
 #   # Accounts (email or Google sign-in) switch on when both are set. Use the project's public "anon" key only.
 #   supabase_url: https://YOUR-PROJECT.supabase.co
 #   supabase_anon_key: ""
+#   supabase_google: false        # true once the Google provider is enabled in Supabase
 
 # Sent as the User-Agent to public APIs. Nominatim's usage policy asks for a contact here.
 user_agent: "edradar/0.1 (eminent-domain lead research)"
