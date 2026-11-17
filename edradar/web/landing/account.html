@@ -90,6 +90,7 @@
 
 <script type="module">
 import {authOn, supa, firmOf, firmData, say, watch, valid} from "./auth.js";
+const invited = /type=(invite|recovery)/.test(location.hash);      // read before the sign-in library clears the address
 const form = document.getElementById("firm"), status = document.getElementById("status"), who = document.getElementById("who");
 if (!authOn) location.replace("signup.html");
 const s = await supa();
@@ -119,6 +120,8 @@ else {
   form.addEventListener("change", e => { if (e.target.name === "plan") syncPlan(); }); syncPlan();
   const agreed = !!(user.user_metadata || {}).agreed_terms_at, agreeRow = document.getElementById("agree-row");
   agreeRow.hidden = agreed; form.elements.agree.required = !agreed;       // people who signed up with Google agree here
+  if (invited) { const np = document.getElementById("newpass"); np.hidden = false; np.querySelector("input").required = true;
+    document.getElementById("nudge").textContent = "Welcome. Choose a password and add your firm's details to finish setting up."; document.getElementById("nudge").hidden = false; }
   form.hidden = false; watch(form);
   form.addEventListener("submit", async e => {
     e.preventDefault();
