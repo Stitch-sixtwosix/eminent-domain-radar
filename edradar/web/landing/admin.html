@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin · EminentTracker</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Your EminentTracker account. Built by eminent domain attorneys, for eminent domain attorneys.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7.5' fill='%231b2333'/%3E%3Cpath d='M8 5h16v4.200H12.200v13.600H24V27H8z' fill='%23fff'/%3E%3Cpath d='M12.200 13.900H32v4.200H12.200z' fill='%23e0662e'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<script src="auth-config.js"></script>
+</head>
+<body>
+
+<header class="bar">
+  <a class="brand" href="./" aria-label="EminentTracker home"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7.5" fill="#1b2333"/><path d="M8 5h16v4.200H12.200v13.600H24V27H8z" fill="#fff"/><path d="M12.200 13.900H32v4.200H12.200z" fill="#e0662e"/></svg><b>Eminent<span>Tracker</span></b></a>
+  <nav aria-label="Site">
+    <a href="./#how">What it does</a>
+    <a href="./#pricing">Pricing</a>
+    <a class="auth-only" href="login.html">Sign in</a>
+  </nav>
+</header>
+
+<main class="doc in admin" id="main">
+  <h1>Admin</h1>
+  <p class="updated" id="who">Checking who is signed in…</p>
+  <p class="status bad" id="err" role="alert" hidden></p>
+  <div id="panel" hidden>
+    <dl class="tiles" id="tiles"></dl>
+    <h2>Accounts</h2>
+    <p>Set a plan to open the app for an account. A change takes effect the next time that person signs in.</p>
+    <div class="tablewrap"><table id="accounts"><thead><tr><th>Account</th><th>Firm</th><th>Signed up</th><th>Last sign-in</th><th>Asked for</th><th>Access</th><th></th></tr></thead><tbody></tbody></table></div>
+    <h2>Not tracked yet</h2>
+    <p>Payments and renewals appear here once Stripe is live. How often each firm opens the app, and how many postcards or emails they send, is not recorded yet.</p>
+  </div>
+</main>
+
+<footer>
+  <div class="in">
+    <span>© 2026 EminentTracker, a product of Duerr Imports, LLC</span>
+    <nav aria-label="Footer"><a href="blog/">Blog</a><a href="terms.html">Terms of use</a><a href="privacy.html">Privacy</a><a href="compliance.html">Compliance</a><a href="privacy.html#owners">Property owners: opt out</a><a href="signup.html">Sign up</a><a class="auth-only" href="login.html">Sign in</a><a href="mailto:{{contact_email}}?subject=EminentTracker">Contact</a></nav>
+    <div class="rules">
+      <p><b>Rules this service is run under.</b> Subscribers agree to follow them; the software enforces the ones it can. <a href="compliance.html">Read the full compliance page.</a></p>
+      <ul>
+        <li>State rules of professional conduct on lawyer advertising and solicitation (ABA Model Rules 7.1 to 7.3 and each state’s version)</li>
+        <li>CAN-SPAM Act for commercial email</li>
+        <li>Telephone Consumer Protection Act, the National Do Not Call Registry and state telemarketing laws</li>
+        <li>Fair Credit Reporting Act: data may not be used for credit, employment, insurance or tenant decisions</li>
+        <li>Deceptive Mail Prevention and Enforcement Act and U.S. Postal Service mailing standards</li>
+        <li>State privacy laws and each public agency’s terms for using its records</li>
+      </ul>
+    </div>
+    <p class="legal">EminentTracker is a research and marketing tool for licensed attorneys. It is not a law firm, does not give legal advice and does not create an attorney-client relationship. Records come from public sources and can be incomplete or out of date. A project on a planning list may never take any land, and appearing here does not mean a property will be taken. Map data © OpenStreetMap contributors.</p>
+  </div>
+</footer>
+<script type="module">
+import {authOn, supa} from "./auth.js";
+const $ = id => document.getElementById(id), esc = t => String(t == null ? "" : t).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const day = t => t ? new Date(t).toLocaleDateString(undefined, {year: "numeric", month: "short", day: "numeric"}) : "never";
+const STATES = "{{state_names}}".split("|");
+if (!authOn) location.replace("./");
+const s = await supa(), {data} = await s.auth.getSession();
+if (!data.session) location.replace("login.html");
+else if ((data.session.user.app_metadata || {}).role !== "admin") { $("who").textContent = "Signed in as " + data.session.user.email + "."; $("err").textContent = "This account is not an administrator."; $("err").hidden = false; }
+else { $("who").textContent = "Signed in as " + data.session.user.email + " (administrator)."; load(); }
+
+async function load() {
+  const {data: rows, error} = await s.rpc("admin_overview");
+  if (error) { $("err").textContent = "The account list could not be loaded: " + error.message; $("err").hidden = false; return; }
+  $("err").hidden = true; $("panel").hidden = false;
+  const active = rows.filter(r => r.access === "active" && r.role !== "admin"), single = active.filter(r => r.plan !== "all").length, all = active.filter(r => r.plan === "all").length;
+  const week = rows.filter(r => Date.now() - new Date(r.created_at) < 7 * 864e5).length;
+  $("tiles").innerHTML = [["Sign-ups", rows.length], ["New in 7 days", week], ["Email confirmed", rows.filter(r => r.confirmed).length],
+    ["Active subscriptions", active.length], ["Single state", single], ["All states", all], ["Monthly value at list price", "$" + (single * 499 + all * 999).toLocaleString()]]
+    .map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("");
+  document.querySelector("#accounts tbody").innerHTML = rows.map(r => {
+    const cur = r.access === "active" ? (r.plan === "all" ? "all" : "single") : "none";
+    return `<tr data-id="${r.id}"><td><b>${esc(r.email)}</b><span>${esc(r.full_name || "")}${r.role === "admin" ? " · administrator" : ""}${r.confirmed ? "" : " · email not confirmed"}${r.provider === "google" ? " · Google" : ""}</span></td>
+      <td>${esc(r.firm || "")}<span>${esc(r.location || "")}${r.phone ? " · " + esc(r.phone) : ""}</span></td>
+      <td>${day(r.created_at)}<span>${r.agreed_terms_at ? "agreed to terms" : "terms not agreed"}</span></td><td>${day(r.last_sign_in_at)}</td>
+      <td>${esc((r.chosen_plan || "").replace(/ \(.*/, ""))}<span>${esc(r.chosen_state || "")}</span></td>
+      <td><select data-plan aria-label="Plan for ${esc(r.email)}"><option value="none"${cur === "none" ? " selected" : ""}>No access</option><option value="single"${cur === "single" ? " selected" : ""}>Single state</option><option value="all"${cur === "all" ? " selected" : ""}>All states</option></select>
+        <select data-state aria-label="State for ${esc(r.email)}"${cur === "single" ? "" : " hidden"}>${STATES.map(n => `<option${(r.state || r.chosen_state || "").toLowerCase() === n.toLowerCase() ? " selected" : ""}>${n}</option>`).join("")}</select></td>
+      <td><button class="btn small" data-save>Save</button></td></tr>`; }).join("");
+}
+document.querySelector("#accounts").addEventListener("change", e => { if (e.target.matches("[data-plan]")) e.target.closest("tr").querySelector("[data-state]").hidden = e.target.value !== "single"; });
+document.querySelector("#accounts").addEventListener("click", async e => {
+  const b = e.target.closest("[data-save]"); if (!b) return;
+  const tr = b.closest("tr"), plan = tr.querySelector("[data-plan]").value, state = tr.querySelector("[data-state]").value;
+  b.disabled = true; b.textContent = "Saving…";
+  const {error} = await s.rpc("admin_set_access", {target: tr.dataset.id, new_access: plan === "none" ? "none" : "active", new_plan: plan === "all" ? "all" : "single", new_state: plan === "single" ? state.toLowerCase() : ""});
+  if (error) { $("err").textContent = "Not saved: " + error.message; $("err").hidden = false; b.disabled = false; b.textContent = "Save"; return; }
+  b.textContent = "Saved"; setTimeout(load, 700);
+});
+</script>
+</body>
+</html>

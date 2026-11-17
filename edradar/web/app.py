@@ -568,7 +568,8 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
     live = (cfg.get("site") or {}).get("live_states") or ["Pennsylvania"]
     fill["live_states"] = ", ".join(live)
     fill["state_options"] = "".join('<option value="%s">%s%s</option>' % (n, n, "" if n in live else " (coming)") for n in US_STATES)
-    for name in ("index.html", "signup.html", "login.html", "account.html", "terms.html", "privacy.html", "compliance.html"):
+    fill["state_names"] = "|".join(US_STATES)
+    for name in ("index.html", "signup.html", "login.html", "account.html", "terms.html", "privacy.html", "compliance.html", "admin.html"):
         page = (landing / name).read_text()
         for k, v in fill.items():
             page = page.replace("{{%s}}" % k, v)
@@ -625,7 +626,7 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
     (out / "index.html").write_text(html)
     (site / ".nojekyll").write_text("")
     domain = (cfg.get("site") or {}).get("domain")
-    (site / "robots.txt").write_text("User-agent: *\nDisallow: /app/\nDisallow: /account.html\n"
+    (site / "robots.txt").write_text("User-agent: *\nDisallow: /app/\nDisallow: /account.html\nDisallow: /admin.html\n"
                                      + ("Sitemap: https://%s/sitemap.xml\n" % domain if domain else ""))
     domain = (cfg.get("site") or {}).get("domain")
     if domain:                       # GitHub Pages serves the snapshot at this address while the file is present

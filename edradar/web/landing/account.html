@@ -36,7 +36,7 @@
         <p style="margin-top: 12px; font-size: 14px" id="sub-soon" hidden>Online payment is being switched on. Email <a href="mailto:{{contact_email}}?subject=EminentTracker%20subscription">{{contact_email}}</a> and we will activate your plan today.</p>
       </div>
     </div>
-    <p style="font-size: var(--s-small); margin-top: 20px"><button class="linkish" type="button" id="out">Sign out</button></p>
+    <p style="font-size: var(--s-small); margin-top: 20px"><a href="admin.html" id="admin-link" hidden>Admin</a> <button class="linkish" type="button" id="out">Sign out</button></p>
   </div>
   <div>
     <form class="card" id="firm" novalidate hidden>
@@ -101,6 +101,7 @@ else {
   who.textContent = "Signed in as " + user.email + ".";
   // What the account may open is set by us when payment is confirmed; nothing on this page can change it.
   const plan = user.app_metadata || {}, active = plan.access === "active";
+  document.getElementById("admin-link").hidden = plan.role !== "admin";
   document.getElementById("sub").hidden = false;
   document.getElementById("sub-status").textContent = active
     ? "Subscription active: " + (plan.plan === "all" ? "all 50 states" : "single state" + (plan.state ? ", " + plan.state.replace(/\b\w/g, c => c.toUpperCase()) : "")) + "."
