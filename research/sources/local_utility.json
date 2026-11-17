@@ -3943,6 +3943,786 @@
     "Ongoing": 62,
     "Planning": 39
    }
+  },
+  {
+   "name": "Los Angeles County Public Works Stormwater Projects",
+   "authority": "Los Angeles County Public Works / LA County Flood Control District",
+   "states": [
+    "CA"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/RmCCgQtiZLDCtblq/arcgis/rest/services/PW_Stormwater_Projects/FeatureServer/0",
+   "verified": true,
+   "record_count": 75,
+   "geometry": "point",
+   "fields": {
+    "id": "Id",
+    "name": "ProjName",
+    "description": "Watershed",
+    "status": "Phase",
+    "work_type": "Section"
+   },
+   "planned_filter": "Phase IN ('Planning','Design')",
+   "sample": "{\"Id\": \"56\", \"Phase\": \"Planning\", \"Watershed\": \"USCR\", \"ProjName\": \"Pico Canyon Park Stormwater Improvement Projects\", \"Section\": \"West\"}",
+   "restrictions": null,
+   "notes": "Stormwater capture projects (many in parks). Item last modified 2025-02.",
+   "status_values": {
+    "Completed": 11,
+    "Construction": 3,
+    "Design": 8,
+    "Planning": 53
+   }
+  },
+  {
+   "name": "San Antonio Bond Projects (points)",
+   "authority": "City of San Antonio",
+   "states": [
+    "TX"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/g1fRTDLeMgspWrYp/arcgis/rest/services/BondProject/FeatureServer/0",
+   "verified": true,
+   "record_count": 370,
+   "geometry": "point",
+   "fields": {
+    "name": "Project_Name",
+    "description": "Project_Comments",
+    "cost": "Total_Budget",
+    "status": "Phase",
+    "date": "Construction_Start_Date",
+    "county": "Council_District",
+    "work_type": "Proposition"
+   },
+   "planned_filter": "Phase='Design'  (others: Construction, Complete, Cancelled); Bond_Year gives the bond programme",
+   "sample": "{\"Project_Name\": \"1604/Bulverde Road Turanarounds\", \"Proposition\": \"Streets\", \"Phase\": \"Complete\", \"Council_District\": \"10\", \"Construction_Start_Date\": \"Summer 2018\", \"Total_Budget\": \"477597\"}",
+   "restrictions": null,
+   "notes": "",
+   "status_values": {
+    "Cancelled": 6,
+    "Complete": 256,
+    "Construction": 68,
+    "Design": 40
+   },
+   "group": "sa_bond"
+  },
+  {
+   "name": "San Antonio Bond Projects (lines)",
+   "authority": "City of San Antonio",
+   "states": [
+    "TX"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/g1fRTDLeMgspWrYp/arcgis/rest/services/BondProjectLine/FeatureServer/0",
+   "verified": true,
+   "record_count": 134,
+   "geometry": "polyline",
+   "fields": {
+    "id": "Project_No",
+    "name": "Project_Name",
+    "description": "Scope",
+    "cost": "Total_Budget",
+    "status": "Phase",
+    "date": "Construction_Start_Date",
+    "county": "Council_District",
+    "work_type": "Proposition"
+   },
+   "planned_filter": "Phase='Design'",
+   "sample": "{\"Project_No\": \"23-01558\", \"Project_Name\": \"1604/Bulverde Road Turanarounds\", \"Proposition\": \"Streets\", \"Phase\": \"Complete\", \"Council_District\": \"10\", \"Construction_Start_Date\": \"Summer 2018\", \"Total_Budget\": \"477597.23\", \"Scope\": \"Leverage funds toward construction of turnarounds under the North 1604/Bulverde intersection. Cost reflects City of San Antonio’s contribution to a proposed fed\"}",
+   "restrictions": null,
+   "notes": "Street, drainage and bridge bond projects with Scope text.",
+   "status_values": {
+    "Cancelled": 1,
+    "Complete": 74,
+    "Construction": 30,
+    "Design": 29
+   },
+   "group": "sa_bond"
+  },
+  {
+   "name": "Boston Coastal Resilience Project Tracking",
+   "authority": "City of Boston",
+   "states": [
+    "MA"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/sFnw0xNflSi8J0uh/arcgis/rest/services/coastal_resilience_project_tracking_ViewOnly/FeatureServer/0",
+   "verified": true,
+   "record_count": 40,
+   "geometry": "polygon",
+   "fields": {
+    "name": "title",
+    "description": "Notes",
+    "status": "Status",
+    "county": "Neighborhood"
+   },
+   "planned_filter": "Status IN ('Future Focus Area','Design','Permitting')",
+   "sample": "{\"title\": \"1141 Bennington Street\", \"Neighborhood\": \"East Boston\", \"Status\": \"Permitting\", \"Notes\": \"For more information, please visit the following link: <a href=\\\"https://www.bostonplans.org/projects/development-projects/1141-bennington-street\\\"_top\\\">1141 Benn\"}",
+   "restrictions": null,
+   "notes": "Flood barriers and waterfront elevation projects; PropertyOwner and Ownership fields say whose land is involved.",
+   "status_values": {
+    "Completed": 6,
+    "Design": 15,
+    "Future Focus Area": 13,
+    "In Construction": 3,
+    "Permitting": 3
+   }
+  },
+  {
+   "name": "Detroit Streetscape Projects",
+   "authority": "City of Detroit DPW",
+   "states": [
+    "MI"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Streetscape_Projects/FeatureServer/41",
+   "verified": true,
+   "record_count": 32,
+   "geometry": "polyline",
+   "fields": {
+    "name": "Road_Name",
+    "description": "Scope",
+    "cost": "Estimated_Cost",
+    "status": "Status",
+    "date": "Year",
+    "county": "District"
+   },
+   "planned_filter": "Status='Design'",
+   "sample": "{\"Road_Name\": \"Livernois\", \"Year\": \"2019\", \"Status\": \"Completed\", \"District\": \"D2\", \"Estimated_Cost\": \"$19.73M\", \"Scope\": \"Reconstruction, Reconfigured Travel Lanes, Wider Sidewalks, Bike Lanes\"}",
+   "restrictions": null,
+   "notes": "Corridor reconstructions; small list (32).",
+   "status_values": {
+    "Completed": 17,
+    "Construction": 3,
+    "Design": 12
+   }
+  },
+  {
+   "name": "Tucson / Pima RTA Next Roadway Projects",
+   "authority": "Regional Transportation Authority of Pima County / City of Tucson",
+   "states": [
+    "AZ"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services3.arcgis.com/9coHY2fvuFjG9HQX/arcgis/rest/services/RTA_Next__Roadway_Projects_HFL/FeatureServer/1",
+   "verified": true,
+   "record_count": 14,
+   "geometry": "polyline",
+   "fields": {
+    "id": "ProjectID",
+    "name": "ProjectName",
+    "description": "Location_Desc",
+    "work_type": "Type",
+    "status": "Status",
+    "date": "FY_Planned",
+    "county": "Ward"
+   },
+   "planned_filter": "Status IN ('Planned','Design')",
+   "sample": "{\"ProjectName\": \"RTA Next #14: Drexel Road Modernization\", \"Ward\": \"5\", \"Type\": \"Roadway\", \"ProjectID\": \"TBD\", \"Status\": \"Planned\", \"FY_Planned\": \"2032\"}",
+   "restrictions": null,
+   "notes": "Voter-approved RTA Next road widenings and modernisations; companion service RTA_One__Roadway_Projects_HFL holds the first RTA plan.",
+   "status_values": {
+    "Design": 2,
+    "Planned": 12
+   }
+  },
+  {
+   "name": "Fresno capital projects (approximate project location)",
+   "authority": "City of Fresno",
+   "states": [
+    "CA"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/WkBUojyNPhsWOk1W/arcgis/rest/services/COF_PROJECTCENTROID_PUBLIC/FeatureServer/17",
+   "verified": true,
+   "record_count": 1008,
+   "geometry": "point",
+   "fields": {
+    "id": "ProjectID",
+    "name": "ProjectName",
+    "description": "Scope",
+    "work_type": "ProjectType",
+    "status": "ProjectStatus",
+    "date": "NTP_date",
+    "county": "District"
+   },
+   "planned_filter": "ProjectStatus='active' and Curr_Phase not construction/closeout (Curr_Phase holds the phase text)",
+   "sample": "{\"ProjectName\": \"Terminal Refresh\", \"ProjectID\": \"AP00001\", \"ProjectStatus\": \"active\", \"Scope\": \"Modernize existing Terminal finishes\", \"District\": \"4\", \"ProjectType\": \"operational\", \"NTP_date\": \"1738540800000\"}",
+   "restrictions": null,
+   "notes": "Point per city capital project, all departments. Item last modified 2025-04.",
+   "status_values": {
+    "closed": 456,
+    "active": 552
+   }
+  },
+  {
+   "name": "Atlanta Beltline Trail Sections - project status",
+   "authority": "Atlanta Beltline, Inc.",
+   "states": [
+    "GA"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://gis.beltline.org/server/rest/services/ABI_Trails_Sections_public/FeatureServer/0",
+   "verified": true,
+   "record_count": 36,
+   "geometry": "polyline",
+   "fields": {
+    "name": "segmentname",
+    "work_type": "abitrailtype",
+    "status": "projectstatus",
+    "date": "construction_date",
+    "county": "council_district",
+    "id": "segmentid",
+    "description": "extent"
+   },
+   "planned_filter": "projectstatus IN ('Design','Shovel Ready')",
+   "sample": "{\"segmentid\": \"TRL-EST-1 & TRL-EST-2\", \"segmentname\": \"Eastside Trail - Segments 1 & 2\", \"abitrailtype\": \"Main\", \"projectstatus\": \"Complete\", \"extent\": \"Memorial Dr to Irwin St\"}",
+   "restrictions": null,
+   "notes": "Beltline trail/transit corridor segments; ABI acquires right-of-way for unbuilt segments.",
+   "status_values": {
+    "Construction": 3,
+    "Complete": 19,
+    "Design": 3,
+    "Shovel Ready": 11
+   }
+  },
+  {
+   "name": "Minneapolis 2027 Construction Map (bike/pedestrian layer; 12 layers in service)",
+   "authority": "City of Minneapolis Public Works",
+   "states": [
+    "MN"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/afSMGVsC7QlRK1kZ/arcgis/rest/services/2027_Mpls_Construction_Map/FeatureServer/9",
+   "verified": true,
+   "record_count": 6,
+   "geometry": "polyline",
+   "fields": {
+    "description": "PROJECT_DESCRIPTION",
+    "work_type": "PROJECT_TYPE",
+    "date": "PROJECT_START_YEAR",
+    "name": "PROJECT_DESCRIPTION"
+   },
+   "planned_filter": "Whole service is next-year planned work; services 2027_Mpls_Construction_Map and 2028_Mpls_Construction_Map exist (same schema, layers 1-12 by work type). PROJECT_START_YEAR >= current year.",
+   "sample": "{\"PROJECT_DESCRIPTION\": \"2nd St N Bikeway\", \"PROJECT_TYPE\": \"Protected Bikeways Program\", \"PROJECT_START_YEAR\": \"2027\"}",
+   "restrictions": null,
+   "notes": "Mostly paving, alley and utility work inside existing right-of-way; low eminent-domain value but a clean planned-work feed."
+  },
+  {
+   "name": "New Orleans DPW Roadwork Projects",
+   "authority": "City of New Orleans Department of Public Works",
+   "states": [
+    "LA"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://gis.nola.gov/arcgis/rest/services/Transportation/DPWRoadWorkProjects/MapServer/0",
+   "verified": true,
+   "record_count": 10233,
+   "geometry": "polyline",
+   "fields": {
+    "id": "PROJID",
+    "name": "Project_Name",
+    "description": "CONSTTYPE",
+    "work_type": "PROJTYPE",
+    "cost": "Total_Cost",
+    "status": "Current_Phase",
+    "date": "StartQtr",
+    "county": "COUNCILDST"
+   },
+   "planned_filter": "Current_Phase='Planned'",
+   "sample": "{\"PROJID\": \"RR186\", \"COUNCILDST\": \"Council District E\", \"CONSTTYPE\": \"Patch Mill/Overlay\", \"PROJTYPE\": \"RR\", \"Project_Name\": \"Viavant-Lake Catherine Group C (VAR)\", \"Current_Phase\": \"Complete\", \"StartQtr\": \"06/15/2020\", \"Total_Cost\": \"8580860.62\"}",
+   "restrictions": null,
+   "notes": "Street reconstruction by block segment (10,233 segments). SWBRoadWorkProjects MapServer in the same folder holds Sewerage & Water Board work.",
+   "status_values": {
+    "Complete": 8688,
+    "Construction": 1310,
+    "Planned": 235
+   }
+  },
+  {
+   "name": "Hillsborough County CIP projects",
+   "authority": "Hillsborough County, Florida",
+   "states": [
+    "FL"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/apTfC6SUmnNfnxuF/arcgis/rest/services/CIP_Polygons_Final_ListView/FeatureServer/1",
+   "verified": true,
+   "record_count": 2966,
+   "geometry": "polygon",
+   "fields": {
+    "id": "CIPNumber",
+    "name": "ProjectName",
+    "description": "Description",
+    "work_type": "ProjectType",
+    "cost": "ProjectCompletionBudget",
+    "status": "CurrentProjectPhase",
+    "date": "DesignLandAcquisitionEndDate"
+   },
+   "planned_filter": "CurrentProjectPhase IN ('Planning','Study','Design','Procurement','TBD','Funding Only')  -- DesignLandAcquisitionEndDate in the future means design/land acquisition still open",
+   "sample": "{\"CIPNumber\": \"C46132025\", \"ProjectName\": \"Cranberry Lane Drainage Improvements\", \"ProjectType\": \"Stormwater and Water Quality Improvements\", \"CurrentProjectPhase\": \"Procurement\", \"Description\": \"This project is part of the Major Neighborhood Drainage Improvements Program, providing relief to the local community via the construction of drainage and storm\", \"ProjectCompletionBudget\": \"4058694.06\"}",
+   "restrictions": null,
+   "notes": "All county capital projects (roads, stormwater, water/wastewater, parks, fire stations). Values: Completed 1867, Procurement 410, Design 240, Planning 136, Construction 127, TBD 106, Study 39."
+  },
+  {
+   "name": "Wake County Public School System Construction Projects",
+   "authority": "Wake County Public School System",
+   "states": [
+    "NC"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/oqISN6Dt6ax5xklN/arcgis/rest/services/wcsfdc_geom_projects_public/FeatureServer/0",
+   "verified": true,
+   "record_count": 11,
+   "geometry": "point",
+   "fields": {
+    "name": "schl_name",
+    "description": "loc_desc",
+    "work_type": "prj_type",
+    "id": "schl_code"
+   },
+   "planned_filter": "No status field; all rows are current bond-programme projects. prj_type distinguishes New School from Renovation.",
+   "sample": "{\"schl_code\": \"448\", \"schl_name\": \"Hunter Elementary\", \"prj_type\": \"Renovation\", \"loc_desc\": \"1018 E DAVIE ST, RALEIGH, NC 27601\"}",
+   "restrictions": null,
+   "notes": "Small (11). New-school sites are the land-acquisition signal."
+  },
+  {
+   "name": "Travis County CIP: Roads, Sidewalks and Trails",
+   "authority": "Travis County Transportation and Natural Resources",
+   "states": [
+    "TX"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/HGcSYZ5bvjRswoCb/arcgis/rest/services/CIP_Project_Overview/FeatureServer/1",
+   "verified": true,
+   "record_count": 98,
+   "geometry": "polyline",
+   "fields": {
+    "id": "ProjectID",
+    "name": "Project_Name",
+    "description": "Scope",
+    "work_type": "Project_Type",
+    "cost": "TotalEstimatedCost",
+    "status": "Project_Status",
+    "county": "Comm_Name_and_Precinct"
+   },
+   "planned_filter": "Project_Status IN ('Not Started','Started','Design','Pre-Construction')",
+   "sample": "{\"ProjectID\": \"100\", \"Project_Name\": \"Arterial A (Engineering and ROW)\", \"Project_Type\": \"Roadway\", \"Comm_Name_and_Precinct\": \"Jeff Travillion (Pct 1)\", \"Project_Status\": \"Design\", \"Scope\": \"New MAD 4 arterial between US 290 East and Parmer Lane\", \"TotalEstimatedCost\": \"23000000\"}",
+   "restrictions": null,
+   "notes": "Bond-funded new arterials and widenings; project names state \"Engineering and ROW\" where land is being bought. LocationLimits gives termini.",
+   "status_values": {
+    "Completed": 59,
+    "Construction": 4,
+    "Design": 21,
+    "Not Started": 7,
+    "Pre-Construction": 2,
+    "Started": 5
+   },
+   "group": "travis_cip"
+  },
+  {
+   "name": "Travis County CIP: Bridges, Intersections and Drainage",
+   "authority": "Travis County Transportation and Natural Resources",
+   "states": [
+    "TX"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/HGcSYZ5bvjRswoCb/arcgis/rest/services/CIP_Project_Overview/FeatureServer/0",
+   "verified": true,
+   "record_count": 34,
+   "geometry": "point",
+   "fields": {
+    "id": "ProjectID",
+    "name": "Project_Name",
+    "description": "Scope",
+    "work_type": "Project_Type",
+    "cost": "TotalEstimatedCost",
+    "status": "Project_Status",
+    "county": "Comm_Name_and_Precinct"
+   },
+   "planned_filter": "Project_Status IN ('Not Started','Started','Design','Pre-Construction')",
+   "sample": "{\"ProjectID\": \"77\", \"Project_Name\": \"Bee Creek Road at Bee Creek Low Water Crossing- project supended \", \"Project_Type\": \"Bridge\", \"Comm_Name_and_Precinct\": \"Ann Howard (Pct 3)\", \"Project_Status\": \"Completed\", \"Scope\": \"Improve existing low water crossing to all-weather crossing\"}",
+   "restrictions": null,
+   "notes": "",
+   "status_values": {
+    "Completed": 26,
+    "Construction": 1,
+    "Design": 4,
+    "Pre-Construction": 3
+   },
+   "group": "travis_cip"
+  },
+  {
+   "name": "Pittsburgh Water (PWSA) Waterline Installation Projects",
+   "authority": "Pittsburgh Water and Sewer Authority",
+   "states": [
+    "PA"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services5.arcgis.com/jAsbh6V9IpseXByp/arcgis/rest/services/PWSA_Project_Locations/FeatureServer/0",
+   "verified": true,
+   "record_count": 434,
+   "geometry": "polyline",
+   "fields": {
+    "id": "PROJECT_NO",
+    "name": "PROJ_NAME",
+    "status": "STATUS",
+    "date": "START_DATE",
+    "description": "SUMMARY"
+   },
+   "planned_filter": "STATUS='Planned'",
+   "sample": "{\"PROJ_NAME\": \"Smallman Street Reconstruction- Water\", \"PROJECT_NO\": \"2017-424-113-0\", \"SUMMARY\": \"12 Inch Water Main Installation at Smallman Street Reconstruction Site\", \"STATUS\": \"Complete\", \"START_DATE\": \"1519862400000\"}",
+   "restrictions": null,
+   "notes": "",
+   "status_values": {
+    "Complete": 328,
+    "In Progress": 79,
+    "Planned": 27
+   },
+   "group": "pwsa"
+  },
+  {
+   "name": "Pittsburgh Water (PWSA) Sewer Rehabilitation Projects",
+   "authority": "Pittsburgh Water and Sewer Authority",
+   "states": [
+    "PA"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services5.arcgis.com/jAsbh6V9IpseXByp/arcgis/rest/services/PWSA_Project_Locations/FeatureServer/1",
+   "verified": true,
+   "record_count": 1434,
+   "geometry": "polyline",
+   "fields": {
+    "id": "PROJECT_NO",
+    "name": "PROJ_NAME",
+    "status": "STATUS",
+    "date": "START_DATE",
+    "description": "SUMMARY"
+   },
+   "planned_filter": "STATUS IN ('Planned','On Hold')",
+   "sample": "{\"PROJ_NAME\": \"Smallman Street Reconstruction- Sewer\", \"PROJECT_NO\": \"2017-424-113-0\", \"SUMMARY\": \"Sanitary and Storm Sewer Installation at Smallman Street Reconstruction Site\", \"STATUS\": \"Complete\", \"START_DATE\": \"1519862400000\"}",
+   "restrictions": null,
+   "notes": "",
+   "status_values": {
+    "Complete": 1177,
+    "Planned": 114,
+    "On Hold": 28,
+    "Not Required": 5,
+    "In Progress": 110
+   },
+   "group": "pwsa"
+  },
+  {
+   "name": "Durham CIP Projects (points)",
+   "authority": "City of Durham",
+   "states": [
+    "NC"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/G5vR3cOjh6g2Ed8E/arcgis/rest/services/CIP_Projects/FeatureServer/57",
+   "verified": true,
+   "record_count": 28,
+   "geometry": "point",
+   "fields": {
+    "name": "FIRST_main_project_title",
+    "description": "project_description",
+    "work_type": "FIRST_Project_Type",
+    "cost": "FIRST_sum_of_budget",
+    "status": "FIRST_current_project_phase",
+    "date": "CurrentPhaseCompletionDate",
+    "id": "project"
+   },
+   "planned_filter": "FIRST_current_project_phase IN ('Planning','Design','Land Acquisition','Bidding')  -- 'Land Acquisition' is an explicit phase",
+   "sample": "{\"project\": \"Unnamed\", \"FIRST_current_project_phase\": \"Design\", \"FIRST_main_project_title\": \"Unamed Project\", \"FIRST_Project_Type\": \"Misc\"}",
+   "restrictions": null,
+   "notes": "Layer 58 (ProjectCorridors) holds the linear projects with the same naming.",
+   "status_values": {
+    "Bidding": 2,
+    "Construction/Installation": 6,
+    "Design": 16,
+    "Land Acquisition": 1,
+    "Planning": 3
+   }
+  },
+  {
+   "name": "Austin Light Rail base design: Proposed ROW lines",
+   "authority": "Austin Transit Partnership",
+   "states": [
+    "TX"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services7.arcgis.com/BnWSLs6TLD51iZWF/arcgis/rest/services/Draft_Base_Design/FeatureServer/3",
+   "verified": true,
+   "record_count": 855,
+   "geometry": "polyline",
+   "fields": {
+    "name": "Level_File_Category",
+    "work_type": "Level_Existing_Proposed",
+    "date": "ProcessedDate",
+    "description": "igds_level_name"
+   },
+   "planned_filter": "Entire layer is proposed (unbuilt) right-of-way for Austin Light Rail Phase 1; no status field.",
+   "sample": "{\"igds_level_name\": \"ROW_Right Of Way Proposed\", \"ProcessedDate\": \"20240624\", \"Level_File_Category\": \"ROW Proposed\", \"Level_Existing_Proposed\": \"Proposed\"}",
+   "restrictions": null,
+   "notes": "CAD-derived linework dated 2024-06 (ProcessedDate). Intersect with parcels to find properties touched. Other layers: 2 Track, 4 Temporary Construction Easement, 5 Proposed Easements, 7 Station Platform Area, 8 Guideway.",
+   "group": "atp"
+  },
+  {
+   "name": "Austin Light Rail base design: Proposed Easements",
+   "authority": "Austin Transit Partnership",
+   "states": [
+    "TX"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services7.arcgis.com/BnWSLs6TLD51iZWF/arcgis/rest/services/Draft_Base_Design/FeatureServer/5",
+   "verified": true,
+   "record_count": 320,
+   "geometry": "polyline",
+   "fields": {
+    "name": "Level_File_Category",
+    "work_type": "Level_Existing_Proposed",
+    "date": "ProcessedDate",
+    "description": "igds_level_name"
+   },
+   "planned_filter": "Entire layer is proposed permanent easements; no status field.",
+   "sample": "{\"igds_level_name\": \"ROW_Permanent Easement Line _ Proposed\", \"ProcessedDate\": \"20240624\", \"Level_File_Category\": \"ROW Proposed Easement\", \"Level_Existing_Proposed\": \"Proposed\"}",
+   "restrictions": null,
+   "notes": "",
+   "group": "atp"
+  },
+  {
+   "name": "Austin Light Rail base design: Station Platform Areas",
+   "authority": "Austin Transit Partnership",
+   "states": [
+    "TX"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services7.arcgis.com/BnWSLs6TLD51iZWF/arcgis/rest/services/Draft_Base_Design/FeatureServer/7",
+   "verified": true,
+   "record_count": 21,
+   "geometry": "polygon",
+   "fields": {
+    "name": "Level_File_Category",
+    "work_type": "Level_File_Category",
+    "date": "ProcessedDate",
+    "description": "igds_level_name"
+   },
+   "planned_filter": "Entire layer is proposed stations.",
+   "sample": "{\"igds_level_name\": \"CPR_Platform_Station\", \"ProcessedDate\": \"20240624\", \"Level_File_Category\": \"Proposed Station Platform Footprint\"}",
+   "restrictions": null,
+   "notes": "",
+   "group": "atp"
+  },
+  {
+   "name": "Oklahoma State Flood Plan Stormwater Projects",
+   "authority": "Oklahoma Water Resources Board (projects sponsored by cities, counties, conservancy districts)",
+   "states": [
+    "OK"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/fI5CUOPa2wdhkCHV/arcgis/rest/services/State_Flood_Plan_Stormwater_Projects/FeatureServer/99",
+   "verified": true,
+   "record_count": 210,
+   "geometry": "point",
+   "fields": {
+    "name": "FMP_NAME",
+    "description": "FMP_DESCR",
+    "work_type": "FMP_TYPE",
+    "cost": "FMP_COST",
+    "date": "FMP_COST_YEAR",
+    "county": "COUNTY",
+    "id": "FMP_ID"
+   },
+   "planned_filter": "All rows are proposed flood mitigation projects (FMPs) in the Oklahoma Comprehensive Flood Plan; none are built.",
+   "sample": "{\"FMP_ID\": \"1100001\", \"FMP_NAME\": \"City of Altus Stormwater Channel - N. Veterans Dr and E. Broadway St.\", \"FMP_DESCR\": \"Proposed flood channel to contain 1% chance flood to mitigate flooding to developed properties as well as to new development.\", \"COUNTY\": \"Jackson\", \"FMP_TYPE\": \"Channel\", \"FMP_COST\": \"3000000\", \"FMP_COST_YEAR\": \"2010*\"}",
+   "restrictions": null,
+   "notes": "SPONSOR names the local government; includes proposed channels, detention basins, levee work and buyouts."
+  },
+  {
+   "name": "NYC DEP/DDC Stormwater and Sewer Capital Projects",
+   "authority": "NYC Department of Environmental Protection / Department of Design and Construction",
+   "states": [
+    "NY"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/at3rDjch5X7i9Bag/arcgis/rest/services/Public_Stormwater_Sewer_Capital_Projects/FeatureServer/0",
+   "verified": true,
+   "record_count": 213,
+   "geometry": "polyline",
+   "fields": {
+    "id": "projectid",
+    "name": "description",
+    "description": "webscope",
+    "status": "phase",
+    "date": "projected_compl",
+    "work_type": "division"
+   },
+   "planned_filter": "phase='Design'",
+   "sample": "{\"projectid\": \"SETVDDC11\", \"webscope\": \"Inspection & Sewer Cleaning\", \"description\": \"TV INSPECTION AND CLEANING - CITYWI\", \"phase\": \"Substantial Completion\", \"division\": \"Infrastructure\", \"projected_compl\": \"1400198400000\"}",
+   "restrictions": null,
+   "notes": "",
+   "status_values": {
+    "Closeout": 83,
+    "Construction": 17,
+    "Design": 20,
+    "Substantial Completion": 93
+   }
+  },
+  {
+   "name": "Hidalgo County Drainage District No. 1 - 2023 Bond Program",
+   "authority": "Hidalgo County Drainage District No. 1",
+   "states": [
+    "TX"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services7.arcgis.com/JSUhwVSJhyVkcN3Q/arcgis/rest/services/2023_Bond/FeatureServer/0",
+   "verified": true,
+   "record_count": 44,
+   "geometry": "polygon",
+   "fields": {
+    "name": "Name",
+    "description": "Descript",
+    "cost": "Actual_Cost",
+    "status": "Proj_Status",
+    "county": "Precinct"
+   },
+   "planned_filter": "Proj_Status IN ('Pre-Design','PD')",
+   "sample": "{\"Name\": \"South Main Drain Phase II\", \"Descript\": \"Approximately 2.9 miles of channel improvements include widening the South Main Drain within existing right of way, from Val Verde Rd. to FM 493.\", \"Precinct\": \"4\", \"Proj_Status\": \"Costruction\", \"Actual_Cost\": \"6242330\"}",
+   "restrictions": null,
+   "notes": "Drainage channel widenings and new drains; drainage districts condemn land for channel right-of-way. Service 2018_Bond_Program in the same org holds the earlier bond.",
+   "status_values": {
+    "Complete": 1,
+    "Costruction": 7,
+    "PD": 8,
+    "Pre-Design": 28
+   }
+  },
+  {
+   "name": "Broken Arrow 2026 Proposed Bond Projects",
+   "authority": "City of Broken Arrow",
+   "states": [
+    "OK"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services5.arcgis.com/rr6hTHIOPEZnXs66/arcgis/rest/services/All_Projects/FeatureServer/4",
+   "verified": true,
+   "record_count": 101,
+   "geometry": "polygon",
+   "fields": {
+    "name": "Project_Name",
+    "description": "Project_Description"
+   },
+   "planned_filter": "All rows are proposed 2026 general-obligation bond projects (not yet built).",
+   "sample": "{\"Project_Name\": \"Trail (10' W. Concrete)\", \"Project_Description\": \"Match money for trail projects\"}",
+   "restrictions": null,
+   "notes": ""
+  },
+  {
+   "name": "Denver Storm Drainage Master Plan - proposed storm routing projects",
+   "authority": "City and County of Denver (DOTI)",
+   "states": [
+    "CO"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/zdB7qR0BtYrg0Xpl/arcgis/rest/services/Denver_Proposed_Storm_Routing_Projects/FeatureServer/68",
+   "verified": true,
+   "record_count": 240,
+   "geometry": "polyline",
+   "fields": {
+    "name": "Project_Name",
+    "description": "Description",
+    "id": "PRP_PROJEC"
+   },
+   "planned_filter": "All rows are proposed (master-plan) storm drain projects.",
+   "sample": "{\"PRP_PROJEC\": \"A\", \"Project_Name\": \"48th Ave Outfall (A)\", \"Description\": \"The Project A improvement is sized based on the installation of the 100-year alternative (Project L) in basin 0061-02 (Highland Basin). This project includes up\"}",
+   "restrictions": null,
+   "notes": "Master-plan proposals, not funded projects."
+  },
+  {
+   "name": "California Electric Transmission Lines (CEC)",
+   "authority": "California Energy Commission (lines owned by utilities)",
+   "states": [
+    "CA"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services3.arcgis.com/bWPjFyq029ChCGur/arcgis/rest/services/Transmission_Line/FeatureServer/2",
+   "verified": true,
+   "record_count": 6838,
+   "geometry": "polyline",
+   "fields": {
+    "name": "Name",
+    "description": "Comments",
+    "work_type": "Type",
+    "status": "Status"
+   },
+   "planned_filter": "Status='Proposed'  (14 of 6,838 rows on 2026-11-17)",
+   "sample": "{\"Name\": \"AMP 115kV\", \"Status\": \"Operational\", \"Type\": \"OH\"}",
+   "restrictions": null,
+   "notes": "Fields also include kV, Owner, Circuit. Only a handful of proposed lines; useful as a statewide check.",
+   "status_values": {
+    "None": 0,
+    "Closed": 1,
+    "Operational": 6795,
+    "Proposed": 14,
+    "Unknown": 24
+   }
+  },
+  {
+   "name": "HIFLD Electric Power Transmission Lines",
+   "authority": "HIFLD / ORNL (national)",
+   "states": [
+    "US"
+   ],
+   "coverage": "national",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/Hp6G80Pky0om7QvQ/arcgis/rest/services/Electric_Power_Transmission_Lines/FeatureServer/0",
+   "verified": true,
+   "record_count": 52244,
+   "geometry": "polyline",
+   "fields": {
+    "id": "ID",
+    "description": "OWNER",
+    "work_type": "TYPE",
+    "status": "STATUS",
+    "date": "SOURCEDATE",
+    "name": "SUB_1|SUB_2"
+   },
+   "planned_filter": "STATUS IN ('PROPOSED','UNDER CONSTRUCTION')  -- only 1 PROPOSED and 11 UNDER CONSTRUCTION rows out of 52,244",
+   "sample": "{\"ID\": \"141176\", \"TYPE\": \"AC; OVERHEAD\", \"STATUS\": \"IN SERVICE\", \"SOURCEDATE\": \"1417392000000\", \"OWNER\": \"MIDWEST ENERGY INC\", \"SUB_1\": \"UNKNOWN119578\", \"SUB_2\": \"TAP140579\"}",
+   "restrictions": null,
+   "notes": "Verified but nearly useless for planned lines: the PROPOSED flag is almost never populated. Do not rely on it.",
+   "status_values": {
+    "IN SERVICE": 41237,
+    "INACTIVE": 53,
+    "NOT AVAILABLE": 10942,
+    "PROPOSED": 1,
+    "UNDER CONSTRUCTION": 11
+   }
   }
  ],
  "unverified": [

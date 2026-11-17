@@ -122,8 +122,144 @@
    "sample": "{\"FID\": 1, \"Entity\": \"Line\", \"Handle\": \"34656C\", \"Layer\": \"R_ROW\", \"LyrFrzn\": 0, \"LyrOn\": 1, \"Color\": 7, \"Linetype\": \"Continuous\"}",
    "restrictions": null,
    "notes": "PATTERN SOURCE, high value for land acquisition: ArDOT publishes the CAD design of each job taken to a public meeting as its own hosted service, with the proposed right-of-way line, construction limits, easements and (here, layer 9) 'Potential Relocations' polygons. The job number is in the service name; attributes are CAD leftovers (Layer, Linetype), so join to the STIP by job number. Discover them by listing https://services.arcgis.com/7cbqsWqMe170dJ3k/arcgis/rest/services?f=json (765 services on 2026-11-17, about 115 matching Job_|ROW|Right_of_Way|Plans|VPI) and https://gis.ardot.gov/hosting/rest/services/Hosted?f=json (e.g. Job_070367_Interactive_Web_Map_Nov_2026 with 'Acquired Right-of-Way'). Service names carry the month, e.g. Job_080675_Roadway_Plans_October_2026, Job_101119_Roadway_Plans_October_2026."
+  },
+  {
+   "name": "RTC Southern Nevada - All RTC Roadway Projects (Las Vegas valley)",
+   "authority": "Regional Transportation Commission of Southern Nevada (funds county/city/NDOT road projects in Clark County)",
+   "states": [
+    "NV"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://webgis.rtcsnv.com/arcgis/rest/services/MPO/ALL_RTC_ROADWAY_PROJECTS/FeatureServer/0",
+   "verified": true,
+   "record_count": 210,
+   "geometry": "polyline",
+   "fields": {
+    "id": "RTC_PROJ_NUM",
+    "name": "PROJECT_NAME",
+    "description": "PROJ_DESCRIPTION",
+    "cost": "PROJECT_COST",
+    "status": "MPO_PHASE",
+    "date": "EST_CONSTR_START",
+    "county": "JURISDICTION"
+   },
+   "planned_filter": "MPO_STATUS = 'ACTIVE' AND MPO_PHASE IN ('Design','Design Complete','Soon to Advertise','Advertise','Pending Construction'); record_count given is for MPO_STATUS='ACTIVE' (856 lines in total incl. completed).",
+   "sample": "{\"RTC_PROJ_NUM\": \"160B-FTI2\", \"PROJECT_NAME\": \"160B-FTI2, Allen Ln - Craig Rd to Centennial Pkwy\", \"PROJ_DESCRIPTION\": \"Allen Ln - Craig Rd to Centennial Pkwy\", \"PROJECT_COST\": 692000.0, \"MPO_PHASE\": \"Design\", \"JURISDICTION\": \"City of North Las Vegas\"}",
+   "restrictions": null,
+   "notes": "Closes most of the Nevada gap by population: RTC-funded street and highway projects of Clark County, Las Vegas, North Las Vegas, Henderson, Boulder City, Mesquite. PROJECT_STATUS (13 values) is the finer status; EST_DESIGN_START/END, EST_NTP, EST_CONSTR_START/END are schedule dates; PROJECT_COST appears to be $ thousands; FROM_STREET/TO_STREET give limits. Refreshed from RTC's project database (last_edited_date 2026-08). Layers 1 and 2 are the unjoined geometry."
+  },
+  {
+   "name": "RTC Southern Nevada Regional Transportation Plan 2025 projects - lines (RTP25 Projects ML1)",
+   "authority": "Regional Transportation Commission of Southern Nevada (MPO); sponsors include NDOT",
+   "states": [
+    "NV"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://webgis.rtcsnv.com/arcgis/rest/services/MPO/RTC_RTP_Projects/MapServer/2",
+   "verified": true,
+   "record_count": 120,
+   "geometry": "polyline",
+   "fields": {
+    "id": "ProjectID",
+    "name": "Project_Name",
+    "description": "Project_Description",
+    "work_type": "Strategy",
+    "date": "FundingYear",
+    "county": "Sponsor"
+   },
+   "planned_filter": "All are plan projects; FundingYear (number) / FundingYear5Y (e.g. '2030-2035') give timing. Sponsor IN ('NDOT','NDOT Freight') selects state highway projects.",
+   "sample": "{\"ProjectID\": \"CC_003\", \"Project_Name\": \"Jones Boulevard 3R\", \"Project_Description\": \"Jones Boulevard 3R\", \"Strategy\": \"Improve Safety\", \"FundingYear\": 2045, \"Sponsor\": \"Clark County\"}",
+   "restrictions": null,
+   "notes": "Long-range plan for the Las Vegas region incl. NDOT freeway projects. Layer 0 = point (multipoint) projects (33), layer 1 = unfunded spot projects, layer 3 = unfunded corridor projects. No cost field; Project_Limits is free text."
+  },
+  {
+   "name": "RTC Washoe 2050 Regional Transportation Plan project listing - funded lines (Reno/Sparks)",
+   "authority": "Regional Transportation Commission of Washoe County (MPO and road builder)",
+   "states": [
+    "NV"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/snfDNSrRKzTzlDky/arcgis/rest/services/RTC_2050_Regional_Transportation_Plan_Draft_Project_Listing/FeatureServer/1",
+   "verified": true,
+   "record_count": 95,
+   "geometry": "polyline",
+   "fields": {
+    "id": "WR_ID",
+    "name": "Project",
+    "description": "Descriptio",
+    "work_type": "Type",
+    "cost": "Cost_Estim",
+    "date": "Domain"
+   },
+   "planned_filter": "All planned. F2025_2034 = 'X' is the first ten years, F2035_2050 = 'X' later; Type IN ('Capacity','Freeway') are widening and new roads (most likely to take land).",
+   "sample": "{\"WR_ID\": \"P96\", \"Project\": \"Peckham - Multimodal\", \"Descriptio\": \"Lakeside Dr to Airway Dr\", \"Type\": \"Multimodal\", \"Cost_Estim\": 15100000, \"Domain\": \"Multimodal & AT Program 2025 - 2034\"}",
+   "restrictions": null,
+   "notes": "Item updated 2026-01. Layer 2 = unfunded lines (69), layer 5 = privately funded (developer) roads, layers 0/4/6 points. Cost_Estim in dollars. Freeway type covers NDOT projects in the region."
+  },
+  {
+   "name": "Jackson MPO (CMPDD) 2045 Metropolitan Transportation Plan - Fiscally Constrained Capacity Projects",
+   "authority": "Central Mississippi Planning & Development District (Jackson MPO); projects built by MDOT, counties and cities",
+   "states": [
+    "MS"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://gis.cmpdd.org/arcgis/rest/services/Hosted/MTP_Plan_2045_Feature_Layer/FeatureServer/2",
+   "verified": true,
+   "record_count": 170,
+   "geometry": "polyline",
+   "fields": {
+    "id": "project_id",
+    "name": "roadway",
+    "description": "limits",
+    "work_type": "improvemen",
+    "status": "stage",
+    "county": "funding"
+   },
+   "planned_filter": "All are planned widening / new-road projects. stage: 'Stage I' = nearest term, 'Stage III' = latest. funding = 'MDOT' selects state projects. improvemen LIKE 'New%' = new-location roads.",
+   "sample": "{\"project_id\": 140, \"roadway\": \"US 80\", \"limits\": \"US 51 to MS 468\", \"improvemen\": \"Widen to 6 Lanes\", \"stage\": \"Stage III\", \"funding\": \"MDOT\"}",
+   "restrictions": null,
+   "notes": "First Mississippi source with geometry: Hinds, Madison, Rankin counties only. Every record is capacity work (17 improvement types such as 'Widen to 6 Lanes', 'New 4 Lane Roadway', 'New Frontage Roads'), the kind that needs right of way. Many segments per project (join on project_id); 17 of 187 segments have blank attributes (count given is the filled ones). Layer 5 = Visionary (unfunded) capacity projects, 3/4 = non-capacity. No cost or year."
+  },
+  {
+   "name": "Jackson MPO (CMPDD) TIP 2025-2028 viewer - MDOT Projects",
+   "authority": "Central Mississippi Planning & Development District (Jackson MPO) / Mississippi DOT",
+   "states": [
+    "MS"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://gis.cmpdd.org/arcgis/rest/services/Hosted/TIP_Viewer_2025_2028/FeatureServer/5",
+   "verified": true,
+   "record_count": 9,
+   "geometry": "polyline",
+   "fields": {
+    "name": "name",
+    "description": "descriptio",
+    "work_type": "classifica",
+    "date": "fiscalyear",
+    "county": "county"
+   },
+   "planned_filter": "All are programmed TIP projects; fiscalyear gives the year.",
+   "sample": "{\"name\": \"Madison County Debt Service I-55\", \"descriptio\": \"MS 463 Improvements from Post Oak Road to US Hwy 51\", \"classifica\": \"Reconstruction\", \"fiscalyear\": \"2025-2026\", \"county\": \"Madison\"}",
+   "restrictions": null,
+   "notes": "Small: one service per TIP cycle with a layer per category (0 bridge, 2 safety, 3 congestion mitigation, 5 MDOT, 6 resurfacing, 7 transportation alternatives). A 2027-2030 service exists (Hosted/TIP_Viewer_2027_2030 and MPO_Awarded_Projects_2027_2030) but its MDOT layer was still empty on 2026-11-17 and its other layers are only partly filled. termini = limits; sponsor; pdf link."
   }
  ],
- "unverified": [],
+ "unverified": [
+  {
+   "name": "NDOT (Nevada) own GIS servers and eSTIP",
+   "url": "https://gis.dot.nv.gov/arcgis/rest/services",
+   "reason": "Re-tested 2026-11-17: /arcgis, /rhgis and /agsphs all answer HTTP 500; estip.nevadadot.com and gis.nevadadot.com did not connect. NDOT's ArcGIS Online org (services1.arcgis.com/9Y4hSlLf13E9S0Eo, 58 services listed) has no STIP, work-program or planned-project layer. No statewide Nevada source exists that a program can read today."
+  },
+  {
+   "name": "MDOT (Mississippi) GeoServer project geometry (WFS Proj_Data:FMS_PROJ_GEOM_X)",
+   "url": "https://geo.mdot.state.ms.us/geoserver/ows?service=WFS&request=GetCapabilities",
+   "reason": "MDOT's public project map (path.mdot.ms.gov/ProjMap) names this GeoServer in its script, but the server answered HTTP 403 Forbidden to a direct request, so it is not open to automated readers; no further attempts made. The map itself lists only 'Under Construction' and 'Construction Complete' projects. No ArcGIS service for MDOT exists (gis.mdot.ms.gov does not connect, maps.mdot.ms.gov returns 500). Mississippi statewide remains a gap; STIP is a PDF."
+  }
+ ],
  "summary": ""
 }

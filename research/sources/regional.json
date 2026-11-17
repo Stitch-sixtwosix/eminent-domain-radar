@@ -542,7 +542,7 @@
    "planned_filter": "CURRENT_STIP_PERIOD_IND='Y' and AWARD_SFY >= current state fiscal year. STIP_PERIOD_PROJECT_PHASES lists phases (look for right-of-way).",
    "sample": "{\"PID_NBR\": 113239, \"PROJECT_NME\": \"CUY Broadway Avenue\", \"DESCRIPTION\": \"Rehabilitation of Broadway Avenue (CR-12) from the CUY/SUM County line to Macedonia Road (CR-154) in the Village of Oakwood.\", \"PRIMARY_WORK_GROUP_NME\": \"Preservation\", \"TOTAL_PROJECT_ESTIMATE_AMT\": 2135000, \"STIP_PERIOD_PROJECT_PHASES\": \"CO\", \"AWARD_SFY\": 2025, \"PROJECT_LOCALES\": \"CUY\"}",
    "restrictions": null,
-   "notes": "Despite the NOACA owner, PROJECT_MPOS shows the layer may carry all Ohio STIP projects - filter PROJECT_MPOS LIKE '%NOACA%' for the region. PID_NBR is the ODOT PID. Points in STIP_Projects_(Points)_view. Data last edited 2026-11-13.",
+   "notes": "PROJECT_MPOS confirms the layer is limited to projects touching the NOACA region (1,298 NOACA-only; the rest are shared with neighbouring MPOs). PID_NBR is the ODOT PID. Points in STIP_Projects_(Points)_view. Data last edited 2026-11-13.",
    "related_layers": [
     {
      "url": "https://services8.arcgis.com/GqBcgxMu2QWgtftB/arcgis/rest/services/STIP_Projects_(Points)_view/FeatureServer/0",
@@ -833,7 +833,7 @@
    "planned_filter": "All planned. Six layers by period: 0/3 = 2027-2029 spot/corridor, 1/4 = 2030-2050 spot/corridor, 2/5 = unfunded spot/corridor.",
    "sample": "{\"ProjectID\": \"CC_003\", \"Project\": \"Jones Boulevard 3R\", \"RTP_Strate\": \"Improve Safety\", \"FundingYr\": \"2030-2050\", \"Muni\": \"Clark County\"}",
    "restrictions": null,
-   "notes": "Small attribute set (name, municipality, strategy, funding period). Published from a consultant/staff account in the RTC org; last edit 2024. Data last edited 2024-10-07.",
+   "notes": "Small attribute set (name, municipality, strategy, funding period). Hosted in the ArcGIS Online org of the consultant Parametrix, not RTC's own; last edit 2024, so it may be withdrawn. Data last edited 2024-10-07.",
    "related_layers": [
     {
      "url": "https://services3.arcgis.com/q5Jezm9AgzqyE7Q6/arcgis/rest/services/RTP_Projects_9172024_Update/FeatureServer/3",
@@ -1284,7 +1284,7 @@
     "date": "FY_YR",
     "county": "CNTY_NA"
    },
-   "planned_filter": "FY_YR >= current fiscal year. SCPE_ID = phase scope: 'RW' right-of-way, 'UT' utilities, 'PE' engineering, 'CN' construction - RW rows are direct acquisition signals.",
+   "planned_filter": "FY_YR >= current fiscal year (values 2025-2027). SCPE_ID = phase: 'PE' engineering or 'CN' construction (no right-of-way rows are mapped).",
    "sample": "{\"PJ_REF_ID\": 100074911, \"PJ_DS\": \"THE INSTALLATION OF ITS DEVICES AND NETWORK INFRASTRUCTURE TO SUPPORT ADVANCED CORRIDOR MANAGEMENT (ALGO, TSMO) ON I-20/59\", \"SCPE_ID\": \"CN\", \"PJ_TOT_OBLG_AM\": 4750357.31, \"CNTY_NA\": \"JEFFERSON   \"}",
    "restrictions": null,
    "notes": "ALDOT CPMS extract: PJ_REF_ID is the ALDOT project number, PJ_FAMLY_ID groups phases. Text fields are space-padded. Data last edited 2026-08-27."
@@ -1409,7 +1409,7 @@
     "date": "PrgmCycle",
     "county": null
    },
-   "planned_filter": "ProjStatus <> 'Completed' (values such as 'Funded in TIP', planned). ProjType1 = 'Roadway Capacity' for widenings/new roads.",
+   "planned_filter": "ProjStatus NOT IN ('Completed','Under Construction'). Values: Unfunded, Not Started, Funds Programmed, Funded in PPRTA, Design, Funded in TIP, Partial Funded PPRTA, Funds Obligated. ProjType1 = 'Roadway Capacity' for widenings/new roads.",
    "sample": "{\"TranProjID\": \"2019-028\", \"Proj_Name\": \"Jackson Creek Parkway Expansion\", \"Proj_Desc\": \"Jackson Creek Parkway (JCP) is a major north south road from Baptist Road to Highway 105. The project is intended to increase the 2 lane seg\", \"ProjType1\": \"Roadway Capacity\", \"ProjStatus\": \"Funded in TIP\", \"PrgmCycle\": \"2050 LRTP\"}",
    "restrictions": null,
    "notes": "Layer 1 lines, layer 0 points. SpnsrAgncy names the builder. No cost field. Layer copyright text: CDOT, PPRTA. Data last edited 2026-04-29.",
@@ -1444,7 +1444,7 @@
     "date": null,
     "county": "Sponsor"
    },
-   "planned_filter": "Status field (exclude completed).",
+   "planned_filter": "All programmed FY2026-2029; Status is 'New' or 'Keep' (carried over).",
    "sample": "{\"TIP_ID\": \"2020-026\", \"ProjectNam\": \"Laporte Ave Improvements Fishback to Sunset\", \"ProjectTyp\": \"Bike/Ped\", \"Status\": \"Keep\", \"Sponsor\": \"Fort Collins\"}",
    "restrictions": null,
    "notes": "Small layer (34 lines, 39 points in layer 0 where the type field is ProjType). Data last edited 2026-11-09.",
@@ -1506,7 +1506,7 @@
     "date": "PROJECTSTA",
     "county": null
    },
-   "planned_filter": "CONSTCOMPL >= current year; PROJECTPHA gives the current phase (e.g. 'Right of Way', 'Construction').",
+   "planned_filter": "CONSTCOMPL >= current year; PROJECTPHA gives the programmed phase ('Preliminary Engineering','Design','Construction','Design Build').",
    "sample": "{\"PROJECT_ID\": \"445649-1\", \"PROJECT_NA\": \"22ND ST S FROM 9TH AVE S TO 5TH AVE S\", \"DESCRIPTIO\": \"COMPLETE STREETS-ADD BRICK PAVERS,WIDEN SIDWALKS,STREETSCAPE\", \"TYPE_FORM\": \"ROAD IMPROVEMENT\", \"TOT_COST_N\": 7296682, \"PROJECTPHA\": \"Construction\", \"PROJECTSTA\": 2028}",
    "restrictions": null,
    "notes": "PROJECT_ID is the FDOT financial project number. Data steward: Forward Pinellas. Layer copyright text: DATA STEWARD: Forward Pinellas, info@forwardpinellas.org 727-464-8250. Data last edited 2026-07-23."
@@ -1678,8 +1678,573 @@
      "record_count": 131
     }
    ]
+  },
+  {
+   "name": "Maricopa Association of Governments TIP projects",
+   "authority": "Maricopa Association of Governments (Phoenix MPO); ADOT, Maricopa County, cities, Valley Metro",
+   "states": [
+    "AZ"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/MdyCMZnX1raZ7TS3/arcgis/rest/services/TIP_data_gdb/FeatureServer/1",
+   "verified": true,
+   "record_count": 296,
+   "geometry": "polyline",
+   "fields": {
+    "id": "dbo_vwTIPMapData_ProjectTIPCode",
+    "name": "dbo_vwTIPMapData_ProjectName",
+    "description": "dbo_vwTIPMapData_ProjectDescription",
+    "work_type": "dbo_vwTIPMapData_ProjectTypeName",
+    "cost": "dbo_vwTIPMapData_CostEstimate",
+    "status": "dbo_vwTIPMapData_Completed",
+    "date": "dbo_vwTIPMapData_DateActiveYear",
+    "county": "dbo_vwTIPMapData_AgencyName"
+   },
+   "planned_filter": "dbo_vwTIPMapData_Completed = 0 and dbo_vwTIPMapData_Deleted = 0. Join table 4 (TIP_phase) on SegmentID: Phase = 'Right of Way' with Status = 'Planned' or 'Underway' and WorkYear >= current year is a direct acquisition signal (926 right-of-way phase rows).",
+   "sample": "{\"dbo_vwTIPMapData_ProjectName\": \"Signal Butte Rd: Williams Field Rd to Germann Rd\", \"dbo_vwTIPMapData_ProjectDescription\": \"Signal Butte Rd: Williams Field Rd to Germann Rd\", \"dbo_vwTIPMapData_Completed\": 0, \"dbo_vwTIPMapData_DateActiveYear\": 2023, \"dbo_vwTIPMapData_AgencyName\": \"Mesa\"}",
+   "restrictions": null,
+   "notes": "Layers 0 points, 1 lines, 2 polygons, 3 multipoints, table 4 TIP_phase (8,285 work phases with Phase, WorkYear, Status, amounts). Field names carry long join prefixes (SCDATALOADER_SCORPIONS_Lines_*, dbo_vwTIPMapData_*) that differ by layer. Lanes before/after fields show widening. Data last edited 2026-09-17.",
+   "related_layers": [
+    {
+     "url": "https://services1.arcgis.com/MdyCMZnX1raZ7TS3/arcgis/rest/services/TIP_data_gdb/FeatureServer/4",
+     "layer": "TIP_phase",
+     "geometry": "none",
+     "record_count": 8285
+    }
+   ]
+  },
+  {
+   "name": "AAMPO TIP FY2027-2030 projects",
+   "authority": "Alamo Area MPO (San Antonio); TxDOT San Antonio District, Bexar County, cities, VIA",
+   "states": [
+    "TX"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/ZmHtsY5M3DRYt09u/arcgis/rest/services/TIP_2027_2030/FeatureServer/0",
+   "verified": true,
+   "record_count": 68,
+   "geometry": "polyline",
+   "fields": {
+    "id": "MPO_NUM",
+    "name": "NAME",
+    "description": "DESCRIPTION",
+    "work_type": "TYPE_OF_WORK",
+    "cost": "TOTAL_PROJECT",
+    "status": "PHASE",
+    "date": "FisYear",
+    "county": "COUNTY"
+   },
+   "planned_filter": "All programmed FY2027-2030 (FisYear). TYPE_OF_WORK = 'Added Capacity/New Road'. PHASE codes: C construction, R right-of-way, E engineering.",
+   "sample": "{\"MPO_NUM\": \"5560\", \"NAME\": \"FM 1103\", \"DESCRIPTION\": \"Expand from 2 to 4 lanes with median, turn lanes, and bicycle and pedestrian accommodations\", \"TYPE_OF_WORK\": \"Added Capacity/New Road\", \"TOTAL_PROJECT\": 40255000, \"PHASE\": \"C\", \"FisYear\": 2029, \"COUNTY\": \"Guadalupe\"}",
+   "restrictions": null,
+   "notes": "CSJ joins to TxDOT. LIMIT_FROM/LIMIT_TO limits; SUBAGENCY names the builder; LET_DATE. Data last edited 2026-04-02."
+  },
+  {
+   "name": "AAMPO proposed Metropolitan Transportation Plan projects (May 2026)",
+   "authority": "Alamo Area MPO",
+   "states": [
+    "TX"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/ZmHtsY5M3DRYt09u/arcgis/rest/services/Proposed_MTP_052026/FeatureServer/0",
+   "verified": true,
+   "record_count": 248,
+   "geometry": "polyline",
+   "fields": {
+    "id": "MPO_NUM",
+    "name": "NAME",
+    "description": "DESCRIPTION",
+    "work_type": "TYPE_OF_WORK_NEW",
+    "cost": null,
+    "status": "Plan_Type",
+    "date": "FisYear",
+    "county": "COUNTY"
+   },
+   "planned_filter": "All planned; FisYear >= current year. Plan_Type = 'MTP' (long-range) or 'TIP'.",
+   "sample": "{\"MPO_NUM\": \"9244\", \"NAME\": \"Leon Creek Bike & Ped Trail\", \"DESCRIPTION\": \"Construct complete street (multimodal) elements within Gruene Historic District and surrounding areas including shared use paths, protected \", \"TYPE_OF_WORK_NEW\": \"Bicycle/Pedestrian\", \"FisYear\": 2031, \"COUNTY\": \"Bexar\", \"Plan_Type\": \"MTP\"}",
+   "restrictions": null,
+   "notes": "Mobility 2050 plan update. LIMIT_FROM/LIMIT_TO; CSJ where assigned; UTP flags TxDOT Unified Transportation Program listing. Data last edited 2026-06-08."
+  },
+  {
+   "name": "PlanRVA / RRTPO 2050 LRTP constrained plan projects",
+   "authority": "Richmond Regional TPO (PlanRVA); VDOT, CVTA, counties, City of Richmond",
+   "states": [
+    "VA"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/7SazdyBTbp9w1Fga/arcgis/rest/services/Constrained_Plan/FeatureServer/0",
+   "verified": true,
+   "record_count": 207,
+   "geometry": "polyline",
+   "fields": {
+    "id": "Prj_ID",
+    "name": "Project",
+    "description": "Prj_DESC",
+    "work_type": "Category",
+    "cost": "Cost_2030",
+    "status": null,
+    "date": null,
+    "county": null
+   },
+   "planned_filter": "All planned (fiscally constrained list of the 2050 LRTP).",
+   "sample": "{\"Prj_ID\": \"FAT-12\", \"Project\": \"Fall Line / Route 1  -  Off-Road/On-Road Trail\", \"Prj_DESC\": \"Richmond Fall Line Trail: Segment 4B - MM 20.7 to MM 21.8\", \"Category\": \"Active Transportation\", \"Cost_2030\": 1241000}",
+   "restrictions": null,
+   "notes": "Corridor field has From/To. link = scorecard PDF. Cost_2020 and Cost_2030 in dollars. Data last edited 2025-11-26."
+  },
+  {
+   "name": "Oregon Metro 2023 Regional Transportation Plan projects",
+   "authority": "Metro (Portland OR MPO); ODOT, TriMet, counties, cities",
+   "states": [
+    "OR"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/McQ0OlIABe29rJJy/arcgis/rest/services/Final2023RTP_projects_ALL_fullattr_View/FeatureServer/0",
+   "verified": true,
+   "record_count": 1044,
+   "geometry": "point",
+   "fields": {
+    "id": "RTP_ID",
+    "name": "Project_Name",
+    "description": "Description",
+    "work_type": "RTP_Investment_Category",
+    "cost": "Estimated_Cost__in_2023_dollars",
+    "status": "Status",
+    "date": "Time_Period",
+    "county": "County_or_counties"
+   },
+   "planned_filter": "All planned. Financially_Constrained_ = 'Yes' for funded list; Time_Period '2023-2030' or '2031-2045'. RTP_Investment_Category for throughway/road capacity.",
+   "sample": "{\"RTP_ID\": 10100, \"Project_Name\": \"Group 9--Downtown Pedestrian Improvements\", \"Description\": \"Group 9 – Downtown Pedestrian ImprovementsDowntown Streetscape Improvements  Install sidewalk bulbouts, lighting, and pedestrian amenities.\\n\", \"RTP_Investment_Category\": \"Active Transportation - Pedestrian/Bicycle\", \"Estimated_Cost__in_2023_dollars\": 19320000, \"Status\": \"2014 Not Committed\", \"Time_Period\": \"2031-2045\", \"County_or_counties\": \"Clackamas County\"}",
+   "restrictions": null,
+   "notes": "1,044 multipoint features (project locations, not alignments). Nominating_Agency names the builder; start/end location fields. A 2028 RTP is in draft (tile layers only so far). Data last edited 2024-12-06."
+  },
+  {
+   "name": "Indianapolis MPO 2050 MTP projects",
+   "authority": "Indianapolis MPO; INDOT, counties, cities",
+   "states": [
+    "IN"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services5.arcgis.com/qVN2o0aio8BMbwcJ/arcgis/rest/services/2050_MTP_Projects/FeatureServer/0",
+   "verified": true,
+   "record_count": 170,
+   "geometry": "polyline",
+   "fields": {
+    "id": "PROJ_ID",
+    "name": "Descriptio",
+    "description": "Imprv_Type",
+    "work_type": "Imprv_Type",
+    "cost": "Total_Cost",
+    "status": null,
+    "date": "Time_Perio",
+    "county": "Sponsor"
+   },
+   "planned_filter": "All planned capacity projects. Time_Perio gives the period.",
+   "sample": "{\"PROJ_ID\": 6042, \"Descriptio\": \"US 36 from Raceway Rd. to Transfer Dr.\", \"Imprv_Type\": \"Widen from 4 lanes to 6 lanes\", \"Total_Cost\": 24576813, \"Time_Perio\": \"2020-2049\", \"Sponsor\": \"INDOT\"}",
+   "restrictions": null,
+   "notes": "Edited 2023. The IMPO TIP itself lives in the MiTIP web application, with no public feature layer found; a newer 9-line draft layer MTP_Projects_Map_WFL1 (2026) carries INDOT DES numbers. Data last edited 2023-02-13.",
+   "related_layers": [
+    {
+     "url": "https://services5.arcgis.com/qVN2o0aio8BMbwcJ/arcgis/rest/services/MTP_Projects_Map_WFL1/FeatureServer/0",
+     "layer": "Draft MTP Projects",
+     "geometry": "polyline",
+     "record_count": 9
+    }
+   ]
+  },
+  {
+   "name": "Broward MPO 2050 MTP cost feasible plan projects",
+   "authority": "Broward Metropolitan Planning Organization; FDOT District 4, Broward County, cities",
+   "states": [
+    "FL"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/vEO7zMZKFkKFr1Do/arcgis/rest/services/2050_MTP_CFP_3_25_2025_shp/FeatureServer/0",
+   "verified": true,
+   "record_count": 343,
+   "geometry": "polyline",
+   "fields": {
+    "id": "MTP_ID",
+    "name": "Project_Na",
+    "description": "Project_De",
+    "work_type": "Primary_Wo",
+    "cost": "Total",
+    "status": null,
+    "date": null,
+    "county": "City"
+   },
+   "planned_filter": "All planned. Funding-period columns F2025, F2026_2030, F2031_2035, F2036_2040, F2041_2050 show when money is planned.",
+   "sample": "{\"MTP_ID\": \"TI304\", \"Project_Na\": \"Johnson St from N 35th Ave to N 30th Rd & N 21st Ave to N 14th Ave\", \"Primary_Wo\": \"BIKE LANE/SIDEWALK\", \"Total\": 1751608, \"City\": \"Hollywood\"}",
+   "restrictions": null,
+   "notes": "FM is the FDOT financial management number where one exists. Program_Na = funding program. Data last edited 2025-03-25."
+  },
+  {
+   "name": "Broward MPO 2025 TIP projects",
+   "authority": "Broward Metropolitan Planning Organization",
+   "states": [
+    "FL"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/vEO7zMZKFkKFr1Do/arcgis/rest/services/2025_TIP/FeatureServer/0",
+   "verified": true,
+   "record_count": 761,
+   "geometry": "polyline",
+   "fields": {
+    "id": "FM_",
+    "name": "Project_De",
+    "description": "Extra_De_1",
+    "work_type": "Type_of_Wo",
+    "cost": null,
+    "status": null,
+    "date": null,
+    "county": null
+   },
+   "planned_filter": "All programmed in the FY2025-2029 TIP. Type_of_Wo e.g. 'ADD LANES & RECONSTRUCT'.",
+   "sample": "{\"FM_\": \"4515762\", \"Project_De\": \"TSMA REPLACEMENT PROJECT BROWARD COUNTY\", \"Extra_De_1\": \"PRELIMINARY ENGINEERING\", \"Type_of_Wo\": \"TRAFFIC SIGNALS\"}",
+   "restrictions": null,
+   "notes": "FM_ is the FDOT financial management number; join to the FDOT work program for cost, phases and years. Data last edited 2024-06-11."
+  },
+  {
+   "name": "Fresno COG RTP project list (Feb 2025)",
+   "authority": "Fresno Council of Governments; Caltrans District 6, Fresno County, cities",
+   "states": [
+    "CA"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/v2YXtBuIb8gr4ywi/arcgis/rest/services/RTP_list_2_18_2025/FeatureServer/0",
+   "verified": true,
+   "record_count": 2342,
+   "geometry": "polyline",
+   "fields": {
+    "id": "TIP_ID",
+    "name": "PROJECT_TITLE",
+    "description": "DESCRIPTION",
+    "work_type": "RANK_CATEGORY",
+    "cost": "CURRENT_",
+    "status": "CAPACITY_STATUS",
+    "date": "OPEN_TO_TRAFFIC",
+    "county": "AGENCY"
+   },
+   "planned_filter": "OPEN_TO_TRAFFIC >= current year. CAPACITY_STATUS = 'Y' marks capacity-increasing projects. RTP = 'Y' means in the constrained plan.",
+   "sample": "{\"TIP_ID\": \"FRE501703\", \"PROJECT_TITLE\": \"North Ave Bike Lanes - Indianola Ave to Bethel Ave\", \"DESCRIPTION\": \"Class II bike facility on North Ave from Indianola Ave to Bethel Ave\", \"RANK_CATEGORY\": \"Bike & Ped\", \"CURRENT_\": \"$190 \", \"CAPACITY_STATUS\": \"N\", \"OPEN_TO_TRAFFIC\": 2029, \"AGENCY\": \"Sanger, City of\"}",
+   "restrictions": null,
+   "notes": "2,342 lines plus points (layer 1), multipoints (2), polygons (3). CURRENT_ is cost text in $ thousands. PROJECT_LIMITS, STREET_NAME give location. Data last edited 2025-02-18.",
+   "related_layers": [
+    {
+     "url": "https://services.arcgis.com/v2YXtBuIb8gr4ywi/arcgis/rest/services/RTP_list_2_18_2025/FeatureServer/1",
+     "layer": "RTP_list_2_18_2025_points",
+     "geometry": "point",
+     "record_count": 34
+    }
+   ]
+  },
+  {
+   "name": "East-West Gateway TIP FY2026-2029 projects",
+   "authority": "East-West Gateway Council of Governments (St. Louis MPO); MoDOT, IDOT, counties, cities, Metro",
+   "states": [
+    "MO",
+    "IL"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services7.arcgis.com/m44ilbCHbbvvNw4A/arcgis/rest/services/TIP_26_29_Features_070125/FeatureServer/0",
+   "verified": true,
+   "record_count": 432,
+   "geometry": "polyline",
+   "fields": {
+    "id": "TIPSEG",
+    "name": "PROJ_TITLE",
+    "description": "DESC2",
+    "work_type": "PROJTYPE",
+    "cost": "PROJ_TOT",
+    "status": "AMDNO",
+    "date": "PGM_YR_S",
+    "county": "COUNTY"
+   },
+   "planned_filter": "All programmed FY2026-2029. DESC2 lists the work and often says 'LAND ACQUISITION' or 'RIGHT OF WAY' outright; PROJTYPE = 'Capacity'.",
+   "sample": "{\"TIPSEG\": \"4707C\", \"PROJ_TITLE\": \"IL 3 CONNECTOR\", \"DESC2\": \"LAND ACQUISITION; UTILITY RELOCATION, NEW 2 LN ROAD\", \"PROJTYPE\": \"Capacity\", \"PROJ_TOT\": 32500000, \"COUNTY\": \"ST. CLAIR\", \"PGM_YR_S\": 23, \"AMDNO\": \"0121-MY\"}",
+   "restrictions": null,
+   "notes": "Layer 0 lines (432), layer 1 points (144). DESC1 = limits; SPONSOR; SPROJN = state job number; STATE = MO or IL. Service name carries a date. Data last edited 2025-08-05.",
+   "related_layers": [
+    {
+     "url": "https://services7.arcgis.com/m44ilbCHbbvvNw4A/arcgis/rest/services/TIP_26_29_Features_070125/FeatureServer/1",
+     "layer": "Combined_Features_Points_070125",
+     "geometry": "multipoint",
+     "record_count": 144
+    }
+   ]
+  },
+  {
+   "name": "MRCOG TIP map (Albuquerque)",
+   "authority": "Mid-Region Council of Governments / Mid-Region MPO; NMDOT, Bernalillo County, Albuquerque, Rio Rancho",
+   "states": [
+    "NM"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://mrcogmaps.org/server/rest/services/TIP_Map/TIP_Map_20260122/FeatureServer/0",
+   "verified": true,
+   "record_count": 116,
+   "geometry": "polyline",
+   "fields": {
+    "id": "ControlNum",
+    "name": "PrjctTitle",
+    "description": null,
+    "work_type": "PrjctType",
+    "cost": null,
+    "status": null,
+    "date": "last_edited_date",
+    "county": "LeadAgency"
+   },
+   "planned_filter": "All are in the current TIP. PrjctType codes e.g. 'Capacity Project', 'Safety (21)'.",
+   "sample": "{\"ControlNum\": \"A300019\", \"PrjctTitle\": \"Coors Blvd. SW Pedestrian Safety Improvements\", \"PrjctType\": \"Safety (21)\", \"LeadAgency\": \"County of Bernalillo\", \"last_edited_date\": 1756323024000}",
+   "restrictions": null,
+   "notes": "ControlNum is the NMDOT control number (joins to NMDOT STIP). Thin attributes. Service name carries a date (folder TIP_Map)."
+  },
+  {
+   "name": "AMATS TIP 2026-2029 projects (Akron)",
+   "authority": "Akron Metropolitan Area Transportation Study; ODOT District 4, counties, cities",
+   "states": [
+    "OH"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/8roChjXOF0iBhNoB/arcgis/rest/services/TIP2629_Project_Details/FeatureServer/0",
+   "verified": true,
+   "record_count": 250,
+   "geometry": "none",
+   "fields": {
+    "id": "PID",
+    "name": "NAME",
+    "description": "DESCRIPTION",
+    "work_type": "DESIGNATION",
+    "cost": "TOTAL",
+    "status": null,
+    "date": null,
+    "county": "SPONSOR"
+   },
+   "planned_filter": "All programmed SFY2026-2029. Table TIP2629_Project_Funding has PHASE and YEAR rows per PID.",
+   "sample": "{\"PID\": 118732, \"NAME\": \"SUM S Main St (Akron)\", \"DESCRIPTION\": \"Replacement of SFN 7760027 SUM S Main St bridge over Conrail and CSX Railroads.\", \"TOTAL\": 7090000, \"SPONSOR\": \"Akron, City of\", \"DESIGNATION\": \"GRP\"}",
+   "restrictions": null,
+   "notes": "This is the attribute table; geometry is in TIP2629_Project_Lines (480 lines) and TIP2629_Project_Points keyed by PID_NBR = PID. TERMINI gives limits. Data last edited 2026-11-02.",
+   "related_layers": [
+    {
+     "url": "https://services1.arcgis.com/8roChjXOF0iBhNoB/arcgis/rest/services/TIP2629_Project_Lines/FeatureServer/0",
+     "layer": "TIP 2026-2029 ProjectLines",
+     "geometry": "polyline",
+     "record_count": 480
+    },
+    {
+     "url": "https://services1.arcgis.com/8roChjXOF0iBhNoB/arcgis/rest/services/TIP2629_Project_Funding/FeatureServer/0",
+     "layer": "TIP2629 Project Funding",
+     "geometry": "none",
+     "record_count": 657
+    }
+   ]
+  },
+  {
+   "name": "OKI 2050 long-range plan road and freight projects (2024 update)",
+   "authority": "Ohio-Kentucky-Indiana Regional Council of Governments (Cincinnati MPO); ODOT, KYTC, INDOT, counties",
+   "states": [
+    "OH",
+    "KY",
+    "IN"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://gis.oki.org/server/rest/services/Hosted/LRP_Data_April_2024/FeatureServer/0",
+   "verified": true,
+   "record_count": 284,
+   "geometry": "polyline",
+   "fields": {
+    "id": "pid",
+    "name": "facility",
+    "description": "descriptio",
+    "work_type": "type",
+    "cost": "cost",
+    "status": null,
+    "date": "timeline",
+    "county": "county_1"
+   },
+   "planned_filter": "All planned. type IN ('Add through lanes','New facility', ...) for land-taking work.",
+   "sample": "{\"pid\": 9902, \"facility\": \"KY 842\", \"descriptio\": \"Improve safety and reduce congestion along KY 842 (Richardson Road) from Boone County line to KY 1303 (Turkeyfoot Road)\", \"type\": \"Add through lanes\", \"cost\": \"15.4\", \"county_1\": \"Kenton\"}",
+   "restrictions": null,
+   "notes": "location gives limits; lead_agenc the builder; cost in $ millions. Older layer Layers/Project2050Plan/MapServer/0 (196 lines) has YOE (year of expenditure) and YOE_Cost. OKI's TIP was not found as a public layer.",
+   "related_layers": [
+    {
+     "url": "https://gis.oki.org/server/rest/services/Layers/Project2050Plan/MapServer/0",
+     "layer": "Projects",
+     "geometry": "polyline",
+     "record_count": 196
+    }
+   ]
+  },
+  {
+   "name": "Oklahoma Turnpike Authority ACCESS Oklahoma program projects (consultant copy)",
+   "authority": "Oklahoma Turnpike Authority (15-year ACCESS Oklahoma expansion program)",
+   "states": [
+    "OK"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services7.arcgis.com/p6OX6CjG8lXHZvik/arcgis/rest/services/ACCESS_Projects_Public_2/FeatureServer/0",
+   "verified": true,
+   "record_count": 59,
+   "geometry": "polyline",
+   "fields": {
+    "id": "DesignSegment",
+    "name": "Label",
+    "description": "Project",
+    "work_type": "Type",
+    "cost": "PrelimAmt",
+    "status": "ProjectStatus",
+    "date": "ExpStartDt",
+    "county": "Turnpike"
+   },
+   "planned_filter": "ProjectStatus IN ('Future','Active Design') (exclude 'Active Construction').",
+   "sample": "{\"DesignSegment\": \"CIM-33001\", \"Label\": \"Cimarron Turnpike at SH-108 / Glencoe\", \"Project\": \"Cimarron - SH-108 Interchange at Glencoe\", \"Type\": \"Access Improvement\", \"PrelimAmt\": \"$26,000,000\", \"ProjectStatus\": \"Future\", \"ExpStartDt\": \"TBD\", \"Turnpike\": \"Cimarron Turnpike\"}",
+   "restrictions": null,
+   "notes": "59 segments incl. new-alignment turnpikes. Published by the program consultant (Poe & Associates), titled 'Test Use Only', last edited June 2024: treat as a lead list and confirm against accessoklahoma.com. No official OTA-hosted layer was found. Data last edited 2024-06-03."
+  },
+  {
+   "name": "Florida's Turnpike work program 2024-2028 (consultant copy)",
+   "authority": "Florida's Turnpike Enterprise (FDOT District 8)",
+   "states": [
+    "FL"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/9lDFdeC4JIBgML6L/arcgis/rest/services/Turnpike_Work_Program__2024_2028_/FeatureServer/4",
+   "verified": true,
+   "record_count": 83,
+   "geometry": "polyline",
+   "fields": {
+    "id": "WPITEM_SEG",
+    "name": "DESCRIPTIO",
+    "description": "PROJECT_TY",
+    "work_type": "PROJECT_TY",
+    "cost": "AMOUNT",
+    "status": "PHASE",
+    "date": "FISCAL_YEA",
+    "county": "COUNTY_NAM"
+   },
+   "planned_filter": "PHASE = 'ROW' rows are funded right-of-way phases; PDE/PE precede them. FISCAL_YEA >= current year.",
+   "sample": "{\"WPITEM_SEG\": 1907171, \"DESCRIPTIO\": \"ATIS DYNAMIC MESSAGE SIGNS, HWY ADVISORY RADIO TRAFFIC MANAGEMENT CENT\", \"PROJECT_TY\": \"ITS FREEWAY MANAGEMENT\", \"AMOUNT\": 3200, \"PHASE\": \"ROW\", \"FISCAL_YEA\": 2028, \"COUNTY_NAM\": \"TURNPIKE\"}",
+   "restrictions": null,
+   "notes": "One row per item/phase/year. Copy published by VHB in March 2024, so it is stale; the live FDOT work program (state DOT source) supersedes it. FDOT's own Turnpike_Active_Construction_Projects layer (230 lines, edited 2026-09) covers work already under contract, i.e. after acquisition. Data last edited 2024-03-25."
+  },
+  {
+   "name": "Ohio Turnpike construction projects (points)",
+   "authority": "Ohio Turnpike and Infrastructure Commission",
+   "states": [
+    "OH"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services3.arcgis.com/i0P1AizjIwwAZiAU/arcgis/rest/services/ConstructionProjects_Points_7_20_26/FeatureServer/0",
+   "verified": true,
+   "record_count": 28,
+   "geometry": "point",
+   "fields": {
+    "id": "ProjNO",
+    "name": "Decription",
+    "description": null,
+    "work_type": null,
+    "cost": null,
+    "status": "Status",
+    "date": "Schedule",
+    "county": null
+   },
+   "planned_filter": "Status = 'Active'. Schedule gives start/end months.",
+   "sample": "{\"ProjNO\": \"43-26-06\", \"Decription\": \"PORTLAND ROAD (C.R. 32) ML Bridge Deck Replacement\", \"Status\": \"Active\", \"Schedule\": \"04-26/10-26\"}",
+   "restrictions": null,
+   "notes": "Current-season construction (28 points; mostly bridge and pavement work inside existing right-of-way), not a forward capital plan. 'Decription' is the field's real spelling. Low value for early land-taking signals. Data last edited 2026-07-22."
   }
  ],
- "unverified": [],
- "summary": ""
+ "unverified": [
+  {
+   "name": "SACOG MTP/SCS 2025 projects",
+   "url": "https://services.sacog.org/hosting/rest/services/MTP_SCS/SACOG_MTP_SCS_Projects_2025/FeatureServer",
+   "reason": "Listed as public on ArcGIS Online (also MTP_SCS_Project_point_2025) but the SACOG server timed out on every request from this network (3 attempts, up to 45 s)."
+  },
+  {
+   "name": "MARC (Kansas City) RTP 2050 projects",
+   "url": "https://gis2.marc2.org/arcgis/rest/services/Transportation/RTP_2050_Projects/MapServer",
+   "reason": "Listed as public on ArcGIS Online (also Transportation/RTP2050_2025) but gis2.marc2.org timed out on every request."
+  },
+  {
+   "name": "HCTRA project map services",
+   "url": "https://gismaps.hctra.org/arcgis/rest/services/Projects",
+   "reason": "Harris County Toll Road Authority publishes per-project MapServers (e.g. Projects/HardyDowntownConnectorProject) but the server timed out; these are design layers for single projects, not a capital-program list."
+  },
+  {
+   "name": "Illinois Tollway candidate projects (HNTB/CDM Smith digitized list)",
+   "url": "https://services.arcgis.com/rD2ylXRs80UroD90/arcgis/rest/services/IL_Tollway_Projects/FeatureServer/0",
+   "reason": "Reachable (68 lines with project_name, project_scope, est_cost_2032) but it is a consultant's working list of candidate projects for a planning study, not an adopted Tollway capital program. No official Illinois Tollway project layer found."
+  },
+  {
+   "name": "SCAG FTIP",
+   "url": "https://maps.scag.ca.gov/scaggis/rest/services/FTIP/FTIP2017/MapServer",
+   "reason": "Only the 2017 FTIP is published as a service; no current FTIP or Connect SoCal 2024 project layer found on maps.scag.ca.gov, rdp.scag.ca.gov or ArcGIS Online. County transportation commissions hold the project data."
+  },
+  {
+   "name": "CMAP TIP (eTIP)",
+   "url": "https://etip.cmap.illinois.gov/",
+   "reason": "No public feature layer of TIP or regionally significant projects found in CMAP's ArcGIS Online org (486 services checked by name); eTIP is a web application without a documented API. Not fetched."
+  },
+  {
+   "name": "NJTPA TIP (NOTIS)",
+   "url": "https://www.njtpa.org/",
+   "reason": "No public NJTPA project layer found; only a consultant demo. NJDOT's statewide STIP layer (state DOT source) covers the same projects."
+  },
+  {
+   "name": "SANDAG RTIP / Regional Plan projects",
+   "url": "https://services1.arcgis.com/HG80xaIVT1z1OdO5/arcgis/rest/services",
+   "reason": "SANDAG's org has only 2021-2022 Regional Plan layers (Highway_Projects_Points_Update_20220415, Complete_Corridors_*) and a bikeway CIP; geo.sandag.org returns 403; the Socrata catalog at opendata.sandag.org returned no RTIP dataset."
+  },
+  {
+   "name": "Miami-Dade TPO TIP/LRTP",
+   "url": "https://www.miamidadetpo.org/",
+   "reason": "No public project feature layer found on ArcGIS Online."
+  },
+  {
+   "name": "Hillsborough TPO TIP/LRTP",
+   "url": "https://services.arcgis.com/apTfC6SUmnNfnxuF/arcgis/rest/services",
+   "reason": "Plan Hillsborough org (803 services) has no service named for TIP/LRTP/cost-feasible projects."
+  },
+  {
+   "name": "Kern COG RTP",
+   "url": "https://services5.arcgis.com/uTFGLhNvXrAg67id/arcgis/rest/services",
+   "reason": "Only 2014 RTP project layers are published."
+  },
+  {
+   "name": "Memphis MPO TIP/RTP",
+   "url": "https://services2.arcgis.com/saWmpKJIUAjyyNVc/arcgis/rest/services",
+   "reason": "No TIP or RTP project layer in the org's 165 services."
+  },
+  {
+   "name": "Indianapolis MPO TIP (MiTIP)",
+   "url": "https://mitip.indympo.org/",
+   "reason": "TIP is in the MiTIP web application; no current public feature layer found (only the 2050 MTP layer, listed under sources)."
+  },
+  {
+   "name": "NTTA capital projects",
+   "url": "https://services.arcgis.com/pS2RA6RqB5M3sZIg/arcgis/rest/services",
+   "reason": "NTTA's org (105 services) has no project or capital-plan layer; NTTA corridors appear in the NCTCOG Mobility 2050 source (NewAdd_Tllwy='Yes')."
+  },
+  {
+   "name": "Pennsylvania Turnpike, New Jersey Turnpike, Kansas Turnpike, E-470, CFX, CTRMA capital-project maps",
+   "url": "",
+   "reason": "No public machine-readable project layer found through ArcGIS Online search; gis.paturnpike.com did not answer. Not verified either way."
+  }
+ ],
+ "summary": "Verified ArcGIS feature/map layers of planned projects for regional planning bodies, each fetched live on 2026-11-17 with a record count and a sample record. Covered MPOs: ARC Atlanta, MTC Bay Area, NCTCOG, H-GAC (TIP and RTP), CAMPO Austin, AAMPO (TIP and MTP), Met Council, WFRC (RTP and TIP), Mountainland, PSRC (TIP and RTP), SEMCOG, DRCOG, MWCOG/TPB, DVRPC (PA and NJ), NOACA, MORPC, MVRPC, TMACOG, AMATS, OKI, Boston MPO, NYMTC, GBNRTC, CRTC Albany, Baltimore BRTB, WILMAPCO, SPC Pittsburgh, SJTPO, HRTPO, PlanRVA, CAMPO NC, CRTPO (MTP and STIP), GNRC Nashville, Chattanooga TPO, RPCGB Birmingham, New Orleans RPC, MetroPlan Orlando (TIP subset and MTP needs), Broward MPO (MTP and TIP), Forward Pinellas, Sarasota/Manatee, FDOT SIS cost feasible plan, MAG Phoenix, PAG/RTA Tucson, RTC Southern Nevada, RTC Washoe, MRCOG, PPACG, NFRMPO, Oregon Metro, Fresno COG, EWG St. Louis, WAMPO, Lincoln MPO, Indianapolis MPO (MTP). Most TIP layers carry the state DOT project number (CSJ, PID, MPMS, PIN, FM/FPN, UPC, DBNUM, JobNet), so they join to state DOT sources. Long-range plan (MTP/RTP/LRTP) layers are the earliest signal: they list widenings and new roads 5-25 years ahead. Layers with an explicit right-of-way signal: MAG Phoenix TIP_phase table, PSRC Financials table and MTP_Status, H-GAC and AAMPO PHASE, SEMCOG phase_type_abbrv, SJTPO PHASE, EWG DESC2 text, MetroPlan ROW_PV_COST, FDOT SIS SM_RW/HiPh, New Orleans TIP PhaseDescr. Caveats: many MPO services are republished under a new name with each TIP amendment or plan update (noted per source) so ingest should rediscover by listing the org's services; several are hosted by consultants (RTC Southern Nevada, OTA ACCESS, Florida's Turnpike copy). No licence or commercial-use restriction was stated on any layer; none requires a login or key. Not found or not reachable (see unverified): SACOG, MARC and HCTRA (servers timed out), SCAG, CMAP, NJTPA, SANDAG, Miami-Dade TPO, Hillsborough TPO, Kern COG, Memphis MPO, IndyMPO TIP, and almost all toll authorities - only Oklahoma's ACCESS program (consultant copy), Florida's Turnpike and Ohio Turnpike construction points were found. Not examined for lack of time: smaller MPOs seen in search results (e.g. Lehigh Valley, COMPASS Boise, MAPA Omaha, GVMC Grand Rapids, Lexington, Sarasota earlier TIPs, Ocala-Marion, NWARPC, Florida-Alabama TPO, KDOT TIP layers, CDTC, NVTA) and states with no source here (e.g. SC, AR, OK MPOs, IA, WI MPOs, CT, RI, HI, ID, MT, ME, NH, VT, WV, MS, SD, ND, WY, AK)."
 }
