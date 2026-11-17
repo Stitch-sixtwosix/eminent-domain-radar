@@ -37,12 +37,17 @@ publishes, usually an assessed value rather than market value.
 
 ## How leads are scored
 
-* **Project score (0-100)**: likelihood the project needs private land (new roadway 95, widening 85,
-  interchange 70, bridge replacement 40 ...) plus a bonus for early stages and large budgets.
-  PennDOT records are scored by transparent rules in `edradar/classify.py`; free-text notices are
-  read by Claude when an Anthropic API key is set, otherwise by keyword rules.
-* **Lead score**: the project score for parcels that abut the mapped alignment (within 20 m) or are
-  named in the document; 75% of it for parcels in the wider 75 m ring.
+Every lead gets a score out of 100, in whole points from four parts that add up to the score:
+
+| Part | Points | How it is set |
+|---|---|---|
+| Need for private land | 0-60 | Each kind of project is rated 0-100 for how likely it is to take land; 60% of that rating counts. New roadway or interchange 95 (57 points), realignment 90 (54), widening or added lane 85 (51), new bridge 75 (45), interchange improvement 70 (42), intersection or turning lane 60 (36), reconstruction 45 (27), bridge replacement 40 (24). Wording such as "right-of-way" or "bypass" adds 8 to the rating. Free-text notices are rated by Claude or keyword rules. |
+| How early it is | 0-15 | Planning or environmental review 15, design 12, right-of-way acquisition 8, stage not published 6, condemnation already authorized 4, construction 0. |
+| Size of the project | 0-10 | Budget of $50M or more 10, $10M-$50M 7, $1M-$10M 4, under $1M or not published 0. |
+| Where the parcel sits | 5 or 15 | Abuts the mapped alignment (within 20 m) or is named in the document 15; nearby but not abutting (20-75 m) 5. |
+
+A project's own score assumes a parcel on the alignment, so it equals the score of its best leads. The rules live
+in `edradar/classify.py`; after changing them run `edradar rescore`.
 
 ## Run it
 

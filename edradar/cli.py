@@ -34,6 +34,7 @@ def main() -> None:
     p.add_argument("--min-score", type=int, default=90)
     p.add_argument("--limit", type=int, default=25, help="most owners to look up in this batch")
     p.add_argument("--run", action="store_true", help="actually look them up; without it only the count and cost are shown")
+    sub.add_parser("rescore", help="recompute all scores from stored data (after the scoring rules change)")
     sub.add_parser("usage", help="billable usage: lookups and postcards, cost and client price")
     p = sub.add_parser("export", help="write a read-only static copy of the dashboard")
     p.add_argument("--out", default="site")
@@ -87,6 +88,8 @@ def main() -> None:
                   % (res["owners"], res["max_cost"], res["max_billed"]))
         else:
             print("%d owners looked up, %d matched, %d failed" % (res["owners"], res["matched"], res["failed"]))
+    elif args.cmd == "rescore":
+        print(pipeline.rescore(db))
     elif args.cmd == "usage":
         from . import skiptrace
 

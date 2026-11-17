@@ -78,11 +78,26 @@ def geocode(cfg: Dict[str, Any], db: DB) -> int:
 
 
 def lead_score(project_score: int, reason: str) -> int:
-    if reason == "named_in_document":
-        return min(100, project_score + 10)
-    if reason == "abuts_alignment":
-        return project_score
-    return int(round(project_score * 0.75))
+    return C.lead_points(project_score, reason)
+
+
+def rescore(db: DB) -> Dict[str, int]:
+    """Recompute every project and lead score from what is already stored. Run after the scoring rules change."""
+    n = 0
+    for p in db.rows("SELECT id, acquisition_likelihood, stage, est_cost, score FROM projects"):
+        outside = p["score"] == 0 and (p["acquisition_likelihood"] or 0) > 0     # scored 0 because it is not in PA
+        new = 0 if outside else C.overall_score(p["acquisition_likelihood"] or 0, p["stage"] or "unknown", p["est_cost"])
+        if new != p["score"]:
+            db.conn.execute("UPDATE projects SET score=? WHERE id=?", (new, p["id"]))
+            n += 1
+    leads = 0
+    for l in db.rows("SELECT l.id, l.score, l.match_reason, p.score AS ps FROM leads l JOIN projects p ON p.id=l.project_id"):
+        new = C.lead_points(l["ps"], l["match_reason"])
+        if new != l["score"]:
+            db.conn.execute("UPDATE leads SET score=? WHERE id=?", (new, l["id"]))
+            leads += 1
+    db.commit()
+    return {"projects_changed": n, "leads_changed": leads}
 
 
 def match(cfg: Dict[str, Any], db: DB, limit: Optional[int] = None) -> int:

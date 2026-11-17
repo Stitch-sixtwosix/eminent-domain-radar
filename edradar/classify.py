@@ -19,8 +19,38 @@ STAGES = ["planning", "environmental_review", "design", "row_acquisition", "cond
           "construction", "unknown"]
 
 # How early a stage is. Earlier stages are worth more as leads: owners have not been approached yet.
-STAGE_BONUS = {"planning": 10, "environmental_review": 10, "design": 8, "row_acquisition": 6,
-               "condemnation_filed": 0, "construction": -25, "unknown": 0}
+# ---------------------------------------------------------------- the 100-point score
+# Every score is whole points from four components that add up to at most 100:
+#   1. Need for private land   0-60   how likely this kind of project is to take land (likelihood x 0.6)
+#   2. How early it is         0-15   earlier stages score higher: owners have not been approached yet
+#   3. Size of the project     0-10   from the published budget
+#   4. Where the parcel sits   0-15   on the alignment or named in the document 15, nearby 5
+# A project's own score assumes a parcel on the alignment (the full 15), so it equals the score of its best leads.
+MAX_POINTS = {"need": 60, "stage": 15, "size": 10, "position": 15}
+STAGE_POINTS = {"planning": 15, "environmental_review": 15, "design": 12, "row_acquisition": 8,
+                "condemnation_filed": 4, "unknown": 6, "construction": 0}
+POSITION_POINTS = {"named_in_document": 15, "abuts_alignment": 15, "within_buffer": 5}
+POSITION_LABEL = {"named_in_document": "Parcel is named in the source document",
+                  "abuts_alignment": "Parcel abuts the mapped alignment (within 20 m)",
+                  "within_buffer": "Parcel is nearby but not abutting (20 to 75 m)"}
+
+
+def need_points(likelihood: Optional[int]) -> int:
+    return max(0, min(60, int(round((likelihood or 0) * 0.6))))
+
+
+def size_points(est_cost: Optional[float]) -> int:
+    if not est_cost:
+        return 0
+    return 10 if est_cost >= 50e6 else 7 if est_cost >= 10e6 else 4 if est_cost >= 1e6 else 0
+
+
+def size_label(est_cost: Optional[float]) -> str:
+    if not est_cost:
+        return "No budget published"
+    return ("Budget of $50M or more" if est_cost >= 50e6 else "Budget of $10M to $50M" if est_cost >= 10e6
+            else "Budget of $1M to $10M" if est_cost >= 1e6 else "Budget under $1M")
+
 
 # PennDOT improvement type -> (likelihood that private land is needed, project type)
 PENNDOT_RULES: Dict[str, Tuple[int, str]] = {
@@ -56,18 +86,24 @@ def clamp(n: float) -> int:
 
 
 def overall_score(likelihood: int, stage: str, est_cost: Optional[float] = None, in_pa: bool = True) -> int:
+    """Project score out of 100: the three project components plus the full 15 for a parcel on the alignment."""
     if not in_pa:
         return 0
-    s = likelihood * 0.85 + STAGE_BONUS.get(stage, 0)
-    if est_cost:
-        s += 5 if est_cost >= 50e6 else 3 if est_cost >= 10e6 else 0
-    return clamp(s)
+    return need_points(likelihood) + STAGE_POINTS.get(stage, STAGE_POINTS["unknown"]) + size_points(est_cost) \
+        + MAX_POINTS["position"]
 
 
-STAGE_LABEL = {"planning": "Early stage (planning)", "environmental_review": "Early stage (environmental review)",
-               "design": "In design", "row_acquisition": "Right-of-way acquisition under way",
-               "condemnation_filed": "Condemnation already authorized", "construction": "Under construction",
-               "unknown": "Stage unknown"}
+def lead_points(project_score: int, reason: str) -> int:
+    """Lead score out of 100: swap the project's assumed 15 position points for this parcel's actual position."""
+    if project_score <= 0:
+        return 0
+    return max(0, project_score - MAX_POINTS["position"] + POSITION_POINTS.get(reason, 5))
+
+
+STAGE_LABEL = {"planning": "Planning: the earliest stage", "environmental_review": "Environmental review: still early",
+               "design": "In design", "row_acquisition": "Right-of-way acquisition already under way",
+               "condemnation_filed": "Condemnation already authorized", "construction": "Under construction: too late",
+               "unknown": "Stage not published"}
 
 
 STAGE_ORDER = [
@@ -107,22 +143,20 @@ def timeline(stage: Optional[str], raw: Optional[Dict[str, Any]] = None, today: 
 
 def score_breakdown(likelihood: Optional[int], stage: Optional[str], est_cost: Optional[float],
                     score: Optional[int]) -> List[Dict[str, Any]]:
-    """The parts of a project score, in the same arithmetic as overall_score, for display."""
-    likelihood = likelihood or 0
-    parts: List[Dict[str, Any]] = [
-        {"label": "Likelihood the project needs private land: %d of 100, weighted 85%%" % likelihood,
-         "points": round(likelihood * 0.85, 1)},
-        {"label": STAGE_LABEL.get(stage or "unknown", "Stage unknown"), "points": STAGE_BONUS.get(stage or "unknown", 0)},
+    """The four components of a project score, each with its points and its maximum. They sum to the score."""
+    if score == 0:
+        return [{"key": "outside", "label": "Not scored: the notice does not affect land in Pennsylvania",
+                 "points": 0, "max": 100}]
+    stage = stage if stage in STAGE_POINTS else "unknown"
+    return [
+        {"key": "need", "label": "Need for private land", "detail": "This kind of project is rated %d of 100 for taking "
+         "private land; 60%% of that rating counts" % (likelihood or 0), "points": need_points(likelihood), "max": 60},
+        {"key": "stage", "label": "How early it is", "detail": STAGE_LABEL.get(stage, "Stage unknown"),
+         "points": STAGE_POINTS[stage], "max": 15},
+        {"key": "size", "label": "Size of the project", "detail": size_label(est_cost), "points": size_points(est_cost), "max": 10},
+        {"key": "position", "label": "Where the parcel sits", "detail": "A parcel on the alignment",
+         "points": MAX_POINTS["position"], "max": 15},
     ]
-    if est_cost and est_cost >= 10e6:
-        parts.append({"label": "Budget over $50M" if est_cost >= 50e6 else "Budget over $10M",
-                      "points": 5 if est_cost >= 50e6 else 3})
-    total = sum(x["points"] for x in parts)
-    if score is not None and clamp(total) != score:
-        parts.append({"label": "Not in Pennsylvania" if score == 0 else "Adjustment", "points": score - round(total)})
-    elif total > 100 or total < 0:
-        parts.append({"label": "Capped to the 0-100 scale", "points": clamp(total) - round(total, 1)})
-    return parts
 
 
 # ---------------------------------------------------------------- PennDOT rules

@@ -164,9 +164,10 @@
   .p-sec .when { font-size: 13px; margin-bottom: 10px; display: grid; gap: 2px; }
   .p-sec .when b { font-weight: 600; } .p-sec .when span { color: var(--ink-2); }
   .points { width: 100%; font-size: 13px; }
-  .points td { padding: 5px 0; border-bottom: 1px solid var(--line); }
-  .points td:first-child { padding-right: 12px; }
-  .points .sub-total td { font-weight: 500; }
+  .points th { position: static; box-shadow: none; height: auto; padding: 0 0 5px; border-bottom: 1px solid var(--line-strong); }
+  .points td { padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .points td.num, .points th.num { padding-left: 14px; }
+  .points .sub { color: var(--ink-2); font-size: 12.5px; }
   .points .total td { font-weight: 600; border-bottom: 0; font-size: 14px; }
   .figs { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: var(--radius); }
   .figs div { padding: 9px 12px; border-left: 1px solid var(--line); }
@@ -391,9 +392,8 @@ const REASON = {named_in_document: "Named in document", abuts_alignment: "Abuts 
 const safeUrl = u => /^https?:\/\//i.test(u || "") ? u : "#";
 const day = s => s ? new Date(s.replace(" ", "T") + "Z").toLocaleDateString(undefined, {month: "short", day: "numeric"}) : "";
 const signed = n => (n > 0 ? "+" : n < 0 ? "−" : "") + Math.abs(n).toLocaleString(undefined, {maximumFractionDigits: 1});
-const REASON_WEIGHT = {named_in_document: ["Named in the source document", "+10"], abuts_alignment: ["Abuts the alignment (within 20 m)", "× 100%"], within_buffer: ["Nearby (within 75 m)", "× 75%"]};
 const TIPS = {
-  score: "Lead score, 0 to 100. It is the project's score, kept in full when the parcel abuts the mapped alignment, cut to 75% when it is only nearby, and raised by 10 when the document names the parcel. Hover any score for its own breakdown.",
+  score: "Lead score out of 100, in whole points from four parts. Need for private land: up to 60. How early the project is: up to 15. Size of the project: up to 10. Where the parcel sits: 15 on the alignment or named in the document, 5 if only nearby. Hover any score, or open the lead, to see its points.",
   owner: "Owner of record and mailing address from the county's public parcel file. Some county files are dated snapshots, so confirm ownership with the county before outreach.",
   property: "Street address of the parcel where the county publishes one, with the county's parcel ID and county beneath.",
   value: "The value the county publishes for the parcel. In most counties this is an assessed value, which is usually lower than market value.",
@@ -405,35 +405,31 @@ const TIPS = {
 const infoBtn = key => `<button class="info" type="button" data-tip-key="${key}" aria-label="About this column"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="8" cy="8" r="6.25"/><path d="M8 7.25v3.5"/><circle cx="8" cy="5" r=".4" fill="currentColor"/></svg></button>`;
 const th = (label, key, cls) => `<th${cls ? ` class="${cls}"` : ""}>${label}${infoBtn(key)}</th>`;
 function partsHtml(title, parts, total) {
-  return `<b>${esc(title)}</b>` + parts.map(x => `<div class="row"><span>${esc(x.label)}</span><span>${signed(x.points)}</span></div>`).join("") +
-    `<div class="row sum"><span>Score</span><span>${total}</span></div>`;
+  return `<b>${esc(title)}</b>` + parts.map(x => `<div class="row"><span>${esc(x.label)}${x.detail ? `<br><span style="opacity:.75">${esc(x.detail)}</span>` : ""}</span><span>${x.points} / ${x.max}</span></div>`).join("") +
+    `<div class="row sum"><span>Score</span><span>${total} / 100</span></div>`;
 }
-// Every lead score as points that add up: the project's points, then one adjustment for where the parcel sits.
-const PARCEL_POINTS = {
-  named_in_document: ["Parcel is named in the source document", "The ordinance or notice lists this parcel, so 10 points are added."],
-  abuts_alignment: ["Parcel abuts the mapped alignment (within 20 m)", "Closest parcels keep the full project score."],
-  within_buffer: ["Parcel is nearby, not abutting (20 to 75 m)", "Less likely to be touched, so a quarter of the project score is taken off."],
+// Every lead score is the project's first three parts plus this parcel's own position points.
+const POSITION = {
+  named_in_document: [15, "Named in the source document"],
+  abuts_alignment: [15, "Abuts the mapped alignment (within 20 m)"],
+  within_buffer: [5, "Nearby but not abutting (20 to 75 m)"],
 };
 function leadPoints(r) {
   const p = projects.find(x => x.id === r.project_id) || (SNAP && SNAP.projects.find(x => x.id === r.project_id)) || {};
-  const ps = r.project_score ?? p.score ?? null, rows = (p.score_parts || []).map(x => ({label: x.label, points: x.points}));
-  const [label, note] = PARCEL_POINTS[r.match_reason] || [r.match_reason, ""];
-  return {project: ps, parts: rows, parcel: {label, note, points: ps == null ? 0 : r.score - ps}, total: r.score};
+  const [pts, detail] = POSITION[r.match_reason] || [5, r.match_reason];
+  const parts = (p.score_parts || []).map(x => x.key === "position" ? {...x, points: pts, detail} : x);
+  return {parts, total: r.score, adds: parts.reduce((a, x) => a + x.points, 0)};
 }
 function pointsTable(r) {
-  const t = leadPoints(r), line = (label, pts, cls) => `<tr${cls ? ` class="${cls}"` : ""}><td>${esc(label)}</td><td class="num">${pts}</td></tr>`;
-  return `<table class="points"><tbody>${t.parts.map(x => line(x.label, signed(x.points))).join("")}
-    ${t.project != null ? line("Project score", t.project, "sub-total") : ""}
-    ${line(t.parcel.label, signed(t.parcel.points) === "0" ? "+0" : signed(t.parcel.points))}
-    ${line("Lead score", t.total, "total")}</tbody></table>
-    <p style="margin-top:8px">${esc(t.parcel.note)} Scores run from 0 to 100; project points are rounded to a whole number before the parcel adjustment.</p>`;
+  const t = leadPoints(r);
+  return `<table class="points"><thead><tr><th>Part</th><th class="num">Points</th><th class="num">Out of</th></tr></thead><tbody>${t.parts.map(x =>
+    `<tr><td>${esc(x.label)}<div class="sub">${esc(x.detail || "")}</div></td><td class="num">${x.points}</td><td class="num">${x.max}</td></tr>`).join("")}
+    <tr class="total"><td>Lead score</td><td class="num">${t.total}</td><td class="num">100</td></tr></tbody></table>`;
 }
-function projectTip(p) { return partsHtml("Project score", p.score_parts || [], p.score); }
+function projectTip(p) { return partsHtml("Project score (for a parcel on the alignment)", p.score_parts || [], p.score); }
 function leadTip(r) {
-  const t = leadPoints(r), row = (a, b, cls) => `<div class="row${cls ? " " + cls : ""}"><span>${esc(a)}</span><span>${b}</span></div>`;
-  return `<b>How this lead scored ${t.total}</b>` + t.parts.map(x => row(x.label, signed(x.points))).join("") +
-    (t.project != null ? row("Project score", t.project, "sum") : "") +
-    row(t.parcel.label, signed(t.parcel.points) === "0" ? "+0" : signed(t.parcel.points)) + row("Lead score", t.total, "sum");
+  const t = leadPoints(r);
+  return partsHtml("How this lead scored " + t.total, t.parts, t.total);
 }
 
 function lettingText(t) {
@@ -733,8 +729,8 @@ async function loadLeads() {
   $("stagebar").hidden = !p;
   if (p) $("stagebar").innerHTML = stageHead(p.timeline) + stageList(p.timeline, false);
   $("breakdown").hidden = !p;
-  if (p) $("breakdown").innerHTML = `<span class="lead">How this project scored ${p.score}</span>` +
-    (p.score_parts || []).map(x => `<span class="part">${esc(x.label)}<b>${signed(x.points)}</b></span>`).join("");
+  if (p) $("breakdown").innerHTML = `<span class="lead">How this project scored ${p.score} of 100</span>` +
+    (p.score_parts || []).map(x => `<span class="part" data-tip-text="${esc(x.detail || "")}">${esc(x.label)}<b>${x.points} / ${x.max}</b></span>`).join("");
   if (!leadRows.length) skeleton();
   const ticket = ++leadTicket;                      // a slower, older request must not overwrite a newer one
   const rows = await api("/api/leads?" + leadParams());
@@ -913,7 +909,7 @@ async function openParcel(leadId) {
   const head = `<div class="p-head"><h2>${r.owner ? esc(r.owner) : "Owner not published"}</h2>
     <div class="meta">${[r.address ? esc(r.address) : "", "Parcel " + esc(r.apn), esc(county)].filter(Boolean).join(" · ")}</div>
     <button type="button" data-close-parcel aria-label="Close parcel details">${X_ICON}</button></div>`;
-  const scoreSec = `<div class="p-sec"><h3>How this lead scored ${r.score}</h3>${pointsTable(r)}</div>`;
+  const scoreSec = `<div class="p-sec"><h3>How this lead scored ${r.score} of 100</h3>${pointsTable(r)}</div>`;
   const why = `<div class="p-sec"><h3>Why it is on the list</h3><p>${esc(REASON[r.match_reason] || r.match_reason)}${r.distance_m != null ? `, ${Math.round(r.distance_m)} m from the alignment` : ""} of ${esc(r.project || "the project")}${r.stage ? `, which is in ${esc(r.stage.replace(/_/g, " "))}` : ""}. Lead score ${r.score}.</p></div>`;
   panel.innerHTML = head + `<div class="p-body">${why}${scoreSec}<div class="p-sec"><p>Loading the boundary and county record…</p></div></div>`;
   panel.setAttribute("data-open", "");

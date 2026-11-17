@@ -54,8 +54,17 @@ def test_layer_selection_and_lead_scores():
     assert parcels.normalize_apn("Allegheny", "76-D-1-0-2") == "0076D00001000002"
     assert parcels.normalize_apn("BERKS", " 12-34 ") == "12-34"
     assert pipeline.lead_score(80, "abuts_alignment") == 80
-    assert pipeline.lead_score(80, "within_buffer") == 60
-    assert pipeline.lead_score(95, "named_in_document") == 100
+    assert pipeline.lead_score(80, "within_buffer") == 70          # 15 position points become 5
+    assert pipeline.lead_score(95, "named_in_document") == 95
+    assert pipeline.lead_score(0, "abuts_alignment") == 0
+    db = DB(":memory:")
+    db.upsert_signal({"source": "penndot", "external_id": "9", "title": "T", "raw": {}})
+    pid = db.save_project(db.unclassified_signals()[0]["id"], {"name": "T", "stage": "planning", "acquisition_likelihood": 95,
+                                                                "score": 96, "est_cost": 60e6}, "rules")
+    db.upsert_lead(pid, db.upsert_parcel({"layer": "t", "apn": "Z"}), None, "within_buffer", 72)
+    db.commit()
+    assert pipeline.rescore(db) == {"projects_changed": 1, "leads_changed": 1}
+    assert db.rows("SELECT p.score ps, l.score ls FROM leads l JOIN projects p ON p.id=l.project_id") == [{"ps": 97, "ls": 87}]
 
 
 def seeded_db(path):
@@ -216,13 +225,22 @@ def test_postcard_and_email_flows(tmp_path, monkeypatch):
     assert client.post("/api/leads/%d/postcard" % lead_id).status_code == 409
 
 
-def test_score_breakdown_adds_up():
+def test_score_is_a_100_point_rubric():
+    # new roadway (95), planning, $60M: 57 + 15 + 10 + 15
+    assert C.overall_score(95, "planning", 60e6) == 97
+    # bridge replacement (40), design, no budget: 24 + 12 + 0 + 15
+    assert C.overall_score(40, "design", None) == 51
+    assert C.overall_score(100, "planning", 1e9) == 100 and C.overall_score(0, "construction", None) == 15
     for likelihood, stage, cost in ((95, "planning", 60e6), (40, "design", None), (100, "planning", 700e6),
-                                    (30, "construction", 2e6), (85, "row_acquisition", 12e6)):
+                                    (30, "construction", 2e6), (85, "row_acquisition", 12e6), (60, "unknown", 0)):
         score = C.overall_score(likelihood, stage, cost)
         parts = C.score_breakdown(likelihood, stage, cost, score)
-        assert abs(sum(p["points"] for p in parts) - score) <= 0.5, (likelihood, stage, parts)
-    assert C.score_breakdown(90, "planning", None, 0)[-1]["label"] == "Not in Pennsylvania"
+        assert [x["key"] for x in parts] == ["need", "stage", "size", "position"]
+        assert sum(x["points"] for x in parts) == score and sum(x["max"] for x in parts) == 100
+        assert all(isinstance(x["points"], int) and 0 <= x["points"] <= x["max"] for x in parts)
+    assert C.score_breakdown(90, "planning", None, 0)[0]["key"] == "outside"
+    assert C.lead_points(97, "within_buffer") == 87 and C.lead_points(97, "abuts_alignment") == 97
+
 
 
 def test_parcel_detail(tmp_path, monkeypatch):
