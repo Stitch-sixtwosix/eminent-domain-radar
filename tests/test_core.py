@@ -180,7 +180,8 @@ def test_postcard_and_email_flows(tmp_path, monkeypatch):
     out = outreach.send_postcard(cfg, lead, httpx.Client(transport=httpx.MockTransport(lob)))
     assert out == {"external_id": "psc_1", "mode": "test", "proof_url": "https://lob.test/proof.pdf",
                    "expected_delivery": None}
-    assert "use_type=marketing" in sent["body"] and "9+OAK+ST" in sent["body"] and sent["idem"] == "edradar-lead-7"
+    assert "use_type=marketing" in sent["body"] and "9+OAK+ST" in sent["body"] and sent["idem"].startswith("et-test-7-")
+    assert "flex" not in check["front"] + check["back"] and "inset" not in check["front"] + check["back"]
 
     calls = []
 
@@ -219,7 +220,10 @@ def test_postcard_and_email_flows(tmp_path, monkeypatch):
     monkeypatch.delenv("LOB_API_KEY")
     r = client.post("/api/leads/%d/postcard" % lead_id)
     assert r.status_code == 409 and "LOB_API_KEY" in r.json()["detail"]
-    db.log_outreach(lead_id, "postcard", "test", "psc_1", {})
+    db.log_outreach(lead_id, "postcard", "test", "psc_1", {})        # a test proof is not a mailing
+    row = client.get("/api/leads").json()[0]
+    assert row["postcard_at"] is None and row["postcard_test_at"] and row["status"] == "new"
+    db.log_outreach(lead_id, "postcard", "sent", "psc_2", {})
     row = client.get("/api/leads").json()[0]
     assert row["postcard_at"] and row["status"] == "contacted"
     assert client.post("/api/leads/%d/postcard" % lead_id).status_code == 409
@@ -336,8 +340,12 @@ def test_campaign_filter_and_snapshot(tmp_path, monkeypatch):
         assert False
     except ValueError:
         pass
-    monkeypatch.setenv("LOB_API_KEY", "test_x")
     lob = httpx.Client(transport=httpx.MockTransport(lambda req: httpx.Response(200, json={"id": "psc_9"})))
+    monkeypatch.setenv("LOB_API_KEY", "test_x")
+    res = outreach.run_campaign(cfg, db, 80, limit=1, dry_run=False, client=lob)
+    assert len(res["sent"]) == 1 and res["mode"] == "test"
+    assert len(outreach.campaign_leads(db, 80)) == 2           # a test proof does not use up the owner
+    monkeypatch.setenv("LOB_API_KEY", "live_x")                # (mocked: nothing is really mailed)
     res = outreach.run_campaign(cfg, db, 80, limit=1, dry_run=False, client=lob)
     assert len(res["sent"]) == 1 and res["sent"][0]["owner"] == "ROE HOLDINGS LLC"
     # the same owner's second parcel is not mailed again

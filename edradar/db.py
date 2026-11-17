@@ -287,8 +287,9 @@ class DB:
                      detail: Dict[str, Any]) -> None:
         self.conn.execute("INSERT INTO outreach (lead_id, channel, status, external_id, detail) VALUES (?,?,?,?,?)",
                           (lead_id, channel, status, external_id, json.dumps(detail)))
-        self.conn.execute("UPDATE leads SET status='contacted' WHERE id=? AND status IN ('new','reviewing')",
-                          (lead_id,))
+        if status == "sent":      # a test proof is not contact
+            self.conn.execute("UPDATE leads SET status='contacted' WHERE id=? AND status IN ('new','reviewing')",
+                              (lead_id,))
         self.conn.commit()
 
     def get_setting(self, key: str) -> Optional[Dict[str, Any]]:

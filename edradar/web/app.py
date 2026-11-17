@@ -23,7 +23,10 @@ SELECT l.id, l.score, l.match_reason, l.distance_m, l.status, l.notes, l.created
        pa.apn, pa.county AS parcel_county, pa.address, pa.owner, pa.mailing_address, pa.market_value, pa.acres,
        pa.layer, p.id AS project_id, p.name AS project, p.project_type, p.stage, p.score AS project_score,
        p.est_cost, s.source, s.url, s.agency, pa.owner_kind, pa.mailable, pa.email_contacts,
-       (SELECT MAX(o.created_at) FROM outreach o WHERE o.lead_id = l.id AND o.channel = 'postcard') AS postcard_at,
+       (SELECT MAX(o.created_at) FROM outreach o WHERE o.lead_id = l.id AND o.channel = 'postcard'
+          AND o.status = 'sent') AS postcard_at,
+       (SELECT MAX(o.created_at) FROM outreach o WHERE o.lead_id = l.id AND o.channel = 'postcard'
+          AND o.status = 'test') AS postcard_test_at,
        (SELECT MAX(o.created_at) FROM outreach o WHERE o.lead_id = l.id AND o.channel = 'email') AS email_at
 FROM leads l JOIN parcels pa ON pa.id = l.parcel_id JOIN projects p ON p.id = l.project_id
 JOIN signals s ON s.id = p.signal_id
@@ -52,8 +55,8 @@ OUTREACH_FILTERS = {
     "email": "pa.owner_kind = 'company' AND COALESCE(pa.email_contacts, 1) > 0 "
              "AND NOT EXISTS (SELECT 1 FROM outreach o WHERE o.lead_id = l.id AND o.channel = 'email')",
     "postcard": outreach.POSTCARD_ELIGIBLE,
-    "contacted": "EXISTS (SELECT 1 FROM outreach o WHERE o.lead_id = l.id)",
-    "none": "NOT EXISTS (SELECT 1 FROM outreach o WHERE o.lead_id = l.id)",
+    "contacted": "EXISTS (SELECT 1 FROM outreach o WHERE o.lead_id = l.id AND o.status = 'sent')",
+    "none": "NOT EXISTS (SELECT 1 FROM outreach o WHERE o.lead_id = l.id AND o.status = 'sent')",
     "traced": "EXISTS (SELECT 1 FROM skiptraces t WHERE t.owner = pa.owner AND t.mailing_address IS pa.mailing_address "
               "AND t.matched = 1)",
 }

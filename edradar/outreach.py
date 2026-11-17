@@ -8,6 +8,7 @@ both services stay switched off until their API key is present in the environmen
 """
 from __future__ import annotations
 
+import hashlib
 import html
 import os
 import re
@@ -193,28 +194,35 @@ def status(cfg: Dict[str, Any]) -> Dict[str, Any]:
 
 
 # ---------------------------------------------------------------- postcards (Lob)
+# Lob prints a 4x6 card from a 6.25 x 4.25 in page: 0.125 in on every side is trimmed off, and its print engine is an
+# older one. So the artwork uses only absolute positioning and floats (no flexbox, no `inset`), and keeps all text
+# 0.3 in from the page edge. On the back, the lower right is reserved by Lob for the address, barcode and postage.
 CARD_CSS = """
 *{box-sizing:border-box;margin:0;padding:0}
-body{width:6.25in;height:4.25in;font-family:Georgia,'Times New Roman',serif;color:#14202b}
-.safe{position:absolute;inset:0.25in;display:flex;flex-direction:column}
+html,body{width:6.25in;height:4.25in}
+body{position:relative;overflow:hidden;font-family:Georgia,'Times New Roman',serif;color:#14202b}
+.safe{position:absolute;top:0.3in;left:0.3in;width:5.65in;height:3.65in}
 """
 
 FRONT = """<html><head><style>%(css)s
 body{background:#f4f5f7}
-h1{font-size:%(h1)spt;line-height:1.12;font-weight:700;letter-spacing:-0.01em;max-width:5.1in}
-p{font-family:Helvetica,Arial,sans-serif;font-size:11pt;line-height:1.4;margin-top:0.16in;max-width:4.9in}
-.firm{margin-top:auto;font-family:Helvetica,Arial,sans-serif;font-size:10pt;letter-spacing:0.02em;
-border-top:1.5pt solid #14202b;padding-top:0.09in;display:flex;justify-content:space-between}
+h1{font-size:%(h1)spt;line-height:1.14;font-weight:700;width:5.3in}
+p{font-family:Helvetica,Arial,sans-serif;font-size:11pt;line-height:1.4;margin-top:0.17in;width:5.1in}
+.firm{position:absolute;left:0;bottom:0;width:5.65in;border-top:1.5pt solid #14202b;padding-top:0.09in;
+font-family:Helvetica,Arial,sans-serif;font-size:10.5pt;font-weight:bold}
+.firm .ph{float:right;font-weight:normal}
 </style></head><body><div class="safe">
 <h1>%(headline)s</h1>
 <p>%(message)s</p>
-<div class="firm"><span>%(firm)s</span><span>%(phone)s</span></div>
+<div class="firm"><span class="ph">%(phone)s</span>%(firm)s</div>
 </div></body></html>"""
 
 BACK = """<html><head><style>%(css)s
 body{background:#fff}
-.msg{width:2.75in;font-family:Helvetica,Arial,sans-serif;font-size:9.5pt;line-height:1.42}
-.fine{margin-top:auto;width:2.75in;font-family:Helvetica,Arial,sans-serif;font-size:6.6pt;line-height:1.3;color:#3d4a57}
+.msg{position:absolute;top:0;left:0;width:5.65in;height:1.3in;overflow:hidden;
+font-family:Helvetica,Arial,sans-serif;font-size:10pt;line-height:1.42}
+.fine{position:absolute;left:0;bottom:0;width:2.15in;font-family:Helvetica,Arial,sans-serif;font-size:6.5pt;
+line-height:1.3;color:#3d4a57}
 </style></head><body><div class="safe">
 <div class="msg">%(back)s</div>
 <div class="fine">%(label)s%(firm)s, %(firm_addr)s. This notice is based on public planning records. No taking of your property has been announced, and receiving this card does not mean one will occur.</div>
@@ -232,7 +240,7 @@ def postcard_html(cfg: Dict[str, Any], lead: Dict[str, Any]) -> Dict[str, str]:
         "h1": 25 if len(headline) <= 62 else 21 if len(headline) <= 90 else 17,     # long headlines step down, never overflow
         "headline": e(headline),
         "message": e(render(tpl["postcard_message"], values)[:420]),
-        "back": e(render(tpl["postcard_back"], values)[:520]),
+        "back": e(render(tpl["postcard_back"], values)[:430]),
         "firm": e(values["firm_name"]),
         "phone": e(firm.get("phone") or ""),
         "label": "ADVERTISEMENT. " if pc.get("advertising_label", True) else "",
@@ -276,7 +284,8 @@ def send_postcard(cfg: Dict[str, Any], lead: Dict[str, Any], client: Optional[ht
     }
     client = client or httpx.Client(timeout=60)
     r = client.post(LOB_URL, data={k: v for k, v in data.items() if v}, auth=(os.environ["LOB_API_KEY"], ""),
-                    headers={"Idempotency-Key": "edradar-lead-%s" % lead["id"]})
+                    headers={"Idempotency-Key": "et-%s-%s-%s" % (st["mode"], lead["id"], hashlib.sha1(
+                        (check["front"] + check["back"]).encode()).hexdigest()[:12])})
     if r.status_code >= 400:
         msg = (r.json().get("error") or {}).get("message") if "json" in r.headers.get("content-type", "") else r.text
         raise RuntimeError("Lob declined the postcard: %s" % (msg or r.status_code))
@@ -350,7 +359,8 @@ class Apollo:
 POSTCARD_ELIGIBLE = """
     pa.mailable = 1 AND pa.owner_kind IN ('individual', 'company') AND l.status NOT IN ('rejected', 'retained')
     AND NOT EXISTS (SELECT 1 FROM outreach o JOIN leads l2 ON l2.id = o.lead_id JOIN parcels p2 ON p2.id = l2.parcel_id
-                    WHERE o.channel = 'postcard' AND p2.owner = pa.owner AND p2.mailing_address = pa.mailing_address)
+                    WHERE o.channel = 'postcard' AND o.status = 'sent'
+                      AND p2.owner = pa.owner AND p2.mailing_address = pa.mailing_address)
 """
 
 

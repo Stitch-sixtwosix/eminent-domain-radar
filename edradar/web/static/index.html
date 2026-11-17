@@ -712,7 +712,8 @@ function outreachCell(r) {
     : r.owner_kind === "company" && (r.email_contacts ?? 1) > 0
       ? `<button class="sm" data-act="email" data-lead="${r.id}">${ICON.mail}Email${r.email_contacts ? ` (${r.email_contacts})` : ""}</button>`
       : `<button class="sm" disabled title="${r.owner_kind === "company" ? "Apollo has no contacts at this owner" : "Email lookup covers company owners. Individual owners get postcards."}">${ICON.mail}Email</button>`;
-  return `<td class="acts">${btn("postcard", "Postcard", r.postcard_at, "Mailed")}${emailBtn}</td>`;
+  const tested = !r.postcard_at && r.postcard_test_at ? `<div class="sub">Test proof made ${esc(day(r.postcard_test_at))}</div>` : "";
+  return `<td class="acts">${btn("postcard", "Postcard", r.postcard_at, "Mailed")}${emailBtn}${tested}</td>`;
 }
 function skeleton() {
   $("leads-wrap").innerHTML = "<table><tbody>" + Array.from({length: 6}, (_, i) =>
