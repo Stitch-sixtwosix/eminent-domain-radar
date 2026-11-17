@@ -121,8 +121,10 @@ def coverage(cfg: Dict[str, Any]) -> list:
                 if isinstance(x, dict) and ((x.get("restrictions") and not x.get("approved")) or x.get("held"))]
         rows.append({"code": code, "state": st.get("state") or code, "researched": True, "projects": has_projects, "counties": total,
                      "counties_projects": total if has_projects else 0,
-                     "counties_owners": total if statewide else min(len(ok_counties), total),
-                     "owners": "statewide" if statewide else ("%d counties" % len(ok_counties) if ok_counties else "none"),
+                     "counties_owners": min(total, int((sw or {}).get("counties_covered") or total)) if statewide
+                     else min(len(ok_counties), total),
+                     "owners": ("statewide" if not (sw or {}).get("counties_covered") else "%d counties in one state file" % sw["counties_covered"])
+                     if statewide else ("%d counties" % len(ok_counties) if ok_counties else "none"),
                      "held": ", ".join(str(h) for h in held if h) or None, "note": st.get("summary")})
     return sorted(rows, key=lambda r: r["state"])
 

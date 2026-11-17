@@ -38,15 +38,41 @@
    "geometry": "polyline",
    "record_count": 719,
    "fields": {
-    "id": "TIP_ID",
+    "id": "TIPID",
     "name": "ProjectName",
     "description": "Description",
-    "work_type": "ProjectType",
     "cost": "TOTallocat",
-    "status": "ProjectSta",
-    "county": "Municipality"
+    "status": "ProjectStatus",
+    "work_type": "Treatment",
+    "county": "MUNICIPALITY"
    },
-   "work_type_values": [],
+   "work_type_values": [
+    "Amtrak Major Rehabilitation \u2013 work, superstructure, and/or total bridge replacement on a structure carrying or spanning Amtrak lines.",
+    "Amtrak Preservation \u2013 work to extend the useful service life of a structure carrying or spanning Amtrak lines, which may include joint replacement, bridge washing, zone painting, deck repairs, minimum to moderate concrete or steel superstructure repairs, moderate substructure repairs, culvert repairs and other incidentals.",
+    "Bridge Demolition",
+    "Demolition",
+    "Fill in - Demolish bridge and replace with an embankment or concrete arch if access needs to be maintained",
+    "Historic Major Rehabilitation \u2013 Total Bridge Replacement",
+    "Historic Major Rehabilitation \u2013 work, superstructure, and/or total bridge replacement on historic bridge(s).",
+    "Historic Preservation \u2013 - work to extend the useful service life of the structure, which may include joint replacement, bridge washing, zone painting, deck repairs, minimum to moderate concrete or steel superstructure repairs, moderate substructure repairs, culvert repairs and other incidentals on historic bridge(s).",
+    "Major Rehabiliation Work, Superstructure and/or Total Bridge Replacement",
+    "Major Rehabilitation - Partial deck replacement",
+    "Major Rehabilitation - Replace superstructure, eliminate end spans, and rehabilitate center pier",
+    "Major Rehabilitation - Some deck replacement over highway portion, rehabilitate substructure including additional strengthening steel repairs, and replace superstructure over railroad portion",
+    "Major rehabilitation work,  superstructure, and/or total bridge replacement.",
+    "Major Rehabilitation work, superstructure, and/or total bridge replacement.",
+    "Major rehabilitation work, superstructure, and/or total bridge replacement.  Phase II work on Washington Bridge Westbound. Cash flow includes $40M to support the project. Additional funds may be secured through BUILD Grant program. If RIDOT obtains a BUILD grant, additional infrastructure improvements targeting economic development ill be included in the project.",
+    "Major rehabilitation work, superstructure, and/or total bridge replacement. This project is being completed in conjunction with TIPID 1415, Rt 5, Lambert Lind Hwy (Mayfield Ave to I-95).",
+    "Preservation - work to extend the useful service life of the structure - Partial Deck Replacement",
+    "Preservation - work to extend the useful service life of the structure, which may include joint replacement, bridge washing, zone painting, deck repairs, minimum to moderate concrete or steel superstructure repairs, moderate substructure repairs, culvert repairs and other incidentals.",
+    "Preservation - work to extend the useful service life of the structure, which may include joint replacement, bridge washing, zone painting, deck repairs, minimum to moderate conrete or steel superstructure repairs, moderate substructure repairs, culvert repairs and other incidentals.",
+    "Safety Improvements to Pontiac Avenue, Sockanosset Cross Road, and the Route 37 on- and off-ramps, including the introduction of dual left-turn lanes northbound onto Sockanosset Cross Road, widening of the Route 37 West off-ramp onto Pontiac Avenue (TIP ID 6770, Bridge #126401), and signal improvements to improve traffic flow.",
+    "This line item involves the non-Federal Transit Administration funding used for the construction of the 6/10 Interchange and associated bridges to bring this section of roadway into a state of good repair.",
+    "This line item will support design and development of a potential future project to address the \"missing move\" between Route 4 and I-95.",
+    "This project involves the construction of a park including constructing walkways, a gathering area, and a bituminous three spot parking lot; furnishing and installing trees, landscaping and all other incidentals necessary. The park was originally a part of a stormwater mitigation action for Bridge 055001. The lot where the park is to be constructed is 20 Division Street in Pawtucket, just East of the Division Street Bridge.",
+    "Total Bridge Replacement",
+    "Total bridge replacement."
+   ],
    "status_values": [],
    "notes": "RI Division of Statewide Planning STIP map for FFY2018-2027 as of Amendment 26 (2020): OUTDATED, the current STIP is FFY2022-2031 and no public GIS service for it was found. FY2018..FY2027 and TOTallocat are programmed dollars in MILLIONS by fiscal year; ProjectSta is free text, there is no clean phase field and no letting date. The map service has 15 layers by program (0-6 points, 7-13 lines, 14 polygon) with the same schema.",
    "stage": "planning"
@@ -86,15 +112,41 @@
    "geometry": "point",
    "record_count": 719,
    "fields": {
-    "id": "TIP_ID",
+    "id": "TIPID",
     "name": "ProjectName",
     "description": "Description",
-    "work_type": "ProjectType",
     "cost": "TOTallocat",
-    "status": "ProjectSta",
-    "county": "Municipality"
+    "status": "ProjectStatus",
+    "work_type": "Bridge_Treatment",
+    "county": "Municipaliy"
    },
-   "work_type_values": [],
+   "work_type_values": [
+    "Amtrak Major Rehabilitation \u2013 work, superstructure, and/or total bridge replacement on a structure carrying or spanning Amtrak lines.",
+    "Amtrak Preservation \u2013 work to extend the useful service life of a structure carrying or spanning Amtrak lines, which may include joint replacement, bridge washing, zone painting, deck repairs, minimum to moderate concrete or steel superstructure repairs, moderate substructure repairs, culvert repairs and other incidentals.",
+    "Bridge Demolition",
+    "Demolition",
+    "Fill in - Demolish bridge and replace with an embankment or concrete arch if access needs to be maintained",
+    "Historic Major Rehabilitation \u2013 Total Bridge Replacement",
+    "Historic Major Rehabilitation \u2013 work, superstructure, and/or total bridge replacement on historic bridge(s).",
+    "Historic Preservation \u2013 - work to extend the useful service life of the structure, which may include joint replacement, bridge washing, zone painting, deck repairs, minimum to moderate concrete or steel superstructure repairs, moderate substructure repairs, culvert repairs and other incidentals on historic bridge(s).",
+    "Major Rehabiliation Work, Superstructure and/or Total Bridge Replacement",
+    "Major Rehabilitation - Partial deck replacement",
+    "Major Rehabilitation - Replace superstructure, eliminate end spans, and rehabilitate center pier",
+    "Major Rehabilitation - Some deck replacement over highway portion, rehabilitate substructure including additional strengthening steel repairs, and replace superstructure over railroad portion",
+    "Major rehabilitation work,  superstructure, and/or total bridge replacement.",
+    "Major rehabilitation work, superstructure, and/or total bridge replacement.",
+    "Major rehabilitation work, superstructure, and/or total bridge replacement.  Phase II work on Washington Bridge Westbound. Cash flow includes $40M to support the project. Additional funds may be secured through BUILD Grant program. If RIDOT obtains a BUILD grant, additional infrastructure improvements targeting economic development ill be included in the project.",
+    "Major rehabilitation work, superstructure, and/or total bridge replacement. This project is being completed in conjunction with TIPID 1415, Rt 5, Lambert Lind Hwy (Mayfield Ave to I-95).",
+    "Preservation - work to extend the useful service life of the structure - Partial Deck Replacement",
+    "Preservation - work to extend the useful service life of the structure, which may include joint replacement, bridge washing, zone painting, deck repairs, minimum to moderate concrete or steel superstructure repairs, moderate substructure repairs, culvert repairs and other incidentals.",
+    "Preservation - work to extend the useful service life of the structure, which may include joint replacement, bridge washing, zone painting, deck repairs, minimum to moderate conrete or steel superstructure repairs, moderate substructure repairs, culvert repairs and other incidentals.",
+    "Safety Improvements to Pontiac Avenue, Sockanosset Cross Road, and the Route 37 on- and off-ramps, including the introduction of dual left-turn lanes northbound onto Sockanosset Cross Road, widening of the Route 37 West off-ramp onto Pontiac Avenue (TIP ID 6770, Bridge #126401), and signal improvements to improve traffic flow.",
+    "This line item involves the non-Federal Transit Administration funding used for the construction of the 6/10 Interchange and associated bridges to bring this section of roadway into a state of good repair.",
+    "This line item will support design and development of a potential future project to address the \"missing move\" between Route 4 and I-95.",
+    "This project involves the construction of a park including constructing walkways, a gathering area, and a bituminous three spot parking lot; furnishing and installing trees, landscaping and all other incidentals necessary. The park was originally a part of a stormwater mitigation action for Bridge 055001. The lot where the park is to be constructed is 20 Division Street in Pawtucket, just East of the Division Street Bridge.",
+    "Total bridge replacement",
+    "Total bridge replacement."
+   ],
    "status_values": [],
    "notes": "RI Division of Statewide Planning STIP map for FFY2018-2027 as of Amendment 26 (2020): OUTDATED, the current STIP is FFY2022-2031 and no public GIS service for it was found. FY2018..FY2027 and TOTallocat are programmed dollars in MILLIONS by fiscal year; ProjectSta is free text, there is no clean phase field and no letting date. The map service has 15 layers by program (0-6 points, 7-13 lines, 14 polygon) with the same schema.",
    "stage": "planning"
@@ -130,6 +182,30 @@
   }
  ],
  "parcels_statewide": null,
- "parcels_counties": [],
- "summary": "Only an outdated STIP map service (FFY2018-2027, 2020 amendment) and a small LRTP proposed-projects layer were found; no current RIDOT planned-projects GIS service was verified. Parcel research pending."
+ "parcels_counties": [
+  {
+   "county": "CRANSTON (city)",
+   "url": "https://arcgisserver.cranstonri.org/arcgis/rest/services/Parcels/FeatureServer/54",
+   "fields": {
+    "apn": "Parcels_ParcelID",
+    "owner": [
+     "CAMAExtract_Owner1",
+     "CAMAExtract_Owner2"
+    ],
+    "mailing_address": [
+     "CAMAExtract_OwnerAddress",
+     "CAMAExtract_OwnerCity",
+     "CAMAExtract_OwnerState",
+     "CAMAExtract_OwnerZip"
+    ],
+    "address": "CAMAExtract_ParcAddress",
+    "market_value": "CAMAExtract_AssessedValueTotal",
+    "acres": "CAMAExtract_AreaAC"
+   },
+   "notes": "City of Cranston parcels in RIGIS standard format joined to the assessor CAMA extract (tax roll year in CAMAExtract_TaxRollYear). Rhode Island has no county government; parcels are kept by the 39 cities and towns.",
+   "verified": true,
+   "record_count": 36632
+  }
+ ],
+ "summary": "Projects: only an outdated STIP map service (FFY2018-2027, 2020 amendment) and a small LRTP proposed-projects layer were found; no current RIDOT planned-projects GIS service was verified. Parcels: no statewide owner layer (RIGIS publishes none; parcels are municipal, many on vendor viewers without open services); only Cranston's city layer with owner and mailing address was verified, Providence was not found."
 }

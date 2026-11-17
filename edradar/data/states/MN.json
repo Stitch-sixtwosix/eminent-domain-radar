@@ -199,7 +199,8 @@
    "county": "co_name"
   },
   "restrictions": null,
-  "notes": "PARTIAL statewide: 60 of Minnesota's 87 counties have opted in. 2,132,898 of 2,714,438 records have an owner name. Owner names present for Hennepin (447,044), Ramsey, Dakota, Anoka, Washington, St. Louis, Olmsted, Wright; counties such as Scott and Stearns are in the layer but with owner_name empty. When own_add_* is empty (e.g. Hennepin) the taxpayer name and address are in tax_name / tax_add_l1..l4. state_pin is county FIPS + PIN. Site address is split across several fields. Layer 1 of the service is a per-county metadata layer. No restriction is stated on the service; the dataset page licence text was not confirmed."
+  "notes": "PARTIAL statewide: 60 of Minnesota's 87 counties have opted in. 2,132,898 of 2,714,438 records have an owner name. Owner names present for Hennepin (447,044), Ramsey, Dakota, Anoka, Washington, St. Louis, Olmsted, Wright; counties such as Scott and Stearns are in the layer but with owner_name empty. When own_add_* is empty (e.g. Hennepin) the taxpayer name and address are in tax_name / tax_add_l1..l4. state_pin is county FIPS + PIN. Site address is split across several fields. Layer 1 of the service is a per-county metadata layer. No restriction is stated on the service; the dataset page licence text was not confirmed.",
+  "counties_covered": 60
  },
  "parcels_counties": [],
  "summary": "MnDOT's 10-year plan gives planned projects as lines (roads) and points (bridges) but cost is a text range and there is no letting date, only fiscal year. Parcels with owner names exist for 60 of 87 counties in one MnGeo layer (all the big metro counties except Scott have owners); the other 27 counties are missing."

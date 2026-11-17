@@ -170,7 +170,134 @@
    "notes": "Same schema; local/regional point locations."
   }
  ],
- "parcels_statewide": null,
- "parcels_counties": [],
- "summary": "ITD ITIP FY2027-2033 verified as four layers (state/regional x line/point) with work type, program year and per-phase dollars including right-of-way. Parcels not yet researched."
+ "parcels_statewide": {
+  "name": "Public Idaho Parcels - Parcels Public (State of Idaho, PARTIAL coverage)",
+  "url": "https://services1.arcgis.com/CNPdEkvnGl65jCX8/arcgis/rest/services/Public_Idaho_Parcels_/FeatureServer/7",
+  "verified": true,
+  "record_count": 381144,
+  "owner_filled_count": 151836,
+  "fields": {
+   "apn": "PARCEL_ID",
+   "owner": "OWNER1",
+   "mailing_address": [
+    "MAIL_ADD1",
+    "MAIL_ADD2",
+    "MAIL_CITY",
+    "MAIL_STATE",
+    "MAIL_ZIP"
+   ],
+   "address": [
+    "SITE_ADD",
+    "SITE_CITY",
+    "SITE_ZIP"
+   ],
+   "market_value": "VAL_TOTAL",
+   "acres": "ASR_ACRES",
+   "county": "County"
+  },
+  "restrictions": "Idaho terms of use: data provided without warranty; 'Pursuant to Idaho Code 74-120, the information provided by the County is not being distributed for use as a mailing list or telephone number list, and no list of persons prepared by County may be used as a mailing list or a telephone list unless such use is expressly permitted by Idaho law.' This is a direct restriction on solicitation mailings.",
+  "notes": "NOT truly statewide: only 13 of 44 counties participate (Ada, Bear Lake, Boise, Camas, Gooding, Jerome, Lincoln, Minidoka, Nez Perce, Oneida, Teton, Valley, Washington), and OWNER1 is filled for 11 of them (blank for Ada and Lincoln). Mailing fields were empty in the sample record, so check fill rate per county. Layer 0 = parcel centroids (points), layer 8 = improvement table."
+ },
+ "parcels_counties": [
+  {
+   "county": "ADA",
+   "name": "Ada County Parcels (copy hosted by Idaho Transportation Dept District 3, D3_Parcels layer 0)",
+   "url": "https://services1.arcgis.com/Qqv4dYPC8Vv8e3c3/arcgis/rest/services/D3_Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 207858,
+   "owner_filled_count": 207857,
+   "fields": {
+    "apn": "PARCEL",
+    "owner": "PRIMOWNER",
+    "mailing_address": [
+     "ADDCONCAT",
+     "STATCONCAT"
+    ],
+    "address": [
+     "ADDRESS",
+     "CITY_STATE"
+    ],
+    "market_value": "TOTALVALUE",
+    "acres": "ACRES"
+   },
+   "restrictions": "None stated on the item; Idaho Code 74-120 (no use of public-agency lists as mailing/telephone lists) applies statewide.",
+   "notes": "Snapshot of Ada County assessor parcels kept by ITD, PROPYEAR 2023 in the sample, so it is not live. SECOWNER = second owner. Which of the ADD*/PROP* field groups is mailing vs situs was not confirmed (identical in the sample): check on a record with an out-of-area owner. Other layers of the same service: 1 Canyon, 2 Washington, 3 Elmore, 4 Adams, 5 Valley, 6 Owyhee, 7 Boise counties (each with its own schema)."
+  },
+  {
+   "county": "CANYON",
+   "name": "Canyon County Parcels (copy hosted by ITD District 3, D3_Parcels layer 1)",
+   "url": "https://services1.arcgis.com/Qqv4dYPC8Vv8e3c3/arcgis/rest/services/D3_Parcels/FeatureServer/1",
+   "verified": true,
+   "record_count": 100818,
+   "owner_filled_count": 95766,
+   "fields": {
+    "apn": "ACCOUNT",
+    "owner": "OwnerName",
+    "mailing_address": [
+     "Address",
+     "City",
+     "State",
+     "ZipCode"
+    ],
+    "address": [
+     "SiteAddres",
+     "SiteCity",
+     "SiteZIP"
+    ],
+    "market_value": "FCVTotal",
+    "acres": "ACRES"
+   },
+   "restrictions": "None stated on the item; Idaho Code 74-120 applies.",
+   "notes": "ITD-held snapshot of Canyon County parcels (item updated 2025). OwnerSec = second owner, InCareOf, PIN, AIN also present."
+  },
+  {
+   "county": "BONNEVILLE",
+   "name": "Bonneville_Parcels_2025Apr (Bonneville County)",
+   "url": "https://services2.arcgis.com/Xd5SMhLZ1h9t0F3b/arcgis/rest/services/Bonneville_Parcels_2025Apr/FeatureServer/0",
+   "verified": true,
+   "record_count": 63803,
+   "owner_filled_count": 62779,
+   "fields": {
+    "apn": "parcelnumb",
+    "owner": "owner",
+    "mailing_address": [
+     "owneraddre",
+     "ownercity",
+     "ownerstate",
+     "ownerzipco"
+    ],
+    "address": [
+     "parceladdr",
+     "parcelcity",
+     "parcelzipc"
+    ],
+    "market_value": "lastassess"
+   },
+   "restrictions": "None stated on the item; Idaho Code 74-120 applies.",
+   "notes": "County-published snapshot dated April 2025 (name will change with the next release). 'additional' = additional owner; landvalue; legaldescr. No acres field."
+  },
+  {
+   "county": "BANNOCK",
+   "name": "Bannock County Parcels GDB - parcel_public",
+   "url": "https://services6.arcgis.com/jEWFLsriO24ArCMH/arcgis/rest/services/Parcels_GDB/FeatureServer/0",
+   "verified": true,
+   "record_count": 46078,
+   "owner_filled_count": 44481,
+   "fields": {
+    "apn": "PARCEL_NO",
+    "owner": "OwnerName",
+    "mailing_address": [
+     "Address",
+     "Address2",
+     "CityStZip"
+    ],
+    "address": "SitusAddress",
+    "market_value": "CurMktValue",
+    "acres": "GIS_ACRES"
+   },
+   "restrictions": "None stated on the item; Idaho Code 74-120 applies.",
+   "notes": "Bannock County (Pocatello) public parcels, item updated 2026. The first sample record had blank owner fields; see owner_filled_count."
+  }
+ ],
+ "summary": "ITD ITIP FY2027-2033 verified (four layers, with right-of-way dollars). No complete statewide owner layer: the State's Public Idaho Parcels covers 13 of 44 counties (owners in 11). Ada, Canyon, Bonneville and Bannock county layers with owners verified; Kootenai not found. Idaho Code 74-120 restricts mailing-list use."
 }

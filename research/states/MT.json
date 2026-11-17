@@ -68,7 +68,35 @@
    "notes": "Same schema as the line layer; only 3 point projects."
   }
  ],
- "parcels_statewide": null,
+ "parcels_statewide": {
+  "name": "Montana Cadastral Framework - Montana Parcels (Montana State Library)",
+  "url": "https://services.arcgis.com/qnjIrwR8z5Izc0ij/arcgis/rest/services/Montana_Cadastral_Framework/FeatureServer/1",
+  "verified": true,
+  "record_count": 921278,
+  "owner_filled_count": 883985,
+  "fields": {
+   "apn": "PARCELID",
+   "owner": "OwnerName",
+   "mailing_address": [
+    "OwnerAddress1",
+    "OwnerAddress2",
+    "OwnerAddress3",
+    "OwnerCity",
+    "OwnerState",
+    "OwnerZipCode"
+   ],
+   "address": [
+    "AddressLine1",
+    "AddressLine2",
+    "CityStateZip"
+   ],
+   "market_value": "TotalValue",
+   "acres": "TotalAcres",
+   "county": "CountyName"
+  },
+  "restrictions": "Montana State Library licence text: state law (MCA 2-6-1017) prohibits public agencies from distributing or selling a distribution (mailing) list without permission of those on the list, and prohibits a list of persons prepared by a public agency from being used as a distribution list without their permission, except by that agency; it 'does not prevent an individual from compiling a distribution list by examination of records that are otherwise open to public inspection'. Get legal advice before using owner names/addresses for mailings.",
+  "notes": "Statewide, all 56 counties, tax year 2026 in the sample. Also CareOfTaxpayer, DbaName, PropType, TotalLandValue, TotalBuildingValue, GISAcres, LegalDescriptionShort. Layer 0 = conservation easements, layer 2 = public lands."
+ },
  "parcels_counties": [],
- "summary": "MDT Tentative Construction Plan verified (295 lines + 3 points, FFY 2025-2030, scope and cost). Parcels not yet researched."
+ "summary": "Both needs met: MDT Tentative Construction Plan (295 lines, FFY 2025-2030, scope and cost, no county field) and statewide Montana Cadastral parcels with owner name and mailing address. Note Montana's mailing-list statute (MCA 2-6-1017)."
 }

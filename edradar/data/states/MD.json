@@ -99,6 +99,77 @@
   }
  ],
  "parcels_statewide": null,
- "parcels_counties": [],
- "summary": "MDOT SHA project portal points (with status, work type, estimated start) and the FY2026-2031 CTP points verify; both are point-only and lack cost. Parcel research pending."
+ "parcels_counties": [
+  {
+   "county": "PRINCE GEORGE'S",
+   "url": "https://services.arcgis.com/kSZiBgsXsUF788NB/arcgis/rest/services/Property_Flattened_Py/FeatureServer/0",
+   "fields": {
+    "apn": "ACCOUNT",
+    "owner": "OWNER_NAME",
+    "mailing_address": [
+     "MAIL_STREET",
+     "MAIL_CITY",
+     "MAIL_STATE",
+     "MAIL_ZIP5"
+    ],
+    "address": [
+     "HOUSE_NUMBER",
+     "STREET_NAME",
+     "STREET_TYPE",
+     "CITY",
+     "ZIP5"
+    ],
+    "market_value": "CURR_ASSESS",
+    "acres": "LAND_AREA_ACRE"
+   },
+   "notes": "Prince George's County / M-NCPPC property polygons with SDAT attributes. FCV_LAND + FCV_IMPS are full cash values; PROPERTY_ID is district+account; SDAT_ACCOUNT_URL links to the state record.",
+   "verified": true,
+   "record_count": 344397
+  },
+  {
+   "county": "ANNE ARUNDEL",
+   "url": "https://gis.aacounty.org/arcgis/rest/services/OpenData/Planning_OpenData/MapServer/34",
+   "fields": {
+    "apn": "ASST_ACCOUNT_NO",
+    "owner": [
+     "ASST_FIRST_OWNER",
+     "ASST_SECND_OWNER"
+    ],
+    "mailing_address": [
+     "MADR_LINE_1",
+     "MADR_LINE_2",
+     "MADR_LINE_3"
+    ],
+    "address": [
+     "ASST_HOUSE_NO",
+     "ASST_STREET_NAME",
+     "ASST_STREET_TYPE",
+     "ASST_POST_OFFICE",
+     "ASST_ZIP_CODE"
+    ]
+   },
+   "notes": "Anne Arundel County open-data parcels with assessment owner names and mailing address lines; no value or acreage field (ASST_PROP_SIZE with ASST_PROP_SIZE_TYP gives lot size).",
+   "verified": true,
+   "record_count": 267598
+  },
+  {
+   "county": "BALTIMORE CITY",
+   "url": "https://baltegis.baltimorecity.gov/mapping/rest/services/CityView/RealProperty_OB/FeatureServer/0",
+   "fields": {
+    "apn": "PIN",
+    "owner": [
+     "OWNER_1",
+     "OWNER_2",
+     "OWNER_3"
+    ],
+    "mailing_address": "MAILTOADD",
+    "address": "FULLADDR",
+    "market_value": "CURRLAND"
+   },
+   "notes": "Baltimore City real property (independent city). Owner names are space-padded; MAILTOADD is often null. CURRLAND + CURRIMPR are current land and improvement values (BFCVLAND/BFCVIMPR base full cash values); BLOCKLOT is the city block/lot id.",
+   "verified": true,
+   "record_count": 237456
+  }
+ ],
+ "summary": "MDOT SHA project portal points (status, work type, estimated start) and the FY2026-2031 CTP points verify; both are point-only and lack cost. The statewide MD iMAP parcel layer (https://mdgeodata.md.gov/imap/rest/services/PlanningCadastre/MD_ParcelBoundaries/MapServer/0, 2,293,824 parcels, verified) has owner MAILING address (OWNADD1, OWNADD2, OWNCITY, OWNSTATE, OWNERZIP), ACCTID, ADDRESS, NFMTTLVL, ACRES and an SDAT link (SDATWEBADR) but NO owner-name field. Owner names verified for Prince George's, Anne Arundel and Baltimore City; Montgomery County's layer (gis3.montgomerycountymd.gov .../property/property_query/MapServer/0) also has owner address but no name, and Baltimore County's server was unreachable."
 }

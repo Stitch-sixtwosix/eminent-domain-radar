@@ -37,10 +37,62 @@
    ],
    "notes": "CDOT 10-Year Plan strategic pipeline projects as lines (ArcGIS Online item updated 2026-09, owner Planning_GIS_CDOT). planningprojectidstatus is the phase (see status_values); anything before construction is planned/in development. No cost or letting date in this layer. stip_id links to the STIP; projecttype is a second category field; route + milepoststart/milepostend locate it; adaptiveformtablewebsite is the project web page.",
    "stage": "planning"
+  },
+  {
+   "name": "CDOT Ten Year Plan Project Points (approved)",
+   "url": "https://services.arcgis.com/yzB9WM8W0BO3Ql7d/arcgis/rest/services/TenYearPlan_Approved_Points/FeatureServer/0",
+   "verified": true,
+   "geometry": "point",
+   "record_count": 17,
+   "fields": {
+    "id": "planningprojectid",
+    "name": "projectname",
+    "description": "projectdescription",
+    "work_type": "ProjectTypeValue",
+    "status": "projectstatus",
+    "county": "county"
+   },
+   "work_type_values": [
+    "Active Transportation",
+    "Safety"
+   ],
+   "status_values": [
+    "Design",
+    "New Project",
+    "Planning"
+   ],
+   "notes": "Point version of the 10-Year Plan projects (17 records). Field names differ from the line layer: projectname, projectdescription, projectstatus, stipid.",
+   "stage": "planning"
   }
  ],
  "projects_note": "CDOT's own open-data server (dtdapps.codot.gov/server/rest/services/Webapps/open_data_sde/FeatureServer, layers 24 'Projects (all types) - Line' and 25 '- Point', listed on ArcGIS Online as updated 2026) could NOT be reached on 2026-11-16/17: connection timed out on every attempt (old host dtdapps.coloradodot.info gave HTTP 522). Not verified, so not recorded as a source; worth retrying because it probably carries all project types with cost and dates.",
- "parcels_statewide": null,
+ "parcels_statewide": {
+  "name": "Colorado Public Parcels - Colorado_Public_Parcel_Composite (Governor's Office of Information Technology)",
+  "url": "https://gis.colorado.gov/public/rest/services/Address_and_Parcel/Colorado_Public_Parcels/FeatureServer/0",
+  "verified": true,
+  "record_count": 2599937,
+  "owner_filled_count": 2221910,
+  "fields": {
+   "apn": "parcel_id",
+   "owner": "owner",
+   "mailing_address": [
+    "ownerAdd",
+    "ownAddCty",
+    "ownAddStt",
+    "ownAddZip"
+   ],
+   "address": [
+    "situsAdd",
+    "sitAddCty",
+    "sitAddZip"
+   ],
+   "market_value": "apprValTot",
+   "acres": "landAcres",
+   "county": "countyName"
+  },
+  "restrictions": "No commercial-use or solicitation restriction stated. Licence text is a warranty disclaimer only (data used at one's own risk; State of Colorado makes no warranty of accuracy or completeness).",
+  "notes": "Statewide composite collected annually from counties in one schema (dateReceived shows when each county's data arrived, e.g. 4/23/2026). owner2 = second owner; account = assessor account; apprValTot/asedValTot/salePrice are stored as text; saleDate text; landUseDsc, zoningDesc, legalDesc also present. The 'sharing' field is 'Public' in the sample; counties that do not share publicly may be missing or have blank owner fields, so check coverage by countyName."
+ },
  "parcels_counties": [],
- "summary": "CDOT 10-Year Plan line and point layers verified (phase and type, no cost or dates); CDOT's fuller 'Projects (all types)' server was unreachable. Parcels not yet researched."
+ "summary": "Statewide parcels with owner and mailing address verified (2.6M records). Projects: CDOT 10-Year Plan lines/points verified (phase and type, no cost or dates); CDOT's fuller 'Projects (all types)' server was unreachable and is unverified."
 }

@@ -68,6 +68,54 @@
     }
   ],
   "parcels_statewide": null,
-  "parcels_counties": [],
-  "summary": "DelDOT CTP project layers on FirstMap carry phase, cost and estimated/actual milestone dates (including real-estate dates), which is ideal. Parcel research pending."
+  "parcels_counties": [
+    {
+      "county": "NEW CASTLE",
+      "url": "https://services6.arcgis.com/iiIgE8mTDBf4z99T/arcgis/rest/services/NCCDE_Static_Tax_Parcels_-_3-13-2026/FeatureServer/0",
+      "fields": {
+        "apn": "PARCELNO",
+        "owner": "CNTCTLAST",
+        "mailing_address": [
+          "OWNADDR",
+          "OWNADDR2",
+          "OWNCITY",
+          "OWNSTATE",
+          "OWNZIP"
+        ],
+        "address": [
+          "ADDRESS",
+          "PROPCITY",
+          "PROPZIP"
+        ]
+      },
+      "notes": "New Castle County government static tax-parcel snapshot dated 2026-03-13 (primary address + primary owner per parcel); CNTCTLAST is the owner name. LOTSZ is lot size (units not stated). The county's live server gis.nccde.org returned HTTP 572 to automated requests.",
+      "verified": true,
+      "record_count": 203678
+    },
+    {
+      "county": "KENT",
+      "url": "https://gis.kentcountyde.gov/server/rest/services/Parcels/Parcels/FeatureServer/0",
+      "fields": {
+        "apn": "Name",
+        "owner": [
+          "OWNERNAME",
+          "SECONDARYOWNER"
+        ],
+        "mailing_address": [
+          "MAILINGADDRESS",
+          "MAILINGADDRESS2",
+          "OWNERCITY",
+          "OWNERSTATE",
+          "OWNERZIP"
+        ],
+        "address": "LOCATION",
+        "market_value": "TOTALASSESSMENT",
+        "acres": "DEEDACREAGE"
+      },
+      "notes": "Kent County, DE live parcel layer; Name is the parcel number, Pride links to the county property record. TOTALASSESSMENT is assessed value.",
+      "verified": true,
+      "record_count": 84016
+    }
+  ],
+  "summary": "DelDOT CTP project layers on FirstMap carry phase, cost and estimated/actual milestone dates (including real-estate dates). The FirstMap statewide parcel layer (https://enterprise.firstmap.delaware.gov/arcgis/rest/services/PlanningCadastre/DE_StateParcels/FeatureServer/0, 454,893 parcels, verified) has only PIN, ACRES, COUNTY, so owners come from counties: New Castle (static 2026 snapshot) and Kent verified; Sussex County's 'ParcelsWithOwner' services exist but returned HTTP 403 to automated requests."
 }

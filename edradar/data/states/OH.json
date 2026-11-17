@@ -105,6 +105,101 @@
   }
  ],
  "parcels_statewide": null,
- "parcels_counties": [],
- "summary": "ODOT TIMS 'Next 4 Fiscal Years' line and point layers give planned projects with cost, status, work category and award/construction dates. Parcel research pending."
+ "parcels_counties": [
+  {
+   "county": "FRANKLIN",
+   "url": "https://gis.franklincountyohio.gov/hosting/rest/services/ParcelFeatures/Parcel_Features/MapServer/0",
+   "fields": {
+    "apn": "PARCELID",
+    "owner": [
+     "OWNERNME1",
+     "OWNERNME2",
+     "OWNERNME3"
+    ],
+    "mailing_address": [
+     "MAILNME1",
+     "MAILNME2"
+    ],
+    "address": "SITEADDRESS",
+    "market_value": "TOTVALUEBASE",
+    "acres": "ACRES"
+   },
+   "notes": "Franklin County Auditor tax parcels (Columbus). MAILNME1/MAILNME2 hold the owner's address lines; PSTLNME1/PSTLADDRES/PSTLCITYSTZIP are the tax-bill mailing party (often a mortgage servicer).",
+   "verified": true,
+   "record_count": 495359
+  },
+  {
+   "county": "CUYAHOGA (City of Cleveland only)",
+   "url": "https://services3.arcgis.com/dty2kHktVXHrqO8i/arcgis/rest/services/Parcel_Analytics_(PUBLIC_DRAFT_)/FeatureServer/0",
+   "fields": {
+    "apn": "parcelpin",
+    "owner": "parcel_owner",
+    "mailing_address": [
+     "mail_name",
+     "mail_addr_street",
+     "mail_unit_no",
+     "mail_city",
+     "mail_state",
+     "mail_zip"
+    ],
+    "address": "par_addr_all",
+    "market_value": "gross_certified_total",
+    "acres": "parcel_acreage"
+   },
+   "notes": "City of Cleveland open data 'Property Insights' (labelled public draft) built from county fiscal office data; covers Cleveland parcels only, not the rest of Cuyahoga County. The county's own server (gis.cuyahogacounty.gov) timed out from the research network and could not be verified.",
+   "verified": true,
+   "record_count": 162838
+  },
+  {
+   "county": "HAMILTON",
+   "url": "https://services8.arcgis.com/YU1yCuZZBuqsMM2h/arcgis/rest/services/Parcel_Polygons_20241008_view/FeatureServer/0",
+   "fields": {
+    "apn": "PARCELID",
+    "owner": [
+     "OWNNM1",
+     "OWNNM2"
+    ],
+    "mailing_address": [
+     "MLNM1",
+     "MLADR1",
+     "MLADR1A",
+     "MLADR2"
+    ],
+    "address": [
+     "ADDRNO",
+     "ADDRST",
+     "ADDRSF"
+    ],
+    "market_value": "MKT_TOTAL_VAL",
+    "acres": "ACREDEED"
+   },
+   "notes": "Hamilton County Auditor (Cincinnati) parcel polygons view; service name is dated 2024-10-08 so it may be a static snapshot. OWNAD1/OWNAD2/OWNADCITY/OWNADSTATE/OWNADZIP are the owner address, ML* the tax mailing name/address. A CAGIS open-data layer with the same schema exists at https://services.arcgis.com/JyZag7oO4NteHGiq/arcgis/rest/services/Open_Data_Feature_Collection/FeatureServer/0 but returned only 126,000 rows.",
+   "verified": true,
+   "record_count": 418487
+  },
+  {
+   "county": "SUMMIT",
+   "url": "https://services3.arcgis.com/3Ukh5HzAdI6WZ3KP/arcgis/rest/services/TaxParcels_dashboard/FeatureServer/0",
+   "fields": {
+    "apn": "PARCELID",
+    "owner": [
+     "OWNERNME1",
+     "OWNERNME2"
+    ],
+    "mailing_address": [
+     "PSTLADDRESS",
+     "PSTLCITY",
+     "PSTLSTATE",
+     "PSTLZIP5"
+    ],
+    "address": "SITEADDRESS",
+    "market_value": "LNDVALUE",
+    "acres": "STATEDAREA"
+   },
+   "notes": "Summit County (Akron) GIS tax parcels. Row count (518,514) is about double the county's parcel count, so expect duplicate geometries per PARCELID. LNDVALUE is land value only (CNTASSDVAL is current assessed value); STATEDAREA is text like '0.0761 a'.",
+   "verified": true,
+   "record_count": 518514
+  }
+ ],
+ "summary": "ODOT TIMS 'Next 4 Fiscal Years' line and point layers give planned projects with cost, status, work category and award/construction dates. The statewide OGRIP parcel layer (https://services2.arcgis.com/MlJ0G8iWUyC7jAmu/arcgis/rest/services/OhioStatewidePacels_full_view/FeatureServer/0, 6.3M parcels, verified) has no owner-name field (only parcel id, situs and mailing address, land use, link to county auditor site), so county auditor layers are needed; Franklin, Hamilton, Summit and Cleveland verified, Cuyahoga County's own server and Montgomery County were not reachable/found."
 }

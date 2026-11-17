@@ -63,5 +63,18 @@
   ],
   "parcels_statewide": null,
   "parcels_counties": [],
-  "summary": "NHDOT's project services exist with the right layers (in planning, in design, Ten Year Plan, right-of-way projects) but could not be verified: all data queries failed with a server error on the check dates. Parcels not yet researched."
+  "summary": "Weak state. NHDOT's project services exist with the right layers (in planning, in design, Ten Year Plan, right-of-way projects) but could not be verified: every data query failed with a server error on 2026-11-16 and again on 2026-11-17. Statewide parcels exist but without owner names, and no county or regional owner layer was found.",
+  "parcels_statewide_no_owner": {
+    "name": "NH Parcel Mosaic (NH GRANIT) - Parcels + Cama table",
+    "url": "https://nhgeodata.unh.edu/nhgeodata/rest/services/CAD/ParcelMosaic/MapServer/1",
+    "verified": true,
+    "record_count": 617124,
+    "fields": {
+      "apn": "NH_GIS_ID",
+      "address": "StreetAddress",
+      "county": "CountyId"
+    },
+    "notes": "Statewide parcel polygons exist and answer, but there is NO owner name anywhere: neither the polygon layer nor the related Cama table (https://nhgeodata.unh.edu/nhgeodata/rest/services/CAD/ParcelMosaic/MapServer/3, 709,366 rows, has TownName, CountyName, land-use class SLUC_desc, street address, map/lot) carries owner or mailing address."
+  },
+  "parcels_counties_reason": "None found. In New Hampshire parcels and assessing records are kept by each city/town, not by counties. The one regional layer checked (Nashua Regional Planning Commission open data parcels, https://services6.arcgis.com/2ZriDy2NFXltCIFR/arcgis/rest/services/NRPCOpenData/FeatureServer/2, 65,641 parcels, answered) also has no owner field. Individual city services (Manchester, Nashua, Concord) were not checked."
 }

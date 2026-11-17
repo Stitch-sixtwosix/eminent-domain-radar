@@ -92,14 +92,14 @@
       "record_count": 135718,
       "fields": {
         "apn": "tmk_txt",
-        "owner": "majorowner",
         "market_value": [
           "landvalue",
           "bldgvalue"
         ],
-        "acres": "taxacres"
+        "acres": "taxacres",
+        "major_owner": "majorowner"
       },
-      "notes": "Hawaii County Parcels: majorowner is NOT a general owner-name field - the sample value was 'Govt. State', so it looks like a major-landowner / government category (to be confirmed with a distinct-values pull). Has land and building values. No mailing address."
+      "notes": "Hawaii County Parcels: NO general owner name. majorowner only names large landowners and government (197 distinct values such as 'Govt. State DLNR', 'Alexander & Baldwin', 'Bishop Museum', 'C. Brewer'); ordinary private owners are not identified. Has land and building values. No mailing address."
     },
     {
       "county": "HONOLULU",
@@ -128,5 +128,5 @@
       "notes": "Maui County Parcels: NO owner field (values and acres only)."
     }
   ],
-  "summary": "Projects found, but on HDOT's Socrata portal rather than ArcGIS: 80 state highway projects in design with line geometry, cost and scope, plus an Oahu TIP layer. No statewide owner data: only Kauai publishes owner names in the state layers; Honolulu and Maui have none and Hawaii County has only a major-owner category."
+  "summary": "Projects found, but on HDOT's Socrata open-data portal rather than ArcGIS: 80 state highway projects in design with line geometry, cost and scope, plus an Oahu TIP layer on ArcGIS. No statewide owner data: the statewide TMK layer has no owner, and of the four counties only Kauai publishes owner names (no mailing address); Honolulu and Maui have none and Hawaii County names only major landowners."
 }

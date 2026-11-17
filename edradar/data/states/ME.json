@@ -1,7 +1,7 @@
 {
  "state": "Maine",
  "code": "ME",
- "checked": "2026-11-16",
+ "checked": "2026-11-17",
  "projects": [
   {
    "name": "MaineDOT Construction Advertise Plan - Line",
@@ -138,7 +138,41 @@
    "stage": "planning"
   }
  ],
- "parcels_statewide": null,
+ "parcels_statewide": {
+  "name": "Maine Parcels Organized Towns (Maine GeoLibrary) - polygons + ADB assessment table",
+  "url": "https://services1.arcgis.com/RbMX0mRVOFNTdLzd/arcgis/rest/services/Maine_Parcels_Organized_Towns/FeatureServer/10",
+  "verified": true,
+  "record_count": 708382,
+  "fields": {
+   "apn": "STATE_ID",
+   "address": "PROP_LOC",
+   "county": "COUNTY"
+  },
+  "assessment_table": {
+   "url": "https://services1.arcgis.com/RbMX0mRVOFNTdLzd/arcgis/rest/services/Maine_Parcels_Organized_Towns/FeatureServer/9",
+   "verified": true,
+   "record_count": 522253,
+   "join": "STATE_ID (table) = STATE_ID (polygon layer)",
+   "fields": {
+    "apn": "STATE_ID",
+    "owner": "OWNER1",
+    "mailing_address": [
+     "OWN_ADDR1",
+     "OWN_ADDR2",
+     "OWN_CITY",
+     "OWN_STATE",
+     "OWN_ZIP"
+    ],
+    "market_value": [
+     "LAND_VAL",
+     "BLDG_VAL"
+    ],
+    "acres": "LOT_SIZE"
+   }
+  },
+  "restrictions": null,
+  "notes": "PARTIAL statewide. Towns submit data voluntarily: the polygon layer holds parcels for about 319 town codes (GEOCODE) across all 16 counties, but the owner table (layer 9, Maine_Parcels_Organized_Towns_ADB) only has rows for 211 town codes, and 459,454 rows have a non-blank OWNER1. The polygon layer itself has NO owner; join the table on STATE_ID (town GEOCODE + '_' + MAP_BK_LOT, e.g. '09030_101-001-000'). Data age varies by town (FMUPDAT on polygons, e.g. 2010; YEAR_CREAT on the table, e.g. 2023; YEAR_CREAT has many junk values) so owners can be years out of date. OWNER2 is a second owner; LS_DATE / LS_PRICE are the last sale; LOT_SIZE was null in the sample. Blanks are often a single space. No restriction stated on the service. The unorganized territory is a separate layer (https://services1.arcgis.com/RbMX0mRVOFNTdLzd/arcgis/rest/services/Maine_Unorganized_Parcel_Layers_view/FeatureServer/0, 36,282 parcels, answered) with no owner-name field."
+ },
  "parcels_counties": [],
- "summary": "Projects found: MaineDOT's advertise plan gives this year's lettings as lines and points with scope, estimate and advertise date, and an all-projects polygon layer has a Planned/Candidate status for longer-range work. Parcels not yet researched."
+ "summary": "Projects work: MaineDOT's advertise plan gives this year's lettings as lines and points with scope, estimate and advertise date, and an all-projects polygon layer has a Planned/Candidate status. Parcels are partial: a state layer has owner and mailing address for roughly 211 of the organized towns via a joined table; other towns have boundaries only and data age varies. County-level sources were not researched because Maine parcels are kept by towns, not counties."
 }

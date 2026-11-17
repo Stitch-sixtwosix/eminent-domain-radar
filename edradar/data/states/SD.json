@@ -1,7 +1,7 @@
 {
  "state": "South Dakota",
  "code": "SD",
- "checked": "2026-11-16",
+ "checked": "2026-11-17",
  "projects": [
   {
    "name": "SDDOT STIP 2027 (Approved) - Construction Reconstruction",
@@ -20,7 +20,7 @@
    },
    "work_type_values": [],
    "status_values": [],
-   "notes": "One layer per improvement category of the approved STIP map; the layer itself is the work type. Most relevant for land acquisition (grading, reconstruction). No status field: everything here is programmed, not yet built. FiscalYear and ConstructionYear are text years; LettingDate is often null. EstCost is dollars. Other fields: HwyNbr, BegMRMNbr/EndMRMNbr (mile markers), SegmentLen, FundCat1-5, ProjectList (control number + project number), ProjectManager, ReadyDate. MapCategory sample value 'Con/Recon'. Coordinates are a South Dakota projected system (ask for outSR=4326).",
+   "notes": "One layer per improvement category of the approved STIP map; the layer itself is the work type. Most relevant for land acquisition (grading, reconstruction). No status field: everything here is programmed, not yet built. FiscalYear and ConstructionYear are text years; LettingDate is often null. EstCost is dollars. Other fields: HwyNbr, BegMRMNbr/EndMRMNbr (mile markers), SegmentLen, FundCat1-5, ProjectList (control number + project number), ProjectManager, ReadyDate. MapCategory sample value 'Con/Recon'. Coordinates are a South Dakota projected system (ask for outSR=4326). ConstructionYear values on this layer: '2027', '2027 & 2028', '2027 - 2029', '2028', '2028 & 2029', '2029', '2029 & 2030', '2030', '2030 & 2031'.",
    "stage": "planning"
   },
   {
@@ -163,6 +163,46 @@
   }
  ],
  "parcels_statewide": null,
- "parcels_counties": [],
- "summary": "Projects found: SDDOT's approved STIP map service gives planned projects as lines per category with cost, year and county (found by opening the map linked from dot.sd.gov; the tentative STIP is a sibling service STIP/DOT_STIP_Tentative on the same server). Parcels not yet researched."
+ "parcels_counties": [
+  {
+   "county": "PENNINGTON",
+   "url": "https://gis.rcgov.org/server/rest/services/OpenData/TaxParcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 54804,
+   "fields": {
+    "apn": "PIN",
+    "owner": [
+     "GranteeLastName",
+     "Grantee1stName",
+     "Grantee2ndName"
+    ],
+    "mailing_address": [
+     "GranteeFullAddr",
+     "GranteeCity",
+     "GranteeState",
+     "GranteeZip"
+    ],
+    "address": "PropAddress",
+    "market_value": "ValueTotal",
+    "acres": "Acres"
+   },
+   "notes": "Rapid City / Pennington County open data tax parcels. The owner is the 'Grantee' (current deed holder): company names sit whole in GranteeLastName (e.g. 'LINK REALTY HOLDINGS LLC'), people are split into last/first/initial. 54,400 of 54,804 have a GranteeLastName. Grantor* fields are the previous owner. TaxID is the assessor id. No restriction stated on the service."
+  },
+  {
+   "county": "MINNEHAHA",
+   "url": "https://gis.minnehahacounty.gov/minnemap/rest/services/Parcels/MapServer/0",
+   "verified": false,
+   "fields": {},
+   "notes": "NOT VERIFIED: listed on ArcGIS Online as the county's 'MCParcels' layer, but the server did not answer (connection timed out on two attempts, 2026-11-17). Fields unknown. The City of Sioux Falls server (https://gis.siouxfalls.gov/arcgis/rest/services/Data/Property/MapServer/1) also timed out; the city's hosted 'Parcels with Property Taxes 2026' layer did answer but has no owner field."
+  },
+  {
+   "county": "LINCOLN",
+   "url": "https://gis.lincolncountysd.gov/arcgis/rest/services/Pro29/Parcels/FeatureServer",
+   "verified": false,
+   "fields": {},
+   "notes": "NOT VERIFIED: the server answered HTTP 403 Forbidden to a plain request. Fields unknown."
+  }
+ ],
+ "summary": "Projects work well: SDDOT's approved STIP map service gives planned projects as lines per category with cost, year and county. No statewide owner parcels; of the big counties only Pennington (Rapid City) was verified with owner and mailing address - Minnehaha and Sioux Falls servers timed out and Lincoln refused the request. Brown and Brookings were not checked.",
+ "parcels_statewide_reason": "No free statewide parcel layer with owner names was found on the state servers checked (sdgis.sd.gov hosted services, the State of South Dakota ArcGIS Online organisation); parcels are published county by county."
 }

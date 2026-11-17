@@ -4,7 +4,35 @@
  "checked": "2026-11-17",
  "projects": [],
  "projects_reason": "No queryable GIS service of planned MDOT projects was found. MDOT's public project map (https://path.mdot.ms.gov/ProjMap, fetched) is a Google Maps page fed by embedded data, not a GIS service, and lists only 'Under Construction' and 'Construction Complete' projects, not planned ones. ArcGIS Online catalog searches for MDOT / Mississippi STIP layers returned nothing relevant, the state service www.gisonline.ms.gov/arcgis/rest/services/MDEQ/Mississippi_Transportation_Projects/MapServer (fetched) holds only road-centerline index layers despite its name, and the guessed MDOT GIS hostnames do not resolve. The STIP is published as documents only.",
- "parcels_statewide": null,
+ "parcels_statewide": {
+  "name": "MARIS / MDEQ Mississippi statewide parcels, August 2024 (East and West layers)",
+  "url": "https://gis.mississippi.edu/server/rest/services/Cadastral/MS_Parcels_August_2024/MapServer/2",
+  "additional_urls": [
+   "https://gis.mississippi.edu/server/rest/services/Cadastral/MS_Parcels_August_2024/MapServer/1"
+  ],
+  "verified": true,
+  "record_count": 2006049,
+  "fields": {
+   "apn": "PARNO",
+   "owner": "OWNNAME",
+   "mailing_address": [
+    "MAILADD1",
+    "MAILADD2",
+    "MCITY1",
+    "MSTATE1",
+    "MZIP1",
+    "MCITY2",
+    "MSTATE2",
+    "MZIP2"
+   ],
+   "address": "SITEADD",
+   "market_value": "TOTVAL",
+   "acres": "GISACRES",
+   "county": "CNTYNAME"
+  },
+  "restrictions": null,
+  "notes": "Official statewide parcels on the state's MARIS server, split in two layers of one map service: layer 2 = MS_East_MDEQPARCELS_2024 (1,127,050 parcels), layer 1 = MS_West_MDEQPARCELS_2024 (878,999); both must be read. Tax year 2024 in the samples; the service name carries the release date, so a newer release will have a new URL (older ones: MS_Parcels_Aprl2024, MS_Parcels_August_2023). IMPORTANT: this MapServer does not support paging (resultOffset / resultRecordCount return error 400 'Pagination is not supported'); page by object id instead (where=FID>=a AND FID<b), maxRecordCount 2000. Mailing address is inconsistent between counties: in the samples the street was in MAILADD2 and MAILADD1 held a blank or an extra name line, so use both. PPIN = county parcel index number; TAXACRES / TOTAL_AC = assessed acres; LANDVAL, IMPVAL1, IMPVAL2; DEEDREF, DEEDDATE; LEGLDESC. Blank values are a single space, not null. No use restriction stated on the service. An older (tax year 2022) copy with the same schema that does support paging is hosted by a private engineering firm at https://gis.waggonereng.com/server/rest/services/Hosted/Mississippi_Parcels_Staewide/FeatureServer/3 (verified, 1,981,235 parcels, 82 counties, owner filled on 1,970,398); it is not an official source and could disappear."
+ },
  "parcels_counties": [],
- "summary": "No planned-projects GIS source found for Mississippi. Parcels not researched yet."
+ "summary": "Parcels are covered statewide with owner name and mailing address (official MARIS service, no paging support). No planned-projects GIS source was found: MDOT publishes only under-construction and completed projects on a non-GIS map."
 }

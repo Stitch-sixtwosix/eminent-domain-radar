@@ -129,6 +129,53 @@
     }
   ],
   "parcels_statewide": null,
-  "parcels_counties": [],
-  "summary": "VDOT's SYIP approved-projects line and point layers verify with status, scope, cost and right-of-way/construction phase dates. Parcel research pending."
+  "parcels_counties": [
+    {
+      "county": "PRINCE WILLIAM",
+      "url": "https://gisweb.pwcva.gov/arcgis/rest/services/OpenData/OpenData/MapServer/0",
+      "fields": {
+        "apn": "GPIN",
+        "owner": "CAMA_OWNER_CUR",
+        "mailing_address": [
+          "CAMA_ADDRESS2",
+          "CAMA_ADDRESS3",
+          "CAMA_CITY",
+          "CAMA_STATE",
+          "CAMA_ZIPCODE"
+        ],
+        "address": [
+          "ST_NO",
+          "ST_NAME",
+          "ST_TYPE",
+          "CITY",
+          "ZIP"
+        ],
+        "acres": "DEED_ACREAGE"
+      },
+      "notes": "Prince William County open-data parcels joined to CAMA; 156,428 of 160,086 rows have an owner (names look truncated at about 30 characters). The CAMA_ADDRESS*/CAMA_CITY/STATE/ZIPCODE fields appear to be the owner's mailing address (not confirmed by documentation). No value field.",
+      "verified": true,
+      "record_count": 160086
+    },
+    {
+      "county": "CHESTERFIELD",
+      "url": "https://services3.arcgis.com/TsynfzBSE6sXfoLq/arcgis/rest/services/Cadastral_ProdA/FeatureServer/3",
+      "fields": {
+        "apn": "GPIN",
+        "owner": "OwnerName",
+        "mailing_address": [
+          "OwnerAddress",
+          "OwnerCity",
+          "OwnerState",
+          "OwnerZip"
+        ],
+        "address": "Address",
+        "market_value": "FairMarketValue",
+        "acres": "DeededAcres"
+      },
+      "notes": "Chesterfield County 'ParcelsEnriched' layer (county ArcGIS Online org); 150,861 of 151,015 rows have OwnerName (rows without it are non-parcel polygons with all-null attributes). TotalAssessment also present.",
+      "verified": true,
+      "record_count": 151015
+    }
+  ],
+  "summary": "VDOT's SYIP approved-projects line and point layers verify with status, scope, cost and right-of-way/construction phase dates. The VGIN statewide parcel layer (https://vginmaps.vdem.virginia.gov/arcgis/rest/services/VA_Base_Layers/VA_Parcels/FeatureServer/0, 4,174,364 parcels, verified) has only FIPS, LOCALITY, PARCELID, no owner. Owner names verified for Prince William and Chesterfield only; Fairfax's open-data parcel layer has no owner fields, and the Loudoun, Virginia Beach and Henrico servers timed out from the research network."
 }
