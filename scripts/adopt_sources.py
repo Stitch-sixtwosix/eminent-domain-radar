@@ -88,7 +88,8 @@ def main() -> None:
                         pass
             except Exception as e:
                 skipped.append((name, "did not answer just now: %s" % str(e)[:60])); continue
-            layers.append({"state": states[0], "name": name, "key": "g" + hashlib.sha1((s["url"] + "|" + name).encode()).hexdigest()[:9],   # permanent: never the position in a file "url": s["url"], "fields": s["fields"],
+            # The key is permanent (address plus name), never the position in a file, so a new research round cannot load a map twice.
+            layers.append({"state": states[0], "name": name, "key": "g" + hashlib.sha1((s["url"] + "|" + name).encode()).hexdigest()[:9], "url": s["url"], "fields": s["fields"],
                            "where": where, "unfiltered": unfiltered, "agency": s.get("authority") or name, "stage": "planning",
                            "likelihood": rev.get("likelihood"), "source_prefix": "gis", "category": doc.get("category") or f.stem, "coverage": s.get("coverage"),
                            "records": total})

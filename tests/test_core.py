@@ -661,3 +661,11 @@ def test_geometry_helpers_survive_bad_points():
     assert geo.center({"paths": [[["NaN", 1], [-80.0, 40.0], [None, None], [-79.0, 41.0]]]}) == (40.5, -79.5)
     assert geo.center({"rings": [[[-100.0, 30.0], [-99.0, 31.0]]]}) == (30.5, -99.5)
     assert geo.center({"x": "bad", "y": 2}) is None and geo.center({"points": [[900000.0, 5000000.0]]}) is None
+
+
+def test_shipped_project_layers_are_complete():
+    import json
+    from pathlib import Path
+    layers = json.loads((Path(__file__).parent.parent / "edradar/data/sources/layers.json").read_text())
+    assert layers and all(x.get("url") and x.get("fields") and x.get("state") and x.get("name") for x in layers)
+    assert len({x["key"] for x in layers}) == len(layers)
