@@ -247,6 +247,236 @@
    "sample": "{\"name\": \"Madison County Debt Service I-55\", \"descriptio\": \"MS 463 Improvements from Post Oak Road to US Hwy 51\", \"classifica\": \"Reconstruction\", \"fiscalyear\": \"2025-2026\", \"county\": \"Madison\"}",
    "restrictions": null,
    "notes": "Small: one service per TIP cycle with a layer per category (0 bridge, 2 safety, 3 congestion mitigation, 5 MDOT, 6 resurfacing, 7 transportation alternatives). A 2027-2030 service exists (Hosted/TIP_Viewer_2027_2030 and MPO_Awarded_Projects_2027_2030) but its MDOT layer was still empty on 2026-11-17 and its other layers are only partly filled. termini = limits; sponsor; pdf link."
+  },
+  {
+   "name": "Wichita Area MPO (WAMPO) TIP 2027-2030 All Projects (carries KDOT project IDs)",
+   "authority": "Wichita Area Metropolitan Planning Organization; lead agencies KDOT, Wichita, Sedgwick County and cities",
+   "states": [
+    "KS"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services6.arcgis.com/Xj5oQOHmqKlB1HVs/arcgis/rest/services/TIP_2027_2030_AllProjects/FeatureServer/0",
+   "verified": true,
+   "record_count": 152,
+   "geometry": "polyline",
+   "fields": {
+    "id": "WAMPO_ID",
+    "name": "ProjectTitle",
+    "description": "ProjectScope",
+    "work_type": "ProjectType",
+    "cost": "Total_Cost",
+    "status": "TIP_Action_27_30",
+    "county": "LeadAgency"
+   },
+   "planned_filter": "All are programmed for FFY 2027-2030. ProjectType IN ('RN - New Roadway','RX - Roadway Expansion (add through lanes)','RM - Roadway Reconstruction/Modernization','BR - Bridge') are the land-taking kinds. LeadAgency = 'KDOT' for state projects.",
+   "sample": "{\"WAMPO_ID\": \"B-20-01\", \"ProjectTitle\": \"Replace Bridge #184 on K-15 in Sedgwick County\", \"ProjectScope\": \"Bridge Replacement\", \"ProjectType\": \"BR - Bridge\", \"Total_Cost\": 5514000, \"TIP_Action_27_30\": \"Carry Over Project (Unchanged)\", \"LeadAgency\": \"KDOT\"}",
+   "restrictions": null,
+   "notes": "Official, current (edited 2026-11-05). KDOT_Project_ID (e.g. KA-5770-01) links to KDOT's WinCPMS. Project_Limits is free text. Kansas statewide is still only the consultant-hosted centroid copy: KDOT's own server kanplan.ksdot.gov (Transportation/Projects_KHUB and APPS/WinCPMS_KHUB MapServer, listed on ArcGIS Online by owner KanDOT, modified 2025-12) and wfs.ksdot.org did not resolve/connect on 2026-11-17."
+  },
+  {
+   "name": "Indianapolis MPO Metropolitan Transportation Plan projects - current (MTP_2024Q3)",
+   "authority": "Indianapolis Metropolitan Planning Organization; sponsors INDOT, counties and cities",
+   "states": [
+    "IN"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services5.arcgis.com/qVN2o0aio8BMbwcJ/arcgis/rest/services/MTP_2022Q1/FeatureServer/1",
+   "verified": true,
+   "record_count": 176,
+   "geometry": "polyline",
+   "fields": {
+    "id": "PROJ_ID",
+    "name": "Descriptio",
+    "work_type": "Imprv_Type",
+    "cost": "Total_Cost",
+    "date": "Time_Perio",
+    "county": "Sponsor"
+   },
+   "planned_filter": "All are plan projects; Time_Perio gives the period (e.g. '2020-2029 (E&C)'). Sponsor = 'INDOT' for state projects. Imprv_Type is free text such as 'Widen from 4 lanes to 6 lanes', 'New 2-lane road'.",
+   "sample": "{\"PROJ_ID\": 6042, \"Descriptio\": \"US 36 from Raceway Rd to I-465\", \"Imprv_Type\": \"Widen from 4 lanes to 6 lanes\", \"Total_Cost\": 24576813, \"Time_Perio\": \"2020-2029 (E&C)\", \"Sponsor\": \"INDOT\"}",
+   "restrictions": null,
+   "notes": "Capacity (widening / new road / interchange) projects of the eight-county Indianapolis region, i.e. the ones that need right of way. Item 'MTP Projects - Current' updated 2026-02; layer data dated 2024-07. No status field."
+  },
+  {
+   "name": "INDOT STIP/TIP joined projects FY2026-2030 (INDOT's STIP consultant, partial)",
+   "authority": "Indiana DOT / Indiana MPOs (hosted by INDOT's STIP consultant)",
+   "states": [
+    "IN"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services3.arcgis.com/zkfscBHttPaQwR4x/arcgis/rest/services/Total_Projects_tip_stip_joined/FeatureServer/0",
+   "verified": true,
+   "record_count": 133,
+   "geometry": "polyline",
+   "fields": {
+    "id": "Join_DES",
+    "name": "Join_Proje",
+    "description": "Join_Locat",
+    "work_type": "Join_Prima",
+    "cost": "Join_Estim",
+    "status": "Join_Pha_2",
+    "county": "Join_Count"
+   },
+   "planned_filter": "All programmed FY2026-2030. Join_Pha_2 is the phase code (PE, RW = right of way, CN = construction); Join_FY26..Join_FY30 hold dollars by year as text.",
+   "sample": "{\"Join_DES\": \"2100030\", \"Join_Proje\": \"Traffic Signals Modernization\", \"Join_Locat\": \"Traffic Signal Modernization on SR 2 At intersection of SR55 W JCT (Grant St), Project diameter is 0.1 miles\", \"Join_Prima\": \"HSIP\", \"Join_Estim\": \"$266,560\", \"Join_Pha_2\": \"CN\", \"Join_Count\": \"LAKE\"}",
+   "restrictions": null,
+   "notes": "Only 133 records (looks like MPO-area projects, e.g. NIRPC), but it is the only Indiana layer found that has phase (incl. RW) and dollars by fiscal year; DES number joins to the STIP_2024 layer already recorded. Third-party host; edited 2026-06. INDOT's own server gis.indot.in.gov still returns HTTP 403 (re-tested 2026-11-17), so no official INDOT replacement was found."
+  },
+  {
+   "name": "MAPA (Omaha-Council Bluffs MPO) 2050 Metropolitan Transportation Plan projects - lines",
+   "authority": "Metropolitan Area Planning Agency; lead agencies NDOT, Iowa DOT, Omaha, Douglas/Sarpy counties and cities",
+   "states": [
+    "NE",
+    "IA"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/CHjpJeHqytL8t8op/arcgis/rest/services/MTP_Projects_Line_view/FeatureServer/0",
+   "verified": true,
+   "record_count": 1175,
+   "geometry": "polyline",
+   "fields": {
+    "id": "MTP_ID",
+    "name": "Project_Name",
+    "description": "MTP_Project_Description",
+    "work_type": "Grouped_Category",
+    "cost": "MTP_TotalProjectCost",
+    "date": "MTP_Est_Construction_Year",
+    "county": "County"
+   },
+   "planned_filter": "MTP_Est_Construction_Year >= current year; Grouped_Category = 'Expansion' for widening / new roads. State field separates Nebraska from Iowa.",
+   "sample": "{\"MTP_ID\": 807, \"Project_Name\": \"Fort Street\", \"MTP_Project_Description\": \"This project will extend Fort Street from\", \"Grouped_Category\": \"Expansion\", \"MTP_Est_Construction_Year\": 2015, \"County\": \"Douglas\"}",
+   "restrictions": null,
+   "notes": "Best Nebraska substitute while NDOT's own server is unreachable: 1,175 line projects compiled from the MPO plan, the TIP, Omaha/Bellevue/La Vista/Papillion CIPs and Sarpy County one-and-six-year plans (Planning_Origin says which). Contains past years too, so filter on year. Lead_Agency identifies NDOT projects. Edited 2025-09. Companion MTP_Projects_Point_view."
+  },
+  {
+   "name": "MAPA FY2026 TIP projects - lines (Omaha-Council Bluffs)",
+   "authority": "Metropolitan Area Planning Agency (MPO)",
+   "states": [
+    "NE",
+    "IA"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/CHjpJeHqytL8t8op/arcgis/rest/services/FY26_TIP_Projects/FeatureServer/2",
+   "verified": true,
+   "record_count": 72,
+   "geometry": "polyline",
+   "fields": {
+    "id": "tip_id",
+    "name": "proj_name",
+    "work_type": "proj_type",
+    "cost": "proj_cost",
+    "county": "geography"
+   },
+   "planned_filter": "All programmed in the FY2026 TIP; control_num is the NDOT control number (NE-xxxxx) or Iowa DOT number.",
+   "sample": "{\"tip_id\": \"2022-032\", \"proj_name\": \"33rd & Hamilton Mini Roundabout\", \"proj_type\": \"Other\", \"proj_cost\": 648790, \"geography\": \"Douglas\"}",
+   "restrictions": null,
+   "notes": "Layers 1 (points) and 3 (polygons) hold the rest of the TIP. tip_category e.g. 'Automotive/Roadway'; lead_agency; fund_source. No phase or year fields."
+  },
+  {
+   "name": "Lincoln MPO 2050 LRTP roadway project prioritization - linear projects (consultant web map)",
+   "authority": "Lincoln MPO / City of Lincoln, Lancaster County, NDOT (hosted by the plan's consultant)",
+   "states": [
+    "NE"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/bH0ZyWM4JffCJ4P5/arcgis/rest/services/Lincoln_LRTP_Roadway_Project_Prioritization_WebMap/FeatureServer/10",
+   "verified": true,
+   "record_count": 133,
+   "geometry": "polyline",
+   "fields": {
+    "id": "ProjectID",
+    "name": "ProjectStr",
+    "description": "ProjectDes",
+    "status": "ProjStatus",
+    "county": "ProjectLea"
+   },
+   "planned_filter": "All are candidate or committed roadway projects of the plan being written in 2026. ProjStatus LIKE 'Committed%' = funded (TIP, HSIP, local, developer); blank = candidate.",
+   "sample": "{\"ProjectID\": 76, \"ProjectStr\": \"West Beltway (US 77)\", \"ProjectDes\": \"Freeway with new interchanges\", \"ProjStatus\": \"Committed - TIP\", \"ProjectLea\": \"NDOT\"}",
+   "restrictions": null,
+   "notes": "133 roadway capacity projects incl. NDOT's West Beltway (US 77) and South Beltway work; ProjectDes says e.g. 'Freeway with new interchanges', '2 lanes + turn lanes'. Proj_Limit gives limits. Layer 0 = point (intersection) projects. Third-party host, edited 2026-03; may be withdrawn when the plan is adopted. Lincoln's own TIP layer (services1.arcgis.com/wpJGOi6N4Rq5cqFv/.../TIP_Program_Projects, 535 points) is the official alternative but thin."
+  },
+  {
+   "name": "NCDOT Right of Way GIS - Proposed Acquisition: ROW Left (new right-of-way polygons per parcel)",
+   "authority": "North Carolina DOT Right of Way Unit",
+   "states": [
+    "NC"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://gis11.services.ncdot.gov/arcgis/rest/services/RowMsPub/NCDOT_RowMS_ProposedAcquisition/MapServer/116",
+   "verified": true,
+   "record_count": 28027,
+   "geometry": "polygon",
+   "fields": {
+    "id": "ProjectParcelID",
+    "name": "ProjectID",
+    "work_type": "LevelName",
+    "description": "ProjectParcelClaimText"
+   },
+   "planned_filter": "No status or date. ProjectID = STIP number + '_ROWGIS' (e.g. B5326_ROWGIS -> STIP B-5326): keep parcels whose STIP project is still in the NCDOT STIP layer (already recorded) with a right-of-way or construction year not yet past.",
+   "sample": "{\"ProjectParcelID\": \"B5326_5\", \"ProjectID\": \"B5326_ROWGIS\", \"LevelName\": \"Exist Deed Draft Right of Way Left\"}",
+   "restrictions": null,
+   "notes": "TOP FIND for land acquisition: the actual areas NCDOT plans to acquire, as polygons per project parcel, from its right-of-way plans. One layer per take type and side: 116/117 ROW Left/Right (28,027 in 116), 120/121 temporary drainage easement, 123/124 temporary construction easement (23,059 in 123), 126/127 temporary utility, 130-149 permanent easements (construction, conservation, drainage, utility, aerial utility), 151/152 remnants, 154 Existing Parcel Shape (65,937 whole affected parcels), 106 parcel number polygons, 2 Property Owner (owner names as map annotation: TextString, e.g. an owner's name, with ProjectID; 226,755 text pieces, long names split over several). ProjectParcelID = project + parcel number (B5326_5). maxRecordCount 1000. Covers past and current projects together. Sibling folder RowMS has ProposedProperty / ProposedRoad / ExistingProperty CAD layers (e.g. 'Prop ROW Marker')."
+  },
+  {
+   "name": "SCDOT statewide Long Range Transportation Plan projects - corridors (LRTPCorridorProjects)",
+   "authority": "South Carolina DOT with the state's MPOs, COGs and sales-tax counties",
+   "states": [
+    "SC"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/VaY7cY9pvUYUP1Lf/arcgis/rest/services/LRTPCorridorProjects/FeatureServer/0",
+   "verified": true,
+   "record_count": 782,
+   "geometry": "polyline",
+   "fields": {
+    "id": "ProjectID",
+    "name": "Name",
+    "description": "Descriptio",
+    "work_type": "ProjectTyp",
+    "cost": "Anticipate",
+    "status": "ProjectSta",
+    "date": "ProjectYr",
+    "county": "CountyID"
+   },
+   "planned_filter": "ProjectSta NOT IN ('Complete','Completed','Completed - Recently','Substantially Complete','Under Construction','Construction','Awarded'); for land: ProjectTyp IN ('Road Widening','Widening','Widenings','New Location','New Road','Extension','New Interchange','Corridor Improvement','Corridor Improvements'). ProjectSta values 'Right of Way Acquisition', 'Right-of-Way', 'ROW Acquisition' mark projects buying land now.",
+   "sample": "{\"ProjectID\": \" \", \"Name\": \"Rainbow Lake Rd\", \"Descriptio\": \" \", \"ProjectTyp\": \"Corridor Improvement\", \"Anticipate\": \" \", \"ProjectSta\": \" \", \"ProjectYr\": 0, \"CountyID\": 42}",
+   "restrictions": null,
+   "notes": "CURRENT replacement for the stale October 2023 SCDOT snapshot: edited 2026-11-02, in SCDOT's own ArcGIS Online org. Compiles long-range plan projects reported by 29 agencies (ReportingA: MPOs such as GPATS, CHATS, COATS; COGs; sales-tax counties such as Charleston, Horry, York). ProjectFun = funding (LRTP, Local Option Sales Tax...). AlreadyonP = 'Yes' means already a programmed SCDOT project (ProjectID like P031970). Values are free text entered by each agency, so 30 status spellings and 31 type spellings; Anticipate (cost) is text; many rows lack a description. Companion layers same schema: LRTPIntersectionProjects (1,580 multipoints) and LRTPBridgeProjects (265 multipoints)."
+  },
+  {
+   "name": "SCDOT statewide Long Range Transportation Plan projects - intersections (LRTPIntersectionProjects)",
+   "authority": "South Carolina DOT with MPOs/COGs/counties",
+   "states": [
+    "SC"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/VaY7cY9pvUYUP1Lf/arcgis/rest/services/LRTPIntersectionProjects/FeatureServer/0",
+   "verified": true,
+   "record_count": 1580,
+   "geometry": "point",
+   "fields": {
+    "id": "ProjectID",
+    "name": "Name",
+    "description": "Descriptio",
+    "work_type": "ProjectTyp",
+    "cost": "Anticipate",
+    "status": "ProjectSta",
+    "date": "ProjectYr",
+    "county": "CountyID"
+   },
+   "planned_filter": "Same as the corridor layer: drop completed / under-construction statuses.",
+   "sample": "{\"ProjectID\": \"P031970\", \"Name\": \"S-37 (JP Stevens Rd) @ W Cherry & S-65 (JP Stevens Rd) @ Martin Creek Rd\", \"Descriptio\": \" \", \"ProjectTyp\": \"Intersection Improvement\", \"Anticipate\": \" \", \"ProjectSta\": \"Design/Development\", \"ProjectYr\": \"2027\", \"CountyID\": 37}",
+   "restrictions": null,
+   "notes": "Point (multipoint) companion to LRTPCorridorProjects, edited 2026-11-02. LRTPBridgeProjects (same org, 265 records, ProjectTyp e.g. 'New Bridge') is the bridge companion."
   }
  ],
  "unverified": [
@@ -259,6 +489,26 @@
    "name": "MDOT (Mississippi) GeoServer project geometry (WFS Proj_Data:FMS_PROJ_GEOM_X)",
    "url": "https://geo.mdot.state.ms.us/geoserver/ows?service=WFS&request=GetCapabilities",
    "reason": "MDOT's public project map (path.mdot.ms.gov/ProjMap) names this GeoServer in its script, but the server answered HTTP 403 Forbidden to a direct request, so it is not open to automated readers; no further attempts made. The map itself lists only 'Under Construction' and 'Construction Complete' projects. No ArcGIS service for MDOT exists (gis.mdot.ms.gov does not connect, maps.mdot.ms.gov returns 500). Mississippi statewide remains a gap; STIP is a PDF."
+  },
+  {
+   "name": "KDOT WinCPMS / Projects KHUB (official Kansas project layers)",
+   "url": "https://kanplan.ksdot.gov/arcgis_web_adaptor/rest/services/Transportation/Projects_KHUB/MapServer",
+   "reason": "Listed on ArcGIS Online by owner KanDOT (modified 2025-12-11; also APPS/WinCPMS_KHUB/MapServer and wfs.ksdot.org/.../Transportation/WinCPMS/MapServer/0), but kanplan.ksdot.gov, kanplan.ksdot.org and wfs.ksdot.org did not resolve or connect from the research machine or from a second fetch service on 2026-11-17. Likely the right official source; retest from another network."
+  },
+  {
+   "name": "NDOT (Nebraska) Program Book 2027 layers",
+   "url": "https://gis.ne.gov/dot/rest/services/ProgramBookDOT/FeatureServer/0",
+   "reason": "Confirmed as the data behind NDOT's public 'Program Book 2027' web app (ArcGIS Online item 6f5b199003864bbb83586221a08c7a74 references layers 0 and 1 of this service; a sibling RightOfWayDOT/FeatureServer 'Right of Ways of Nebraska' also exists). gis.ne.gov resolves through public DNS to 164.119.176.149 but the connection timed out on every attempt, and a second fetch service could not resolve it; NDOT's ArcGIS Online org (services6.arcgis.com/ljihus0RxqhjsxEd) holds only 4 unrelated services. Retest from another network: this is almost certainly the right source."
+  },
+  {
+   "name": "NHDOT project layers (Projects In Planning / In Design / Ten Year Plan / ROW projects)",
+   "url": "https://maps.dot.nh.gov/arcgis_server/rest/services/Projects/NHDOT_PROJECTS_PROPOSALS/MapServer",
+   "reason": "Re-tested 2026-11-17: layer definitions answer but query, find and identify all return error 500 on every Projects service (NHDOT_PROJECTS_ALL, _PROPOSALS, _PROPOSALS_ROW, _BY_TYPE). Server-side fault at NHDOT; the stale third-party copy recorded under sources is the stopgap."
+  },
+  {
+   "name": "Rhode Island current STIP (FFY2022-2031) GIS",
+   "url": "https://risegis.ri.gov/hosting/rest/services/RIDOA",
+   "reason": "Not found. The RIDOA folder (17 services) still has only the FFY18-27 STIP map services; the RIDOT folder has assets only (Bridge, Rhodeways, signs); RIDOT's ArcGIS Online org (services5.arcgis.com/JfTJE9T2RFfUZzVx, 44 services) has sweeping, bridge condition and municipal road-fund layers but no STIP; Statewide Planning's org has only the small LRTP ProposedProjects_Line already recorded. The current STIP is published through an e-STIP web application without an open GIS feed."
   }
  ],
  "summary": ""

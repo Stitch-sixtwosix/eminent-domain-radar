@@ -2,7 +2,7 @@
  {
   "state": "NC",
   "name": "Charlotte Capital Improvement Projects (points)",
-  "key": "local_1",
+  "key": "local_17",
   "url": "https://gis.charlottenc.gov/arcgis/rest/services/CIP/Capital_Investment_Projects_Points/MapServer/0",
   "fields": {
    "id": "Project_ID",
@@ -25,7 +25,7 @@
  {
   "state": "NC",
   "name": "Charlotte Capital Improvement Projects (polygons)",
-  "key": "local_2",
+  "key": "local_18",
   "url": "https://gis.charlottenc.gov/arcgis/rest/services/CIP/Capital_Improvements_Projects_Polygons/MapServer/0",
   "fields": {
    "id": "Project_ID",
@@ -48,7 +48,7 @@
  {
   "state": "NC",
   "name": "Charlotte Capital Improvement Projects (lines)",
-  "key": "local_3",
+  "key": "local_19",
   "url": "https://gis.charlottenc.gov/arcgis/rest/services/CIP/Capital_Improvement_Project_Lines/MapServer/0",
   "fields": {
    "id": "Project_ID",
@@ -71,7 +71,7 @@
  {
   "state": "TX",
   "name": "Dallas Capital Improvement Program: Active Bond Program - Points",
-  "key": "local_4",
+  "key": "local_20",
   "url": "https://services2.arcgis.com/rwnOSbfKSwyTBcwN/arcgis/rest/services/CapitalImprovementProgram/FeatureServer/0",
   "fields": {
    "id": "ProjectNum",
@@ -95,7 +95,7 @@
  {
   "state": "TX",
   "name": "Dallas Capital Improvement Program: Active Bond Program - Lines",
-  "key": "local_5",
+  "key": "local_21",
   "url": "https://services2.arcgis.com/rwnOSbfKSwyTBcwN/arcgis/rest/services/CapitalImprovementProgram/FeatureServer/3",
   "fields": {
    "id": "ProjectNum",
@@ -119,7 +119,7 @@
  {
   "state": "TX",
   "name": "Dallas Capital Improvement Program: 2024 Bond Program - Points",
-  "key": "local_6",
+  "key": "local_22",
   "url": "https://services2.arcgis.com/rwnOSbfKSwyTBcwN/arcgis/rest/services/CapitalImprovementProgram/FeatureServer/10",
   "fields": {
    "id": "ProjectNum",
@@ -143,7 +143,7 @@
  {
   "state": "TX",
   "name": "Dallas Capital Improvement Program: 2024 Bond Program - Lines",
-  "key": "local_7",
+  "key": "local_23",
   "url": "https://services2.arcgis.com/rwnOSbfKSwyTBcwN/arcgis/rest/services/CapitalImprovementProgram/FeatureServer/9",
   "fields": {
    "id": "ProjectNum",
@@ -167,7 +167,7 @@
  {
   "state": "TX",
   "name": "Dallas Capital Improvement Program: 2017 Bond Program - Points",
-  "key": "local_8",
+  "key": "local_24",
   "url": "https://services2.arcgis.com/rwnOSbfKSwyTBcwN/arcgis/rest/services/CapitalImprovementProgram/FeatureServer/1",
   "fields": {
    "id": "ProjectNum",
@@ -191,7 +191,7 @@
  {
   "state": "TX",
   "name": "Dallas Capital Improvement Program: 2017 Bond Program - Lines",
-  "key": "local_9",
+  "key": "local_25",
   "url": "https://services2.arcgis.com/rwnOSbfKSwyTBcwN/arcgis/rest/services/CapitalImprovementProgram/FeatureServer/4",
   "fields": {
    "id": "ProjectNum",
@@ -215,7 +215,7 @@
  {
   "state": "NC",
   "name": "Raleigh Capital Improvement Projects (public)",
-  "key": "local_10",
+  "key": "local_26",
   "url": "https://services.arcgis.com/v400IkDOw1ad7Yad/arcgis/rest/services/Capital_Improvement_Projects_Public/FeatureServer/0",
   "fields": {
    "name": "PROJ_NAME",
@@ -235,7 +235,7 @@
  {
   "state": "VA",
   "name": "Virginia Beach CIP Projects",
-  "key": "local_11",
+  "key": "local_27",
   "url": "https://services2.arcgis.com/CyVvlIiUfRBmMQuu/arcgis/rest/services/CIP_Projects/FeatureServer/0",
   "fields": {
    "id": "Project_Number",
@@ -256,7 +256,7 @@
  {
   "state": "WA",
   "name": "Seattle Public Utilities CIP Project Boundaries",
-  "key": "local_13",
+  "key": "local_29",
   "url": "https://services.arcgis.com/ZOyb2t4B0UYuYNYH/arcgis/rest/services/SPU_Capital_Improvement_Projects_and_Workorders/FeatureServer/2",
   "fields": {
    "name": "CP_PRJCT_NAME",
@@ -278,7 +278,7 @@
  {
   "state": "WA",
   "name": "Seattle Parks and Recreation Capital Project Sites",
-  "key": "local_14",
+  "key": "local_30",
   "url": "https://services.arcgis.com/ZOyb2t4B0UYuYNYH/arcgis/rest/services/SPR_Capital_Project_Sites_public/FeatureServer/0",
   "fields": {
    "description": "DESCRIPTION",
@@ -301,7 +301,7 @@
  {
   "state": "WA",
   "name": "King County Wastewater Treatment Division capital projects",
-  "key": "local_15",
+  "key": "local_31",
   "url": "https://services.arcgis.com/Ej0PsM5Aw677QF1W/arcgis/rest/services/WTDwebsiteCIP/FeatureServer/0",
   "fields": {
    "id": "Id",
@@ -321,7 +321,7 @@
  {
   "state": "FL",
   "name": "Miami-Dade Utility Coordination: DTPW capital improvement corridors",
-  "key": "local_16",
+  "key": "local_32",
   "url": "https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/MDCPWCorridor_gdb/FeatureServer/0",
   "fields": {
    "id": "PROJECTID",
@@ -344,7 +344,7 @@
  {
   "state": "FL",
   "name": "Miami-Dade Utility Coordination: DTPW capital improvement sites",
-  "key": "local_17",
+  "key": "local_33",
   "url": "https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/MDCPWSite_gdb/FeatureServer/0",
   "fields": {
    "id": "PROJECTID",
@@ -367,7 +367,7 @@
  {
   "state": "FL",
   "name": "Miami-Dade Utility Coordination: WASD sewer capital projects",
-  "key": "local_18",
+  "key": "local_34",
   "url": "https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/WASDSewer_gdb/FeatureServer/0",
   "fields": {
    "id": "PROJECTID",
@@ -390,7 +390,7 @@
  {
   "state": "FL",
   "name": "Miami-Dade Utility Coordination: WASD water capital projects",
-  "key": "local_19",
+  "key": "local_35",
   "url": "https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/WASDWater_gdb/FeatureServer/0",
   "fields": {
    "id": "PROJECTID",
@@ -413,7 +413,7 @@
  {
   "state": "FL",
   "name": "Orange County FL Public Works Capital Improvement Projects (lines)",
-  "key": "local_20",
+  "key": "local_36",
   "url": "https://services1.arcgis.com/0U8EQ1FrumPeIqDb/arcgis/rest/services/Capital_Improvement_Projects_Map_(Public_-_2026_-_View)/FeatureServer/0",
   "fields": {
    "name": "Project_Name",
@@ -435,7 +435,7 @@
  {
   "state": "FL",
   "name": "Orange County FL CIP Roadways",
-  "key": "local_21",
+  "key": "local_37",
   "url": "https://ocgis4.ocfl.net/arcgis/rest/services/AGOL_Open_Data/MapServer/8",
   "fields": {
    "id": "CIP_NO",
@@ -458,7 +458,7 @@
  {
   "state": "VA",
   "name": "Fairfax County DOT Capital Improvement Linear Projects",
-  "key": "local_22",
+  "key": "local_38",
   "url": "https://services1.arcgis.com/ioennV6PpG5Xodq0/arcgis/rest/services/DOT_Capital_Improvement_Linear_Projects/FeatureServer/0",
   "fields": {
    "id": "ID",
@@ -481,7 +481,7 @@
  {
   "state": "VA",
   "name": "Fairfax County DOT Capital Improvement Spot Projects",
-  "key": "local_23",
+  "key": "local_39",
   "url": "https://services1.arcgis.com/ioennV6PpG5Xodq0/arcgis/rest/services/DOT_Capital_Improvement_Spot_Projects/FeatureServer/0",
   "fields": {
    "id": "ID",
@@ -504,7 +504,7 @@
  {
   "state": "VA",
   "name": "Fairfax County Capital Improvement Projects (facilities)",
-  "key": "local_24",
+  "key": "local_40",
   "url": "https://services1.arcgis.com/ioennV6PpG5Xodq0/arcgis/rest/services/Capital_Improvement_Projects/FeatureServer/0",
   "fields": {
    "work_type": "CATEGORY",
@@ -526,7 +526,7 @@
  {
   "state": "NY",
   "name": "NYC Capital Projects Database (CPDB) - polygons",
-  "key": "local_25",
+  "key": "local_41",
   "url": "https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/Capital_Projects_Database_poly/FeatureServer/0",
   "fields": {
    "id": "maprojid",
@@ -549,7 +549,7 @@
  {
   "state": "NY",
   "name": "NYC Capital Projects Database (CPDB) - points",
-  "key": "local_26",
+  "key": "local_42",
   "url": "https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/Capital_Projects_Database_points/FeatureServer/0",
   "fields": {
    "id": "maprojid",
@@ -572,7 +572,7 @@
  {
   "state": "TX",
   "name": "Austin Watershed Protection CIP projects",
-  "key": "local_27",
+  "key": "local_43",
   "url": "https://services.arcgis.com/0L95CJ0VTaxqcmED/arcgis/rest/services/WPD_BenefitsCIP/FeatureServer/0",
   "fields": {
    "id": "PROJECT_ID",
@@ -595,7 +595,7 @@
  {
   "state": "TX",
   "name": "Montgomery County TX CIP Project Areas (road bond)",
-  "key": "local_28",
+  "key": "local_44",
   "url": "https://services1.arcgis.com/PRoAPGnMSUqvTrzq/arcgis/rest/services/CIP_Project_Areas_View/FeatureServer/0",
   "fields": {
    "id": "PROJID",
@@ -619,7 +619,7 @@
  {
   "state": "VA",
   "name": "Prince William County Capital Improvement Projects",
-  "key": "local_29",
+  "key": "local_45",
   "url": "https://services2.arcgis.com/0Q7l03Ls62VG0fy4/arcgis/rest/services/CIP_view/FeatureServer/0",
   "fields": {
    "id": "ID",
@@ -642,7 +642,7 @@
  {
   "state": "MO",
   "name": "St. Louis MSD Active Wastewater Projects",
-  "key": "local_30",
+  "key": "local_46",
   "url": "https://services1.arcgis.com/plGX8WiX9ylnkcee/arcgis/rest/services/Capital_Projects/FeatureServer/0",
   "fields": {
    "id": "PROJECT_NUMBER",
@@ -664,7 +664,7 @@
  {
   "state": "MO",
   "name": "St. Louis MSD Active Stormwater Projects",
-  "key": "local_31",
+  "key": "local_47",
   "url": "https://services1.arcgis.com/plGX8WiX9ylnkcee/arcgis/rest/services/Capital_Projects/FeatureServer/1",
   "fields": {
    "id": "PROJECT_NUMBER",
@@ -686,7 +686,7 @@
  {
   "state": "TN",
   "name": "Chattanooga Capital Projects Tracking (points)",
-  "key": "local_33",
+  "key": "local_49",
   "url": "https://services2.arcgis.com/OIAIimblRxPs0xxc/arcgis/rest/services/Capital_Improvements__Public_view/FeatureServer/0",
   "fields": {
    "name": "projname",
@@ -709,7 +709,7 @@
  {
   "state": "TN",
   "name": "Chattanooga Capital Projects Tracking (lines)",
-  "key": "local_34",
+  "key": "local_50",
   "url": "https://services2.arcgis.com/OIAIimblRxPs0xxc/arcgis/rest/services/Capital_Improvements__Public_view/FeatureServer/1",
   "fields": {
    "name": "projname",
@@ -732,7 +732,7 @@
  {
   "state": "TN",
   "name": "Chattanooga Capital Projects Tracking (polygons)",
-  "key": "local_35",
+  "key": "local_51",
   "url": "https://services2.arcgis.com/OIAIimblRxPs0xxc/arcgis/rest/services/Capital_Improvements__Public_view/FeatureServer/2",
   "fields": {
    "name": "projname",
@@ -755,7 +755,7 @@
  {
   "state": "IL",
   "name": "Chicago RTA Capital Projects (impact areas)",
-  "key": "local_36",
+  "key": "local_52",
   "url": "https://services5.arcgis.com/NIHJ1cAxHq972sDH/arcgis/rest/services/Capital_Projects_Dashboard_Sys/FeatureServer/0",
   "fields": {
    "name": "PROJ_TITLE",
@@ -776,7 +776,7 @@
  {
   "state": "CO",
   "name": "Aurora CO Public Works CIP Projects",
-  "key": "local_37",
+  "key": "local_53",
   "url": "https://services3.arcgis.com/0Va1ID99NSrNyyPX/arcgis/rest/services/CIP_Projects_PW2/FeatureServer/0",
   "fields": {
    "name": "Name",
@@ -798,7 +798,7 @@
  {
   "state": "CO",
   "name": "Aurora Water CIP Projects",
-  "key": "local_38",
+  "key": "local_54",
   "url": "https://services3.arcgis.com/0Va1ID99NSrNyyPX/arcgis/rest/services/CIP_Projects_AW2/FeatureServer/0",
   "fields": {
    "name": "Name",
@@ -820,7 +820,7 @@
  {
   "state": "TX",
   "name": "Harris County Precinct 4 Capital Projects",
-  "key": "local_39",
+  "key": "local_55",
   "url": "https://services.arcgis.com/su8ic9KbA7PYVxPS/arcgis/rest/services/Precinct_4_Capital_Projects/FeatureServer/0",
   "fields": {
    "name": "Name",
@@ -843,7 +843,7 @@
  {
   "state": "MI",
   "name": "Great Lakes Water Authority CIP Project Areas",
-  "key": "local_40",
+  "key": "local_56",
   "url": "https://utility.arcgis.com/usrsvcs/servers/eadf50d82a9c46afbf993d2eada16144/rest/services/CIP_GLWA/GLWA_Capital_Improvements_Program/MapServer/0",
   "fields": {
    "id": "CIPNumber",
@@ -865,7 +865,7 @@
  {
   "state": "OH",
   "name": "Northeast Ohio Regional Sewer District CIP Projects",
-  "key": "local_41",
+  "key": "local_57",
   "url": "https://utility.arcgis.com/usrsvcs/servers/a52b9aa24ab74e3e9359719138fcd8b9/rest/services/Public/E_C_CIP_Projects_Dashboard/MapServer/0",
   "fields": {
    "name": "PROJECT_NAME",
@@ -888,7 +888,7 @@
  {
   "state": "WA",
   "name": "Kirkland CIP Projects",
-  "key": "local_42",
+  "key": "local_58",
   "url": "https://services2.arcgis.com/loGMwowmR0OPlOQb/arcgis/rest/services/CIP_Project/FeatureServer/0",
   "fields": {
    "id": "CIPID",
@@ -910,7 +910,7 @@
  {
   "state": "CA",
   "name": "Carlsbad Capital Improvement Projects",
-  "key": "local_43",
+  "key": "local_59",
   "url": "https://services.arcgis.com/ay9ePoQ2UfAX3U38/arcgis/rest/services/CapitalImprovementProject/FeatureServer/0",
   "fields": {
    "name": "PROJNAME",
@@ -933,7 +933,7 @@
  {
   "state": "CA",
   "name": "Los Angeles County Public Works Stormwater Projects",
-  "key": "local_44",
+  "key": "local_60",
   "url": "https://services.arcgis.com/RmCCgQtiZLDCtblq/arcgis/rest/services/PW_Stormwater_Projects/FeatureServer/0",
   "fields": {
    "id": "Id",
@@ -954,7 +954,7 @@
  {
   "state": "TX",
   "name": "San Antonio Bond Projects (points)",
-  "key": "local_45",
+  "key": "local_61",
   "url": "https://services.arcgis.com/g1fRTDLeMgspWrYp/arcgis/rest/services/BondProject/FeatureServer/0",
   "fields": {
    "name": "Project_Name",
@@ -977,7 +977,7 @@
  {
   "state": "TX",
   "name": "San Antonio Bond Projects (lines)",
-  "key": "local_46",
+  "key": "local_62",
   "url": "https://services.arcgis.com/g1fRTDLeMgspWrYp/arcgis/rest/services/BondProjectLine/FeatureServer/0",
   "fields": {
    "id": "Project_No",
@@ -1001,7 +1001,7 @@
  {
   "state": "MA",
   "name": "Boston Coastal Resilience Project Tracking",
-  "key": "local_47",
+  "key": "local_63",
   "url": "https://services.arcgis.com/sFnw0xNflSi8J0uh/arcgis/rest/services/coastal_resilience_project_tracking_ViewOnly/FeatureServer/0",
   "fields": {
    "name": "title",
@@ -1021,7 +1021,7 @@
  {
   "state": "MI",
   "name": "Detroit Streetscape Projects",
-  "key": "local_48",
+  "key": "local_64",
   "url": "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/Streetscape_Projects/FeatureServer/41",
   "fields": {
    "name": "Road_Name",
@@ -1043,7 +1043,7 @@
  {
   "state": "AZ",
   "name": "Tucson / Pima RTA Next Roadway Projects",
-  "key": "local_49",
+  "key": "local_65",
   "url": "https://services3.arcgis.com/9coHY2fvuFjG9HQX/arcgis/rest/services/RTA_Next__Roadway_Projects_HFL/FeatureServer/1",
   "fields": {
    "id": "ProjectID",
@@ -1066,7 +1066,7 @@
  {
   "state": "CA",
   "name": "Fresno capital projects (approximate project location)",
-  "key": "local_50",
+  "key": "local_66",
   "url": "https://services2.arcgis.com/WkBUojyNPhsWOk1W/arcgis/rest/services/COF_PROJECTCENTROID_PUBLIC/FeatureServer/17",
   "fields": {
    "id": "ProjectID",
@@ -1089,7 +1089,7 @@
  {
   "state": "GA",
   "name": "Atlanta Beltline Trail Sections - project status",
-  "key": "local_51",
+  "key": "local_67",
   "url": "https://gis.beltline.org/server/rest/services/ABI_Trails_Sections_public/FeatureServer/0",
   "fields": {
    "name": "segmentname",
@@ -1112,7 +1112,7 @@
  {
   "state": "MN",
   "name": "Minneapolis 2027 Construction Map (bike/pedestrian layer; 12 layers in service)",
-  "key": "local_52",
+  "key": "local_68",
   "url": "https://services.arcgis.com/afSMGVsC7QlRK1kZ/arcgis/rest/services/2027_Mpls_Construction_Map/FeatureServer/9",
   "fields": {
    "description": "PROJECT_DESCRIPTION",
@@ -1130,33 +1130,9 @@
   "records": 6
  },
  {
-  "state": "LA",
-  "name": "New Orleans DPW Roadwork Projects",
-  "key": "local_53",
-  "url": "https://gis.nola.gov/arcgis/rest/services/Transportation/DPWRoadWorkProjects/MapServer/0",
-  "fields": {
-   "id": "PROJID",
-   "name": "Project_Name",
-   "description": "CONSTTYPE",
-   "work_type": "PROJTYPE",
-   "cost": "Total_Cost",
-   "status": "Current_Phase",
-   "date": "StartQtr",
-   "county": "COUNCILDST"
-  },
-  "where": "Current_Phase='Planned'",
-  "unfiltered": false,
-  "agency": "City of New Orleans Department of Public Works",
-  "stage": "planning",
-  "source_prefix": "gis",
-  "category": "local_utility",
-  "coverage": "city",
-  "records": 10233
- },
- {
   "state": "FL",
   "name": "Hillsborough County CIP projects",
-  "key": "local_54",
+  "key": "local_70",
   "url": "https://services.arcgis.com/apTfC6SUmnNfnxuF/arcgis/rest/services/CIP_Polygons_Final_ListView/FeatureServer/1",
   "fields": {
    "id": "CIPNumber",
@@ -1179,7 +1155,7 @@
  {
   "state": "NC",
   "name": "Wake County Public School System Construction Projects",
-  "key": "local_55",
+  "key": "local_71",
   "url": "https://services2.arcgis.com/oqISN6Dt6ax5xklN/arcgis/rest/services/wcsfdc_geom_projects_public/FeatureServer/0",
   "fields": {
    "name": "schl_name",
@@ -1199,7 +1175,7 @@
  {
   "state": "TX",
   "name": "Travis County CIP: Roads, Sidewalks and Trails",
-  "key": "local_56",
+  "key": "local_72",
   "url": "https://services1.arcgis.com/HGcSYZ5bvjRswoCb/arcgis/rest/services/CIP_Project_Overview/FeatureServer/1",
   "fields": {
    "id": "ProjectID",
@@ -1222,7 +1198,7 @@
  {
   "state": "TX",
   "name": "Travis County CIP: Bridges, Intersections and Drainage",
-  "key": "local_57",
+  "key": "local_73",
   "url": "https://services1.arcgis.com/HGcSYZ5bvjRswoCb/arcgis/rest/services/CIP_Project_Overview/FeatureServer/0",
   "fields": {
    "id": "ProjectID",
@@ -1245,7 +1221,7 @@
  {
   "state": "PA",
   "name": "Pittsburgh Water (PWSA) Waterline Installation Projects",
-  "key": "local_58",
+  "key": "local_74",
   "url": "https://services5.arcgis.com/jAsbh6V9IpseXByp/arcgis/rest/services/PWSA_Project_Locations/FeatureServer/0",
   "fields": {
    "id": "PROJECT_NO",
@@ -1266,7 +1242,7 @@
  {
   "state": "PA",
   "name": "Pittsburgh Water (PWSA) Sewer Rehabilitation Projects",
-  "key": "local_59",
+  "key": "local_75",
   "url": "https://services5.arcgis.com/jAsbh6V9IpseXByp/arcgis/rest/services/PWSA_Project_Locations/FeatureServer/1",
   "fields": {
    "id": "PROJECT_NO",
@@ -1287,7 +1263,7 @@
  {
   "state": "NC",
   "name": "Durham CIP Projects (points)",
-  "key": "local_60",
+  "key": "local_76",
   "url": "https://services2.arcgis.com/G5vR3cOjh6g2Ed8E/arcgis/rest/services/CIP_Projects/FeatureServer/57",
   "fields": {
    "name": "FIRST_main_project_title",
@@ -1310,7 +1286,7 @@
  {
   "state": "TX",
   "name": "Austin Light Rail base design: Proposed ROW lines",
-  "key": "local_61",
+  "key": "local_77",
   "url": "https://services7.arcgis.com/BnWSLs6TLD51iZWF/arcgis/rest/services/Draft_Base_Design/FeatureServer/3",
   "fields": {
    "name": "Level_File_Category",
@@ -1330,7 +1306,7 @@
  {
   "state": "TX",
   "name": "Austin Light Rail base design: Proposed Easements",
-  "key": "local_62",
+  "key": "local_78",
   "url": "https://services7.arcgis.com/BnWSLs6TLD51iZWF/arcgis/rest/services/Draft_Base_Design/FeatureServer/5",
   "fields": {
    "name": "Level_File_Category",
@@ -1350,7 +1326,7 @@
  {
   "state": "TX",
   "name": "Austin Light Rail base design: Station Platform Areas",
-  "key": "local_63",
+  "key": "local_79",
   "url": "https://services7.arcgis.com/BnWSLs6TLD51iZWF/arcgis/rest/services/Draft_Base_Design/FeatureServer/7",
   "fields": {
    "name": "Level_File_Category",
@@ -1370,7 +1346,7 @@
  {
   "state": "OK",
   "name": "Oklahoma State Flood Plan Stormwater Projects",
-  "key": "local_64",
+  "key": "local_80",
   "url": "https://services2.arcgis.com/fI5CUOPa2wdhkCHV/arcgis/rest/services/State_Flood_Plan_Stormwater_Projects/FeatureServer/99",
   "fields": {
    "name": "FMP_NAME",
@@ -1393,7 +1369,7 @@
  {
   "state": "NY",
   "name": "NYC DEP/DDC Stormwater and Sewer Capital Projects",
-  "key": "local_65",
+  "key": "local_81",
   "url": "https://services.arcgis.com/at3rDjch5X7i9Bag/arcgis/rest/services/Public_Stormwater_Sewer_Capital_Projects/FeatureServer/0",
   "fields": {
    "id": "projectid",
@@ -1415,7 +1391,7 @@
  {
   "state": "TX",
   "name": "Hidalgo County Drainage District No. 1 - 2023 Bond Program",
-  "key": "local_66",
+  "key": "local_82",
   "url": "https://services7.arcgis.com/JSUhwVSJhyVkcN3Q/arcgis/rest/services/2023_Bond/FeatureServer/0",
   "fields": {
    "name": "Name",
@@ -1436,7 +1412,7 @@
  {
   "state": "OK",
   "name": "Broken Arrow 2026 Proposed Bond Projects",
-  "key": "local_67",
+  "key": "local_83",
   "url": "https://services5.arcgis.com/rr6hTHIOPEZnXs66/arcgis/rest/services/All_Projects/FeatureServer/4",
   "fields": {
    "name": "Project_Name",
@@ -1454,7 +1430,7 @@
  {
   "state": "CO",
   "name": "Denver Storm Drainage Master Plan - proposed storm routing projects",
-  "key": "local_68",
+  "key": "local_84",
   "url": "https://services1.arcgis.com/zdB7qR0BtYrg0Xpl/arcgis/rest/services/Denver_Proposed_Storm_Routing_Projects/FeatureServer/68",
   "fields": {
    "name": "Project_Name",
@@ -1473,7 +1449,7 @@
  {
   "state": "CA",
   "name": "California Electric Transmission Lines (CEC)",
-  "key": "local_69",
+  "key": "local_85",
   "url": "https://services3.arcgis.com/bWPjFyq029ChCGur/arcgis/rest/services/Transmission_Line/FeatureServer/2",
   "fields": {
    "name": "Name",
@@ -1489,6 +1465,407 @@
   "category": "local_utility",
   "coverage": "statewide",
   "records": 6838
+ },
+ {
+  "state": "CA",
+  "name": "LA Metro Southeast Gateway Line (West Santa Ana Branch): Acquisitions and Displacements",
+  "key": "local_87",
+  "url": "https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/services/Acquisitions_and_Displacements_Final_2/FeatureServer/0",
+  "fields": {
+   "description": "ImpactType",
+   "work_type": "ROWType",
+   "county": "City",
+   "id": "WSABParcel",
+   "name": "APN",
+   "status": "TakeType"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "Los Angeles County Metropolitan Transportation Authority (LA Metro)",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "one transit project (LA County)",
+  "records": 488
+ },
+ {
+  "state": "CA",
+  "name": "LA Metro: Full Acquisition Boundaries (Southeast Gateway Line)",
+  "key": "local_88",
+  "url": "https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/services/Property_Impacts_Acquisitions_2/FeatureServer/1",
+  "fields": {
+   "id": "APN",
+   "name": "Acquistion"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "LA Metro",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "one transit project (LA County)",
+  "records": 52
+ },
+ {
+  "state": "CA",
+  "name": "LA Metro Planned Stations",
+  "key": "local_89",
+  "url": "https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/services/Metro_Planned_Stations/FeatureServer/0",
+  "fields": {
+   "name": "STOPNAME",
+   "work_type": "Type_",
+   "status": "Status",
+   "description": "LINE2"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "LA Metro",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "metro area",
+  "records": 48
+ },
+ {
+  "state": "CA",
+  "name": "LA Metro Transit Projects (Measure M / LRTP corridors)",
+  "key": "local_90",
+  "url": "https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/services/Metro_Transit_Projects/FeatureServer/0",
+  "fields": {
+   "name": "Name",
+   "work_type": "Mode",
+   "description": "Measure"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "LA Metro",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "metro area",
+  "records": 22
+ },
+ {
+  "state": "TX",
+  "name": "Harris County Flood Control District 2018 Bond: CIP structural channel projects (local-only, lines)",
+  "key": "local_91",
+  "url": "https://services2.arcgis.com/nLl0k0Mja5hnSeSl/arcgis/rest/services/HCFCD_CIP_Structural_Local_Only_Line/FeatureServer/0",
+  "fields": {
+   "id": "ID",
+   "name": "ProjectTitle",
+   "description": "DescriptionBenefits",
+   "work_type": "Type",
+   "cost": "GrantTotalCost",
+   "county": "WTSHNAME"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "Harris County Flood Control District",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "county",
+  "records": 59
+ },
+ {
+  "state": "TX",
+  "name": "Harris County Flood Control District 2018 Bond project points",
+  "key": "local_92",
+  "url": "https://services2.arcgis.com/nLl0k0Mja5hnSeSl/arcgis/rest/services/HCFCD_Bond_Points/FeatureServer/0",
+  "fields": {
+   "work_type": "Type",
+   "status": "Status",
+   "id": "BondID"
+  },
+  "where": "Status='In Progress'",
+  "unfiltered": false,
+  "agency": "Harris County Flood Control District",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "county",
+  "records": 180
+ },
+ {
+  "state": "TX",
+  "name": "Harris County Flood Control District Buyout Areas",
+  "key": "local_93",
+  "url": "https://services2.arcgis.com/nLl0k0Mja5hnSeSl/arcgis/rest/services/HCFCD_Buyout_Areas/FeatureServer/0",
+  "fields": {
+   "name": "Area_Name",
+   "description": "Notes",
+   "cost": "Cost_sqft",
+   "date": "Updated",
+   "county": "Precinct",
+   "id": "Unit_No",
+   "status": "PLN_Aprvd"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "Harris County Flood Control District",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "county",
+  "records": 80
+ },
+ {
+  "state": "TX",
+  "name": "Harris County Flood Control District Bond Program Status Report projects (polygons)",
+  "key": "local_94",
+  "url": "https://services2.arcgis.com/nLl0k0Mja5hnSeSl/arcgis/rest/services/BPSR_Projects/FeatureServer/1",
+  "fields": {
+   "id": "ProjectID",
+   "name": "COMMONNAME",
+   "work_type": "Category",
+   "status": "PROJECTSTATUS",
+   "date": "EXTRACT_DATE",
+   "description": "StageName"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "Harris County Flood Control District",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "county",
+  "records": 479
+ },
+ {
+  "state": "AZ",
+  "name": "Valley Metro Light Rail Extensions",
+  "key": "local_98",
+  "url": "https://services2.arcgis.com/2t1927381mhTgWNC/arcgis/rest/services/Light_Rail_Extensions_View/FeatureServer/0",
+  "fields": {
+   "id": "ID",
+   "status": "Status",
+   "county": "City",
+   "name": "PHASE",
+   "work_type": "Service"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "Valley Metro (Phoenix region)",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "metro area",
+  "records": 8
+ },
+ {
+  "state": "AZ",
+  "name": "Valley Metro Light Rail Extension Stations",
+  "key": "local_99",
+  "url": "https://services2.arcgis.com/2t1927381mhTgWNC/arcgis/rest/services/Light_Rail_Extension_Stations_View/FeatureServer/0",
+  "fields": {
+   "name": "Name",
+   "status": "Status",
+   "description": "Extension"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "Valley Metro (Phoenix region)",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "metro area",
+  "records": 29
+ },
+ {
+  "state": "CA",
+  "name": "California High-Speed Rail Statewide Alignment",
+  "key": "local_100",
+  "url": "https://services3.arcgis.com/rGGp0aiv6Rf11t2H/arcgis/rest/services/HSR_Statewide_Alignment/FeatureServer/1",
+  "fields": {
+   "status": "PHASE",
+   "name": "PROJECT_SECTION"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "California High-Speed Rail Authority",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "statewide",
+  "records": 16
+ },
+ {
+  "state": "NC",
+  "name": "Charlotte Right-of-Way Tracking for Future Corridors",
+  "key": "local_101",
+  "url": "https://services.arcgis.com/9Nl857LBlQVyzq54/arcgis/rest/services/ROWTrackingFutureCorridors/FeatureServer/0",
+  "fields": {
+   "name": "Project_Name",
+   "description": "Property_Owners",
+   "status": "Segment_Status",
+   "id": "Project_UniqueID_fromPRWP"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "City of Charlotte (CDOT / Planning)",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "city",
+  "records": 301
+ },
+ {
+  "state": "NC",
+  "name": "Charlotte LYNX Red Line Route - Proposed",
+  "key": "local_102",
+  "url": "https://services.arcgis.com/9Nl857LBlQVyzq54/arcgis/rest/services/LYNX_Red_Line_Route___Proposed/FeatureServer/0",
+  "fields": {
+   "status": "Status",
+   "name": "Alignment"
+  },
+  "where": "Status='Proposed'",
+  "unfiltered": false,
+  "agency": "Charlotte Area Transit System (CATS)",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "metro area",
+  "records": 1
+ },
+ {
+  "state": "NC",
+  "name": "Charlotte-Mecklenburg Schools 2023 Bond Projects",
+  "key": "local_103",
+  "url": "https://services.arcgis.com/9Nl857LBlQVyzq54/arcgis/rest/services/CMS_2023_Bond_Projects/FeatureServer/0",
+  "fields": {
+   "description": "Project_Description",
+   "work_type": "ProjectType",
+   "county": "city",
+   "name": "Site",
+   "id": "Project"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "Charlotte-Mecklenburg Schools",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "county",
+  "records": 35
+ },
+ {
+  "state": "NC",
+  "name": "Wake County Public Schools Proposed School Bond Projects 2026",
+  "key": "local_104",
+  "url": "https://services2.arcgis.com/oqISN6Dt6ax5xklN/arcgis/rest/services/bond_projects_2026/FeatureServer/0",
+  "fields": {
+   "name": "school_name",
+   "work_type": "category",
+   "cost": "funding",
+   "id": "schl_code",
+   "description": "projects"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "Wake County Public School System",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "county",
+  "records": 54
+ },
+ {
+  "state": "NE",
+  "name": "OPPD Transmission Projects",
+  "key": "local_105",
+  "url": "https://services.arcgis.com/VYvz62U0tSeheRDB/arcgis/rest/services/Transmission_Projects/FeatureServer/0",
+  "fields": {
+   "name": "ProjectTitle",
+   "description": "ProjectDescription",
+   "work_type": "ProjectType",
+   "status": "ProjectSTatus",
+   "date": "ProjectStartYear",
+   "county": "ProjectLocation"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "Omaha Public Power District (public utility with eminent domain)",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "utility service area",
+  "records": 9
+ },
+ {
+  "state": "OH",
+  "name": "COTA LinkUS BRT Corridors",
+  "key": "local_106",
+  "url": "https://services6.arcgis.com/PyaYYixu3QuadcCe/arcgis/rest/services/BRT_Corridors/FeatureServer/0",
+  "fields": {
+   "name": "name",
+   "work_type": "category",
+   "date": "year",
+   "id": "line_name"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "Central Ohio Transit Authority",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "metro area",
+  "records": 3
+ },
+ {
+  "state": "VA",
+  "name": "Fairfax County Richmond Highway BRT: Proposed Right of Way",
+  "key": "local_107",
+  "url": "https://services1.arcgis.com/ioennV6PpG5Xodq0/arcgis/rest/services/Richmond_Highway_BRT_Features_gdb/FeatureServer/9",
+  "fields": {
+   "name": "DISPLAY"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "Fairfax County Department of Transportation",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "one transit project",
+  "records": 492
+ },
+ {
+  "state": "MN",
+  "name": "Minnesota route-permit project data: Proposed ROW (Iron Range - St. Louis County - Arrowhead 345 kV)",
+  "key": "local_108",
+  "url": "https://services1.arcgis.com/yfalcTIlueMdl9fz/arcgis/rest/services/ISA_Project_Data/FeatureServer/2",
+  "fields": {
+   "name": "Acres"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "Minnesota Department of Commerce EERA / Minnesota PUC route permit docket",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "one transmission project",
+  "records": 1
+ },
+ {
+  "state": "TX",
+  "name": "North Harris County Regional Water Authority CIP - distribution lines",
+  "key": "local_109",
+  "url": "https://services7.arcgis.com/J4DUhTE5Ib36d1gd/arcgis/rest/services/NHCRW_CIP/FeatureServer/0",
+  "fields": {
+   "description": "Comments",
+   "work_type": "Type",
+   "status": "STATUS_CON",
+   "date": "dist_date",
+   "name": "PROJECT",
+   "county": "LOCATION"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "North Harris County Regional Water Authority",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "authority service area",
+  "records": 608
  },
  {
   "state": "GA",
@@ -3015,5 +3392,162 @@
   "category": "state_dot_gaps",
   "coverage": "metro area",
   "records": 95
+ },
+ {
+  "state": "KS",
+  "name": "Wichita Area MPO (WAMPO) TIP 2027-2030 All Projects (carries KDOT project IDs)",
+  "key": "state_10",
+  "url": "https://services6.arcgis.com/Xj5oQOHmqKlB1HVs/arcgis/rest/services/TIP_2027_2030_AllProjects/FeatureServer/0",
+  "fields": {
+   "id": "WAMPO_ID",
+   "name": "ProjectTitle",
+   "description": "ProjectScope",
+   "work_type": "ProjectType",
+   "cost": "Total_Cost",
+   "status": "TIP_Action_27_30",
+   "county": "LeadAgency"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "Wichita Area Metropolitan Planning Organization; lead agencies KDOT, Wichita, Sedgwick County and cities",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "state_dot_gaps",
+  "coverage": "metro area",
+  "records": 152
+ },
+ {
+  "state": "IN",
+  "name": "Indianapolis MPO Metropolitan Transportation Plan projects - current (MTP_2024Q3)",
+  "key": "state_11",
+  "url": "https://services5.arcgis.com/qVN2o0aio8BMbwcJ/arcgis/rest/services/MTP_2022Q1/FeatureServer/1",
+  "fields": {
+   "id": "PROJ_ID",
+   "name": "Descriptio",
+   "work_type": "Imprv_Type",
+   "cost": "Total_Cost",
+   "date": "Time_Perio",
+   "county": "Sponsor"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "Indianapolis Metropolitan Planning Organization; sponsors INDOT, counties and cities",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "state_dot_gaps",
+  "coverage": "metro area",
+  "records": 176
+ },
+ {
+  "state": "IN",
+  "name": "INDOT STIP/TIP joined projects FY2026-2030 (INDOT's STIP consultant, partial)",
+  "key": "state_12",
+  "url": "https://services3.arcgis.com/zkfscBHttPaQwR4x/arcgis/rest/services/Total_Projects_tip_stip_joined/FeatureServer/0",
+  "fields": {
+   "id": "Join_DES",
+   "name": "Join_Proje",
+   "description": "Join_Locat",
+   "work_type": "Join_Prima",
+   "cost": "Join_Estim",
+   "status": "Join_Pha_2",
+   "county": "Join_Count"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "Indiana DOT / Indiana MPOs (hosted by INDOT's STIP consultant)",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "state_dot_gaps",
+  "coverage": "statewide",
+  "records": 133
+ },
+ {
+  "state": "NE",
+  "name": "Lincoln MPO 2050 LRTP roadway project prioritization - linear projects (consultant web map)",
+  "key": "state_15",
+  "url": "https://services1.arcgis.com/bH0ZyWM4JffCJ4P5/arcgis/rest/services/Lincoln_LRTP_Roadway_Project_Prioritization_WebMap/FeatureServer/10",
+  "fields": {
+   "id": "ProjectID",
+   "name": "ProjectStr",
+   "description": "ProjectDes",
+   "status": "ProjStatus",
+   "county": "ProjectLea"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "Lincoln MPO / City of Lincoln, Lancaster County, NDOT (hosted by the plan's consultant)",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "state_dot_gaps",
+  "coverage": "metro area",
+  "records": 133
+ },
+ {
+  "state": "NC",
+  "name": "NCDOT Right of Way GIS - Proposed Acquisition: ROW Left (new right-of-way polygons per parcel)",
+  "key": "state_16",
+  "url": "https://gis11.services.ncdot.gov/arcgis/rest/services/RowMsPub/NCDOT_RowMS_ProposedAcquisition/MapServer/116",
+  "fields": {
+   "id": "ProjectParcelID",
+   "name": "ProjectID",
+   "work_type": "LevelName",
+   "description": "ProjectParcelClaimText"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "North Carolina DOT Right of Way Unit",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "state_dot_gaps",
+  "coverage": "statewide",
+  "records": 28027
+ },
+ {
+  "state": "SC",
+  "name": "SCDOT statewide Long Range Transportation Plan projects - corridors (LRTPCorridorProjects)",
+  "key": "state_17",
+  "url": "https://services1.arcgis.com/VaY7cY9pvUYUP1Lf/arcgis/rest/services/LRTPCorridorProjects/FeatureServer/0",
+  "fields": {
+   "id": "ProjectID",
+   "name": "Name",
+   "description": "Descriptio",
+   "work_type": "ProjectTyp",
+   "cost": "Anticipate",
+   "status": "ProjectSta",
+   "date": "ProjectYr",
+   "county": "CountyID"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "South Carolina DOT with the state's MPOs, COGs and sales-tax counties",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "state_dot_gaps",
+  "coverage": "statewide",
+  "records": 782
+ },
+ {
+  "state": "SC",
+  "name": "SCDOT statewide Long Range Transportation Plan projects - intersections (LRTPIntersectionProjects)",
+  "key": "state_18",
+  "url": "https://services1.arcgis.com/VaY7cY9pvUYUP1Lf/arcgis/rest/services/LRTPIntersectionProjects/FeatureServer/0",
+  "fields": {
+   "id": "ProjectID",
+   "name": "Name",
+   "description": "Descriptio",
+   "work_type": "ProjectTyp",
+   "cost": "Anticipate",
+   "status": "ProjectSta",
+   "date": "ProjectYr",
+   "county": "CountyID"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "South Carolina DOT with MPOs/COGs/counties",
+  "stage": "planning",
+  "source_prefix": "gis",
+  "category": "state_dot_gaps",
+  "coverage": "statewide",
+  "records": 1580
  }
 ]

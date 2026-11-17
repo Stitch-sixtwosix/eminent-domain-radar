@@ -1,0 +1,938 @@
+[
+ {
+  "slug": "huntsvilleal",
+  "name": "Huntsville (City Council Regular Meeting)",
+  "place": "Huntsville",
+  "state": "AL"
+ },
+ {
+  "slug": "maricopa",
+  "name": "Maricopa County (Parks and Recreation Advisory Committee)",
+  "place": "Maricopa County",
+  "state": "AZ"
+ },
+ {
+  "slug": "mesa",
+  "name": "Mesa (City Council Study Session)",
+  "place": "Mesa",
+  "state": "AZ"
+ },
+ {
+  "slug": "phoenix",
+  "name": "Phoenix (Community Services and Education Subcommittee)",
+  "place": "Phoenix",
+  "state": "AZ"
+ },
+ {
+  "slug": "pima",
+  "name": "Pima County (Proclamation)",
+  "place": "Pima County",
+  "state": "AZ"
+ },
+ {
+  "slug": "actransit",
+  "name": "AC Transit (Board of Directors - Regular Meeting)",
+  "place": "AC Transit",
+  "state": "CA"
+ },
+ {
+  "slug": "bart",
+  "name": "BART (BART Accessibility Task Force)",
+  "place": "BART",
+  "state": "CA"
+ },
+ {
+  "slug": "alameda",
+  "name": "City of Alameda (City Council)",
+  "place": "City of Alameda",
+  "state": "CA"
+ },
+ {
+  "slug": "contra-costa",
+  "name": "Contra Costa County (Governing Board of the Green Empowerment Zone)",
+  "place": "Contra Costa County",
+  "state": "CA"
+ },
+ {
+  "slug": "costamesa",
+  "name": "Costa Mesa (PARKS AND COMMUNITY SERVICES COMMISSION)",
+  "place": "Costa Mesa",
+  "state": "CA"
+ },
+ {
+  "slug": "cupertino",
+  "name": "Cupertino (Teen Commission)",
+  "place": "Cupertino",
+  "state": "CA"
+ },
+ {
+  "slug": "eldorado",
+  "name": "El Dorado County (Planning Commission)",
+  "place": "El Dorado County",
+  "state": "CA"
+ },
+ {
+  "slug": "fontana",
+  "name": "Fontana (City Council Meeting)",
+  "place": "Fontana",
+  "state": "CA"
+ },
+ {
+  "slug": "fresno",
+  "name": "Fresno (Parks, Recreation, and Arts Commission)",
+  "place": "Fresno",
+  "state": "CA"
+ },
+ {
+  "slug": "fresnocounty",
+  "name": "Fresno County (BOS District 1)",
+  "place": "Fresno County",
+  "state": "CA"
+ },
+ {
+  "slug": "fullerton",
+  "name": "Fullerton (City Council - Successor Agency - Housing Authority)",
+  "place": "Fullerton",
+  "state": "CA"
+ },
+ {
+  "slug": "goleta",
+  "name": "Goleta (Goleta RDA Successor Agency)",
+  "place": "Goleta",
+  "state": "CA"
+ },
+ {
+  "slug": "hayward",
+  "name": "Hayward (Library Commission)",
+  "place": "Hayward",
+  "state": "CA"
+ },
+ {
+  "slug": "humboldt",
+  "name": "Humboldt County (Board of Supervisors)",
+  "place": "Humboldt County",
+  "state": "CA"
+ },
+ {
+  "slug": "huntingtonbeach",
+  "name": "Huntington Beach (Finance Commission)",
+  "place": "Huntington Beach",
+  "state": "CA"
+ },
+ {
+  "slug": "lacsd",
+  "name": "LA County Sanitation Districts (County Sanitation District No. 2 of Los Angeles County)",
+  "place": "LA County Sanitation Districts",
+  "state": "CA"
+ },
+ {
+  "slug": "metro",
+  "name": "LA Metro (Planning and Programming Committee)",
+  "place": "LA Metro",
+  "state": "CA"
+ },
+ {
+  "slug": "lausd",
+  "name": "LAUSD (Board of Education)",
+  "place": "LAUSD",
+  "state": "CA"
+ },
+ {
+  "slug": "lacounty",
+  "name": "Los Angeles County (Los Angeles County Affordable Housing Solutions Agency Investment Review Committee)",
+  "place": "Los Angeles County",
+  "state": "CA"
+ },
+ {
+  "slug": "mtc",
+  "name": "Metropolitan Transportation Commission (Clipper Executive Board)",
+  "place": "Metropolitan Transportation Commission",
+  "state": "CA"
+ },
+ {
+  "slug": "mwdh2o",
+  "name": "Metropolitan Water District of Southern California (Joint One Water & Adaptation Committee and Subcommittee on Imported Water)",
+  "place": "Metropolitan Water District of Southern California",
+  "state": "CA"
+ },
+ {
+  "slug": "monterey",
+  "name": "Monterey County (Board of Supervisors)",
+  "place": "Monterey County",
+  "state": "CA"
+ },
+ {
+  "slug": "mountainview",
+  "name": "Mountain View (Tennis Advisory Committee)",
+  "place": "Mountain View",
+  "state": "CA"
+ },
+ {
+  "slug": "napacity",
+  "name": "Napa (CITY COUNCIL OF THE CITY OF NAPA)",
+  "place": "Napa",
+  "state": "CA"
+ },
+ {
+  "slug": "napa",
+  "name": "Napa County (Board of Supervisors)",
+  "place": "Napa County",
+  "state": "CA"
+ },
+ {
+  "slug": "newportbeach",
+  "name": "Newport Beach (Harbor Commission)",
+  "place": "Newport Beach",
+  "state": "CA"
+ },
+ {
+  "slug": "ocsd",
+  "name": "OC San (ADMINISTRATION COMMITTEE)",
+  "place": "OC San",
+  "state": "CA"
+ },
+ {
+  "slug": "octa",
+  "name": "OCTA (Finance and Administration Committee)",
+  "place": "OCTA",
+  "state": "CA"
+ },
+ {
+  "slug": "oakland",
+  "name": "Oakland (*Rules & Legislation Committee)",
+  "place": "Oakland",
+  "state": "CA"
+ },
+ {
+  "slug": "ousd",
+  "name": "Oakland USD (Board of Education)",
+  "place": "Oakland USD",
+  "state": "CA"
+ },
+ {
+  "slug": "cityoforange",
+  "name": "Orange (Orange City Council)",
+  "place": "Orange",
+  "state": "CA"
+ },
+ {
+  "slug": "pomona",
+  "name": "Pomona (Ethics Commission)",
+  "place": "Pomona",
+  "state": "CA"
+ },
+ {
+  "slug": "polb",
+  "name": "Port of Long Beach (Sponsorship Special Purpose Committee of the Whole)",
+  "place": "Port of Long Beach",
+  "state": "CA"
+ },
+ {
+  "slug": "portofoakland",
+  "name": "Port of Oakland (Board of Port Commissioners)",
+  "place": "Port of Oakland",
+  "state": "CA"
+ },
+ {
+  "slug": "riversideca",
+  "name": "Riverside (City Council)",
+  "place": "Riverside",
+  "state": "CA"
+ },
+ {
+  "slug": "riversidecountyca",
+  "name": "Riverside County (Board of Supervisors)",
+  "place": "Riverside County",
+  "state": "CA"
+ },
+ {
+  "slug": "sacramento",
+  "name": "Sacramento (City Council - 2PM)",
+  "place": "Sacramento",
+  "state": "CA"
+ },
+ {
+  "slug": "salinas",
+  "name": "Salinas (Planning Commission)",
+  "place": "Salinas",
+  "state": "CA"
+ },
+ {
+  "slug": "sanbernardino",
+  "name": "San Bernardino (Closed Session)",
+  "place": "San Bernardino",
+  "state": "CA"
+ },
+ {
+  "slug": "sdcounty",
+  "name": "San Diego County (BOARD OF SUPERVISORS)",
+  "place": "San Diego County",
+  "state": "CA"
+ },
+ {
+  "slug": "sanjose",
+  "name": "San Jose (City Council)",
+  "place": "San Jose",
+  "state": "CA"
+ },
+ {
+  "slug": "sanleandro",
+  "name": "San Leandro (Community Police Review Board)",
+  "place": "San Leandro",
+  "state": "CA"
+ },
+ {
+  "slug": "sanmateocounty",
+  "name": "San Mateo County (COUNTY EXECUTIVE)",
+  "place": "San Mateo County",
+  "state": "CA"
+ },
+ {
+  "slug": "santabarbara",
+  "name": "Santa Barbara County (BOARD OF SUPERVISORS)",
+  "place": "Santa Barbara County",
+  "state": "CA"
+ },
+ {
+  "slug": "santaclara",
+  "name": "Santa Clara (Development Review Hearing)",
+  "place": "Santa Clara",
+  "state": "CA"
+ },
+ {
+  "slug": "scvwd",
+  "name": "Santa Clara Valley Water District (Board of Directors)",
+  "place": "Santa Clara Valley Water District",
+  "state": "CA"
+ },
+ {
+  "slug": "santa-rosa",
+  "name": "Santa Rosa (City Council)",
+  "place": "Santa Rosa",
+  "state": "CA"
+ },
+ {
+  "slug": "solano",
+  "name": "Solano County (Board of Supervisors)",
+  "place": "Solano County",
+  "state": "CA"
+ },
+ {
+  "slug": "sonoma-county",
+  "name": "Sonoma County (Board of Supervisors District 5)",
+  "place": "Sonoma County",
+  "state": "CA"
+ },
+ {
+  "slug": "stockton",
+  "name": "Stockton (City Council and Concurrent Authorities)",
+  "place": "Stockton",
+  "state": "CA"
+ },
+ {
+  "slug": "sunnyvaleca",
+  "name": "Sunnyvale (Bicycle and Pedestrian Advisory Commission)",
+  "place": "Sunnyvale",
+  "state": "CA"
+ },
+ {
+  "slug": "visalia",
+  "name": "Visalia (Visalia City Council)",
+  "place": "Visalia",
+  "state": "CA"
+ },
+ {
+  "slug": "arapahoe",
+  "name": "Arapahoe County (Board of County Commissioners Study Session)",
+  "place": "Arapahoe County",
+  "state": "CO"
+ },
+ {
+  "slug": "coloradosprings",
+  "name": "Colorado Springs (City Council Work Session)",
+  "place": "Colorado Springs",
+  "state": "CO"
+ },
+ {
+  "slug": "denver",
+  "name": "Denver (Governance and Intergovernmental Relations)",
+  "place": "Denver",
+  "state": "CO"
+ },
+ {
+  "slug": "bridgeportct",
+  "name": "Bridgeport (City Council)",
+  "place": "Bridgeport",
+  "state": "CT"
+ },
+ {
+  "slug": "brevardfl",
+  "name": "Brevard County (County Manager)",
+  "place": "Brevard County",
+  "state": "FL"
+ },
+ {
+  "slug": "broward",
+  "name": "Broward County (Board Appointments)",
+  "place": "Broward County",
+  "state": "FL"
+ },
+ {
+  "slug": "clearwater",
+  "name": "Clearwater (City Council)",
+  "place": "Clearwater",
+  "state": "FL"
+ },
+ {
+  "slug": "coralgables",
+  "name": "Coral Gables (Historic Preservation Board)",
+  "place": "Coral Gables",
+  "state": "FL"
+ },
+ {
+  "slug": "fortlauderdale",
+  "name": "Fort Lauderdale (City Attorney)",
+  "place": "Fort Lauderdale",
+  "state": "FL"
+ },
+ {
+  "slug": "hernandocountyfl",
+  "name": "Hernando County (Value Adjustment Board)",
+  "place": "Hernando County",
+  "state": "FL"
+ },
+ {
+  "slug": "hillsboroughcounty",
+  "name": "Hillsborough County (Zoning Hearing Master)",
+  "place": "Hillsborough County",
+  "state": "FL"
+ },
+ {
+  "slug": "hollywoodfl",
+  "name": "Hollywood (Historic Preservation Board)",
+  "place": "Hollywood",
+  "state": "FL"
+ },
+ {
+  "slug": "jaxcityc",
+  "name": "Jacksonville (Land Use & Zoning Committee)",
+  "place": "Jacksonville",
+  "state": "FL"
+ },
+ {
+  "slug": "martin",
+  "name": "Martin County (Community Redevelopment Agency)",
+  "place": "Martin County",
+  "state": "FL"
+ },
+ {
+  "slug": "miamifl",
+  "name": "Miami (City Commission)",
+  "place": "Miami",
+  "state": "FL"
+ },
+ {
+  "slug": "ocala",
+  "name": "Ocala (City Council)",
+  "place": "Ocala",
+  "state": "FL"
+ },
+ {
+  "slug": "occompt",
+  "name": "Orange County (Administrative Services Department)",
+  "place": "Orange County",
+  "state": "FL"
+ },
+ {
+  "slug": "pinellas",
+  "name": "Pinellas County (Business Technology Services)",
+  "place": "Pinellas County",
+  "state": "FL"
+ },
+ {
+  "slug": "polkcountyfl",
+  "name": "Polk County (Board of County Commissioners (Organizational))",
+  "place": "Polk County",
+  "state": "FL"
+ },
+ {
+  "slug": "pompano",
+  "name": "Pompano Beach (City Commission)",
+  "place": "Pompano Beach",
+  "state": "FL"
+ },
+ {
+  "slug": "psl",
+  "name": "Port St. Lucie (Special City Council)",
+  "place": "Port St. Lucie",
+  "state": "FL"
+ },
+ {
+  "slug": "seminolecountyfl",
+  "name": "Seminole County (Board of County Commissioners)",
+  "place": "Seminole County",
+  "state": "FL"
+ },
+ {
+  "slug": "dekalbcountyga",
+  "name": "DeKalb County (Board of Commissioners)",
+  "place": "DeKalb County",
+  "state": "GA"
+ },
+ {
+  "slug": "fulton",
+  "name": "Fulton County (Board of Commissioners)",
+  "place": "Fulton County",
+  "state": "GA"
+ },
+ {
+  "slug": "mauicounty",
+  "name": "Maui County (Water and Infrastructure Committee (2025-2027))",
+  "place": "Maui County",
+  "state": "HI"
+ },
+ {
+  "slug": "cook-county",
+  "name": "Cook County (Zoning and Building Committee)",
+  "place": "Cook County",
+  "state": "IL"
+ },
+ {
+  "slug": "dupage",
+  "name": "DuPage County (Judicial and Public Safety Committee)",
+  "place": "DuPage County",
+  "state": "IL"
+ },
+ {
+  "slug": "mwrd",
+  "name": "Metropolitan Water Reclamation District of Greater Chicago (Miscellaneous & New Business)",
+  "place": "Metropolitan Water Reclamation District of Greater Chicago",
+  "state": "IL"
+ },
+ {
+  "slug": "naperville",
+  "name": "Naperville (Sister Cities Commission)",
+  "place": "Naperville",
+  "state": "IL"
+ },
+ {
+  "slug": "olatheks",
+  "name": "Olathe (City Council)",
+  "place": "Olathe",
+  "state": "KS"
+ },
+ {
+  "slug": "lexington",
+  "name": "Lexington (Human Resources)",
+  "place": "Lexington",
+  "state": "KY"
+ },
+ {
+  "slug": "louisville",
+  "name": "Louisville (Planning Commission)",
+  "place": "Louisville",
+  "state": "KY"
+ },
+ {
+  "slug": "cityofno",
+  "name": "New Orleans (City Council)",
+  "place": "New Orleans",
+  "state": "LA"
+ },
+ {
+  "slug": "norta",
+  "name": "RTA New Orleans (Board of Commissioners)",
+  "place": "RTA New Orleans",
+  "state": "LA"
+ },
+ {
+  "slug": "boston",
+  "name": "Boston (City Council)",
+  "place": "Boston",
+  "state": "MA"
+ },
+ {
+  "slug": "baltimore",
+  "name": "Baltimore (Land Use & Transportation Committee)",
+  "place": "Baltimore",
+  "state": "MD"
+ },
+ {
+  "slug": "a2gov",
+  "name": "Ann Arbor (Transportation Commission)",
+  "place": "Ann Arbor",
+  "state": "MI"
+ },
+ {
+  "slug": "glwater",
+  "name": "GLWA (Board of Directors Workshop Meeting)",
+  "place": "GLWA",
+  "state": "MI"
+ },
+ {
+  "slug": "hennepinmn",
+  "name": "Hennepin County (Board of Hennepin County Commissioners)",
+  "place": "Hennepin County",
+  "state": "MN"
+ },
+ {
+  "slug": "stpaul",
+  "name": "Saint Paul (Legislative Hearings)",
+  "place": "Saint Paul",
+  "state": "MN"
+ },
+ {
+  "slug": "gocolumbiamo",
+  "name": "Columbia (Parks and Recreation Commission)",
+  "place": "Columbia",
+  "state": "MO"
+ },
+ {
+  "slug": "kansascity",
+  "name": "Kansas City (Finance, Governance and Public Safety Committee)",
+  "place": "Kansas City",
+  "state": "MO"
+ },
+ {
+  "slug": "charlottenc",
+  "name": "Charlotte (City Council Business Meeting)",
+  "place": "Charlotte",
+  "state": "NC"
+ },
+ {
+  "slug": "durhamcounty",
+  "name": "Durham County (Board of County Commissioners)",
+  "place": "Durham County",
+  "state": "NC"
+ },
+ {
+  "slug": "guilford",
+  "name": "Guilford County (Board of Commissioners)",
+  "place": "Guilford County",
+  "state": "NC"
+ },
+ {
+  "slug": "mecklenburg",
+  "name": "Mecklenburg County (Board of Commissioners)",
+  "place": "Mecklenburg County",
+  "state": "NC"
+ },
+ {
+  "slug": "wake",
+  "name": "Wake County (Board of Commissioners)",
+  "place": "Wake County",
+  "state": "NC"
+ },
+ {
+  "slug": "wilmington",
+  "name": "Wilmington (City Council)",
+  "place": "Wilmington",
+  "state": "NC"
+ },
+ {
+  "slug": "newark",
+  "name": "Newark (Municipal Council and City Clerk)",
+  "place": "Newark",
+  "state": "NJ"
+ },
+ {
+  "slug": "abcwua",
+  "name": "ABCWUA (Albuquerque Bernalillo County Water Utility Authority)",
+  "place": "ABCWUA",
+  "state": "NM"
+ },
+ {
+  "slug": "cabq",
+  "name": "Albuquerque (City Council)",
+  "place": "Albuquerque",
+  "state": "NM"
+ },
+ {
+  "slug": "clark",
+  "name": "Clark County (Debt Management Commission)",
+  "place": "Clark County",
+  "state": "NV"
+ },
+ {
+  "slug": "cityofrochester",
+  "name": "Rochester (City Council)",
+  "place": "Rochester",
+  "state": "NY"
+ },
+ {
+  "slug": "westchestercountyny",
+  "name": "Westchester County (County Executive)",
+  "place": "Westchester County",
+  "state": "NY"
+ },
+ {
+  "slug": "yonkersny",
+  "name": "Yonkers (Public Hearing Notice)",
+  "place": "Yonkers",
+  "state": "NY"
+ },
+ {
+  "slug": "canton",
+  "name": "Canton (Canton Building Authority)",
+  "place": "Canton",
+  "state": "OH"
+ },
+ {
+  "slug": "cincinnatioh",
+  "name": "Cincinnati (Economic and Cultural Opportunity)",
+  "place": "Cincinnati",
+  "state": "OH"
+ },
+ {
+  "slug": "cityofcleveland",
+  "name": "Cleveland (City Council)",
+  "place": "Cleveland",
+  "state": "OH"
+ },
+ {
+  "slug": "columbus",
+  "name": "Columbus (City Bulletin)",
+  "place": "Columbus",
+  "state": "OH"
+ },
+ {
+  "slug": "toledo",
+  "name": "Toledo (Zoning & Planning Committee)",
+  "place": "Toledo",
+  "state": "OH"
+ },
+ {
+  "slug": "oregonmetro",
+  "name": "Oregon Metro (Joint Policy Advisory Committee on Transportation (JPACT))",
+  "place": "Oregon Metro",
+  "state": "OR"
+ },
+ {
+  "slug": "salem",
+  "name": "Salem (City Council)",
+  "place": "Salem",
+  "state": "OR"
+ },
+ {
+  "slug": "pittsburgh",
+  "name": "Pittsburgh (Committee on Innovation, Performance, Asset Management, and Technology)",
+  "place": "Pittsburgh",
+  "state": "PA"
+ },
+ {
+  "slug": "providenceri",
+  "name": "Providence (City Council)",
+  "place": "Providence",
+  "state": "RI"
+ },
+ {
+  "slug": "matatransit",
+  "name": "MATA (Board of Commissioners)",
+  "place": "MATA",
+  "state": "TN"
+ },
+ {
+  "slug": "nashville",
+  "name": "Nashville (Metropolitan Council)",
+  "place": "Nashville",
+  "state": "TN"
+ },
+ {
+  "slug": "austintexas",
+  "name": "Austin (City Council)",
+  "place": "Austin",
+  "state": "TX"
+ },
+ {
+  "slug": "corpuschristi",
+  "name": "Corpus Christi (Airport Board)",
+  "place": "Corpus Christi",
+  "state": "TX"
+ },
+ {
+  "slug": "cityofdallas",
+  "name": "Dallas (Department of Planning and Development)",
+  "place": "Dallas",
+  "state": "TX"
+ },
+ {
+  "slug": "elpasotexas",
+  "name": "El Paso (Greater El Paso Civic, Convention and Tourism Advisory Board)",
+  "place": "El Paso",
+  "state": "TX"
+ },
+ {
+  "slug": "fortworthgov",
+  "name": "Fort Worth (CITY COUNCIL)",
+  "place": "Fort Worth",
+  "state": "TX"
+ },
+ {
+  "slug": "harriscountytx",
+  "name": "Harris County (Commissioners Court)",
+  "place": "Harris County",
+  "state": "TX"
+ },
+ {
+  "slug": "houstonisd",
+  "name": "Houston ISD (Consent Agenda)",
+  "place": "Houston ISD",
+  "state": "TX"
+ },
+ {
+  "slug": "killeen",
+  "name": "Killeen (City Council)",
+  "place": "Killeen",
+  "state": "TX"
+ },
+ {
+  "slug": "cityoflaredo",
+  "name": "Laredo (City Council)",
+  "place": "Laredo",
+  "state": "TX"
+ },
+ {
+  "slug": "leaguecity",
+  "name": "League City (City Council)",
+  "place": "League City",
+  "state": "TX"
+ },
+ {
+  "slug": "mckinney",
+  "name": "McKinney (Board of Adjustment)",
+  "place": "McKinney",
+  "state": "TX"
+ },
+ {
+  "slug": "mesquite",
+  "name": "Mesquite (City Council)",
+  "place": "Mesquite",
+  "state": "TX"
+ },
+ {
+  "slug": "newbraunfels",
+  "name": "New Braunfels (City Council)",
+  "place": "New Braunfels",
+  "state": "TX"
+ },
+ {
+  "slug": "pflugerville",
+  "name": "Pflugerville (City Council)",
+  "place": "Pflugerville",
+  "state": "TX"
+ },
+ {
+  "slug": "plano",
+  "name": "Plano (City Council Preliminary Open Meeting)",
+  "place": "Plano",
+  "state": "TX"
+ },
+ {
+  "slug": "roundrock",
+  "name": "Round Rock (Historic Preservation Commission)",
+  "place": "Round Rock",
+  "state": "TX"
+ },
+ {
+  "slug": "sanmarcos",
+  "name": "San Marcos (City Council)",
+  "place": "San Marcos",
+  "state": "TX"
+ },
+ {
+  "slug": "rideuta",
+  "name": "UTA (Transit Commission)",
+  "place": "UTA",
+  "state": "UT"
+ },
+ {
+  "slug": "alexandria",
+  "name": "Alexandria (Planning Commission Public Hearing)",
+  "place": "Alexandria",
+  "state": "VA"
+ },
+ {
+  "slug": "hampton",
+  "name": "Hampton (Planning Commission)",
+  "place": "Hampton",
+  "state": "VA"
+ },
+ {
+  "slug": "richmondva",
+  "name": "Richmond (City Council)",
+  "place": "Richmond",
+  "state": "VA"
+ },
+ {
+  "slug": "bellevue",
+  "name": "Bellevue (Planning Commission)",
+  "place": "Bellevue",
+  "state": "WA"
+ },
+ {
+  "slug": "kingcounty",
+  "name": "King County (Metropolitan King County Council)",
+  "place": "King County",
+  "state": "WA"
+ },
+ {
+  "slug": "olympia",
+  "name": "Olympia (Land Use & Environment Committee)",
+  "place": "Olympia",
+  "state": "WA"
+ },
+ {
+  "slug": "redmond",
+  "name": "Redmond (Committee of the Whole - Public Safety and Human Services)",
+  "place": "Redmond",
+  "state": "WA"
+ },
+ {
+  "slug": "seattle",
+  "name": "Seattle (City Clerk)",
+  "place": "Seattle",
+  "state": "WA"
+ },
+ {
+  "slug": "snohomish",
+  "name": "Snohomish County (To Be Determined)",
+  "place": "Snohomish County",
+  "state": "WA"
+ },
+ {
+  "slug": "cityoftacoma",
+  "name": "Tacoma (Government Performance and Finance Committee)",
+  "place": "Tacoma",
+  "state": "WA"
+ },
+ {
+  "slug": "dane",
+  "name": "Dane County (Community Justice Council - Behavioral Health Subcommittee)",
+  "place": "Dane County",
+  "state": "WI"
+ },
+ {
+  "slug": "madison",
+  "name": "Madison (BOARD OF PUBLIC WORKS)",
+  "place": "Madison",
+  "state": "WI"
+ },
+ {
+  "slug": "milwaukee",
+  "name": "Milwaukee (COMMON COUNCIL)",
+  "place": "Milwaukee",
+  "state": "WI"
+ },
+ {
+  "slug": "milwaukeecounty",
+  "name": "Milwaukee County (County Clerk's Office)",
+  "place": "Milwaukee County",
+  "state": "WI"
+ },
+ {
+  "slug": "racine",
+  "name": "Racine (Finance and Personnel Committee)",
+  "place": "Racine",
+  "state": "WI"
+ }
+]

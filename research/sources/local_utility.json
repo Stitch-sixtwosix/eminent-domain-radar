@@ -2517,6 +2517,451 @@
    ]
   },
   {
+   "name": "Kansas City GO KC Capital Projects (with right-of-way tract counts)",
+   "authority": "City of Kansas City, Missouri",
+   "states": [
+    "MO"
+   ],
+   "coverage": "city",
+   "kind": "socrata",
+   "url": "https://data.kcmo.org/resource/5kdn-nmb7.json",
+   "verified": true,
+   "record_count": 27,
+   "geometry": "none",
+   "fields": {
+    "id": "peoplesoft_project_number",
+    "name": "project_name",
+    "description": "scope_of_work",
+    "work_type": "project_type",
+    "cost": "bond_funds_on_project",
+    "status": "project_phase",
+    "date": "design_start",
+    "county": "council_district"
+   },
+   "planned_filter": "project_phase IN ('Design','N/A') and project_status='Active'; row_status, row_tracts_total, row_tracts_acquired, row_tracts_condemned give right-of-way progress",
+   "sample": "{\"project_name\": \"NE Vivion Rd - Streetscape Improvements\", \"peoplesoft_project_number\": \"89008267\", \"council_district\": \"1\", \"scope_of_work\": \"Design and construction of streetscape improvements along Vivion Road from Highland to Chouteau.\", \"project_phase\": \"Design\", \"bond_funds_on_project\": \"Yes\", \"design_start\": \"2016-01-31T00:00:00.000\"}",
+   "restrictions": null,
+   "notes": "Only 27 GO-bond projects and the sample row was last_updated 2022, but it is the only feed found that publishes counts of tracts acquired and tracts CONDEMNED per project. boundary column gives the street limits as text."
+  },
+  {
+   "name": "Texas Comptroller Eminent Domain Database - entities",
+   "authority": "Texas Comptroller of Public Accounts (annual filings by every entity with eminent domain authority)",
+   "states": [
+    "TX"
+   ],
+   "coverage": "statewide",
+   "kind": "socrata",
+   "url": "https://data.texas.gov/resource/cvjb-eurw.json",
+   "verified": true,
+   "record_count": 66845,
+   "geometry": "none",
+   "fields": {
+    "id": "id",
+    "name": "eminent_domain_name",
+    "description": "entity_type",
+    "work_type": "entity_category_type_code",
+    "cost": null,
+    "status": "condemnation_petition",
+    "date": "report_year",
+    "county": "mailing_city_name"
+   },
+   "planned_filter": "report_year = current year AND condemnation_petition='YES'  -> entities that filed a condemnation petition in the preceding year",
+   "sample": "{\"id\": \"20190201091621653\", \"eminent_domain_name\": \"Houston Community College System\", \"entity_category_type_code\": \"Governmental\", \"entity_type\": \"Community College District\", \"report_year\": \"2019\", \"condemnation_petition\": \"NO\", \"mailing_city_name\": \"HOUSTON\"}",
+   "restrictions": null,
+   "notes": "Not a project list: it is the statutory registry (Gov. Code 2206) of ~6,500 entities per year (cities, counties, MUDs, pipelines, utilities, school districts, river authorities) with contact details and whether they filed a condemnation petition. Companion dataset x7n3-dc7h \"Eminent Domain Project Data\" (266,767 rows: eminent_domain_name, report_year, project_tx) lists the project TYPES each entity uses the power for (e.g. \"Pipelines or related facilities\"). Use to rank which Texas authorities are actively condemning."
+  },
+  {
+   "name": "NYC Capital Projects Dashboard - Citywide Budget and Schedule",
+   "authority": "NYC Mayor's Office of Operations / all city agencies",
+   "states": [
+    "NY"
+   ],
+   "coverage": "city",
+   "kind": "socrata",
+   "url": "https://data.cityofnewyork.us/resource/fb86-vt7u.json",
+   "verified": true,
+   "record_count": 56525,
+   "geometry": "none",
+   "fields": {
+    "id": "fms_id",
+    "name": "fms_project_name",
+    "description": "agency_project_description",
+    "work_type": "ten_year_plan_category",
+    "cost": "total_budget",
+    "status": "current_phase",
+    "date": "forecast_completion",
+    "county": "borough"
+   },
+   "planned_filter": "reporting_period = latest (202605 on 2026-11-17) AND current_phase IN ('(Pending)','(Pre-Design)','Pre-Design','Design','Construction Procurement')",
+   "sample": "{\"fms_id\": \"LQWSTTECH\", \"total_budget\": \"44000.00\", \"fms_project_name\": \"WHITESTONE: Technology Initiative\", \"current_phase\": \"(Pending)\", \"borough\": \"Queens\", \"ten_year_plan_category\": \"SUPPORT SERVICES IMPROVEMENTS\"}",
+   "restrictions": null,
+   "notes": "One row per project per reporting period (three periods a year) - always filter to the latest reporting_period. No geometry; borough and community_board only. Join to CPDB (ArcGIS layers above, or Socrata fi59-268w / h2ic-zdws points / 9jkp-n57r polygons) on fms_id = maprojid for locations."
+  },
+  {
+   "name": "NYC Parks Capital Project Tracker",
+   "authority": "NYC Department of Parks and Recreation",
+   "states": [
+    "NY"
+   ],
+   "coverage": "city",
+   "kind": "socrata",
+   "url": "https://data.cityofnewyork.us/resource/4hcv-tc5r.json",
+   "verified": true,
+   "record_count": 2818,
+   "geometry": "point",
+   "fields": {
+    "id": "trackerid",
+    "name": "title",
+    "description": "summary",
+    "work_type": "fundingsource",
+    "cost": "totalfunding",
+    "status": "currentphase",
+    "date": "designstart",
+    "county": "borough"
+   },
+   "planned_filter": "currentphase IN ('proposed','design','design-procurement','procurement')",
+   "sample": "{\"trackerid\": \"9835\", \"title\": \"Woodside Memorial Plaza Reconstruction\", \"summary\": \"This project will reconstruct Woodside Memorial Plaza.\", \"currentphase\": \"completed\", \"designstart\": \"2021-01-01T00:00:00.000\", \"totalfunding\": \"$1,749,000\", \"fundingsource\": \"Borough President, City Council\", \"borough\": \"Queens\"}",
+   "restrictions": null,
+   "notes": "latitude/longitude columns. Park projects on existing parkland - low eminent-domain value."
+  },
+  {
+   "name": "NYC School Construction Authority - Capacity Projects by School (new schools)",
+   "authority": "NYC School Construction Authority",
+   "states": [
+    "NY"
+   ],
+   "coverage": "city",
+   "kind": "socrata",
+   "url": "https://data.cityofnewyork.us/resource/a94k-kjys.json",
+   "verified": true,
+   "record_count": 78,
+   "geometry": "point",
+   "fields": {
+    "id": "project",
+    "name": "school",
+    "description": "address",
+    "work_type": "proposed_leased_facility",
+    "cost": "total_est_cost",
+    "status": "existing_site_identified",
+    "date": "constr_start",
+    "county": "boro"
+   },
+   "planned_filter": "existing_site_identified='NO'  -> new school funded in the capital plan with NO SITE YET (SCA must acquire one, by eminent domain if needed); constr_start in the future",
+   "sample": "{\"existing_site_identified\": \"NO\", \"proposed_leased_facility\": \"NO\", \"project\": \"DSF0001114650\", \"school\": \"PROJECT #60\", \"boro\": \"TBD\", \"constr_start\": \"28-May\", \"total_est_cost\": \"76\"}",
+   "restrictions": null,
+   "notes": "78 new-capacity projects from the SCA five-year capital plan. SCA has condemnation power. Dataset updated 2026-03."
+  },
+  {
+   "name": "MTA Capital Project Details",
+   "authority": "Metropolitan Transportation Authority (NYC Transit, LIRR, Metro-North, Bridges & Tunnels)",
+   "states": [
+    "NY"
+   ],
+   "coverage": "metro area",
+   "kind": "socrata",
+   "url": "https://data.ny.gov/resource/9hy6-8j6t.json",
+   "verified": true,
+   "record_count": 156,
+   "geometry": "none",
+   "fields": {
+    "id": "project_id",
+    "name": "title",
+    "description": "description",
+    "work_type": "asset_categories",
+    "cost": "goal_project_cost",
+    "status": "stage",
+    "date": "start_date",
+    "county": "agencies"
+   },
+   "planned_filter": "stage IN ('Planning','Procurement')",
+   "sample": "{\"project_id\": \"14918\", \"title\": \"Design-Build Services for Track Intrusion Detection Systems (TIDS) at Two Stations\", \"stage\": \"Procurement\", \"agencies\": \"['New York City Transit']\", \"asset_categories\": \"['Signals & Communications']\", \"description\": \"This project will demonstrate the feasibility, performance, and reliability of an artificial intelligence–supported approach to right-of-way intrusion detection\"}",
+   "restrictions": null,
+   "notes": "Only 156 large projects from the MTA capital dashboard. Companion datasets: 6ifx-7aaq MTA 2025-2029 Capital Plan ACEP Projects (403 planned line items with total_budget), nswv-d6bz schedules, f6fd-xfps budgets. No geometry."
+  },
+  {
+   "name": "NYS Thruway Authority Capital Program projects",
+   "authority": "New York State Thruway Authority",
+   "states": [
+    "NY"
+   ],
+   "coverage": "statewide (Thruway corridor)",
+   "kind": "socrata",
+   "url": "https://data.ny.gov/resource/n5iq-rskv.json",
+   "verified": true,
+   "record_count": 484,
+   "geometry": "point",
+   "fields": {
+    "id": "id",
+    "name": "description",
+    "description": "description",
+    "work_type": "division",
+    "cost": "approved_construction_amount",
+    "status": "status",
+    "date": "estimated_letting_date",
+    "county": "division"
+   },
+   "planned_filter": "status='PLANNED'  (143 rows; ACTIVE 37, COMPLETED 304)",
+   "sample": "{\"status\": \"PLANNED\", \"id\": \"H1117.5\", \"division\": \"Buffalo\", \"description\": \"Buffalo Division: Pavement Safety Striping, MP 452.34 to MP 455.06 - 2013\", \"estimated_letting_date\": \"2013\", \"approved_construction_amount\": \"50000.00\"}",
+   "restrictions": null,
+   "notes": "latitude/longitude per project. Mostly bridge and pavement work inside existing right-of-way. Sample row is from the 2012 plan - also filter on program_year."
+  },
+  {
+   "name": "Mesa Capital Projects Explorer - Project Details",
+   "authority": "City of Mesa",
+   "states": [
+    "AZ"
+   ],
+   "coverage": "city",
+   "kind": "socrata",
+   "url": "https://citydata.mesaaz.gov/resource/tft3-rpu9.json",
+   "verified": true,
+   "record_count": 284,
+   "geometry": "polygon",
+   "fields": {
+    "id": "project_id",
+    "name": "project_name",
+    "description": "project_description",
+    "work_type": "project_types_category",
+    "cost": "additional_financial_metrics",
+    "status": "project_stage_id",
+    "date": null,
+    "county": "district_id"
+   },
+   "planned_filter": "project_stage_id='Anticipated'  (109; 'Active' 164 = under way; 'Close Out' 11)",
+   "sample": "{\"project_id\": \"CP1350\", \"project_name\": \"Transwestern Gate Station\", \"project_types_category\": \"Natural Gas\", \"district_id\": \"COUNCIL DISTRICT 6\", \"project_stage_id\": \"Anticipated\", \"project_description\": \"Construct an interconnect with Transwestern Pipelines new 516-mile expansion from Texas to Arizona to support future growth of the Magma gas system while enhanc\", \"additional_financial_metrics\": \"300000\"}",
+   "restrictions": "See Terms of Use (portal licence field)",
+   "notes": "Geometry is in the companion dataset rwes-dxag \"Capital Projects Explorer Project Shapes\" (projectid, geometry MultiPolygon) - join on project_id = projectid. Includes city gas and electric utility projects."
+  },
+  {
+   "name": "Norfolk Capital Improvement Plan Projects - FY 2027",
+   "authority": "City of Norfolk",
+   "states": [
+    "VA"
+   ],
+   "coverage": "city",
+   "kind": "socrata",
+   "url": "https://data.norfolk.gov/resource/6tqj-4az3.json",
+   "verified": true,
+   "record_count": 93,
+   "geometry": "point",
+   "fields": {
+    "id": "project_id",
+    "name": "project_name",
+    "description": "description",
+    "work_type": "department",
+    "cost": "amount",
+    "status": null,
+    "date": null,
+    "county": "ward"
+   },
+   "planned_filter": "All rows are projects funded in the FY2027 CIP (one dataset per fiscal year; FY2026 is dpv9-3yq2).",
+   "sample": "{\"project_id\": \"2900\", \"department\": \"Utilities - Water Fund\", \"project_name\": \"Replace Lake Smith Culvert\", \"description\": \"Provide funds to replace the existing culvert under Northampton Boulevard that connects Lake Whitehurst with Lake Smith. The culvert is owned by the City of Nor\", \"amount\": \"11000000\"}",
+   "restrictions": null,
+   "notes": "latitude/longitude and location text. Includes coastal flood-protection (floodwall) projects."
+  },
+  {
+   "name": "Montgomery County MD Approved Capital Budget Projects (FY26)",
+   "authority": "Montgomery County, Maryland (OMB)",
+   "states": [
+    "MD"
+   ],
+   "coverage": "county",
+   "kind": "socrata",
+   "url": "https://data.montgomerycountymd.gov/resource/pvd3-847m.json",
+   "verified": true,
+   "record_count": 481,
+   "geometry": "point",
+   "fields": {
+    "id": "project_code",
+    "name": "project_name",
+    "description": null,
+    "work_type": null,
+    "cost": null,
+    "status": "projectstatus_name",
+    "date": null,
+    "county": "councildistricts"
+   },
+   "planned_filter": "projectstatus_name IN ('Planning Stage','Preliminary Design Stage','Final Design Stage','TBA')",
+   "sample": "{\"project_code\": \"P998799\", \"project_name\": \"Minor New Construction - Local Parks\", \"projectstatus_name\": \"Ongoing\"}",
+   "restrictions": null,
+   "notes": "481 CIP projects with status and point; thin attributes - project_code (e.g. P998799) keys into the county CIP budget pages. A new dataset is published per fiscal year."
+  },
+  {
+   "name": "Fulton County Capital Projects",
+   "authority": "Fulton County, Georgia",
+   "states": [
+    "GA"
+   ],
+   "coverage": "county",
+   "kind": "socrata",
+   "url": "https://data.fultoncountyga.gov/resource/kb7r-9t75.json",
+   "verified": true,
+   "record_count": 130,
+   "geometry": "none",
+   "fields": {
+    "id": "project_id",
+    "name": "project_name",
+    "description": "description",
+    "work_type": "county_services",
+    "cost": "total_project_budget",
+    "status": "stage",
+    "date": "construction_start_date",
+    "county": "district"
+   },
+   "planned_filter": "stage IN ('Planning','Land','Design','Bidding')  -- 'Land' = land acquisition stage",
+   "sample": "{\"project_id\": \"I064\", \"project_name\": \"Johns Creek General Upgrade\", \"district\": \"District 1\", \"county_services\": \"Water\"}",
+   "restrictions": "Creative Commons Attribution 4.0 International",
+   "notes": "Water/sewer, libraries, public buildings. total_land_parcel column records parcels involved."
+  },
+  {
+   "name": "New Orleans RoadWork DPW Projects (Socrata copy)",
+   "authority": "City of New Orleans Department of Public Works",
+   "states": [
+    "LA"
+   ],
+   "coverage": "city",
+   "kind": "socrata",
+   "url": "https://data.nola.gov/resource/u5mk-y9z4.json",
+   "verified": true,
+   "record_count": 14297,
+   "geometry": "point",
+   "fields": {
+    "id": "projid",
+    "name": "project_name",
+    "description": "consttype",
+    "work_type": "projtype",
+    "cost": "total_cost",
+    "status": "current_phase",
+    "date": "startqtr",
+    "county": "councildst"
+   },
+   "planned_filter": "current_phase='Planned'  (3,753 segments)",
+   "sample": "{\"projid\": \"DPW824\", \"councildst\": \"Council District C\", \"consttype\": \"Patch Mill/Overlay\", \"projtype\": \"DPW\", \"project_name\": \"Citywide Minor Streets #1 (District C)\", \"current_phase\": \"Planned\", \"startqtr\": \"Jan-Mar 2027\", \"total_cost\": \"2000000.0\"}",
+   "restrictions": null,
+   "notes": "Same data as the gis.nola.gov ArcGIS layer above, refreshed daily; companion bsnu-de3a = Sewerage & Water Board projects. Road reconstruction in existing right-of-way."
+  },
+  {
+   "name": "Connecticut School Construction Priority and Non-Priority Projects",
+   "authority": "Connecticut DAS Office of School Construction Grants (projects by local school districts)",
+   "states": [
+    "CT"
+   ],
+   "coverage": "statewide",
+   "kind": "socrata",
+   "url": "https://data.ct.gov/resource/cdnr-dk6j.json",
+   "verified": true,
+   "record_count": 381,
+   "geometry": "none",
+   "fields": {
+    "id": "contract_id",
+    "name": "school_name",
+    "description": "type_of_grant",
+    "work_type": "school_type",
+    "cost": "estimated_project_cost",
+    "status": "project_status",
+    "date": "fiscal_year_of_award",
+    "county": "district_name"
+   },
+   "planned_filter": "project_status='Estimated payments' AND fiscal_year_of_award >= current year - 2  (recently authorised, not yet audited)",
+   "sample": "{\"contract_id\": \"24DASY095090MAGNPARTB\", \"district_name\": \"Town Of New London\", \"school_name\": \"New London High School Part B\", \"type_of_grant\": \"Priority\", \"fiscal_year_of_award\": \"2016\", \"school_type\": \"Secondary\", \"project_status\": \"Estimated payments\", \"estimated_project_cost\": \"9974000.00\"}",
+   "restrictions": null,
+   "notes": "State grant list: tells you which towns have an approved new-school or expansion project, not where the site is."
+  },
+  {
+   "name": "EIA Natural Gas Pipeline Projects",
+   "authority": "U.S. Energy Information Administration (projects by pipeline companies; FERC or state authority per row)",
+   "states": [
+    "US"
+   ],
+   "coverage": "national",
+   "kind": "xlsx",
+   "url": "https://www.eia.gov/naturalgas/pipelines/EIA-NaturalGasPipelineProjects.xlsx",
+   "verified": true,
+   "record_count": 215,
+   "geometry": "none",
+   "fields": {
+    "id": "Docket/Permit  Number",
+    "name": "Project Name",
+    "description": "Notes",
+    "work_type": "Project Type",
+    "cost": "Cost (millions)",
+    "status": "Status",
+    "date": "Year In Service Date",
+    "county": "State(s)"
+   },
+   "planned_filter": "Sheet 'Natural Gas Pipeline Projects' (header on row 2): Status IN ('Announced','Pre-applied','Applied','Approved','On Hold')  (counts on 2026-11-17: Construction 35, Applied 28, Approved 27, Announced 18, On Hold 13, Completed 12, Pre-applied 9)",
+   "sample": "{\"Project Name\": \"2026 Expansion Project\", \"Pipeline Operator Name\": \"Great Basin Gas Transmission\", \"Project Type\": \"Expansion\", \"Status\": \"Approved\", \"Year In Service Date\": \"2027\", \"State(s)\": \"NV\", \"Miles\": \"4.7\", \"Authority\": \"FERC\", \"Docket/Permit  Number\": \"CP25-209\"}",
+   "restrictions": "U.S. government work, public domain",
+   "notes": "Excel workbook (1.2 MB), updated quarterly; sheet 3 holds historical projects 1996-2024. Columns also include Pipeline Operator Name, Beg_State/End_State, Miles, Pipeline Diameter (Inches), Pipeline Type (Interstate/Intrastate), Authority, Crosses State Border, Website. No geometry: place is state(s) plus free-text Notes. Interstate gas pipelines get federal eminent domain with a FERC certificate, so Status=Applied/Approved rows are early condemnation signals; use the FERC docket (CPxx-xxx) to find the route."
+  },
+  {
+   "name": "SPP Transmission Expansion Plan (STEP) Project List",
+   "authority": "Southwest Power Pool (projects built by member utilities)",
+   "states": [
+    "KS",
+    "OK",
+    "NE",
+    "SD",
+    "ND",
+    "MO",
+    "AR",
+    "TX",
+    "NM",
+    "LA",
+    "IA",
+    "MN",
+    "MT",
+    "WY"
+   ],
+   "coverage": "regional grid operator",
+   "kind": "xlsx",
+   "url": "https://www.spp.org/Documents/56610/2024 SPP Transmission Expansion Plan Project List.xlsx",
+   "verified": true,
+   "record_count": 400,
+   "geometry": "none",
+   "fields": {
+    "id": "NTC_ID|PID|UID",
+    "name": "Project Name",
+    "description": "Project Description/ Comments",
+    "work_type": "Project Type",
+    "cost": "Current Cost Estimate",
+    "status": "Project Status",
+    "date": "Project Owner Indicated In-Service Date",
+    "county": "State(s)"
+   },
+   "planned_filter": "Project Status NOT IN ('Complete','Closed Out','In Service'): keep 'NTC - Commitment Window', 'NTC-C Project Estimate Window', 'On Schedule < 4', 'On Schedule > 4', 'Delay - Mitigation', 'Delay - Mitigation Window', 'Re-evaluation' (legend in the first rows of the sheet); column 'Number of New' (miles of new line) > 0 selects new lines rather than rebuilds",
+   "sample": "{\"NTC_ID\": \"200220\", \"PID\": \"30375\", \"UID\": \"50442\", \"ProjectOwner\": \"NPPD\", \"State(s)\": \"NE\", \"Project Name\": \"Multi - Gentleman - Cherry Co. - Holt Co. 345 kV\", \"Upgrade Name\": \"Cherry Co. - Gentleman 345 kV Ckt 1\", \"Project Status\": \"Delay - Mitigation\", \"Project Description/ Comments\": \"Build new 110-mile 345 kV line\", \"Voltages (kV)\": \"345\"}",
+   "restrictions": null,
+   "notes": "Excel file linked from https://www.spp.org/engineering/transmission-planning/ ; header row is row 14, 400 upgrade rows (statuses on 2026-11-17: Delay - Mitigation 121, On Schedule < 4 83, NTC - Commitment Window 63, Complete 38, In Service 30, NTC-C Project Estimate Window 26). This file is the 2024 STEP list (Q1 2024 project tracking); the 2025 and 2026 STEP are published as zip archives on the same page (Documents/56611 and Documents/76727) - the URL changes each year, so scrape the page for the newest link. From/To bus names give end points; no geometry."
+  },
+  {
+   "name": "Chicago City Council eLMS API (legislation)",
+   "authority": "City of Chicago, Office of the City Clerk",
+   "states": [
+    "IL"
+   ],
+   "coverage": "city",
+   "kind": "api",
+   "url": "https://api.chicityclerkelms.chicago.gov/matter",
+   "verified": true,
+   "record_count": null,
+   "geometry": "none",
+   "fields": {
+    "id": "matterId|recordNumber",
+    "name": "title",
+    "description": "title",
+    "work_type": "matterCategory|type",
+    "cost": null,
+    "status": "status|subStatus",
+    "date": "introductionDate|finalActionDate",
+    "county": "committeReferral"
+   },
+   "planned_filter": "GET /matter?search=acquisition&top=100 (also search='eminent domain', 'condemnation', 'acquisition authority', 'redevelopment'); keep rows with finalActionDate null (status '2-Submitted to Clerk', '4-In Committee')",
+   "sample": "{\"recordNumber\": \"O2026-0029679\", \"status\": \"2-Submitted to Clerk\", \"introductionDate\": \"2026-12-08T16:00:00+00:00\", \"committeReferral\": \"Committee on Transportation and Public Way\", \"title\": \"Vacation of public alley in area bounded by W 49th St, S Union Ave, W 51st St and railroad right-of-way\", \"matterCategory\": \"ALLEY | Vacation(s)\", \"type\": \"Ordinance\"}",
+   "restrictions": null,
+   "notes": "Chicago left Legistar; this is its replacement public JSON API (no key). search= is full-text; search and filter cannot be combined (HTTP 400 \"Invalid use of search and filter parameters\"). Returns {data:[...]} with top/skip paging. Record count not obtained."
+  },
+  {
    "name": "Charlotte Capital Improvement Projects (points)",
    "authority": "City of Charlotte",
    "states": [
@@ -4723,6 +5168,623 @@
     "PROPOSED": 1,
     "UNDER CONSTRUCTION": 11
    }
+  },
+  {
+   "name": "LA Metro Southeast Gateway Line (West Santa Ana Branch): Acquisitions and Displacements",
+   "authority": "Los Angeles County Metropolitan Transportation Authority (LA Metro)",
+   "states": [
+    "CA"
+   ],
+   "coverage": "one transit project (LA County)",
+   "kind": "arcgis",
+   "url": "https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/services/Acquisitions_and_Displacements_Final_2/FeatureServer/0",
+   "verified": true,
+   "record_count": 488,
+   "geometry": "polygon",
+   "fields": {
+    "description": "ImpactType",
+    "work_type": "ROWType",
+    "county": "City",
+    "id": "WSABParcel",
+    "name": "APN",
+    "status": "TakeType"
+   },
+   "planned_filter": "Every row is a parcel the project will take. TakeType IN ('Full','Part') = permanent acquisition (297 parcels); 'TCE' = temporary construction easement (191). ROWType: Fee Area / Permanent Aerial Easement / Permanent Surface Easement / TCE.",
+   "sample": "{\"WSABParcel\": \"WSAB-873\", \"APN\": \"6241-001-270\", \"ImpactType\": \"Access Road\", \"ROWType\": \"Permanent Surface Easement\", \"TakeType\": \"Part\", \"City\": \"Paramount\"}",
+   "restrictions": null,
+   "notes": "HIGHEST VALUE: parcel-level list (assessor APN, take type, acres, relocation flag) from the project environmental document. Published by a Metro consultant account (item dated 2024-03); static, not a live feed. Same org also has Property_Impacts_Acquisitions_2 (layer 1 Full Acquistion Boundaries, 52 parcels with APN), Metro_ROW_Affected_Properties (130) and Metro_ROW_Potential_Affected_Property.",
+   "group": "lametro"
+  },
+  {
+   "name": "LA Metro: Full Acquisition Boundaries (Southeast Gateway Line)",
+   "authority": "LA Metro",
+   "states": [
+    "CA"
+   ],
+   "coverage": "one transit project (LA County)",
+   "kind": "arcgis",
+   "url": "https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/services/Property_Impacts_Acquisitions_2/FeatureServer/1",
+   "verified": true,
+   "record_count": 52,
+   "geometry": "polygon",
+   "fields": {
+    "id": "APN",
+    "name": "Acquistion"
+   },
+   "planned_filter": "All rows are full-parcel acquisitions.",
+   "sample": "{\"APN\": \"7039-013-007\", \"Acquistion\": \"Full\"}",
+   "restrictions": null,
+   "notes": "",
+   "group": "lametro"
+  },
+  {
+   "name": "LA Metro Planned Stations",
+   "authority": "LA Metro",
+   "states": [
+    "CA"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/services/Metro_Planned_Stations/FeatureServer/0",
+   "verified": true,
+   "record_count": 48,
+   "geometry": "point",
+   "fields": {
+    "name": "STOPNAME",
+    "work_type": "Type_",
+    "status": "Status",
+    "description": "LINE2"
+   },
+   "planned_filter": "Status='Planned' (all 48 rows)",
+   "sample": "{\"STOPNAME\": \"South Park/Fashion District\", \"Status\": \"Planned\", \"Type_\": \"Rail\", \"LINE2\": \"WSAB Ext2\"}",
+   "restrictions": null,
+   "notes": "",
+   "status_values": {
+    "Planned": 48
+   },
+   "group": "lametro"
+  },
+  {
+   "name": "LA Metro Transit Projects (Measure M / LRTP corridors)",
+   "authority": "LA Metro",
+   "states": [
+    "CA"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services8.arcgis.com/TNoJFjk1LsD45Juj/arcgis/rest/services/Metro_Transit_Projects/FeatureServer/0",
+   "verified": true,
+   "record_count": 22,
+   "geometry": "polyline",
+   "fields": {
+    "name": "Name",
+    "work_type": "Mode",
+    "description": "Measure"
+   },
+   "planned_filter": "No status field; Measure and LRTP columns say which funding plan the project is in. All are planned or under-construction corridors.",
+   "sample": "{\"Name\": \"North Hollywood to Pasadena Transit Corridor\", \"Mode\": \"Bus Rapid Transit\", \"Measure\": \"Measure M\"}",
+   "restrictions": null,
+   "notes": "Companion layer Metro_Highway_Projects (20 rows, same schema) covers Metro-funded highway projects such as the High Desert Corridor.",
+   "group": "lametro"
+  },
+  {
+   "name": "Harris County Flood Control District 2018 Bond: CIP structural channel projects (local-only, lines)",
+   "authority": "Harris County Flood Control District",
+   "states": [
+    "TX"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/nLl0k0Mja5hnSeSl/arcgis/rest/services/HCFCD_CIP_Structural_Local_Only_Line/FeatureServer/0",
+   "verified": true,
+   "record_count": 59,
+   "geometry": "polyline",
+   "fields": {
+    "id": "ID",
+    "name": "ProjectTitle",
+    "description": "DescriptionBenefits",
+    "work_type": "Type",
+    "cost": "GrantTotalCost",
+    "county": "WTSHNAME"
+   },
+   "planned_filter": "No status field; all are 2018 bond programme projects. ProjectTitle/DescriptionBenefits state the stage, e.g. \"Planning, Right-Of-Way Acquisition, Design, and Construction...\". Cross-check HCFCD_Bond_Points Status (In Progress / Complete / Closed) by bond ID.",
+   "sample": "{\"ID\": \"F-07\", \"Type\": \"Local-Only\", \"WTSHNAME\": \"BRAYS BAYOU\", \"ProjectTitle\": \"Planning, Right-Of-Way Acquisition, Design, and Construction of Channel Conveyance Improvements on Keegans Bayou \", \"GrantTotalCost\": \"0\", \"DescriptionBenefits\": \"Right of way acquisition, design and construction of this project could reduce the risk flooding for over 900 structures in the 1% floodplain.  Project will be \"}",
+   "restrictions": null,
+   "notes": "Sibling services in the same org: HCFCD_CIP_Structural_Cost_Shared_Line, HCFCD_CIP_Structural_Community_Input_Lines, HCFCD_Bond_Detention_Basins_Bond, HCFCD_Proposed_Drainage_Improvements (104 subdivision drainage projects), HCFCD_All_ROW (existing right-of-way).",
+   "group": "hcfcd"
+  },
+  {
+   "name": "Harris County Flood Control District 2018 Bond project points",
+   "authority": "Harris County Flood Control District",
+   "states": [
+    "TX"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/nLl0k0Mja5hnSeSl/arcgis/rest/services/HCFCD_Bond_Points/FeatureServer/0",
+   "verified": true,
+   "record_count": 180,
+   "geometry": "point",
+   "fields": {
+    "work_type": "Type",
+    "status": "Status",
+    "id": "BondID"
+   },
+   "planned_filter": "Status='In Progress'",
+   "sample": "{\"Type\": \"Local-Only\", \"BondID\": \"F-72\", \"Status\": \"In Progress\"}",
+   "restrictions": null,
+   "notes": "Thin attributes (BondID, Type, Status); join to the CIP structural layers by bond ID.",
+   "status_values": {
+    "Closed": 2,
+    "Complete": 25,
+    "In Progress": 153
+   },
+   "group": "hcfcd"
+  },
+  {
+   "name": "Harris County Flood Control District Buyout Areas",
+   "authority": "Harris County Flood Control District",
+   "states": [
+    "TX"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/nLl0k0Mja5hnSeSl/arcgis/rest/services/HCFCD_Buyout_Areas/FeatureServer/0",
+   "verified": true,
+   "record_count": 80,
+   "geometry": "point",
+   "fields": {
+    "name": "Area_Name",
+    "description": "Notes",
+    "cost": "Cost_sqft",
+    "date": "Updated",
+    "county": "Precinct",
+    "id": "Unit_No",
+    "status": "PLN_Aprvd"
+   },
+   "planned_filter": "All rows are designated buyout interest areas. HCFCD buyouts are mostly voluntary, but Harris County has used mandatory buyouts with eminent domain in some areas.",
+   "sample": "{\"Area_Name\": \"ABST 484 J B JONES\", \"Precinct\": \"4\", \"PLN_Aprvd\": \"Yes\", \"Updated\": \"Updated 10.22.2017\", \"Unit_No\": \"G103-00-00\", \"Cost_sqft\": \"0.131731\"}",
+   "restrictions": null,
+   "notes": "\"Updated 10.22.2017\" on sample row - check currency before relying on it.",
+   "group": "hcfcd"
+  },
+  {
+   "name": "Harris County Flood Control District Bond Program Status Report projects (polygons)",
+   "authority": "Harris County Flood Control District",
+   "states": [
+    "TX"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/nLl0k0Mja5hnSeSl/arcgis/rest/services/BPSR_Projects/FeatureServer/1",
+   "verified": true,
+   "record_count": 479,
+   "geometry": "polygon",
+   "fields": {
+    "id": "ProjectID",
+    "name": "COMMONNAME",
+    "work_type": "Category",
+    "status": "PROJECTSTATUS",
+    "date": "EXTRACT_DATE",
+    "description": "StageName"
+   },
+   "planned_filter": "PROJECTSTATUS='Active' AND StageName IN ('Feasibility','Preliminary Engineering','Design','ROW / Utilities')  -- 'ROW / Utilities' (41 rows) = right-of-way acquisition stage",
+   "sample": "{\"ProjectID\": \"A100-00-00-P006\", \"Category\": \"1 - Major Partnership Flood Damage Reduction Projects\", \"PROJECTSTATUS\": \"Closeout\", \"StageName\": \"Feasibility\", \"EXTRACT_DATE\": \"1672113935000\"}",
+   "restrictions": null,
+   "notes": "EXTRACT_DATE on sample is Dec 2022 (BPSR_Projects_Jan_2023 is a newer copy) - a dated snapshot, not live.",
+   "status_values": {
+    "Active": 254,
+    "Closeout": 100,
+    "Complete": 25,
+    "Inactive": 100
+   },
+   "group": "hcfcd"
+  },
+  {
+   "name": "TVA Transmission System Siting projects: Proposed Centerline",
+   "authority": "Tennessee Valley Authority (federal; has eminent domain)",
+   "states": [
+    "TN",
+    "AL",
+    "MS",
+    "KY",
+    "GA",
+    "NC",
+    "VA"
+   ],
+   "coverage": "TVA service area (7 states)",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/w8auYAijfGK1Mydj/arcgis/rest/services/TSSProjects_Hosted/FeatureServer/0",
+   "verified": true,
+   "record_count": 447,
+   "geometry": "polyline",
+   "fields": {
+    "id": "PROJECT_ID",
+    "name": "NAME",
+    "description": "DESCRIPTION",
+    "status": "STATUS",
+    "work_type": "DESCRIPTION"
+   },
+   "planned_filter": "STATUS='Active' (all 447 rows). DESCRIPTION distinguishes 'New Transmission Line', 'New Transmission Line ROW', 'Re-Build', 'Delivery Point'.",
+   "sample": "{\"DESCRIPTION\": \"Transmission Line\", \"NAME\": \"Union - Tupelo, MS\", \"PROJECT_ID\": \"400236\", \"STATUS\": \"Active\"}",
+   "restrictions": null,
+   "notes": "NAME gives end points with state (e.g. \"Union - Tupelo, MS\"). TVA publishes many per-project services in the same org with alternative routes, proposed ROW polygons and even open-house parcel lists (e.g. Jones_Chapel_Proposed_ROW, Riceville_Proposed_Route_ROW, Sundown_Drive_OpenHouse_Parcels_NewROW) - list https://services.arcgis.com/w8auYAijfGK1Mydj/arcgis/rest/services?f=json and filter names on Proposed|Alternative|ROW. Item last modified 2025-03.",
+   "status_values": {
+    "Active": 447
+   },
+   "group": "tva"
+  },
+  {
+   "name": "TVA Transmission System Siting projects: Project Alternatives (route segments)",
+   "authority": "Tennessee Valley Authority",
+   "states": [
+    "TN",
+    "AL",
+    "MS",
+    "KY",
+    "GA",
+    "NC",
+    "VA"
+   ],
+   "coverage": "TVA service area (7 states)",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/w8auYAijfGK1Mydj/arcgis/rest/services/TSSProjects_Hosted/FeatureServer/5",
+   "verified": true,
+   "record_count": 2691,
+   "geometry": "polyline",
+   "fields": {
+    "id": "PROJECT_ID",
+    "name": "PROJECT_NAME",
+    "description": "DESCRIPTION",
+    "status": "STATUS",
+    "date": "INSERVICE_DATE"
+   },
+   "planned_filter": "STATUS='Active'; INSERVICE_DATE in the future",
+   "sample": "{\"PROJECT_NAME\": \"Hillsboro, TN\", \"DESCRIPTION\": \"Delivery Point\", \"PROJECT_ID\": \"202139\", \"INSERVICE_DATE\": \"1401580800000\"}",
+   "restrictions": null,
+   "notes": "",
+   "status_values": {
+    "None": 0,
+    " ": 139,
+    "Active": 1520
+   },
+   "group": "tva"
+  },
+  {
+   "name": "Our Grid Future: Planned Transmission lines (national compilation, April 2025)",
+   "authority": "Compiled by Horizon Climate Group / National Audubon Society from utility and RTO plans (lines owned by utilities)",
+   "states": [
+    "US"
+   ],
+   "coverage": "national",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/lDFzr3JyGEn5Eymu/arcgis/rest/services/Our_Grid_Future_Planned_Transmission_April_2025/FeatureServer/2",
+   "verified": true,
+   "record_count": 578,
+   "geometry": "polyline",
+   "fields": {
+    "id": "ProjectID",
+    "name": "Project",
+    "work_type": "Type",
+    "status": "Status",
+    "date": "EstYear",
+    "county": "StatesAbbr",
+    "description": "AllSub"
+   },
+   "planned_filter": "Status IN ('Pre-planning / conceptual','Planning','Permitting','Engineering, design, and routing','On hold')  (exclude Construction, Complete, Terminated)",
+   "sample": "{\"ProjectID\": \"P-0282\", \"Project\": \"New York Energy Solution\", \"Status\": \"Complete\", \"Type\": \"Upgrade\", \"EstYear\": \"2023\", \"AllSub\": \"Knickerbocker, Churchtown, Blue Stones Tap Station, Pleasant Valley, Van Wagner\", \"StatesAbbr\": \"NY\"}",
+   "restrictions": "No licence stated on the item; snippet says data \"provided by the Horizon Climate Group and are available for public viewing at https://ourgridfuture.org/\". Third-party compilation - confirm terms before commercial reuse.",
+   "notes": "578 segments of planned high-voltage lines with Owner, MinVolt/MaxVolt, FromSub/ToSub, ISO_RTO (PJM 180, MISO 88, CAISO 41, ERCOT 35, NYISO 24, SPP 20, ISONE 6), PlanAuth, Link. Third-party NGO snapshot dated April 2025, not an authority feed and not updated continuously; alignments are approximate. Best single machine-readable national layer of PLANNED transmission found.",
+   "status_values": {
+    " ": 159,
+    "Complete": 20,
+    "Construction": 67,
+    "Engineering, design, and routing": 96,
+    "On hold": 7,
+    "Permitting": 71,
+    "Planning": 142,
+    "Pre-planning / conceptual": 15,
+    "Terminated": 1
+   }
+  },
+  {
+   "name": "Valley Metro Light Rail Extensions",
+   "authority": "Valley Metro (Phoenix region)",
+   "states": [
+    "AZ"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/2t1927381mhTgWNC/arcgis/rest/services/Light_Rail_Extensions_View/FeatureServer/0",
+   "verified": true,
+   "record_count": 8,
+   "geometry": "polyline",
+   "fields": {
+    "id": "ID",
+    "status": "Status",
+    "county": "City",
+    "name": "PHASE",
+    "work_type": "Service"
+   },
+   "planned_filter": "Status='Planned' (all 8 rows on 2026-11-17, although South Central and Northwest Phase 2 have since opened - check PHASE names against current news)",
+   "sample": "{\"ID\": \"0\", \"PHASE\": \"Northwest Extension - Phase 2\", \"Service\": \"Passenger\", \"City\": \"Phoenix\", \"Status\": \"Planned\"}",
+   "restrictions": null,
+   "notes": "",
+   "group": "valleymetro"
+  },
+  {
+   "name": "Valley Metro Light Rail Extension Stations",
+   "authority": "Valley Metro (Phoenix region)",
+   "states": [
+    "AZ"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/2t1927381mhTgWNC/arcgis/rest/services/Light_Rail_Extension_Stations_View/FeatureServer/0",
+   "verified": true,
+   "record_count": 29,
+   "geometry": "point",
+   "fields": {
+    "name": "Name",
+    "status": "Status",
+    "description": "Extension"
+   },
+   "planned_filter": "Status IN ('Planned','Planned Special Use')",
+   "sample": "{\"Name\": \"35th Ave and I-10\", \"Extension\": \"I-10 West Extension\", \"Status\": \"Planned\"}",
+   "restrictions": null,
+   "notes": "",
+   "status_values": {
+    "Planned": 28,
+    "Planned Special Use": 1
+   },
+   "group": "valleymetro"
+  },
+  {
+   "name": "California High-Speed Rail Statewide Alignment",
+   "authority": "California High-Speed Rail Authority",
+   "states": [
+    "CA"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services3.arcgis.com/rGGp0aiv6Rf11t2H/arcgis/rest/services/HSR_Statewide_Alignment/FeatureServer/1",
+   "verified": true,
+   "record_count": 16,
+   "geometry": "polyline",
+   "fields": {
+    "status": "PHASE",
+    "name": "PROJECT_SECTION"
+   },
+   "planned_filter": "Whole layer is the planned system; PHASE 1 vs 2 and PROJECT_SECTION identify the section. Only the Central Valley sections are under construction.",
+   "sample": "{\"PROJECT_SECTION\": \"Sacramento to Merced\", \"PHASE\": \"2\"}",
+   "restrictions": null,
+   "notes": "Layer 0 holds the 33 planned stations. CHSRA uses eminent domain heavily (resolutions of necessity via the State Public Works Board).",
+   "status_values": {
+    "None": 0,
+    "1": 12,
+    "2": 2,
+    "Phase 1": 1
+   }
+  },
+  {
+   "name": "Charlotte Right-of-Way Tracking for Future Corridors",
+   "authority": "City of Charlotte (CDOT / Planning)",
+   "states": [
+    "NC"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/9Nl857LBlQVyzq54/arcgis/rest/services/ROWTrackingFutureCorridors/FeatureServer/0",
+   "verified": true,
+   "record_count": 301,
+   "geometry": "polyline",
+   "fields": {
+    "name": "Project_Name",
+    "description": "Property_Owners",
+    "status": "Segment_Status",
+    "id": "Project_UniqueID_fromPRWP"
+   },
+   "planned_filter": "Segment_Status='No ROW Dedicated/Reserved' = future road corridor where the city still needs the land (206 of 301 segments); 'Committed','ROW Reserved','ROW Dedicated' = already secured",
+   "sample": "{\"Project_Name\": \"Fred D. Alexander Blvd.\", \"Segment_Status\": \"No ROW Dedicated/Reserved\"}",
+   "restrictions": null,
+   "notes": "Planned new-road and extension corridors with Parcel_IDs, Property_Owners and required Width per segment - a direct list of parcels in the path of future roads.",
+   "status_values": {
+    "None": 0,
+    "Committed": 6,
+    "No ROW Dedicated/Reserved": 206,
+    "ROW Dedicated": 40,
+    "ROW Reserved": 44
+   },
+   "group": "charlotte_transit"
+  },
+  {
+   "name": "Charlotte LYNX Red Line Route - Proposed",
+   "authority": "Charlotte Area Transit System (CATS)",
+   "states": [
+    "NC"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/9Nl857LBlQVyzq54/arcgis/rest/services/LYNX_Red_Line_Route___Proposed/FeatureServer/0",
+   "verified": true,
+   "record_count": 1,
+   "geometry": "polyline",
+   "fields": {
+    "status": "Status",
+    "name": "Alignment"
+   },
+   "planned_filter": "Status='Proposed'",
+   "sample": "{\"Alignment\": \"LYNX Red Line\", \"Status\": \"Proposed\"}",
+   "restrictions": null,
+   "notes": "Sibling proposed-route services: LYNX_Red_Line_Stations_Proposed, LYNX_Gold_Line_Route_Proposed, LYNX_Gold_Line_Stations_Proposed, LYNX_Blue_Line_Route_Ballantyne_Proposed, LYNX_Blue_Line_Stations_Ballantyne_Proposed, CATS_Project_Data_Lines (Silver Line phases, FundingStatus).",
+   "status_values": {
+    "Proposed": 1
+   },
+   "group": "charlotte_transit"
+  },
+  {
+   "name": "Charlotte-Mecklenburg Schools 2023 Bond Projects",
+   "authority": "Charlotte-Mecklenburg Schools",
+   "states": [
+    "NC"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/9Nl857LBlQVyzq54/arcgis/rest/services/CMS_2023_Bond_Projects/FeatureServer/0",
+   "verified": true,
+   "record_count": 35,
+   "geometry": "point",
+   "fields": {
+    "description": "Project_Description",
+    "work_type": "ProjectType",
+    "county": "city",
+    "name": "Site",
+    "id": "Project"
+   },
+   "planned_filter": "No status field; ProjectType distinguishes New / Replacement / Renovation and Offsite flags projects on a new site",
+   "sample": "{\"Site\": \"Albemarle Road MS\", \"Project\": \"Albemarle Road MS\", \"ProjectType\": \"Replacement\", \"Project_Description\": \"Onsite replacement with 54 CR baseline facility\", \"city\": \"Charlotte\"}",
+   "restrictions": null,
+   "notes": "Offsite=yes rows are new-site schools (land needed)."
+  },
+  {
+   "name": "Wake County Public Schools Proposed School Bond Projects 2026",
+   "authority": "Wake County Public School System",
+   "states": [
+    "NC"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/oqISN6Dt6ax5xklN/arcgis/rest/services/bond_projects_2026/FeatureServer/0",
+   "verified": true,
+   "record_count": 54,
+   "geometry": "point",
+   "fields": {
+    "name": "school_name",
+    "work_type": "category",
+    "cost": "funding",
+    "id": "schl_code",
+    "description": "projects"
+   },
+   "planned_filter": "All rows are proposed 2026 bond projects; category distinguishes New School from Lifecycle/Renovation.",
+   "sample": "{\"schl_code\": \"304\", \"school_name\": \"Adams Elementary School\", \"projects\": \"DRAINAGE IMPROVEMENTS,HVAC CONTROLS,HVAC REPLACEMENT,ROOF\", \"category\": \"Lifecycle - Minor\"}",
+   "restrictions": null,
+   "notes": ""
+  },
+  {
+   "name": "OPPD Transmission Projects",
+   "authority": "Omaha Public Power District (public utility with eminent domain)",
+   "states": [
+    "NE"
+   ],
+   "coverage": "utility service area",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/VYvz62U0tSeheRDB/arcgis/rest/services/Transmission_Projects/FeatureServer/0",
+   "verified": true,
+   "record_count": 9,
+   "geometry": "polygon",
+   "fields": {
+    "name": "ProjectTitle",
+    "description": "ProjectDescription",
+    "work_type": "ProjectType",
+    "status": "ProjectSTatus",
+    "date": "ProjectStartYear",
+    "county": "ProjectLocation"
+   },
+   "planned_filter": "ProjectSTatus='In Progress'; Milestone fields give routing / easement acquisition / construction steps",
+   "sample": "{\"ProjectType\": \"Transmission\", \"ProjectTitle\": \"Cass to Sarpy Transmission Project\", \"ProjectLocation\": \"Turtle Creek Substation to Cass County Substation\", \"ProjectSTatus\": \"In Progress\", \"ProjectDescription\": \"The project will connect a new, 345kV transmission line from OPPD’s Cass County Station to OPPD’s new Turtle Creek Station. This new infrastructure is needed to\", \"ProjectStartYear\": \"2023\"}",
+   "restrictions": null,
+   "notes": "Small (9) but each is a new 161/345 kV line or substation with milestone statuses.",
+   "status_values": {
+    "In Progress": 9
+   }
+  },
+  {
+   "name": "COTA LinkUS BRT Corridors",
+   "authority": "Central Ohio Transit Authority",
+   "states": [
+    "OH"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services6.arcgis.com/PyaYYixu3QuadcCe/arcgis/rest/services/BRT_Corridors/FeatureServer/0",
+   "verified": true,
+   "record_count": 3,
+   "geometry": "polyline",
+   "fields": {
+    "name": "name",
+    "work_type": "category",
+    "date": "year",
+    "id": "line_name"
+   },
+   "planned_filter": "All rows are planned BRT corridors; year = planned opening.",
+   "sample": "{\"line_name\": \"[BRT] East Main BRT\", \"name\": \"E Main BRT\", \"year\": \"2030\", \"category\": \"By 2030\"}",
+   "restrictions": null,
+   "notes": ""
+  },
+  {
+   "name": "Fairfax County Richmond Highway BRT: Proposed Right of Way",
+   "authority": "Fairfax County Department of Transportation",
+   "states": [
+    "VA"
+   ],
+   "coverage": "one transit project",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/ioennV6PpG5Xodq0/arcgis/rest/services/Richmond_Highway_BRT_Features_gdb/FeatureServer/9",
+   "verified": true,
+   "record_count": 492,
+   "geometry": "polyline",
+   "fields": {
+    "name": "DISPLAY"
+   },
+   "planned_filter": "Entire layer is proposed right-of-way linework for the Richmond Highway BRT (no attributes beyond DISPLAY). Intersect with parcels.",
+   "sample": "geometry-only record: all attribute fields null on the sampled row",
+   "restrictions": null,
+   "notes": "Other layers in the service: 4 Proposed_Grading_Limits, 6 Preliminary_Limits_of_Disturbance, 8 Existing_Parcel_Boundaries."
+  },
+  {
+   "name": "Minnesota route-permit project data: Proposed ROW (Iron Range - St. Louis County - Arrowhead 345 kV)",
+   "authority": "Minnesota Department of Commerce EERA / Minnesota PUC route permit docket",
+   "states": [
+    "MN"
+   ],
+   "coverage": "one transmission project",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/yfalcTIlueMdl9fz/arcgis/rest/services/ISA_Project_Data/FeatureServer/2",
+   "verified": true,
+   "record_count": 1,
+   "geometry": "polygon",
+   "fields": {
+    "name": "Acres"
+   },
+   "planned_filter": "Entire layer is the proposed right-of-way of one transmission project.",
+   "sample": "{\"Acres\": \"1189.0781713844244\"}",
+   "restrictions": null,
+   "notes": "The org (yfalcTIlueMdl9fz, used for Minnesota energy environmental review maps) publishes one service per siting docket: Proposed_Transmission_Center_Line, ProposedTransmissionLineROW, Permitted_Route, L3R_Route_Segment_Alternatives, Heartland_Lakes_Transmission_Project, 20251031_Proposed_Project_Data etc. No single statewide index layer - enumerate https://services1.arcgis.com/yfalcTIlueMdl9fz/arcgis/rest/services?f=json and filter on Proposed|Route|ROW. ISA_Project_Data layer 8 even carries the 75k parcels with owner names in the study area."
+  },
+  {
+   "name": "North Harris County Regional Water Authority CIP - distribution lines",
+   "authority": "North Harris County Regional Water Authority",
+   "states": [
+    "TX"
+   ],
+   "coverage": "authority service area",
+   "kind": "arcgis",
+   "url": "https://services7.arcgis.com/J4DUhTE5Ib36d1gd/arcgis/rest/services/NHCRW_CIP/FeatureServer/0",
+   "verified": true,
+   "record_count": 608,
+   "geometry": "polyline",
+   "fields": {
+    "description": "Comments",
+    "work_type": "Type",
+    "status": "STATUS_CON",
+    "date": "dist_date",
+    "name": "PROJECT",
+    "county": "LOCATION"
+   },
+   "planned_filter": "STATUS_CON IN ('Conceptual','Design')  (173 + 60 of 608 segments; others Construction 64, In Service 304)",
+   "sample": "{\"PROJECT\": \"17-4\", \"LOCATION\": \"ESMT\", \"STATUS_CON\": \"In Service\", \"dist_date\": \"2010\", \"Comments\": \"Built\", \"Type\": \"Distribution\"}",
+   "restrictions": null,
+   "notes": "Large-diameter water transmission lines; the authority condemns pipeline easements. Item modified 2025-09."
   }
  ],
  "unverified": [
@@ -4730,7 +5792,107 @@
    "name": "Legistar clients nyc (New York City Council) and phila (Philadelphia City Council)",
    "url": "https://webapi.legistar.com/v1/nyc/matters",
    "reason": "HTTP 403: these two clients require an API token (free sign-up, which the brief forbids). All other listed clients work without one."
+  },
+  {
+   "name": "San Jose Capital Improvement Project Points/Lines/Polygons",
+   "url": "https://geo.sanjoseca.gov/server/rest/services/OPN/OPN_OpenDataService/MapServer/533",
+   "reason": "Listed in ArcGIS Online (layers 533, 534, 535; item modified 2026-02) but the server timed out on every request from this network (60 s, twice)."
+  },
+  {
+   "name": "Portland OR Capital Improvement Projects CIP Points/Lines/Polys",
+   "url": "https://www.portlandmaps.com/od/rest/services/COP_OpenData_CityProjects/MapServer/44",
+   "reason": "Listed in ArcGIS Online (layers 43, 44, 45; modified 2026-11) but the server timed out from this network."
+  },
+  {
+   "name": "Bexar County CIPs",
+   "url": "https://maps.bexar.org/arcgis/rest/services/PW/Capital_Projects/MapServer/0",
+   "reason": "Timed out from this network."
+  },
+  {
+   "name": "Baltimore County DPWT Construction Projects",
+   "url": "https://bcgisapps.baltimorecountymd.gov/arcgis/rest/services/DPWTConstructionProjects/MapServer/0",
+   "reason": "Timed out from this network."
+  },
+  {
+   "name": "Sioux Falls Capital Improvements Program (CIP) lines/points",
+   "url": "https://gis.siouxfalls.gov/arcgis/rest/services/Data/Community/MapServer/41",
+   "reason": "Timed out from this network (layers 41 and 42)."
+  },
+  {
+   "name": "Topeka Capital Improvement Projects",
+   "url": "https://maps.topeka.gov/arcgis/rest/services/CapitalPlanning/CIP_Projects/FeatureServer",
+   "reason": "TLS certificate failed verification (self-signed chain); not fetched."
+  },
+  {
+   "name": "Pflugerville CIP Points and Lines",
+   "url": "https://maps.pflugervilletx.gov/arcgis/rest/services/Engineering/Capital_Improvements/MapServer",
+   "reason": "Timed out from this network."
+  },
+  {
+   "name": "Tarrant County Bond Funded Projects 2021",
+   "url": "https://mapit.tarrantcounty.com/arcgis/rest/services/Transportation/BondFundedProjects2021/MapServer",
+   "reason": "Host name did not resolve."
+  },
+  {
+   "name": "Tulsa Infrastructure Projects",
+   "url": "https://utility.arcgis.com/usrsvcs/servers/0d3b8efa0eeb47aeb8eb24b96858080d/rest/services/MayorsOffice/Infrastructure_Projects/FeatureServer",
+   "reason": "HTTP 403 - listed as public but the proxied service needs permission."
+  },
+  {
+   "name": "Broward County Surtax Funded Projects",
+   "url": "https://services.arcgis.com/JMAJrTsHNLrSsWf5/arcgis/rest/services/Surtax_Funded_Projects_DB/FeatureServer",
+   "reason": "Token required (499)."
+  },
+  {
+   "name": "Spokane Public Works Projects",
+   "url": "https://services.spokanegis.org/arcgis/rest/services/ICM/PublicWorksProjects_WM_Dynamic/MapServer",
+   "reason": "HTTP 403."
+  },
+  {
+   "name": "SCE DRP Transmission Projects",
+   "url": "https://drpep.sce.com/arcgis_server/rest/services/Hosted/DRP_Transmission_Projects/FeatureServer",
+   "reason": "Host name did not resolve from this network."
+  },
+  {
+   "name": "San Diego CIP projects CSV (data.sandiego.gov)",
+   "url": "https://seshat.datasd.org/cip/cip_projects_datasd.csv",
+   "reason": "Guessed file path returned 403 AccessDenied; the correct path on the San Diego open-data portal was not found."
+  },
+  {
+   "name": "ERCOT Transmission Project and Information Tracking (TPIT)",
+   "url": "https://www.ercot.com/gridinfo/planning",
+   "reason": "ERCOT site returned HTTP 403 (bot protection) to a plain client; TPIT is an Excel report published three times a year."
+  },
+  {
+   "name": "PJM Transmission Construction Status / RTEP project list",
+   "url": "https://www.pjm.com/planning/project-construction",
+   "reason": "Page is rendered by script; no direct xlsx/csv/json link found in the HTML and the guessed API path returned the not-found page. PJM Data Miner needs an API key (sign-up)."
+  },
+  {
+   "name": "MISO MTEP Appendix A project list",
+   "url": "https://www.misoenergy.org/planning/transmission-planning/mtep/",
+   "reason": "Page links only zip archives (https://cdn.misoenergy.org/MTEP25731615.zip, MTEP26 Report - Draft784746.zip); archives not downloaded/opened, so the project table inside is unverified."
+  },
+  {
+   "name": "CAISO transmission plan project lists",
+   "url": "https://www.caiso.com/generation-transmission/transmission/transmission-planning",
+   "reason": "Only transmission-access-charge cost workbooks are linked as xlsx; approved-project lists are in PDF plans. No machine-readable project list found."
+  },
+  {
+   "name": "NYISO and ISO-NE project lists",
+   "url": "https://www.iso-ne.com/system-planning/transmission-planning/transmission-projects",
+   "reason": "No downloadable links in the fetched HTML (script-rendered); NYISO queue workbook URL guessed from memory failed. ISO-NE publishes an RSP Project List xlsx three times a year but the URL was not found."
+  },
+  {
+   "name": "State public utility commission siting dockets (TX PUC, NY DPS, CA PUC, OH Power Siting Board, WI PSC, IA IUB, ND PSC, VA SCC, etc.)",
+   "url": "",
+   "reason": "No public machine-readable API or statewide GIS layer found for any state commission; dockets are web search forms and PDFs. Only Minnesota (per-docket ArcGIS services) and California (CEC lines with Status) had usable GIS."
+  },
+  {
+   "name": "Airport authority and port authority capital programs",
+   "url": "",
+   "reason": "No public GIS/API of planned airport or seaport capital projects found; these are published as PDF capital plans. Board agendas for Port of Oakland, Port of Long Beach and others are reachable through the Legistar clients list."
   }
  ],
- "summary": ""
+ "summary": "Checked 2026-11-17. Every source listed under sources was fetched live and real records read. Coverage: (1) City/county capital programs with GIS: Charlotte, Dallas, Raleigh, Durham, Virginia Beach, Norfolk, Nashville, Chattanooga, Seattle, Kirkland, Carlsbad, Fresno, LA County, San Antonio, Austin (watershed + light rail), Travis, Montgomery (TX), Harris Pct 4 and Harris County Flood Control, Hidalgo drainage district, Aurora and Denver CO, Mesa and Tucson AZ, Fairfax and Prince William VA, Montgomery MD, DC, NYC (three feeds), Boston, Detroit and GLWA, Cleveland NEORSD, St. Louis MSD, Kansas City, Minneapolis, New Orleans, Miami-Dade, Orange and Hillsborough FL, Fulton GA, Pittsburgh, Broken Arrow OK. (2) Legistar: 177 working client slugs verified with real requests (156 active), across 32 states, plus Chicago's own eLMS API. (3) Transit: LA Metro (including a parcel-level acquisitions layer), Valley Metro, Austin Transit Partnership, Charlotte CATS, Chicago RTA, MTA, COTA, Fairfax BRT, California High-Speed Rail, Atlanta Beltline. (4) Transmission/pipelines: TVA siting projects, OPPD, California CEC, a national third-party planned-transmission layer (Our Grid Future), SPP project list, EIA gas pipeline projects, Minnesota per-docket siting layers, Texas eminent-domain entity registry. HIFLD is verified but has almost no proposed lines. (5) Flood control, schools: Harris County FCD, Oklahoma state flood plan, LA County, St. Louis MSD; school programs for Wake County, Charlotte-Mecklenburg, NYC SCA and Connecticut. Not covered: no usable feed found for the cities of Los Angeles, Houston, Phoenix, Philadelphia, San Diego, San Francisco, Indianapolis, Columbus, Jacksonville, Fort Worth, El Paso, Memphis, Oklahoma City, Las Vegas, Baltimore, Milwaukee, Albuquerque, Sacramento, Atlanta, Omaha, Tampa, Honolulu (searched ArcGIS Online and Socrata; they may have layers on their own servers that the catalog search did not surface). PJM, MISO, ERCOT, CAISO, NYISO and ISO-NE lists could not be verified as machine-readable; state utility-commission dockets have no APIs; no airport or port capital-project GIS found. Several servers (San Jose, Portland, Bexar, Baltimore County, Sioux Falls) timed out from this network and are listed as unverified. States with no source at all besides the national layers: AK, DE, ID, IN, ME, NH, SC, VT, WV. States with only Legistar clients (no project layer): HI, NV, NJ, OR, RI, UT, WI."
 }

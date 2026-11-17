@@ -301,8 +301,9 @@ def classify_keywords(signal: Dict[str, Any]) -> Dict[str, Any]:
     else:
         stage = "unknown"
     # Federal Register results are already full-text filtered to Pennsylvania by the search terms.
+    # A signal filed under another state came from that state's own council or agency, so it is in scope.
     in_pa = (bool(signal.get("county")) or signal.get("source") == "federal_register"
-             or bool(PA_HINT.search(text)))
+             or bool(PA_HINT.search(text)) or (signal.get("state") or "PA") != "PA")
     apns = sorted({m.group(0) for p in APN_PATTERNS for m in p.finditer(text)})
     locations = sorted({m.group(0) for m in ADDRESS.finditer(text)})[:8]
     return {

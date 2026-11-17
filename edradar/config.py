@@ -90,6 +90,13 @@ def add_states(cfg: Dict[str, Any]) -> None:
         import json
 
         dot_layers += json.loads(extra.read_text())
+    councils = Path(__file__).parent / "data" / "sources" / "legistar_clients.json"   # councils verified to answer
+    if councils.exists():
+        import json
+
+        leg = cfg.setdefault("sources", {}).setdefault("legistar", {})
+        have = {c.get("slug") for c in leg.get("clients") or []}
+        leg["clients"] = (leg.get("clients") or []) + [c for c in json.loads(councils.read_text()) if c["slug"] not in have]
     if dot_layers:
         src = cfg.setdefault("sources", {}).setdefault("dot_arcgis", {})
         src.setdefault("enabled", True)

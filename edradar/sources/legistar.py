@@ -37,6 +37,7 @@ def fetch(cfg: Dict[str, Any], http: Http) -> Iterator[Dict[str, Any]]:
                     "url": "https://%s.legistar.com/LegislationDetail.aspx?ID=%s&GUID=%s" % (
                         slug, mid, m.get("MatterGuid")),
                     "agency": client.get("name") or slug,
+                    "state": (client.get("state") or "PA").upper(),
                     "county": (client.get("county") or "").upper() or None,
                     "municipality": client.get("place") or client.get("name"),
                     "published": (m.get("MatterIntroDate") or "")[:10] or None,
