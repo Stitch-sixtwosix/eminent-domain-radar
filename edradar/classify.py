@@ -221,6 +221,61 @@ ADDRESS = re.compile(r"\b\d{1,5} (?:[NSEW]\.? )?[A-Z][A-Za-z]+(?: [A-Z][A-Za-z]+
                      r"(?:Street|St|Avenue|Ave|Road|Rd|Boulevard|Blvd|Way|Drive|Dr|Lane|Ln|Pike|Highway)\b")
 
 
+# Any state DOT's project record: what the work is decides how likely it is to need private land.
+DOT_WORK = [
+    (r"new (?:road|route|highway|alignment|location|corridor|connector|interchange|freeway|expressway)|bypass|\bextension\b|extend ", 95, "highway"),
+    (r"new interchange", 95, "interchange"),
+    (r"realign|relocat", 90, "highway"),
+    (r"widen|add(?:ed|ing|itional)? (?:travel |through |general purpose )?lanes?|capacity|duali[sz]|(?:four|six|4|6)[- ]lan(?:e|ing)|two[- ]way left|passing lane|auxiliary lane", 85, "highway"),
+    (r"grade separation|overpass|underpass|new bridge|flyover", 75, "bridge"),
+    (r"interchange", 70, "interchange"),
+    (r"park[- ](?:and|&|n)[- ]ride|transit (?:center|station|facility)|rail (?:station|extension)", 65, "transit"),
+    (r"roundabout|intersection|turn(?:ing)? lanes?|channeliz", 60, "highway"),
+    (r"reconstruct|rebuild|moderni[sz]", 45, "highway"),
+    (r"bridge (?:replace|reconstruct)|replace (?:the )?bridge|culvert replace", 40, "bridge"),
+    (r"shoulder|safety|slide|slope|rockfall|curve", 30, "highway"),
+    (r"sidewalk|pedestrian|bike|bicycl|trail|shared[- ]use|multi[- ]?use|ada\b", 25, "other"),
+    (r"signal|lighting|drainage|culvert|bridge (?:rehab|repair|preserv|deck|paint)", 18, "other"),
+    (r"resurfac|overlay|pavement|repav|mill|seal|preserv|rehabilitat|striping|marking|guardrail|guiderail|sign(?:s|ing)\b|maint|\bits\b|landscap|study|planning", 5, "other"),
+]
+DOT_STAGE = [
+    (r"complete|closed|finished|open to traffic|construct|under contract|awarded|\blet\b|active work|in progress", "construction"),
+    (r"right[- ]of[- ]way|\brow\b|r/w|acquisition|utilit", "row_acquisition"),
+    (r"design|engineer|\bpe\b|plans?\b|ps&e|final", "design"),
+    (r"environment|nepa|scoping|study|concept|alternativ", "environmental_review"),
+    (r"plan|program|proposed|candidate|future|stip|\btip\b|long[- ]range|unfunded|funded|scheduled|develop|pending|not started", "planning"),
+]
+
+
+def classify_dot(signal: Dict[str, Any]) -> Dict[str, Any]:
+    raw = json.loads(signal["raw"]) if isinstance(signal.get("raw"), str) else (signal.get("raw") or {})
+    work = "%s. %s" % (raw.get("_work_type") or "", signal.get("title") or "")
+    text = "%s %s" % (work, signal.get("body") or "")
+    likelihood, ptype = 10, "other"
+    for pat, weight, kind in DOT_WORK:          # the stated type of work first, then the description
+        if re.search(pat, work, re.I):
+            likelihood, ptype = weight, kind
+            break
+    else:
+        for pat, weight, kind in DOT_WORK:
+            if re.search(pat, text, re.I):
+                likelihood, ptype = max(10, weight - 10), kind
+                break
+    if likelihood >= 30 and re.search(r"right[- ]of[- ]way|\bROW\b|acquisition|new alignment|relocat", text, re.I):
+        likelihood = min(100, likelihood + 8)
+    status = str(raw.get("_status") or "")
+    stage = next((st for pat, st in DOT_STAGE if re.search(pat, status, re.I)), "planning" if not status else "unknown")
+    cost = raw.get("_cost")
+    geometry = json.loads(signal["geometry"]) if isinstance(signal.get("geometry"), str) else signal.get("geometry")
+    c = geo.center(geometry)
+    return {
+        "name": signal.get("title"), "project_type": ptype, "stage": stage, "acquisition_likelihood": likelihood,
+        "score": overall_score(likelihood, stage, cost), "summary": signal.get("body") or signal.get("title"),
+        "est_cost": cost, "contact": None, "locations": [], "parcel_ids_mentioned": [],
+        "geometry": geometry, "lat": c[0] if c else None, "lon": c[1] if c else None,
+    }
+
+
 def classify_keywords(signal: Dict[str, Any]) -> Dict[str, Any]:
     text = "%s. %s" % (signal.get("title") or "", signal.get("body") or "")
     likelihood = 0

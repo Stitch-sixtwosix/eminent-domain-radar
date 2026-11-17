@@ -22,7 +22,7 @@ LEAD_SQL = """
 SELECT l.id, l.score, l.match_reason, l.distance_m, l.status, l.notes, l.created_at,
        pa.apn, pa.county AS parcel_county, pa.address, pa.owner, pa.mailing_address, pa.market_value, pa.acres,
        pa.layer, p.id AS project_id, p.name AS project, p.project_type, p.stage, p.score AS project_score,
-       p.est_cost, s.source, s.url, s.agency, pa.owner_kind, pa.mailable, pa.email_contacts,
+       p.est_cost, s.source, s.url, s.agency, s.state, pa.owner_kind, pa.mailable, pa.email_contacts,
        (SELECT MAX(o.created_at) FROM outreach o WHERE o.lead_id = l.id AND o.channel = 'postcard'
           AND o.status = 'sent') AS postcard_at,
        (SELECT MAX(o.created_at) FROM outreach o WHERE o.lead_id = l.id AND o.channel = 'postcard'
@@ -75,8 +75,11 @@ OUTREACH_FILTERS = {
 }
 
 
-def _lead_filters(project_id, status, county, min_score, owner_only, q, outreach_filter=None, stage=None, list_id=None):
+def _lead_filters(project_id, status, county, min_score, owner_only, q, outreach_filter=None, stage=None, list_id=None,
+                  state=None):
     where, params = ["l.score >= ?"], [min_score]
+    if state:
+        where.append("s.state = ?"); params.append(state.upper())
     if list_id is not None:
         where.append(outreach.IN_LIST); params.append(list_id)
     if project_id is not None:
@@ -107,30 +110,40 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
         return FileResponse(STATIC / "index.html", headers={"Cache-Control": "no-cache"})
 
     @app.get("/api/stats")
-    def stats() -> Dict[str, Any]:
+    def stats(state: Optional[str] = None) -> Dict[str, Any]:
+        st = state.upper() if state else None
+        w = " AND s.state = '%s'" % st if st and st.isalpha() and len(st) == 2 else ""
         one = lambda sql: db.rows(sql)[0]["n"]
+        proj = "FROM projects p JOIN signals s ON s.id = p.signal_id WHERE p.score >= 60" + w
+        lead = "FROM leads l JOIN parcels pa ON pa.id = l.parcel_id JOIN projects p ON p.id = l.project_id " \
+               "JOIN signals s ON s.id = p.signal_id WHERE 1=1" + w
         return {
-            "signals": one("SELECT COUNT(*) n FROM signals"),
-            "updated": one("SELECT MAX(fetched_at) n FROM signals"),
-            "projects": one("SELECT COUNT(*) n FROM projects WHERE score >= 60"),
-            "leads": one("SELECT COUNT(*) n FROM leads"),
-            "leads_with_owner": one("SELECT COUNT(*) n FROM leads l JOIN parcels p ON p.id=l.parcel_id "
-                                    "WHERE p.owner IS NOT NULL"),
+            "state": st,
+            "states": [dict(r, name=STATE_NAMES.get(r["code"], r["code"])) for r in db.rows(
+                "SELECT s.state AS code, COUNT(*) AS projects FROM projects p JOIN signals s ON s.id = p.signal_id "
+                "WHERE p.score >= 60 GROUP BY s.state ORDER BY s.state")],
+            "signals": one("SELECT COUNT(*) n FROM signals s WHERE 1=1" + w),
+            "updated": one("SELECT MAX(fetched_at) n FROM signals s WHERE 1=1" + w),
+            "projects": one("SELECT COUNT(*) n " + proj),
+            "leads": one("SELECT COUNT(*) n " + lead),
+            "leads_with_owner": one("SELECT COUNT(*) n " + lead + " AND pa.owner IS NOT NULL"),
             "counties": [r["county"] for r in db.rows(
-                "SELECT DISTINCT county FROM signals WHERE county IS NOT NULL ORDER BY county")],
+                "SELECT DISTINCT s.county FROM signals s WHERE s.county IS NOT NULL" + w + " ORDER BY s.county")],
             "types": [r["project_type"] for r in db.rows(
-                "SELECT DISTINCT project_type FROM projects ORDER BY project_type")],
+                "SELECT DISTINCT p.project_type FROM projects p JOIN signals s ON s.id = p.signal_id WHERE 1=1" + w
+                + " ORDER BY p.project_type")],
             "statuses": STATUSES,
             "stages": [{"key": k, "label": label, "projects": n} for (k, label, _), n in
-                       ((st, one("SELECT COUNT(*) n FROM projects WHERE score >= 60 AND stage = '%s'" % st[0]))
-                        for st in STAGE_ORDER)],
+                       ((sg, one("SELECT COUNT(*) n " + proj + " AND p.stage = '%s'" % sg[0])) for sg in STAGE_ORDER)],
         }
 
     @app.get("/api/projects")
     def projects(min_score: int = 60, county: Optional[str] = None, project_type: Optional[str] = None,
                  source: Optional[str] = None, q: Optional[str] = None, stage: Optional[str] = None,
-                 limit: int = 500) -> List[Dict[str, Any]]:
+                 state: Optional[str] = None, limit: int = 500) -> List[Dict[str, Any]]:
         where, params = ["p.score >= ?"], [min_score]
+        if state:
+            where.append("s.state = ?"); params.append(state.upper())
         if county:
             where.append("s.county = ?"); params.append(county.upper())
         if project_type:
@@ -144,18 +157,18 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
         rows = db.rows(
             """SELECT p.id, p.name, p.project_type, p.stage, p.acquisition_likelihood, p.score, p.summary,
                       p.est_cost, p.contact, p.geometry, p.lat, p.lon, p.matched_at, p.engine,
-                      s.source, s.url, s.agency, s.county, s.published, s.raw,
+                      s.source, s.url, s.agency, s.county, s.state, s.published, s.raw,
                       (SELECT COUNT(*) FROM leads l WHERE l.project_id = p.id) AS lead_count
                FROM projects p JOIN signals s ON s.id = p.signal_id
                WHERE %s ORDER BY p.score DESC, p.est_cost DESC LIMIT ?""" % " AND ".join(where),
-            params + [min(limit, 2000)],
+            params + [min(limit, 20000)],
         )
         for r in rows:
             r["geometry"] = json.loads(r["geometry"]) if r["geometry"] else None
             raw = json.loads(r.pop("raw") or "{}")
             r["timeline"] = timeline(r["stage"], raw if isinstance(raw, dict) else {})
             r["score_parts"] = score_breakdown(r["acquisition_likelihood"], r["stage"], r["est_cost"], r["score"])
-        return rows
+        return rows[:limit]
 
     def one_lead(lead_id: int) -> Dict[str, Any]:
         rows = db.rows(LEAD_SQL + " WHERE l.id = ?", (lead_id,))
@@ -349,8 +362,8 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
     def leads(project_id: Optional[int] = None, status: Optional[str] = None, county: Optional[str] = None,
               min_score: int = 0, owner_only: bool = False, q: Optional[str] = None,
               outreach: Optional[str] = None, stage: Optional[str] = None, list_id: Optional[int] = None,
-              limit: int = 300) -> List[Dict[str, Any]]:
-        where, params = _lead_filters(project_id, status, county, min_score, owner_only, q, outreach, stage, list_id)
+              state: Optional[str] = None, limit: int = 300) -> List[Dict[str, Any]]:
+        where, params = _lead_filters(project_id, status, county, min_score, owner_only, q, outreach, stage, list_id, state)
         return db.rows(LEAD_SQL + where + " ORDER BY l.score DESC, pa.market_value DESC LIMIT ?",
                        params + [min(limit, 5000)])
 
@@ -381,12 +394,14 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
     return app
 
 
-US_STATES = ("Alabama Alaska Arizona Arkansas California Colorado Connecticut Delaware Florida Georgia Hawaii Idaho Illinois "
-             "Indiana Iowa Kansas Kentucky Louisiana Maine Maryland Massachusetts Michigan Minnesota Mississippi Missouri Montana "
-             "Nebraska Nevada New_Hampshire New_Jersey New_Mexico New_York North_Carolina North_Dakota Ohio Oklahoma Oregon "
-             "Pennsylvania Rhode_Island South_Carolina South_Dakota Tennessee Texas Utah Vermont Virginia Washington West_Virginia "
-             "Wisconsin Wyoming").replace("_", "\u00a0").split()
-US_STATES = [n.replace("\u00a0", " ") for n in US_STATES]
+US_STATES = ("Alabama,Alaska,Arizona,Arkansas,California,Colorado,Connecticut,Delaware,Florida,Georgia,Hawaii,Idaho,Illinois,"
+             "Indiana,Iowa,Kansas,Kentucky,Louisiana,Maine,Maryland,Massachusetts,Michigan,Minnesota,Mississippi,Missouri,Montana,"
+             "Nebraska,Nevada,New Hampshire,New Jersey,New Mexico,New York,North Carolina,North Dakota,Ohio,Oklahoma,Oregon,"
+             "Pennsylvania,Rhode Island,South Carolina,South Dakota,Tennessee,Texas,Utah,Vermont,Virginia,Washington,West Virginia,"
+             "Wisconsin,Wyoming").split(",")
+STATE_CODES = dict(zip(US_STATES, "AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM NY "
+                                  "NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY".split()))
+STATE_NAMES = {v: k for k, v in STATE_CODES.items()}
 PRIVATE_BUCKET = "app-data"
 
 
@@ -505,34 +520,43 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
     from fastapi.testclient import TestClient
 
     client = TestClient(create_app(cfg))
-    stats = client.get("/api/stats").json()
-    stats["generated"] = date.today().isoformat()
-    projects = client.get("/api/projects", params={"min_score": min_score, "limit": 2000}).json()
-    keep = ("id", "project_id", "project_score", "score", "match_reason", "distance_m", "status", "apn", "parcel_county", "address",
-            "owner", "mailing_address", "market_value", "acres", "owner_kind", "mailable", "email_contacts")
     db = DB(cfg["database"])
     layer_cfg = {x.get("name"): x for x in cfg.get("parcel_layers") or []}
-    layers: List[Dict[str, Any]] = []      # each lead points at one of these so the page can fetch its own boundary
-    layer_index: Dict[str, int] = {}
-    leads = []
+    keep = ("id", "project_id", "project_score", "score", "match_reason", "distance_m", "status", "apn", "parcel_county", "address",
+            "owner", "mailing_address", "market_value", "acres", "owner_kind", "mailable", "email_contacts")
     extra = {r["lead_id"]: r for r in db.rows(
         "SELECT l.id AS lead_id, pa.layer, pa.attributes, pa.apn FROM leads l JOIN parcels pa ON pa.id = l.parcel_id")}
-    for r in db.rows(LEAD_SQL + " ORDER BY l.score DESC, pa.market_value DESC"):
-        row = {k: r[k] for k in keep}
-        x = extra[r["id"]]
-        parcel = {"apn": x["apn"], "attributes": json.loads(x["attributes"] or "{}")}
-        facts = parceldetail.background(parcel)["facts"]
-        prof = parceldetail.owner_profile(r, facts, [])
-        row["facts"] = [[f["label"], f["value"]] for f in facts]
-        row["own"] = [prof["location"], prof["occupancy"]]
-        layer = layer_cfg.get(x["layer"])
-        q = parceldetail.boundary_query(layer, parcel) if layer else None
-        if q:
-            if x["layer"] not in layer_index:
-                layer_index[x["layer"]] = len(layers)
-                layers.append({"name": x["layer"], "url": q.pop("url"), "provider": q.pop("provider"), "field": q.pop("field")})
-            row["bq"] = dict({k: v for k, v in q.items() if k not in ("url", "provider", "field")}, l=layer_index[x["layer"]])
-        leads.append(row)
+
+    def state_data(code: Optional[str]) -> Dict[str, Any]:
+        """Everything the app shows for one state (or for all of them when code is None)."""
+        q = {"state": code} if code else {}
+        st = client.get("/api/stats", params=q).json()
+        st["generated"] = date.today().isoformat()
+        projs = client.get("/api/projects", params=dict(q, min_score=min_score, limit=20000)).json()
+        layers: List[Dict[str, Any]] = []      # each lead points at one of these so the page can fetch its own boundary
+        layer_index: Dict[str, int] = {}
+        rows_out = []
+        where, params = (" WHERE s.state = ?", (code,)) if code else ("", ())
+        for r in db.rows(LEAD_SQL + where + " ORDER BY l.score DESC, pa.market_value DESC", params):
+            row = {k: r[k] for k in keep}
+            x = extra[r["id"]]
+            parcel = {"apn": x["apn"], "attributes": json.loads(x["attributes"] or "{}")}
+            facts = parceldetail.background(parcel)["facts"]
+            prof = parceldetail.owner_profile(r, facts, [])
+            row["facts"] = [[f["label"], f["value"]] for f in facts]
+            row["own"] = [prof["location"], prof["occupancy"]]
+            layer = layer_cfg.get(x["layer"])
+            bq = parceldetail.boundary_query(layer, parcel) if layer else None
+            if bq:
+                if x["layer"] not in layer_index:
+                    layer_index[x["layer"]] = len(layers)
+                    layers.append({"name": x["layer"], "url": bq.pop("url"), "provider": bq.pop("provider"), "field": bq.pop("field")})
+                row["bq"] = dict({k: v for k, v in bq.items() if k not in ("url", "provider", "field")}, l=layer_index[x["layer"]])
+            rows_out.append(row)
+        return {"stats": st, "projects": projs, "leads": rows_out, "layers": layers}
+
+    whole = state_data(None)
+    stats, projects, leads, layers = whole["stats"], whole["projects"], whole["leads"], whole["layers"]
     # The hub is published read-only: totals, the template and the activity log, with sending switched off and
     # Apollo-sourced contacts left out.
     hub = client.get("/api/outreach/hub").json()
@@ -565,7 +589,8 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
     fill["photo"] = ('<figure class="portrait"><img src="img/william-duerr.jpg" width="520" height="520" loading="lazy" '
                      'alt="William Christopher Duerr"></figure>') if (landing / "img" / "william-duerr.jpg").exists() else ""
     fill["contact_email"] = (cfg.get("site") or {}).get("contact_email") or "info@duerrlawpc.com"
-    live = (cfg.get("site") or {}).get("live_states") or ["Pennsylvania"]
+    live = (cfg.get("site") or {}).get("live_states") or [
+        STATE_NAMES.get(x["code"], x["code"]) for x in stats.get("states") or []] or ["Pennsylvania"]
     fill["live_states"] = ", ".join(live)
     fill["state_options"] = "".join('<option value="%s">%s%s</option>' % (n, n, "" if n in live else " (coming)") for n in US_STATES)
     fill["state_names"] = "|".join(US_STATES)
@@ -611,12 +636,21 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
                 '  window.__etToken({token: session.access_token, plan: meta.plan, state: meta.state}); }</script>\n')
         html = html.replace("</head>", gate + "</head>", 1)
         assert "login.html?next=app" in html
-    payload = json.dumps({"stats": stats, "projects": projects, "leads": leads, "layers": layers,
-                          "template": outreach.template(cfg), "hub": hub, "contacts": {}}, separators=(",", ":")).encode()
-    # With a Supabase secret key the data goes to a private bucket only signed-in users can read, and no copy is
-    # published on the open site. Without one (or if the upload fails) the data file is published as before.
-    live_slugs = [state_slug(n) for n in ((cfg.get("site") or {}).get("live_states") or ["Pennsylvania"])]
-    private = _upload_private(cfg, payload, upload_client, live_slugs[0])
+    common = {"template": outreach.template(cfg), "hub": hub, "contacts": {}}
+    payload = json.dumps(dict(whole, **common), separators=(",", ":")).encode()
+    # With a Supabase secret key each state's data goes to a private bucket that only subscribers to that state
+    # can read, and no copy is published on the open site. Without one (or if an upload fails) the data file is
+    # published openly as before.
+    codes = [x["code"] for x in stats.get("states") or []] or ["PA"]
+    live_slugs, private = [], True
+    for code in codes:
+        slug = state_slug(STATE_NAMES.get(code, code))
+        one = payload if len(codes) == 1 else json.dumps(dict(state_data(code), **common), separators=(",", ":")).encode()
+        if _upload_private(cfg, one, upload_client, slug):
+            live_slugs.append(slug)
+        else:
+            private = False
+            break
     if private:
         html = html.replace('window.EDRADAR_STATIC = true;', 'window.EDRADAR_STATIC = true; window.EDRADAR_PRIVATE = true; '
                             'window.EDRADAR_STATES = %s;' % json.dumps(live_slugs), 1)

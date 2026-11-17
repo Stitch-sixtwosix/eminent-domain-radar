@@ -149,6 +149,11 @@ class DB:
         self.conn.executescript(SCHEMA)
         if "geometry" not in [r["name"] for r in self.conn.execute("PRAGMA table_info(parcels)")]:
             self.conn.execute("ALTER TABLE parcels ADD COLUMN geometry TEXT")   # cached boundary rings
+        for table in ("signals", "parcels"):       # every record carries its state; rows from before that are Pennsylvania
+            if "state" not in [r["name"] for r in self.conn.execute("PRAGMA table_info(%s)" % table)]:
+                self.conn.execute("ALTER TABLE %s ADD COLUMN state TEXT DEFAULT 'PA'" % table)
+                self.conn.execute("UPDATE %s SET state='PA' WHERE state IS NULL" % table)
+        self.conn.execute("CREATE INDEX IF NOT EXISTS idx_signals_state ON signals(state)")
         if "owner_kind" not in [r["name"] for r in self.conn.execute("PRAGMA table_info(parcels)")]:
             self.conn.execute("ALTER TABLE parcels ADD COLUMN owner_kind TEXT")       # individual, company, government, unknown
             self.conn.execute("ALTER TABLE parcels ADD COLUMN mailable INTEGER")      # 1 when the mailing address parses
@@ -174,6 +179,7 @@ class DB:
         """
         params = {k: s.get(k) for k in ("source", "external_id", "title", "body", "url", "agency",
                                           "county", "municipality", "published")}
+        params["state"] = (s.get("state") or "PA").upper()
         params["geometry"] = _json(s.get("geometry"))
         params["raw"] = _json(s.get("raw"))
         existing = self.conn.execute(
@@ -183,9 +189,9 @@ class DB:
         if existing is None:
             self.conn.execute(
                 """INSERT INTO signals (source, external_id, title, body, url, agency, county, municipality,
-                                        published, geometry, raw)
+                                        published, geometry, raw, state)
                    VALUES (:source, :external_id, :title, :body, :url, :agency, :county, :municipality,
-                           :published, :geometry, :raw)""",
+                           :published, :geometry, :raw, :state)""",
                 params,
             )
             self.conn.commit()
@@ -194,7 +200,7 @@ class DB:
             self.conn.execute(
                 """UPDATE signals SET title=:title, body=:body, url=:url, agency=:agency, county=:county,
                      municipality=:municipality, published=:published, geometry=:geometry, raw=:raw,
-                     updated_at=datetime('now') WHERE source=:source AND external_id=:external_id""",
+                     state=:state, updated_at=datetime('now') WHERE source=:source AND external_id=:external_id""",
                 params,
             )
             self.conn.execute("DELETE FROM projects WHERE signal_id=? AND NOT EXISTS "
@@ -246,7 +252,7 @@ class DB:
 
     def projects_to_match(self, min_score: int, limit: int) -> List[sqlite3.Row]:
         return self.conn.execute(
-            """SELECT p.*, s.county FROM projects p JOIN signals s ON s.id=p.signal_id
+            """SELECT p.*, s.county, s.state FROM projects p JOIN signals s ON s.id=p.signal_id
                WHERE p.score >= ? AND p.matched_at IS NULL
                  AND (p.geometry IS NOT NULL OR p.parcel_ids_mentioned != '[]')
                ORDER BY p.score DESC LIMIT ?""",
@@ -261,11 +267,12 @@ class DB:
     def upsert_parcel(self, p: Dict[str, Any]) -> int:
         row = {k: p.get(k) for k in ("layer", "apn", "county", "address", "owner", "mailing_address",
                                      "market_value", "acres")}
+        row["state"] = (p.get("state") or "PA").upper()
         row["attributes"] = json.dumps(p.get("attributes") or {})
         self.conn.execute(
-            """INSERT INTO parcels (layer, apn, county, address, owner, mailing_address, market_value, acres, attributes)
-               VALUES (:layer, :apn, :county, :address, :owner, :mailing_address, :market_value, :acres, :attributes)
-               ON CONFLICT(layer, apn) DO UPDATE SET county=excluded.county, address=excluded.address,
+            """INSERT INTO parcels (layer, apn, county, address, owner, mailing_address, market_value, acres, attributes, state)
+               VALUES (:layer, :apn, :county, :address, :owner, :mailing_address, :market_value, :acres, :attributes, :state)
+               ON CONFLICT(layer, apn) DO UPDATE SET state=excluded.state, county=excluded.county, address=excluded.address,
                  owner=excluded.owner, mailing_address=excluded.mailing_address,
                  market_value=excluded.market_value, acres=excluded.acres, attributes=excluded.attributes,
                  owner_kind=CASE WHEN excluded.owner IS parcels.owner AND excluded.mailing_address IS parcels.mailing_address

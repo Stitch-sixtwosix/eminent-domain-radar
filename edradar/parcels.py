@@ -15,9 +15,12 @@ from . import geo
 from .http import Http
 
 
-def pick_layer(layers: List[Dict[str, Any]], county: Optional[str]) -> Optional[Dict[str, Any]]:
-    county = (county or "").upper()
+def pick_layer(layers: List[Dict[str, Any]], county: Optional[str], state: Optional[str] = "PA") -> Optional[Dict[str, Any]]:
+    """The first layer for this state that covers the county; a layer with no counties covers its whole state."""
+    county, state = (county or "").upper(), (state or "PA").upper()
     for layer in layers:
+        if (layer.get("state") or "PA").upper() != state:
+            continue
         wanted = [c.upper() for c in layer.get("counties") or []]
         if not wanted or county in wanted:
             return layer

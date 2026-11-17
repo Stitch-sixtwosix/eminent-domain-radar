@@ -581,3 +581,33 @@ def test_private_data_upload(tmp_path, monkeypatch):
     export_static(cfg, str(tmp_path / "site2"), upload_client=bad)
     assert (tmp_path / "site2" / "app" / "data.json").exists()
     assert "EDRADAR_PRIVATE = true" not in (tmp_path / "site2" / "app" / "index.html").read_text()
+
+
+def test_state_dot_source_and_classifier(tmp_path):
+    from edradar.classify import classify_dot
+    from edradar.parcels import pick_layer
+    from edradar.sources import dot_arcgis
+    from edradar.web.app import STATE_CODES, STATE_NAMES, US_STATES
+
+    assert len(US_STATES) == 50 and len(STATE_CODES) == 50 and STATE_NAMES["NH"] == "New Hampshire"
+    layer = {"state": "oh", "name": "ODOT projects", "key": "odot", "url": "https://x/FeatureServer/0", "agency": "Ohio DOT",
+             "fields": {"id": "PID", "name": "PROJECT_NAME", "description": "DESCR", "work_type": ["WORK", "TYPE"],
+                        "cost": "COST", "status": "PHASE", "let_date": "LET", "county": "COUNTY"}}
+    attrs = {"PID": 77, "PROJECT_NAME": "FRA-70 widening", "DESCR": "Add lanes on I-70 from A to B", "WORK": None,
+             "TYPE": "Major Widening", "COST": "$12,500,000", "PHASE": "Preliminary Engineering", "LET": 1924992000000,
+             "COUNTY": "Franklin County"}
+    sig = dot_arcgis.to_signal(layer, attrs, {"paths": [[[-83.0, 39.9], [-82.9, 39.95]]]})
+    assert sig["source"] == "dot:OH" and sig["state"] == "OH" and sig["external_id"] == "odot:77" and sig["county"] == "FRANKLIN"
+    assert sig["raw"]["_cost"] == 12500000.0 and sig["raw"]["_let"].startswith("2031-") and "Major Widening" in sig["body"]
+    out = classify_dot(dict(sig, raw=json.dumps(sig["raw"]), geometry=json.dumps(sig["geometry"])))
+    assert out["acquisition_likelihood"] == 85 and out["stage"] == "design" and out["project_type"] == "highway" and out["score"] >= 80
+    paving = dot_arcgis.to_signal(layer, dict(attrs, PID=78, TYPE="Resurfacing", PROJECT_NAME="FRA-33 paving", DESCR="Mill and overlay"), None)
+    assert classify_dot(paving)["acquisition_likelihood"] <= 10
+    built = dot_arcgis.to_signal(layer, dict(attrs, PID=79, PHASE="Under Construction"), None)
+    assert classify_dot(built)["stage"] == "construction"
+
+    db = DB(str(tmp_path / "s.db"))
+    assert db.upsert_signal(sig) and db.rows("SELECT state FROM signals")[0]["state"] == "OH"
+    layers = [{"name": "PA county", "counties": ["FRANKLIN"]}, {"name": "Ohio statewide", "state": "OH"}]
+    assert pick_layer(layers, "FRANKLIN", "OH")["name"] == "Ohio statewide"       # same county name, different state
+    assert pick_layer(layers, "FRANKLIN", "PA")["name"] == "PA county" and pick_layer(layers, "ADAMS", "NJ") is None

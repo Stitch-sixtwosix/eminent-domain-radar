@@ -385,6 +385,7 @@
     #parcel { top: 0; }
   }
   .demo .mode, .demo .done { display: none; }
+  #f-state { height: 32px; max-width: 170px; }
   #panes { display: none; }
   @media (max-width: 720px) {
     /* A phone shows one thing at a time: the project list, the map or the lead table, switched from a bar at the foot. */
@@ -459,6 +460,7 @@
 <body>
 <header>
   <div class="brand"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7.5" fill="#1b2333"/><path d="M8 7h16v4.2H12.2v13.6H24V29H8z" fill="#fff" transform="translate(0 -2)"/><path d="M12.2 13.9H32v4.2H12.2z" fill="#e0662e"/></svg><b class="wordmark" aria-label="EminentTracker">Eminent<span>Tracker</span></b></div>
+  <select id="f-state" hidden aria-label="State"></select>
   <nav class="views" id="views" hidden aria-label="Views">
     <button type="button" data-view="leads" aria-pressed="true">Leads</button><button type="button" data-view="hub" aria-pressed="false">Outreach</button>
   </nav>
@@ -610,7 +612,7 @@ const DEMO_OWNERS = [["SAMPLE FAMILY TRUST", "100 EXAMPLE RD, ANYTOWN, ST 00000"
 if (DEMO) document.documentElement.classList.add("demo");
 let leadTicket = 0, TOTAL_LEADS = 0, STATUSES = [], OUT = null, projects = [], selected = null, layers = {}, leadRows = [], listView = null;
 const picked = new Set();     // leads ticked in the table, to be saved to a client list
-const HOME = [[39.72, -80.52], [42.27, -74.69]];
+let HOME = [[39.72, -80.52], [42.27, -74.69]];      // replaced by the extent of the open state's projects
 const map = L.map("map", {preferCanvas: true, zoomSnap: 0, zoomDelta: 0.5, scrollWheelZoom: false, minZoom: 5}).fitBounds(HOME);
 // Smooth zoom for trackpads and mouse wheels. Each scroll or pinch event moves a zoom *goal*; an animation loop
 // glides the map toward it every frame, keeping the point under the pointer fixed. It moves the view with Leaflet's
@@ -768,13 +770,29 @@ async function staticApi(path) {
   if (!SNAP && window.EDRADAR_PRIVATE) {
     // The data lives in a private store: it is fetched with this visitor's own sign-in and unpacked here.
     const who = await window.ET_TOKEN, auth = window.ET_AUTH, live = window.EDRADAR_STATES || [];
-    // An all-states plan opens any live state; a single-state plan can only ever load its own.
-    const state = who.plan === "all" ? live[0] : String(who.state || "").toLowerCase().replace(/ /g, "-");
+    // An all-states plan opens any live state (chosen in the bar, kept in the address); a single-state plan can only load its own.
+    const asked = new URLSearchParams(location.search).get("state");
+    const state = who.plan === "all" ? (live.includes(asked) ? asked : live[0]) : String(who.state || "").toLowerCase().replace(/ /g, "-");
     if (!live.includes(state)) throw new Error("your plan's state is not live yet. We will email you as soon as it is");
+    if (who.plan === "all" && live.length > 1) {
+      const pick = $("f-state");
+      pick.innerHTML = live.map(x => `<option value="${x}"${x === state ? " selected" : ""}>${x.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())}</option>`).join("");
+      pick.hidden = false;
+      pick.onchange = () => { const u = new URL(location.href); u.searchParams.set("state", pick.value); u.searchParams.delete("project"); u.searchParams.delete("lead"); location.href = u; };
+    }
     const r = await fetch(auth.url + "/storage/v1/object/authenticated/app-data/states/" + state + ".json.gz?v=" + encodeURIComponent(window.EDRADAR_BUILD || ""),
                           {headers: {Authorization: "Bearer " + who.token, apikey: auth.key}});
     if (!r.ok) throw new Error("the data could not be opened for this account (" + r.status + ")");
     SNAP = await new Response(r.body.pipeThrough(new DecompressionStream("gzip"))).json();
+  }
+  if (SNAP && !SNAP.fitted) {            // frame the map on this state's projects
+    SNAP.fitted = true;
+    const pts = (SNAP.projects || []).filter(p => p.lat != null && p.lon != null);
+    if (pts.length) {
+      const lat = pts.map(p => p.lat), lon = pts.map(p => p.lon);
+      HOME = [[Math.min(...lat) - 0.15, Math.min(...lon) - 0.15], [Math.max(...lat) + 0.15, Math.max(...lon) + 0.15]];
+      if (!selected) map.fitBounds(HOME, {animate: false});
+    }
   }
   if (!SNAP) { const r = await fetch("data.json?v=" + encodeURIComponent(window.EDRADAR_BUILD || "")); if (!r.ok) throw new Error("data.json returned " + r.status); SNAP = await r.json(); }
   const [route, qs] = path.split("?"), q = new URLSearchParams(qs || "");

@@ -9,9 +9,9 @@ from . import parcels as P
 from .db import DB
 from .geocode import Geocoder
 from .http import Http
-from .sources import federal_register, legistar, penndot
+from .sources import federal_register, legistar, penndot, dot_arcgis
 
-SOURCES = {"penndot": penndot, "federal_register": federal_register, "legistar": legistar}
+SOURCES = {"penndot": penndot, "federal_register": federal_register, "legistar": legistar, "dot_arcgis": dot_arcgis}
 
 
 def ingest(cfg: Dict[str, Any], db: DB, only: Optional[str] = None) -> Dict[str, int]:
@@ -40,6 +40,8 @@ def classify(cfg: Dict[str, Any], db: DB) -> int:
         signal = dict(row)
         if signal["source"] == "penndot":
             engine, result = "rules", C.classify_penndot(signal)
+        elif signal["source"].startswith("dot:"):
+            engine, result = "rules", C.classify_dot(signal)
         else:
             if text_classifier is None:
                 text_classifier = C.make_text_classifier(cfg.get("classifier") or {})
@@ -108,7 +110,7 @@ def match(cfg: Dict[str, Any], db: DB, limit: Optional[int] = None) -> int:
     projects = db.projects_to_match(int(m["min_project_score"]), int(limit or m["projects_per_run"]))
     total = 0
     for p in projects:
-        layer = P.pick_layer(layers, p["county"])
+        layer = P.pick_layer(layers, p["county"], p["state"])
         if layer is None or failures.get(layer["name"], 0) >= 3:
             continue
         found = []
@@ -128,7 +130,7 @@ def match(cfg: Dict[str, Any], db: DB, limit: Optional[int] = None) -> int:
         for r in found:
             r.setdefault("county", None)
             r["county"] = r["county"] or p["county"]
-            parcel_id = db.upsert_parcel(dict(r, layer=layer["name"]))
+            parcel_id = db.upsert_parcel(dict(r, layer=layer["name"], state=p["state"]))
             db.upsert_lead(p["id"], parcel_id, r.get("distance_m"), r["reason"],
                            lead_score(p["score"], r["reason"]))
         db.mark_matched(p["id"])
