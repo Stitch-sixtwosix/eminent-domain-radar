@@ -134,6 +134,11 @@ def test_static_export(tmp_path):
     assert "for eminent domain attorneys" in home and "{{" not in home and (tmp_path / "site" / "signup.html").exists()
     assert (tmp_path / "site" / "auth-config.js").read_text() == 'window.ET_AUTH = {"url": "", "key": "", "google": false};\n'
     assert (tmp_path / "site" / "login.html").exists() and (tmp_path / "site" / "account.html").exists()
+    blog = (tmp_path / "site" / "blog" / "index.html").read_text()
+    post = (tmp_path / "site" / "blog" / "how-leads-are-scored.html").read_text()
+    assert "how-leads-are-scored.html" in blog and "<h2>Need for private land: up to 60 points</h2>" in post and "{{" not in post
+    assert "https://example.test/blog/how-leads-are-scored.html" in (tmp_path / "site" / "sitemap.xml").read_text()
+    assert "Sitemap: https://example.test/sitemap.xml" in (tmp_path / "site" / "robots.txt").read_text()
     assert (tmp_path / "site" / "site.css").exists() and (tmp_path / "site" / "img" / "overview.jpg").exists()
     assert counts == {"projects": 1, "leads": 1}
     data = json.loads((tmp_path / "site" / "app" / "data.json").read_text())

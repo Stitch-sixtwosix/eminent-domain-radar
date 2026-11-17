@@ -415,6 +415,85 @@ def _upload_private(cfg: Dict[str, Any], payload: bytes, client: Any = None) -> 
         return False
 
 
+def _md(text: str) -> str:
+    """The small part of Markdown the blog uses: ## headings, paragraphs, - lists, **bold**, *italic*, [links](url)."""
+    import html as _html
+    import re
+
+    def inline(t: str) -> str:
+        t = _html.escape(t, quote=False)
+        t = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", t)
+        t = re.sub(r"(?<!\*)\*(?!\*)(.+?)\*", r"<em>\1</em>", t)
+        return re.sub(r"\[([^\]]+)\]\((https?://[^)\s]+|/[^)\s]*)\)", r'<a href="\2">\1</a>', t)
+
+    out: List[str] = []
+    for block in re.split(r"\n\s*\n", text.strip()):
+        lines = block.strip().splitlines()
+        if lines[0].startswith("## "):
+            out.append("<h2>%s</h2>" % inline(lines[0][3:].strip()))
+        elif all(ln.lstrip().startswith("- ") for ln in lines):
+            out.append("<ul>%s</ul>" % "".join("<li>%s</li>" % inline(ln.lstrip()[2:]) for ln in lines))
+        else:
+            out.append("<p>%s</p>" % inline(" ".join(ln.strip() for ln in lines)))
+    return "\n".join(out)
+
+
+def _build_blog(landing: Path, site: Path, fill: Dict[str, str], domain: str) -> None:
+    """Render landing/blog/*.md to /blog/, and write sitemap.xml for every public page."""
+    import html as _html
+    from datetime import date as _date
+
+    shell = (landing / "index.html").read_text()
+    head = shell[:shell.index('<a class="skip"')]
+    header = shell[shell.index('<a class="skip"'):shell.index("<main")].replace('href="#', 'href="/#')
+    footer = shell[shell.index("<footer>"):shell.index("</footer>") + 9]
+    for k, v in fill.items():
+        head, header, footer = (x.replace("{{%s}}" % k, v) for x in (head, header, footer))
+    base = "https://%s" % domain if domain else ""
+
+    def page(path: str, title: str, desc: str, body: str) -> None:
+        import re
+        h = head.replace("<title>EminentTracker: eminent domain leads, years before the notice</title>",
+                         "<title>%s · EminentTracker</title>" % _html.escape(title))
+        h = re.sub(r'<meta name="description" content="[^"]*">',
+                   '<meta name="description" content="%s">\n<base href="/">\n<link rel="canonical" href="%s/%s">'
+                   % (_html.escape(desc, quote=True), base, path), h, 1)
+        h = re.sub(r'<meta property="og:title" content="[^"]*">', '<meta property="og:title" content="%s">' % _html.escape(title, quote=True), h, 1)
+        (site / path).parent.mkdir(parents=True, exist_ok=True)
+        (site / (path if path.endswith(".html") else path + "index.html")).write_text(
+            h + header + '<main id="main" class="doc in">\n' + body + "\n</main>\n\n" + footer + "\n</body>\n</html>\n")
+
+    posts = []
+    for f in sorted((landing / "blog").glob("*.md"), reverse=True):
+        raw = f.read_text()
+        meta: Dict[str, str] = {}
+        if raw.startswith("---"):
+            front, raw = raw[3:].split("\n---", 1)
+            meta = dict((k.strip(), v.strip()) for k, v in (ln.split(":", 1) for ln in front.strip().splitlines() if ":" in ln))
+        when = _date.fromisoformat(meta.get("date") or f.name[:10])
+        posts.append({"slug": f.stem[11:] if f.stem[:4].isdigit() else f.stem, "title": meta.get("title") or f.stem,
+                      "desc": meta.get("description") or "", "date": when, "html": _md(raw)})
+    posts.sort(key=lambda x: x["date"], reverse=True)
+    nice = lambda d: d.strftime("%B %-d, %Y")
+    for x in posts:
+        page("blog/%s.html" % x["slug"], x["title"], x["desc"],
+             '<p class="updated"><a href="blog/">Blog</a> · <time datetime="%s">%s</time></p>\n<h1>%s</h1>\n%s\n'
+             '<p class="post-cta"><a class="btn" href="signup.html">See the leads in your state</a></p>'
+             % (x["date"].isoformat(), nice(x["date"]), _html.escape(x["title"]), x["html"]))
+    listing = "".join('<li><a href="blog/%s.html">%s</a><time datetime="%s">%s</time><p>%s</p></li>'
+                      % (x["slug"], _html.escape(x["title"]), x["date"].isoformat(), nice(x["date"]), _html.escape(x["desc"])) for x in posts)
+    page("blog/", "Blog", "Notes on eminent domain practice, public project planning and reaching property owners early.",
+         '<h1>Blog</h1>\n<p class="updated">Eminent domain practice, public project planning and reaching owners early.</p>\n'
+         '<ul class="posts">%s</ul>' % listing)
+    if base:
+        urls = [("", None), ("blog/", posts[0]["date"] if posts else None)] + [("blog/%s.html" % x["slug"], x["date"]) for x in posts] \
+            + [(n, None) for n in ("signup.html", "terms.html", "privacy.html", "compliance.html")]
+        (site / "sitemap.xml").write_text(
+            '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+            + "".join("  <url><loc>%s/%s</loc>%s</url>\n" % (base, u, "<lastmod>%s</lastmod>" % d.isoformat() if d else "") for u, d in urls)
+            + "</urlset>\n")
+
+
 def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload_client: Any = None) -> Dict[str, int]:
     """Write a read-only copy of the dashboard (index.html + data.json) that any static host can serve."""
     from datetime import date
@@ -490,6 +569,7 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
         for k, v in fill.items():
             page = page.replace("{{%s}}" % k, v)
         (site / name).write_text(page)
+    _build_blog(landing, site, fill, (cfg.get("site") or {}).get("domain") or "")
     shutil.copyfile(landing / "site.css", site / "site.css")
     shutil.copyfile(landing / "auth.js", site / "auth.js")
     # Accounts switch on when a Supabase project is configured. Its URL and "anon" key are public by design;
@@ -535,7 +615,9 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
         (out / "data.json").write_bytes(payload)
     (out / "index.html").write_text(html)
     (site / ".nojekyll").write_text("")
-    (site / "robots.txt").write_text("User-agent: *\nDisallow: /app/\n")
+    domain = (cfg.get("site") or {}).get("domain")
+    (site / "robots.txt").write_text("User-agent: *\nDisallow: /app/\nDisallow: /account.html\n"
+                                     + ("Sitemap: https://%s/sitemap.xml\n" % domain if domain else ""))
     domain = (cfg.get("site") or {}).get("domain")
     if domain:                       # GitHub Pages serves the snapshot at this address while the file is present
         (site / "CNAME").write_text(domain.strip() + "\n")

@@ -140,6 +140,15 @@ form .agree { display: flex; align-items: flex-start; gap: 10px; font-weight: 40
 form .agree input { width: 18px; height: 18px; margin: 3px 0 0; flex: none; accent-color: var(--accent); }
 form .agree a { color: var(--accent); }
 form .agree .err { flex-basis: 100%; }
+.posts { list-style: none !important; padding: 0 !important; margin-top: 32px !important; }
+.posts li { padding: 22px 0; border-top: 1px solid var(--line); }
+.posts li + li { margin-top: 0; }
+.posts a { display: block; font-size: 21px; font-weight: 700; letter-spacing: -0.015em; line-height: 1.25; color: var(--ink); text-decoration: none; }
+.posts a:hover { text-decoration: underline; }
+.posts time { display: block; margin-top: 6px; font-size: 14px; color: var(--muted); }
+.posts p { margin-top: 8px; color: var(--muted); }
+.doc .post-cta { margin-top: 40px; } .doc .post-cta a { color: #fff; }
+.doc em { color: var(--muted); }
 form .hint { display: block; margin-top: 6px; font-weight: 400; font-size: 14px; color: var(--muted); }
 .plans-pick label { align-items: flex-start; padding: 12px 14px; border: 1px solid var(--line-strong); border-radius: 6px; flex: 1 1 220px; }
 .plans-pick label:has(input:checked) { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }
