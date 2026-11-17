@@ -40,7 +40,7 @@ def classify(cfg: Dict[str, Any], db: DB) -> int:
         signal = dict(row)
         if signal["source"] == "penndot":
             engine, result = "rules", C.classify_penndot(signal)
-        elif signal["source"].startswith("dot:"):
+        elif signal["source"].startswith(("dot:", "gis:")):
             try:
                 engine, result = "rules", C.classify_dot(signal)
             except Exception as e:                  # one malformed record must not stop a run of thousands

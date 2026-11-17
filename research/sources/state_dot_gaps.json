@@ -1,0 +1,129 @@
+{
+ "category": "state_dot_gaps",
+ "checked": "2026-11-17",
+ "sources": [
+  {
+   "name": "NHDOT 10 Year Plan - Planning Projects (copy in The Nature Conservancy's NH_Transportation_Source_Data)",
+   "authority": "New Hampshire DOT (copy hosted by The Nature Conservancy)",
+   "states": [
+    "NH"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/F7DSX1DSNSiWmOqh/arcgis/rest/services/NH_Transportation_Source_Data/FeatureServer/0",
+   "verified": true,
+   "record_count": 105,
+   "geometry": "polyline",
+   "fields": {
+    "id": "L2In_Planning_PROJ_NUMBER",
+    "name": "L2In_Planning_PROJ_NAME",
+    "description": "L2In_Planning_PROJ_DESCRIPTION",
+    "status": "L2In_Planning_PROJECT_TYPE",
+    "cost": "L2In_Planning_PROJECT_DOLLARS",
+    "date": "L2In_Planning_AD_DATE"
+   },
+   "planned_filter": "All records are PROJECT_TYPE 'Planning' and IS_TEN_YEAR 'YES' at the time of the copy; drop any whose L2In_Planning_AD_DATE is in the past.",
+   "sample": "{\"L2In_Planning_PROJ_NUMBER\": \"29055\", \"L2In_Planning_PROJ_NAME\": \"RICHMOND\", \"L2In_Planning_PROJ_DESCRIPTION\": \"BRIDGE REPLACEMENT-WHIPPLE HILL RD OVER ROARING BROOK-BR. #065/083\", \"L2In_Planning_PROJECT_TYPE\": \"Planning\", \"L2In_Planning_PROJECT_DOLLARS\": \"     $3,414,378\", \"L2In_Planning_AD_DATE\": 1721088000000}",
+   "restrictions": null,
+   "notes": "THIRD-PARTY, STALE copy: NHDOT's own 'Projects In Planning' layer (maps.dot.nh.gov Projects/NHDOT_PROJECTS_PROPOSALS) exported by TNC; BUILD_DATE 2023-11, layer last edited 2024-03. Only the planning-stage Ten Year Plan projects (105 lines). Same schema as NHDOT's layer incl. HAS_ROW_PLANS, TYP_PROJECT_SHEET (PDF link per project), PROJECT_DOLLARS as padded text. NHDOT's own server still returns error 500 on every query, find and identify call (re-tested 2026-11-17), so this is the only copy with real records found. Use as a stopgap."
+  },
+  {
+   "name": "Nashua Regional Planning Commission MPO Projects Map - Ten-Year Plan Projects (Lines)",
+   "authority": "Nashua Regional Planning Commission (MPO) / NHDOT",
+   "states": [
+    "NH"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services6.arcgis.com/2ZriDy2NFXltCIFR/arcgis/rest/services/Nashua_MPO_Projects_Map/FeatureServer/5",
+   "verified": true,
+   "record_count": 25,
+   "geometry": "polyline",
+   "fields": {
+    "id": "PROJECTNO",
+    "name": "LOCATION",
+    "description": "SUMMARY",
+    "work_type": "TYPE",
+    "cost": "COST",
+    "status": "STATUS",
+    "date": "YEAR",
+    "county": "MUN"
+   },
+   "planned_filter": "OBLIGATED = 'No' (not yet funded for construction); YEAR is the planned year",
+   "sample": "{\"PROJECTNO\": \"42593\", \"LOCATION\": \"Future Baboosic Greenway\", \"SUMMARY\": \"Construct rail trail between Baboosic Lake Rd and Walnut Hill Rd\", \"TYPE\": \"Bike-Ped\", \"COST\": \"$852,566\", \"STATUS\": \"Active\", \"YEAR\": \"2029\", \"MUN\": \"Amherst\"}",
+   "restrictions": null,
+   "notes": "Nashua region only (13 towns). Service has 8 layers: 0-3 points and 4-7 lines for MTP (long-range), Ten-Year Plan, TIP and Obligated projects; flags TIP/TYP/MTP say which plans a project is in. Last edited 2023-08, so it reflects the 2023-2026 TIP. COST is text."
+  },
+  {
+   "name": "ArDOT STIP 2023-2026 lines (STIP_2023_2026_Web_Map, real attribute fields)",
+   "authority": "Arkansas DOT (ArDOT ArcGIS Online org)",
+   "states": [
+    "AR"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/7cbqsWqMe170dJ3k/arcgis/rest/services/STIP_2023_2026_Web_Map_9_21_2023_WFL1/FeatureServer/1",
+   "verified": true,
+   "record_count": 1075,
+   "geometry": "polyline",
+   "fields": {
+    "id": "Job_No",
+    "name": "Job_Name",
+    "description": "Scope_Of_W",
+    "work_type": "Job_Type",
+    "cost": "Cost_Estim",
+    "status": "Status",
+    "date": "Federal_Fi",
+    "county": "County_No"
+   },
+   "planned_filter": "Federal_Fi >= current federal fiscal year (values 2023-2026, 0 = unscheduled). New_Locati = 1 marks new-location jobs (27 lines), Job_Type = 'Capacity' marks widening.",
+   "sample": "{\"Job_No\": \"101170\", \"Job_Name\": \"Hwy. 63 \\u2013 Hwy. 67 (S)\", \"Scope_Of_W\": \"Level Up & UTBWC\", \"Job_Type\": \"Pavement Preservation\", \"Cost_Estim\": 2400, \"Status\": 2, \"Federal_Fi\": 2025, \"County_No\": 38}",
+   "restrictions": null,
+   "notes": "Previous STIP cycle (edited 2023-09), but unlike the current 2025-2028 KML-import layer on gis.ardot.gov it has proper fields: job name, scope of work, job type (7 values), cost estimate (looks like $ thousands), federal fiscal year, new-location flag. Use it to enrich the 2025-2028 layer by Job_No (the job number is in that layer's popupinfo HTML). Layer 0 is the point version (same schema). County_No is ArDOT's county number, not a name."
+  },
+  {
+   "name": "ArDOT Highway Study E-Library - study corridors (DISPLAY_LINES)",
+   "authority": "Arkansas DOT Transportation Planning & Policy",
+   "states": [
+    "AR"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/7cbqsWqMe170dJ3k/arcgis/rest/services/HighwayStudy_ELibrary/FeatureServer/10",
+   "verified": true,
+   "record_count": 346,
+   "geometry": "polyline",
+   "fields": {
+    "id": "Library_Nu",
+    "name": "Title",
+    "work_type": "Document_Type",
+    "date": "Date",
+    "county": "County"
+   },
+   "planned_filter": "Date >= 2018 (year of the study; 8 lines dated 2020 or later) and Document_Type in ('AHC Planning Study','Environmental','Interchange Justification Report','Toll Feasibility')",
+   "sample": "{\"Library_Nu\": \"1.01.005\", \"Title\": \"Forrest City Western Bypass Feasibility Report\", \"Document_Type\": \"AHC Planning Study\", \"Date\": 1974, \"County\": \"St. Francis\"}",
+   "restrictions": null,
+   "notes": "Corridor lines for every planning, bypass, feasibility and environmental study ArDOT holds since the 1970s (346 lines), each with a PDF link (SharepointLink). Most are historical; recent ones are early signals of new-location and widening corridors (e.g. Highway 412 Corridor Planning Study Update, 2020). Layer 9 is the same as multipoints. No cost or status."
+  },
+  {
+   "name": "ArDOT public-involvement design map, example: Job 012366 Springdale Bypass - Proposed Right-of-Way (one service per job)",
+   "authority": "Arkansas DOT",
+   "states": [
+    "AR"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/7cbqsWqMe170dJ3k/arcgis/rest/services/Job_012366_Roadway_Plan_Springdale_Bypass_Jan_2026/FeatureServer/21",
+   "verified": true,
+   "record_count": 1,
+   "geometry": "polyline",
+   "fields": {},
+   "planned_filter": "Every such service is a project still in design (public-involvement stage). Take the layers named 'Proposed Right-of-Way', 'Temporary Construction Easement', 'Proposed Construction Limits' and 'Potential Relocations'.",
+   "sample": "{\"FID\": 1, \"Entity\": \"Line\", \"Handle\": \"34656C\", \"Layer\": \"R_ROW\", \"LyrFrzn\": 0, \"LyrOn\": 1, \"Color\": 7, \"Linetype\": \"Continuous\"}",
+   "restrictions": null,
+   "notes": "PATTERN SOURCE, high value for land acquisition: ArDOT publishes the CAD design of each job taken to a public meeting as its own hosted service, with the proposed right-of-way line, construction limits, easements and (here, layer 9) 'Potential Relocations' polygons. The job number is in the service name; attributes are CAD leftovers (Layer, Linetype), so join to the STIP by job number. Discover them by listing https://services.arcgis.com/7cbqsWqMe170dJ3k/arcgis/rest/services?f=json (765 services on 2026-11-17, about 115 matching Job_|ROW|Right_of_Way|Plans|VPI) and https://gis.ardot.gov/hosting/rest/services/Hosted?f=json (e.g. Job_070367_Interactive_Web_Map_Nov_2026 with 'Acquired Right-of-Way'). Service names carry the month, e.g. Job_080675_Roadway_Plans_October_2026, Job_101119_Roadway_Plans_October_2026."
+  }
+ ],
+ "unverified": [],
+ "summary": ""
+}

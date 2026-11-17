@@ -85,6 +85,11 @@ def add_states(cfg: Dict[str, Any]) -> None:
         if _usable(sw) and (sw.get("fields") or {}).get("apn"):
             parcel_layers.append({"state": code, "name": "%s statewide parcels" % code, "provider": "arcgis",
                                   "url": sw["url"], "fields": sw["fields"]})
+    extra = Path(__file__).parent / "data" / "sources" / "layers.json"      # regional, city and utility project maps
+    if extra.exists():
+        import json
+
+        dot_layers += json.loads(extra.read_text())
     if dot_layers:
         src = cfg.setdefault("sources", {}).setdefault("dot_arcgis", {})
         src.setdefault("enabled", True)

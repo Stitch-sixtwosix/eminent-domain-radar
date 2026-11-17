@@ -55,7 +55,7 @@ def to_signal(layer: Dict[str, Any], attrs: Dict[str, Any], geometry: Optional[D
                                               "Status: %s" % status if status else None, "Let: %s" % let if let else None) if x)
     county = _first(attrs, f.get("county"))
     return {
-        "source": "dot:%s" % layer["state"].upper(), "external_id": "%s:%s" % (layer.get("key") or layer["name"][:24], pid),
+        "source": "%s:%s" % (layer.get("source_prefix") or "dot", layer["state"].upper()), "external_id": "%s:%s" % (layer.get("key") or layer["name"][:24], pid),
         "title": title[:160], "body": body[:4000], "url": layer.get("info_url") or layer["url"],
         "agency": layer.get("agency") or layer["name"], "state": layer["state"].upper(),
         "county": str(county).upper().replace(" COUNTY", "").strip() if county else None,

@@ -1,0 +1,3956 @@
+{
+ "category": "local_utility",
+ "checked": "2026-11-17",
+ "sources": [
+  {
+   "name": "Legistar Web API (city/county/agency legislation)",
+   "authority": "Each client city, county or special district (legislative body named per client)",
+   "states": [
+    "AL",
+    "AZ",
+    "CA",
+    "CO",
+    "CT",
+    "FL",
+    "GA",
+    "HI",
+    "IL",
+    "KS",
+    "KY",
+    "LA",
+    "MA",
+    "MD",
+    "MI",
+    "MN",
+    "MO",
+    "NC",
+    "NJ",
+    "NM",
+    "NV",
+    "NY",
+    "OH",
+    "OR",
+    "PA",
+    "RI",
+    "TN",
+    "TX",
+    "UT",
+    "VA",
+    "WA",
+    "WI"
+   ],
+   "coverage": "177 verified clients (156 with matters since June 2026)",
+   "kind": "api",
+   "url": "https://webapi.legistar.com/v1/{client}/matters",
+   "verified": true,
+   "record_count": 177,
+   "geometry": "none",
+   "fields": {
+    "id": "MatterId|MatterFile",
+    "name": "MatterName",
+    "description": "MatterTitle",
+    "work_type": "MatterTypeName",
+    "cost": null,
+    "status": "MatterStatusName",
+    "date": "MatterIntroDate|MatterAgendaDate|MatterPassedDate",
+    "county": "MatterBodyName"
+   },
+   "planned_filter": "OData v3: $filter=substringof('eminent domain',MatterTitle) or substringof('condemnation',MatterTitle)  (also try 'right-of-way', 'acquisition', 'necessity', 'easement'); add  and MatterIntroDate ge datetime'2026-01-01'  and $orderby=MatterIntroDate desc. A matter that is introduced/on an agenda but has no MatterPassedDate is the earliest signal.",
+   "sample": "{\"client\": \"cityofdallas\", \"date\": \"2026-11-12\", \"file\": \"26-3734A\", \"type\": \"UPCOMING AGENDA ITEMS\", \"status\": \"Agenda Ready\", \"body\": \"Transportation and Infrastructure Committee\", \"title\": \"(26-3626A) (Council District: 4) Authorize an acquisition, including the exercise of the right of eminent domain, if such becomes necessary, from Darling International Inc., of two tracts of land, in fee, containing a to\"}",
+   "restrictions": null,
+   "notes": "Every client below was tested on 2026-11-17 with a real request to /matters (latest matter) and a title search for 'eminent domain'/'condemnation'. No key needed for these clients. Max 1000 rows per request ($top/$skip). Other useful endpoints: /bodies, /events?$filter=EventDate ge datetime'..', /events/{id}/eventitems, /matters/{id}/attachments (PDF links), /matters/{id}/texts/{textId} (full text), /matters/{id}/histories. Place names are in the free text only - no geometry. 'active': false means the client answers but its newest matter is old (city left Legistar or stopped publishing). Not usable without a token: nyc and phila (HTTP 403, token required). Not on Legistar API (HTTP 500 'not set up'): Houston, Chicago (own eLMS API, see separate source), Los Angeles city, San Diego city, Indianapolis, Atlanta (current), Tucson, Las Vegas, Memphis, Omaha, Raleigh, Tampa, Tulsa, Honolulu among others tested.",
+   "clients": [
+    {
+     "client": "huntsvilleal",
+     "place": "Huntsville",
+     "state": "AL",
+     "latest_matter_date": "2026-11-06",
+     "latest_matter_body": "City Council Regular Meeting",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2025-03-04",
+      "file": "2025-190",
+      "type": "New Business for Consideration or Action",
+      "status": "Passed",
+      "body": "City Council Regular Meeting",
+      "title": "Resolution authorizing the acquisition and/or condemnation of certain property for public access and utility and drainage easements, on, over, under, across, and upon certain parcels of land for PARC Project, Project No."
+     }
+    },
+    {
+     "client": "goodyear",
+     "place": "Goodyear",
+     "state": "AZ",
+     "latest_matter_date": "2021-01-27",
+     "latest_matter_body": "Self-Insured Healthcare Trust Board",
+     "active": false,
+     "condemnation_title_hits_sample": {
+      "date": "2020-01-15",
+      "file": "2020-6856",
+      "type": "Resolution",
+      "status": "Agenda Ready",
+      "body": "City Council Regular Meeting",
+      "title": "AUTHORIZE THE UTILIZATION OF EMINENT DOMAIN FOR THE GOODYEAR WATER TREATMENT FACILITY AND RAW WATER PIPELINE DELIVERY PROJECT RECOMMENDATION: ADOPT RESOLUTION NO. 2020-2027 AUTHORIZING THE CITY ATTORNEY TO BRING ACTION(S"
+     }
+    },
+    {
+     "client": "maricopa",
+     "place": "Maricopa County",
+     "state": "AZ",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Parks and Recreation Advisory Committee",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-05-01",
+      "file": "RES 26-12",
+      "type": "Resolution",
+      "status": "Passed",
+      "body": "City Council Regular Meeting",
+      "title": "A Resolution of the Mayor and City Council of the City of Maricopa, Arizona, authorizing and directing the acquisition of all property necessary for the completion of roadway improvements to the southwest corner of Smith"
+     }
+    },
+    {
+     "client": "mesa",
+     "place": "Mesa",
+     "state": "AZ",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "City Council Study Session",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-04-28",
+      "file": "26-0465",
+      "type": "Resolution",
+      "status": "Agenda Ready",
+      "body": "City Council",
+      "title": "Authorizing continued negotiations for the acquisition of certain real property rights necessary for the Pecos Road Relief Sewer Line, CP1185NS03, and, as a matter of public use and necessity, authorizing the acquisition"
+     }
+    },
+    {
+     "client": "phoenix",
+     "place": "Phoenix",
+     "state": "AZ",
+     "latest_matter_date": "2026-11-10",
+     "latest_matter_body": "Community Services and Education Subcommittee",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "pima",
+     "place": "Pima County",
+     "state": "AZ",
+     "latest_matter_date": "2026-11-06",
+     "latest_matter_body": "Proclamation",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-09-08",
+      "file": "File ID 20788",
+      "type": "Agenda Item",
+      "status": "Approved",
+      "body": "Real Property",
+      "title": "Condemnation RESOLUTION NO. 2026 - 57, of the Board of Supervisors, authorizing the Pima County Attorney to condemn real property interests where necessary, for Valencia Road: Mission Road to Camino de la Tierra (4VALMR)"
+     }
+    },
+    {
+     "client": "actransit",
+     "place": "AC Transit",
+     "state": "CA",
+     "latest_matter_date": "2026-11-10",
+     "latest_matter_body": "Board of Directors - Regular Meeting",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "bart",
+     "place": "BART",
+     "state": "CA",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "BART Accessibility Task Force",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "carson",
+     "place": "Carson",
+     "state": "CA",
+     "latest_matter_date": "2024-09-18",
+     "latest_matter_body": "Parks, Recreation and Cultural Arts Commission",
+     "active": false,
+     "condemnation_title_hits_sample": {
+      "date": "2019-06-11",
+      "file": "2019-609",
+      "type": "Discussion",
+      "status": "Agenda Ready",
+      "body": "City Council",
+      "title": "CONSIDER RESOLUTION 19-119 OF THE CITY COUNCIL OF THE CITY OF CARSON, CALIFORNIA, APPROVING THE REAL ESTATE EXCHANGE AGREEMENT UNDER THREAT OF CONDEMNATION AND JOINT ESCROW INSTRUCTIONS WITH PROLOGIS TARGETED U.S. LOGIST"
+     }
+    },
+    {
+     "client": "chulavista",
+     "place": "Chula Vista",
+     "state": "CA",
+     "latest_matter_date": "2021-05-13",
+     "latest_matter_body": "City Council",
+     "active": false,
+     "condemnation_title_hits_sample": {
+      "date": "2021-01-14",
+      "file": "20-0565",
+      "type": "Action Item",
+      "status": "Passed",
+      "body": "City Council",
+      "title": "RESOLUTION NO. 2021-013 OF THE CITY COUNCIL OF THE CITY OF CHULA VISTA IN SUPPORT OF ACCOUNTABILITY FOR THE VIOLENT ATTACK ON OUR CAPITOL, CONDEMNATION ON THE ASSAULT TO OUR DEMOCRACY AND CONDEMNING THE USE OF VIOLENCE A"
+     }
+    },
+    {
+     "client": "alameda",
+     "place": "City of Alameda",
+     "state": "CA",
+     "latest_matter_date": "2026-11-05",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2018-09-14",
+      "file": "2018-5985",
+      "type": "Consent Calendar Item",
+      "status": "Agenda Ready",
+      "body": "City Council",
+      "title": "Adoption of Resolution Amending the General Fund and the Capital Improvement Program Budget for Fiscal Year 2018-19 for the Jean Sweeney Open Space Park Project to Fund Immediate Possession of Four Remnant Parcels Totali"
+     }
+    },
+    {
+     "client": "contra-costa",
+     "place": "Contra Costa County",
+     "state": "CA",
+     "latest_matter_date": "2026-11-20",
+     "latest_matter_body": "Governing Board of the Green Empowerment Zone",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-09-28",
+      "file": "26-4290",
+      "type": "Consent Item",
+      "status": "Passed",
+      "body": "BOARD OF SUPERVISORS",
+      "title": "APPROVE and AUTHORIZE the County Counsel, or designee, to execute, on behalf of the County, a legal services contract with Nossaman LLP, effective September 15, 2026, for specialized eminent domain, inverse condemnation,"
+     }
+    },
+    {
+     "client": "corona",
+     "place": "Corona",
+     "state": "CA",
+     "latest_matter_date": "2024-08-15",
+     "latest_matter_body": "Planning and Housing Commission",
+     "active": false,
+     "condemnation_title_hits_sample": {
+      "date": "2021-07-08",
+      "file": "21-0722",
+      "type": "Public Hearing",
+      "status": "Passed",
+      "body": "City Council",
+      "title": "Public Hearing and Resolution declaring the Necessity of acquisition, by eminent domain, of temporary ingress and egress easement interests, located on North McKinley Street, south of the State Route 91 eastbound on-ramp"
+     }
+    },
+    {
+     "client": "costamesa",
+     "place": "Costa Mesa",
+     "state": "CA",
+     "latest_matter_date": "2026-11-09",
+     "latest_matter_body": "PARKS AND COMMUNITY SERVICES COMMISSION",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "cupertino",
+     "place": "Cupertino",
+     "state": "CA",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "Teen Commission",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "eldorado",
+     "place": "El Dorado County",
+     "state": "CA",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Planning Commission",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2025-04-15",
+      "file": "25-0764",
+      "type": "Agenda Item",
+      "status": "Approved",
+      "body": "Board of Supervisors",
+      "title": "Department of Transportation and County Counsel recommending the Board: 1) Approve and authorize the continuation of the perpetual Agreement 6755 between County of El Dorado and Burke, Williams & Sorensen, LLP for legal "
+     }
+    },
+    {
+     "client": "fontana",
+     "place": "Fontana",
+     "state": "CA",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "City Council Meeting",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2021-10-18",
+      "file": "21-979",
+      "type": "Public Hearing",
+      "status": "Passed",
+      "body": "City Council Meeting",
+      "title": "Hearing for the Consideration of a Resolution of Necessity to Acquire Permanent Street Easement and Temporary Construction Easement Interests in Certain Real Property Located in the City of Fontana, San Bernardino County"
+     }
+    },
+    {
+     "client": "fresno",
+     "place": "Fresno",
+     "state": "CA",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "Parks, Recreation, and Arts Commission",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-10-26",
+      "file": "ID 26-1446",
+      "type": "Action Item",
+      "status": "Passed",
+      "body": "City Council",
+      "title": "Actions pertaining to the acquisition of property rights on a parcel located at the southwest corner of East Shields Avenue and North Fresno Street, to benefit the Shields Avenue Trail - Blackstone to Fresno Project (Cou"
+     }
+    },
+    {
+     "client": "fresnocounty",
+     "place": "Fresno County",
+     "state": "CA",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "BOS District 1",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-08-18",
+      "file": "26-0918",
+      "type": "Agenda Item",
+      "status": "Approved",
+      "body": "Public Works & Planning",
+      "title": "Approve request by City of Sanger to acquire right-of-way, excluding eminent domain condemnation actions, from parcels adjacent to existing County right-of-way, within an identified unincorporated area, as needed to supp"
+     }
+    },
+    {
+     "client": "fullerton",
+     "place": "Fullerton",
+     "state": "CA",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "City Council - Successor Agency - Housing Authority",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2021-04-12",
+      "file": "21-530",
+      "type": "Consent Calendar",
+      "status": "Agenda Ready",
+      "body": "City Council - Successor Agency - Housing Authority",
+      "title": "CONDEMNATION OF HATE CRIMES AGAINST ASIAN AMERICANS"
+     }
+    },
+    {
+     "client": "goleta",
+     "place": "Goleta",
+     "state": "CA",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Goleta RDA Successor Agency",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2023-06-07",
+      "file": "23-292",
+      "type": "Public Hearing",
+      "status": "Agenda Ready",
+      "body": "City Council",
+      "title": "Adoption of a Resolution Declaring That The Acquisition Of Permanent Easement and Temporary Construction Easement Interests By Eminent Domain Is Necessary For The Construction Of The San Jose Creek Multipurpose Path – No"
+     }
+    },
+    {
+     "client": "hayward",
+     "place": "Hayward",
+     "state": "CA",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "Library Commission",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "humboldt",
+     "place": "Humboldt County",
+     "state": "CA",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "Board of Supervisors",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "huntingtonbeach",
+     "place": "Huntington Beach",
+     "state": "CA",
+     "latest_matter_date": "2026-11-15",
+     "latest_matter_body": "Finance Commission",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "lacsd",
+     "place": "LA County Sanitation Districts",
+     "state": "CA",
+     "latest_matter_date": "2026-11-03",
+     "latest_matter_body": "County Sanitation District No. 2 of Los Angeles County",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "metro",
+     "place": "LA Metro",
+     "state": "CA",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "Planning and Programming Committee",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-09-11",
+      "file": "2026-0683",
+      "type": "Resolution",
+      "status": "Agenda Ready",
+      "body": "Board of Directors - Regular Board Meeting",
+      "title": "ADOPT the Resolutions of Necessity authorizing the commencement of eminent domain actions to acquire the Property Interests for the properties identified in Attachment A and described as follows: 1. 2900 Fernwood Avenue,"
+     }
+    },
+    {
+     "client": "lausd",
+     "place": "LAUSD",
+     "state": "CA",
+     "latest_matter_date": "2026-12-05",
+     "latest_matter_body": "Board of Education",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "longbeach",
+     "place": "Long Beach",
+     "state": "CA",
+     "latest_matter_date": "2023-11-10",
+     "latest_matter_body": "Citizen Police Complaint Commission",
+     "active": false,
+     "condemnation_title_hits_sample": {
+      "date": "2016-07-21",
+      "file": "16-0717",
+      "type": "Resolution",
+      "status": "Adopted",
+      "body": "City Council",
+      "title": "Recommendation to adopt Resolution of Intention to vacate the un-named alley opening described in the Final Decree of Condemnation, Case No. C-2003, recorded January 30, 1930; Set the date of September 20, 2016 for the p"
+     }
+    },
+    {
+     "client": "lacounty",
+     "place": "Los Angeles County",
+     "state": "CA",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Los Angeles County Affordable Housing Solutions Agency Investment Review Committee",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2019-07-18",
+      "file": "19-4836",
+      "type": "Recommendation",
+      "status": "Filed",
+      "body": "Board of Supervisors",
+      "title": "Open Session adjourned to Closed Session at 2:24 p.m. to: CS-1. Confer with Legal Counsel on existing litigation, pursuant to Paragraph (1) of subdivision (d) of Government Code Section 54956.9: Los Angeles County Metrop"
+     }
+    },
+    {
+     "client": "mtc",
+     "place": "Metropolitan Transportation Commission",
+     "state": "CA",
+     "latest_matter_date": "2026-09-23",
+     "latest_matter_body": "Clipper Executive Board",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2019-05-07",
+      "file": "19-0560",
+      "type": "Report",
+      "status": "Committee Approval",
+      "body": "ABAG Legislation Committee",
+      "title": "AB 1487 (Chiu): Housing Alliance for the Bay Area AB 1487 (Chiu) would establish the Housing Alliance for the Bay Area (HABA) to increase funding for affordable housing in the nine-county region. The bill authorizes HABA"
+     }
+    },
+    {
+     "client": "mwdh2o",
+     "place": "Metropolitan Water District of Southern California",
+     "state": "CA",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Joint One Water & Adaptation Committee and Subcommittee on Imported Water",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "monterey",
+     "place": "Monterey County",
+     "state": "CA",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "Board of Supervisors",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2007-12-11",
+      "file": "07-028",
+      "type": "Minutes",
+      "status": "Passed",
+      "body": "Board of Supervisors",
+      "title": "Adopt an Ordinance providing that Eminent Domain by the Adopt an Ordinance providing that Eminent Domain by the"
+     }
+    },
+    {
+     "client": "mountainview",
+     "place": "Mountain View",
+     "state": "CA",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Tennis Advisory Committee",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2022-03-28",
+      "file": "201956",
+      "type": "Consent Calendar",
+      "status": "Agenda Ready",
+      "body": "City Council",
+      "title": "Legal Services Agreement with Burke, Williams & Sorensen for Eminent Domain Proceedings"
+     }
+    },
+    {
+     "client": "napacity",
+     "place": "Napa",
+     "state": "CA",
+     "latest_matter_date": "2026-11-04",
+     "latest_matter_body": "CITY COUNCIL OF THE CITY OF NAPA",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "napa",
+     "place": "Napa County",
+     "state": "CA",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "Board of Supervisors",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "newportbeach",
+     "place": "Newport Beach",
+     "state": "CA",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "Harbor Commission",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "ocsd",
+     "place": "OC San",
+     "state": "CA",
+     "latest_matter_date": "2026-11-05",
+     "latest_matter_body": "ADMINISTRATION COMMITTEE",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "octa",
+     "place": "OCTA",
+     "state": "CA",
+     "latest_matter_date": "2026-11-09",
+     "latest_matter_body": "Finance and Administration Committee",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "oakland",
+     "place": "Oakland",
+     "state": "CA",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "*Rules & Legislation Committee",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2025-04-21",
+      "file": "25-0660",
+      "type": "City Resolution",
+      "status": "Passed",
+      "body": "Special Concurrent Meeting of the Oakland Redevelopment Successor Agency/City Council",
+      "title": "Subject: Resolution Of Necessity For Fire Station 4 Land Acquisition From: Economic Workforce Development Department Recommendation: Conduct A Public Hearing And Upon Conclusion Adopt A Resolution Of Necessity For The Ac"
+     }
+    },
+    {
+     "client": "ousd",
+     "place": "Oakland USD",
+     "state": "CA",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Board of Education",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "cityoforange",
+     "place": "Orange",
+     "state": "CA",
+     "latest_matter_date": "2026-10-30",
+     "latest_matter_body": "Orange City Council",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "pomona",
+     "place": "Pomona",
+     "state": "CA",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "Ethics Commission",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "polb",
+     "place": "Port of Long Beach",
+     "state": "CA",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Sponsorship Special Purpose Committee of the Whole",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-04-14",
+      "file": "HD-26-205",
+      "type": "Ordinance",
+      "status": "Passed",
+      "body": "Harbor Commission",
+      "title": "Approve Second Reading and Adoption of Ordinance to Authorize Chief Executive Officer to Execute the Stipulation for Entry of Final Judgment of Condemnation between the Port of Long Beach, County of Los Angeles, and Lege"
+     }
+    },
+    {
+     "client": "portofoakland",
+     "place": "Port of Oakland",
+     "state": "CA",
+     "latest_matter_date": "2026-11-09",
+     "latest_matter_body": "Board of Port Commissioners",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "portofsandiego",
+     "place": "Port of San Diego",
+     "state": "CA",
+     "latest_matter_date": "2024-02-07",
+     "latest_matter_body": "Board of Port Commissioners",
+     "active": false,
+     "condemnation_title_hits_sample": {
+      "date": "2020-08-27",
+      "file": "2020-0326",
+      "type": "Closed Session Item",
+      "status": "Closed Session",
+      "body": "Board of Port Commissioners",
+      "title": "Closed Session Item No. 4 CONFERENCE WITH LEGAL COUNSEL - ANTICIPATED LITIGATION Significant exposure to litigation Government Code Section 54956.9(d)(2) Cays Resort, LLC By letter dated July 22, 2020, Rebecca L. Reed, a"
+     }
+    },
+    {
+     "client": "riversideca",
+     "place": "Riverside",
+     "state": "CA",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-02-19",
+      "file": "26-0796",
+      "type": "PUBLIC HEARING/PLANNING REFERRALS AND APPEALS",
+      "status": "Agenda Ready",
+      "body": "City Council",
+      "title": "Adopt a Resolution declaring that the Public Interest and Necessity require the acquisition of a Permanent Street and Highway Easement and Temporary Construction Easement over a portion of certain real property for the c"
+     }
+    },
+    {
+     "client": "riversidecountyca",
+     "place": "Riverside County",
+     "state": "CA",
+     "latest_matter_date": "2026-09-21",
+     "latest_matter_body": "Board of Supervisors",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "sacramento",
+     "place": "Sacramento",
+     "state": "CA",
+     "latest_matter_date": "2026-12-25",
+     "latest_matter_body": "City Council - 2PM",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2020-09-22",
+      "file": "2020-01172",
+      "type": "Consent Item",
+      "status": "Agenda Ready",
+      "body": "City Council - 2PM",
+      "title": "Rescinding Resolutions of Necessity Previously Adopted to Acquire Certain Real Property by Eminent Domain for Sacramento River Parkway Project - Central Levee Pocket Trail Segment (K15185000)"
+     }
+    },
+    {
+     "client": "salinas",
+     "place": "Salinas",
+     "state": "CA",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "Planning Commission",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "sanbernardino",
+     "place": "San Bernardino",
+     "state": "CA",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "Closed Session",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-10-08",
+      "file": "15048",
+      "type": "Discussion",
+      "status": "Passed",
+      "body": "Real Estate Services",
+      "title": "Hearing to Consider Adoption of the Resolution of Necessity for Acquisition by Eminent Domain of a Non-Exclusive Permanent Access Easement for the Department of Behavioral Health Comprehensive Treatment Campus Project"
+     }
+    },
+    {
+     "client": "sdcounty",
+     "place": "San Diego County",
+     "state": "CA",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "BOARD OF SUPERVISORS",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "sfgov",
+     "place": "San Francisco",
+     "state": "CA",
+     "latest_matter_date": "2020-09-17",
+     "latest_matter_body": "Board of Supervisors",
+     "active": false,
+     "condemnation_title_hits_sample": {
+      "date": "2018-10-16",
+      "file": "180955",
+      "type": "Ordinance",
+      "status": "Mayors Office",
+      "body": "Board of Supervisors",
+      "title": "Ordinance authorizing settlement of the lawsuit filed by Ho Tan and Lionel Tan against the City and County of San Francisco for $245,000; the lawsuit was filed on August 20, 2015, in San Francisco Superior Court, Case No"
+     }
+    },
+    {
+     "client": "sanjose",
+     "place": "San Jose",
+     "state": "CA",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "sanleandro",
+     "place": "San Leandro",
+     "state": "CA",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "Community Police Review Board",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "sanmateocounty",
+     "place": "San Mateo County",
+     "state": "CA",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "COUNTY EXECUTIVE",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-05-19",
+      "file": "26-434",
+      "type": "Resolution",
+      "status": "Passed",
+      "body": "PUBLIC WORKS",
+      "title": "Recommendation to: A) Adopt a resolution certifying and adopting the Initial Study/Mitigated Negative Declaration, dated December 2025, together with the Responses to Comments, and the Mitigation Monitoring and Reporting"
+     }
+    },
+    {
+     "client": "santabarbara",
+     "place": "Santa Barbara County",
+     "state": "CA",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "BOARD OF SUPERVISORS",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2020-09-24",
+      "file": "20-00761",
+      "type": "Administrative Item",
+      "status": "Agenda Ready",
+      "body": "BOARD OF SUPERVISORS",
+      "title": "Consider recommendations regarding an Agreement for Professional Legal Services with Rutan and Tucker, LLP for Eminent Domain Proceedings and Litigation, as follows: (4/5 Vote Required) Acting as the Board of Directors, "
+     }
+    },
+    {
+     "client": "santaclara",
+     "place": "Santa Clara",
+     "state": "CA",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "Development Review Hearing",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2018-12-05",
+      "file": "18-1629",
+      "type": "Public Hearing/General Business",
+      "status": "Agenda Ready",
+      "body": "City Council and Authorities Concurrent",
+      "title": "Action on Resolution of Necessity to Acquire Recreation Facilities Rights from Leasehold Located at 5105 Great America Parkway, Santa Clara, California from IA Lodging Santa Clara LLC for a Public Project and Directing t"
+     }
+    },
+    {
+     "client": "scvwd",
+     "place": "Santa Clara Valley Water District",
+     "state": "CA",
+     "latest_matter_date": "2026-11-10",
+     "latest_matter_body": "Board of Directors",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2020-07-14",
+      "file": "20-0600",
+      "type": "Time Certain Item",
+      "status": "Agenda Ready",
+      "body": "Board of Directors",
+      "title": "CLOSED SESSION CONFERENCE WITH LEGAL COUNSEL-EXISTING LITIGATION Pursuant to Government Code §54956.9(d)(1); Great Oaks v. SCVWD Master Complaint, {Inverse Condemnation; Declaratory Relief; Writ of Mandate; Claim for Ref"
+     }
+    },
+    {
+     "client": "santa-rosa",
+     "place": "Santa Rosa",
+     "state": "CA",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2025-10-27",
+      "file": "25-0757",
+      "type": "CC- Public Hearing",
+      "status": "Agenda Ready",
+      "body": "City Council",
+      "title": "PUBLIC HEARING - A RESOLUTION OF NECESSITY FOR THE ACQUISITION BY EMINENT DOMAIN OF EASEMENT INTERESTS IN PORTIONS OF REAL PROPERTY COMMONLY KNOWN AS 408 DUNCAN STREET, APN 010-495-010 BACKGROUND: Acquisition, by eminent"
+     }
+    },
+    {
+     "client": "solano",
+     "place": "Solano County",
+     "state": "CA",
+     "latest_matter_date": "2026-12-25",
+     "latest_matter_body": "Board of Supervisors",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2024-11-26",
+      "file": "24-904",
+      "type": "Resolution",
+      "status": "Public Hearing",
+      "body": "Resource Management",
+      "title": "Receive a presentation and conduct a public hearing on the necessity for acquiring right-of-way from APN 0107-020-040 for the Stevenson Bridge Rehabilitation Project; and Consider adopting a Resolution of Necessity to ac"
+     }
+    },
+    {
+     "client": "sonoma-county",
+     "place": "Sonoma County",
+     "state": "CA",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Board of Supervisors District 5",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2025-12-09",
+      "file": "2026-0009",
+      "type": "Regular Calendar Item",
+      "status": "Agenda Ready",
+      "body": "Public Infrastructure",
+      "title": "Public Hearing to Authorize the Use of Eminent Domain to Acquire Property Rights for the Morelli Lane Storm Damage Repair Project"
+     }
+    },
+    {
+     "client": "stockton",
+     "place": "Stockton",
+     "state": "CA",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "City Council and Concurrent Authorities",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2023-10-18",
+      "file": "23-0992",
+      "type": "New Business",
+      "status": "Agenda Ready",
+      "body": "City Council and Concurrent Authorities",
+      "title": "STOCKTON DIAMOND GRADE SEPARATION PROJECT - EMINENT DOMAIN"
+     }
+    },
+    {
+     "client": "sunnyvaleca",
+     "place": "Sunnyvale",
+     "state": "CA",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "Bicycle and Pedestrian Advisory Commission",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "visalia",
+     "place": "Visalia",
+     "state": "CA",
+     "latest_matter_date": "2026-11-06",
+     "latest_matter_body": "Visalia City Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2016-05-16",
+      "file": "HIST-9430",
+      "type": "Historical",
+      "status": "Passed",
+      "body": "Visalia City Council",
+      "title": "Authorize the City Manager to 1) approve an agreement with TRC Engineers, Inc. in the amount of $968,600.00 to support right-of-way acquisition, prepare environmental documents, complete Caltrans project approval documen"
+     }
+    },
+    {
+     "client": "arapahoe",
+     "place": "Arapahoe County",
+     "state": "CO",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "Board of County Commissioners Study Session",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2025-08-26",
+      "file": "25-473",
+      "type": "Resolution",
+      "status": "Passed",
+      "body": "Board of County Commissioners Business Meeting",
+      "title": "Resolution Approving Eminent Domain Proceedings for Property at E Quincy Ave and S Harvest Rd Necessary for Right of Way"
+     }
+    },
+    {
+     "client": "coloradosprings",
+     "place": "Colorado Springs",
+     "state": "CO",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "City Council Work Session",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-03-26",
+      "file": "26-144",
+      "type": "Resolution",
+      "status": "Mayor's Office",
+      "body": "City Council",
+      "title": "A Resolution authorizing the use of Possession and Use Agreements and Eminent Domain to acquire real property, permanent easements, and temporary easements using Brookside Realignment Project using PPRTA funds Presenter:"
+     }
+    },
+    {
+     "client": "denver",
+     "place": "Denver",
+     "state": "CO",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Governance and Intergovernmental Relations",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-11-10",
+      "file": "26-1735",
+      "type": "Bill",
+      "status": "Committee Consent",
+      "body": "Finance and Business",
+      "title": "Approves Land Acquisition Ordinance granting the authority to acquire through negotiated purchase or condemnation all property interests needed for flood and drainage improvements to reduce the flood plain and solve sedi"
+     }
+    },
+    {
+     "client": "bridgeportct",
+     "place": "Bridgeport",
+     "state": "CT",
+     "latest_matter_date": "2026-10-14",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "alachua",
+     "place": "Alachua County",
+     "state": "FL",
+     "latest_matter_date": "2023-05-03",
+     "latest_matter_body": "Board of County Commissioners",
+     "active": false,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "brevardfl",
+     "place": "Brevard County",
+     "state": "FL",
+     "latest_matter_date": "2026-11-05",
+     "latest_matter_body": "County Manager",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-01-22",
+      "file": "8610",
+      "type": "New Business - County Attorney",
+      "status": "Adopted",
+      "body": "County Attorney",
+      "title": "Consideration of a Joint Resolution with City of Palm Bay for condemnation of an approximate 3500-foot right-of-way from Forestar (USA) Real Estate Group Inc. for the extension of the St. Johns Heritage Parkway"
+     }
+    },
+    {
+     "client": "broward",
+     "place": "Broward County",
+     "state": "FL",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Board Appointments",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "clearwater",
+     "place": "Clearwater",
+     "state": "FL",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "coralgables",
+     "place": "Coral Gables",
+     "state": "FL",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "Historic Preservation Board",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2023-02-07",
+      "file": "23-5314",
+      "type": "Resolution",
+      "status": "Adopted",
+      "body": "City Commission",
+      "title": "A Resolution of the City Commission reaffirming the City’s condemnation of antisemitism and bigotry and designating the Mayor as a signatory to the Mayors’ compact to combat hate and extremism. (Sponsored by Mayor Lago) "
+     }
+    },
+    {
+     "client": "fortlauderdale",
+     "place": "Fort Lauderdale",
+     "state": "FL",
+     "latest_matter_date": "2026-11-10",
+     "latest_matter_body": "City Attorney",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2020-09-21",
+      "file": "20-0773",
+      "type": "RESOLUTION",
+      "status": "PASSED",
+      "body": "City Manager",
+      "title": "Resolution Declaring a Public Purpose and Necessity for the Acquisition of the Property Located at 1201-1205 SW 1st Street, Fort Lauderdale, FL 33312 and Authorizing the Acquisition of Property by Purchase or Eminent Dom"
+     }
+    },
+    {
+     "client": "gainesville",
+     "place": "Gainesville",
+     "state": "FL",
+     "latest_matter_date": "2022-10-26",
+     "latest_matter_body": "Charter Officers",
+     "active": false,
+     "condemnation_title_hits_sample": {
+      "date": "2016-11-07",
+      "file": "160525.",
+      "type": "Resolution",
+      "status": "Adopted",
+      "body": "City Manager",
+      "title": "Resolution Determining the Necessity and Public Purpose for the Condemnation of Two Parcels of Land (B) A Resolution to determine the necessity and public purpose for the condemnation of two parcels of land associated wi"
+     }
+    },
+    {
+     "client": "hernandocountyfl",
+     "place": "Hernando County",
+     "state": "FL",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Value Adjustment Board",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2024-03-08",
+      "file": "13843",
+      "type": "Resolution",
+      "status": "Adopted",
+      "body": "Board of County Commissioners",
+      "title": "Resolution Determining Necessity of Acquisition of Property by Eminent Domain for Barclay Road, From Lucky Lane to Highway 50W (Cortez Boulevard) Improvement Project"
+     }
+    },
+    {
+     "client": "hillsboroughcounty",
+     "place": "Hillsborough County",
+     "state": "FL",
+     "latest_matter_date": "2026-10-29",
+     "latest_matter_body": "Zoning Hearing Master",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "hollywoodfl",
+     "place": "Hollywood",
+     "state": "FL",
+     "latest_matter_date": "2026-10-26",
+     "latest_matter_body": "Historic Preservation Board",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "jaxcityc",
+     "place": "Jacksonville",
+     "state": "FL",
+     "latest_matter_date": "2026-11-10",
+     "latest_matter_body": "Land Use & Zoning Committee",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-07-28",
+      "file": "2026-0587-E",
+      "type": "Ordinance",
+      "status": "Enacted",
+      "body": "City Council",
+      "title": "ORD Declaring the Public Necessity for Acquiring Fee Simple Title, Temporary Construction Easements, & Permanent Drainage Easements Through Condemnation by Right of Eminent Domain to & Over Certain Real Property in Counc"
+     }
+    },
+    {
+     "client": "martin",
+     "place": "Martin County",
+     "state": "FL",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Community Redevelopment Agency",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "miamifl",
+     "place": "Miami",
+     "state": "FL",
+     "latest_matter_date": "2026-06-24",
+     "latest_matter_body": "City Commission",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "miamidade",
+     "place": "Miami-Dade County",
+     "state": "FL",
+     "latest_matter_date": "2018-06-15",
+     "latest_matter_body": "BOARD OF COUNTY COMMISSIONERS",
+     "active": false,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "ocala",
+     "place": "Ocala",
+     "state": "FL",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "occompt",
+     "place": "Orange County",
+     "state": "FL",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "Administrative Services Department",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-06-09",
+      "file": "26-0748",
+      "type": "Resolution",
+      "status": "Passed",
+      "body": "Administrative Services Department",
+      "title": "Approval and execution of Resolution of the Orange County Board of County Commissioners regarding Eminent Domain proceedings including necessary parcels related to the Reams Road Project; superseding Resolutions approved"
+     }
+    },
+    {
+     "client": "pbc",
+     "place": "Palm Beach County",
+     "state": "FL",
+     "latest_matter_date": "2026-04-21",
+     "latest_matter_body": "Board of County Commissioners",
+     "active": false,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "pensacola",
+     "place": "Pensacola",
+     "state": "FL",
+     "latest_matter_date": "2023-10-23",
+     "latest_matter_body": "City Council",
+     "active": false,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "pinellas",
+     "place": "Pinellas County",
+     "state": "FL",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Business Technology Services",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2022-06-06",
+      "file": "22-1020A",
+      "type": "Resolution",
+      "status": "Passed",
+      "body": "Public Works",
+      "title": "Second Resolution determining the necessity to construct bridge and drainage improvements to Beckett Bridge and Riverside Drive and directing the condemnation of the necessary properties and property rights required for "
+     }
+    },
+    {
+     "client": "polkcountyfl",
+     "place": "Polk County",
+     "state": "FL",
+     "latest_matter_date": "2026-11-09",
+     "latest_matter_body": "Board of County Commissioners (Organizational)",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-03-18",
+      "file": "26-0461",
+      "type": "Consent Agenda",
+      "status": "Passed",
+      "body": "Board of County Commissioners",
+      "title": "Authorize the County Attorney’s Office or outside counsel to stipulate to a final judgment for Parcel 127 in the case of Polk County v. Meritage Homes of Florida, Inc., an eminent domain lawsuit filed to acquire needed r"
+     }
+    },
+    {
+     "client": "pompano",
+     "place": "Pompano Beach",
+     "state": "FL",
+     "latest_matter_date": "2026-11-10",
+     "latest_matter_body": "City Commission",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2022-03-30",
+      "file": "22-296",
+      "type": "Resolution / Consent Agenda",
+      "status": "Passed",
+      "body": "City Commission",
+      "title": "A RESOLUTION OF THE CITY COMMISSION OF THE CITY OF POMPANO BEACH, FLORIDA, AUTHORIZING THE SETTLEMENT OF THE EMINENT DOMAIN LAND ACQUISITION LITIGATION BETWEEN THE CITY OF POMPANO BEACH, FLORIDA, AND 1081 NW 27 AVE, LLC "
+     }
+    },
+    {
+     "client": "psl",
+     "place": "Port St. Lucie",
+     "state": "FL",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "Special City Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2023-06-07",
+      "file": "2023-536",
+      "type": "Resolution",
+      "status": "Passed",
+      "body": "City Council",
+      "title": "Resolution 23-R61, Finding that the Acquisition of a Portion of Real Property Described as Lot 35, Block 401, Port St. Lucie Section Six, According to the Plat thereof, as Recorded in Plat Book 12, Page 36, of the Public"
+     }
+    },
+    {
+     "client": "seminolecountyfl",
+     "place": "Seminole County",
+     "state": "FL",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "Board of County Commissioners",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2025-10-28",
+      "file": "2025-1044",
+      "type": "Consent Item",
+      "status": "Passed",
+      "body": "Board of County Commissioners",
+      "title": "Approve the proposed Stipulated Order of Taking and Final Judgment in the amount of $80,210.00 between Seminole County and Hattaway Holdings, LLC, regarding Parcel 101 of the Hillview Drive Improvement Project and as par"
+     }
+    },
+    {
+     "client": "atlantaga",
+     "place": "Atlanta (archive only, stops 2022)",
+     "state": "GA",
+     "latest_matter_date": "2022-05-24",
+     "latest_matter_body": "Atlanta City Council",
+     "active": false,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "dekalbcountyga",
+     "place": "DeKalb County",
+     "state": "GA",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "Board of Commissioners",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-02-05",
+      "file": "2026-0332",
+      "type": "Resolution",
+      "status": "Public Hearing",
+      "body": "Board of Commissioners",
+      "title": "Commission District(s): 3 and 7 Resolution and Order of the DeKalb County Board of Commissioners Authorizing Condemnation by Declaration of Taking Method Pursuant to O.C.G.A. §§ 22-3-140 And 32-3-1, Et Seq. Of Certain Pr"
+     }
+    },
+    {
+     "client": "fulton",
+     "place": "Fulton County",
+     "state": "GA",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "Board of Commissioners",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2020-02-05",
+      "file": "20-0110",
+      "type": "Historical",
+      "status": "Historical",
+      "body": "Board of Commissioners",
+      "title": "Request approval of a Resolution authorizing the use of eminent domain to acquire real property interests necessary to complete the Fulton – Cobb Diversion Line and Pump Station Project, to, where necessary, authorize th"
+     }
+    },
+    {
+     "client": "mauicounty",
+     "place": "Maui County",
+     "state": "HI",
+     "latest_matter_date": "2026-11-10",
+     "latest_matter_body": "Water and Infrastructure Committee (2025-2027)",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-10-26",
+      "file": "WAI-33 Reso 26-177",
+      "type": "Resolution",
+      "status": "Agenda Ready",
+      "body": "Water and Infrastructure Committee (2025-2027)",
+      "title": "RESOLUTION 26-177, AUTHORIZING PROCEEDINGS IN CONDEMNATION BY EMINENT DOMAIN FOR THE ACQUISITION OF REAL PROPERTY INTERESTS REQUIRED FOR PHASE 1 OF THE LILOA DRIVE EXTENSION PROJECT (WAI-33)"
+     }
+    },
+    {
+     "client": "cook-county",
+     "place": "Cook County",
+     "state": "IL",
+     "latest_matter_date": "2026-11-19",
+     "latest_matter_body": "Zoning and Building Committee",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-10-21",
+      "file": "26-2686",
+      "type": "Resolution",
+      "status": "Held / Deferred in Committee",
+      "body": "Legislation and Intergovernmental Relations Committee",
+      "title": "PROPOSED RESOLUTION A RESOLUTION CONDEMNING THE DEATHLY IMPACT OF USAID CUTS ON GLOBAL HEALTH WHEREAS, in 1998, Congress established the United States Agency for International Development (USAID) as a functionally indepe"
+     }
+    },
+    {
+     "client": "dupage",
+     "place": "DuPage County",
+     "state": "IL",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Judicial and Public Safety Committee",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2023-12-14",
+      "file": "DT-R-0002-24",
+      "type": "Transportation Resolution",
+      "status": "Adopted",
+      "body": "Transportation Committee",
+      "title": "Condemnation Authorization for ROW Acquisition along CH 9/Lemont Road, 83rd Street to 87th Street, Section 16-00232-00-CH."
+     }
+    },
+    {
+     "client": "mwrd",
+     "place": "Metropolitan Water Reclamation District of Greater Chicago",
+     "state": "IL",
+     "latest_matter_date": "2026-10-29",
+     "latest_matter_body": "Miscellaneous & New Business",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2025-08-15",
+      "file": "25-0642",
+      "type": "Agenda Item",
+      "status": "Adopted",
+      "body": "Real Estate Development Committee",
+      "title": "Authority to pay final just compensation for six vacant and unoccupied properties within the right-of-way for the Central Park Stormwater Detention Basin and Separate Storm Sewer Improvements in Harvey, Illinois (Contrac"
+     }
+    },
+    {
+     "client": "naperville",
+     "place": "Naperville",
+     "state": "IL",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Sister Cities Commission",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "olatheks",
+     "place": "Olathe",
+     "state": "KS",
+     "latest_matter_date": "2026-11-10",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-06-22",
+      "file": "G26-5841",
+      "type": "New Business",
+      "status": "Agenda Ready",
+      "body": "City Council",
+      "title": "Consideration of Ordinance No. 26-39 authorizing payment by the City Treasurer of an eminent domain award and court-appointed appraiser’s fees for constructing and maintaining the Santa Fe, Ridgeview to Mur Len Improveme"
+     }
+    },
+    {
+     "client": "sedgwickcounty",
+     "place": "Sedgwick County",
+     "state": "KS",
+     "latest_matter_date": "2019-07-23",
+     "latest_matter_body": "Grants Committee",
+     "active": false,
+     "condemnation_title_hits_sample": {
+      "date": "2018-09-10",
+      "file": "18-751",
+      "type": "Consent",
+      "status": "Consent Agenda",
+      "body": "Board of Sedgwick County Commissioners",
+      "title": "Resolution Providing for the Condemnation of Certain Real Property for Construction of Bridge No. 606-11-3000 (Project B471) District 3."
+     }
+    },
+    {
+     "client": "lexington",
+     "place": "Lexington",
+     "state": "KY",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Human Resources",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2024-10-08",
+      "file": "1031-24",
+      "type": "Agenda Item",
+      "status": "Removed From Docket",
+      "body": "Urban County Council",
+      "title": "A Resolution condemning necessary permanent and temporary easements across the property located at 1067 Armstrong Mill Rd., for the Merrick Trunk Sewer Project and authorizing the Dept. of Law to institute condemnation p"
+     }
+    },
+    {
+     "client": "louisville",
+     "place": "Louisville",
+     "state": "KY",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Planning Commission",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-07-27",
+      "file": "R-100-26",
+      "type": "Resolution",
+      "status": "Passed",
+      "body": "Public Works Committee",
+      "title": "A RESOLUTION AUTHORIZING THE OFFICE OF THE JEFFERSON COUNTY ATTORNEY TO BRING A CONDEMNATION ACTION AGAINST THE OWNER OF CERTAIN PROPERTY, PARCEL NO. EIGHTEEN (18), IN JEFFERSON COUNTY IN CONNECTION WITH THE CRUMS LANE S"
+     }
+    },
+    {
+     "client": "cityofno",
+     "place": "New Orleans",
+     "state": "LA",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "norta",
+     "place": "RTA New Orleans",
+     "state": "LA",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Board of Commissioners",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "boston",
+     "place": "Boston",
+     "state": "MA",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2024-05-20",
+      "file": "2024-0868",
+      "type": "Mayor Order",
+      "status": "Passed",
+      "body": "Committee on Environmental Justice, Resiliency, and Parks",
+      "title": "Councilor Coletta Zapata called Docket #0867, message and order for your approval an Order authorizing the Parks and Recreation Commission, on behalf of the City of Boston, to acquire by an eminent domain taking a parcel"
+     }
+    },
+    {
+     "client": "baltimore",
+     "place": "Baltimore",
+     "state": "MD",
+     "latest_matter_date": "2026-11-09",
+     "latest_matter_body": "Land Use & Transportation Committee",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-04-27",
+      "file": "26-0179",
+      "type": "Ordinance",
+      "status": "Enacted",
+      "body": "Baltimore City Council",
+      "title": "Bond Issue – Affordable Housing Loan – $22,000,000 FOR the purpose of authorizing the Mayor and City Council of Baltimore (pursuant to General Assembly House Resolution I and Senate Resolution I of 2026 approved by the m"
+     }
+    },
+    {
+     "client": "montgomerycountymd",
+     "place": "Montgomery County",
+     "state": "MD",
+     "latest_matter_date": "2023-02-14",
+     "latest_matter_body": "Council Session",
+     "active": false,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "a2gov",
+     "place": "Ann Arbor",
+     "state": "MI",
+     "latest_matter_date": "2026-11-18",
+     "latest_matter_body": "Transportation Commission",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "detroit",
+     "place": "Detroit",
+     "state": "MI",
+     "latest_matter_date": "2017-05-05",
+     "latest_matter_body": "Public Health and Safety Standing Committee",
+     "active": false,
+     "condemnation_title_hits_sample": {
+      "date": "2016-07-13",
+      "file": "15-2235",
+      "type": "Contract",
+      "status": "New Business",
+      "body": "Internal Operations Standing Committee",
+      "title": "Submitting reso. autho. Contract No. 2641654 - 100% City Funding - To Provide Legal Services - The Attorney Shall Act for and Assist the City of Detroit Law Department by Providing Legal Representation to the City in the"
+     }
+    },
+    {
+     "client": "glwater",
+     "place": "GLWA",
+     "state": "MI",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Board of Directors Workshop Meeting",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2024-10-14",
+      "file": "2024-351",
+      "type": "Resolution",
+      "status": "Passed",
+      "body": "Board of Directors",
+      "title": "Permanent Easement Agreement between GLWA and Elizabeth Eldridge, (owner of certain mineral rights on the Woodmere Cemetery) in connection with the eminent domain lawsuit known as Great Lakes Water Authority v Midwest Me"
+     }
+    },
+    {
+     "client": "hennepinmn",
+     "place": "Hennepin County",
+     "state": "MN",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Board of Hennepin County Commissioners",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-09-24",
+      "file": "26-0366",
+      "type": "Resolution",
+      "status": "Approved",
+      "body": "Board of Hennepin County Commissioners",
+      "title": "Authorization to acquire right of way by direct purchase or condemnation for various transportation projects"
+     }
+    },
+    {
+     "client": "stpaul",
+     "place": "Saint Paul",
+     "state": "MN",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Legislative Hearings",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-10-15",
+      "file": "RLH VO 26-46",
+      "type": "Resolution LH Vacate Order",
+      "status": "Passed",
+      "body": "City Council",
+      "title": "Appeal of Sandra M. Mott-Gergel to a Notice of Condemnation Order to Vacate at 777 BERRY STREET, Apartment 203B."
+     }
+    },
+    {
+     "client": "gocolumbiamo",
+     "place": "Columbia",
+     "state": "MO",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Parks and Recreation Commission",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2019-10-10",
+      "file": "SPC67-19",
+      "type": "Scheduled Public Comment",
+      "status": "Filed",
+      "body": "City Council",
+      "title": "Brian Johnstone - Random sampling of Columbia residents oppose use of eminent domain and support the preservation of \"The Columbia Wilderness Sanctuary and Natural School.\""
+     }
+    },
+    {
+     "client": "kansascity",
+     "place": "Kansas City",
+     "state": "MO",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "Finance, Governance and Public Safety Committee",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-10-26",
+      "file": "260966",
+      "type": "Ordinance",
+      "status": "Passed",
+      "body": "Council",
+      "title": "Sponsor: Director of Public Works Department Authorizing condemnation and taking of private property interests for public use for Street Right Of Way, Permanent Drainage Easement, Permanent Wall Easement, and Temporary C"
+     }
+    },
+    {
+     "client": "charlottenc",
+     "place": "Charlotte",
+     "state": "NC",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "City Council Business Meeting",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-10-05",
+      "file": "15-26843",
+      "type": "Reference",
+      "status": "Agenda Ready",
+      "body": "City Council Business Meeting",
+      "title": "Reference - Property Acquisitions and Condemnations"
+     }
+    },
+    {
+     "client": "durhamcounty",
+     "place": "Durham County",
+     "state": "NC",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Board of County Commissioners",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "greensboro",
+     "place": "Greensboro",
+     "state": "NC",
+     "latest_matter_date": "2021-06-15",
+     "latest_matter_body": "City Council",
+     "active": false,
+     "condemnation_title_hits_sample": {
+      "date": "2017-12-04",
+      "file": "ID 17-0784",
+      "type": "Resolution",
+      "status": "Passed",
+      "body": "City Council",
+      "title": "Resolution Authorizing the City Attorney to Institute Proceedings to Acquire by Eminent Domain an Easement Running Over and Across Property Located at 112 E. Market Street, as more particularly described in the Guilford "
+     }
+    },
+    {
+     "client": "guilford",
+     "place": "Guilford County",
+     "state": "NC",
+     "latest_matter_date": "2026-11-05",
+     "latest_matter_body": "Board of Commissioners",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2018-09-18",
+      "file": "2018-365",
+      "type": "New Business",
+      "status": "Passed",
+      "body": "Board of Commissioners",
+      "title": "CITY OF ARCHDALE CONDEMNATION - WEANT ROAD 16 INCH SEWAGE FORCE MAIN PROJECT"
+     }
+    },
+    {
+     "client": "mecklenburg",
+     "place": "Mecklenburg County",
+     "state": "NC",
+     "latest_matter_date": "2026-11-10",
+     "latest_matter_body": "Board of Commissioners",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "wake",
+     "place": "Wake County",
+     "state": "NC",
+     "latest_matter_date": "2026-11-06",
+     "latest_matter_body": "Board of Commissioners",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "wilmington",
+     "place": "Wilmington",
+     "state": "NC",
+     "latest_matter_date": "2026-11-10",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2025-08-18",
+      "file": "25-0392",
+      "type": "Resolution",
+      "status": "First Reading",
+      "body": "City Council",
+      "title": "Resolution Authorizing the City Attorney to File Condemnation Actions for the Pine Grove South Intersection Improvements Project"
+     }
+    },
+    {
+     "client": "newark",
+     "place": "Newark",
+     "state": "NJ",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "Municipal Council and City Clerk",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2024-06-13",
+      "file": "24-0880",
+      "type": "Resolution",
+      "status": "Adopted",
+      "body": "Economic and Housing  Development",
+      "title": "Dept/ Agency: Economic and Housing Development Action: ( ) Ratifying (X) Authorizing (X) Amending Type of Service: Referral of Proposed Sixth Amendment to the Newark’s River: Public Access and Redevelopment Plan to the N"
+     }
+    },
+    {
+     "client": "abcwua",
+     "place": "ABCWUA",
+     "state": "NM",
+     "latest_matter_date": "2026-09-18",
+     "latest_matter_body": "Albuquerque Bernalillo County Water Utility Authority",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2006-09-20",
+      "file": "R-06-23",
+      "type": "Resolution",
+      "status": "Adopted",
+      "body": "Albuquerque Bernalillo County Water Utility Authority",
+      "title": "Authorizing the Acquisition of New Mexico Utilities Inc., via Negotiation, A Proceeding in Eminent Domain or Otherwise; and Authorizing The Executive Director to Perform All Acts in Furtherance of Such Acquisition"
+     }
+    },
+    {
+     "client": "cabq",
+     "place": "Albuquerque",
+     "state": "NM",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2011-04-18",
+      "file": "OC-11-23",
+      "type": "Other Communication",
+      "status": "Approved",
+      "body": "City Council",
+      "title": "Hearing on Condemnation of Building at 3106 Monroe N.E."
+     }
+    },
+    {
+     "client": "clark",
+     "place": "Clark County",
+     "state": "NV",
+     "latest_matter_date": "2026-11-05",
+     "latest_matter_body": "Debt Management Commission",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2025-08-28",
+      "file": "25-2855",
+      "type": "Consent",
+      "status": "Passed",
+      "body": "Clark County Board of Commissioners",
+      "title": "Approve and authorize a proposed settlement in the amount of $1,860,000 for Assessor’s Parcel Number 140-35-601-032 (Ronald and Kathryn Angeli, husband and wife as joint tenants) needed as right-of-way for construction o"
+     }
+    },
+    {
+     "client": "cityofrochester",
+     "place": "Rochester",
+     "state": "NY",
+     "latest_matter_date": "2026-10-14",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "westchestercountyny",
+     "place": "Westchester County",
+     "state": "NY",
+     "latest_matter_date": "2026-11-09",
+     "latest_matter_body": "County Executive",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2015-02-18",
+      "file": "7889",
+      "type": "COMMUNICATION - Articles",
+      "status": "New Business",
+      "body": "Board of Legislators",
+      "title": "HON. PETER HARCKHAM: Huff Post article-Nebraska Judge halts eminent domain re: Keystone Route"
+     }
+    },
+    {
+     "client": "yonkersny",
+     "place": "Yonkers",
+     "state": "NY",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Public Hearing Notice",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2025-04-11",
+      "file": "RES.53-2025",
+      "type": "Resolution",
+      "status": "Passed",
+      "body": "City Council of Yonkers Stated Meeting",
+      "title": "RESOLUTION AUTHORIZING THE ADOPTION AND PUBLICATION BY THE CITY COUNCIL OF THE CITY OF YONKERS OF THE DETERMINATION AND FINDINGS (AS DEFINED BELOW) UNDER SECTION 204 OF THE NEW YORK EMINENT DOMAIN PROCEDURE LAW CONCERNIN"
+     }
+    },
+    {
+     "client": "canton",
+     "place": "Canton",
+     "state": "OH",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "Canton Building Authority",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2021-07-07",
+      "file": "2021-0196",
+      "type": "General Item",
+      "status": "Agenda Ready",
+      "body": "City Council",
+      "title": "Discussion and Approval of Filing Condemnation Action for Easement for the Sewer Line and Pedestrian Trail Across Property of Crescent Farms Canton, LLC - City Attorney Bobby Dyer - Attachment 11F"
+     }
+    },
+    {
+     "client": "cincinnatioh",
+     "place": "Cincinnati",
+     "state": "OH",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Economic and Cultural Opportunity",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2023-06-20",
+      "file": "202301801",
+      "type": "Resolution",
+      "status": "Passed",
+      "body": "Cincinnati City Council",
+      "title": "RESOLUTION, submitted by Vice Mayor Kearney, from Emily Smart Woerner, City Solicitor, EXPRESSING Council’s condemnation of Ohio Senate Bill 83 and Ohio House Bill 151 and the harmful impact they would have on higher edu"
+     }
+    },
+    {
+     "client": "cityofcleveland",
+     "place": "Cleveland",
+     "state": "OH",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2010-02-05",
+      "file": "2199-05",
+      "type": "Ordinance",
+      "status": "Historical",
+      "body": "City Council",
+      "title": "AN EMERGENCY ORDINANCE TO AMEND SECTIONS 369.21 AND 367.99 OF THE CODIFIED ORDINANCES OF CLEVELAND, OHIO, 1976, AS ENACTED AND AMENDED BY VARIOUS ORDINANCES, RELATING TO CONDEMNATION OF PREMISES; CONDITIONS AND NOTICE AN"
+     }
+    },
+    {
+     "client": "columbus",
+     "place": "Columbus",
+     "state": "OH",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "City Bulletin",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2005-02-17",
+      "file": "0400-2005",
+      "type": "Ordinance",
+      "status": "Defeated",
+      "body": "Public Service & Transportation Committee",
+      "title": "To amend the 2004 Capital Improvements Budget; to authorize the transfer of $1,000,000.00 between projects within the 1995, 1999 Voted Streets and Highways Fund; to authorize the City Attorney to expend an additional $1,"
+     }
+    },
+    {
+     "client": "toledo",
+     "place": "Toledo",
+     "state": "OH",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "Zoning & Planning Committee",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "oregonmetro",
+     "place": "Oregon Metro",
+     "state": "OR",
+     "latest_matter_date": "2026-11-19",
+     "latest_matter_body": "Joint Policy Advisory Committee on Transportation (JPACT)",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "salem",
+     "place": "Salem",
+     "state": "OR",
+     "latest_matter_date": "2026-06-21",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2024-11-20",
+      "file": "24-479",
+      "type": "Resolution",
+      "status": "Agenda Ready",
+      "body": "City Council",
+      "title": "Initiation of Eminent Domain / Condemnation Proceedings Related to the 2022 Safety and Livability Bond Bridges Rehabilitation Project Ward(s): Ward 1 Councilor(s): Councilor Stapleton Neighborhood(s): NEN Result Area(s):"
+     }
+    },
+    {
+     "client": "pittsburgh",
+     "place": "Pittsburgh",
+     "state": "PA",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Committee on Innovation, Performance, Asset Management, and Technology",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-10-09",
+      "file": "2026-0981",
+      "type": "Resolution",
+      "status": "Passed Finally",
+      "body": "Committee on Public Works and Infrastructure",
+      "title": "Resolution amending Resolution 561 of 2026 entitled, a Resolution authorizing the taking, appropriating, and condemning by the City of Pittsburgh of certain property rights in temporary construction easements and public "
+     }
+    },
+    {
+     "client": "providenceri",
+     "place": "Providence",
+     "state": "RI",
+     "latest_matter_date": "2026-06-15",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "matatransit",
+     "place": "MATA",
+     "state": "TN",
+     "latest_matter_date": "2026-09-14",
+     "latest_matter_body": "Board of Commissioners",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "nashville",
+     "place": "Nashville",
+     "state": "TN",
+     "latest_matter_date": "2026-11-10",
+     "latest_matter_body": "Metropolitan Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-11-04",
+      "file": "BL2026-1659",
+      "type": "Bill",
+      "status": "First Reading",
+      "body": "Metropolitan Council",
+      "title": "An ordinance authorizing The Metropolitan Government of Nashville and Davidson County to acquire permanent and temporary easements through negotiation, condemnation and acceptance for the 2025 Leatherbury Court Stormwate"
+     }
+    },
+    {
+     "client": "austintexas",
+     "place": "Austin",
+     "state": "TX",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-10-19",
+      "file": "26-3008",
+      "type": "Eminent Domain ",
+      "status": "Agenda Ready",
+      "body": "City Council",
+      "title": "Approve a resolution authorizing the filing of eminent domain proceedings and payment to acquire the property interests needed in support of Austin Energy’s Capital Express Central CKT823, 834, & 835 Structure Relocation"
+     }
+    },
+    {
+     "client": "corpuschristi",
+     "place": "Corpus Christi",
+     "state": "TX",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Airport Board",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-08-18",
+      "file": "26-1338",
+      "type": "Ordinance",
+      "status": "Future Agenda",
+      "body": "City Council",
+      "title": "One-reading ordinance declaring a public necessity and authorizing the use of the power of eminent domain to acquire easements on Nueces County Appraisal District Property ID (NCAD ID) 507301 with a legal description of "
+     }
+    },
+    {
+     "client": "dfwairport",
+     "place": "DFW Airport",
+     "state": "TX",
+     "latest_matter_date": "2022-03-23",
+     "latest_matter_body": "Concessions/Commercial Development Committee",
+     "active": false,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "cityofdallas",
+     "place": "Dallas",
+     "state": "TX",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "Department of Planning and Development",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-11-12",
+      "file": "26-3734A",
+      "type": "UPCOMING AGENDA ITEMS",
+      "status": "Agenda Ready",
+      "body": "Transportation and Infrastructure Committee",
+      "title": "(26-3626A) (Council District: 4) Authorize an acquisition, including the exercise of the right of eminent domain, if such becomes necessary, from Darling International Inc., of two tracts of land, in fee, containing a to"
+     }
+    },
+    {
+     "client": "elpasotexas",
+     "place": "El Paso",
+     "state": "TX",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Greater El Paso Civic, Convention and Tourism Advisory Board",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-06-23",
+      "file": "26-0791",
+      "type": "Other Business",
+      "status": "Agenda Ready",
+      "body": "City Council",
+      "title": "Discussion, consideration, and action to approve a Resolution pursuant to Texas Government Code, Section 2206.053, authorizing the use of eminent domain to condemn the property described below, comprised of 3.095 acres, "
+     }
+    },
+    {
+     "client": "fortworthgov",
+     "place": "Fort Worth",
+     "state": "TX",
+     "latest_matter_date": "2026-06-02",
+     "latest_matter_body": "CITY COUNCIL",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-06-01",
+      "file": "M&C 26-0475",
+      "type": "Land - Report of CM",
+      "status": "Passed",
+      "body": "CITY COUNCIL",
+      "title": "(CD 7) Adopt Resolution Authorizing Condemnation by Eminent Domain to Acquire a Total of 2,180 Square Feet of Temporary Construction Easement Rights From Real Properties Owned by: Barry G. Caldwell, Located at 2321 Ashla"
+     }
+    },
+    {
+     "client": "grandprairie",
+     "place": "Grand Prairie",
+     "state": "TX",
+     "latest_matter_date": "2021-01-14",
+     "latest_matter_body": "Planning",
+     "active": false,
+     "condemnation_title_hits_sample": {
+      "date": "2020-04-14",
+      "file": "20-9918",
+      "type": "Agenda Item",
+      "status": "Consent Agenda",
+      "body": "City Attorney",
+      "title": "Authorize settlement in lieu of proceeding further with condemnation in the condemnation lawsuit styled City of Grand Prairie v. Charles N. Fry, Jr. a/k/a C.N. Fry, Jr. and The Charles N. Fry, Jr. and Karen Ann Fry Revoc"
+     }
+    },
+    {
+     "client": "harriscountytx",
+     "place": "Harris County",
+     "state": "TX",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Commissioners Court",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-09-03",
+      "file": "26-6066",
+      "type": "Public Necessity",
+      "status": "Passed",
+      "body": "Commissioners Court",
+      "title": "Request for approval to decree that the Harris County Flood Control District project serves a public purpose and public necessity, which requires that the Harris County Real Property Division be directed to acquire 18 fe"
+     }
+    },
+    {
+     "client": "houstonisd",
+     "place": "Houston ISD",
+     "state": "TX",
+     "latest_matter_date": "2026-11-09",
+     "latest_matter_body": "Consent Agenda",
+     "active": true,
+     "condemnation_title_hits_sample": null
+    },
+    {
+     "client": "killeen",
+     "place": "Killeen",
+     "state": "TX",
+     "latest_matter_date": "2026-11-04",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2024-12-09",
+      "file": "RS-25-008",
+      "type": "Resolution",
+      "status": "Passed",
+      "body": "City Council",
+      "title": "Consider a memorandum/resolution approving a request submitted by Jane W. Janecek, on behalf of Bunny Trail Real Estate, LP, authorizing the City to utilize its condemnation authority in accordance with Killeen Code of O"
+     }
+    },
+    {
+     "client": "cityoflaredo",
+     "place": "Laredo",
+     "state": "TX",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2024-10-10",
+      "file": "24-1993",
+      "type": "Closed Session",
+      "status": "Passed",
+      "body": "City Council",
+      "title": "Request for Executive Session pursuant to Texas Government Code Section 551.072, Deliberation Regarding Real Property, to discuss possible condemnation of real property located on 1218 Matamoros St. with a legal descript"
+     }
+    },
+    {
+     "client": "leaguecity",
+     "place": "League City",
+     "state": "TX",
+     "latest_matter_date": "2026-11-09",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-04-16",
+      "file": "26-0169",
+      "type": "Agenda Item",
+      "status": "Approved",
+      "body": "Capital Projects",
+      "title": "Consider and take action on a resolution determining that land is needed for the construction and improvements associated with the Clear Creek Village Soundwall Project (ST2202), in the City of League City, Texas, specif"
+     }
+    },
+    {
+     "client": "mckinney",
+     "place": "McKinney",
+     "state": "TX",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "Board of Adjustment",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-06-01",
+      "file": "26-0583",
+      "type": "Resolution",
+      "status": "Regular Agenda Item",
+      "body": "City Council Regular Meeting",
+      "title": "Consider/Discuss/Act on Adoption of a Resolution Determining a Public Necessity to Acquire Certain Easement Rights for Public Use by Eminent Domain for a Sanitary Sewer Easement and a Temporary Construction Easement asso"
+     }
+    },
+    {
+     "client": "mesquite",
+     "place": "Mesquite",
+     "state": "TX",
+     "latest_matter_date": "2026-11-04",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2023-03-03",
+      "file": "23-6485",
+      "type": "Agenda Item",
+      "status": "Passed",
+      "body": "City Council",
+      "title": "An ordinance determining the necessity of acquiring real property for construction, operation, and maintenance of public facilities on a portion of the property located at the northwest intersection of FM 2757 and CR 257"
+     }
+    },
+    {
+     "client": "newbraunfels",
+     "place": "New Braunfels",
+     "state": "TX",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-08-28",
+      "file": "26-1061",
+      "type": "Resolution",
+      "status": "Individual Item Ready",
+      "body": "City Council",
+      "title": "Discuss and Consider a Resolution authorizing acquisition, by use of the Power of Eminent Domain, of a 0.7402-Acre Permanent Utility Easement Out of the A.M. Esnaurizar Survey, Abstract 98, Comal County, Texas, Being All"
+     }
+    },
+    {
+     "client": "pflugerville",
+     "place": "Pflugerville",
+     "state": "TX",
+     "latest_matter_date": "2026-12-22",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-10-27",
+      "file": "2026-1043",
+      "type": "Agenda Item",
+      "status": "Discuss only",
+      "body": "Public Works",
+      "title": "1.) Executive Session Item: Consultation with legal counsel pursuant to Section 551.071 of the Texas Government Code regarding the award of the Special Commissioners in the condemnation proceeding styled City of Pflugerv"
+     }
+    },
+    {
+     "client": "plano",
+     "place": "Plano",
+     "state": "TX",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "City Council Preliminary Open Meeting",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-08-24",
+      "file": "26-788",
+      "type": "CC - Items for Individual Consideration",
+      "status": "Agenda Ready",
+      "body": "City Council",
+      "title": "Consideration of an Ordinance to determine the public use, need and necessity for the acquisition of the fee or easement interest in the properties as described in the attached Exhibit “A” located generally along the eas"
+     }
+    },
+    {
+     "client": "roundrock",
+     "place": "Round Rock",
+     "state": "TX",
+     "latest_matter_date": "2026-11-04",
+     "latest_matter_body": "Historic Preservation Commission",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-10-29",
+      "file": "2026-280",
+      "type": "Resolution",
+      "status": "Agenda Ready",
+      "body": "City Council",
+      "title": "Consider a resolution determining the necessity and authorizing the use of the City’s power of eminent domain to acquire 0.0778 acre of land owned by Walima LLC for the Gattis School Road Segment 2 Project."
+     }
+    },
+    {
+     "client": "sanantonio",
+     "place": "San Antonio",
+     "state": "TX",
+     "latest_matter_date": "2021-09-24",
+     "latest_matter_body": "Head Start Policy Council",
+     "active": false,
+     "condemnation_title_hits_sample": {
+      "date": "2020-10-08",
+      "file": "20-6059",
+      "type": "Real Property Acquisition",
+      "status": "Passed",
+      "body": "City Council A Session",
+      "title": "Ordinance approving the acquisition through negotiation or condemnation of interests in land sufficient for project purposes of privately-owned real property located along Southcross Boulevard between Pleasanton Road and"
+     }
+    },
+    {
+     "client": "sanmarcos",
+     "place": "San Marcos",
+     "state": "TX",
+     "latest_matter_date": "2026-11-04",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2024-03-28",
+      "file": "TMP-2062",
+      "type": "Action Item",
+      "status": "Agenda Ready",
+      "body": "City Council",
+      "title": "RESOLUTION NO. 2024-9278 - DECLARING THE PUBLIC INTEREST AND NECESSITY TO ACQUIRE PROPERTY BY EMINENT DOMAIN FOR THE IMPLEMENTATION OF THE UNIVERSITY DISTRICT SPECIFIC PLAN, NORTH CITY DRIVE, AND STREET “A” RIGHT-OF-WAY "
+     }
+    },
+    {
+     "client": "slco",
+     "place": "Salt Lake County",
+     "state": "UT",
+     "latest_matter_date": "2025-05-29",
+     "latest_matter_body": "Constable Nominating Commission",
+     "active": false,
+     "condemnation_title_hits_sample": {
+      "date": "2023-08-09",
+      "file": "23-0786",
+      "type": "Discussion Items",
+      "status": "Passed",
+      "body": "County Council",
+      "title": "Consideration of a Resolution of The Salt Lake County Council Authorizing and Approving Proceedings in Eminent Domain as Necessary for Property Owned by Old Time Clock, LLC"
+     }
+    },
+    {
+     "client": "rideuta",
+     "place": "UTA",
+     "state": "UT",
+     "latest_matter_date": "2026-11-02",
+     "latest_matter_body": "Transit Commission",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2021-12-17",
+      "file": "22-006",
+      "type": "Resolution",
+      "status": "Passed",
+      "body": "Board of Trustees",
+      "title": "R2022-01-04 - Resolution Authorizing the Petitioning of the Utah Department of Transportation to use Eminent Domain for the Acquisition of Property necessary for the Ogden-Weber State Bus Rapid Transit Project - Parcels "
+     }
+    },
+    {
+     "client": "alexandria",
+     "place": "Alexandria",
+     "state": "VA",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "Planning Commission Public Hearing",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2013-10-28",
+      "file": "14-2073",
+      "type": "Other",
+      "status": "Agenda Ready",
+      "body": "City Council Legislative Meeting",
+      "title": "Public Hearing Regarding the City’s Options, Including Eminent Domain, for Implementing the Approved Waterfront Small Area Plan in the Center of the Plan at the Foot of King Street Including the Old Dominion Boat Club’s "
+     }
+    },
+    {
+     "client": "hampton",
+     "place": "Hampton",
+     "state": "VA",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "Planning Commission",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-03-12",
+      "file": "26-0107",
+      "type": "Resolution",
+      "status": "Passed",
+      "body": "City Council Legislative Session",
+      "title": "Resolution to Authorize the Acquisitions, by Negotiation or Condemnation, of Portions of Land in Fee Simple from Properties Located at 101 Clover Street (LRSN: 8003106); 715 E. Little Back River Road (LRSN: 8004923); 12 "
+     }
+    },
+    {
+     "client": "richmondva",
+     "place": "Richmond",
+     "state": "VA",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "City Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-06-30",
+      "file": "ORD. 2026-292",
+      "type": "Ordinance",
+      "status": "Adopted",
+      "body": "City Council",
+      "title": "To declare a public necessity for and to authorize the acquisition by gift, purchase, condemnation, or otherwise, certain temporary construction easements, permanent retaining wall maintenance easements, and permanent ut"
+     }
+    },
+    {
+     "client": "bellevue",
+     "place": "Bellevue",
+     "state": "WA",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "Planning Commission",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-08-14",
+      "file": "ORD 6940",
+      "type": "Ordinance",
+      "status": "Consent Agenda",
+      "body": "City Council Regular Meeting",
+      "title": "Ordinance authorizing and providing for acquisition of interests in land for the purpose of constructing the 120th Avenue NE Stage 4, NE 16th Street to Northup Way Project (CIP Plan No. PW-R-186); providing for condemnat"
+     }
+    },
+    {
+     "client": "kingcounty",
+     "place": "King County",
+     "state": "WA",
+     "latest_matter_date": "2026-11-24",
+     "latest_matter_body": "Metropolitan King County Council",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2025-07-22",
+      "file": "2025-0218",
+      "type": "Ordinance",
+      "status": "Passed",
+      "body": "Transportation, Economy, and Environment Committee",
+      "title": "AN ORDINANCE outlining the intended sequencing of steps to acquire property interests needed for the RapidRide I Line project; and authorizing the condemnation of real property to obtain fee title, easements, and other r"
+     }
+    },
+    {
+     "client": "olympia",
+     "place": "Olympia",
+     "state": "WA",
+     "latest_matter_date": "2026-11-19",
+     "latest_matter_body": "Land Use & Environment Committee",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2022-10-11",
+      "file": "22-0958",
+      "type": "ordinance",
+      "status": "Passed",
+      "body": "City Council",
+      "title": "Approval of an Ordinance Authorizing the Use of Eminent Domain by the City of Olympia for the Fones Road Improvement Project"
+     }
+    },
+    {
+     "client": "redmond",
+     "place": "Redmond",
+     "state": "WA",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "Committee of the Whole - Public Safety and Human Services",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2024-11-15",
+      "file": "AM No. 24-191",
+      "type": "Consent Item",
+      "status": "Passed",
+      "body": "City Council",
+      "title": "Approval of an Ordinance Authorizing the City’s Acquisition of Temporary and Permanent Interests in Real Property by Negotiation and Possible Use of Eminent Domain (Condemnation) for the Evans Creek Relocation Project No"
+     }
+    },
+    {
+     "client": "seattle",
+     "place": "Seattle",
+     "state": "WA",
+     "latest_matter_date": "2026-11-13",
+     "latest_matter_body": "City Clerk",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-07-22",
+      "file": "CB 121292",
+      "type": "Ordinance (Ord)",
+      "status": "Passed",
+      "body": "City Clerk",
+      "title": "An ordinance relating to Seattle Public Utilities; authorizing the acquisition by negotiation or eminent domain (condemnation) of three parcels of land in Seattle for utility purposes identified as King County Parcel Num"
+     }
+    },
+    {
+     "client": "snohomish",
+     "place": "Snohomish County",
+     "state": "WA",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "To Be Determined",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-05-05",
+      "file": "2026-1164",
+      "type": "Motion",
+      "status": "Approved",
+      "body": "Public Hearings",
+      "title": "Motion 26-196, authorizing the Prosecuting Attorney to commence condemnation proceedings for Jordan Creek Bridge (Jordan Creek Bridge No. 214) - RC 1369 / UPI# 15-0083 - Parcel 002 (Case)"
+     }
+    },
+    {
+     "client": "cityoftacoma",
+     "place": "Tacoma",
+     "state": "WA",
+     "latest_matter_date": "2026-11-12",
+     "latest_matter_body": "Government Performance and Finance Committee",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-07-22",
+      "file": "ORD29117",
+      "type": "Ordinance",
+      "status": "Passed",
+      "body": "City Council",
+      "title": "An ordinance declaring the public necessity for, and providing for the acquisition by eminent domain, certain property along a vacated alleyway located between Puyallup Avenue and East 25th Street, adjacent to the east s"
+     }
+    },
+    {
+     "client": "dane",
+     "place": "Dane County",
+     "state": "WI",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Community Justice Council - Behavioral Health Subcommittee",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2026-06-02",
+      "file": "2026 MIN-079",
+      "type": "Minutes",
+      "status": "Agenda Ready",
+      "body": "Condemnation Commission",
+      "title": "MINUTES OF THE JUNE 25, 2025 CONDEMNATION COMMISSION MEETING"
+     }
+    },
+    {
+     "client": "madison",
+     "place": "Madison",
+     "state": "WI",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "BOARD OF PUBLIC WORKS",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2017-09-14",
+      "file": "48869",
+      "type": "Resolution",
+      "status": "Passed",
+      "body": "Mayor's Office",
+      "title": "Opposing the State Prohibiting the Use of Condemnation for Bike and Pedestrian Paths."
+     }
+    },
+    {
+     "client": "milwaukee",
+     "place": "Milwaukee",
+     "state": "WI",
+     "latest_matter_date": "2026-11-24",
+     "latest_matter_body": "COMMON COUNCIL",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2024-08-20",
+      "file": "24153",
+      "type": "APPEAL",
+      "status": "Denied",
+      "body": "ADMINISTRATIVE REVIEW BOARD OF APPEALS",
+      "title": "Appeal of Kevin Bian for reinspection condemnation charges relating to garbage and litter (1222 S 23rd St.) (8th Aldermanic District)."
+     }
+    },
+    {
+     "client": "milwaukeecounty",
+     "place": "Milwaukee County",
+     "state": "WI",
+     "latest_matter_date": "2026-10-21",
+     "latest_matter_body": "County Clerk's Office",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2012-11-14",
+      "file": "12-898",
+      "type": "Action Report",
+      "status": "Signed",
+      "body": "County Clerk",
+      "title": "From the Interim Director, Department of Transportation, requesting authorization to enter into an agreement with Milwaukee County Research Park Corporation (MCRPC) regarding the division of eminent domain compensation f"
+     }
+    },
+    {
+     "client": "racine",
+     "place": "Racine",
+     "state": "WI",
+     "latest_matter_date": "2026-11-16",
+     "latest_matter_body": "Finance and Personnel Committee",
+     "active": true,
+     "condemnation_title_hits_sample": {
+      "date": "2017-11-30",
+      "file": "1174-17",
+      "type": "Communication",
+      "status": "In Committee",
+      "body": "Redevelopment Authority of the City of Racine",
+      "title": "Subject: (Direct Referral) RDA Resolution 17-31 authorizing the RDA Executive Director to enter into arm's length negotiations for the purchase of property at 1230 Sixth Street (Gospel Lighthouse Pentecostal Church of Go"
+     }
+    }
+   ]
+  },
+  {
+   "name": "Charlotte Capital Improvement Projects (points)",
+   "authority": "City of Charlotte",
+   "states": [
+    "NC"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://gis.charlottenc.gov/arcgis/rest/services/CIP/Capital_Investment_Projects_Points/MapServer/0",
+   "verified": true,
+   "record_count": 711,
+   "geometry": "point",
+   "fields": {
+    "id": "Project_ID",
+    "name": "Project_Name",
+    "description": "Public_Project_Description",
+    "work_type": "Project_Type",
+    "cost": "Total_Project_Budget",
+    "status": "Project_Phase",
+    "date": "Anticipated_Start_Date"
+   },
+   "planned_filter": "Project_Phase IN ('Planning','Design','Design-Build','Active','On Hold','Procurement Services')  (exclude 'Complete','Cancelled'; 'Construction' = already building)",
+   "sample": "{\"Project_ID\": \"SWDES12165\", \"Project_Name\": \"Storm Drainage Improvement Project -1108 Jordans Pond Ln\", \"Public_Project_Description\": \"Install and/or repair drainage infrastructure.\", \"Project_Type\": \"Storm Water\", \"Project_Phase\": \"Design\", \"Anticipated_Start_Date\": \"TBD\", \"Total_Project_Budget\": \"TBD\"}",
+   "restrictions": null,
+   "notes": "Location_Description gives the place; Total_Project_Budget is text (\"TBD\" or \"$3,150,000\"). Mostly storm drainage, roads, sidewalks.",
+   "status_values": {
+    "Active": 39,
+    "Construction": 115,
+    "On Hold": 2,
+    "": 9,
+    "Planning": 31,
+    "Design": 502,
+    "Complete": 12,
+    "Cancelled": 1
+   },
+   "group": "charlotte_cip"
+  },
+  {
+   "name": "Charlotte Capital Improvement Projects (polygons)",
+   "authority": "City of Charlotte",
+   "states": [
+    "NC"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://gis.charlottenc.gov/arcgis/rest/services/CIP/Capital_Improvements_Projects_Polygons/MapServer/0",
+   "verified": true,
+   "record_count": 353,
+   "geometry": "polygon",
+   "fields": {
+    "id": "Project_ID",
+    "name": "Project_Name",
+    "description": "Public_Project_Description",
+    "work_type": "Project_Type",
+    "cost": "Total_Project_Budget",
+    "status": "Project_Phase",
+    "date": "Anticipated_Start_Date"
+   },
+   "planned_filter": "Project_Phase IN ('Planning','Design','Design-Build','Active','On Hold','Procurement Services')  (exclude 'Complete','Cancelled'; 'Construction' = already building)",
+   "sample": "{\"Project_ID\": \"PMES221736\", \"Project_Name\": \"Arrowood at Whitehall Commons Intersection\", \"Public_Project_Description\": \"New traffic signal at intersection with new ramps/ped signals/ crosswalks.\", \"Project_Type\": \"New Traffic Signal\", \"Project_Phase\": \"Design\", \"Anticipated_Start_Date\": \"Mid\", \"Total_Project_Budget\": \"$3,150,000\"}",
+   "restrictions": null,
+   "notes": "",
+   "status_values": {
+    "Active": 56,
+    "Complete": 48,
+    "Construction": 78,
+    "Design": 120,
+    "Design-Build": 2,
+    "On Hold": 9,
+    "Planning": 38,
+    "Procurement Services": 2
+   },
+   "group": "charlotte_cip"
+  },
+  {
+   "name": "Charlotte Capital Improvement Projects (lines)",
+   "authority": "City of Charlotte",
+   "states": [
+    "NC"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://gis.charlottenc.gov/arcgis/rest/services/CIP/Capital_Improvement_Project_Lines/MapServer/0",
+   "verified": true,
+   "record_count": 123,
+   "geometry": "polyline",
+   "fields": {
+    "id": "Project_ID",
+    "name": "Project_Name",
+    "description": "Public_Project_Description",
+    "work_type": "Project_Type",
+    "cost": "Total_Project_Budget",
+    "status": "Project_Phase",
+    "date": "Anticipated_Start_Date"
+   },
+   "planned_filter": "Project_Phase IN ('Planning','Design','Design-Build','Active','On Hold','Procurement Services')  (exclude 'Complete','Cancelled'; 'Construction' = already building)",
+   "sample": "{\"Project_ID\": \"SP_8\", \"Project_Name\": \"Graham Street Extension-Mallard Creek Road\", \"Project_Type\": \"Pedestrian and Bike\", \"Project_Phase\": \"Construction\", \"Total_Project_Budget\": \"$1,114,325\"}",
+   "restrictions": null,
+   "notes": "Includes new road alignments (e.g. Graham Street Extension).",
+   "status_values": {
+    "": 1,
+    "Active": 3,
+    "Complete": 21,
+    "Construction": 13,
+    "Design": 80,
+    "Planning": 5
+   },
+   "group": "charlotte_cip"
+  },
+  {
+   "name": "Dallas Capital Improvement Program: Active Bond Program - Points",
+   "authority": "City of Dallas",
+   "states": [
+    "TX"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/rwnOSbfKSwyTBcwN/arcgis/rest/services/CapitalImprovementProgram/FeatureServer/0",
+   "verified": true,
+   "record_count": 284,
+   "geometry": "point",
+   "fields": {
+    "id": "ProjectNum",
+    "name": "Name",
+    "description": "Description",
+    "work_type": "Category",
+    "cost": "BondAmount",
+    "status": "Status",
+    "county": "District",
+    "date": "CnstStartE"
+   },
+   "planned_filter": "Status IN ('Remaining To Be Awarded','Under Design','Awarded for Design','Design Completed','Under Acquisition','Advertised for Construction','On Hold')  -- 'Under Acquisition' is a direct right-of-way signal",
+   "sample": "{\"ProjectNum\": \"1006927\", \"Name\": \"UNT Transit Oriented Development\", \"Category\": \"Economic Development\", \"Status\": \"Under Construction\", \"BondAmount\": \"5000000\"}",
+   "restrictions": null,
+   "notes": "Same schema on every layer of the service (layers 0-11; 6,7,8,11 are tables without geometry). Date fields ending E are estimates, A actuals (DsgnAwardE, CnstStartE, CnstCmpltE).",
+   "status_values": {
+    "Awarded for Construction": 17,
+    "Awarded for Design": 3,
+    "Complete": 1,
+    "Design Completed": 7,
+    "Under Acquisition": 1,
+    "Under Construction": 132,
+    "Under Design": 123
+   },
+   "group": "dallas_cip"
+  },
+  {
+   "name": "Dallas Capital Improvement Program: Active Bond Program - Lines",
+   "authority": "City of Dallas",
+   "states": [
+    "TX"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/rwnOSbfKSwyTBcwN/arcgis/rest/services/CapitalImprovementProgram/FeatureServer/3",
+   "verified": true,
+   "record_count": 197,
+   "geometry": "polyline",
+   "fields": {
+    "id": "ProjectNum",
+    "name": "Name",
+    "description": "Description",
+    "work_type": "Category",
+    "cost": "BondAmount",
+    "status": "Status",
+    "county": "District",
+    "date": "CnstStartE"
+   },
+   "planned_filter": "Status IN ('Remaining To Be Awarded','Under Design','Awarded for Design','Design Completed','Under Acquisition','Advertised for Construction','On Hold')  -- 'Under Acquisition' is a direct right-of-way signal",
+   "sample": "{\"ProjectNum\": \"1007045\", \"Name\": \"Joppa Connector Trail\", \"Category\": \"Hike and Bike Trails\", \"Status\": \"Under Construction\", \"District\": \"TBD\"}",
+   "restrictions": null,
+   "notes": "Same schema on every layer of the service (layers 0-11; 6,7,8,11 are tables without geometry). Date fields ending E are estimates, A actuals (DsgnAwardE, CnstStartE, CnstCmpltE).",
+   "status_values": {
+    "Awarded for Construction": 9,
+    "Awarded for Design": 9,
+    "In Service": 2,
+    "Under Construction": 81,
+    "Under Design": 96
+   },
+   "group": "dallas_cip"
+  },
+  {
+   "name": "Dallas Capital Improvement Program: 2024 Bond Program - Points",
+   "authority": "City of Dallas",
+   "states": [
+    "TX"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/rwnOSbfKSwyTBcwN/arcgis/rest/services/CapitalImprovementProgram/FeatureServer/10",
+   "verified": true,
+   "record_count": 369,
+   "geometry": "point",
+   "fields": {
+    "id": "ProjectNum",
+    "name": "Name",
+    "description": "Description",
+    "work_type": "Category",
+    "cost": "BondAmount",
+    "status": "Status",
+    "county": "District",
+    "date": "CnstStartE"
+   },
+   "planned_filter": "Status IN ('Remaining To Be Awarded','Under Design','Awarded for Design','Design Completed','Under Acquisition','Advertised for Construction','On Hold')  -- 'Under Acquisition' is a direct right-of-way signal",
+   "sample": "{\"ProjectNum\": \"1019881\", \"Name\": \"Lancaster-Kiest Branch Library Monument Sign-CDSF-CD4\", \"Description\": \"Project has been declared as Lancaster-Kiest Branch Library Monument Sign\", \"Category\": \"CDSF\", \"BondAmount\": \"30000\", \"District\": \"04\"}",
+   "restrictions": null,
+   "notes": "Same schema on every layer of the service (layers 0-11; 6,7,8,11 are tables without geometry). Date fields ending E are estimates, A actuals (DsgnAwardE, CnstStartE, CnstCmpltE).",
+   "status_values": {
+    "": 59,
+    "Advertised for Construction": 2,
+    "Awarded for Construction": 2,
+    "Awarded for Design": 3,
+    "Canceled": 2,
+    "Canceled/Reprogrammed": 6,
+    "Complete": 16,
+    "Design Completed": 6,
+    "In Service": 1,
+    "On Hold": 4,
+    "Remaining To Be Awarded": 169,
+    "Under Construction": 30,
+    "Under Design": 69
+   },
+   "group": "dallas_cip"
+  },
+  {
+   "name": "Dallas Capital Improvement Program: 2024 Bond Program - Lines",
+   "authority": "City of Dallas",
+   "states": [
+    "TX"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/rwnOSbfKSwyTBcwN/arcgis/rest/services/CapitalImprovementProgram/FeatureServer/9",
+   "verified": true,
+   "record_count": 452,
+   "geometry": "polyline",
+   "fields": {
+    "id": "ProjectNum",
+    "name": "Name",
+    "description": "Description",
+    "work_type": "Category",
+    "cost": "BondAmount",
+    "status": "Status",
+    "county": "District",
+    "date": "CnstStartE"
+   },
+   "planned_filter": "Status IN ('Remaining To Be Awarded','Under Design','Awarded for Design','Design Completed','Under Acquisition','Advertised for Construction','On Hold')  -- 'Under Acquisition' is a direct right-of-way signal",
+   "sample": "{\"ProjectNum\": \"1019893\", \"Name\": \"2100-2200 Toluca Ave\", \"Description\": \"2024 Bond Program - Part of Project Street Group 24-4002; from W Illinois Avenue to W Woodin Blvd; Local street reconstruction of approximately 668 Linear feet \", \"Category\": \"Street Reconstruction - Local Streets\", \"Status\": \"Under Design\", \"BondAmount\": \"932039\", \"CnstStartE\": \"1840147200000\", \"District\": \"04\"}",
+   "restrictions": null,
+   "notes": "Same schema on every layer of the service (layers 0-11; 6,7,8,11 are tables without geometry). Date fields ending E are estimates, A actuals (DsgnAwardE, CnstStartE, CnstCmpltE).",
+   "status_values": {
+    "": 13,
+    "Awarded for Construction": 6,
+    "Awarded for Design": 9,
+    "Canceled": 9,
+    "Canceled/Reprogrammed": 3,
+    "Complete": 110,
+    "In Service": 40,
+    "On Hold": 28,
+    "Remaining To Be Awarded": 162,
+    "Under Construction": 16,
+    "Under Design": 56
+   },
+   "group": "dallas_cip"
+  },
+  {
+   "name": "Dallas Capital Improvement Program: 2017 Bond Program - Points",
+   "authority": "City of Dallas",
+   "states": [
+    "TX"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/rwnOSbfKSwyTBcwN/arcgis/rest/services/CapitalImprovementProgram/FeatureServer/1",
+   "verified": true,
+   "record_count": 368,
+   "geometry": "point",
+   "fields": {
+    "id": "ProjectNum",
+    "name": "Name",
+    "description": "Description",
+    "work_type": "Category",
+    "cost": "BondAmount",
+    "status": "Status",
+    "county": "District",
+    "date": "CnstStartE"
+   },
+   "planned_filter": "Status IN ('Remaining To Be Awarded','Under Design','Awarded for Design','Design Completed','Under Acquisition','Advertised for Construction','On Hold')  -- 'Under Acquisition' is a direct right-of-way signal",
+   "sample": "{\"ProjectNum\": \"1011596\", \"Name\": \"J. Erik Jonsson Central Library\", \"Description\": \"Rehabilitation of existing structure.  Includes roofing and plumbing corrections.\", \"Category\": \"Library Facilities\", \"Status\": \"In Service\", \"BondAmount\": \"99000\", \"CnstStartE\": \"1693440000000\", \"District\": \"02\"}",
+   "restrictions": null,
+   "notes": "Same schema on every layer of the service (layers 0-11; 6,7,8,11 are tables without geometry). Date fields ending E are estimates, A actuals (DsgnAwardE, CnstStartE, CnstCmpltE).",
+   "status_values": {
+    "": 8,
+    "Awarded for Construction": 12,
+    "Canceled": 1,
+    "Canceled/Reprogrammed": 40,
+    "Complete": 221,
+    "Design Completed": 1,
+    "In Service": 22,
+    "On Hold": 17,
+    "Remaining To Be Awarded": 12,
+    "Under Construction": 17,
+    "Under Design": 17
+   },
+   "group": "dallas_cip"
+  },
+  {
+   "name": "Dallas Capital Improvement Program: 2017 Bond Program - Lines",
+   "authority": "City of Dallas",
+   "states": [
+    "TX"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/rwnOSbfKSwyTBcwN/arcgis/rest/services/CapitalImprovementProgram/FeatureServer/4",
+   "verified": true,
+   "record_count": 1030,
+   "geometry": "polyline",
+   "fields": {
+    "id": "ProjectNum",
+    "name": "Name",
+    "description": "Description",
+    "work_type": "Category",
+    "cost": "BondAmount",
+    "status": "Status",
+    "county": "District",
+    "date": "CnstStartE"
+   },
+   "planned_filter": "Status IN ('Remaining To Be Awarded','Under Design','Awarded for Design','Design Completed','Under Acquisition','Advertised for Construction','On Hold')  -- 'Under Acquisition' is a direct right-of-way signal",
+   "sample": "{\"ProjectNum\": \"1011664\", \"Name\": \"Edgefield and Windomere/12th to Wentworth (alley)\", \"Description\": \"Alley Petition ProjectPB17-1003\", \"Category\": \"Alley Petitions\", \"Status\": \"Complete\", \"BondAmount\": \"214000\", \"CnstStartE\": \"1661817600000\", \"District\": \"01\"}",
+   "restrictions": null,
+   "notes": "Same schema on every layer of the service (layers 0-11; 6,7,8,11 are tables without geometry). Date fields ending E are estimates, A actuals (DsgnAwardE, CnstStartE, CnstCmpltE).",
+   "status_values": {
+    "Complete": 911,
+    "Canceled/Reprogrammed": 24,
+    "In Service": 29,
+    "Under Design": 29,
+    "Under Construction": 23,
+    "Awarded for Construction": 3,
+    "Remaining To Be Awarded": 3,
+    "On Hold": 7,
+    "": 1
+   },
+   "group": "dallas_cip"
+  },
+  {
+   "name": "Raleigh Capital Improvement Projects (public)",
+   "authority": "City of Raleigh",
+   "states": [
+    "NC"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/v400IkDOw1ad7Yad/arcgis/rest/services/Capital_Improvement_Projects_Public/FeatureServer/0",
+   "verified": true,
+   "record_count": 1200,
+   "geometry": "polygon",
+   "fields": {
+    "name": "PROJ_NAME",
+    "status": "STATUS",
+    "work_type": "DEPT",
+    "description": "URL"
+   },
+   "planned_filter": "STATUS IN ('planning','programmed','Not Started','prep','design','rowa','Pre-construction')  -- 'rowa' = right-of-way acquisition phase",
+   "sample": "{\"PROJ_NAME\": \"Mitchell Mill Road Widening\", \"DEPT\": \"trans\", \"STATUS\": \"complete\"}",
+   "restrictions": null,
+   "notes": "Thin attributes (name, dept, status, URL to project page); polygons of project limits. STATUS value rowa marks projects in right-of-way acquisition.",
+   "status_values": {
+    "None": 0,
+    "": 1,
+    "closed": 254,
+    "complete": 463,
+    "construction": 83,
+    "design": 202,
+    "Not Started": 11,
+    "planning": 68,
+    "Pre-construction": 8,
+    "prep": 4,
+    "programmed": 21,
+    "rowa": 8,
+    "unknown": 26
+   }
+  },
+  {
+   "name": "Virginia Beach CIP Projects",
+   "authority": "City of Virginia Beach",
+   "states": [
+    "VA"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/CyVvlIiUfRBmMQuu/arcgis/rest/services/CIP_Projects/FeatureServer/0",
+   "verified": true,
+   "record_count": 186,
+   "geometry": "point",
+   "fields": {
+    "id": "Project_Number",
+    "name": "Name",
+    "cost": "Project_Cost",
+    "county": "CouncilDistrict",
+    "work_type": "Section"
+   },
+   "planned_filter": "No status field: every row is a project in the adopted CIP document (PDF_Page points to the page). Treat all as planned/funded.",
+   "sample": "{\"Section\": \"Economic & Tourism Development\", \"Name\": \"17th Street Improvements - Phase I Pacific to Cypress\", \"CouncilDistrict\": \"5\", \"Project_Number\": \"100001\", \"Project_Cost\": \"48843040\"}",
+   "restrictions": null,
+   "notes": ""
+  },
+  {
+   "name": "Nashville Capital Projects (Capital Project Management System)",
+   "authority": "Metro Nashville & Davidson County",
+   "states": [
+    "TN"
+   ],
+   "coverage": "city/county",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/HdTo6HJqh92wn4D8/arcgis/rest/services/Capital_Project_Management_System_Merged_Tables_view/FeatureServer/0",
+   "verified": true,
+   "record_count": 1529,
+   "geometry": "none",
+   "fields": {
+    "name": "ProjectName",
+    "description": "Description",
+    "work_type": "ProjectType",
+    "cost": "RevisedBudget",
+    "status": "ProjectStatus",
+    "date": "EstStartDate",
+    "county": "CouncilDistricts"
+   },
+   "planned_filter": "ProjectStatus IN ('Planned','Scheduled','On Hold')  ('In Progress' = under way)",
+   "sample": "{\"ProjectName\": \"2021 Collier CEI – Project A – Summer Group Paving\", \"ProjectType\": \"New\", \"ProjectStatus\": \"Complete\", \"CouncilDistricts\": \"06,33,31,10,19,21,14,09,07,24,01,26,02,23,17,08,35,13,28,16,11,22,25,15,32,34,03,12,04,20,05,30,27,29,18\", \"RevisedBudget\": \"0\", \"EstStartDate\": \"1609459200000\", \"Description\": \"Paving CEI is needed for logging, estimating, and plans for 2021 summer paving projects for Groups 1,2,3,4,5 and special operations\"}",
+   "restrictions": null,
+   "notes": "Table without geometry, but has StreetAddress and ProjectLocation text. ProjectPhase and ProjectCategory also present.",
+   "status_values": {
+    "Complete": 488,
+    "Planned": 359,
+    "Scheduled": 47,
+    "On Hold": 76,
+    "Cancelled": 20,
+    "In Progress": 539
+   }
+  },
+  {
+   "name": "Seattle Public Utilities CIP Project Boundaries",
+   "authority": "Seattle Public Utilities",
+   "states": [
+    "WA"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/ZOyb2t4B0UYuYNYH/arcgis/rest/services/SPU_Capital_Improvement_Projects_and_Workorders/FeatureServer/2",
+   "verified": true,
+   "record_count": 58,
+   "geometry": "polygon",
+   "fields": {
+    "name": "CP_PRJCT_NAME",
+    "description": "CP_CMNCTN_DESC",
+    "work_type": "CP_PROGRAM_NAME",
+    "status": "CP_STATUS_TEXT",
+    "date": "CP_EXPCTD_CNST_DATE",
+    "id": "CP_PRJCT_CST_NBR"
+   },
+   "planned_filter": "CP_STATUS_TEXT='Active' and CP_EXPCTD_CNST_DATE in the future; CP_PRD_DVLP_PHASE_TEXT gives the phase",
+   "sample": "{\"CP_PRJCT_NAME\": \"Bitter Lake Reservoir Imprv\", \"CP_PROGRAM_NAME\": \"PC-SU-C140\", \"CP_STATUS_TEXT\": \"Active\", \"CP_EXPCTD_CNST_DATE\": \"1768928400000\", \"CP_PRJCT_CST_NBR\": \"76099280\", \"CP_CMNCTN_DESC\": \"Reservoir covering at Bitter Lake Reservoir \"}",
+   "restrictions": null,
+   "notes": "Water, drainage and sewer capital projects. Layer 1 of the same service is 5,700 small work orders (service renewals) - not useful.",
+   "status_values": {
+    "Active": 55,
+    "On Hold": 3
+   }
+  },
+  {
+   "name": "Seattle Parks and Recreation Capital Project Sites",
+   "authority": "Seattle Parks and Recreation",
+   "states": [
+    "WA"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/ZOyb2t4B0UYuYNYH/arcgis/rest/services/SPR_Capital_Project_Sites_public/FeatureServer/0",
+   "verified": true,
+   "record_count": 884,
+   "geometry": "point",
+   "fields": {
+    "description": "DESCRIPTION",
+    "status": "PHASE",
+    "date": "CONSTR_START",
+    "name": "PROJECTTIT",
+    "id": "PS_DET_PRO",
+    "cost": "TOT_VALUE",
+    "county": "COUNCIL_D"
+   },
+   "planned_filter": "PHASE IN ('Planning','Design','On Hold')",
+   "sample": "{\"PROJECTTIT\": \"Jackson Golf Driving Range Drainage and Turf\", \"PS_DET_PRO\": \"PRK732407-07\", \"COUNCIL_D\": \"5\", \"PHASE\": \"Close Out\", \"TOT_VALUE\": \"737975\"}",
+   "restrictions": null,
+   "notes": "Park projects; mostly on land the city already owns, low eminent-domain value.",
+   "status_values": {
+    "Complete": 30,
+    "Closed": 21,
+    "Construction": 85,
+    "Admin": 88,
+    "None": 0,
+    "Close Out": 162,
+    "On Hold": 3,
+    "Design": 123,
+    "Planning": 68
+   }
+  },
+  {
+   "name": "King County Wastewater Treatment Division capital projects",
+   "authority": "King County WTD",
+   "states": [
+    "WA"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/Ej0PsM5Aw677QF1W/arcgis/rest/services/WTDwebsiteCIP/FeatureServer/0",
+   "verified": true,
+   "record_count": 43,
+   "geometry": "point",
+   "fields": {
+    "id": "Id",
+    "name": "Name",
+    "status": "Status",
+    "description": "MgrateLink"
+   },
+   "planned_filter": "Status='Active'",
+   "sample": "{\"Id\": \"0\", \"Name\": \"Eastgate Sewer Pipeline Lining\", \"Status\": \"Completed\", \"MgrateLink\": \"https://www.kingcounty.gov/depts/dnrp/wtd/capital-projects/completed/eastgate.aspx\"}",
+   "restrictions": null,
+   "notes": "Only name, status and a link to the project web page. Small (43).",
+   "status_values": {
+    "Active": 12,
+    "Completed": 31
+   }
+  },
+  {
+   "name": "Miami-Dade Utility Coordination: DTPW capital improvement corridors",
+   "authority": "Miami-Dade Dept. of Transportation and Public Works",
+   "states": [
+    "FL"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/MDCPWCorridor_gdb/FeatureServer/0",
+   "verified": true,
+   "record_count": 90,
+   "geometry": "polyline",
+   "fields": {
+    "id": "PROJECTID",
+    "name": "PRJNAME",
+    "description": "PRJSCOPE",
+    "work_type": "FACTYPE",
+    "date": "STARTDATE",
+    "status": "GENPRJSTAT",
+    "county": "AGCYNAME"
+   },
+   "planned_filter": "GENPRJSTAT / AGYPRJSTAT hold the status; keep rows with STARTDATE in the future or ENDDATE not yet passed",
+   "sample": "{\"PRJNAME\": \"Traffic Signal Loop Repair and Installation\", \"PROJECTID\": \"20230220-1-72207\", \"PRJSCOPE\": \"Traffic Signal Improvement\", \"AGCYNAME\": \"Miami-Dade County Department of Transportation and Public Works\", \"FACTYPE\": \"Roadway\", \"GENPRJSTAT\": \"Construction\", \"STARTDATE\": \"1744776000000\"}",
+   "restrictions": null,
+   "notes": "",
+   "group": "miamidade_uc"
+  },
+  {
+   "name": "Miami-Dade Utility Coordination: DTPW capital improvement sites",
+   "authority": "Miami-Dade Dept. of Transportation and Public Works",
+   "states": [
+    "FL"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/MDCPWSite_gdb/FeatureServer/0",
+   "verified": true,
+   "record_count": 87,
+   "geometry": "point",
+   "fields": {
+    "id": "PROJECTID",
+    "name": "PRJNAME",
+    "description": "PRJSCOPE",
+    "work_type": "FACTYPE",
+    "date": "STARTDATE",
+    "status": "GENPRJSTAT",
+    "county": "AGCYNAME"
+   },
+   "planned_filter": "GENPRJSTAT / AGYPRJSTAT hold the status; keep rows with STARTDATE in the future or ENDDATE not yet passed",
+   "sample": "{\"PRJNAME\": \"Replace existing electrical service disconnect at NW 32 Av Between NW 176 St to NW 177 St (4364)\", \"PROJECTID\": \"20250048-6-72899\", \"PRJSCOPE\": \"Traffic Signal Improvement\", \"AGCYNAME\": \"Miami-Dade County Department of Transportation and Public Works\", \"FACTYPE\": \"Roadway\", \"GENPRJSTAT\": \"Construction\", \"STARTDATE\": \"1772600400000\"}",
+   "restrictions": null,
+   "notes": "",
+   "group": "miamidade_uc"
+  },
+  {
+   "name": "Miami-Dade Utility Coordination: WASD sewer capital projects",
+   "authority": "Miami-Dade Water and Sewer Department",
+   "states": [
+    "FL"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/WASDSewer_gdb/FeatureServer/0",
+   "verified": true,
+   "record_count": 161,
+   "geometry": "polyline",
+   "fields": {
+    "id": "PROJECTID",
+    "name": "PRJNAME",
+    "description": "PRJSCOPE",
+    "work_type": "FACTYPE",
+    "date": "STARTDATE",
+    "status": "GENPRJSTAT",
+    "county": "AGCYNAME"
+   },
+   "planned_filter": "GENPRJSTAT / AGYPRJSTAT hold the status; keep rows with STARTDATE in the future or ENDDATE not yet passed",
+   "sample": "{\"PRJNAME\": \"FM FOR PUMP STATION 0604\", \"PROJECTID\": \"11897\", \"PRJSCOPE\": \"-New 3100 LF of 8-inch FM\", \"AGCYNAME\": \"Miami-Dade Water and Sewer Department\", \"FACTYPE\": \"Sewer\", \"GENPRJSTAT\": \"Complete\", \"STARTDATE\": \"1405504800000\"}",
+   "restrictions": null,
+   "notes": "New force mains and sewer lines with lengths in PRJSCOPE.",
+   "group": "miamidade_uc"
+  },
+  {
+   "name": "Miami-Dade Utility Coordination: WASD water capital projects",
+   "authority": "Miami-Dade Water and Sewer Department",
+   "states": [
+    "FL"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/8Pc9XBTAsYuxx9Ny/arcgis/rest/services/WASDWater_gdb/FeatureServer/0",
+   "verified": true,
+   "record_count": 400,
+   "geometry": "polyline",
+   "fields": {
+    "id": "PROJECTID",
+    "name": "PRJNAME",
+    "description": "PRJSCOPE",
+    "work_type": "FACTYPE",
+    "date": "STARTDATE",
+    "status": "GENPRJSTAT",
+    "county": "AGCYNAME"
+   },
+   "planned_filter": "GENPRJSTAT / AGYPRJSTAT hold the status; keep rows with STARTDATE in the future or ENDDATE not yet passed",
+   "sample": "{\"PRJNAME\": \"EMERGENCY INSTALLATION OF FOUR (4) ACCESS MANHOLES IN SW 40TH ST (BIRD RD), AT 37TH AVE, ANDERSON RD, AND 57TH AVE\", \"PROJECTID\": \"12335\", \"PRJSCOPE\": \"Emergency installation of access manholes to facilitate repairs to PCCP water main.\", \"AGCYNAME\": \"Miami-Dade Water and Sewer Department\", \"FACTYPE\": \"Water\", \"GENPRJSTAT\": \"Complete\", \"STARTDATE\": \"1346320800000\"}",
+   "restrictions": null,
+   "notes": "",
+   "group": "miamidade_uc"
+  },
+  {
+   "name": "Orange County FL Public Works Capital Improvement Projects (lines)",
+   "authority": "Orange County Public Works",
+   "states": [
+    "FL"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/0U8EQ1FrumPeIqDb/arcgis/rest/services/Capital_Improvement_Projects_Map_(Public_-_2026_-_View)/FeatureServer/0",
+   "verified": true,
+   "record_count": 208,
+   "geometry": "polyline",
+   "fields": {
+    "name": "Project_Name",
+    "work_type": "ProjectType",
+    "status": "Phase",
+    "date": "Start_Date",
+    "description": "Project_Detail",
+    "county": "Location"
+   },
+   "planned_filter": "Phase IN ('0 Pending','1 Study','2 Design','3 ROW','4 Bidding','5 Scheduled')  -- '3 ROW' = right-of-way acquisition",
+   "sample": "{\"Project_Name\": \"Taft Vineland Rd Segment 1\", \"Location\": \"Taft Vineland Rd\", \"Project_Detail\": \"The project involves widening the existing two-lane road into a four-lane divided roadway, incorporating lighting and landscaping within the median. Project wil\", \"Phase\": \"2 Design\", \"Start_Date\": \"1998-05-19\", \"ProjectType\": \"Retrofit\"}",
+   "restrictions": null,
+   "notes": "Road widenings, new roads, sidewalks, drainage. Location / Location_From / Location_To give the limits.",
+   "status_values": {
+    "0 Pending": 26,
+    "1 Study": 19,
+    "2 Design": 39,
+    "3 ROW": 4,
+    "4 Bidding": 5,
+    "5 Scheduled": 9,
+    "6 Construction": 15,
+    "7 Completed": 91
+   },
+   "group": "orangefl_cip"
+  },
+  {
+   "name": "Orange County FL CIP Roadways",
+   "authority": "Orange County Public Works",
+   "states": [
+    "FL"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://ocgis4.ocfl.net/arcgis/rest/services/AGOL_Open_Data/MapServer/8",
+   "verified": true,
+   "record_count": 41,
+   "geometry": "polyline",
+   "fields": {
+    "id": "CIP_NO",
+    "name": "PROJNAME",
+    "work_type": "FUNDTYPE",
+    "status": "PHASE",
+    "county": "DISTRICT",
+    "description": "STREET",
+    "date": "CONSTART"
+   },
+   "planned_filter": "PHASE IN ('Design','Design RFP','RCA','ROW')  -- ROW = right-of-way acquisition; RCA = roadway conceptual analysis",
+   "sample": "{\"STREET\": \"KENNEDY BV\", \"PROJNAME\": \"Kennedy Bv East\", \"FUNDTYPE\": \"Programmed County Roadways\", \"CIP_NO\": \"3096\", \"DISTRICT\": \"2\", \"PHASE\": \"Design\", \"CONSTART\": \"Nov 2021\"}",
+   "restrictions": null,
+   "notes": "Programmed county roadway widenings; FROM_/TO_ give limits.",
+   "status_values": {
+    "Design": 26,
+    "ROW": 1,
+    "RCA": 4,
+    "Construction": 9,
+    "Design RFP": 1
+   },
+   "group": "orangefl_cip"
+  },
+  {
+   "name": "Fairfax County DOT Capital Improvement Linear Projects",
+   "authority": "Fairfax County Department of Transportation",
+   "states": [
+    "VA"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/ioennV6PpG5Xodq0/arcgis/rest/services/DOT_Capital_Improvement_Linear_Projects/FeatureServer/0",
+   "verified": true,
+   "record_count": 319,
+   "geometry": "polyline",
+   "fields": {
+    "id": "ID",
+    "description": "SCOPE",
+    "work_type": "PROJECT_TYPE",
+    "cost": "TOTAL_FUNDING",
+    "status": "STATUS",
+    "county": "DISTRICT",
+    "name": "PROJECT"
+   },
+   "planned_filter": "STATUS IN ('Project Initiation','Study','Design','Design-Build','ROW','Utilities','Bid Advertisement','On Hold')  -- ROW = land acquisition under way",
+   "sample": "{\"ID\": \"571\", \"PROJECT\": \"Route 29 from Legato Road to Shirley Gate Road\", \"SCOPE\": \"Widen northbound Route 29 to 3 lanes from Legato Road to Shirley Gate Road and add a dedicated right turn lane from Stevenson Drive to Waples Mill Road\", \"STATUS\": \"Complete\", \"DISTRICT\": \"BR; SP\", \"PROJECT_TYPE\": \"Primary Road\", \"TOTAL_FUNDING\": \"15.824\"}",
+   "restrictions": null,
+   "notes": "",
+   "status_values": {
+    "Cancelled": 15,
+    "Complete": 170,
+    "Construction": 15,
+    "Design": 32,
+    "Design-Build": 3,
+    "Inactive": 3,
+    "On Hold": 40,
+    "Project Initiation": 21,
+    "ROW": 9,
+    "Study": 8,
+    "Utilities": 3
+   },
+   "group": "fairfax_dot"
+  },
+  {
+   "name": "Fairfax County DOT Capital Improvement Spot Projects",
+   "authority": "Fairfax County Department of Transportation",
+   "states": [
+    "VA"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/ioennV6PpG5Xodq0/arcgis/rest/services/DOT_Capital_Improvement_Spot_Projects/FeatureServer/0",
+   "verified": true,
+   "record_count": 212,
+   "geometry": "point",
+   "fields": {
+    "id": "ID",
+    "description": "SCOPE",
+    "work_type": "PROJECT_TYPE",
+    "cost": "TOTAL_FUNDING",
+    "status": "STATUS",
+    "county": "DISTRICT",
+    "name": "PROJECT"
+   },
+   "planned_filter": "STATUS IN ('Project Initiation','Study','Design','Design-Build','ROW','Utilities','Bid Advertisement','On Hold')  -- ROW = land acquisition under way",
+   "sample": "{\"ID\": \"931\", \"PROJECT\": \"Huntington Bus Operations Expansion\", \"SCOPE\": \"Add two maintenance bays and a service area, site upgrades, and building upgrades to the existing facility\", \"STATUS\": \"Complete\", \"DISTRICT\": \"MV\", \"PROJECT_TYPE\": \"Transit\", \"TOTAL_FUNDING\": \"6.000\"}",
+   "restrictions": null,
+   "notes": "",
+   "status_values": {
+    "Bid Advertisement": 1,
+    "Cancelled": 8,
+    "Complete": 117,
+    "Construction": 7,
+    "Design": 29,
+    "Design-Build": 1,
+    "Inactive": 2,
+    "On Hold": 11,
+    "Project Initiation": 27,
+    "ROW": 4,
+    "Study": 5
+   },
+   "group": "fairfax_dot"
+  },
+  {
+   "name": "Fairfax County Capital Improvement Projects (facilities)",
+   "authority": "Fairfax County",
+   "states": [
+    "VA"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/ioennV6PpG5Xodq0/arcgis/rest/services/Capital_Improvement_Projects/FeatureServer/0",
+   "verified": true,
+   "record_count": 141,
+   "geometry": "point",
+   "fields": {
+    "work_type": "CATEGORY",
+    "status": "STATUS",
+    "date": "FISCALYEAR",
+    "county": "SUPERVISOR_DISTRICT",
+    "name": "PROJECT",
+    "description": "ADDRESS"
+   },
+   "planned_filter": "STATUS IN ('Proposed','In progress')",
+   "sample": "{\"PROJECT\": \"Courtroom Renovations\", \"CATEGORY\": \"Court Facilities\", \"ADDRESS\": \"4110 Chain Bridge Road\", \"SUPERVISOR_DISTRICT\": \"Providence\", \"STATUS\": \"In progress\", \"FISCALYEAR\": \"2022\"}",
+   "restrictions": null,
+   "notes": "Public buildings (courts, fire stations, libraries, schools).",
+   "status_values": {
+    "None": 0,
+    "In progress": 116,
+    "Proposed": 22
+   }
+  },
+  {
+   "name": "NYC Capital Projects Database (CPDB) - polygons",
+   "authority": "NYC Department of City Planning (projects of all city agencies)",
+   "states": [
+    "NY"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/Capital_Projects_Database_poly/FeatureServer/0",
+   "verified": true,
+   "record_count": 1784,
+   "geometry": "polygon",
+   "fields": {
+    "id": "maprojid",
+    "name": "descript",
+    "description": "descript",
+    "work_type": "typecat",
+    "date": "mindate|maxdate",
+    "cost": "pctotal",
+    "county": "magenname"
+   },
+   "planned_filter": "No status field. Keep rows whose maxdate (latest planned commitment date) is in the future; mindate/maxdate bracket planned spending.",
+   "sample": "{\"maprojid\": \"850GKOH15-01\", \"maxdate\": \"2028-06-01\", \"mindate\": \"2018-04-03\", \"magenname\": \"Department of Design and Construction\", \"descript\": \"GI - GREEN INFRASTRUCTURE IN OH-015 GRAVESEND BAY CSO PH 1\", \"typecat\": \"Fixed Asset\", \"pctotal\": \"94875000\"}",
+   "restrictions": null,
+   "notes": "Every capital project in the NYC Capital Commitment Plan that could be mapped. magenname = managing agency; ccpversion = plan version.",
+   "group": "nyc_cpdb"
+  },
+  {
+   "name": "NYC Capital Projects Database (CPDB) - points",
+   "authority": "NYC Department of City Planning (projects of all city agencies)",
+   "states": [
+    "NY"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services5.arcgis.com/GfwWNkhOj9bNBqoJ/arcgis/rest/services/Capital_Projects_Database_points/FeatureServer/0",
+   "verified": true,
+   "record_count": 2776,
+   "geometry": "point",
+   "fields": {
+    "id": "maprojid",
+    "name": "descript",
+    "description": "descript",
+    "work_type": "typecat",
+    "date": "mindate|maxdate",
+    "cost": "pctotal",
+    "county": "magenname"
+   },
+   "planned_filter": "No status field. Keep rows whose maxdate (latest planned commitment date) is in the future; mindate/maxdate bracket planned spending.",
+   "sample": "{\"maprojid\": \"037LNCA13AGL\", \"maxdate\": \"2027-06-01\", \"mindate\": \"2027-06-01\", \"magenname\": \"New York Public Library\", \"descript\": \"AGUILAR - Technology Upgrades\", \"typecat\": \"ITT, Vehicles, and Equipment\", \"pctotal\": \"0\"}",
+   "restrictions": null,
+   "notes": "",
+   "group": "nyc_cpdb"
+  },
+  {
+   "name": "Austin Watershed Protection CIP projects",
+   "authority": "City of Austin Watershed Protection Department",
+   "states": [
+    "TX"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/0L95CJ0VTaxqcmED/arcgis/rest/services/WPD_BenefitsCIP/FeatureServer/0",
+   "verified": true,
+   "record_count": 364,
+   "geometry": "polygon",
+   "fields": {
+    "id": "PROJECT_ID",
+    "name": "PROJECT_NAME",
+    "description": "WPD_PROJECT_TYPE",
+    "work_type": "PROJECT_TYPE",
+    "cost": "ECAPRIS_BUDGET_ESTIMATE",
+    "status": "PROJECT_PHASE",
+    "date": "FIVEYEAR_DESCRIPTION"
+   },
+   "planned_filter": "PROJECT_PHASE IN ('Preliminary','Preliminary Phase','Design','Design Phase','Bid/Award/Execution Phase')",
+   "sample": "{\"PROJECT_ID\": \"6039\", \"PROJECT_NAME\": \"East Bouldin Creek - St. Edwards Regional Water Quality Pond\", \"PROJECT_TYPE\": \"Drainage\", \"WPD_PROJECT_TYPE\": \"Construction\", \"ECAPRIS_BUDGET_ESTIMATE\": \"0\", \"FIVEYEAR_DESCRIPTION\": \"FY22-26\"}",
+   "restrictions": null,
+   "notes": "Drainage, flood-risk reduction (including buyouts), erosion and water-quality projects.",
+   "status_values": {
+    "None": 0,
+    "Bid/Award/Execution Phase": 4,
+    "Construction Phase": 23,
+    "Design": 3,
+    "Design Phase": 45,
+    "Post-Construction Phase": 27,
+    "Preliminary": 30,
+    "Preliminary Phase": 39
+   }
+  },
+  {
+   "name": "Montgomery County TX CIP Project Areas (road bond)",
+   "authority": "Montgomery County, Texas",
+   "states": [
+    "TX"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/PRoAPGnMSUqvTrzq/arcgis/rest/services/CIP_Project_Areas_View/FeatureServer/0",
+   "verified": true,
+   "record_count": 78,
+   "geometry": "polygon",
+   "fields": {
+    "id": "PROJID",
+    "name": "PROJNAME",
+    "description": "DESCRIPTION",
+    "work_type": "PROJTYPE",
+    "cost": "ESTCOST",
+    "status": "PROJPHASE",
+    "date": "PLANSTARTDT",
+    "county": "PRECINCT"
+   },
+   "planned_filter": "PROJPHASE='Proposal'  (others: Construction, Closeout)",
+   "sample": "{\"PROJID\": \"Robinson Road\", \"PROJNAME\": \"Robinson Road Widening\", \"PROJTYPE\": \"Transportation\", \"PROJPHASE\": \"Proposal\", \"PRECINCT\": \"C3\", \"DESCRIPTION\": \"Road Widening\"}",
+   "restrictions": null,
+   "notes": "Road widenings and new roads by commissioner precinct; PROJFROM/PROJTO give limits.",
+   "status_values": {
+    "Closeout": 15,
+    "Construction": 12,
+    "Proposal": 51
+   }
+  },
+  {
+   "name": "Prince William County Capital Improvement Projects",
+   "authority": "Prince William County",
+   "states": [
+    "VA"
+   ],
+   "coverage": "county",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/0Q7l03Ls62VG0fy4/arcgis/rest/services/CIP_view/FeatureServer/0",
+   "verified": true,
+   "record_count": 55,
+   "geometry": "point",
+   "fields": {
+    "id": "ID",
+    "name": "ProjectName",
+    "description": "Description",
+    "work_type": "Category1_CIP_Section",
+    "cost": "Cost",
+    "date": "Completion_Date",
+    "county": "Magisterial_District"
+   },
+   "planned_filter": "No status field; Completion_Date holds the planned fiscal year (e.g. FY2027) - keep future years.",
+   "sample": "{\"ProjectName\": \"Doves Landing Park\", \"Category1_CIP_Section\": \"Community Development\", \"Cost\": \"$3,900,000\", \"Completion_Date\": \"FY2027\", \"Description\": \"Doves Landing is a 308-acre passive park that will expand to nearly 500 acres with the addition of the Sinclair Mill and Long Branch properties, with the Sincla\", \"Magisterial_District\": \"Coles\", \"ID\": \"2\"}",
+   "restrictions": null,
+   "notes": ""
+  },
+  {
+   "name": "St. Louis MSD Active Wastewater Projects",
+   "authority": "Metropolitan St. Louis Sewer District",
+   "states": [
+    "MO"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/plGX8WiX9ylnkcee/arcgis/rest/services/Capital_Projects/FeatureServer/0",
+   "verified": true,
+   "record_count": 366,
+   "geometry": "polygon",
+   "fields": {
+    "id": "PROJECT_NUMBER",
+    "name": "PROJECT_NAME",
+    "description": "PROJECT_DESCRIPTION",
+    "work_type": "PROJECT_TYPE",
+    "status": "STATUS",
+    "date": "START_DATE"
+   },
+   "planned_filter": "Layer holds only STATUS='Active'; use START_DATE in the future / FISCAL_YEAR for not-yet-built work",
+   "sample": "{\"PROJECT_NUMBER\": \"11091\", \"PROJECT_NAME\": \"SENECA PUBLIC I/I REDUCTION\", \"STATUS\": \"Active\", \"PROJECT_TYPE\": \"Wastewater\", \"PROJECT_DESCRIPTION\": \"Remove I/I through system rehabilitation.\"}",
+   "restrictions": null,
+   "notes": "MSD has condemnation power for sewer easements.",
+   "status_values": {
+    "Active": 366
+   },
+   "group": "stl_msd"
+  },
+  {
+   "name": "St. Louis MSD Active Stormwater Projects",
+   "authority": "Metropolitan St. Louis Sewer District",
+   "states": [
+    "MO"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/plGX8WiX9ylnkcee/arcgis/rest/services/Capital_Projects/FeatureServer/1",
+   "verified": true,
+   "record_count": 219,
+   "geometry": "polygon",
+   "fields": {
+    "id": "PROJECT_NUMBER",
+    "name": "PROJECT_NAME",
+    "description": "PROJECT_DESCRIPTION",
+    "work_type": "PROJECT_TYPE",
+    "status": "STATUS",
+    "date": "START_DATE"
+   },
+   "planned_filter": "Layer holds only STATUS='Active'; use START_DATE / FISCAL_YEAR",
+   "sample": "{\"PROJECT_NUMBER\": \"11525\", \"PROJECT_NAME\": \"STONE HILL DR. #4700-4736 FLOOD PROTECTION\", \"STATUS\": \"Active\", \"PROJECT_TYPE\": \"Stormwater\", \"PROJECT_DESCRIPTION\": \"FLOOD PROOF FIVE HOMES TO PROTECT AGAINST 100 YEAR FLOODING FROM ADJACENT STREAM.\"}",
+   "restrictions": null,
+   "notes": "Flood protection projects often involve buyouts of flooded homes.",
+   "status_values": {
+    "Active": 219
+   },
+   "group": "stl_msd"
+  },
+  {
+   "name": "DC Parks and Recreation Capital Projects",
+   "authority": "DC Department of Parks and Recreation",
+   "states": [
+    "DC"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://maps2.dcgis.dc.gov/dcgis/rest/services/DCGIS_DATA/Recreation_WebMercator/MapServer/0",
+   "verified": true,
+   "record_count": 102,
+   "geometry": "point",
+   "fields": {
+    "description": "DESCRIPTION",
+    "work_type": "PROJECT_TYPE",
+    "cost": "TOTAL_BUDGET",
+    "status": "CURRENT_STATUS",
+    "county": "WARD",
+    "name": "PROJECT",
+    "date": "CONSTRUCTION_START"
+   },
+   "planned_filter": "CURRENT_STATUS IN ('Predesign','Design','Permitting')",
+   "sample": "{\"PROJECT\": \"Harry Thomas Recreation Center\", \"WARD\": \"5\", \"PROJECT_TYPE\": \"Recreation Center Renovation\", \"CURRENT_STATUS\": \"Design\", \"DESCRIPTION\": \"The project funds a comprehensive modernization of the Harry Thomas Recreation Center, including renovation of interior program spaces with new flooring, a rede\", \"TOTAL_BUDGET\": \"19000000\", \"CONSTRUCTION_START\": \"TBD\"}",
+   "restrictions": null,
+   "notes": "Park and recreation-centre modernisations on existing public land; low eminent-domain value.",
+   "status_values": {
+    "Permitting": 19,
+    "Close-out": 18,
+    "Construction": 22,
+    "Design": 23,
+    "Predesign": 20
+   }
+  },
+  {
+   "name": "Chattanooga Capital Projects Tracking (points)",
+   "authority": "City of Chattanooga",
+   "states": [
+    "TN"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/OIAIimblRxPs0xxc/arcgis/rest/services/Capital_Improvements__Public_view/FeatureServer/0",
+   "verified": true,
+   "record_count": 26,
+   "geometry": "point",
+   "fields": {
+    "name": "projname",
+    "description": "projdesc",
+    "work_type": "projtype",
+    "cost": "Approved_Budget",
+    "status": "status",
+    "county": "Council_District",
+    "id": "UID"
+   },
+   "planned_filter": "status IN ('Planning/Design/Bidding','Project On Hold')",
+   "sample": "{\"UID\": \"C10059\", \"projname\": \"Goodwin Road/Hamilton Place Blvd\", \"projdesc\": \"Modification of Hamilton Place Boulevard at the I-75/Hamilton Place Interchange to accommodate revised traffic patterns from the Interchange Modification Projec\", \"projtype\": \"Transportation\", \"status\": \"In Progress\", \"Approved_Budget\": \"6667325.31\", \"Council_District\": \"4 & 6\"}",
+   "restrictions": null,
+   "notes": "",
+   "status_values": {
+    "In Progress": 7,
+    "Planning/Design/Bidding": 19
+   },
+   "group": "chattanooga_cip"
+  },
+  {
+   "name": "Chattanooga Capital Projects Tracking (lines)",
+   "authority": "City of Chattanooga",
+   "states": [
+    "TN"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/OIAIimblRxPs0xxc/arcgis/rest/services/Capital_Improvements__Public_view/FeatureServer/1",
+   "verified": true,
+   "record_count": 23,
+   "geometry": "polyline",
+   "fields": {
+    "name": "projname",
+    "description": "projdesc",
+    "work_type": "projtype",
+    "cost": "Approved_Budget",
+    "status": "status",
+    "county": "Council_District",
+    "id": "UID"
+   },
+   "planned_filter": "status IN ('Planning/Design/Bidding','Project On Hold')",
+   "sample": "{\"UID\": \"C10644\", \"projname\": \"14th St Greenway\", \"projdesc\": \"Infrastructure and neighborhood enhancements to create a pedestrian and bicycle boulevard along East 14th Street to create a safe, functional, and appealing pub\", \"projtype\": \"Transportation\", \"status\": \"In Progress\", \"Approved_Budget\": \"200000\", \"Council_District\": \"8 & 9\"}",
+   "restrictions": null,
+   "notes": "",
+   "status_values": {
+    "Completed-Closing Out Funds": 2,
+    "In Progress": 10,
+    "Planning/Design/Bidding": 10,
+    "Project On Hold": 1
+   },
+   "group": "chattanooga_cip"
+  },
+  {
+   "name": "Chattanooga Capital Projects Tracking (polygons)",
+   "authority": "City of Chattanooga",
+   "states": [
+    "TN"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/OIAIimblRxPs0xxc/arcgis/rest/services/Capital_Improvements__Public_view/FeatureServer/2",
+   "verified": true,
+   "record_count": 126,
+   "geometry": "polygon",
+   "fields": {
+    "name": "projname",
+    "description": "projdesc",
+    "work_type": "projtype",
+    "cost": "Approved_Budget",
+    "status": "status",
+    "county": "Council_District",
+    "id": "UID"
+   },
+   "planned_filter": "status IN ('Planning/Design/Bidding','Project On Hold')",
+   "sample": "{\"UID\": \"C10660\", \"projname\": \"Campus Consolidation Needs Study\", \"projdesc\": \"Evaluation of existing City office spaces to determine their highest and best use by City Departments across City facilities\", \"projtype\": \"Facilities\", \"Approved_Budget\": \"150000\", \"status\": \"Planning/Design/Bidding\", \"Council_District\": \"City-Wide\"}",
+   "restrictions": null,
+   "notes": "",
+   "status_values": {
+    "Completed-Closing Out Funds": 8,
+    "Continuous Project": 5,
+    "In Progress": 61,
+    "Planning/Design/Bidding": 47,
+    "Project On Hold": 5
+   },
+   "group": "chattanooga_cip"
+  },
+  {
+   "name": "Chicago RTA Capital Projects (impact areas)",
+   "authority": "Regional Transportation Authority (CTA, Metra, Pace)",
+   "states": [
+    "IL"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services5.arcgis.com/NIHJ1cAxHq972sDH/arcgis/rest/services/Capital_Projects_Dashboard_Sys/FeatureServer/0",
+   "verified": true,
+   "record_count": 515,
+   "geometry": "polygon",
+   "fields": {
+    "name": "PROJ_TITLE",
+    "work_type": "PROJ_TYPE",
+    "id": "PROJ_CODE",
+    "county": "SERV_BRD",
+    "description": "URL_LINK"
+   },
+   "planned_filter": "No status field; all rows are projects in the current RTA capital program. SERV_BRD = CTA/Metra/Pace; URL_LINK opens the RTAMS project page with funding years.",
+   "sample": "{\"PROJ_TITLE\": \"Systemwide Tactical Traction Power Upgrades (Equipment/Cable/Enclosures)\", \"PROJ_CODE\": \"0009\", \"SERV_BRD\": \"CTA\", \"PROJ_TYPE\": \"IM\", \"URL_LINK\": \"https://rtams.org/projects/capital/50009#map\"}",
+   "restrictions": null,
+   "notes": "Mostly state-of-good-repair work; expansion projects (e.g. Red Line Extension) are in the Key_Capital_Projects table of the same org."
+  },
+  {
+   "name": "Aurora CO Public Works CIP Projects",
+   "authority": "City of Aurora Public Works",
+   "states": [
+    "CO"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services3.arcgis.com/0Va1ID99NSrNyyPX/arcgis/rest/services/CIP_Projects_PW2/FeatureServer/0",
+   "verified": true,
+   "record_count": 7633,
+   "geometry": "polygon",
+   "fields": {
+    "name": "Name",
+    "description": "Description",
+    "work_type": "ProjectType",
+    "cost": "ApproxBudget",
+    "status": "Status",
+    "date": "Year"
+   },
+   "planned_filter": "Status IN ('Pending','SCOPE','PL','DES','BID')  (COMPLETE, UCON = under construction, CA, POST excluded)",
+   "sample": "{\"Name\": \"Surface Treatment Program 2015\", \"Description\": \"Slurry 2015\", \"Status\": \"COMPLETE\", \"Year\": \"2015\"}",
+   "restrictions": null,
+   "notes": "Status codes are abbreviations: PL planning, DES design, BID bidding, UCON under construction.",
+   "status_values": {
+    "None": 0,
+    "BID": 5,
+    "CA": 1,
+    "COMPLETE": 6680,
+    "DES": 51,
+    "Pending": 833,
+    "PL": 1,
+    "POST": 1,
+    "SCOPE": 10,
+    "UCON": 14
+   },
+   "group": "aurora_cip"
+  },
+  {
+   "name": "Aurora Water CIP Projects",
+   "authority": "Aurora Water",
+   "states": [
+    "CO"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services3.arcgis.com/0Va1ID99NSrNyyPX/arcgis/rest/services/CIP_Projects_AW2/FeatureServer/0",
+   "verified": true,
+   "record_count": 604,
+   "geometry": "polygon",
+   "fields": {
+    "name": "Name",
+    "description": "Description",
+    "work_type": "ProjectType",
+    "cost": "ApproxBudget",
+    "status": "Status",
+    "date": "Year"
+   },
+   "planned_filter": "Status IN ('PL','PREDE','SCOPE','DES','BID')",
+   "sample": "{\"Name\": \"2nd Creek Interceptor Segment E\", \"Description\": \"Project around High Point Lift Station\", \"Status\": \"COMPLETE\", \"Year\": \"2017\", \"ApproxBudget\": \"6000000\", \"ProjectType\": \"CONSTR\"}",
+   "restrictions": null,
+   "notes": "Water and sewer interceptors, pipelines, reservoirs.",
+   "status_values": {
+    "None": 0,
+    "BID": 1,
+    "CA": 7,
+    "COMPLETE": 106,
+    "DES": 178,
+    "PL": 202,
+    "POST": 3,
+    "PREDE": 12,
+    "SCOPE": 5,
+    "UC": 1,
+    "UCON": 66
+   },
+   "group": "aurora_cip"
+  },
+  {
+   "name": "Harris County Precinct 4 Capital Projects",
+   "authority": "Harris County Precinct 4",
+   "states": [
+    "TX"
+   ],
+   "coverage": "county (one precinct)",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/su8ic9KbA7PYVxPS/arcgis/rest/services/Precinct_4_Capital_Projects/FeatureServer/0",
+   "verified": true,
+   "record_count": 120,
+   "geometry": "point",
+   "fields": {
+    "name": "Name",
+    "description": "Description",
+    "work_type": "Type",
+    "status": "Stage",
+    "date": "Start_Date",
+    "county": "Precinct",
+    "id": "Code"
+   },
+   "planned_filter": "Stage IN ('Scoping','Design')",
+   "sample": "{\"Name\": \"Westpark Undercrossing\", \"Code\": \"?\", \"Type\": \"Hike & Bike\", \"Stage\": \"Complete\", \"Description\": \"Design a pedestrian undercrossing along Brays Bayou under Westpark Drive. Connects to Addicks Clodine Underpass.\", \"Precinct\": \"814\"}",
+   "restrictions": null,
+   "notes": "",
+   "status_values": {
+    "Complete": 75,
+    "Construction": 12,
+    "Design": 25,
+    "Scoping": 8
+   }
+  },
+  {
+   "name": "Great Lakes Water Authority CIP Project Areas",
+   "authority": "Great Lakes Water Authority (Detroit region water and sewer)",
+   "states": [
+    "MI"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://utility.arcgis.com/usrsvcs/servers/eadf50d82a9c46afbf993d2eada16144/rest/services/CIP_GLWA/GLWA_Capital_Improvements_Program/MapServer/0",
+   "verified": true,
+   "record_count": 157,
+   "geometry": "polygon",
+   "fields": {
+    "id": "CIPNumber",
+    "name": "CIP_SiteName",
+    "work_type": "ProjectType",
+    "cost": "TotalProjectCost",
+    "status": "ProjectStatus",
+    "date": "StartDate"
+   },
+   "planned_filter": "ProjectStatus LIKE 'Future Planned%' OR ProjectStatus LIKE 'Active - Pre-Procurement%' OR ProjectStatus LIKE 'Active - Procurement%' OR ProjectStatus LIKE '%Design'",
+   "sample": "{\"CIPNumber\": \"111001\", \"CIP_SiteName\": \"Lake Huron WTP, Low-Lift, High Lift and Filter Backwash Pumping System Improvements\", \"ProjectStatus\": \"Project Execution - Design\", \"StartDate\": \"2020-03-14\", \"TotalProjectCost\": \"144106618\", \"ProjectType\": \"Water Treatment\"}",
+   "restrictions": null,
+   "notes": "Regional water mains, pump stations and sewers across SE Michigan.",
+   "status_values": {
+    "Active - Pre-Procurement - Construction": 2,
+    "Closed": 8,
+    "Project Execution - Construction": 48,
+    "Active - Procurement - Design": 3,
+    "Future Planned - Within Five Year Plan": 48,
+    "Future Planned - Ten Year CIP": 15,
+    "Active - Procurement - Negotiation Phase - Design": 1,
+    "Cancelled": 4,
+    "Project Execution - Pending Closeout": 4,
+    "Active - Procurement - Construction": 1,
+    "Project Execution - Design": 20,
+    "Active - Procurement - Board Approved - Construction": 1,
+    "Future Planned - Beyond Ten Years": 1,
+    "Active - Pre-Procurement - Design": 1
+   }
+  },
+  {
+   "name": "Northeast Ohio Regional Sewer District CIP Projects",
+   "authority": "Northeast Ohio Regional Sewer District (Cleveland area)",
+   "states": [
+    "OH"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://utility.arcgis.com/usrsvcs/servers/a52b9aa24ab74e3e9359719138fcd8b9/rest/services/Public/E_C_CIP_Projects_Dashboard/MapServer/0",
+   "verified": true,
+   "record_count": 85,
+   "geometry": "point",
+   "fields": {
+    "name": "PROJECT_NAME",
+    "description": "PROJECT_DESCRIPTION",
+    "work_type": "PROJECT_TYPE",
+    "cost": "CONSTRUCTION_BUDGETS",
+    "status": "PROJECT_PHASE",
+    "date": "CONST_CONTRACT_COMPLETION",
+    "id": "ORACLE_PROJECT_NUMBER"
+   },
+   "planned_filter": "PROJECT_PHASE IN ('Future','Study','Design')",
+   "sample": "{\"ORACLE_PROJECT_NUMBER\": \"1373_10\", \"PROJECT_NAME\": \"GES-10\", \"PROJECT_DESCRIPTION\": \"GES-10 will cover the standard General Engineering Service type of tasks used in the past for plant evaluation and design process and associated planning tasks.\", \"PROJECT_PHASE\": \"Design\", \"PROJECT_TYPE\": \"N/A\", \"CONSTRUCTION_BUDGETS\": \"0.0\"}",
+   "restrictions": null,
+   "notes": "Tunnels, interceptors and stormwater projects.",
+   "status_values": {
+    "Future": 28,
+    "Study": 1,
+    "Close-Out": 6,
+    "Construction": 27,
+    "Design": 22,
+    "Reimbursement": 1
+   }
+  },
+  {
+   "name": "Kirkland CIP Projects",
+   "authority": "City of Kirkland",
+   "states": [
+    "WA"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/loGMwowmR0OPlOQb/arcgis/rest/services/CIP_Project/FeatureServer/0",
+   "verified": true,
+   "record_count": 210,
+   "geometry": "polygon",
+   "fields": {
+    "id": "CIPID",
+    "name": "PROJ_NAME",
+    "cost": "BUDGET_NUM",
+    "date": "Const_startdate",
+    "description": "PROJ_DES",
+    "work_type": "CIP_TYP"
+   },
+   "planned_filter": "No status field; ACT_FLG / FUND_FLG flag active and funded projects and Const_startdate gives the planned construction start - keep future dates",
+   "sample": "{\"CIPID\": \"PKC1190200\", \"CIP_TYP\": \"Park\", \"PROJ_NAME\": \"Juanita Beach North - Field Upgrades\", \"PROJ_DES\": \"Implementation of park master plan improvements.  Funding for 2017/2018 targeted for second phase of improvements, which may include select improvements to the \", \"BUDGET_NUM\": \"600000\"}",
+   "restrictions": null,
+   "notes": ""
+  },
+  {
+   "name": "Carlsbad Capital Improvement Projects",
+   "authority": "City of Carlsbad",
+   "states": [
+    "CA"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/ay9ePoQ2UfAX3U38/arcgis/rest/services/CapitalImprovementProject/FeatureServer/0",
+   "verified": true,
+   "record_count": 270,
+   "geometry": "point",
+   "fields": {
+    "name": "PROJNAME",
+    "description": "PROJDESCR",
+    "work_type": "PROJTYPE",
+    "cost": "TTLCOST",
+    "status": "PROJPHASE",
+    "county": "DISTRICT",
+    "date": "CONSTSTART"
+   },
+   "planned_filter": "PROJPHASE IN ('Not Started','Planning','Design','Bid & Award')",
+   "sample": "{\"PROJNAME\": \"Traffic Signal - Maverick Way and Camino De Los Coches\", \"PROJTYPE\": \"Traffic System\", \"PROJDESCR\": \"Upgrade traffic signal control hardware and detection, relocate the signal poles and align left turn signal heads, replace the pedestrian ramps to meet American\", \"DISTRICT\": \"4\", \"CONSTSTART\": \"1702454400000\", \"PROJPHASE\": \"Design\", \"TTLCOST\": \"490000\"}",
+   "restrictions": null,
+   "notes": "",
+   "status_values": {
+    "Bid & Award": 6,
+    "Closeout": 26,
+    "Completed": 31,
+    "Construction": 11,
+    "Design": 38,
+    "Not Started": 57,
+    "Ongoing": 62,
+    "Planning": 39
+   }
+  }
+ ],
+ "unverified": [
+  {
+   "name": "Legistar clients nyc (New York City Council) and phila (Philadelphia City Council)",
+   "url": "https://webapi.legistar.com/v1/nyc/matters",
+   "reason": "HTTP 403: these two clients require an API token (free sign-up, which the brief forbids). All other listed clients work without one."
+  }
+ ],
+ "summary": ""
+}
