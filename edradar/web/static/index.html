@@ -163,6 +163,11 @@
   a.btn svg { width: 14px; height: 14px; }
   .p-sec .when { font-size: 13px; margin-bottom: 10px; display: grid; gap: 2px; }
   .p-sec .when b { font-weight: 600; } .p-sec .when span { color: var(--ink-2); }
+  .points { width: 100%; font-size: 13px; }
+  .points td { padding: 5px 0; border-bottom: 1px solid var(--line); }
+  .points td:first-child { padding-right: 12px; }
+  .points .sub-total td { font-weight: 500; }
+  .points .total td { font-weight: 600; border-bottom: 0; font-size: 14px; }
   .figs { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: var(--radius); }
   .figs div { padding: 9px 12px; border-left: 1px solid var(--line); }
   .figs div:first-child { border-left: 0; }
@@ -403,12 +408,32 @@ function partsHtml(title, parts, total) {
   return `<b>${esc(title)}</b>` + parts.map(x => `<div class="row"><span>${esc(x.label)}</span><span>${signed(x.points)}</span></div>`).join("") +
     `<div class="row sum"><span>Score</span><span>${total}</span></div>`;
 }
+// Every lead score as points that add up: the project's points, then one adjustment for where the parcel sits.
+const PARCEL_POINTS = {
+  named_in_document: ["Parcel is named in the source document", "The ordinance or notice lists this parcel, so 10 points are added."],
+  abuts_alignment: ["Parcel abuts the mapped alignment (within 20 m)", "Closest parcels keep the full project score."],
+  within_buffer: ["Parcel is nearby, not abutting (20 to 75 m)", "Less likely to be touched, so a quarter of the project score is taken off."],
+};
+function leadPoints(r) {
+  const p = projects.find(x => x.id === r.project_id) || (SNAP && SNAP.projects.find(x => x.id === r.project_id)) || {};
+  const ps = r.project_score ?? p.score ?? null, rows = (p.score_parts || []).map(x => ({label: x.label, points: x.points}));
+  const [label, note] = PARCEL_POINTS[r.match_reason] || [r.match_reason, ""];
+  return {project: ps, parts: rows, parcel: {label, note, points: ps == null ? 0 : r.score - ps}, total: r.score};
+}
+function pointsTable(r) {
+  const t = leadPoints(r), line = (label, pts, cls) => `<tr${cls ? ` class="${cls}"` : ""}><td>${esc(label)}</td><td class="num">${pts}</td></tr>`;
+  return `<table class="points"><tbody>${t.parts.map(x => line(x.label, signed(x.points))).join("")}
+    ${t.project != null ? line("Project score", t.project, "sub-total") : ""}
+    ${line(t.parcel.label, signed(t.parcel.points) === "0" ? "+0" : signed(t.parcel.points))}
+    ${line("Lead score", t.total, "total")}</tbody></table>
+    <p style="margin-top:8px">${esc(t.parcel.note)} Scores run from 0 to 100; project points are rounded to a whole number before the parcel adjustment.</p>`;
+}
 function projectTip(p) { return partsHtml("Project score", p.score_parts || [], p.score); }
 function leadTip(r) {
-  const ps = r.project_score ?? (projects.find(p => p.id === r.project_id) || {}).score;
-  return `<b>Lead score</b><div class="row"><span>Project score</span><span>${ps ?? "–"}</span></div>` +
-    `<div class="row"><span>${esc((REASON_WEIGHT[r.match_reason] || [r.match_reason])[0])}</span><span>${esc((REASON_WEIGHT[r.match_reason] || ["", ""])[1])}</span></div>` +
-    `<div class="row sum"><span>Score</span><span>${r.score}</span></div>`;
+  const t = leadPoints(r), row = (a, b, cls) => `<div class="row${cls ? " " + cls : ""}"><span>${esc(a)}</span><span>${b}</span></div>`;
+  return `<b>How this lead scored ${t.total}</b>` + t.parts.map(x => row(x.label, signed(x.points))).join("") +
+    (t.project != null ? row("Project score", t.project, "sum") : "") +
+    row(t.parcel.label, signed(t.parcel.points) === "0" ? "+0" : signed(t.parcel.points)) + row("Lead score", t.total, "sum");
 }
 
 function lettingText(t) {
@@ -888,8 +913,9 @@ async function openParcel(leadId) {
   const head = `<div class="p-head"><h2>${r.owner ? esc(r.owner) : "Owner not published"}</h2>
     <div class="meta">${[r.address ? esc(r.address) : "", "Parcel " + esc(r.apn), esc(county)].filter(Boolean).join(" · ")}</div>
     <button type="button" data-close-parcel aria-label="Close parcel details">${X_ICON}</button></div>`;
+  const scoreSec = `<div class="p-sec"><h3>How this lead scored ${r.score}</h3>${pointsTable(r)}</div>`;
   const why = `<div class="p-sec"><h3>Why it is on the list</h3><p>${esc(REASON[r.match_reason] || r.match_reason)}${r.distance_m != null ? `, ${Math.round(r.distance_m)} m from the alignment` : ""} of ${esc(r.project || "the project")}${r.stage ? `, which is in ${esc(r.stage.replace(/_/g, " "))}` : ""}. Lead score ${r.score}.</p></div>`;
-  panel.innerHTML = head + `<div class="p-body">${why}<div class="p-sec"><p>Loading the boundary and county record…</p></div></div>`;
+  panel.innerHTML = head + `<div class="p-body">${why}${scoreSec}<div class="p-sec"><p>Loading the boundary and county record…</p></div></div>`;
   panel.setAttribute("data-open", "");
   let d;
   try { d = await api(`/api/leads/${leadId}/detail`); }
@@ -930,7 +956,7 @@ async function openParcel(leadId) {
   const rel = d.related.length ? `<div class="p-sec"><h3>Other parcels held by this owner</h3><ul class="plain">${d.related.map(x =>
       `<li>${esc(x.address || "Parcel " + x.apn)}<div class="sub">${[esc(x.project), "score " + x.score, x.market_value ? "$" + Math.round(x.market_value).toLocaleString() : ""].filter(Boolean).join(" · ")}</div></li>`).join("")}</ul></div>` : "";
   const rec = bg.record.length ? `<details class="rec"><summary>Full county record (${bg.record.length} fields, ${esc(d.layer)})</summary><dl class="facts">${bg.record.map(f => `<dt>${esc(f.field)}</dt><dd>${esc(f.value)}</dd>`).join("")}</dl></details>` : "";
-  panel.querySelector(".p-body").innerHTML = why + ownerSec + contactSec + letterSec + stageSec +
+  panel.querySelector(".p-body").innerHTML = why + scoreSec + ownerSec + contactSec + letterSec + stageSec +
     `<div class="p-sec"><h3>Boundary</h3>${shape}</div><div class="p-sec"><h3>Land background</h3>${facts}</div>${rel}` +
     `<div class="p-sec" id="p-cases"><h3>Similar cases</h3><p>Searching Pennsylvania appellate opinions…</p></div>${rec}`;
   let c;
