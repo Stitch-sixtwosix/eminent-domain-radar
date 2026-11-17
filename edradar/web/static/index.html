@@ -435,19 +435,32 @@ const ICON = {
 let leadTicket = 0, TOTAL_LEADS = 0, STATUSES = [], OUT = null, projects = [], selected = null, layers = {}, leadRows = [];
 const HOME = [[39.72, -80.52], [42.27, -74.69]];
 const map = L.map("map", {preferCanvas: true, zoomSnap: 0, zoomDelta: 0.5, scrollWheelZoom: false, minZoom: 5}).fitBounds(HOME);
-// Leaflet's wheel zoom jumps in steps, which lurches on a trackpad. This follows the gesture instead:
-// two-finger scroll and pinch both zoom continuously around the pointer; a mouse wheel moves about half a level a notch.
+// Smooth zoom for trackpads and mouse wheels. Each scroll or pinch event moves a zoom *goal*; an animation loop
+// glides the map toward it every frame, keeping the point under the pointer fixed. It moves the view with Leaflet's
+// own _move, which rescales the tiles already on screen. (A plain setZoom here would reset the view on every event
+// and reload every tile, which is what makes zooming look like it jumps.)
 (() => {
-  let target = null, point = null, frame = 0, idle;
+  let goal = null, anchorPoint = null, anchorLatLng = null, frame = 0, moving = false;
+  const step = () => {
+    frame = 0;
+    const z = map.getZoom(), next = Math.abs(goal - z) < 0.004 ? goal : z + (goal - z) * 0.28;
+    const offset = anchorPoint.subtract(map.getSize().divideBy(2));
+    const center = map.unproject(map.project(anchorLatLng, next).subtract(offset), next);
+    if (!moving) { map._moveStart(true, false); moving = true; }
+    map._move(center, next);
+    if (next === goal) { map._moveEnd(true); moving = false; goal = null; }
+    else frame = requestAnimationFrame(step);
+  };
   $("map").addEventListener("wheel", e => {
     if (e.target.closest(".basemap, .leaflet-control")) return;
     e.preventDefault();
     const dy = e.deltaMode === 1 ? e.deltaY * 18 : e.deltaMode === 2 ? e.deltaY * 300 : e.deltaY;
-    const step = Math.max(-0.5, Math.min(0.5, -dy * (e.ctrlKey ? 0.012 : 0.004)));   // ctrlKey marks a pinch
-    target = Math.max(map.getMinZoom(), Math.min(map.getMaxZoom(), (target ?? map.getZoom()) + step));
-    point = map.mouseEventToContainerPoint(e);
-    if (!frame) frame = requestAnimationFrame(() => { frame = 0; map.setZoomAround(point, target, {animate: false}); });
-    clearTimeout(idle); idle = setTimeout(() => { target = null; }, 180);
+    const change = Math.max(-0.6, Math.min(0.6, -dy * (e.ctrlKey ? 0.014 : 0.005)));   // ctrlKey marks a pinch
+    if (goal === null) map.stop();                                                    // end any fly or pan in progress
+    goal = Math.max(map.getMinZoom(), Math.min(map.getMaxZoom(), (goal ?? map.getZoom()) + change));
+    const pt = map.mouseEventToContainerPoint(e);
+    if (!anchorPoint || !moving || pt.distanceTo(anchorPoint) > 4) { anchorPoint = pt; anchorLatLng = map.containerPointToLatLng(pt); }
+    if (!frame) frame = requestAnimationFrame(step);
   }, {passive: false});
 })();
 const BASE = {
