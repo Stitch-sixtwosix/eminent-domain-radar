@@ -450,3 +450,16 @@ def test_skip_trace_and_usage(tmp_path, monkeypatch):
     assert client.get("/api/leads/%d/detail" % lead["id"]).json()["skiptrace"]["emails"] == ["jane@roe.test"]
     assert len(client.get("/api/leads", params={"outreach": "traced"}).json()) == 1
     assert client.get("/api/outreach/status").json()["skiptrace"] == {"enabled": True, "why": None, "price": 1.0, "cost": 0.25}
+
+
+def test_env_file_supplies_keys(tmp_path, monkeypatch):
+    from edradar.config import load_env_file
+
+    f = tmp_path / ".env"
+    f.write_text("# keys\nLOB_API_KEY=test_123\nEMPTY\nQUOTED='abc'\n")
+    monkeypatch.delenv("LOB_API_KEY", raising=False)
+    monkeypatch.setenv("QUOTED", "already-set")
+    load_env_file(str(f))
+    import os
+    assert os.environ["LOB_API_KEY"] == "test_123" and os.environ["QUOTED"] == "already-set"
+    monkeypatch.delenv("LOB_API_KEY")

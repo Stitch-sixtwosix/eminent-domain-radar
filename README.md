@@ -135,6 +135,10 @@ refused when the mailing address cannot be read reliably (about 1.5% of addresse
 Apollo holds business contacts, so email works for company-owned parcels; individual owners get postcards.
 The postcard wording lives in `edradar/outreach.py` and prints "ADVERTISEMENT." by default.
 
+**Keys.** Put API keys in a file named `.env` in the project folder, one per line (`LOB_API_KEY=...`,
+`APOLLO_API_KEY=...`, `BATCHDATA_API_KEY=...`, `COURTLISTENER_TOKEN=...`). The file is ignored by git and read
+automatically by every command and by the dashboard.
+
 ## Known limits
 
 * In the 32 counties without a public owner layer (listed above), leads carry a parcel ID only.

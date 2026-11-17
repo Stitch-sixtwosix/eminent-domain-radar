@@ -30,7 +30,20 @@ def _merge(base: Dict[str, Any], over: Dict[str, Any]) -> Dict[str, Any]:
     return out
 
 
+def load_env_file(path: str = ".env") -> None:
+    """Read KEY=VALUE lines from a private .env file (never committed) so API keys need not live in the shell."""
+    p = Path(path)
+    if not p.exists():
+        return
+    for line in p.read_text().splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            key, value = line.split("=", 1)
+            os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
+
+
 def load_config(path: Optional[str] = None) -> Dict[str, Any]:
+    load_env_file()
     path = path or os.environ.get("EDRADAR_CONFIG") or "config.yaml"
     p = Path(path)
     if not p.exists():
