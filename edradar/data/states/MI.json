@@ -1,0 +1,67 @@
+{
+ "state": "Michigan",
+ "code": "MI",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "MDOT Five-Year Transportation Program 2027-2031 (Lines)",
+   "url": "https://services2.arcgis.com/67lKNkQ2TO1I3lhR/arcgis/rest/services/MdotFiveYearTransportationProgam_2026_2030/FeatureServer/9",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 1186,
+   "fields": {
+    "id": "JOBNET_ID",
+    "name": "RPT_WK_DESC",
+    "description": "RPT_LOC_DESC",
+    "work_type": "WK_TYPE_DESC",
+    "cost": "PHASE_BDGT_AMT",
+    "status": "STIP_STAT_DESC",
+    "let_date": "SCHD_LET_DATE",
+    "county": "CNTY_DESC"
+   },
+   "work_type_values": [
+    "Active Traffic Management",
+    "Bridge Miscellaneous",
+    "Bridge Replacement",
+    "Major Widening",
+    "Minor Widening",
+    "Reconstruction",
+    "Road Capital Preventive Maintenance",
+    "Road Rehabilitation",
+    "Traffic Safety"
+   ],
+   "status_values": [
+    "Approved",
+    "Pending"
+   ],
+   "notes": "The service name says 2026_2030 (and misspells 'Progam') but the content is the FY 2027-2031 program. work_type_values listed are WK_SUB_CAT_DESC (9 values, best for filtering: Major Widening, Minor Widening, Reconstruction); WK_TYPE_DESC is finer; WK_CAT_DESC is Bridge/Road/System Operations/Traffic Safety. Only construction phases (PHASE_TYPE_ABBRV='CON'). Future work: ACTL_LET_DATE is null and SCHD_LET_DATE/PHASE_ANTCP_CNST_DATE are in the future; FSCL_YR runs 2023-2031 so some rows are already let. ANTCP_CNST_YRS lists construction years.",
+   "where": "ACTL_LET_DATE IS NULL",
+   "stage": "planning"
+  },
+  {
+   "name": "MDOT Five-Year Transportation Program 2027-2031 (Points)",
+   "url": "https://services2.arcgis.com/67lKNkQ2TO1I3lhR/arcgis/rest/services/MdotFiveYearTransportationProgam_2026_2030/FeatureServer/8",
+   "verified": true,
+   "geometry": "point",
+   "record_count": null,
+   "fields": {
+    "id": "JOBNET_ID",
+    "name": "RPT_WK_DESC",
+    "description": "RPT_LOC_DESC",
+    "work_type": "WK_TYPE_DESC",
+    "cost": "PHASE_BDGT_AMT",
+    "status": "STIP_STAT_DESC",
+    "let_date": "SCHD_LET_DATE",
+    "county": "CNTY_DESC"
+   },
+   "work_type_values": [],
+   "status_values": [],
+   "notes": "Point jobs (bridges, spot work) of the same program; same schema as the lines layer.",
+   "where": "ACTL_LET_DATE IS NULL",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "Projects section done; parcel research still in progress."
+}

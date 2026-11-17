@@ -1,0 +1,10 @@
+{
+  "state": "Nebraska",
+  "code": "NE",
+  "checked": "2026-11-17",
+  "projects": [],
+  "projects_note": "Not verified. NDOT lists 'ProgramBook_NDOT' on ArcGIS Online at https://gis.ne.gov/dot/rest/services/ProgramBookDOT/FeatureServer but gis.ne.gov did not resolve from the research machine (every *.ne.gov GIS host failed DNS), and no copy hosted elsewhere was found.",
+  "parcels_statewide": null,
+  "parcels_counties": [],
+  "summary": "Projects section done; parcel research still in progress."
+}

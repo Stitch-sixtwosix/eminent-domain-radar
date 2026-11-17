@@ -1,0 +1,91 @@
+{
+  "state": "Oklahoma",
+  "code": "OK",
+  "checked": "2026-11-17",
+  "projects": [
+    {
+      "name": "ODOT 8-Year Work Plan Roads 2027-2034 (Work Plan Roadways)",
+      "url": "https://services6.arcgis.com/RBtoEUQ2lmN0K3GY/arcgis/rest/services/ODOT_Workplan_Roads_2027to2034/FeatureServer/0",
+      "verified": true,
+      "geometry": "polyline",
+      "record_count": 1441,
+      "fields": {
+        "id": "C_JOB_PIECE",
+        "name": "T_JP_DESC",
+        "description": "T_JP_DESC",
+        "work_type": "T_PROJ_WORK_DESC",
+        "cost": "A_TOTAL_AMT_INFL",
+        "let_date": "PROGRAM_FED_YR",
+        "county": "COUNTY_NO"
+      },
+      "work_type_values": [
+        "03:GRADE & DRAIN",
+        "05:GRADE, DRAIN & BRIDGE",
+        "06:INTERCHANGE",
+        "07:GRADE,DRAIN,BRIDGE & SURFACE",
+        "11:BRIDGE & APPROACHES",
+        "15:BRIDGE REHABILITATION",
+        "16:SURFACE",
+        "18:RESURFACE",
+        "21:WIDEN & RESURFACE",
+        "25:INTERSECT MODIF",
+        "30:INTERSECTION MOD. & TRAF. SIGNALS",
+        "32:CROSSING IMPR. & R/R SIGNALS",
+        "39:GRADE, DRAIN & SURFACE",
+        "44:BANK PROTECTION",
+        "45:SAFETY IMPROVEMENT",
+        "46:MONEY ONLY",
+        "56:WIDEN, RESURFACE & BRIDGE",
+        "69:DOWEL BAR RETROFIT & DIAMOND GRIND",
+        "76:PAVEMENT REHABILITATION",
+        "79:RETAINING, VISUAL & SOUND WALLS",
+        "86:RIGHT OF WAY",
+        "91:UTILITIES",
+        "89:INTERSECTION SAFETY IMPROVEMENT"
+      ],
+      "status_values": [],
+      "notes": "Everything in the layer is planned (8-year construction work plan, federal fiscal years 2027-2037 in PROGRAM_FED_YR). No status field; T_LET_DATE_YEAR/T_LET_DATE_MONTH exist but were null in the sample, so PROGRAM_FED_YR is the schedule. Work codes 86:RIGHT OF WAY and 91:UTILITIES are separate job pieces that mark right-of-way acquisition. County is a number (COUNTY_NO), not a name. ODOT republishes under a new service name each October (..._2026to2033, ..._2027to2034)."
+    },
+    {
+      "name": "ODOT 8-Year Work Plan Bridges 2027-2034 (Work Plan Bridges)",
+      "url": "https://services6.arcgis.com/RBtoEUQ2lmN0K3GY/arcgis/rest/services/ODOT_Workplan_Bridges_2027to2034/FeatureServer/0",
+      "verified": true,
+      "geometry": "point",
+      "record_count": 531,
+      "fields": {
+        "id": "JOB_PIECE",
+        "name": "JP_DESC",
+        "description": "JP_DESC",
+        "work_type": "WORK_CODE",
+        "cost": "TOT_AMT_INFL",
+        "let_date": [
+          "LET_DATE_YR",
+          "LET_DATE_MONTH"
+        ],
+        "county": "COUNTY_NO"
+      },
+      "work_type_values": [
+        "05",
+        "06",
+        "07",
+        "11",
+        "14",
+        "15",
+        "18",
+        "21",
+        "25",
+        "39",
+        "46",
+        "56",
+        "76",
+        "86",
+        "91"
+      ],
+      "status_values": [],
+      "notes": "Bridges in the same 8-year plan; WORK_CODE uses the same numeric codes as the roads layer (text is in the roads layer's T_PROJ_WORK_DESC). PROG_FED_YR 2027-2037."
+    }
+  ],
+  "parcels_statewide": null,
+  "parcels_counties": [],
+  "summary": "Projects section done; parcel research still in progress."
+}

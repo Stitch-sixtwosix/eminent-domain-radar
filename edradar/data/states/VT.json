@@ -1,0 +1,133 @@
+{
+ "state": "Vermont",
+ "code": "VT",
+ "checked": "2026-11-16",
+ "projects": [
+  {
+   "name": "VTrans Projects - Planned Project Segments",
+   "url": "https://maps.vtrans.vermont.gov/arcgis/rest/services/vtp3/Projects/FeatureServer/1",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 160,
+   "fields": {
+    "id": "PIN",
+    "name": "ProjectName",
+    "description": "ProjectDescription",
+    "work_type": "WorkDescription",
+    "cost": "LatestEstimateConst",
+    "status": "ProgressIndicatorStage",
+    "let_date": "ExpectedBidDate",
+    "county": "County"
+   },
+   "work_type_values": [
+    "Bike & Ped",
+    "Class 1 Pavement, Rehabilitation",
+    "Interstate Bridge, Maintenance",
+    "Interstate Pavement, Rehabilitation",
+    "None",
+    "Roadway, General",
+    "Roadway, Ledge/Slope",
+    "Roadway, Roadbed Reconstruction",
+    "Roadway, Small Culverts",
+    "State Hwy Bridge, Reconstruction",
+    "State Hwy Bridge, Rehabilitation",
+    "State Hwy Pavement, Maintenance",
+    "State Hwy Pavement, Preservation",
+    "State Hwy Pavement, Rehabilitation",
+    "Town Hwy Bridge, Reconstruction",
+    "Town Hwy Bridge, Rehabilitation",
+    "Traffic & Safety, General",
+    "Traffic & Safety, HSIP Infrastructure Project",
+    "Traffic & Safety, Signal Mgmt",
+    "Traffic & Safety, Signs",
+    "Transportation Alternatives"
+   ],
+   "status_values": [
+    "Planned",
+    "Pre-Construction",
+    "Procurement",
+    "Project Definition",
+    "Project Design"
+   ],
+   "notes": "Line projects in development, from the VTrans VPINS project system. This layer holds only not-yet-built projects; projects under construction are in separate layers 2 (points) and 3 (segments) of the same service. ProgressIndicatorStatus has values Planned / Development / Construction. Other useful fields: Program, FHWAWorkType, PlannedBidYear, PlannedConstructionYear, ExpectedConstructionStart, Town, FactSheet (URL), ProjectManager. ExpectedBidDate is often null; PlannedConstructionYear is filled more often. Geometry is Vermont State Plane metres (ask for outSR=4326).",
+   "stage": "planning"
+  },
+  {
+   "name": "VTrans Projects - Planned Project Points",
+   "url": "https://maps.vtrans.vermont.gov/arcgis/rest/services/vtp3/Projects/FeatureServer/0",
+   "verified": true,
+   "geometry": "point",
+   "record_count": 239,
+   "fields": {
+    "id": "PIN",
+    "name": "ProjectName",
+    "description": "ProjectDescription",
+    "work_type": "WorkDescription",
+    "cost": "LatestEstimateConst",
+    "status": "ProgressIndicatorStage",
+    "let_date": "ExpectedBidDate",
+    "county": "County"
+   },
+   "work_type_values": [
+    "Airport - Apron(s)",
+    "Airport - Fuel System",
+    "Airport - Hazard Removal",
+    "Airport - Land Acquisition",
+    "Bike & Ped",
+    "Bike/Ped - Sidewalk",
+    "Culvert - Reconstruction",
+    "Interstate Bridge, Large Culverts",
+    "Interstate Bridge, Maintenance",
+    "Interstate Bridge, Preservation",
+    "Interstate Bridge, Reconstruction",
+    "Interstate Bridge, Rehabilitation",
+    "None",
+    "Park & Ride",
+    "Roadway, Emergent Needs",
+    "Roadway, General",
+    "Roadway, Ledge/Slope",
+    "Roadway, Small Culverts",
+    "State Hwy Bridge, Emergent Needs",
+    "State Hwy Bridge, Large Culverts",
+    "State Hwy Bridge, Maintenance",
+    "State Hwy Bridge, Reconstruction",
+    "State Hwy Bridge, Rehabilitation",
+    "State Hwy Pavement, Admin/Design/Mgmt",
+    "State Hwy Pavement, Rehabilitation"
+   ],
+   "status_values": [
+    "Planned",
+    "Pre-Construction",
+    "Procurement",
+    "Project Definition",
+    "Project Design"
+   ],
+   "notes": "Point projects (bridges, culverts, intersections, airports, park-and-rides) in development; same fields as the segments layer. 31 distinct work types in total; the first 25 are listed (the rest: Stormwater Mitigation, Town Hwy Bridge Reconstruction/Rehabilitation, Traffic & Safety HSIP / Signal Mgmt, Transportation Alternatives).",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": {
+  "name": "VT Data - Statewide Standardized Parcel Data - parcel polygons (VCGI)",
+  "url": "https://services1.arcgis.com/BkFxaEFNwHqX3tAw/arcgis/rest/services/FS_VCGI_OPENDATA_Cadastral_VTPARCELS_poly_standardized_parcels_SP_v1/FeatureServer/0",
+  "verified": true,
+  "record_count": 344321,
+  "fields": {
+   "apn": "SPAN",
+   "owner": "OWNER1",
+   "mailing_address": [
+    "ADDRGL1",
+    "ADDRGL2",
+    "CITYGL",
+    "STGL",
+    "ZIPGL"
+   ],
+   "address": "E911ADDR",
+   "market_value": "REAL_FLV",
+   "acres": "ACRESGL"
+  },
+  "restrictions": null,
+  "notes": "Statewide parcel polygons with the town Grand List joined on. OWNER2 holds a second owner. There is no county field: TOWN / TNAME give the municipality. LAND_LV and IMPRV_LV split the value. GLYEAR is the grand list year (2025 in the sample). No use restriction is stated on the service itself; the VCGI open data page was not checked for licence text."
+ },
+ "parcels_counties": [],
+ "summary": "Both sources work: VTrans publishes planned projects (points and lines) with cost, stage and dates, and VCGI publishes statewide parcels with owner name and mailing address."
+}

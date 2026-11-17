@@ -1,0 +1,70 @@
+{
+ "state": "Utah",
+ "code": "UT",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "UDOT STIP_Projects (ePM)",
+   "url": "https://maps.udot.utah.gov/central/rest/services/Stip_Projects/MapServer/0",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 3219,
+   "fields": {
+    "id": "PIN",
+    "name": "PIN_DESC",
+    "description": "PUBLIC_DESC",
+    "work_type": "PROJ_TYP_NM",
+    "cost": "PROJECT_VALUE",
+    "status": "PIN_STAT_NM",
+    "let_date": "ADVERTISE_DATE",
+    "county": "CNTY_NAME"
+   },
+   "work_type_values": [
+    "Active Transportation",
+    "Capacity",
+    "Contingency",
+    "Enhancement",
+    "Environmental",
+    "Federal Lands Access Program",
+    "Freight",
+    "Joint Highway Committee",
+    "Maintenance",
+    "Not Applicable",
+    "Other",
+    "Pavement Reconstruction",
+    "Preservation",
+    "Rehabilitation",
+    "Roadway",
+    "Structures",
+    "Studies",
+    "Traffic Management",
+    "Traffic and Safety",
+    "Transportation Solutions"
+   ],
+   "status_values": [
+    "Active",
+    "Advertised",
+    "Awarded",
+    "Central Review",
+    "Close Out",
+    "Closed",
+    "Concept Scoping",
+    "Contract Closed Out",
+    "Contract Complete",
+    "Funding",
+    "Hold",
+    "Physically Complete",
+    "Proposed",
+    "Region Review",
+    "STIP",
+    "Scoping",
+    "Substantially Compl",
+    "Under Construction"
+   ],
+   "notes": "UDOT ePM project lines, all statuses including closed projects. Planned/in development = PIN_STAT_NM in (Proposed, Concept Scoping, Scoping, Funding, STIP, Active, Region Review, Central Review, Advertised) or PIN_STATUS_PHASE_DESC in (Concept Development, Planning/Funding, Funding, STIP, Design, Advertising); built = Under Construction / Awarded / Substantially Compl / Physically Complete / Closed. Other useful fields: PIN_STATUS_PHASE_DESC, PRIMARY_CONCEPT (136 detailed concepts e.g. 'Widen Existing Facility', 'New Interchange on Existing Freeway'), PLANNED_CONSTRUCTION_YEAR, FORECAST_ST_YR, PROJECTED_START_DATE, PROJ_LOC, ENV_DOC_TYPE_CD, Municipality_Name. Dates epoch ms. EPM/STIP_2024/MapServer/0 returned the same 3,219 records and schema."
+  }
+ ],
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "UDOT ePM STIP project line layer verified (3,219 projects with status, concept, value, advertise date). Parcels not yet researched."
+}

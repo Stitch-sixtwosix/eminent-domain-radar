@@ -1,0 +1,22 @@
+{
+  "state": "Arkansas", "code": "AR", "checked": "2026-11-17",
+  "projects": [
+    {"name": "ArDOT STIP 2025-2028 Polylines (STIP_2025_2028_WFL1)", "url": "https://gis.ardot.gov/hosting/rest/services/Hosted/STIP_2025_2028_WFL1/FeatureServer/2", "verified": true,
+     "geometry": "polyline", "record_count": 922,
+     "fields": {"description": "popupinfo"},
+     "work_type_values": ["Capacity", "Bridge Replacement", "Capital"],
+     "status_values": [],
+     "notes": "The 2025-2028 STIP on ArDOT's own server, but it is a KML import: the real attributes are NOT fields. The only useful field is 'popupinfo', an HTML table that must be parsed. Rows seen in it: Job_No (the ArDOT job number, e.g. 090646), Job_Type (e.g. 'Capacity', 'Bridge Replacement', 'Capital'; only three values were sampled, not a full distinct list), Job_Type_Abbr, District_No, County_No (number, not name), Route_No, Section_No, Logmile_Direction, AH_Road_Id, AH_Begin_Logmile, AH_End_Logmile, AH_Length. There is no project description, cost, phase or letting date in the layer; those would have to come from the STIP document by Job_No. Other fields (name = 'Placemark', folderpath, symbolid) are KML leftovers. Everything in a STIP is programmed work, so all records count as planned. maxRecordCount 2000."},
+    {"name": "ArDOT STIP 2025-2028 Points (STIP_2025_2028_WFL1)", "url": "https://gis.ardot.gov/hosting/rest/services/Hosted/STIP_2025_2028_WFL1/FeatureServer/1", "verified": true,
+     "geometry": "point", "record_count": 299,
+     "fields": {"description": "popupinfo"},
+     "work_type_values": [], "status_values": [],
+     "notes": "Point jobs of the same STIP (bridges, intersections). Same KML-import structure: attributes only inside the 'popupinfo' HTML."}
+  ],
+  "parcels_statewide": {"name": "Arkansas GIS Office statewide parcels (PARCEL_POLYGON_CAMP)", "url": "https://gis.arkansas.gov/arcgis/rest/services/FEATURESERVICES/Planning_Cadastre/FeatureServer/6", "verified": true, "record_count": 2149447,
+     "fields": {"apn": "parcelid", "owner": "ownername", "address": "adrlabel", "market_value": "totalvalue", "acres": "taxarea", "county": "county"},
+     "restrictions": null,
+     "notes": "Statewide county-assessor parcels assembled by the Arkansas GIS Office (CAMP program). Owner name is present; there is NO owner mailing address. The address fields (adrnum, predir, pstrnam, pstrtype, psufdir, adrcity, adrzip5, adrlabel) are the property's site address. Also countyfips, countyid (FIPS + parcel id), parcellgl (legal description), parceltype, assessvalue, landvalue, impvalue, subdivision, section/township/range, camadate, pubdate. taxarea is the assessor's acreage (1.41 in the sample, matching the legal description). Coverage is not every county: the service description says county data is integrated as counties provide it. maxRecordCount is only 200, so paging is slow. Layer 0 of the same service is parcel centroids. No use restriction stated on the service."},
+  "parcels_counties": [],
+  "summary": "Statewide parcels with owner name work (no mailing address). The STIP layer has geometry and job numbers but its attributes are buried in HTML and it has no cost, phase or dates."
+}

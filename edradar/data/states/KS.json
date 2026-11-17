@@ -1,0 +1,66 @@
+{
+ "state": "Kansas",
+ "code": "KS",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "winCMPSCentroid (third-party copy of KDOT WinCPMS project list, published by a KDOT consultant)",
+   "url": "https://services6.arcgis.com/eNPJk90aMrXNOKF8/arcgis/rest/services/Centroids_for_WinCPMS/FeatureServer/10",
+   "verified": true,
+   "geometry": "point",
+   "record_count": 2569,
+   "fields": {
+    "id": "d_proj_full_num",
+    "name": "proj_friendly_name",
+    "description": [
+     "prdc_friendly_loc_desc",
+     "prdc_friendly_scope_desc"
+    ],
+    "work_type": "wtyp_name",
+    "status": "proj_status_cd",
+    "let_date": "d_proj_let_date",
+    "county": "d_primary_cnty_county_cd"
+   },
+   "work_type_values": [
+    "Bridge Replacement",
+    "Bridge Repair",
+    "Bridge Deck",
+    "Bridge Overlay",
+    "Concrete Pavement",
+    "Culvert",
+    "Grading and Surfacing",
+    "Grading, Bridge and Surfacing",
+    "Grading and Culvert",
+    "Interchange/s",
+    "Intersection Improvement",
+    "Milling and Overlay",
+    "Overlay",
+    "Pavement Reconstruction",
+    "Pavement Patching",
+    "PE, Row and Utilities",
+    "Preliminary Engineering",
+    "Preliminary Engineering and Row",
+    "Right Of Way Only",
+    "Roundabout",
+    "Ramp Improvement",
+    "Location Study",
+    "Pedestrian and Bicycle Paths",
+    "Lighting",
+    "Guard Fence"
+   ],
+   "status_values": [
+    "ACTIV",
+    "CANC",
+    "CLOSE",
+    "COMPL",
+    "PLAN"
+   ],
+   "notes": "NOT the official endpoint: a point (centroid) copy of KDOT's WinCPMS project extents hosted by a consultant's ArcGIS Online account (item modified 2026-07-01), no cost field. Planned = proj_status_cd 'PLAN' or d_proj_let_date in the future (179 records with let date after 2026-11-16); ifrt_fiscal_programmed_yr gives the programmed year. The official KDOT layer is https://kanplan.ksdot.gov/arcgis_web_adaptor/rest/services/Transportation/WinCPMS/MapServer/0 (polyline, listed on ArcGIS Online by KDOT) but kanplan.ksdot.gov did not resolve from the research machine, so it is UNVERIFIED.",
+   "where": "proj_status_cd = 'PLAN'",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "Projects section done; parcel research still in progress."
+}

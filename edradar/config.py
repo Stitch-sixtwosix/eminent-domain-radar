@@ -74,7 +74,8 @@ def add_states(cfg: Dict[str, Any]) -> None:
         for i, p in enumerate(st.get("projects") or []):
             if _usable(p) and p.get("fields"):
                 dot_layers.append({"state": code, "name": p.get("name") or "%s projects" % code, "key": "%s%d" % (code.lower(), i),
-                                   "url": p["url"], "fields": p["fields"], "where": p.get("where"),
+                                   "url": p["url"], "fields": p["fields"], "where": p.get("where"), "stage": p.get("stage"),
+                                   "max_records": p.get("max_records"),
                                    "agency": p.get("agency") or "%s DOT" % st.get("state", code), "info_url": p.get("info_url")})
         sw = st.get("parcels_statewide")
         counties = [c for c in (st.get("parcels_counties") or []) if _usable(c, need_owner=True)]

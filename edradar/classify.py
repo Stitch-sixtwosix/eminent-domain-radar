@@ -223,6 +223,8 @@ ADDRESS = re.compile(r"\b\d{1,5} (?:[NSEW]\.? )?[A-Z][A-Za-z]+(?: [A-Z][A-Za-z]+
 
 # Any state DOT's project record: what the work is decides how likely it is to need private land.
 DOT_WORK = [
+    (r"right[- ]of[- ]way|\brow\b|r/w", 95, "highway"),
+    (r"new location|convert non-freeway|grade,? drain", 90, "highway"),
     (r"new (?:road|route|highway|alignment|location|corridor|connector|interchange|freeway|expressway)|bypass|\bextension\b|extend ", 95, "highway"),
     (r"new interchange", 95, "interchange"),
     (r"realign|relocat", 90, "highway"),
@@ -264,7 +266,8 @@ def classify_dot(signal: Dict[str, Any]) -> Dict[str, Any]:
     if likelihood >= 30 and re.search(r"right[- ]of[- ]way|\bROW\b|acquisition|new alignment|relocat", text, re.I):
         likelihood = min(100, likelihood + 8)
     status = str(raw.get("_status") or "")
-    stage = next((st for pat, st in DOT_STAGE if re.search(pat, status, re.I)), "planning" if not status else "unknown")
+    # A program of future work (a STIP, a five-year plan) is "planning" unless its status says something more specific.
+    stage = next((st for pat, st in DOT_STAGE if re.search(pat, status, re.I)), raw.get("_stage") or ("planning" if not status else "unknown"))
     cost = raw.get("_cost")
     geometry = json.loads(signal["geometry"]) if isinstance(signal.get("geometry"), str) else signal.get("geometry")
     c = geo.center(geometry)

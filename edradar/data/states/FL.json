@@ -1,0 +1,98 @@
+{
+ "state": "Florida",
+ "code": "FL",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "FDOT Adopted Work Program 2027-2031 (WorkProgram_2027-2031_AD_G1)",
+   "url": "https://services1.arcgis.com/O1JpcwDW8sjYuddV/arcgis/rest/services/WorkProgram_2027_2031_AD_G1/FeatureServer/0",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 968,
+   "fields": {
+    "id": "WPITEM_SEG",
+    "name": "DESCRIPTION",
+    "description": "DESCRIPTION",
+    "work_type": "PROJECT_TYPE",
+    "cost": "AMOUNT",
+    "status": "PHASE",
+    "let_date": "FISCAL_YEAR",
+    "county": "COUNTY_NAME"
+   },
+   "work_type_values": [
+    "ADD AUXILIARY LANE(S)",
+    "ADD LANES & RECONSTRUCT",
+    "ADD LANES & REHABILITATE PVMNT",
+    "ADD LEFT TURN LANE(S)",
+    "ADD RIGHT TURN LANE(S)",
+    "ADD TURN LANE(S)",
+    "BIKE LANE/SIDEWALK",
+    "BIKE PATH/TRAIL",
+    "BRIDGE REPLACEMENT",
+    "BRIDGE-REPAIR/REHABILITATION",
+    "CORRIDOR/SUBAREA PLANNING",
+    "DRAINAGE IMPROVEMENTS",
+    "FEASIBILITY STUDY",
+    "INTERCHANGE - ADD LANES",
+    "INTERCHANGE IMPROVEMENT",
+    "INTERCHANGE RAMP (NEW)",
+    "INTERSECTION IMPROVEMENT",
+    "NEW BRIDGE CONSTRUCTION",
+    "NEW ROAD CONSTRUCTION",
+    "PD&E/EMO STUDY",
+    "RESURFACING",
+    "RIGHT OF WAY ACQUISITION",
+    "RIGHT OF WAY ACTIVITIES",
+    "ROUNDABOUT",
+    "WIDEN/RESURFACE EXIST LANES"
+   ],
+   "status_values": [
+    "PE",
+    "RRU",
+    "CST",
+    "MNT",
+    "PDE",
+    "INC",
+    "ENV",
+    "MSC",
+    "DSB",
+    "ROW",
+    "CAP",
+    "OPS"
+   ],
+   "notes": "FDOT five-year Adopted Work Program, fiscal years 2027-2031, hosted in FDOT's ArcGIS Online organization. One record per project segment and phase: PHASE (code) / PHASE_NAME / DESCRIPT (phase description), FISCAL_YEAR (2027-2031) and AMOUNT are for that phase, so a project appears several times and its cost is the sum. PHASE = ROW (right of way) is the direct land-acquisition signal; PE / PDE / ENV = in development; CST / DSB = construction funded in that fiscal year. No letting date, only fiscal year. WPITEM + WPITMSEG form the financial project number. Also DISTRICT, CATEGORY (HIGHWAYS / TURNPIKE / MAINTENANCE / MISCELLANEOUS), BEGIN_MILE, END_MILE. The same organization has WorkProgram_UnMapped_2027_2031_AD_G1 (items without geometry). The layer name is tied to the program years, so the URL will change with each annual work program. FDOT's own server gis.fdot.gov answered HTTP 406 to a plain automated request and was not used.",
+   "where": "PHASE IN ('PE','PDE','ENV','ROW')",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": {
+  "name": "Florida Statewide Cadastral (CADASTRAL_DOR)",
+  "url": "https://services9.arcgis.com/Gh9awoU677aKree0/arcgis/rest/services/Florida_Statewide_Cadastral/FeatureServer/0",
+  "verified": true,
+  "record_count": 10949394,
+  "fields": {
+   "apn": "PARCEL_ID",
+   "owner": "OWN_NAME",
+   "mailing_address": [
+    "OWN_ADDR1",
+    "OWN_ADDR2",
+    "OWN_CITY",
+    "OWN_STATE",
+    "OWN_ZIPCD"
+   ],
+   "address": [
+    "PHY_ADDR1",
+    "PHY_ADDR2",
+    "PHY_CITY",
+    "PHY_ZIPCD"
+   ],
+   "market_value": "JV",
+   "acres": "LND_SQFOOT",
+   "county": "CO_NO"
+  },
+  "restrictions": null,
+  "notes": "Statewide parcels joined to the Department of Revenue tax roll (NAL fields), all 67 counties. JV = just (market) value; LND_VAL = land value. There is no acres field: LND_SQFOOT is land area in square feet (divide by 43,560). CO_NO is the DOR county number (11 = Alachua in the sample), not FIPS and not a name. ASMNT_YR was 2026 in the sample. DOR_UC = land use code; sale fields SALE_PRC1 / SALE_YR1. maxRecordCount 2000. No use restriction is stated on the service. A centroid version exists in the same organization: Florida_Statewide_Parcel_Centroid_Version."
+ },
+ "parcels_counties": [],
+ "summary": "Both needs are met statewide: FDOT's adopted five-year work program with a right-of-way phase, and statewide parcels with owner name and mailing address. The work program layer is per phase and its URL changes each program year."
+}

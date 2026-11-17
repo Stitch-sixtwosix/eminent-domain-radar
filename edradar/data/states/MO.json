@@ -1,0 +1,29 @@
+{
+ "state": "Missouri",
+ "code": "MO",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "MoDOT STIP (BusinessInt/STIP)",
+   "url": "https://mapping.modot.org/arcgis/rest/services/BusinessInt/STIP/MapServer/0",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 3533,
+   "fields": {
+    "id": "JOB_NO",
+    "name": "ROUTE",
+    "description": "DESCRIPTION",
+    "cost": "ESTIMATED_COST",
+    "let_date": "SFY",
+    "county": "BEGIN_COUNTY_NAME"
+   },
+   "work_type_values": [],
+   "status_values": [],
+   "notes": "Statewide Transportation Improvement Program, state fiscal years 2027-2031 (SFY), so every record is planned. No work-type or status field: the work is in the free-text DESCRIPTION; IS_BRIDGE is Y/N. ESTIMATED_COST and BRIDGES_COST are padded text with commas, not numbers.",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "Projects section done; parcel research still in progress."
+}

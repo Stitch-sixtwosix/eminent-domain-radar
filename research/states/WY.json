@@ -1,0 +1,119 @@
+{
+  "state": "Wyoming",
+  "code": "WY",
+  "checked": "2026-11-16",
+  "projects": [
+    {
+      "name": "WYDOT ITSM STIP Line",
+      "url": "https://services2.arcgis.com/WI04Bd6haCzitbuQ/arcgis/rest/services/ITSM_STIP_Data_Layers/FeatureServer/1",
+      "verified": true,
+      "geometry": "polyline",
+      "record_count": 706,
+      "fields": {
+        "id": "project_id",
+        "name": "proj_descr",
+        "description": "from_descr_long",
+        "work_type": "cow_desc",
+        "cost": "con1",
+        "let_date": "drft_year"
+      },
+      "work_type_values": [
+        "ACQUIRE LAND/EASEMENT",
+        "ADDITIONAL LANES",
+        "BRIDGE REPLACEMENT",
+        "BUILDINGS",
+        "DRAINAGE REPAIR",
+        "ENVIRONMENTAL",
+        "FENCING",
+        "GENERAL MAINTENANCE",
+        "GUARDRAIL",
+        "ITS",
+        "LIGHTING",
+        "MODIFY INTERCHANGE",
+        "MODIFY INTERSECTION",
+        "NEW CONSTRUCTION",
+        "PAVEMENT EXPANSION",
+        "PAVEMENT MAINTENANCE",
+        "PAVEMENT RECONSTRUCTION",
+        "PAVEMENT REHABILITATION",
+        "PAVEMENT RESURFACE",
+        "RECONSTRUCTION",
+        "SAFETY IMPROVEMENTS",
+        "SLIDE REPAIR",
+        "STRUCTURE REPAIR",
+        "TRAFFIC SYSTEMS",
+        "UTILITY"
+      ],
+      "status_values": [],
+      "notes": "WYDOT STIP line projects (ArcGIS Online item last modified 2025-09-16, so it may lag the current STIP). No status, county or letting-date field: drft_year is the STIP year (values 2021-2032; keep the current year and later for planned work). cow_desc is the class of work (53 distinct values across the service, the 25 most relevant listed - the others are transit/airport/admin items such as bus purchases and OPERATING). con1 and ce11 are dollar amounts; they look like construction cost and construction engineering cost, but WYDOT does not label them - confirm before showing as 'cost'. Location is from_descr_long / to_descr_long with route (wyo_route) and reference markers (from_rm, to_rm); district is the WYDOT district. 'ACQUIRE LAND/EASEMENT' and 'ADDITIONAL LANES' are work classes worth flagging."
+    },
+    {
+      "name": "WYDOT ITSM STIP Point",
+      "url": "https://services2.arcgis.com/WI04Bd6haCzitbuQ/arcgis/rest/services/ITSM_STIP_Data_Layers/FeatureServer/0",
+      "verified": true,
+      "geometry": "point",
+      "record_count": 1065,
+      "fields": {
+        "id": "project_id",
+        "name": "proj_descr",
+        "description": "from_descr_long",
+        "work_type": "cow_desc",
+        "cost": "con1",
+        "let_date": "drft_year"
+      },
+      "work_type_values": [
+        "ACQUIRE LAND/EASEMENT",
+        "ADDITIONAL LANES",
+        "BRIDGE REPLACEMENT",
+        "BUILDINGS",
+        "DRAINAGE REPAIR",
+        "ENVIRONMENTAL",
+        "FENCING",
+        "GENERAL MAINTENANCE",
+        "GUARDRAIL",
+        "ITS",
+        "LIGHTING",
+        "MODIFY INTERCHANGE",
+        "MODIFY INTERSECTION",
+        "NEW CONSTRUCTION",
+        "PAVEMENT EXPANSION",
+        "PAVEMENT MAINTENANCE",
+        "PAVEMENT RECONSTRUCTION",
+        "PAVEMENT REHABILITATION",
+        "PAVEMENT RESURFACE",
+        "RECONSTRUCTION",
+        "SAFETY IMPROVEMENTS",
+        "SLIDE REPAIR",
+        "STRUCTURE REPAIR",
+        "TRAFFIC SYSTEMS",
+        "UTILITY"
+      ],
+      "status_values": [],
+      "notes": "Point projects (structures, intersections, airports, transit). Same fields as the line layer. Layer 2 of the service (ITSM STIP ALL, 1,751 points) is lines and points combined as points. WYDOT's own server has an alternative: https://gisservices.wyoroad.info/arcgis/rest/services/ITSM/ITSM_Data_Layers/MapServer (layers 5-18, split by STIP year, costs as text) - it answered but its year grouping looked inconsistent."
+    }
+  ],
+  "parcels_statewide": {
+    "name": "Wyoming statewide parcels 2024 (Office of State Lands server, Dept of Revenue / county assessor data)",
+    "url": "https://gis2.statelands.wyo.gov/arcgis/rest/services/basesde/Parcels2024/FeatureServer/0",
+    "verified": true,
+    "record_count": 370132,
+    "fields": {
+      "apn": "parcelnb",
+      "owner": "ownername1",
+      "mailing_address": [
+        "mailaddres",
+        "mailcity",
+        "mailstate",
+        "mailzipcod"
+      ],
+      "address": "locationad",
+      "market_value": "actualvalu",
+      "acres": "landgrossa",
+      "county": "jurisdicti"
+    },
+    "restrictions": null,
+    "notes": "All 23 counties (jurisdicti is the county name in capitals, e.g. NATRONA, BIGHORN, HOTSPRINGS). Tax year 2024 - this was the newest year found on the server (Parcels2023 and older years also exist), so owners can be up to two years stale. 323,830 of 370,132 records have an owner name; blanks are a single space ' ', not null. ownername2 is a second owner, accountno the assessor account, legal the legal description, assessedva the assessed value. Geometry is returned in lat/long. No restriction stated on the service."
+  },
+  "parcels_counties": [],
+  "summary": "Both work. WYDOT STIP lines and points give class of work, year and dollar amounts but no status or county. A statewide parcel layer with owner and mailing address covers all 23 counties, though it is tax year 2024."
+}

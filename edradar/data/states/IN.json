@@ -1,0 +1,48 @@
+{
+ "state": "Indiana",
+ "code": "IN",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "STIP_2024 (INDOT STIP, published by INDOT's STIP consultant)",
+   "url": "https://services3.arcgis.com/zkfscBHttPaQwR4x/arcgis/rest/services/STIP_2024/FeatureServer/0",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 2959,
+   "fields": {
+    "id": "DES",
+    "name": "LRS",
+    "description": "LOCATION",
+    "work_type": "WORKDESC"
+   },
+   "work_type_values": [
+    "Added Travel Lanes",
+    "Added Travel Lanes, Construct Turn Lanes",
+    "Auxiliary Lane Construction",
+    "Auxiliary Lanes, Passing",
+    "Auxiliary Lanes, Two-way Left Turn Lanes",
+    "Access Control",
+    "Bike/Pedestrian Facilities",
+    "Box Culvert Replacement",
+    "Br Repl with a Small Structure",
+    "Bridge Deck Overlay",
+    "Bridge Deck Replacement",
+    "Bridge Deck Replacement & Widening",
+    "Bridge Rehabilitation Or Repair",
+    "Bridge Maintenance And Repair",
+    "ADA Sidewalk Ramp Construction",
+    "Arch Reconstruction Or Repair",
+    "Small Structure Replacement with Bridge",
+    "Bridge Deck Sealing",
+    "Bridge Inspections",
+    "Bridge Cleaning"
+   ],
+   "status_values": [],
+   "notes": "Weak source. Hosted on a consultant's ArcGIS Online account (item 'INDOT STIP (2024)', modified 2025-12-03), not by INDOT. Only DES number, route, location, WORKTYPE letter code and WORKDESC (154 distinct values; 20 listed); no cost, phase or letting date. All STIP entries are programmed work. INDOT's own server (https://gis.indot.in.gov/ro/rest/services, e.g. DOT/INDOT_NLRI_DATA/MapServer for Next Level Roads) answered HTTP 403 to every request, so nothing there could be verified.",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "Projects section done; parcel research still in progress."
+}

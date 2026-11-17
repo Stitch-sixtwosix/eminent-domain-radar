@@ -1,0 +1,79 @@
+{
+  "state": "Alaska",
+  "code": "AK",
+  "checked": "2026-11-16",
+  "projects": [
+    {
+      "name": "AK DOT&PF STIP PROJECTS & PROGRAMS (PUBLIC) - 2027-2030 STIP",
+      "url": "https://services.arcgis.com/r4A0V7UzH9fcLVvv/arcgis/rest/services/AK_DOT_PF_STIP_PROJECTS_PUBLIC/FeatureServer/0",
+      "verified": true,
+      "geometry": "point",
+      "record_count": 234,
+      "fields": {
+        "id": "STIP_ID",
+        "name": "Proj_Name",
+        "description": "Description",
+        "work_type": "StrategicInvestmentArea",
+        "cost": "STIP_Period_Total",
+        "status": "Scope",
+        "county": "BoroughCensus"
+      },
+      "work_type_values": [
+        "Economic Vitality",
+        "Resiliency",
+        "Safety",
+        "State of Good Repair",
+        "Sustainability"
+      ],
+      "status_values": [
+        "Program",
+        "Project"
+      ],
+      "notes": "One POINT per STIP entry for the 2027-2030 STIP (layer name AK_DOTPF_STIP_2025_10_04); no line geometry. No real work-type or phase field: StrategicInvestmentArea is the nearest category and the scope is in the free-text Description (233 of 234 filled) and Proj_Name. Scope = 'Project' is a real project, 'Program' is a statewide funding programme (drop these). Funding by year is in Year_2027, Year_2028, Year_2029, Year_2030 (dollars); the first non-zero year is the best timing signal, there is no letting date. BoroughCensus is the borough / census area, or 'Corridor' for multi-borough projects. Coordinates are Alaska Albers (ask for outSR=4326)."
+    },
+    {
+      "name": "AK DOT&PF APEX public mapper - Route_Projects (current construction year)",
+      "url": "https://services.arcgis.com/r4A0V7UzH9fcLVvv/arcgis/rest/services/APEX_PROJECTS_PUBLIC_MAPPER_DASHBOARD/FeatureServer/3",
+      "verified": true,
+      "geometry": "polyline",
+      "record_count": 136,
+      "fields": {
+        "name": "Route_Proj_Name",
+        "status": "Route_Database_Status",
+        "let_date": "Route_Construction_Year",
+        "county": "Route_Borough_Census_Area"
+      },
+      "work_type_values": [],
+      "status_values": [
+        "Published"
+      ],
+      "notes": "Line geometry for projects in the construction programme for a given year (sample: Route_Construction_Year 'CY2026'), i.e. about to be or being built rather than long-range plans. No cost or description. Layer 2 (Site_Projects, 67 points) is the point equivalent. Useful mainly to get line geometry by matching project names against the STIP layer."
+    }
+  ],
+  "parcels_statewide": {
+    "name": "Alaska_Statewide_Parcels (ArcGIS Online, compiled from borough assessor data)",
+    "url": "https://services8.arcgis.com/jzbhhVHDe3lCCWFT/arcgis/rest/services/AK_Statewide_Parcels/FeatureServer/0",
+    "verified": true,
+    "record_count": 439003,
+    "fields": {
+      "apn": "AgencyParcelID",
+      "owner": "OwnerName",
+      "mailing_address": [
+        "OwnerAddress",
+        "OwnerCity",
+        "OwnerState",
+        "OwnerZip"
+      ],
+      "address": [
+        "SitusLine1",
+        "SitusCity",
+        "SitusZip"
+      ],
+      "county": "StatusFlag"
+    },
+    "restrictions": null,
+    "notes": "Compiled layer covering 20 sources: Anchorage (CurrentMOA), Mat-Su (CurrentMSB), Fairbanks North Star (CurrentFNSB), Kenai Peninsula (CurrentKPB), Juneau, Ketchikan (KGB), Kodiak (KIB), North Slope (NSB), Bristol Bay, Denali, Dillingham, Haines, Nome, Petersburg, Sitka, Skagway, Unalaska, Wrangell, Yakutat and 'UA1'. The source is identified only by StatusFlag (e.g. 'CurrentFNSB'); SitusCity sometimes holds the borough name. 365,340 of 439,003 records have OwnerName and 367,199 an OwnerAddress. No value or acreage fields. CAUTION: the item is published by a State of Alaska Department of Public Safety account, not by a land-records agency, with no description, update schedule or licence, so currency is unknown and it could be withdrawn. Alaska has no official statewide owner parcel layer; most of the state is unorganized borough with no assessor."
+  },
+  "parcels_counties": [],
+  "summary": "The 2027-2030 STIP is available as points with description and funding by year (no lines, no phase). A compiled statewide parcel layer with owner and mailing address answers and covers the main boroughs, but it comes from an unofficial-looking state account with no documentation."
+}

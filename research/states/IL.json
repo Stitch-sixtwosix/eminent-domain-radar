@@ -1,0 +1,96 @@
+{
+  "state": "Illinois",
+  "code": "IL",
+  "checked": "2026-11-17",
+  "projects": [
+    {
+      "name": "IDOT Multi-Year Improvement Program - Roadway FY 2027-2031",
+      "url": "https://services2.arcgis.com/aIrBD8yn1TDTEXoz/arcgis/rest/services/MYP_Test/FeatureServer/5",
+      "verified": true,
+      "geometry": "polyline",
+      "record_count": 1734,
+      "fields": {
+        "id": "PPSProject",
+        "name": "Route1",
+        "description": "Location",
+        "work_type": "Improvem_1",
+        "cost": "EstimatedC",
+        "status": "ProgramYea",
+        "county": "County1"
+      },
+      "work_type_values": [
+        "Add Auxiliary Lanes",
+        "Additional Lanes",
+        "Bridge Deck Overlay",
+        "Bridge Replacement",
+        "Channelization",
+        "Culvert Replacement",
+        "Designed Overlay",
+        "Grading",
+        "Horizontal Realignment",
+        "Interchange (New)",
+        "Interchange Reconstruction",
+        "Intersection Improvement",
+        "New Construction",
+        "New Shoulders",
+        "Pavement Replacement",
+        "Reconstruction",
+        "Relocation",
+        "Smart Overlay",
+        "Standard Overlay",
+        "Turning Lanes",
+        "Vertical Realignment",
+        "Widening & Resurfacing",
+        "Widening Existing Pavement",
+        "Crack & Joint Sealing",
+        "Microsurfacing 1 Pass"
+      ],
+      "status_values": [
+        "2",
+        "3",
+        "4",
+        "5",
+        "6"
+      ],
+      "notes": "IDOT's published FY 2026-2031 Multi-Year Program (Publicatio = '20262031MULTI-YEAR SQ'), hosted on IDOT's ArcGIS Online account despite the service name 'MYP_Test'. All planned. Layers: 0 Structure FY 2026 (point), 1 Structure FY 2027-2031 (point), 2 Spot FY 2026 (point), 3 Spot FY 2027-2031 (point), 4 Roadway FY 2026 (polyline), 5 Roadway FY 2027-2031 (polyline). The FY 2026 layers are the current annual program (soonest to construction). No letting date: ProgramYea is the year within the program (2-6 here). Improvem_1..Improve_11 hold up to 11 improvement types; ProjectTam is the asset-management category; EstimatedC is text with commas. County1..County4."
+    },
+    {
+      "name": "IDOT Multi-Year Improvement Program - Structure FY 2027-2031",
+      "url": "https://services2.arcgis.com/aIrBD8yn1TDTEXoz/arcgis/rest/services/MYP_Test/FeatureServer/1",
+      "verified": true,
+      "geometry": "point",
+      "record_count": 1682,
+      "fields": {
+        "id": "PPSProject",
+        "name": "Route1",
+        "description": "Location",
+        "work_type": "Improvem_1",
+        "cost": "EstimatedC",
+        "status": "ProgramYea"
+      },
+      "work_type_values": [],
+      "status_values": [],
+      "notes": "Bridge/structure projects of the same program; fewer attributes than the roadway layer (no county field). Sample Improvem_1: 'Bridge Replacement'."
+    },
+    {
+      "name": "IDOT MYP (older edition) - Roadway FY 2026-2030",
+      "url": "https://gis1.dot.illinois.gov/arcgis/rest/services/GAI/MYP/MapServer/5",
+      "verified": true,
+      "geometry": "polyline",
+      "record_count": 1455,
+      "fields": {
+        "id": "PPSProject",
+        "name": "Route1",
+        "description": "Location",
+        "work_type": "Improvem_1",
+        "cost": "EstimatedC"
+      },
+      "work_type_values": [],
+      "status_values": [],
+      "notes": "IDOT's own server, but still the previous FY 2025-2030 edition (layers 0-5 same pattern). Use the ArcGIS Online service above for the current program."
+    }
+  ],
+  "parcels_statewide": null,
+  "parcels_counties": [],
+  "summary": "Projects section done; parcel research still in progress."
+}

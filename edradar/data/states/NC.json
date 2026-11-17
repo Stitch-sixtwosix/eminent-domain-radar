@@ -1,0 +1,110 @@
+{
+ "state": "North Carolina",
+ "code": "NC",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "NCDOT 2026-2035 STIP Lines",
+   "url": "https://gis11.services.ncdot.gov/arcgis/rest/services/NCDOT_STIP/MapServer/1",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 1943,
+   "fields": {
+    "id": "TIP",
+    "name": "Route",
+    "description": "Description",
+    "work_type": "Symbology",
+    "cost": "ProjectCost",
+    "status": "Category",
+    "let_date": "ConstructionYear",
+    "county": "Counties"
+   },
+   "work_type_values": [
+    "Ex Congestion Mitigation-Non",
+    "Rail",
+    "Division Bicycle And Pedestrian",
+    "Regional Public Transit",
+    "Division Congestion Mitigation-Hwy",
+    "Public Transit",
+    "Regional Highway Safety",
+    "Transition Bicycle And Pedestrian",
+    "Division Public Transit",
+    "Regional Rail",
+    "PT Public Transit",
+    "Division Highway Safety",
+    "Ex Bicycle And Pedestrian",
+    "Division Ferry",
+    "Statewide Bridge",
+    "Highway",
+    "Ex Aviation",
+    "Transition Highway",
+    "IM",
+    "Regional Bridge",
+    "Statewide Highway Safety",
+    "Statewide Rail",
+    "Division Highway",
+    "Transition Rail",
+    "Division Rail"
+   ],
+   "status_values": [
+    "Statewide Mobility",
+    "Highway Fund",
+    "Division 1..14 (and combinations)",
+    "Region A..G (and combinations)",
+    "Public Transit",
+    "Not Funded",
+    "Exempt",
+    "Pre-STI (Transition)",
+    ""
+   ],
+   "notes": "Current 10-year STIP. There is no explicit phase/status field: 'Category' is the funding category (value 'Not Funded' marks unfunded projects) and 'Symbology' is category+mode. The work actually done is only in the free-text 'Description'. 'Mode' = Highway / Rail / Ferry / Public Transportation (Transit) / Bike & Ped / Aviation. Timing comes from the text fields 'RightOfWayYear' and 'ConstructionYear' (a year such as '2029', or 'NOT FUNDED', 'POST YEAR', 'FUNDED FOR PRELIMINARY ENGINEERING ONLY', or blank); years before the current one mean already under way. RightOfWayYear in the future is the best signal of upcoming land acquisition. maxRecordCount 1000.",
+   "stage": "planning"
+  },
+  {
+   "name": "NCDOT 2026-2035 STIP Points",
+   "url": "https://gis11.services.ncdot.gov/arcgis/rest/services/NCDOT_STIP/MapServer/0",
+   "verified": true,
+   "geometry": "point",
+   "record_count": 1120,
+   "fields": {
+    "id": "TIP",
+    "name": "Route",
+    "description": "Description",
+    "work_type": "Symbology",
+    "cost": "ProjectCost",
+    "status": "Category",
+    "let_date": "ConstructionYear",
+    "county": "Counties"
+   },
+   "work_type_values": [],
+   "status_values": [],
+   "notes": "Same schema as the lines layer (geometry type is multipoint). Point projects: bridges, intersections, interchanges.",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": {
+  "name": "NC OneMap Parcels (polys)",
+  "url": "https://services.nconemap.gov/secure/rest/services/NC1Map_Parcels/FeatureServer/1",
+  "verified": true,
+  "record_count": 5938804,
+  "fields": {
+   "apn": "parno",
+   "owner": "ownname",
+   "mailing_address": [
+    "mailadd",
+    "munit",
+    "mcity",
+    "mstate",
+    "mzip"
+   ],
+   "address": "siteadd",
+   "market_value": "parval",
+   "acres": "gisacres",
+   "county": "cntyname"
+  },
+  "restrictions": null,
+  "notes": "Statewide, all counties, standardized by NC OneMap from county assessors. In the sample record the whole mailing address was in 'mailadd' and mcity/mstate/mzip were blank; this varies by county. Also 'ownname2', 'altparno', 'nparno' (FIPS-prefixed id), 'landval', 'improvval', 'parusedesc', 'saledate'. Layer 0 of the same service is parcel centroids. maxRecordCount 5000. No use restriction stated on the service."
+ },
+ "parcels_counties": [],
+ "summary": "Both needs are met statewide: the NCDOT 2026-2035 STIP (lines and points, with right-of-way and construction years and cost) and NC OneMap parcels with owner name and mailing address. The STIP has no work-type field; type of work must be read from the description."
+}

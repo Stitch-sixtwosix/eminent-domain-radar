@@ -1,0 +1,206 @@
+{
+ "state": "Minnesota",
+ "code": "MN",
+ "checked": "2026-11-16",
+ "projects": [
+  {
+   "name": "MnDOT 2026-2035 CHIP - STIP Roadway Projects (years 1-4)",
+   "url": "https://services.arcgis.com/qWbGMYB49y8mLbRt/arcgis/rest/services/2026_2035_Capital_Highway_Investment_Plan_Feature_Layers_view/FeatureServer/22",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 534,
+   "fields": {
+    "id": "SP_Number",
+    "name": "Route_Name",
+    "description": "Descriptio",
+    "work_type": "Project_Se",
+    "cost": "Estimated_",
+    "let_date": "Fiscal_Yea",
+    "county": "County"
+   },
+   "work_type_values": [
+    "CATEGORICALLY EXEMPT",
+    "CORRIDORS OF COMMERCE PROGRAM",
+    "EXEMPT",
+    "HIGHWAY FREIGHT PROGRAM",
+    "HISTORIC ROADSIDE PROPERTY",
+    "HSIP - GREATER MN",
+    "HSIP \u2013 METRO",
+    "INTELLIGENT TRANSPORTATION SYSTEMS PROGRAM",
+    "LOCAL PARTNERSHIP PROGRAM",
+    "N/A (I.E. NON-MNDOT SELECTION OR NON-TH PROJECT)",
+    "NHS BRIDGE",
+    "NHS CULVERT",
+    "NHS PAVEMENT",
+    "NON-MOTORIZED INFRASTRUCTURE REHAB",
+    "NON-NHS BRIDGE",
+    "NON-NHS CULVERT",
+    "NON-NHS PAVEMENT",
+    "RAILWAY-HIGHWAY CROSSINGS PROGRAM",
+    "RURAL HIGH RISK ROADS",
+    "SAFETY REST AREA",
+    "STANDALONE BICYCLE/PEDESTRIAN",
+    "STANDALONE GREATER MN MOBILITY",
+    "STANDALONE NOISE BARRIER",
+    "STANDALONE SAFETY",
+    "TRANSPORTATION ECONOMIC DEVELOPMENT PROGRAM"
+   ],
+   "status_values": [],
+   "notes": "Committed (STIP) state highway roadway projects, fiscal years 2026-2029. There is no status field: the layer itself means 'programmed'. Fiscal_Yea is the fiscal year (number), not a letting date. Estimated_ is TEXT such as '$10.6 M' or '$11 - 14 M', not a number. Project_Se is the project selection/investment category (the nearest thing to work type; values have stray spaces and a few bad values such as '65'); the real scope is in the free-text Descriptio. Project_We is a project web link.",
+   "stage": "planning"
+  },
+  {
+   "name": "MnDOT 2026-2035 CHIP - CHIP Roadway Projects (years 5-10)",
+   "url": "https://services.arcgis.com/qWbGMYB49y8mLbRt/arcgis/rest/services/2026_2035_Capital_Highway_Investment_Plan_Feature_Layers_view/FeatureServer/23",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 431,
+   "fields": {
+    "id": "SP_Number",
+    "name": "Route_Name",
+    "description": "Descriptio",
+    "work_type": "Project_Se",
+    "cost": "Estimated_",
+    "let_date": "Fiscal_Yea",
+    "county": "County"
+   },
+   "work_type_values": [
+    "CATEGORICALLY EXEMPT",
+    "HSIP - GREATER MN",
+    "MAJOR CAPACITY EXPANSION/MOBILITY",
+    "NHS BRIDGE",
+    "NHS PAVEMENT",
+    "NON NHS BRIDGE",
+    "NON NHS PAVEMENT",
+    "NON-NHS PAVEMENT",
+    "STANDALONE BICYCLE/PEDESTRIAN",
+    "STANDALONE NOISE BARRIER",
+    "URBAN PAVEMENT"
+   ],
+   "status_values": [],
+   "notes": "Planned (not yet committed) roadway projects, fiscal years 2030-2035. Same fields as the STIP roadway layer; cost is a text range.",
+   "stage": "planning"
+  },
+  {
+   "name": "MnDOT 2026-2035 CHIP - STIP Bridge Projects (years 1-4)",
+   "url": "https://services.arcgis.com/qWbGMYB49y8mLbRt/arcgis/rest/services/2026_2035_Capital_Highway_Investment_Plan_Feature_Layers_view/FeatureServer/13",
+   "verified": true,
+   "geometry": "point",
+   "record_count": 271,
+   "fields": {
+    "id": "SP_Number",
+    "name": "Route_Name",
+    "description": "Descriptio",
+    "work_type": "Project_Se",
+    "cost": "Estimated_",
+    "let_date": "Fiscal_Yea",
+    "county": "County"
+   },
+   "work_type_values": [
+    "CATEGORICALLY EXEMPT",
+    "CORRIDORS OF COMMERCE PROGRAM",
+    "EXEMPT",
+    "EXEMPT (IN 2019-2022 STIP)",
+    "HIGHWAY FREIGHT PROGRAM",
+    "HSIP \u2013 METRO",
+    "N/A (I.E. NON-MNDOT SELECTION OR NON-TH PROJECT)",
+    "NHS BRIDGE",
+    "NHS CULVERT",
+    "NHS PAVEMENT",
+    "NON-NHS BRIDGE",
+    "NON-NHS CULVERT",
+    "NON-NHS PAVEMENT",
+    "PEDESTRIAN BRIDGE REHAB/REPLACE",
+    "URBAN PAVEMENT"
+   ],
+   "status_values": [],
+   "notes": "Committed bridge projects, fiscal years 2026-2029. Bridge number is in Bridge_Nun (spelled that way).",
+   "stage": "planning"
+  },
+  {
+   "name": "MnDOT 2026-2035 CHIP - CHIP Bridge Projects (years 5-10)",
+   "url": "https://services.arcgis.com/qWbGMYB49y8mLbRt/arcgis/rest/services/2026_2035_Capital_Highway_Investment_Plan_Feature_Layers_view/FeatureServer/0",
+   "verified": true,
+   "geometry": "point",
+   "record_count": 500,
+   "fields": {
+    "id": "SP_Number",
+    "name": "Route_Name",
+    "description": "Descriptio",
+    "work_type": "Project_Se",
+    "cost": "Estimated_",
+    "let_date": "Fiscal_Yea",
+    "county": "County"
+   },
+   "work_type_values": [
+    "NHS BRIDGE",
+    "NHS CULVERT",
+    "NHS PAVEMENT",
+    "NON NHS BRIDGE",
+    "NON NHS PAVEMENT",
+    "NON-NHS BRIDGE",
+    "NON-NHS CULVERT",
+    "NON-NHS PAVEMENT",
+    "PEDESTRIAN BRIDGE REHAB/REPLACE",
+    "URBAN PAVEMENT"
+   ],
+   "status_values": [],
+   "notes": "Planned bridge projects, fiscal years 2030-2035. Bridge number is in Bridge_Num here.",
+   "stage": "planning"
+  },
+  {
+   "name": "MnDOT Current, Programmed and Planned Construction Projects (combined view)",
+   "url": "https://services.arcgis.com/qWbGMYB49y8mLbRt/arcgis/rest/services/Construction_Project_view/FeatureServer/59",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 680,
+   "fields": {
+    "id": "SP_Number",
+    "name": "Route_Name",
+    "description": "Descriptio",
+    "status": "projectstatus",
+    "let_date": "Fiscal_Yea",
+    "county": "County"
+   },
+   "work_type_values": [],
+   "status_values": [
+    "Programmed Bridge Project",
+    "Programmed Roadway Project"
+   ],
+   "notes": "Alternative single service with three line layers: 58 Current Construction Projects (202 records, under construction - skip), 59 Programmed (STIP, FY2026-2029, 680 records, NO cost field) and 18 Planned (CHIP, 931 records, cost text in Estimated_, status in StatusType = 'Planned Roadway Project' / 'Planned Bridge project '). Bridges are drawn as tiny lines here. The four CHIP layers above carry more attributes.",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": {
+  "name": "Parcels, Compiled from Opt-In Open Data Counties, Minnesota (MnGeo)",
+  "url": "https://enterprise.gisdata.mn.gov/aghost/rest/services/us_mn_state_mngeo/plan_parcels_open/FeatureServer/0",
+  "verified": true,
+  "record_count": 2714438,
+  "fields": {
+   "apn": "county_pin",
+   "owner": "owner_name",
+   "mailing_address": [
+    "own_add_l1",
+    "own_add_l2",
+    "own_add_l3",
+    "own_add_l4"
+   ],
+   "address": [
+    "anumber",
+    "st_pre_dir",
+    "st_name",
+    "st_pos_typ",
+    "st_pos_dir",
+    "ctu_name",
+    "zip"
+   ],
+   "market_value": "emv_total",
+   "acres": "acres_poly",
+   "county": "co_name"
+  },
+  "restrictions": null,
+  "notes": "PARTIAL statewide: 60 of Minnesota's 87 counties have opted in. 2,132,898 of 2,714,438 records have an owner name. Owner names present for Hennepin (447,044), Ramsey, Dakota, Anoka, Washington, St. Louis, Olmsted, Wright; counties such as Scott and Stearns are in the layer but with owner_name empty. When own_add_* is empty (e.g. Hennepin) the taxpayer name and address are in tax_name / tax_add_l1..l4. state_pin is county FIPS + PIN. Site address is split across several fields. Layer 1 of the service is a per-county metadata layer. No restriction is stated on the service; the dataset page licence text was not confirmed."
+ },
+ "parcels_counties": [],
+ "summary": "MnDOT's 10-year plan gives planned projects as lines (roads) and points (bridges) but cost is a text range and there is no letting date, only fiscal year. Parcels with owner names exist for 60 of 87 counties in one MnGeo layer (all the big metro counties except Scott have owners); the other 27 counties are missing."
+}

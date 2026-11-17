@@ -1,0 +1,76 @@
+{
+  "state": "Texas",
+  "code": "TX",
+  "checked": "2026-11-17",
+  "projects": [
+    {
+      "name": "TxDOT DCIS All Projects",
+      "url": "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/TxDOT_DCIS_All_Projects/FeatureServer/0",
+      "verified": true,
+      "geometry": "polyline",
+      "record_count": 73306,
+      "fields": {
+        "id": "CONTROL_SECT_JOB",
+        "name": "HIGHWAY_NUMBER",
+        "description": [
+          "LIMITS_FROM",
+          "LIMITS_TO",
+          "TYPE_OF_WORK"
+        ],
+        "work_type": "PROJ_CLASS",
+        "cost": "EST_CONSTRUCTION_COST",
+        "status": "PROJ_STG",
+        "let_date": "PROJ_ESTMTD_LET_D",
+        "county": "COUNTY_NAME"
+      },
+      "work_type_values": [
+        "Bridge Replacement",
+        "Bridge Widening or Rehabilitation",
+        "Convert Non-Freeway To Freeway",
+        "Freeway Operational Improvements",
+        "Interchange (New or Reconstructed)",
+        "Intersection & Operational Imprv",
+        "New Location Freeway",
+        "New Location Non-Freeway",
+        "Rehabilitation of Existing Road",
+        "Restoration",
+        "Right of Way",
+        "Overlay",
+        "Preliminary Engineering",
+        "Feasibility Studies",
+        "Hazard Elimination & Safety",
+        "Miscellaneous Construction",
+        "Culvert & Storm Drainage Work",
+        "Bicycle Infrastructure Improvements",
+        "Pedestrian, Sidewalks & Curb Ramps",
+        "Landscape & Scenic Enhancement",
+        "Corridor Traffic Management",
+        "Border Crossing Facility",
+        "Bridge Maintenance",
+        "Routine Maintenance Project",
+        "Railroad Relocation"
+      ],
+      "status_values": [
+        "Cancelled",
+        "Closed",
+        "Construction",
+        "Design and Construct",
+        "Dual",
+        "Execute",
+        "Initiate",
+        "Letting",
+        "Operations and Maint",
+        "PE",
+        "PS&E",
+        "Planning",
+        "Pre Procurement",
+        "Procurement",
+        "Ready to Let"
+      ],
+      "notes": "All TxDOT projects, past and future (66 distinct PROJ_CLASS values; 25 listed). PROJ_STG is the phase; PROJ_STAT is Active/Closed/Inactive/Paused (22,161 not Closed). Planned work = PROJ_STG in Planning/Initiate/PE/PS&E/Ready to Let/Letting etc. with PROJ_STAT='Active' (11,755 records are neither Closed nor Construction). ACTUAL_LET_DATE is filled once let. PRJ_UTP=1 flags Unified Transportation Program projects. The older TxDOT_Projects service on the same host now answers 'Token Required'."
+    }
+  ],
+  "parcels_statewide": null,
+  "parcels_counties": [],
+  "summary": "Projects section done; parcel research still in progress."
+}

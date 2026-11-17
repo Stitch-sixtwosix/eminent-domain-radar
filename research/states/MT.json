@@ -1,0 +1,74 @@
+{
+ "state": "Montana",
+ "code": "MT",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "MDT Tentative Construction Plan - TCP 2026 LINES",
+   "url": "https://gis.mtmdt.us/server/rest/services/MDTGIS/Tentative_Construction_Plan/MapServer/1",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 295,
+   "fields": {
+    "id": "UPN",
+    "name": "PROJECT_NAME",
+    "description": "SCOPE",
+    "work_type": "SCOPE_1",
+    "cost": "CN_AND_CE",
+    "let_date": "FFY_YEAR"
+   },
+   "work_type_values": [
+    "BANK STABILIZATION",
+    "BIKE/PED FACILITIES",
+    "BRIDGE REHAB",
+    "BRIDGE REPLACEMENT",
+    "CHIP SEAL",
+    "CRACK SEALING",
+    "CULVERT REPLACEMENT",
+    "CURVE RECONSTRUCTION",
+    "FENCING",
+    "INT IMPROVEMENTS",
+    "INT UPGRADE / SIGNALS",
+    "INT UPGRADE/SIGNALS",
+    "MAJOR REHAB",
+    "MILL & FILL",
+    "MINOR REHAB",
+    "MISCELLANEOUS",
+    "MNOR REHAB",
+    "OVERLAY",
+    "PAVEMENT PRESERVATION",
+    "RECONSTRUCTION",
+    "REST AREA",
+    "RR CROSSING",
+    "SAFETY",
+    "SLIDE CORRECTION",
+    "SLOPE FLATTENING"
+   ],
+   "notes": "MDT Tentative Construction Plan: projects scheduled for letting in federal fiscal years 2025-2030 (FFY_YEAR is the planned year, integer). All records are planned work; no status field, so future = FFY_YEAR >= current FFY. PROJ_TYPE is a 6-value category (BRIDGE, RECONSTRUCTION, REHABILITATION, RESURFACE, SAFETY, OTHER); SCOPE is a coded description such as '310 - ROADWAY & ROADSIDE SAFETY IMPROVEMENTS'. CN_AND_CE = construction + construction engineering dollars, CN = construction only, COST_RANGE in $ millions. No county field (FN_DISTRICT = MDT district 1-5; ROUTE/BEG_REF_POST/END_REF_POST locate it). PROJECT_ID is the federal project number."
+  },
+  {
+   "name": "MDT Tentative Construction Plan - TCP 2026 POINTS",
+   "url": "https://gis.mtmdt.us/server/rest/services/MDTGIS/Tentative_Construction_Plan/MapServer/0",
+   "verified": true,
+   "geometry": "point",
+   "record_count": 3,
+   "fields": {
+    "id": "UPN",
+    "name": "PROJECT_NAME",
+    "description": "SCOPE",
+    "work_type": "SCOPE_1",
+    "cost": "CN_AND_CE",
+    "let_date": "FFY_YEAR"
+   },
+   "work_type_values": [
+    "BRIDGE REPLACEMENT",
+    "INT UPGRADE / SIGNALS",
+    "RECONSTRUCTION"
+   ],
+   "notes": "Same schema as the line layer; only 3 point projects."
+  }
+ ],
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "MDT Tentative Construction Plan verified (295 lines + 3 points, FFY 2025-2030, scope and cost). Parcels not yet researched."
+}

@@ -1,0 +1,55 @@
+{
+  "state": "Iowa",
+  "code": "IA",
+  "checked": "2026-11-17",
+  "projects": [
+    {
+      "name": "Iowa DOT Five Year Program Projects (public view)",
+      "url": "https://services.arcgis.com/8lRhdTsQyJpO52F1/arcgis/rest/services/Iowa_DOT_Five_Year_Program_Project_Data_V2_Public_VIEW/FeatureServer/0",
+      "verified": true,
+      "geometry": "polyline",
+      "record_count": 668,
+      "fields": {
+        "id": "PID",
+        "name": "RouteID",
+        "description": "Project_Location",
+        "work_type": "Work_Type",
+        "cost": "AmountTotal",
+        "let_date": "Year2",
+        "county": "County"
+      },
+      "work_type_values": [
+        "Bridge Deck Overlay",
+        "Bridge New",
+        "Bridge Painting",
+        "Bridge Rehabilitation",
+        "Bridge Removal",
+        "Bridge Replacement",
+        "Culvert Extension",
+        "Culvert New",
+        "Culvert Repair",
+        "Culvert Replacement",
+        "Erosion Control",
+        "Grade & Pave",
+        "Grading",
+        "Guardrail",
+        "Lighting",
+        "Miscellaneous",
+        "Mitigation",
+        "Patching",
+        "Paved Shoulders",
+        "Pavement Rehab",
+        "Pavement Widening",
+        "Paving",
+        "Right of Way",
+        "Traffic Signals",
+        "Traffic Signs"
+      ],
+      "status_values": [],
+      "notes": "2027-2031 Iowa Transportation Improvement Program (Program = '2027-2031 Program'); all records are programmed future work, one row per project/year/work type (Year2 = 2027..2031; SummaryWorkType and SummaryYears roll up the project). 'Right of Way' is its own Work_Type. AmountTotal looks like thousands of dollars (sample 2306) - check before use. No status field. Table 1 in the same service is the report table."
+    }
+  ],
+  "parcels_statewide": null,
+  "parcels_counties": [],
+  "summary": "Projects section done; parcel research still in progress."
+}

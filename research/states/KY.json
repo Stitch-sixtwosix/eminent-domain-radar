@@ -1,0 +1,21 @@
+{
+  "state": "Kentucky", "code": "KY", "checked": "2026-11-17",
+  "projects": [
+    {"name": "KYTC Current Highway Plan Projects (Active Highway Plan)", "url": "https://maps.kytc.ky.gov/arcgis/rest/services/Apps/ActiveHighwayPlan_Ext_Prd/MapServer/1", "verified": true,
+     "geometry": "polyline", "record_count": 1656,
+     "fields": {"id": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.DIST_ITEM",
+                "name": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.LOCUNIQUE",
+                "description": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.SYP_RPT_DESC",
+                "work_type": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.SYP_RPT_TYPEWORK",
+                "cost": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.SYP_RPT_CSYFUNDCOSTC",
+                "status": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.SYP_RPT_PRECONFLAG",
+                "let_date": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.SYP_RPT_CSYFISYEARC",
+                "county": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.COUNTYNAME"},
+     "work_type_values": ["AIR QUALITY(P)", "AM-ASSET MGT(P)", "AM-BRIDGE (P)", "AM-PAVEMENT (INT)(P)", "AM-PAVEMENT (PKY)(P)", "AM-PAVEMENT (PRI)(P)", "BIKE/PED FACIL(O)", "BRIDGE REPLACEMENT(P)", "CONGESTION MITIGATION", "CONGESTION MITIGTN(O)", "DESIGN ENGINEERING(O)", "DRAINAGE IMPROVE(P)", "ECONOMIC DEVEL(O)", "I-CHANGE RECONST(O)", "INDUSTRIAL ACCESS", "MAJOR WIDENING", "MAJOR WIDENING(O)", "MINOR WIDENING", "MINOR WIDENING(O)", "NEW INTERCHANGE", "NEW ROUTE", "REALIGNMENT", "RECONSTRUCTION", "RELOCATION(O)", "SAFETY"],
+     "status_values": ["A", "Awarded", "I", "Rejected", "TentativeLetting", "Withdrawn"],
+     "notes": "Enacted six-year highway plan joined to route geometry; the layer is a join, so every field name carries the full table prefix (KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.* and KYTCDynamic_Highways.DBO.Project_Locations_Line.*) and must be used that way in outFields. There is one set of phase columns per phase, suffixed P (planning), D (design), R (right of way), U (utilities), C (construction): SYP_RPT_PHASECODEx, SYP_RPT_CSYFUNDCOSTx (cost), SYP_RPT_CSYFISYEARx (fiscal year), SYP_RPT_STAGEx (ESTIMATED / REESTIMATED / AUTHORIZED / SENTTOFHWA / NOTREQUIRED / NON-SIXYEAR / UNK), SYP_RPT_AUTHAMOUNTx, SYP_RPT_AUTHDATEx. Planned vs under way: construction stage 'ESTIMATED' with a future SYP_RPT_CSYFISYEARC = planned; 'AUTHORIZED' = funded/under way; a non-null R phase (SYP_RPT_CSYFISYEARR, values 2021-2032) flags right-of-way acquisition. SYP_RPT_PRECONFLAG meaning of 'A'/'I' is not documented on the service (the awarded layer uses the same field). There is no letting date, only fiscal years. PRECON_INFO_LINK gives a per-project report URL. Total cost = sum of the five phase costs. Layer 0 of the same service ('Awarded Current Highway Plan Projects', 52 records) is the already-awarded subset; layer 2 is the previous plan. maxRecordCount 1000."}
+  ],
+  "parcels_statewide": null,
+  "parcels_counties": [],
+  "summary": "KYTC's enacted highway plan is a good planned-projects source with per-phase cost and fiscal year, including a right-of-way phase. Parcels not researched yet."
+}

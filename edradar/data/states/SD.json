@@ -1,0 +1,168 @@
+{
+ "state": "South Dakota",
+ "code": "SD",
+ "checked": "2026-11-16",
+ "projects": [
+  {
+   "name": "SDDOT STIP 2027 (Approved) - Construction Reconstruction",
+   "url": "https://dotgis.sd.gov/spearfishformation/rest/services/STIP/DOT_STIP_Approved/MapServer/2",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 111,
+   "fields": {
+    "id": "ProjectCtrlNbr",
+    "name": "LocDesc",
+    "description": "ImproveDesc",
+    "work_type": "MapCategory",
+    "cost": "EstCost",
+    "let_date": "LettingDate",
+    "county": "CountyList"
+   },
+   "work_type_values": [],
+   "status_values": [],
+   "notes": "One layer per improvement category of the approved STIP map; the layer itself is the work type. Most relevant for land acquisition (grading, reconstruction). No status field: everything here is programmed, not yet built. FiscalYear and ConstructionYear are text years; LettingDate is often null. EstCost is dollars. Other fields: HwyNbr, BegMRMNbr/EndMRMNbr (mile markers), SegmentLen, FundCat1-5, ProjectList (control number + project number), ProjectManager, ReadyDate. MapCategory sample value 'Con/Recon'. Coordinates are a South Dakota projected system (ask for outSR=4326).",
+   "stage": "planning"
+  },
+  {
+   "name": "SDDOT STIP 2027 (Approved) - Resurfacing",
+   "url": "https://dotgis.sd.gov/spearfishformation/rest/services/STIP/DOT_STIP_Approved/MapServer/3",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 142,
+   "fields": {
+    "id": "ProjectCtrlNbr",
+    "name": "LocDesc",
+    "description": "ImproveDesc",
+    "work_type": "MapCategory",
+    "cost": "EstCost",
+    "let_date": "LettingDate",
+    "county": "CountyList"
+   },
+   "work_type_values": [],
+   "status_values": [],
+   "notes": "One layer per improvement category of the approved STIP map; the layer itself is the work type.",
+   "stage": "planning"
+  },
+  {
+   "name": "SDDOT STIP 2027 (Approved) - Pavement Preservation",
+   "url": "https://dotgis.sd.gov/spearfishformation/rest/services/STIP/DOT_STIP_Approved/MapServer/4",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 509,
+   "fields": {
+    "id": "ProjectCtrlNbr",
+    "name": "LocDesc",
+    "description": "ImproveDesc",
+    "work_type": "MapCategory",
+    "cost": "EstCost",
+    "let_date": "LettingDate",
+    "county": "CountyList"
+   },
+   "work_type_values": [],
+   "status_values": [],
+   "notes": "One layer per improvement category of the approved STIP map; the layer itself is the work type.",
+   "stage": "planning"
+  },
+  {
+   "name": "SDDOT STIP 2027 (Approved) - Safety (lines)",
+   "url": "https://dotgis.sd.gov/spearfishformation/rest/services/STIP/DOT_STIP_Approved/MapServer/6",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 102,
+   "fields": {
+    "id": "ProjectCtrlNbr",
+    "name": "LocDesc",
+    "description": "ImproveDesc",
+    "work_type": "MapCategory",
+    "cost": "EstCost",
+    "let_date": "LettingDate",
+    "county": "CountyList"
+   },
+   "work_type_values": [],
+   "status_values": [],
+   "notes": "One layer per improvement category of the approved STIP map; the layer itself is the work type.",
+   "stage": "planning"
+  },
+  {
+   "name": "SDDOT STIP 2027 (Approved) - Shoulder Improvement",
+   "url": "https://dotgis.sd.gov/spearfishformation/rest/services/STIP/DOT_STIP_Approved/MapServer/18",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 3,
+   "fields": {
+    "id": "ProjectCtrlNbr",
+    "name": "LocDesc",
+    "description": "ImproveDesc",
+    "work_type": "MapCategory",
+    "cost": "EstCost",
+    "let_date": "LettingDate",
+    "county": "CountyList"
+   },
+   "work_type_values": [],
+   "status_values": [],
+   "notes": "One layer per improvement category of the approved STIP map; the layer itself is the work type.",
+   "stage": "planning"
+  },
+  {
+   "name": "SDDOT STIP 2027 (Approved) - ADA",
+   "url": "https://dotgis.sd.gov/spearfishformation/rest/services/STIP/DOT_STIP_Approved/MapServer/5",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 10,
+   "fields": {
+    "id": "ProjectCtrlNbr",
+    "name": "LocDesc",
+    "description": "ImproveDesc",
+    "work_type": "MapCategory",
+    "cost": "EstCost",
+    "let_date": "LettingDate",
+    "county": "CountyList"
+   },
+   "work_type_values": [],
+   "status_values": [],
+   "notes": "One layer per improvement category of the approved STIP map; the layer itself is the work type.",
+   "stage": "planning"
+  },
+  {
+   "name": "SDDOT STIP 2027 (Approved) - Developmental STIP 2031-2034",
+   "url": "https://dotgis.sd.gov/spearfishformation/rest/services/STIP/DOT_STIP_Approved/MapServer/8",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 176,
+   "fields": {
+    "id": "ProjectCtrlNbr",
+    "name": "ProjectList"
+   },
+   "work_type_values": [],
+   "status_values": [],
+   "notes": "Longer-range (2031-2034) projects. Very thin attributes: only HwyNbr, ProjectCtrlNbr, ProjectList, RankingVal, ReadyDate, RYG, ProjectManager - no description or cost. Layer 17 holds 3 matching points.",
+   "stage": "planning"
+  },
+  {
+   "name": "SDDOT STIP 2027 (Approved) - Local Structure Projects",
+   "url": "https://dotgis.sd.gov/spearfishformation/rest/services/STIP/DOT_STIP_Approved/MapServer/10",
+   "verified": true,
+   "geometry": "point",
+   "record_count": 23,
+   "fields": {
+    "id": "ProjectCtrlNbr",
+    "name": "LocDesc",
+    "description": "ImproveDesc",
+    "work_type": "ImprovTypeList",
+    "cost": "EstCost",
+    "status": "TranspProjectStatusCode",
+    "let_date": "LettingDate",
+    "county": "CountyList"
+   },
+   "work_type_values": [],
+   "status_values": [
+    "Recommended"
+   ],
+   "notes": "County/local bridge projects; different field set (has ProjectNbr and TranspProjectStatusCode; only the value 'Recommended' was seen in a sample, the full list was not pulled). Layer 11 (Local Road Projects, 4 lines) and layer 9 (Railroad Crossings, 41 points) are similar small layers.",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "Projects found: SDDOT's approved STIP map service gives planned projects as lines per category with cost, year and county (found by opening the map linked from dot.sd.gov; the tentative STIP is a sibling service STIP/DOT_STIP_Tentative on the same server). Parcels not yet researched."
+}

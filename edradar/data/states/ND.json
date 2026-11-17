@@ -1,0 +1,104 @@
+{
+ "state": "North Dakota",
+ "code": "ND",
+ "checked": "2026-11-16",
+ "projects": [
+  {
+   "name": "NDDOT Statewide Transportation Improvement Program - Masterworks Projects - Line",
+   "url": "https://gis.dot.nd.gov/arcgis/rest/services/external/Statewide_Transportation_Improvement_Program/FeatureServer/0",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 667,
+   "fields": {
+    "id": "ProjectControlNumber",
+    "name": "ProjectName",
+    "description": "Description",
+    "work_type": "WorkType",
+    "cost": "ProjectValueInDollars",
+    "status": "Status",
+    "let_date": "ProposedBidDate",
+    "county": "County"
+   },
+   "work_type_values": [
+    "Bridge",
+    "County",
+    "Emergency Relief",
+    "Other",
+    "Railroad",
+    "Rural",
+    "Safety",
+    "Transportation Alternatives",
+    "Urban"
+   ],
+   "status_values": [
+    "",
+    "Migrated"
+   ],
+   "notes": "NDDOT STIP projects from its Masterworks project system. Status is NOT useful (values only 'Migrated' or blank), so planned vs under way must be told from ConstructionYear (2025-2035, a few 2040/2055/2056) and ProposedBidDate. WorkType is a comma-separated list of short codes (e.g. 'LGHTG,RNDAB,SIGNG', 'AO>2'',MILLG', 'AGGBS,PCC'; 129 distinct combinations on the line layer) so it cannot be listed as a clean value set; ProgramCategory (Bridge, County, Emergency Relief, Other, Railroad, Rural, Safety, Transportation Alternatives, Urban) and InvestmentStrategies (codes such as MJREH, MNCPL, NWRCN, PREPL, SFIMP, STRRE) are cleaner. ProjectNumber is the federal-style project number. Some records are test data (e.g. ProjectName 'TEST MASTER REPOR TEST001'): filter names starting with TEST. work_type_values listed here are the ProgramCategory values, because WorkType is a code list.",
+   "stage": "planning"
+  },
+  {
+   "name": "NDDOT Statewide Transportation Improvement Program - Masterworks Projects - Point",
+   "url": "https://gis.dot.nd.gov/arcgis/rest/services/external/Statewide_Transportation_Improvement_Program/FeatureServer/1",
+   "verified": true,
+   "geometry": "point",
+   "record_count": 326,
+   "fields": {
+    "id": "ProjectControlNumber",
+    "name": "ProjectName",
+    "description": "Description",
+    "work_type": "WorkType",
+    "cost": "ProjectValueInDollars",
+    "status": "Status",
+    "let_date": "ProposedBidDate",
+    "county": "County"
+   },
+   "work_type_values": [],
+   "status_values": [
+    "",
+    "Migrated"
+   ],
+   "notes": "Point projects (bridges, intersections); same fields as the line layer. On points WorkType is sometimes spelled out (e.g. 'Drainage Improvements,Structure Restoration').",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": {
+  "name": "NDGISHUB Parcels (statewide parcel polygons + Parcels_TaxRoll table)",
+  "url": "https://services1.arcgis.com/GOcSXpzwBHyk2nog/arcgis/rest/services/NDGISHUB_Parcels/FeatureServer/0",
+  "verified": true,
+  "record_count": 723217,
+  "fields": {
+   "apn": "UniqueGISID",
+   "acres": "CalculatedAcres",
+   "county": "CountyName"
+  },
+  "tax_roll_table": {
+   "url": "https://services1.arcgis.com/GOcSXpzwBHyk2nog/arcgis/rest/services/NDGISHUB_Parcels/FeatureServer/1",
+   "verified": true,
+   "record_count": 749150,
+   "join": "UniqueGISID (table) = UniqueGISID (polygon layer)",
+   "fields": {
+    "apn": "UniqueParcelID",
+    "owner": "OwnerName",
+    "mailing_address": [
+     "OwnerMailingAddress",
+     "OwnerCity",
+     "OwnerState",
+     "OwnerZip"
+    ],
+    "address": [
+     "PropertyAddress",
+     "PropertyCity",
+     "PropertyZip"
+    ],
+    "market_value": "TotalValue",
+    "acres": "DeededAcres",
+    "county": "CountyName"
+   }
+  },
+  "restrictions": null,
+  "notes": "All 53 counties are present. The polygon layer has NO owner name (its Ownership field is only a class: Private, County, State, Federal, Municipal, Railroad, Tribal...). Owner name, mailing address and values are in the separate table, layer 1 (Parcels_TaxRoll), which must be joined on UniqueGISID (county FIPS + GIS id, e.g. '38065-11117002'); 739,464 of 749,150 tax roll rows have an owner name. One polygon can have several tax roll rows. Owner2Name / Owner2MailingAddress hold a second owner. No restriction is stated on the service."
+ },
+ "parcels_counties": [],
+ "summary": "Both work. NDDOT's STIP service gives lines and points with cost, bid date and construction year (status field is useless, a few test records). Statewide parcels have owners and mailing addresses, but in a tax roll table that has to be joined to the parcel polygons."
+}

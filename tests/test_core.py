@@ -118,7 +118,7 @@ def test_arcgis_row_joins_fields_and_builtin_catalog_loads():
     assert parcels._arcgis_row(layer, {"PIN": None}, True) is None
 
     from edradar.config import load_config
-    layers = load_config("config.example.yaml")["parcel_layers"]
+    layers = [l for l in load_config("config.example.yaml")["parcel_layers"] if not l.get("state")]      # Pennsylvania's own
     assert layers[0]["name"] == "Philadelphia OPA" and not layers[-1].get("counties")
     assert len({l["counties"][0] for l in layers if l.get("counties")}) >= 34
     assert all(l["fields"].get("apn") and l["fields"].get("owner") for l in layers[1:-1])

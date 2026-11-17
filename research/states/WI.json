@@ -1,0 +1,72 @@
+{
+  "state": "Wisconsin",
+  "code": "WI",
+  "checked": "2026-11-17",
+  "projects": [
+    {
+      "name": "WisDOT Construction Projects (6 Year)",
+      "url": "https://dotmaps.wi.gov/arcgis/rest/services/agohub/HIGHWAY_PROGRAM_2_4_6_YEAR/MapServer/1",
+      "verified": true,
+      "geometry": "polyline",
+      "record_count": 1771,
+      "fields": {
+        "id": "PROJECT_ID",
+        "name": "TITLE",
+        "description": "WORK_DESCRIPTION",
+        "work_type": "CONCEPT_DESCRIPTION",
+        "cost": "CONSTRUCTION_COST_RANGE_WD",
+        "let_date": "CONSTRUCTION_YEAR",
+        "county": "COUNTY"
+      },
+      "work_type_values": [
+        "BRIDGE ELIMINATION",
+        "BRIDGE PREVENTIVE",
+        "BRIDGE REHABILITATION",
+        "BRIDGE REPLACEMENT, EXPANSION",
+        "BRIDGE REPLACEMENT, PRESERVATION",
+        "MISCELLANEOUS",
+        "NEW BRIDGE",
+        "PAVEMENT REPLACEMENT",
+        "PAVEMENT REPLACEMENT AND OPERATIONAL IMPROVEMENT",
+        "RECONDITION (IMPROVE CURVE/GRADE/SIGHT/INTERSECT)",
+        "RECONDITION (INTERSECTION/WIDEN/SHOULDER)",
+        "RECONSTRUCTION, EXPANSION",
+        "RECONSTRUCTION, PRESERVATION",
+        "RESURFACING (OVERLAY < 2.5 INCHES)",
+        "RESURFACING (OVERLAY >= 4 INCHES)",
+        "SHORT TERM OVERLAY (MILL AND OVERLAY)",
+        "SEAL COAT/CRACK FILL/JOINT, CRACK OR SPOT REPAIR",
+        "To Be Determined",
+        "PARTIAL DEPTH CIR WITH <= 2.5 INCH CAP",
+        "PATCH/RUT FILL/REPAIR AND GRIND/SLAB REPLACE"
+      ],
+      "status_values": [],
+      "notes": "Six-year highway improvement program from WisDOT's FIIPS system, refreshed regularly (LAST_REFRESH_DATE). CONSTRUCTION_YEAR values 2026..2030 and '2031 - 2032'; all scheduled, not completed. Cost is a text range (e.g. '$10,000,000 - $10,999,999'). COUNTY is space-padded. Look for 'EXPANSION' and 'RECONDITION'/'RECONSTRUCTION' concepts for likely land needs."
+    },
+    {
+      "name": "WisDOT STIP Projects (4 Year)",
+      "url": "https://dotmaps.wi.gov/arcgis/rest/services/agohub/HIGHWAY_PROGRAM_2_4_6_YEAR/MapServer/2",
+      "verified": true,
+      "geometry": "polyline",
+      "record_count": 1061,
+      "fields": {
+        "id": "PROJECT_ID",
+        "name": "TITLE",
+        "description": "WORK_DESCRIPTION",
+        "work_type": "CONCEPT_DESCRIPTION",
+        "cost": "CONSTRUCTION_COST_RANGE_WD",
+        "status": "CONTRACT_STATUS",
+        "let_date": "LET_DATE",
+        "county": "COUNTY"
+      },
+      "work_type_values": [],
+      "status_values": [
+        "Non-Active"
+      ],
+      "notes": "Same projects with more detail for the 4-year STIP window: real LET_DATE, COMPONENT_TYPE (LET, R/E = real estate, R/R, etc.), TIED_PROJECTS, STIP_REFERENCE_CODE, MPO/TIP number. CONTRACT_STATUS 'Non-Active' = not yet under contract. Layer 0 is the 2-year letting list."
+    }
+  ],
+  "parcels_statewide": null,
+  "parcels_counties": [],
+  "summary": "Projects section done; parcel research still in progress."
+}
