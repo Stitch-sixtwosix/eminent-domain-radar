@@ -62,7 +62,7 @@ def to_signal(layer: Dict[str, Any], attrs: Dict[str, Any], geometry: Optional[D
         "published": None, "geometry": geometry or None,
         "raw": dict({k: v for k, v in attrs.items() if v is not None},
                     _work_type=str(work) if work else None, _status=str(status) if status else None,
-                    _cost=_money(_first(attrs, f.get("cost"))), _let=let, _stage=layer.get("stage")),
+                    _cost=_money(_first(attrs, f.get("cost"))), _let=let, _stage=layer.get("stage"), _likelihood=layer.get("likelihood")),
     }
 
 

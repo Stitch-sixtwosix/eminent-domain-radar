@@ -242,6 +242,10 @@ DOT_WORK = [
     (r"resurfac|overlay|pavement|repav|mill|seal|preserv|rehabilitat|striping|marking|guardrail|guiderail|sign(?:s|ing)\b|maint|\bits\b|landscap|study|planning", 5, "other"),
 ]
 DOT_STAGE = [
+    (r"work program|long range program", "planning"),      # Georgia's programs of future work, not work under way
+    (r"\brw\b", "row_acquisition"),                        # Ohio lists the phases funded in the STIP period
+    (r"pre-?litigation|apprais|offer|relocation|right of entry|hold for project", "row_acquisition"),
+    (r"condemn|litigation|special commissioner|trial phase|judgment", "condemnation_filed"),
     (r"complete|closed|finished|open to traffic|construct|under contract|awarded|\blet\b|active work|in progress", "construction"),
     (r"right[- ]of[- ]way|\brow\b|r/w|acquisition|utilit", "row_acquisition"),
     (r"design|engineer|\bpe\b|plans?\b|ps&e|final", "design"),
@@ -266,6 +270,8 @@ def classify_dot(signal: Dict[str, Any]) -> Dict[str, Any]:
                 break
     if likelihood >= 30 and re.search(r"right[- ]of[- ]way|\bROW\b|acquisition|new alignment|relocat", text, re.I):
         likelihood = min(100, likelihood + 8)
+    if raw.get("_likelihood"):                  # a list of parcels the agency is acquiring needs no inference
+        likelihood, ptype = int(raw["_likelihood"]), ("highway" if ptype == "other" else ptype)
     status = str(raw.get("_status") or "")
     # A program of future work (a STIP, a five-year plan) is "planning" unless its status says something more specific.
     stage = next((st for pat, st in DOT_STAGE if re.search(pat, status, re.I)), raw.get("_stage") or ("planning" if not status else "unknown"))

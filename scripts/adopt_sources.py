@@ -19,6 +19,27 @@ STATES = set("AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA MI 
              "TN TX UT VT VA WA WV WI WY".split())
 
 
+# Reviewed by hand: the filter that keeps only work still ahead, taken from each source's own status values.
+# "drop" leaves a layer out; "likelihood" marks layers that list parcels the agency is actually acquiring.
+REVIEW = {
+    "TxDOT Right of Way - Proposed Parcels": {"likelihood": 100, "where": "PARCEL_STATUS = 'Active' AND PARCEL_STAGE IN ('New','Created','Appraised',"
+        "'Appraisal Reviewed','Appraisal Approved','Initial Offer','Final Offer','Pre-Litigation','Special Commissioner Phase','Trial Phase')"},
+    "UDOT Right of Way parcels": {"likelihood": 100, "where": "PROPERTY_STATUS IN ('Acquisition','Condemnation','Hold For Project','Relocation','Right of Entry')"},
+    "ODOT (Ohio) STIP Projects": {"where": "CURRENT_STIP_PERIOD_IND = 'Y'"},
+    "GDOT GeoPI Project Hub": {"where": "STATUS IN ('Construction Work Program','Long Range Program') AND GEOMETRY_SOURCE = 'TPRO Web'"},
+    "PennDOT Transportation Projects": {"drop": "Pennsylvania already has its own PennDOT reader; loading this too would duplicate every project"},
+    "NCDOT Right of Way GIS": {"drop": "no status or date; needs joining to the STIP before it can be filtered to current projects"},
+    "LA Metro": {"likelihood": 100},
+    "Charlotte Right-of-Way Tracking": {"likelihood": 90},
+    "Proposed ROW": {"likelihood": 95}, "Proposed Right of Way": {"likelihood": 95},
+    "Land Acquisition": {"likelihood": 100},
+}
+
+
+def review_for(name: str) -> dict:
+    return next((v for k, v in REVIEW.items() if k.lower() in name.lower()), {})
+
+
 def count(url: str, where: str) -> int:
     q = urllib.parse.urlencode({"where": where, "returnCountOnly": "true", "f": "json"})
     req = urllib.request.Request(url.rstrip("/") + "/query?" + q, headers={"User-Agent": "Mozilla/5.0"})
@@ -50,10 +71,13 @@ def main() -> None:
                 skipped.append((name, "covers several states; needs a state per record")); continue
             if s.get("restrictions"):
                 skipped.append((name, "has a recorded use restriction; needs approval")); continue
+            rev = review_for(name)
+            if rev.get("drop"):
+                skipped.append((name, rev["drop"])); continue
             where, unfiltered = None, True
             try:
                 total = count(s["url"], "1=1")
-                cand = (s.get("planned_filter") or "").strip()
+                cand = rev.get("where") or (s.get("planned_filter") or "").strip()
                 if looks_like_sql(cand):
                     try:
                         n = count(s["url"], cand)
@@ -65,7 +89,7 @@ def main() -> None:
                 skipped.append((name, "did not answer just now: %s" % str(e)[:60])); continue
             layers.append({"state": states[0], "name": name, "key": "%s%d" % (f.stem[:6], i), "url": s["url"], "fields": s["fields"],
                            "where": where, "unfiltered": unfiltered, "agency": s.get("authority") or name, "stage": "planning",
-                           "source_prefix": "gis", "category": doc.get("category") or f.stem, "coverage": s.get("coverage"),
+                           "likelihood": rev.get("likelihood"), "source_prefix": "gis", "category": doc.get("category") or f.stem, "coverage": s.get("coverage"),
                            "records": total})
     DST.mkdir(parents=True, exist_ok=True)
     (DST / "layers.json").write_text(json.dumps(layers, indent=1))

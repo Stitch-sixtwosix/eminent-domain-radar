@@ -477,6 +477,403 @@
    "sample": "{\"ProjectID\": \"P031970\", \"Name\": \"S-37 (JP Stevens Rd) @ W Cherry & S-65 (JP Stevens Rd) @ Martin Creek Rd\", \"Descriptio\": \" \", \"ProjectTyp\": \"Intersection Improvement\", \"Anticipate\": \" \", \"ProjectSta\": \"Design/Development\", \"ProjectYr\": \"2027\", \"CountyID\": 37}",
    "restrictions": null,
    "notes": "Point (multipoint) companion to LRTPCorridorProjects, edited 2026-11-02. LRTPBridgeProjects (same org, 265 records, ProjectTyp e.g. 'New Bridge') is the bridge companion."
+  },
+  {
+   "name": "PennDOT Transportation Projects - lines (Open Data, MPMS project system)",
+   "authority": "Pennsylvania DOT",
+   "states": [
+    "PA"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://gis.penndot.gov/arcgis/rest/services/opendata/transportationprojectslines/MapServer/0",
+   "verified": true,
+   "record_count": 14292,
+   "geometry": "polyline",
+   "fields": {
+    "id": "PROJECT_ID",
+    "name": "PROJECT_TITLE",
+    "description": "PROJECT_SHORT_NARRATIVE",
+    "work_type": "PROJECT_CLASS_NAME",
+    "cost": "EST_CONSTR_PHASE_COST_AMOUNT",
+    "status": "PROJECT_STAGE",
+    "date": "ESTIMATED_LET_DATE",
+    "county": "COUNTY_NAME"
+   },
+   "planned_filter": "PROJECT_STAGE IN ('IN DEVELOPMENT','FUTURE DEVELOPMENT') (14,292 of 195,320 line segments; the count recorded is for this filter). Add HAS_RIGHT_OF_WAY_PHASE = 'T' for projects with a right-of-way phase (4,834 segments). PROJECT_CLASS_NAME IN ('New Alignment','Additional Lanes','Interstate Capacity Adding','New Bridge') = 261 segments most likely to take land.",
+   "sample": "{\"PROJECT_ID\": 8, \"PROJECT_TITLE\": \"SPF FUNDS\", \"PROJECT_SHORT_NARRATIVE\": \"MISCELLANEOUS\", \"PROJECT_CLASS_NAME\": \"Planning/Research/Administration\", \"EST_CONSTR_PHASE_COST_AMOUNT\": 10000.0, \"PROJECT_STAGE\": \"IN DEVELOPMENT\"}",
+   "restrictions": null,
+   "notes": "PENNSYLVANIA HAD NO STATE FILE AT ALL in research/states; this is PennDOT's official open-data layer and is excellent. All projects since the 1990s, one row per road segment (group by PROJECT_ID). Flags: TYP_FLAG (Twelve Year Program), TIP_FLAG, STIP_FLAG, HAS_STUDY_PHASE / HAS_PRELIMINARY_ENGINEER_PHASE / HAS_FINAL_DESIGN_PHASE / HAS_RIGHT_OF_WAY_PHASE / HAS_UTILITY_PHASE / HAS_CONSTRUCTION_PHASE ('T'/'F'). PROJECT_STATUS_CODE_DESC: Candidate, Programmed, Active, Hold, Completed, Finalled, History, Incomplete. LET_DATE (text yyyymmdd) with LET_FLAG 'E' = estimated; ESTIMATED_LET_DATE epoch ms (a few bad far-future values). MUNICIPALITY_NAMES, PLANNING_PARTNER_NAME (MPO/RPO), PROJECT_SPONSOR_NAME, PROJECT_MANAGER_CONTACT_NAME. Refreshed daily (LAST_EDITED_DATE max 2026-11-15). maxRecordCount 2000. No restriction stated."
+  },
+  {
+   "name": "PennDOT Transportation Projects - points (Open Data)",
+   "authority": "Pennsylvania DOT",
+   "states": [
+    "PA"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://gis.penndot.gov/arcgis/rest/services/opendata/transportationprojectspoints/MapServer/0",
+   "verified": true,
+   "record_count": 13358,
+   "geometry": "point",
+   "fields": {
+    "id": "PROJECT_ID",
+    "name": "PROJECT_TITLE",
+    "description": "PROJECT_SHORT_NARRATIVE",
+    "work_type": "PROJECT_CLASS_NAME",
+    "cost": "EST_CONSTR_PHASE_COST_AMOUNT",
+    "status": "PROJECT_STAGE",
+    "date": "ESTIMATED_LET_DATE",
+    "county": "COUNTY_NAME"
+   },
+   "planned_filter": "Same as the lines layer: PROJECT_STAGE IN ('IN DEVELOPMENT','FUTURE DEVELOPMENT'); count recorded is for this filter (167,378 points in all).",
+   "sample": "{\"PROJECT_ID\": 32165, \"PROJECT_TITLE\": \"SR 2007:Thurston Road\", \"PROJECT_SHORT_NARRATIVE\": \"State Route 2007 (Hunter Road/Thurston Road) from Pettis Road to State Route 27  West Mead Township and the City of Meadville  Resurfacing\", \"PROJECT_CLASS_NAME\": \"Highway Restoration\", \"EST_CONSTR_PHASE_COST_AMOUNT\": 400000.0, \"PROJECT_STAGE\": \"FUTURE DEVELOPMENT\", \"ESTIMATED_LET_DATE\": 1861920000000, \"COUNTY_NAME\": \"CRAWFORD\"}",
+   "restrictions": null,
+   "notes": "Point-located projects (bridges, intersections) from the same system; field names checked against the layer by the writer script."
+  },
+  {
+   "name": "UDOT Right of Way parcels (ROW_UDOTParcels_LIVE)",
+   "authority": "Utah DOT Right of Way Division",
+   "states": [
+    "UT"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://maps.udot.utah.gov/central/rest/services/ROW/UDOT_Parcel_Update/MapServer/0",
+   "verified": true,
+   "record_count": 573,
+   "geometry": "polygon",
+   "fields": {
+    "id": "PARCEL_NUMBER",
+    "name": "PIN_DESCRIPTION",
+    "description": "PROJECT_LOCATION",
+    "work_type": "PROPERTY_TYPE",
+    "status": "PROPERTY_STATUS",
+    "date": "ACQ_DATE",
+    "county": "COUNTY"
+   },
+   "planned_filter": "PROPERTY_STATUS IN ('Acquisition' (441), 'Condemnation' (44), 'Hold For Project', 'Relocation', 'Right of Entry') = parcels in the acquisition pipeline; CORRIDOR_PRESERVATION = 'Y' (612) = land bought ahead for future corridors. Everything else (Cleared, Recorded, UDOT ROW, Excess Land, Sold...) is already owned or disposed.",
+   "sample": "{\"PARCEL_NUMBER\": \"102:C\", \"PIN_DESCRIPTION\": \"Smithfield, 250 East Round-About\", \"PROJECT_LOCATION\": \"Cnty:FA-1266; MP 3.00 - 3.00 & 250 East 600 South Intersection\", \"PROPERTY_TYPE\": \"Residential\", \"PROPERTY_STATUS\": \"Acquisition\", \"COUNTY\": \"CACHE\"}",
+   "restrictions": null,
+   "notes": "Parcel polygons UDOT has acquired or is acquiring, 57,287 in all, with PROJECT_PIN (joins to the UDOT ePM STIP layer's PIN), PROJECT_NUMBER, ORIGINAL_OWNER (surname/owner at acquisition), SITUS_ADDRESS, TAX_ID, INSTRUMENT_TYPE, EASEMENT_DESCRIPTION, ACREAGE_GEOM. Caveat: latest ACQ_DATE is 2023-06 and latest CREATED_DATE 2024-02 although rows were edited up to 2026-11, so new acquisitions may lag; use mainly to learn which PINs take land and where corridor preservation is happening."
+  },
+  {
+   "name": "MoDOT NEPA Inventory - environmental study corridors (EIS / EA / PEL)",
+   "authority": "Missouri DOT Environmental",
+   "states": [
+    "MO"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://mapping.modot.org/arcgis/rest/services/NEPA/Jobs/MapServer/1",
+   "verified": true,
+   "record_count": 240,
+   "geometry": "polyline",
+   "fields": {
+    "id": "ROOT_JOB_NUMBER",
+    "name": "DOCUMENT_NAME",
+    "description": "LOCATION_DESCRIPTION",
+    "work_type": "NEPA_CLASSIFICATION",
+    "date": "NEPA_APPR_DATE",
+    "county": "COUNTY_NAME"
+   },
+   "planned_filter": "NEPA_CLASSIFICATION IN ('EIS','EA','PEL') (213 of 240). NEPA_APPR_DATE IS NULL (94 rows) = document not yet approved, i.e. study still open; where a date exists keep recent ones. Then check the job against the STIP layer: an approved corridor not yet in the STIP is future work.",
+   "sample": "{\"ROOT_JOB_NUMBER\": \"3P0533\", \"DOCUMENT_NAME\": \"ROUTES 54, 19 AND 107 AUDRAIN, MONROE, PIKE, AND RALLS COUNTIES IN MISSOURI\", \"LOCATION_DESCRIPTION\": \"THE HIGHWAY IMPROVEMENTS WOULD EXTEND FROM U.S. ROUTE 61 NEAR BOWLING GREEN AND NEW LONDON ON THE EAST TO MARK TWAIN LAKE AND THE MEXICO BYP\", \"NEPA_CLASSIFICATION\": \"EIS\", \"COUNTY_NAME\": \"AUDRAIN\"}",
+   "restrictions": null,
+   "notes": "Corridors that have an environmental impact statement, environmental assessment or planning-and-environment-linkage study: the earliest public signal of new-location and widening projects. NEPA_APPR_DATE is stored as TEXT like '01-DEC-16', so it cannot be range-filtered on the server. Layer 0 'NEPA Jobs' (63 lines) ties construction job numbers and award years (CONST_AWARDYR) to these documents."
+  },
+  {
+   "name": "SDDOT STIP - Unprogrammed projects: Construction Reconstruction",
+   "authority": "South Dakota DOT",
+   "states": [
+    "SD"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://dotgis.sd.gov/spearfishformation/rest/services/STIP/DOT_STIP_Unprogrammed/MapServer/2",
+   "verified": true,
+   "record_count": 68,
+   "geometry": "polyline",
+   "fields": {
+    "id": "ProjectCtrlNbr",
+    "name": "LocDesc",
+    "description": "ImproveDesc",
+    "work_type": "ImprovTypeList",
+    "cost": "EstCost",
+    "status": "TranspProjectStatusCode",
+    "date": "ConstructionYear",
+    "county": "CountyList"
+   },
+   "planned_filter": "All are proposed projects beyond the 4-year STIP (TranspProjectStatusCode 'Proposed'; FiscalYear/ConstructionYear '2099' = not yet scheduled; ImproveDesc often states the proposed year, e.g. 'Proposed FY2035 - Grading, Interim Surfacing').",
+   "sample": "{\"ProjectCtrlNbr\": \"0A9G\", \"LocDesc\": \"SD262 - Fm 4.6 E of Emery to SD42\\r\\n\", \"ImproveDesc\": \"Proposed FY2035 - Grading, Interim Surfacing\\r\\n\\r\\n\", \"ImprovTypeList\": \"Grading, Interim Surfacing\", \"EstCost\": 9792000.0, \"TranspProjectStatusCode\": \"Proposed\", \"ConstructionYear\": \"2099\", \"CountyList\": \"McCook\"}",
+   "restrictions": null,
+   "notes": "Adds the long-range tail to the approved STIP layers already recorded: grading / reconstruction projects SDDOT intends but has not programmed (68 lines; layer 3 resurfacing 41, 6 safety 5). Same schema as DOT_STIP_Approved. Sibling services on the same folder: STIP/DOT_DevelopmentalSTIP_Special (layer 1 'Grading and Shoulder Widening Segments', 52 lines), STIP/DOT_STIP_Tentative (next year's draft STIP, same layers as Approved) and STIP/DOT_STIP_Needs."
+  },
+  {
+   "name": "MDT Corridor Studies (planning corridor study lines)",
+   "authority": "Montana Department of Transportation",
+   "states": [
+    "MT"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://gis.mtmdt.us/server/rest/services/MDTGIS/Corridor_Studies/MapServer/0",
+   "verified": true,
+   "record_count": 41,
+   "geometry": "polyline",
+   "fields": {
+    "name": "NAME",
+    "status": "TYPE_",
+    "date": "DATE_END"
+   },
+   "planned_filter": "TYPE_ = 'Ongoing' (1 on 2026-11-17); 'Completed' studies with a recent DATE_END are corridors whose recommended projects have not been built yet.",
+   "sample": "{\"NAME\": \"US 2 Badrock Canyon \", \"TYPE_\": \"Completed\", \"DATE_END\": 1348963200000}",
+   "restrictions": null,
+   "notes": "Small (41 lines; layer 1 has 4 study-area polygons) but it is the pre-STIP signal for Montana: each row links (HYPERLINK) to the study page. Also on this server: MDTGIS/State_Transportation_Improvement_Program/MapServer (STIP Lines 2026, 275 lines; STIP Points 5), an alternative to the Tentative Construction Plan already recorded."
+  },
+  {
+   "name": "IDOT Annual Highway Improvement Program - Land Acquisition",
+   "authority": "Illinois DOT",
+   "states": [
+    "IL"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/aIrBD8yn1TDTEXoz/arcgis/rest/services/Annual_Highway_Improvement_Program/FeatureServer/3",
+   "verified": true,
+   "record_count": 61,
+   "geometry": "polyline",
+   "fields": {
+    "id": "PPSProject",
+    "name": "Location",
+    "work_type": "Improvem_1",
+    "cost": "EstimatedC",
+    "description": "ProjectTam"
+   },
+   "planned_filter": "Every record is a land-acquisition line item funded in the current annual program (RecordType 'LA', Improvem_1 'Land Acquisition'): IDOT is buying right of way at these locations this fiscal year.",
+   "sample": "{\"PPSProject\": \"1818400300\", \"Location\": \"Joliet Maintenance Yard (17430 N Broadway St, Lockport)\", \"Improvem_1\": \"Land Acquisition\", \"EstimatedC\": \"100,000\", \"ProjectTam\": \"Miscellaneous Improvements\"}",
+   "restrictions": null,
+   "notes": "Direct right-of-way signal for Illinois (61 lines, edited 2026-10-02). EstimatedC is text dollars with commas; Route1-3 give the routes; PPSProject is IDOT's project number (joins to the Multi-Year Program layers already recorded). Sibling layers: 1 Engineering (421 lines; Improvem_1 such as 'P.E. (Phase I)' = preliminary engineering/environmental study, 'P.E. (Phase II)' = design, 'P.E. (Feasibility Study)') = projects in development before construction; 2 Construction (967 lines); 0 Bridge Improvement (2,082 points)."
+  },
+  {
+   "name": "IDOT Annual Highway Improvement Program - Engineering (projects in Phase I / Phase II development)",
+   "authority": "Illinois DOT",
+   "states": [
+    "IL"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/aIrBD8yn1TDTEXoz/arcgis/rest/services/Annual_Highway_Improvement_Program/FeatureServer/1",
+   "verified": true,
+   "record_count": 421,
+   "geometry": "polyline",
+   "fields": {
+    "id": "PPSProject",
+    "name": "Location",
+    "work_type": "Improvem_1",
+    "cost": "EstimatedC",
+    "description": "ProjectTam"
+   },
+   "planned_filter": "Improvem_1 IN ('P.E. (Phase I)','P.E. (Feasibility Study)','Preliminary Engineering','P.E. (Phase II)','P.E. (Consultant Plans)') = projects being studied or designed, not yet built.",
+   "sample": "{\"PPSProject\": \"1225740003\", \"Location\": \"Central AVE to Croftridge LN\", \"Improvem_1\": \"Construction Engineering\", \"EstimatedC\": \"660,000\", \"ProjectTam\": \"Reconstruction - Pavements\"}",
+   "restrictions": null,
+   "notes": "Phase I in Illinois is the preliminary engineering and environmental study where the footprint and land needs are set, so these lines flag projects a year or more before land acquisition appears in layer 3."
+  },
+  {
+   "name": "ODOT (Ohio) STIP Projects - lines, with phases incl. right of way",
+   "authority": "Ohio DOT",
+   "states": [
+    "OH"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://tims.dot.state.oh.us/ags/rest/services/MapViewers/STIP_Projects__Lines_/MapServer/0",
+   "verified": true,
+   "record_count": 8382,
+   "geometry": "polyline",
+   "fields": {
+    "id": "PID_NBR",
+    "name": "PROJECT_NME",
+    "description": "DESCRIPTION",
+    "work_type": "PRIMARY_WORK_GROUP_NME",
+    "cost": "TOTAL_PROJECT_ESTIMATE_AMT",
+    "status": "STIP_PERIOD_PROJECT_PHASES",
+    "date": "AWARD_SFY",
+    "county": "PROJECT_LOCALES"
+   },
+   "planned_filter": "CURRENT_STIP_PERIOD_IND = 'Y' (STIP_PERIOD '2026-2029', 8,382 of 19,049 rows); add STIP_PERIOD_PROJECT_PHASES LIKE '%RW%' for projects with a right-of-way phase programmed in the STIP period (945 rows).",
+   "sample": "{\"PID_NBR\": 114223, \"PROJECT_NME\": \"TRU GR FY2027 (Systematic)\", \"DESCRIPTION\": \"Systematic Guardrail maintenance and repair on various routes in TRU county.\", \"PRIMARY_WORK_GROUP_NME\": \"Maintenance\", \"TOTAL_PROJECT_ESTIMATE_AMT\": 803360.0, \"STIP_PERIOD_PROJECT_PHASES\": \"CO\", \"AWARD_SFY\": 2027, \"PROJECT_LOCALES\": \"TRU\"}",
+   "restrictions": null,
+   "notes": "Complements the TIMS 'Next 4 Fiscal Years' layers already recorded: this one says which phases are funded in the STIP period (ENV environmental, DD detailed design, RW right of way, CO construction, DBT design-build) and in which years (STIP_PERIOD_PROJECT_YEARS), plus TERMINI, sponsoring agency and MPO. Join on PID_NBR. Point version: MapViewers/STIP_Projects__Points_/MapServer/0."
+  },
+  {
+   "name": "MnDOT Corridor Studies",
+   "authority": "Minnesota DOT",
+   "states": [
+    "MN"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/qWbGMYB49y8mLbRt/arcgis/rest/services/Del_Corridor_Studies_view/FeatureServer/0",
+   "verified": true,
+   "record_count": 61,
+   "geometry": "polyline",
+   "fields": {
+    "name": "Study_Title",
+    "description": "Study_Description",
+    "work_type": "Classification",
+    "status": "Status",
+    "date": "Fiscal_Year",
+    "county": "County"
+   },
+   "planned_filter": "Status = 'Active' for studies under way; 'Complete' with a recent Fiscal_Year for corridors whose recommended projects are not yet in the CHIP layers.",
+   "sample": "{\"Study_Title\": \"Hwy 11 / 71 International Falls Corridor Study\", \"Study_Description\": \"Study of Hwy 11 and Hwy 71 between the intersection of Koochiching County Road 91 to Hwy 53/Second Avenue\", \"Classification\": \"Study\", \"Status\": \"Complete\", \"Fiscal_Year\": 2025, \"County\": \"Koochiching\"}",
+   "restrictions": null,
+   "notes": "61 study corridors (edited 2026-10-21) with a link to each study page. Earliest signal of future reconstruction / expansion corridors, ahead of the 10-year CHIP layers already recorded."
+  },
+  {
+   "name": "VDOT Potential Project Pipeline corridors (study locations)",
+   "authority": "Virginia DOT / Office of Intermodal Planning and Investment",
+   "states": [
+    "VA"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/p5v98VHDX9Atv3l7/arcgis/rest/services/Potential_Project_Pipeline_Study_Locations/FeatureServer/0",
+   "verified": true,
+   "record_count": 195,
+   "geometry": "polygon",
+   "fields": {
+    "id": "Corridor_ID",
+    "name": "Description",
+    "county": "Jurisdiction",
+    "status": "LocationFurtherStudy"
+   },
+   "planned_filter": "LocationFurtherStudy = 'Yes' = corridor chosen for a Project Pipeline study; SYIP field shows whether a project is already programmed.",
+   "sample": "{\"Corridor_ID\": \"I-64 03 (EB)\", \"Description\": \"I-64 EB from Exit 107 (Rockfish Gap Tpk) to Exit 114 (Dick Woods Rd)\", \"Jurisdiction\": \"Albemarle County\", \"LocationFurtherStudy\": \"Yes\"}",
+   "restrictions": null,
+   "notes": "195 corridor polygons screened for Virginia's Project Pipeline (the studies that produce SMART SCALE applications), i.e. pre-SYIP candidates. Mostly analysis attributes (traffic, crash need scores); no cost or dates. Edited 2024-09, so it reflects that study round. Also in VDOT's org: SYIP_Legislative (2,864 lines / 3,092 points, edited 2026-06), a second copy of the SYIP, and Arterial_Management_Plans_In_Development (6 lines)."
+  },
+  {
+   "name": "WVDOT Corridor H sections status",
+   "authority": "West Virginia Division of Highways",
+   "states": [
+    "WV"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services2.arcgis.com/xLpB90lOmCXYDAWo/arcgis/rest/services/CorridorH_Sections_Status_082826/FeatureServer/0",
+   "verified": true,
+   "record_count": 15,
+   "geometry": "polyline",
+   "fields": {
+    "name": "Layer",
+    "status": "Status"
+   },
+   "planned_filter": "Status IN ('Preliminary Alignment','Under Design') = unbuilt sections where right of way is still to be bought; 'Open To Traffic' = done.",
+   "sample": "{\"Layer\": \"Elkins to Kerens\", \"Status\": \"Open To Traffic\"}",
+   "restrictions": null,
+   "notes": "Tiny but specific: the state's largest new-location highway (US 48 Corridor H, Elkins to Virginia line), 15 section lines, edited 2026-08-28. Service name carries a date and will change. Related one-off design layers in the same org: 'Proposed Alts', 'Relocations' (12 building polygons), Parsons_to_Davis_Study_Area."
+  },
+  {
+   "name": "GDOT GeoPI Project Hub - Projects (official statewide project lines)",
+   "authority": "Georgia DOT",
+   "states": [
+    "GA"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://enterprisegis.dot.ga.gov/hosting/rest/services/GDOT_Public_Outreach/Project_Hub/MapServer/0",
+   "verified": true,
+   "record_count": 15106,
+   "geometry": "polyline",
+   "fields": {
+    "id": "PROJECT_ID",
+    "name": "PROJECT_NAME",
+    "description": "PROJECT_DESCR",
+    "work_type": "PRIMARY_WORK_TYPE",
+    "status": "STATUS",
+    "county": "COUNTIES"
+   },
+   "planned_filter": "STATUS = 'Construction Work Program' (programmed, 13,948 rows) OR STATUS = 'Long Range Program' (1,158 rows); the record count given is for both. Exclude 'Under Construction', 'Complete', 'Legacy Projects', 'Rejected', 'Deferred'. Drop GEOMETRY_SOURCE = 'County Centroid' / 'Statewide Boundary' rows when real geometry is needed (6,114 programmed rows have real geometry from 'TPRO Web'). PROJECT_TYPE = 'New Construction' (602 planned rows) and work types such as widening, bypass, interchange are the land-taking ones.",
+   "sample": "{\"PROJECT_ID\": \"T005933\", \"PROJECT_NAME\": \"HINESVILLE-CONSTRUCT 1,500' EXTENSION RWY 6L-PHASE III\", \"PROJECT_DESCR\": \"Project number associated with PID: AP017-9024-14(179).\", \"PRIMARY_WORK_TYPE\": \"Airport\", \"STATUS\": \"Construction Work Program\", \"COUNTIES\": \"Liberty\"}",
+   "restrictions": null,
+   "notes": "OFFICIAL REPLACEMENT for the small, dated GDOT STIP layer: the layer behind GDOT's GeoPI / Project Hub public project search, 91,763 lines for every GDOT project (PROJECT_ID = PI number), reloaded nightly (LOAD_DT 2026-11-15). This host (enterprisegis.dot.ga.gov) answers automated requests, unlike the GDOT server noted as blocked in the GA state file. No cost or date fields in the layer: get phase years and right-of-way dollars by PI number from the STIP data or GeoPI. ROUTE_NUMS, CITIES, COUNTIES, legislative districts, FUNDING_SOURCE, HAS_DOCUMENT. Same layer also at GeoPI/GEOPI_APP/MapServer/0. Copyright text: Georgia Department of Transportation; no use restriction stated. Sibling: GeoPI/GDOT_Estimated_ROW/MapServer/1 'GDOT State Route Estimated Right-of-Way' (7,460 polygons of existing right of way, useful to tell whether a project fits inside current ROW). The folder named STIP on this server requires a token."
+  },
+  {
+   "name": "Oklahoma County Improvements for Roads and Bridges (CIRB) 5-year plan FY2027 - road projects",
+   "authority": "Oklahoma DOT with county commissioners (county roads and bridges)",
+   "states": [
+    "OK"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services6.arcgis.com/RBtoEUQ2lmN0K3GY/arcgis/rest/services/CIRB_Projects_FY2027/FeatureServer/1",
+   "verified": true,
+   "record_count": 926,
+   "geometry": "polyline",
+   "fields": {
+    "id": "C_JOB_PIECE",
+    "work_type": "T_PROJ_WORK_DESC",
+    "date": "PROGRAM_FED_YR",
+    "county": "PRIM_COUNTY"
+   },
+   "planned_filter": "All are programmed county projects in the CIRB plan with base year 2027; PROGRAM_FED_YR is the programmed year. T_PROJ_WORK_DESC such as '39:GRADE, DRAIN & SURFACE', and right-of-way / utility work codes (86, 91) as in the state 8-Year Plan layer, mark land needs.",
+   "sample": "{\"C_JOB_PIECE\": 3237704, \"T_PROJ_WORK_DESC\": \"39:GRADE, DRAIN & SURFACE\", \"PROGRAM_FED_YR\": 2029, \"PRIM_COUNTY\": \"67\"}",
+   "restrictions": null,
+   "notes": "Adds the county system to the ODOT 8-Year Work Plan layers already recorded (those cover state highways only): 926 county road segments and (layer 0) 399 county bridges, edited 2026-11-02. Same field scheme as the 8-Year Plan service (job piece number, work code); county is a number. One service per plan year (CIRB_Projects_FY2026, FY2025 ... also present), so the URL changes yearly. Layer 2 is the same lines dissolved per project."
+  },
+  {
+   "name": "HDOT Project Status geometries - Design projects (ArcGIS copy of the Highways project system)",
+   "authority": "Hawaii DOT Highways Division",
+   "states": [
+    "HI"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/HQ0xoN0EzDPBOEci/arcgis/rest/services/HIDOTProjectStatusGeometriesView/FeatureServer/9",
+   "verified": true,
+   "record_count": 117,
+   "geometry": "polyline",
+   "fields": {
+    "id": "PROJECT_ID",
+    "name": "PROJECT_TITLE",
+    "description": "SCOPE",
+    "work_type": "category",
+    "cost": "COST_BAND",
+    "status": "CURR_PHASE",
+    "date": "NTP_DATE"
+   },
+   "planned_filter": "This layer holds only projects in design (CURR_PHASE 'D'); NTP_LABEL says what NTP_DATE means (e.g. 'Scheduled Advertise Date:'). Layers 10-16 are construction-phase projects (skip).",
+   "sample": "{\"PROJECT_ID\": \"0083-1054-D1C3\", \"PROJECT_TITLE\": \"KAMEHAMEHA HIGHWAY RESURFACING, LAIEWAI BRIDGE TO WAIPUHI BRIDGE (CON)\", \"SCOPE\": \"COLD PLANING, RESURFACING, REPAIR WEAKENED PAVEMENT AREAS, UPGRADE GUARDRAIL AND END TERMINALS, INSTALL PAVEMENT MARKINGS, STRIPING AND SIGN\", \"category\": \"safety\", \"COST_BAND\": \"Between $10 Mil and $15 Mil\", \"CURR_PHASE\": \"D\", \"NTP_DATE\": \"2026-10-30\"}",
+   "restrictions": null,
+   "notes": "ArcGIS-queryable version (refreshed daily, edited 2026-11-16) of the HDOT design-project data that the HI state file has only as a Socrata endpoint; 117 lines here versus 80 there, plus point projects in layer 1 (44). COST_BAND is a text range; PERCENT_COMPLETE is design progress; WEBLINK. Layers 3-8 are offset copies of the same lines for map display: use layer 9 only."
+  },
+  {
+   "name": "TxDOT Right of Way - Proposed Parcels (ROW_ODP_Proposed_Parcels)",
+   "authority": "Texas DOT Right of Way Division",
+   "states": [
+    "TX"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/KTcxiTD9dsQw4r7Z/arcgis/rest/services/ROW_ODP_Proposed_Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 2651,
+   "geometry": "polygon",
+   "fields": {
+    "id": "parcelunitid",
+    "name": "prcl_nbr",
+    "work_type": "PROPERTY_TYPE",
+    "status": "PARCEL_STAGE",
+    "county": "COUNTY",
+    "description": "PROJECT_CSJ_NBR"
+   },
+   "planned_filter": "PARCEL_STATUS = 'Active' AND PARCEL_STAGE IN ('New','Created','Appraised','Appraisal Reviewed','Appraisal Approved','Initial Offer','Final Offer','Pre-Litigation','Special Commissioner Phase','Trial Phase') = parcels TxDOT still has to acquire (record_count is for this filter; 12,446 polygons in all). 'Pre-Litigation', 'Special Commissioner Phase' and 'Trial Phase' are eminent-domain proceedings; 'Acquired - Deed', 'Acquired - Judgment', 'Completed' are done; PARCEL_STATUS 'Closed' / 'Cancelled' / 'Ready for Construction' are finished.",
+   "sample": "{\"parcelunitid\": \"P00001974.001\", \"prcl_nbr\": \"2\", \"PROPERTY_TYPE\": \"Commercial\", \"PARCEL_STAGE\": \"Trial Phase\", \"COUNTY\": \"Zapata\", \"PROJECT_CSJ_NBR\": \"003804054\"}",
+   "restrictions": null,
+   "notes": "TOP FIND: the exact parcels (polygons of the part to be taken) TxDOT is acquiring, parcel by parcel, with the acquisition stage, live (layer edited 2026-11-17). PROJECT_CSJ_NBR is the construction CSJ and ROW_CSJ_NBR the right-of-way CSJ (join to TxDOT DCIS All Projects, already recorded, on its CSJ); PRCL_ID / parcelunitid are TxDOT parcel ids; DISTRICT, COUNTY; PROPERTY_TYPE (22 values: Residential, Commercial, Agriculture, Ranch...); PART_ACRG / PART_SQFT look like the parent tract size and PART_INIT / PART_SQFT_INIT the taking, check before use. No owner name: intersect with county parcels. No use restriction stated on the service. Also in TxDOT's org: Future_Interstates (74 lines, I-69 / I-27 / I-14 corridors with STAT Existing/Future) and TxDOT_Future_Texas_Toll_Roads (42 lines, 2023)."
   }
  ],
  "unverified": [
@@ -509,7 +906,42 @@
    "name": "Rhode Island current STIP (FFY2022-2031) GIS",
    "url": "https://risegis.ri.gov/hosting/rest/services/RIDOA",
    "reason": "Not found. The RIDOA folder (17 services) still has only the FFY18-27 STIP map services; the RIDOT folder has assets only (Bridge, Rhodeways, signs); RIDOT's ArcGIS Online org (services5.arcgis.com/JfTJE9T2RFfUZzVx, 44 services) has sweeping, bridge condition and municipal road-fund layers but no STIP; Statewide Planning's org has only the small LRTP ProposedProjects_Line already recorded. The current STIP is published through an e-STIP web application without an open GIS feed."
+  },
+  {
+   "name": "TDOT production server (Projects_Public_Viewer, STIP_Projects)",
+   "url": "https://spatial.tdot.tn.gov/arcgis/rest/services/Roadway_Projects/Projects_Public_Viewer/MapServer/0",
+   "reason": "Re-tested 2026-11-17: still no connection from the research machine (the test host tspatial.tdot.tn.gov, already recorded, answers). TDOT's ArcGIS Online org has no project layer."
+  },
+  {
+   "name": "CDOT 'Projects (all types)' open-data layers",
+   "url": "https://dtdapps.codot.gov/server/rest/services/Webapps/open_data_sde/FeatureServer/24",
+   "reason": "Re-tested 2026-11-17: no connection. Alternatives seen in CDOT's ArcGIS Online org but older than the layers already recorded: 10_Year_Plan_Project_Lines (283 lines, edited 2025-05), Pipeline_Project_Lines (294, 2024)."
+  },
+  {
+   "name": "Louisiana DOTD project services",
+   "url": "https://maps.dotd.la.gov/arcgis/rest/services",
+   "reason": "Re-tested 2026-11-17: HTTP 403 to automated requests. Only third-party snapshots exist on ArcGIS Online (a consultant's 'LADOTD projects scheduled to be let in SFY 2023-2024', a 2022 'DOTD Highway Priority Program' copy): too old to record."
+  },
+  {
+   "name": "ADOT (Arizona) statewide Five-Year Program / eSTIP",
+   "url": "https://gis.azdot.gov/gis/rest/services",
+   "reason": "Re-tested 2026-11-17: HTTP 403. estip.azdot.gov answers as a web page only; no ADOT planned-project feature service was found on ArcGIS Online by name search. Arizona statewide remains a gap (MAG TIP for Phoenix is the only layer)."
+  },
+  {
+   "name": "INDOT own GIS server",
+   "url": "https://gis.indot.in.gov/ro/rest/services",
+   "reason": "Re-tested 2026-11-17: HTTP 403 from two different networks. No official INDOT replacement for the consultant-hosted STIP layer."
+  },
+  {
+   "name": "MDOT (Michigan) 2026-2029 STIP feature service",
+   "url": "https://mdotgis.state.mi.us/arcgis/rest/services/Planning/MdotStip/FeatureServer",
+   "reason": "Listed on ArcGIS Online by owner MDOT_GIS (modified 2026-07-30) but the server returned HTTP 403 to a direct request. Would add the federally programmed STIP (incl. local-agency projects) to the Five-Year Program layers already recorded."
+  },
+  {
+   "name": "ALDOT / NMDOT / Caltrans statewide current planned-project layers",
+   "url": "https://aldotgis.dot.state.al.us/pubgis1/rest/services",
+   "reason": "Nothing better found than what the state files already hold. ALDOT's public server (35 services) has only the undated GeoGISProjects inventory, a 'ProposedRoutes' layer (81 lines, last changes dated 2010) and scanned right-of-way map indexes (ROW_Services/EGIS_ROW, historical). NMDOT's org (213 services) has no eSTIP layer newer than FFY2025. Caltrans' org has district-only layers (D01_Future_Projects / Future_Projects_gdb for District 1, 101 lines edited 2026-09; District 5 SHOPP PID 2024) but no statewide SHOPP/STIP line layer."
   }
  ],
- "summary": ""
+ "summary": "Checked 2026-11-17. 35 verified sources across 24 states (AR, GA, HI, IA, IL, IN, KS, MN, MO, MS, MT, NC, NE, NH, NV, OH, OK, PA, SC, SD, TX, UT, VA, WV; Iowa only through the Omaha MPO layers). GAP STATES: Arkansas - found proper-field STIP 2023-2026 layers, the highway study library and ArDOT's per-job public-involvement design services with proposed right-of-way lines. Nevada - no statewide source (NDOT servers return HTTP 500); covered Las Vegas (RTC Southern Nevada roadway projects and RTP) and Reno (RTC Washoe RTP). Mississippi - no statewide source (MDOT GeoServer refuses requests with 403); covered the Jackson MPO plan and TIP only. Nebraska - NDOT Program Book service confirmed but unreachable from here (DNS/connection failure); covered Omaha (MAPA MTP and TIP) and Lincoln (LRTP). New Hampshire - NHDOT server still errors on every query; only a stale 2023 third-party copy of the planning-stage Ten Year Plan projects plus the Nashua MPO layers. WEAK STATES: Georgia fixed (official GDOT GeoPI project layer, 91,763 lines, on a host that answers); South Carolina fixed (current statewide LRTP corridor/intersection/bridge layers, edited 2026-11); Pennsylvania, which had no state file at all, now has PennDOT's official project lines and points with a right-of-way-phase flag; Kansas, Indiana and Rhode Island not fixed at state level (official KDOT host unreachable, INDOT returns 403, no current RI STIP GIS) - added Wichita TIP, Indianapolis MTP and a partial INDOT STIP/TIP layer with phases. LAND-ACQUISITION LAYERS (best finds): TxDOT proposed right-of-way parcels with acquisition stage including condemnation stages; NCDOT proposed acquisition polygons per parcel (right of way and every easement type); UDOT right-of-way parcels with status; IDOT annual program Land Acquisition and Phase I/II engineering layers; Ohio STIP phases incl. RW; MoDOT NEPA study corridors; MnDOT and Montana corridor studies; VDOT project-pipeline corridors; SDDOT unprogrammed projects; Oklahoma county (CIRB) plan; WVDOT Corridor H; ArDOT per-job proposed ROW. NOT COVERED: additional-layer sweep was done by listing each DOT's known server/ArcGIS Online org and checking name matches; states whose project layers sit on servers I could not list (Wisconsin, North Dakota, Kentucky folders, Illinois gis1) and DOTs with a second server not named in the state files were not swept. Maryland, New Jersey, New York, Washington, Oregon, Florida, Connecticut, Delaware, Maine, Vermont, Wyoming, Iowa, Idaho, Alaska, Michigan: swept, nothing materially better than what is already recorded (minor leads are named in notes). One request to MDOT Mississippi's GeoServer with an added referer header was blocked by the tool's safety check and not retried, since the server had already refused direct access."
 }

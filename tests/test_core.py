@@ -603,6 +603,12 @@ def test_state_dot_source_and_classifier(tmp_path):
     assert out["acquisition_likelihood"] == 85 and out["stage"] == "design" and out["project_type"] == "highway" and out["score"] >= 80
     paving = dot_arcgis.to_signal(layer, dict(attrs, PID=78, TYPE="Resurfacing", PROJECT_NAME="FRA-33 paving", DESCR="Mill and overlay"), None)
     assert classify_dot(paving)["acquisition_likelihood"] <= 10
+    taking = classify_dot(dot_arcgis.to_signal(dict(layer, likelihood=100), dict(attrs, PID=82, TYPE="Fee", PROJECT_NAME="Parcel 12", DESCR=None, PHASE="Special Commissioner Phase"), None))
+    assert taking["acquisition_likelihood"] == 100 and taking["stage"] == "condemnation_filed"
+    assert classify_dot(dot_arcgis.to_signal(layer, dict(attrs, PID=83, PHASE="Initial Offer"), None))["stage"] == "row_acquisition"
+    assert classify_dot(dot_arcgis.to_signal(layer, dict(attrs, PID=84, PHASE="Pre-Litigation"), None))["stage"] == "row_acquisition"
+    assert classify_dot(dot_arcgis.to_signal(layer, dict(attrs, PID=85, PHASE="Construction Work Program"), None))["stage"] == "planning"
+    assert classify_dot(dot_arcgis.to_signal(layer, dict(attrs, PID=86, PHASE="PE, RW, CO"), None))["stage"] == "row_acquisition"
     row = classify_dot(dot_arcgis.to_signal(layer, dict(attrs, PID=80, TYPE="86:RIGHT OF WAY", PHASE=None), None))
     assert row["acquisition_likelihood"] >= 95 and row["stage"] == "row_acquisition"
     lanes = classify_dot(dot_arcgis.to_signal(layer, dict(attrs, PID=81, TYPE="Statewide Highway", PROJECT_NAME="I-440", DESCR="Construct 2 lanes in each direction."), None))
