@@ -119,6 +119,17 @@ CREATE TABLE IF NOT EXISTS contacts (
     UNIQUE(owner, person_id)
 );
 
+-- Saved lists of potential clients. A list is a set of leads; a campaign mails and emails everyone on it.
+CREATE TABLE IF NOT EXISTS lists (
+    id INTEGER PRIMARY KEY, name TEXT NOT NULL UNIQUE, created_at TEXT DEFAULT (datetime('now'))
+);
+CREATE TABLE IF NOT EXISTS list_members (
+    list_id INTEGER NOT NULL REFERENCES lists(id) ON DELETE CASCADE,
+    lead_id INTEGER NOT NULL REFERENCES leads(id),
+    added_at TEXT DEFAULT (datetime('now')),
+    UNIQUE(list_id, lead_id)
+);
+
 CREATE INDEX IF NOT EXISTS idx_leads_score ON leads(score DESC);
 CREATE INDEX IF NOT EXISTS idx_projects_score ON projects(score DESC);
 """
@@ -290,6 +301,28 @@ class DB:
         if status == "sent":      # a test proof is not contact
             self.conn.execute("UPDATE leads SET status='contacted' WHERE id=? AND status IN ('new','reviewing')",
                               (lead_id,))
+        self.conn.commit()
+
+    def save_list(self, name: str, lead_ids: Iterable[int]) -> int:
+        """Create the list if the name is new, then add the leads to it. Returns the list id."""
+        name = " ".join(name.split())[:80]
+        self.conn.execute("INSERT OR IGNORE INTO lists (name) VALUES (?)", (name,))
+        list_id = self.conn.execute("SELECT id FROM lists WHERE name=?", (name,)).fetchone()["id"]
+        self.add_to_list(list_id, lead_ids)
+        return list_id
+
+    def add_to_list(self, list_id: int, lead_ids: Iterable[int]) -> None:
+        self.conn.executemany("INSERT OR IGNORE INTO list_members (list_id, lead_id) SELECT ?, id FROM leads WHERE id = ?",
+                              [(list_id, int(i)) for i in lead_ids])
+        self.conn.commit()
+
+    def remove_from_list(self, list_id: int, lead_ids: Iterable[int]) -> None:
+        self.conn.executemany("DELETE FROM list_members WHERE list_id=? AND lead_id=?", [(list_id, int(i)) for i in lead_ids])
+        self.conn.commit()
+
+    def delete_list(self, list_id: int) -> None:
+        self.conn.execute("DELETE FROM list_members WHERE list_id=?", (list_id,))
+        self.conn.execute("DELETE FROM lists WHERE id=?", (list_id,))
         self.conn.commit()
 
     def get_setting(self, key: str) -> Optional[Dict[str, Any]]:

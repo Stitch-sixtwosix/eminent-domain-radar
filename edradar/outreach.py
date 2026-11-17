@@ -402,6 +402,13 @@ def run_campaign(cfg: Dict[str, Any], db: Any, min_score: int = 80, project_id: 
         return out
     if not st["enabled"]:
         raise ValueError(st["why"])
+    _mail(cfg, db, leads, out, client)
+    return out
+
+
+def _mail(cfg: Dict[str, Any], db: Any, leads: List[Dict[str, Any]], out: Dict[str, Any],
+          client: Optional[httpx.Client] = None) -> None:
+    """Send one postcard per lead, logging each and recording live cards in the usage ledger."""
     for r in leads:
         try:
             res = send_postcard(cfg, r, client)
@@ -416,6 +423,105 @@ def run_campaign(cfg: Dict[str, Any], db: Any, min_score: int = 80, project_id: 
             out["failed"].append({"lead_id": r["id"], "owner": r["owner"], "why": str(e)[:160]})
             if len(out["failed"]) >= 3 and not out["sent"]:
                 break        # the account or key is the problem, not the addresses
+
+
+# ---------------------------------------------------------------- client lists
+# company owners Apollo can search; hidden once a scan found nobody there
+EMAIL_ELIGIBLE = ("pa.owner_kind = 'company' AND COALESCE(pa.email_contacts, 1) > 0 "
+                  "AND NOT EXISTS (SELECT 1 FROM outreach o WHERE o.lead_id = l.id AND o.channel = 'email')")
+IN_LIST = "l.id IN (SELECT lead_id FROM list_members WHERE list_id = ?)"
+MAX_PER_RUN = 200
+
+
+def _one_per_owner(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    seen, out = set(), []
+    for r in rows:
+        key = (r["owner"], r["mailing_address"])
+        if key not in seen:
+            seen.add(key)
+            out.append(r)
+    return out
+
+
+def list_plan(db: Any, list_id: int) -> Dict[str, List[Dict[str, Any]]]:
+    """Who on a list gets a postcard, who gets an email, and who is left out and why."""
+    from .web.app import LEAD_SQL
+
+    order = " ORDER BY l.score DESC, pa.market_value DESC"
+    members = db.rows(LEAD_SQL + " WHERE " + IN_LIST + order, (list_id,))
+    postcard = _one_per_owner(db.rows(LEAD_SQL + " WHERE " + IN_LIST + " AND " + POSTCARD_ELIGIBLE + order, (list_id,)))
+    email_rows = db.rows(LEAD_SQL + " WHERE " + IN_LIST + " AND " + EMAIL_ELIGIBLE + order, (list_id,))
+    emailed_owners = {r["owner"] for r in members if r["email_at"]}
+    seen, email = set(), []
+    for r in email_rows:          # one email per company, however many parcels it owns
+        if r["owner"] not in seen and r["owner"] not in emailed_owners:
+            seen.add(r["owner"]); email.append(r)
+    reached = {(r["owner"], r["mailing_address"]) for r in postcard} | {(r["owner"], r["mailing_address"]) for r in email}
+    skipped = []
+    for r in _one_per_owner(members):
+        if (r["owner"], r["mailing_address"]) in reached or r["owner"] in seen:
+            continue
+        kind = r["owner_kind"] or owner_kind(r["owner"])
+        why = ("No owner of record" if not r["owner"] else "Public body" if kind == "government"
+               else "Marked " + r["status"] if r["status"] in ("rejected", "retained")
+               else "Already contacted" if r["postcard_at"] or r["email_at"] or r["mailable"]
+               else "Mailing address could not be read")
+        skipped.append({"lead_id": r["id"], "owner": r["owner"] or "Unknown owner", "why": why})
+    return {"members": members, "postcard": postcard, "email": email, "skipped": skipped}
+
+
+def list_summaries(db: Any) -> List[Dict[str, Any]]:
+    out = []
+    for row in db.rows("SELECT id, name, created_at FROM lists ORDER BY created_at DESC, id DESC"):
+        plan = list_plan(db, row["id"])
+        owners = _one_per_owner(plan["members"])
+        out.append(dict(row, leads=len(plan["members"]), owners=len(owners), postcard_ready=len(plan["postcard"]),
+                        email_ready=len(plan["email"]),
+                        contacted=sum(1 for r in owners if r["postcard_at"] or r["email_at"])))
+    return out
+
+
+def run_list(cfg: Dict[str, Any], db: Any, list_id: int, postcards: bool = True, email: bool = True,
+             dry_run: bool = True, client: Optional[httpx.Client] = None) -> Dict[str, Any]:
+    """Run a saved list: a postcard to every mailable owner and an Apollo sequence email to every company owner.
+    A dry run reports exactly who would be reached and sends nothing."""
+    plan = list_plan(db, list_id)
+    st = status(cfg)
+    brief = lambda r: {"lead_id": r["id"], "owner": r["owner"], "mailing_address": r["mailing_address"],
+                       "score": r["score"], "project": r["project"]}
+    cards, mails = plan["postcard"][:MAX_PER_RUN], plan["email"][:MAX_PER_RUN]
+    out: Dict[str, Any] = {
+        "dry_run": dry_run, "leads": len(plan["members"]), "skipped": plan["skipped"],
+        "postcard": {"mode": st["postcard"]["mode"], "enabled": st["postcard"]["enabled"], "why": st["postcard"].get("why"),
+                     "eligible": len(plan["postcard"]), "recipients": [brief(r) for r in cards], "sent": [], "failed": []},
+        "email": {"enabled": st["email"]["enabled"], "why": st["email"].get("why"), "from": st["email"].get("from"),
+                  "eligible": len(plan["email"]), "recipients": [brief(r) for r in mails], "sent": [], "failed": []},
+    }
+    if dry_run:
+        return out
+    if postcards and cards and st["postcard"]["enabled"]:
+        _mail(cfg, db, cards, out["postcard"], client)
+    if email and mails and st["email"]["enabled"]:
+        ap = Apollo(cfg, client)
+        for r in mails:
+            try:
+                people = [c for c in db.contacts_for(r["owner"]) if c.get("person_id")]
+                if not people:
+                    people = ap.find_contacts(r)
+                    db.save_contacts(r["owner"], people)
+                people = [c for c in people if c.get("has_email", True)]
+                if not people:
+                    raise ValueError("Apollo has no contact with an email at this company.")
+                res = ap.enroll(r, people[0]["person_id"])
+                db.log_outreach(r["id"], "email", "sent", res["external_id"], res)
+                db.save_contacts(r["owner"], [{"person_id": res["person_id"], "name": res["name"], "title": res["title"],
+                                               "email": res["email"]}] + [c for c in db.contacts_for(r["owner"])
+                                                                          if c["person_id"] != res["person_id"]])
+                out["email"]["sent"].append({"lead_id": r["id"], "owner": r["owner"], "email": res["email"]})
+            except (ValueError, RuntimeError, KeyError, httpx.HTTPError) as e:
+                out["email"]["failed"].append({"lead_id": r["id"], "owner": r["owner"], "why": str(e)[:160]})
+                if len(out["email"]["failed"]) >= 3 and not out["email"]["sent"]:
+                    break
     return out
 
 

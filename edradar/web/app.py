@@ -45,15 +45,28 @@ class Campaign(BaseModel):
     dry_run: bool = True
 
 
+class ListSave(BaseModel):
+    name: str
+    lead_ids: List[int] = []
+
+
+class ListMembers(BaseModel):
+    lead_ids: List[int]
+
+
+class ListRun(BaseModel):
+    postcards: bool = True
+    email: bool = True
+    dry_run: bool = True
+
+
 class LeadUpdate(BaseModel):
     status: Optional[str] = None
     notes: Optional[str] = None
 
 
 OUTREACH_FILTERS = {
-    # company owners Apollo can search; hidden once a scan found nobody there
-    "email": "pa.owner_kind = 'company' AND COALESCE(pa.email_contacts, 1) > 0 "
-             "AND NOT EXISTS (SELECT 1 FROM outreach o WHERE o.lead_id = l.id AND o.channel = 'email')",
+    "email": outreach.EMAIL_ELIGIBLE,
     "postcard": outreach.POSTCARD_ELIGIBLE,
     "contacted": "EXISTS (SELECT 1 FROM outreach o WHERE o.lead_id = l.id AND o.status = 'sent')",
     "none": "NOT EXISTS (SELECT 1 FROM outreach o WHERE o.lead_id = l.id AND o.status = 'sent')",
@@ -62,8 +75,10 @@ OUTREACH_FILTERS = {
 }
 
 
-def _lead_filters(project_id, status, county, min_score, owner_only, q, outreach_filter=None, stage=None):
+def _lead_filters(project_id, status, county, min_score, owner_only, q, outreach_filter=None, stage=None, list_id=None):
     where, params = ["l.score >= ?"], [min_score]
+    if list_id is not None:
+        where.append(outreach.IN_LIST); params.append(list_id)
     if project_id is not None:
         where.append("l.project_id = ?"); params.append(project_id)
     if status:
@@ -212,7 +227,42 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
             "usage": skiptrace.usage_summary(db),
             "rates": skiptrace.rates(cfg),
             "template": outreach.template(cfg),
+            "lists": outreach.list_summaries(db),
         }
+
+    def need_list(list_id: int) -> None:
+        if not db.rows("SELECT 1 FROM lists WHERE id=?", (list_id,)):
+            raise HTTPException(404, "That list no longer exists.")
+
+    @app.get("/api/lists")
+    def lists() -> List[Dict[str, Any]]:
+        return outreach.list_summaries(db)
+
+    @app.post("/api/lists")
+    def list_save(body: ListSave) -> Dict[str, Any]:
+        """Create a list, or add to the list that already has this name."""
+        if not body.name.strip():
+            raise HTTPException(422, "Give the list a name.")
+        list_id = db.save_list(body.name, body.lead_ids)
+        return next(x for x in outreach.list_summaries(db) if x["id"] == list_id)
+
+    @app.post("/api/lists/{list_id}/remove")
+    def list_remove(list_id: int, body: ListMembers) -> Dict[str, Any]:
+        need_list(list_id)
+        db.remove_from_list(list_id, body.lead_ids)
+        return next(x for x in outreach.list_summaries(db) if x["id"] == list_id)
+
+    @app.delete("/api/lists/{list_id}")
+    def list_delete(list_id: int) -> Dict[str, Any]:
+        need_list(list_id)
+        db.delete_list(list_id)
+        return {"deleted": list_id}
+
+    @app.post("/api/lists/{list_id}/campaign")
+    def list_campaign(list_id: int, body: ListRun) -> Dict[str, Any]:
+        """Dry run by default: reports who would get a postcard and who would get an email. With dry_run false it sends."""
+        need_list(list_id)
+        return guard(lambda: outreach.run_list(cfg, db, list_id, body.postcards, body.email, body.dry_run))
 
     @app.get("/api/outreach/template")
     def get_template() -> Dict[str, Any]:
@@ -298,16 +348,18 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
     @app.get("/api/leads")
     def leads(project_id: Optional[int] = None, status: Optional[str] = None, county: Optional[str] = None,
               min_score: int = 0, owner_only: bool = False, q: Optional[str] = None,
-              outreach: Optional[str] = None, stage: Optional[str] = None, limit: int = 300) -> List[Dict[str, Any]]:
-        where, params = _lead_filters(project_id, status, county, min_score, owner_only, q, outreach, stage)
+              outreach: Optional[str] = None, stage: Optional[str] = None, list_id: Optional[int] = None,
+              limit: int = 300) -> List[Dict[str, Any]]:
+        where, params = _lead_filters(project_id, status, county, min_score, owner_only, q, outreach, stage, list_id)
         return db.rows(LEAD_SQL + where + " ORDER BY l.score DESC, pa.market_value DESC LIMIT ?",
                        params + [min(limit, 5000)])
 
     @app.get("/api/leads.csv")
     def leads_csv(project_id: Optional[int] = None, status: Optional[str] = None, county: Optional[str] = None,
                   min_score: int = 0, owner_only: bool = False, q: Optional[str] = None,
-                  outreach: Optional[str] = None, stage: Optional[str] = None) -> StreamingResponse:
-        where, params = _lead_filters(project_id, status, county, min_score, owner_only, q, outreach, stage)
+                  outreach: Optional[str] = None, stage: Optional[str] = None,
+                  list_id: Optional[int] = None) -> StreamingResponse:
+        where, params = _lead_filters(project_id, status, county, min_score, owner_only, q, outreach, stage, list_id)
         rows = db.rows(LEAD_SQL + where + " ORDER BY l.score DESC LIMIT 50000", params)
         buf = io.StringIO()
         if rows:
@@ -368,6 +420,7 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40) -> Dic
     # Apollo-sourced contacts left out.
     hub = client.get("/api/outreach/hub").json()
     hub["contacts"] = []
+    hub["lists"] = []                # a firm's client lists are private to the running app
     off = "Sending is only available in the running app."
     hub["status"] = {"firm_ready": hub["status"]["firm_ready"],
                      "postcard": {"enabled": False, "mode": "off", "why": off},

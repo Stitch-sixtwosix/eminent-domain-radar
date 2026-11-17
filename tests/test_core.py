@@ -480,3 +480,64 @@ def test_env_file_supplies_keys(tmp_path, monkeypatch):
     import os
     assert os.environ["LOB_API_KEY"] == "test_123" and os.environ["QUOTED"] == "already-set"
     monkeypatch.delenv("LOB_API_KEY")
+
+
+def test_client_lists_run_postcards_and_email(tmp_path, monkeypatch):
+    import httpx
+    from edradar import outreach
+
+    path = str(tmp_path / "t.db")
+    db = seeded_db(path)
+    pid = db.rows("SELECT id FROM projects")[0]["id"]
+    for apn, owner, mail, score in [("B-1", "ROE HOLDINGS LLC", "9 OAK ST, ERIE, PA, 16501", 90),
+                                    ("B-2", "ROE HOLDINGS LLC", "9 OAK ST, ERIE, PA, 16501", 88),
+                                    ("B-3", "CITY OF ERIE", "1 STATE ST, ERIE, PA, 16501", 95),
+                                    ("B-5", "POE ANN", "4 ELM RD, ERIE, PA, 16502", 70)]:
+        db.upsert_lead(pid, db.upsert_parcel({"layer": "t", "apn": apn, "owner": owner, "mailing_address": mail}), 5.0,
+                       "abuts_alignment", score)
+    db.refresh_outreach_flags()
+    cfg = {"database": path, "parcel_layers": [], "user_agent": "t",
+           "outreach": {"firm": {"name": "Test Law", "address_line1": "1 Court St", "city": "Erie", "state": "PA", "zip": "16501"},
+                        "postcard": {}, "apollo": {"sequence_id": "s1", "email_account_id": "m1", "from_email": "a@b.c"}}}
+    monkeypatch.delenv("LOB_API_KEY", raising=False)
+    monkeypatch.delenv("APOLLO_API_KEY", raising=False)
+    client = TestClient(create_app(cfg))
+    ids = {r["apn"]: r["id"] for r in client.get("/api/leads").json()}
+    made = client.post("/api/lists", json={"name": "Erie owners", "lead_ids": [ids["B-1"], ids["B-2"], ids["B-3"]]}).json()
+    assert made["owners"] == 2 and made["postcard_ready"] == 1 and made["email_ready"] == 1
+    again = client.post("/api/lists", json={"name": "Erie owners", "lead_ids": [ids["B-5"], ids["B-1"]]}).json()
+    assert again["id"] == made["id"] and again["leads"] == 4 and again["postcard_ready"] == 2     # same name adds, no duplicates
+    assert len(client.get("/api/leads", params={"list_id": made["id"]}).json()) == 4
+    assert client.post("/api/lists", json={"name": "  ", "lead_ids": []}).status_code == 422
+
+    dry = client.post("/api/lists/%d/campaign" % made["id"], json={}).json()
+    assert dry["dry_run"] and [r["owner"] for r in dry["postcard"]["recipients"]] == ["ROE HOLDINGS LLC", "POE ANN"]
+    assert [r["owner"] for r in dry["email"]["recipients"]] == ["ROE HOLDINGS LLC"]
+    assert dry["skipped"] == [{"lead_id": ids["B-3"], "owner": "CITY OF ERIE", "why": "Public body"}]
+    assert not dry["postcard"]["enabled"] and not dry["email"]["enabled"]
+    # with nothing connected, a real run sends nothing rather than failing half way
+    off = outreach.run_list(cfg, db, made["id"], dry_run=False)
+    assert off["postcard"]["sent"] == [] and off["email"]["sent"] == []
+
+    def handler(req):
+        if "lob.com" in str(req.url):
+            return httpx.Response(200, json={"id": "psc_1"})
+        if req.url.path.endswith("/mixed_people/api_search"):
+            return httpx.Response(200, json={"people": [{"id": "p1", "first_name": "Rae", "last_name": "Roe", "title": "Owner"}]})
+        if req.url.path.endswith("/people/match"):
+            return httpx.Response(200, json={"person": {"id": "p1", "name": "Rae Roe", "email": "rae@roe.com", "title": "Owner"}})
+        return httpx.Response(200, json={"contact": {"id": "c1"}})
+
+    http = httpx.Client(transport=httpx.MockTransport(handler))
+    monkeypatch.setenv("LOB_API_KEY", "live_x")          # (mocked: nothing is really mailed)
+    monkeypatch.setenv("APOLLO_API_KEY", "k")
+    res = outreach.run_list(cfg, db, made["id"], dry_run=False, client=http)
+    assert len(res["postcard"]["sent"]) == 2 and res["email"]["sent"][0]["email"] == "rae@roe.com"
+    after = outreach.list_summaries(db)[0]
+    assert after["postcard_ready"] == 0 and after["email_ready"] == 0 and after["contacted"] == 2
+    rerun = outreach.run_list(cfg, db, made["id"], dry_run=False, client=http)
+    assert rerun["postcard"]["sent"] == [] and rerun["email"]["sent"] == []          # nobody is contacted twice
+
+    assert client.post("/api/lists/%d/remove" % made["id"], json={"lead_ids": [ids["B-5"]]}).json()["leads"] == 3
+    assert client.delete("/api/lists/%d" % made["id"]).json() == {"deleted": made["id"]}
+    assert client.get("/api/lists").json() == [] and client.post("/api/lists/%d/campaign" % made["id"], json={}).status_code == 404

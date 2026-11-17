@@ -360,6 +360,13 @@
   .people { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: var(--radius); }
   .people li { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
   .people li:last-child { border-bottom: 0; }
+  .pick { width: 34px; padding-right: 0 !important; } .pick input { width: 15px; height: 15px; margin: 0; vertical-align: middle; accent-color: var(--ink); cursor: pointer; }
+  .lists td { vertical-align: middle; } .lists .row-acts { margin: 0; justify-content: flex-end; flex-wrap: nowrap; }
+  .lists b { font-weight: 600; } .steps { margin: 0; padding-left: 18px; color: var(--ink-2); } .steps li { margin: 2px 0; }
+  .chan { border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; margin-bottom: 10px; }
+  .chan > label { display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; } .chan p { margin: 4px 0 0 23px; color: var(--ink-2); font-size: 13px; }
+  .chan.off > label { color: var(--ink-3); cursor: default; }
+  .camp.one { grid-template-columns: 1fr; } .camp select { font: inherit; color: var(--ink); height: 32px; padding: 0 8px; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--surface); }
   .camp { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
   .camp label { display: grid; gap: 4px; font-size: 12.5px; color: var(--ink-2); }
   .camp input { font: inherit; color: var(--ink); height: 32px; padding: 0 10px; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--surface); }
@@ -434,6 +441,9 @@
         <option value="contacted">Already contacted</option>
       </select>
       <label class="check"><input type="checkbox" id="f-owner"> Owner known</label>
+      <button id="btn-list" hidden>Add to list</button>
+      <button id="btn-unlist" hidden>Remove from list</button>
+      <button id="btn-run-list" class="primary" hidden>Run campaign</button>
       <button id="btn-campaign" hidden>Postcard campaign</button>
       <button id="btn-csv"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8m0 0L5 7m3 3 3-3M3 13h10"/></svg>Export CSV</button>
     </div>
@@ -526,7 +536,8 @@ const ICON = {
   check: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>',
 };
 
-let leadTicket = 0, TOTAL_LEADS = 0, STATUSES = [], OUT = null, projects = [], selected = null, layers = {}, leadRows = [];
+let leadTicket = 0, TOTAL_LEADS = 0, STATUSES = [], OUT = null, projects = [], selected = null, layers = {}, leadRows = [], listView = null;
+const picked = new Set();     // leads ticked in the table, to be saved to a client list
 const HOME = [[39.72, -80.52], [42.27, -74.69]];
 const map = L.map("map", {preferCanvas: true, zoomSnap: 0, zoomDelta: 0.5, scrollWheelZoom: false, minZoom: 5}).fitBounds(HOME);
 // Smooth zoom for trackpads and mouse wheels. Each scroll or pinch event moves a zoom *goal*; an animation loop
@@ -727,6 +738,7 @@ function leadParams() {
   }
   if ($("f-owner").checked) p.set("owner_only", "true");
   if ($("f-outreach").value) p.set("outreach", $("f-outreach").value);
+  if (listView) { p.set("list_id", listView.id); p.set("min_score", 0); p.delete("county"); p.delete("stage"); }
   return p;
 }
 
@@ -768,6 +780,7 @@ function markSelected() {
 }
 async function select(id, fromList = true, animate = true) {
   closeParcel();
+  listView = null; picked.clear();
   selected = projects.find(p => p.id === id) || null;
   markSelected();
   if (selected) {
@@ -800,8 +813,9 @@ function skeleton() {
 }
 async function loadLeads() {
   const p = selected;
-  $("d-title").textContent = p ? pname(p.name) : "Top leads across all projects";
-  $("btn-all").hidden = !p;
+  $("d-title").textContent = p ? pname(p.name) : listView ? "List: " + listView.name : "Top leads across all projects";
+  $("btn-all").hidden = !p && !listView;
+  $("btn-run-list").hidden = !listView;
   $("summary").hidden = !p;
   if (p) $("summary").innerHTML = esc(p.summary || "") + (mpms(p.name) ? `\nPennDOT project number (MPMS): <span class="id">${mpms(p.name)}</span>` : "") +
     (p.contact ? `\nAgency contact: ${esc(p.contact)}` : "") +
@@ -816,15 +830,19 @@ async function loadLeads() {
   const rows = await api("/api/leads?" + leadParams());
   if (ticket !== leadTicket) return;
   leadRows = rows;
+  for (const id of [...picked]) if (!rows.some(r => r.id === id)) picked.delete(id);
+  syncPicked();
   if (!leadRows.length) {
     $("leads-wrap").innerHTML = `<div class="empty">${p && !p.matched_at
       ? `This project has not been matched to parcels yet.${STATIC ? "" : " Run <code>edradar match</code> to find the parcels along it."}`
+      : listView ? "This list is empty. Go back to all projects, tick the leads you want and choose Add to list."
       : "No parcel leads match. Clear the “Owner known” filter or pick another project."}</div>`;
     return;
   }
-  $("leads-wrap").innerHTML = `<table><thead><tr>${th("Score", "score")}${th("Owner of record", "owner")}${th("Property", "property")}
+  $("leads-wrap").innerHTML = `<table><thead><tr>${STATIC ? "" : '<th class="pick"><input type="checkbox" id="pick-all" aria-label="Select every lead shown"></th>'}${th("Score", "score")}${th("Owner of record", "owner")}${th("Property", "property")}
     ${th("County value", "value", "num")}${th("Match", "match")}${p ? "" : th("Project", "project")}${STATIC ? "" : th("Outreach", "outreach")}${STATIC ? "" : th("Status", "status")}</tr></thead><tbody>` +
     leadRows.map(r => `<tr data-row="${r.id}" tabindex="0"${openLead === r.id ? ' class="sel"' : ""}>
+      ${STATIC ? "" : `<td class="pick"><input type="checkbox" data-pick="${r.id}" aria-label="Select ${esc(r.owner || r.apn)}"${picked.has(r.id) ? " checked" : ""}></td>`}
       <td><span class="score ${scoreClass(r.score)}" data-tip-lead="${r.id}">${r.score}</span></td>
       <td class="owner">${r.owner ? esc(r.owner) : '<span class="lookup">Look up at county</span>'}${r.mailing_address ? `<div class="sub">${esc(r.mailing_address)}</div>` : ""}</td>
       <td>${r.address ? esc(r.address) : '<span class="dash">–</span>'}<div class="sub"><span class="id">${esc(r.apn)}</span>${r.parcel_county ? " · " + esc(r.parcel_county[0] + r.parcel_county.slice(1).toLowerCase()) : ""}</div></td>
@@ -941,7 +959,7 @@ function setView(name) {
   if (name === "hub") { closeParcel(); loadHub(); } else map.invalidateSize();
 }
 async function showLeads(filter) {
-  selected = null; markSelected();
+  selected = null; listView = null; markSelected();
   $("f-outreach").value = filter;
   setView("leads");
   await loadLeads();
@@ -965,6 +983,7 @@ function cardMocks(t, sample) {
   return `<div class="mocks"><figure>${front}<figcaption>Postcard front</figcaption></figure>
     <figure>${back}<figcaption>Postcard back. The address block is added by the mail service.</figcaption></figure></div>`;
 }
+let HUB_LISTS = [];
 async function loadHub() {
   const box = $("hub");
   if (!box.innerHTML) box.innerHTML = `<div class="hub"><p class="meta">Loading the outreach hub…</p></div>`;
@@ -973,7 +992,7 @@ async function loadHub() {
 }
 function renderHub(h) {
   const box = $("hub");
-  OUT = {...h.status, rates: h.rates}; TPL = h.template;
+  OUT = {...h.status, rates: h.rates}; TPL = h.template; HUB_LISTS = h.lists || [];
   const pc = h.status.postcard, em = h.status.email, sk = h.status.skiptrace, r = h.ready, t = h.template, f = t.firm;
   const fig = (label, v) => `<div><span>${label}</span><b>${v}</b></div>`;
   const month = h.usage.this_month.reduce((a, x) => a + (x.billed || 0), 0);
@@ -992,6 +1011,14 @@ function renderHub(h) {
   box.innerHTML = `<div class="hub">
     <div class="hub-head"><h1>Outreach hub</h1>${pcState}${STATIC ? "" : `<span class="state ${em.enabled ? "on" : ""}">Email ${em.enabled ? "on" : "off"}</span><span class="state ${sk.enabled ? "on" : ""}">Skip tracing ${sk.enabled ? "on" : "off"}</span>`}</div>
     <div class="figs">${fig("Postcards mailed", h.sent.postcards.toLocaleString())}${fig("Test proofs", h.sent.test_proofs.toLocaleString())}${fig("Emails started", h.sent.emails.toLocaleString())}${fig("Owners skip traced", h.sent.skip_traces.toLocaleString())}${fig("Billed this month", usd(month))}</div>
+    <div class="panel lists"><div class="panel-head"><h3>Client lists</h3><span class="meta">Save the owners you want, then run postcards and email for the whole list in one step.</span></div>
+      ${STATIC ? "<p>Client lists are private to each firm, so they are kept in the running app and are not part of this public page.</p>"
+        : (h.lists || []).length ? `<div class="scroll"><table><thead><tr><th>List</th><th class="num">Owners</th><th class="num">Postcard-ready</th><th class="num">Email-ready</th><th class="num">Contacted</th><th></th></tr></thead><tbody>${h.lists.map(x => `<tr>
+          <td><b>${esc(x.name)}</b><div class="sub">${plural(x.leads, "parcel")} · created ${esc(day(x.created_at))}</div></td>
+          <td class="num">${x.owners}</td><td class="num">${x.postcard_ready}</td><td class="num">${x.email_ready}</td><td class="num">${x.contacted}</td>
+          <td><div class="row-acts"><button class="primary" data-hub="list-run" data-id="${x.id}">Run campaign</button><button data-hub="list-open" data-id="${x.id}">View</button><button data-hub="list-delete" data-id="${x.id}" aria-label="Delete the list ${esc(x.name)}">Delete</button></div></td></tr>`).join("")}</tbody></table></div>`
+        : `<ol class="steps"><li>Open <b>Leads</b> and filter to the owners you want (a project, a county, postcard-ready, email leads).</li><li>Tick the rows, or leave them unticked to take everything shown, and choose <b>Add to list</b>.</li><li>Come back here and choose <b>Run campaign</b>.</li></ol>
+           <div class="row-acts" style="margin-top:10px"><button class="primary" data-hub="leads-">Go to Leads</button></div>`}</div>
     <div class="hub-row three">
       <div class="panel"><h3>Postcards</h3>
         <p><b>${r.postcard_owners.toLocaleString()}</b> owners scoring ${r.min_score} or higher have a usable mailing address and have not been mailed. One card goes to each owner and address, highest score first.</p>
@@ -1032,6 +1059,14 @@ $("hub").addEventListener("click", e => {
   if (a === "campaign") openCampaign();
   else if (a === "template") openTemplate();
   else if (a === "usage") openUsage();
+  else if (a.startsWith("list-")) {
+    const list = HUB_LISTS.find(x => x.id === +b.dataset.id);
+    if (!list) return;
+    if (a === "list-run") openListCampaign(list);
+    else if (a === "list-open") openList(list.id, list.name);
+    else if (b.dataset.sure) jpost("/api/lists/" + list.id, null, "DELETE").then(loadHub);
+    else { b.dataset.sure = 1; b.textContent = "Delete for good?"; setTimeout(() => { if (b.isConnected) { delete b.dataset.sure; b.textContent = "Delete"; } }, 4000); }
+  }
   else if (a.startsWith("leads-")) showLeads(a.slice(6));
 });
 $("views").addEventListener("click", e => { const b = e.target.closest("[data-view]"); if (b) setView(b.dataset.view); });
@@ -1179,7 +1214,7 @@ panel.addEventListener("click", async e => {
 });
 document.addEventListener("keydown", e => {
   if (e.key !== "Escape" || dlg.open) return;
-  if (openLead) closeParcel(); else if (selected && view === "leads") showAllProjects();   // Escape steps back one level at a time
+  if (openLead) closeParcel(); else if ((selected || listView) && view === "leads") showAllProjects();   // Escape steps back one level at a time
 });
 document.querySelector(".basemap").addEventListener("click", e => { const b = e.target.closest("[data-base]"); if (b) { baseChosen = true; setBase(b.dataset.base); } });
 
@@ -1255,6 +1290,95 @@ async function openEmail(leadId) {
     }
   });
 }
+/* ---- client lists: tick leads, save them to a named list, then run postcards and email for the whole list ---- */
+const jpost = (path, body, method = "POST") => api(path, {method, headers: {"Content-Type": "application/json"}, body: JSON.stringify(body || {})});
+const plural = (n, one, many) => `${n.toLocaleString()} ${n === 1 ? one : many || one + "s"}`;
+function syncPicked() {
+  const n = picked.size, all = $("pick-all");
+  $("btn-list").hidden = STATIC || !leadRows.length;
+  $("btn-list").textContent = n ? `Add ${n} to list` : "Add to list";
+  $("btn-unlist").hidden = !(listView && n);
+  if (all) { all.checked = n > 0 && n >= leadRows.length; all.indeterminate = n > 0 && n < leadRows.length; }
+}
+async function openList(id, name) {
+  selected = null; markSelected(); picked.clear(); listView = {id, name};
+  $("f-outreach").value = ""; $("f-owner").checked = false;
+  setView("leads");
+  await loadLeads();
+}
+async function openAddToList() {
+  const ids = picked.size ? [...picked] : leadRows.map(r => r.id);
+  const what = picked.size ? plural(ids.length, "selected lead") : `all ${plural(ids.length, "lead")} shown`;
+  dlg.innerHTML = `<div class="dlg-head"><h2 id="dlg-title">Add to a client list</h2><p>Saving ${what}. Tick rows in the table first to save only some of them.</p></div>
+    <div class="dlg-body"><div class="camp one" id="l-form"><p class="meta">Loading your lists…</p></div><div id="l-out"></div></div>
+    <div class="dlg-foot"><span class="note">A list can be run as one postcard and email campaign from the Outreach hub.</span>
+      <button data-close>Cancel</button><button class="primary" id="l-go" disabled>Save to list</button></div>`;
+  dlg.showModal();
+  let lists = [];
+  try { lists = await api("/api/lists"); } catch (e) { $("l-out").innerHTML = `<div class="alert bad">${esc(e.message)}</div>`; }
+  const others = lists.filter(x => !listView || x.id !== listView.id);
+  $("l-form").innerHTML = (others.length ? `<label>List<select id="l-pick">${others.map(x => `<option value="${esc(x.name)}">${esc(x.name)} (${plural(x.owners, "owner")})</option>`).join("")}<option value="">New list…</option></select></label>` : "") +
+    `<label id="l-new"${others.length ? " hidden" : ""}>Name of the new list<input id="l-name" maxlength="80" placeholder="e.g. US 22 corridor owners" autocomplete="off"></label>`;
+  const name = () => ($("l-pick") && $("l-pick").value) || $("l-name").value.trim();
+  const sync = () => { if ($("l-pick")) $("l-new").hidden = !!$("l-pick").value; $("l-go").disabled = !name(); };
+  $("l-form").addEventListener("input", sync); sync();
+  if (!others.length) $("l-name").focus();
+  $("l-go").addEventListener("click", async ev => {
+    ev.target.disabled = true;
+    try {
+      const res = await jpost("/api/lists", {name: name(), lead_ids: ids});
+      picked.clear(); document.querySelectorAll("[data-pick]").forEach(c => c.checked = false); syncPicked();
+      $("l-form").hidden = true;
+      $("l-out").innerHTML = `<div class="alert">Saved. “${esc(res.name)}” now has ${plural(res.owners, "owner")}: ${res.postcard_ready} ready for a postcard, ${res.email_ready} ready for email.</div>`;
+      dlg.querySelector(".dlg-foot").innerHTML = `<span class="note"></span><button data-close>Keep adding</button><button class="primary" id="l-run">Run campaign</button>`;
+      $("l-run").addEventListener("click", () => openListCampaign(res));
+    } catch (e) { $("l-out").innerHTML = `<div class="alert bad">${esc(e.message)}</div>`; ev.target.disabled = false; }
+  });
+}
+async function openListCampaign(list) {
+  dlg.innerHTML = `<div class="dlg-head"><h2 id="dlg-title">Run campaign: ${esc(list.name)}</h2><p>One postcard per owner and address, and one email per company. Anyone already contacted is left out.</p></div>
+    <div class="dlg-body"><div id="c-out"><p class="meta">Checking everyone on the list…</p></div></div>
+    <div class="dlg-foot"><span class="note" id="c-note"></span><button data-close>Cancel</button><button class="primary" id="c-go" disabled>Run campaign</button></div>`;
+  if (!dlg.open) dlg.showModal();
+  let plan;
+  try { plan = await jpost(`/api/lists/${list.id}/campaign`, {dry_run: true}); }
+  catch (e) { $("c-out").innerHTML = `<div class="alert bad">${esc(e.message)}</div>`; return; }
+  const pc = plan.postcard, em = plan.email, live = pc.mode === "live";
+  const people = rows => rows.length ? `<ul class="people">${rows.slice(0, 5).map(r => `<li><div class="who"><b>${esc(r.owner)}</b><span class="meta">${esc(r.mailing_address || r.why || "")}</span></div>${r.score != null ? `<span class="score ${scoreClass(r.score)}">${r.score}</span>` : ""}</li>`).join("")}</ul>${rows.length > 5 ? `<p class="meta" style="margin:6px 0 0">and ${rows.length - 5} more.</p>` : ""}` : "";
+  const pcN = pc.recipients.length, emN = em.recipients.length;
+  $("c-out").innerHTML = `
+    <div class="chan ${pc.enabled && pcN ? "" : "off"}"><label><input type="checkbox" id="c-pc" ${pc.enabled && pcN ? "checked" : "disabled"}> Postcards: ${plural(pcN, "owner")}</label>
+      <p>${!pc.enabled ? esc(pc.why || "Postcards are off.") : !pcN ? "Nobody on this list is waiting for a postcard." : live ? `Live: ${plural(pcN, "card")} will be mailed and billed, about ${usd(pcN * OUT.rates.postcard.cost)} from Lob.` : "Test mode: Lob makes a proof of each card. Nothing is mailed or billed."}${pc.eligible > pcN ? ` The first ${pcN} of ${pc.eligible} go out in this run.` : ""}</p>${pc.enabled ? people(pc.recipients) : ""}</div>
+    <div class="chan ${em.enabled && emN ? "" : "off"}"><label><input type="checkbox" id="c-em" ${em.enabled && emN ? "checked" : "disabled"}> Email: ${plural(emN, "company", "companies")}</label>
+      <p>${!em.enabled ? esc(em.why || "Email is off.") : !emN ? "No company on this list is waiting for an email." : `The best contact at each company is added to your Apollo sequence, sent from ${esc(em.from || "your mailbox")}. Revealing each email uses one Apollo credit (${emN} in all).`}</p>${em.enabled ? people(em.recipients) : ""}</div>
+    ${plan.skipped.length ? `<details><summary class="meta">${plural(plan.skipped.length, "owner")} left out</summary>${people(plan.skipped)}</details>` : ""}`;
+  const chosen = () => ({postcards: $("c-pc").checked, email: $("c-em").checked});
+  const sync = () => {
+    const c = chosen(), n = (c.postcards ? pcN : 0) + (c.email ? emN : 0);
+    $("c-go").disabled = !n;
+    $("c-go").textContent = !n ? "Nothing to send" : c.postcards && live || c.email ? `Send to ${plural(n, "recipient")}` : `Create ${plural(n, "test proof")}`;
+    $("c-note").textContent = c.postcards && live ? "This mails real postcards. It cannot be undone." : c.email ? "Emails go out on your Apollo sequence's schedule." : "";
+  };
+  $("c-out").addEventListener("change", sync); sync();
+  $("c-go").addEventListener("click", async ev => {
+    ev.target.disabled = true; ev.target.textContent = "Running…";
+    try {
+      const res = await jpost(`/api/lists/${list.id}/campaign`, {...chosen(), dry_run: false});
+      const failed = [...res.postcard.failed, ...res.email.failed];
+      $("c-out").innerHTML = `<div class="alert">${plural(res.postcard.sent.length, res.postcard.mode === "live" ? "postcard mailed" : "test proof created", res.postcard.mode === "live" ? "postcards mailed" : "test proofs created")}, ${plural(res.email.sent.length, "email started", "emails started")}${failed.length ? `, ${failed.length} failed` : ""}.</div>${people(failed)}`;
+      dlg.querySelector(".dlg-foot").innerHTML = `<span class="note">Every item is in the hub's Activity log.</span><button data-close class="primary">Done</button>`;
+      if (view === "leads") loadLeads();
+    } catch (e) { $("c-out").insertAdjacentHTML("afterbegin", `<div class="alert bad">${esc(e.message)}</div>`); sync(); }
+  });
+}
+$("btn-list").addEventListener("click", openAddToList);
+$("btn-run-list").addEventListener("click", () => listView && openListCampaign(listView));
+$("btn-unlist").addEventListener("click", async () => {
+  if (!listView || !picked.size) return;
+  await jpost(`/api/lists/${listView.id}/remove`, {lead_ids: [...picked]});
+  picked.clear(); loadLeads();
+});
+
 async function openCampaign() {
   const pc = OUT.postcard, scope = selected ? selected.name : $("f-county").value ? $("f-county").selectedOptions[0].text + " County" : "all projects";
   dlg.innerHTML = `<div class="dlg-head"><h2 id="dlg-title">Postcard campaign</h2><p>One card per owner and mailing address, highest score first, for ${esc(scope)}.</p></div>
@@ -1343,8 +1467,8 @@ document.addEventListener("scroll", hideTip, true);
 
 /* ---- events ---- */
 function showAllProjects() {
-  if (!selected) return;
-  selected = null; markSelected(); closeParcel();
+  if (!selected && !listView) return;
+  selected = null; listView = null; picked.clear(); markSelected(); closeParcel();
   reduceMotion ? map.fitBounds(HOME, {animate: false}) : map.flyToBounds(HOME, {duration: 0.45, easeLinearity: 0.3});
   loadLeads();
 }
@@ -1358,6 +1482,10 @@ $("projects").addEventListener("keydown", e => {
   const el = e.target.closest(".proj");
   if (el) { e.preventDefault(); select(+el.dataset.id, true, false); }
 });
+$("leads-wrap").addEventListener("change", e => {
+  if (e.target.id === "pick-all") { for (const r of leadRows) e.target.checked ? picked.add(r.id) : picked.delete(r.id); document.querySelectorAll("[data-pick]").forEach(c => c.checked = e.target.checked); syncPicked(); }
+  else if (e.target.dataset.pick) { e.target.checked ? picked.add(+e.target.dataset.pick) : picked.delete(+e.target.dataset.pick); syncPicked(); }
+});
 $("leads-wrap").addEventListener("change", async e => {
   const id = e.target.dataset.status;
   if (id) await api("/api/leads/" + id, {method: "PATCH", headers: {"Content-Type": "application/json"}, body: JSON.stringify({status: e.target.value})});
@@ -1367,7 +1495,7 @@ $("leads-wrap").addEventListener("click", e => {
   if (link) { e.preventDefault(); select(+link.dataset.project, false); }
   if (act) (act.dataset.act === "postcard" ? openPostcard : openEmail)(+act.dataset.lead);
   const row = e.target.closest("tr[data-row]");
-  if (row && !link && !act && !e.target.closest("select, button, a")) openParcel(+row.dataset.row);
+  if (row && !link && !act && !e.target.closest("select, button, a, .pick")) openParcel(+row.dataset.row);
 });
 $("leads-wrap").addEventListener("keydown", e => {
   if (e.key === "Enter" && e.target.matches("tr[data-row]")) openParcel(+e.target.dataset.row);
