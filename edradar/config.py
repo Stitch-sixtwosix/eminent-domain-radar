@@ -93,19 +93,36 @@ def add_states(cfg: Dict[str, Any]) -> None:
 
 
 def coverage(cfg: Dict[str, Any]) -> list:
-    """What each state has: a project source, owner records statewide or by county, and anything held back."""
-    rows = [{"code": "PA", "state": "Pennsylvania", "projects": True, "owners": "35 counties",
-             "held": None, "note": "PennDOT program plus federal notices and Pittsburgh legislation"}]
-    for st in state_files():
-        code = (st.get("code") or "").upper()
-        if len(code) != 2 or code == "PA":
+    """Every state, counted county by county: is there a project source, and how many counties have owner records."""
+    import json
+
+    counties = json.loads((Path(__file__).parent / "data" / "us_counties.json").read_text())
+    names = {"PA": "Pennsylvania"}
+    files = {(st.get("code") or "").upper(): st for st in state_files()}
+    pa_owner = len({c.upper() for layer in cfg.get("parcel_layers") or [] if not layer.get("state")
+                    for c in layer.get("counties") or []})
+    rows = []
+    for code in sorted(counties):
+        total, st = len(counties[code]), files.get(code)
+        if code == "PA":
+            rows.append({"code": "PA", "state": "Pennsylvania", "researched": True, "projects": True, "counties": total,
+                         "counties_projects": total, "counties_owners": min(pa_owner, total), "owners": "%d counties" % pa_owner,
+                         "held": None, "note": "PennDOT program plus federal notices and Pittsburgh legislation"})
             continue
-        sw, counties = st.get("parcels_statewide"), st.get("parcels_counties") or []
-        ok_counties = [c for c in counties if _usable(c, need_owner=True)]
-        held = [x.get("name") or x.get("county") for x in [sw] + counties if isinstance(x, dict) and x.get("restrictions") and not x.get("approved")]
-        rows.append({"code": code, "state": st.get("state") or code,
-                     "projects": any(_usable(p) for p in st.get("projects") or []),
-                     "owners": "statewide" if _usable(sw, need_owner=True) else ("%d counties" % len(ok_counties) if ok_counties else "none"),
+        if not st:
+            rows.append({"code": code, "state": code, "researched": False, "projects": False, "counties": total,
+                         "counties_projects": 0, "counties_owners": 0, "owners": "none", "held": None, "note": "Not researched yet"})
+            continue
+        sw, by_county = st.get("parcels_statewide"), st.get("parcels_counties") or []
+        ok_counties = {str(c.get("county", "")).upper() for c in by_county if _usable(c, need_owner=True)}
+        statewide = _usable(sw, need_owner=True)
+        has_projects = any(_usable(p) for p in st.get("projects") or [])
+        held = [x.get("name") or x.get("county") for x in [sw] + by_county
+                if isinstance(x, dict) and ((x.get("restrictions") and not x.get("approved")) or x.get("held"))]
+        rows.append({"code": code, "state": st.get("state") or code, "researched": True, "projects": has_projects, "counties": total,
+                     "counties_projects": total if has_projects else 0,
+                     "counties_owners": total if statewide else min(len(ok_counties), total),
+                     "owners": "statewide" if statewide else ("%d counties" % len(ok_counties) if ok_counties else "none"),
                      "held": ", ".join(str(h) for h in held if h) or None, "note": st.get("summary")})
     return sorted(rows, key=lambda r: r["state"])
 

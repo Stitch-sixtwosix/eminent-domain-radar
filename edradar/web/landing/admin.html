@@ -35,7 +35,7 @@
     <div class="tablewrap"><table id="accounts"><thead><tr><th>Account</th><th>Firm</th><th>Signed up</th><th>Last sign-in</th><th>Asked for</th><th>Access</th><th></th></tr></thead><tbody></tbody></table></div>
     <h2>State coverage</h2>
     <p id="cov-note">What each state has today. "Live" means subscribers can open it.</p>
-    <div class="tablewrap"><table id="cov"><thead><tr><th>State</th><th>Live</th><th>Projects scoring 60+</th><th>Project source</th><th>Owner records</th><th>Held back</th></tr></thead><tbody></tbody></table></div>
+    <div class="tablewrap"><table id="cov"><thead><tr><th>State</th><th>Live</th><th>Projects scoring 60+</th><th>Project source covers</th><th>Owner records</th><th>Held back</th></tr></thead><tbody></tbody></table></div>
     <h2>Not tracked yet</h2>
     <p>Payments and renewals appear here once Stripe is live. How often each firm opens the app, and how many postcards or emails they send, is not recorded yet.</p>
   </div>
@@ -71,10 +71,12 @@ else if ((data.session.user.app_metadata || {}).role !== "admin") { $("who").tex
 else { $("who").textContent = "Signed in as " + data.session.user.email + " (administrator)."; load(); }
 
 fetch("coverage.json").then(r => r.json()).then(rows => {
-  const live = rows.filter(r => r.live).length, owners = rows.filter(r => r.owners !== "none").length;
-  $("cov-note").textContent = `${live} of 50 states are live. ${rows.length} have been researched; ${owners} of those have owner records connected. States not listed have not been researched yet.`;
+  const sum = k => rows.reduce((a, r) => a + (r[k] || 0), 0), all = sum("counties");
+  const pct = n => Math.round(100 * n / all) + "%";
+  $("cov-note").textContent = `${rows.filter(r => r.live).length} of 50 states are live. Of ${all.toLocaleString()} counties in the country, ${sum("counties_projects").toLocaleString()} (${pct(sum("counties_projects"))}) are covered by a state project source and ${sum("counties_owners").toLocaleString()} (${pct(sum("counties_owners"))}) have owner records connected.`;
   document.querySelector("#cov tbody").innerHTML = rows.map(r => `<tr><td><b>${esc(r.state)}</b><span>${esc(r.note || "")}</span></td><td>${r.live ? "Yes" : "No"}</td>
-    <td>${r.scored_projects.toLocaleString()}</td><td>${r.projects ? "Connected" : "Not found"}</td><td>${esc(r.owners)}</td><td>${esc(r.held || "")}</td></tr>`).join("");
+    <td>${(r.scored_projects || 0).toLocaleString()}</td><td>${r.projects ? "All " + r.counties + " counties" : "Not connected"}</td>
+    <td>${r.counties_owners} of ${r.counties} counties<span>${esc(r.owners)}</span></td><td>${esc(r.held || "")}</td></tr>`).join("");
 }).catch(() => { $("cov-note").textContent = "The coverage table could not be loaded."; });
 
 async function load() {

@@ -636,5 +636,7 @@ def test_state_files_become_sources(tmp_path, monkeypatch):
     names = [x["name"] for x in cfg["parcel_layers"]]
     assert names == ["PA county", "OH Franklin County", "OH statewide parcels"]                  # the restricted Texas layer is held back
     cov = {r["code"]: r for r in config.coverage(cfg)}
-    assert cov["OH"]["owners"] == "statewide" and cov["TX"]["owners"] == "none" and cov["TX"]["held"] == "TX parcels"
-    assert cov["PA"]["projects"] and not cov["TX"]["projects"]
+    assert len(cov) == 50 and sum(r["counties"] for r in cov.values()) == 3142          # every county in the country is on the list
+    assert cov["OH"]["owners"] == "statewide" and cov["OH"]["counties_owners"] == cov["OH"]["counties"] == 88
+    assert cov["TX"]["owners"] == "none" and cov["TX"]["held"] == "TX parcels" and cov["TX"]["counties_owners"] == 0
+    assert cov["PA"]["projects"] and not cov["TX"]["projects"] and not cov["CA"]["researched"]
