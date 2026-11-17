@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Eminent Tracker</title>
+<title>EminentTracker</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7.5' fill='%231b2333'/%3E%3Cpath d='M8 7h16v4.2H12.2v13.6H24V29H8z' fill='%23fff' transform='translate(0 -2)'/%3E%3Cpath d='M12.2 13.9H32v4.2H12.2z' fill='%23e0662e'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -50,7 +50,8 @@
            border-bottom: 1px solid var(--line); }
   .brand { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
   .logo { width: 28px; height: 28px; flex: none; }
-  .brand b { font-size: 17px; font-weight: 600; letter-spacing: -0.015em; }
+  .brand b { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; }
+  .wordmark span { font-weight: 400; color: var(--ink-2); }   /* one word, two weights: the split stays readable */
   .brand span { color: var(--ink-3); font-size: 13px; }
   .stats { display: flex; gap: 22px; margin-left: auto; min-width: 0; overflow: hidden; color: var(--ink-2); font-size: 13px; white-space: nowrap; }
   .stats b { color: var(--ink); font-weight: 600; margin-right: 5px; }
@@ -371,7 +372,7 @@
 </head>
 <body>
 <header>
-  <div class="brand"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7.5" fill="#1b2333"/><path d="M8 7h16v4.2H12.2v13.6H24V29H8z" fill="#fff" transform="translate(0 -2)"/><path d="M12.2 13.9H32v4.2H12.2z" fill="#e0662e"/></svg><b>Eminent Tracker</b></div>
+  <div class="brand"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7.5" fill="#1b2333"/><path d="M8 7h16v4.2H12.2v13.6H24V29H8z" fill="#fff" transform="translate(0 -2)"/><path d="M12.2 13.9H32v4.2H12.2z" fill="#e0662e"/></svg><b class="wordmark" aria-label="EminentTracker">Eminent<span>Tracker</span></b></div>
   <div class="stats">
     <span><b id="st-projects">–</b>projects scoring 60+</span>
     <span><b id="st-leads">–</b>parcel leads</span>
