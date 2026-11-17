@@ -114,14 +114,14 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
         st = state.upper() if state else None
         w = " AND s.state = '%s'" % st if st and st.isalpha() and len(st) == 2 else ""
         one = lambda sql: db.rows(sql)[0]["n"]
-        proj = "FROM projects p JOIN signals s ON s.id = p.signal_id WHERE p.score >= 60" + w
+        proj = "FROM projects p JOIN signals s ON s.id = p.signal_id WHERE p.score >= 60 AND p.duplicate_of IS NULL" + w
         lead = "FROM leads l JOIN parcels pa ON pa.id = l.parcel_id JOIN projects p ON p.id = l.project_id " \
                "JOIN signals s ON s.id = p.signal_id WHERE 1=1" + w
         return {
             "state": st,
             "states": [dict(r, name=STATE_NAMES.get(r["code"], r["code"])) for r in db.rows(
                 "SELECT s.state AS code, COUNT(*) AS projects FROM projects p JOIN signals s ON s.id = p.signal_id "
-                "WHERE p.score >= 60 GROUP BY s.state ORDER BY s.state")],
+                "WHERE p.score >= 60 AND p.duplicate_of IS NULL GROUP BY s.state ORDER BY s.state")],
             "signals": one("SELECT COUNT(*) n FROM signals s WHERE 1=1" + w),
             "updated": one("SELECT MAX(fetched_at) n FROM signals s WHERE 1=1" + w),
             "projects": one("SELECT COUNT(*) n " + proj),
@@ -141,7 +141,7 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
     def projects(min_score: int = 60, county: Optional[str] = None, project_type: Optional[str] = None,
                  source: Optional[str] = None, q: Optional[str] = None, stage: Optional[str] = None,
                  state: Optional[str] = None, limit: int = 500) -> List[Dict[str, Any]]:
-        where, params = ["p.score >= ?"], [min_score]
+        where, params = ["p.score >= ?", "p.duplicate_of IS NULL"], [min_score]
         if state:
             where.append("s.state = ?"); params.append(state.upper())
         if county:

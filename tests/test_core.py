@@ -669,3 +669,24 @@ def test_shipped_project_layers_are_complete():
     layers = json.loads((Path(__file__).parent.parent / "edradar/data/sources/layers.json").read_text())
     assert layers and all(x.get("url") and x.get("fields") and x.get("state") and x.get("name") for x in layers)
     assert len({x["key"] for x in layers}) == len(layers)
+
+
+def test_duplicate_projects_are_merged_conservatively():
+    from edradar import dedupe
+
+    def p(i, name, lat=40.0, lon=-80.0, **kw):
+        return dict({"id": i, "name": name, "state": "OH", "lat": lat, "lon": lon, "est_cost": None, "score": 70,
+                     "leads": 0, "parcel_list": False}, **kw)
+
+    got = dedupe.find([
+        p(1, "I-90 Snoqualmie River Bridge deck repair", score=70),
+        p(2, "I-90 Snoqualmie River Bridge - Deck Repair", score=80),          # same project in a second list: 2 is kept
+        p(3, "I-90 Snoqualmie River Bridge deck repair", lat=40.01),           # a kilometre away: a different job
+        p(4, "FY27 D5 planning and scoping"), p(5, "FY31 D5 planning and scoping"),     # different years
+        p(6, "Main Street widening", est_cost=1e6), p(7, "Main Street widening", est_cost=9e6),   # costs disagree
+        p(8, "ROW Proposed", parcel_list=True), p(9, "ROW Proposed", parcel_list=True),   # neighbouring parcels
+        p(10, "Elm bridge replacement", state="PA"), p(11, "Elm bridge replacement"),     # different states
+        p(12, "Oak Road culvert", leads=3, score=10), p(13, "Oak Road culvert", score=90),   # the one with leads is kept
+        p(14, "Unmapped", lat=None), p(15, "Unmapped", lat=None),
+    ])
+    assert got == {1: 2, 13: 12}

@@ -5,6 +5,7 @@ import json
 from typing import Any, Dict, Optional
 
 from . import classify as C
+from . import dedupe
 from . import parcels as P
 from .db import DB
 from .geocode import Geocoder
@@ -163,6 +164,7 @@ def match(cfg: Dict[str, Any], db: DB, limit: Optional[int] = None) -> int:
 def run_all(cfg: Dict[str, Any], db: DB, limit: Optional[int] = None) -> None:
     print("Ingest"); ingest(cfg, db)
     print("Classify"); classify(cfg, db)
+    print("Merge duplicates"); print("  %(copies)d repeats hidden of %(checked)d mapped projects" % dedupe.run(db))
     print("Geocode"); geocode(cfg, db)
     print("Match"); match(cfg, db, limit)
     db.refresh_outreach_flags()

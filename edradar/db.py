@@ -147,6 +147,8 @@ class DB:
         self.conn.row_factory = sqlite3.Row
         self.conn.execute("PRAGMA foreign_keys = ON")
         self.conn.executescript(SCHEMA)
+        if "duplicate_of" not in [r["name"] for r in self.conn.execute("PRAGMA table_info(projects)")]:
+            self.conn.execute("ALTER TABLE projects ADD COLUMN duplicate_of INTEGER")   # the copy kept, when this is a repeat
         if "geometry" not in [r["name"] for r in self.conn.execute("PRAGMA table_info(parcels)")]:
             self.conn.execute("ALTER TABLE parcels ADD COLUMN geometry TEXT")   # cached boundary rings
         for table in ("signals", "parcels"):       # every record carries its state; rows from before that are Pennsylvania
@@ -253,7 +255,7 @@ class DB:
     def projects_to_match(self, min_score: int, limit: int) -> List[sqlite3.Row]:
         return self.conn.execute(
             """SELECT p.*, s.county, s.state FROM projects p JOIN signals s ON s.id=p.signal_id
-               WHERE p.score >= ? AND p.matched_at IS NULL
+               WHERE p.score >= ? AND p.matched_at IS NULL AND p.duplicate_of IS NULL
                  AND (p.geometry IS NOT NULL OR p.parcel_ids_mentioned != '[]')
                ORDER BY p.score DESC LIMIT ?""",
             (min_score, limit),

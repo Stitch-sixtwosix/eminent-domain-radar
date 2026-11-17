@@ -14,6 +14,7 @@ def main() -> None:
     p = sub.add_parser("ingest", help="pull new signals from sources")
     p.add_argument("--source", choices=sorted(pipeline.SOURCES))
     sub.add_parser("classify", help="score unclassified signals")
+    sub.add_parser("dedupe", help="hide projects that are listed more than once")
     sub.add_parser("geocode", help="geocode text-sourced projects")
     p = sub.add_parser("match", help="find parcels around scored projects")
     p.add_argument("--limit", type=int, help="projects to match this run")
@@ -61,6 +62,9 @@ def main() -> None:
         pipeline.ingest(cfg, db, args.source)
     elif args.cmd == "classify":
         pipeline.classify(cfg, db)
+    elif args.cmd == "dedupe":
+        from . import dedupe as _dedupe
+        print("%(copies)d repeats hidden of %(checked)d mapped projects" % _dedupe.run(db))
     elif args.cmd == "geocode":
         pipeline.geocode(cfg, db)
     elif args.cmd == "match":
