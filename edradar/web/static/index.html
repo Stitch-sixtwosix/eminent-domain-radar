@@ -767,7 +767,7 @@ function mergeValues(r, tpl = TPL) {
     owner_name: titleCase(r.owner) || "the owner of record",
     property: addr ? "your property at " + addr : "your property (parcel " + r.apn + ")",
     property_address: addr || "parcel " + r.apn, parcel_id: String(r.apn || ""), county: titleCase(r.parcel_county),
-    project_name: (r.project || "a planned public project").replace(/\s*\(MPMS \d+\)/, ""),
+    project_name: (r.project || "").replace(/\s*\(MPMS \d+\)/, "").replace(/\s*\([^)]*$/, "").trim() || "a planned public project",
     project_stage: (r.stage || "planning").replace(/_/g, " "), agency: r.agency || "the sponsoring agency",
     firm_name: f.name || "[Your firm name]", attorney_name: f.attorney || f.name || "[Attorney name]",
     firm_phone: f.phone || "[phone]", firm_email: f.email || "[email]", firm_website: f.website || "",

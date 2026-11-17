@@ -390,6 +390,7 @@ def test_outreach_template(tmp_path):
             "mailing_address": "12 MAIN ST, ERIE, PA, 16501"}
     v = outreach.merge_values(cfg, lead)
     assert v["property"] == "your property at 12 Main St" and v["project_name"] == "Widen X" and v["owner_name"] == "Roe Jane"
+    assert outreach.merge_values(cfg, dict(lead, project="S 7th St Extension (Study (MPMS 104995)"))["project_name"] == "S 7th St Extension"
     letter = outreach.render(saved["letter"], v)
     assert "Duerr Law, P.C. represents" in letter and "{{" not in letter and "J. Duerr" in letter
     card = outreach.postcard_html(cfg, lead)

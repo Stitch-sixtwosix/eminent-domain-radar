@@ -154,7 +154,9 @@ def merge_values(cfg: Dict[str, Any], lead: Dict[str, Any]) -> Dict[str, str]:
         "property": "your property at %s" % addr if addr else "your property (parcel %s)" % lead.get("apn"),
         "property_address": addr or "parcel %s" % lead.get("apn"),
         "parcel_id": str(lead.get("apn") or ""), "county": county,
-        "project_name": re.sub(r"\s*\(MPMS \d+\)", "", lead.get("project") or "a planned public project"),
+        # drop the "(MPMS 123)" tag, then any bracket PennDOT's 25-character titles leave unclosed: "Extension (Study"
+        "project_name": re.sub(r"\s*\([^)]*$", "", re.sub(r"\s*\(MPMS \d+\)", "", lead.get("project") or "")).strip()
+                        or "a planned public project",
         "project_stage": (lead.get("stage") or "planning").replace("_", " "),
         "agency": lead.get("agency") or "the sponsoring agency",
         "firm_name": firm.get("name") or "[Your firm name]", "attorney_name": firm.get("attorney") or firm.get("name") or "[Attorney name]",
