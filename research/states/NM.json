@@ -1,0 +1,43 @@
+{
+ "state": "New Mexico",
+ "code": "NM",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "NMDOT ESTIP Project Locations by Year - Project Locations 2025",
+   "url": "https://services.arcgis.com/hOpd7wfnKm16p9D9/arcgis/rest/services/NMDOT_ESTIP_Project_Locations/FeatureServer/2",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 44,
+   "fields": {
+    "id": "CONTROLNUM",
+    "name": "PROJ_TITLE",
+    "work_type": "PROJ_TYPE",
+    "status": "FFY_LIST",
+    "county": "COUNTY"
+   },
+   "work_type_values": [
+    "Bridge - New Construction (8)",
+    "Bridge - Rehab (14)",
+    "Bridge - Replace (11)",
+    "Bridge - Replace + Add Capacity (10)",
+    "Intelligent Transportation Systems (24)",
+    "Road - Major Preservation (6)",
+    "Road - Major Rehabilitation (6)",
+    "Road - Minor Rehabilitation (6)",
+    "Road - New Construction (1)",
+    "Road - Reconstruction (6)"
+   ],
+   "status_values": [
+    "FFY2022, FFY2025",
+    "FFY2024, FFY2025",
+    "FFY2025"
+   ],
+   "notes": "NMDOT eSTIP project lines for federal fiscal year 2025 (layers 0 and 1 are FFY 2023 and 2024). STALE: the ArcGIS Online item was last updated in 2023 and there is no layer for FFY 2026 or later, so most of these are let or built by now. No description, phase or letting date; FFY_LIST is the programmed year. PRG_PRIOR / PRG_2018..PRG_2021 / PRG_FUTURE are programmed dollar amounts (0 in the sample). LEAD_AGY, DIST_MPO, RouteID + FromMeasure/ToMeasure also present."
+  }
+ ],
+ "projects_note": "No current (FFY 2026+) NMDOT STIP geometry service was found in NMDOT's ArcGIS Online org. NMDOT's live eSTIP is a web application, not checked for an open GIS feed.",
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "Only an out-of-date NMDOT eSTIP line layer (FFY 2023-2025, 44 records for 2025) was verified; no current planned-projects layer found. Parcels not yet researched."
+}

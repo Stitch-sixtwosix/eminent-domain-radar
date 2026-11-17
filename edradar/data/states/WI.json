@@ -45,7 +45,26 @@
    "stage": "planning"
   }
  ],
- "parcels_statewide": null,
+ "parcels_statewide": {
+  "name": "Wisconsin Statewide Parcel Database V12 (V1200_WisconsinParcels_2026)",
+  "url": "https://services3.arcgis.com/n6uYoouQZW75n5WI/arcgis/rest/services/Wisconsin_Statewide_Parcels_DB/FeatureServer/0",
+  "verified": true,
+  "record_count": 3574646,
+  "fields": {
+   "apn": "PARCELID",
+   "owner": [
+    "OWNERNME1",
+    "OWNERNME2"
+   ],
+   "mailing_address": "PSTLADRESS",
+   "address": "SITEADRESS",
+   "market_value": "ESTFMKVALUE",
+   "acres": "GISACRES",
+   "county": "CONAME"
+  },
+  "restrictions": null,
+  "notes": "Published by the Wisconsin DOA / State Cartographer's Office (Statewide Parcel Map Database Project, Version 12, tax roll year 2025, loaded March 2026). PSTLADRESS is the full mailing address in one string. STATEID is the statewide unique id; also CNTASSDVALUE, LNDVALUE, IMPVALUE, PROPCLASS, ASSDACRES, DEEDACRES. Owner name is withheld for some parcels: 90,652 records have OWNERNME1 = 'NOT AVAILABLE' and 59,681 are null (about 4% together). No use restriction is stated in the service text. The service name changes with each yearly version (an older URL, .../Wisconsin_Statewide_Parcels/FeatureServer, no longer answers)."
+ },
  "parcels_counties": [],
- "summary": "Projects section done; parcel research still in progress."
+ "summary": "Both needs met: WisDOT 6-year and 4-year STIP project lines (work concept, cost range, let date) and a statewide parcel layer with owner name, mailing address and value."
 }

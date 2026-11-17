@@ -1,0 +1,180 @@
+{
+ "state": "Idaho",
+ "code": "ID",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "ITD ITIP_Lines_State",
+   "url": "https://services1.arcgis.com/Qqv4dYPC8Vv8e3c3/arcgis/rest/services/ITIP_2025/FeatureServer/1",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 237,
+   "fields": {
+    "id": "KeyNo",
+    "name": "Location",
+    "description": "PublicDescription",
+    "work_type": "Work_",
+    "cost": "Total_Est",
+    "status": "ProgramYear",
+    "county": "County"
+   },
+   "work_type_values": [
+    "BR/APPRS",
+    "MAJRWIDN",
+    "NEW RTE",
+    "PLAN/STUDY",
+    "PM",
+    "PUB TRANS",
+    "RECONST/REALIGN",
+    "RESRF/RESTO&REHAB",
+    "SAFTY/TRAF OPER",
+    "STATE MAINT"
+   ],
+   "status_values": [
+    "2027",
+    "2028",
+    "2029",
+    "2030",
+    "2031",
+    "2032",
+    "2033",
+    "Preliminary"
+   ],
+   "notes": "Idaho Transportation Investment Program (ITIP) FY2027-2033, state highway system projects as lines. All records are programmed/planned work; no construction-status field. ProgramYear = year programmed (2027-2033 or 'Preliminary'). Per-year phase dollars are in P20xx_CN / P20xx_PE / P20xx_RW (stored as strings) and Total_CN / Total_PE / Total_RW / Total_Est: a non-zero RW amount means right-of-way purchase is budgeted. Project_Type is a coarser category. Service is named ITIP_2025 (item title ITIP_Hosted_Copy) but holds the current program. ITD disclaimer: data provided as is, no warranty.",
+   "stage": "planning"
+  },
+  {
+   "name": "ITD ITIP_Lines_Regional",
+   "url": "https://services1.arcgis.com/Qqv4dYPC8Vv8e3c3/arcgis/rest/services/ITIP_2025/FeatureServer/0",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 507,
+   "fields": {
+    "id": "KeyNo",
+    "name": "Location",
+    "description": "PublicDescription",
+    "work_type": "Work_",
+    "cost": "Total_Est",
+    "status": "ProgramYear",
+    "county": "County"
+   },
+   "work_type_values": [
+    "ADD LANES SEP RDWY",
+    "BR/APPRS",
+    "ENV PRESV",
+    "MAJRWIDN",
+    "NEW RTE",
+    "PLAN/STUDY",
+    "PM",
+    "PUB TRANS",
+    "RECONST/REALIGN",
+    "RESRF/RESTO&REHAB",
+    "SAFTY/TRAF OPER",
+    "STATE MAINT",
+    "SUP FACIL"
+   ],
+   "status_values": [
+    "2027",
+    "2028",
+    "2029",
+    "2030",
+    "2031",
+    "2032",
+    "2033",
+    "Preliminary"
+   ],
+   "notes": "Same schema as ITIP_Lines_State; local/regional (MPO, local highway) projects as lines.",
+   "stage": "planning"
+  },
+  {
+   "name": "ITD ITIP_Points_State",
+   "url": "https://services1.arcgis.com/Qqv4dYPC8Vv8e3c3/arcgis/rest/services/ITIP_2025/FeatureServer/3",
+   "verified": true,
+   "geometry": "point",
+   "record_count": 1052,
+   "fields": {
+    "id": "KeyNo",
+    "name": "Location",
+    "description": "PublicDescription",
+    "work_type": "Work_",
+    "cost": "Total_Est",
+    "status": "ProgramYear",
+    "county": "County"
+   },
+   "work_type_values": [
+    "ADD LANES SEP RDWY",
+    "AIRPORT DEV",
+    "BR/APPRS",
+    "ENV PRESV",
+    "MAJRWIDN",
+    "NEW RTE",
+    "PLAN/STUDY",
+    "PM",
+    "PUB TRANS",
+    "RECONST/REALIGN",
+    "RESRF/RESTO&REHAB",
+    "SAFTY/TRAF OPER",
+    "STATE MAINT",
+    "SUP FACIL"
+   ],
+   "status_values": [
+    "2027",
+    "2028",
+    "2029",
+    "2030",
+    "2031",
+    "2032",
+    "2033",
+    "Preliminary"
+   ],
+   "notes": "Same schema; point locations (the same KeyNo can also appear in the line layers).",
+   "stage": "planning"
+  },
+  {
+   "name": "ITD ITIP_Points_Regional",
+   "url": "https://services1.arcgis.com/Qqv4dYPC8Vv8e3c3/arcgis/rest/services/ITIP_2025/FeatureServer/2",
+   "verified": true,
+   "geometry": "point",
+   "record_count": 785,
+   "fields": {
+    "id": "KeyNo",
+    "name": "Location",
+    "description": "PublicDescription",
+    "work_type": "Work_",
+    "cost": "Total_Est",
+    "status": "ProgramYear",
+    "county": "County"
+   },
+   "work_type_values": [
+    "AIRPORT DEV",
+    "BR/APPRS",
+    "ENV PRESV",
+    "MAJRWIDN",
+    "NEW RTE",
+    "PLAN/STUDY",
+    "PM",
+    "PUB TRANS",
+    "RECONST/REALIGN",
+    "RESRF/RESTO&REHAB",
+    "SAFTY/TRAF OPER",
+    "STATE MAINT",
+    "SUP FACIL"
+   ],
+   "status_values": [
+    "2027",
+    "2028",
+    "2029",
+    "2030",
+    "2031",
+    "2032",
+    "2033",
+    "Preliminary"
+   ],
+   "notes": "Same schema; local/regional point locations.",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "ITD ITIP FY2027-2033 verified as four layers (state/regional x line/point) with work type, program year and per-phase dollars including right-of-way. Parcels not yet researched."
+}

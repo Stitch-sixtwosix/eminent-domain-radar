@@ -23,6 +23,43 @@
     }
   ],
   "parcels_statewide": null,
-  "parcels_counties": [],
-  "summary": "Projects section done; parcel research still in progress."
+  "parcels_statewide_note": "No free statewide parcel layer with owner names was found for Missouri.",
+  "parcels_counties": [
+    {
+      "county": "ST. LOUIS COUNTY",
+      "url": "https://services2.arcgis.com/w657bnjzrjguNyOy/arcgis/rest/services/STLCOparcels/FeatureServer/0",
+      "verified": true,
+      "record_count": 399685,
+      "fields": {
+        "apn": "LOCATOR",
+        "owner": "OWNER_NAME",
+        "mailing_address": [
+          "OWN_ADD",
+          "OWN_CITY",
+          "OWN_STATE",
+          "OWN_ZIP"
+        ],
+        "address": "PROP_ADD",
+        "market_value": "TOTAPVAL",
+        "acres": "ACRES"
+      },
+      "notes": "On the St. Louis County GIS ArcGIS Online organisation, whole county (399,685 parcels), but the sample record is tax year 2020 (TAXYR), so ownership may be several years old. Newer but partial layers exist in the same organisation (e.g. Parcels_1LivUnit/FeatureServer/27, TAXYR 2024, single-unit residential only, 114,310 records, same field names unshortened)."
+    },
+    {
+      "county": "ST. CHARLES",
+      "url": "https://services7.arcgis.com/n2n27A5sWjEWTpfF/arcgis/rest/services/St_Charles_County_Parcels/FeatureServer/0",
+      "verified": true,
+      "record_count": 161860,
+      "fields": {
+        "apn": "Parcel_ID",
+        "owner": "Owner",
+        "mailing_address": "MailingAdd",
+        "address": "SiteAddres",
+        "market_value": "TotalMarke"
+      },
+      "notes": "Third-party copy on ArcGIS Online, data dated 2020-03 in the sample; includes four previous owners and sale history. The county's own server (map.sccmo.org) timed out."
+    }
+  ],
+  "parcels_counties_note": "Not found or not reachable in the time allowed: Jackson (jcgis.jacksongov.org timed out), St. Louis City, Greene.",
+  "summary": "Projects: MoDOT STIP lines for SFY 2027-2031 verified (description and cost, no work-type or status field). Parcels: no statewide owner layer; St. Louis County and St. Charles County layers verified but both look like 2020 data; Jackson, St. Louis City and Greene not found."
 }

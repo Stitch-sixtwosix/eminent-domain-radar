@@ -61,6 +61,52 @@
   }
  ],
  "parcels_statewide": null,
- "parcels_counties": [],
- "summary": "Projects section done; parcel research still in progress."
+ "parcels_statewide_note": "No free statewide parcel layer with owner names was found for Kansas.",
+ "parcels_counties": [
+  {
+   "county": "WYANDOTTE",
+   "url": "https://gisweb.wycokck.org/arcgis/rest/services/UGMAPS/UGMAPS_4_V03_Owner_Names/MapServer/0",
+   "verified": true,
+   "record_count": 67960,
+   "fields": {
+    "apn": "PARCEL",
+    "owner": "OWNER_NAME",
+    "address": [
+     "NUMB",
+     "DIR",
+     "ST_NAME",
+     "SUFX",
+     "CITY",
+     "ZIP"
+    ],
+    "acres": "ACRE"
+   },
+   "notes": "Unified Government of Wyandotte County/Kansas City KS. Owner name and site address only; no mailing address or value. STATE_ID is the state parcel id."
+  },
+  {
+   "county": "DOUGLAS",
+   "url": "https://services.arcgis.com/8O9UlSTnqjKptoda/arcgis/rest/services/Parcel/FeatureServer/0",
+   "verified": true,
+   "record_count": 41800,
+   "fields": {
+    "apn": "PID",
+    "owner": [
+     "owner1",
+     "owner2",
+     "owner3"
+    ],
+    "mailing_address": [
+     "address",
+     "city",
+     "state",
+     "zip"
+    ],
+    "address": "situs",
+    "acres": "SYSCALACRES"
+   },
+   "notes": "Published by the City of Lawrence GIS account; 41,800 parcels (appears to be county-wide or close to it; not confirmed). No value field."
+  }
+ ],
+ "parcels_counties_note": "Not found or not reachable in the time allowed: Johnson (maps.jocogov.org answered 403), Sedgwick (gis.sedgwick.gov timed out), Shawnee (gis.snco.us timed out).",
+ "summary": "Projects: only a consultant-hosted point copy of KDOT's WinCPMS project list could be verified (no cost); KDOT's own KanPlan server did not resolve from here. Parcels: no statewide owner layer; Wyandotte and Douglas verified, Johnson/Sedgwick/Shawnee not reachable."
 }

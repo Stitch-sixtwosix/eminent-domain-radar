@@ -1,0 +1,85 @@
+{
+ "state": "South Carolina",
+ "code": "SC",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "SCDOT Programmed Project Lines (October 2023 snapshot)",
+   "url": "https://services1.arcgis.com/VaY7cY9pvUYUP1Lf/arcgis/rest/services/ProgrammedProjectLinesOct2023/FeatureServer/0",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 3000,
+   "fields": {
+    "id": "ProjectID",
+    "name": "ProjectNam",
+    "description": "ProjectDes",
+    "work_type": "ProjectTyp",
+    "status": "ProjectAct",
+    "let_date": "CON_Year",
+    "county": "LocationLi"
+   },
+   "work_type_values": [
+    "Resurfacing",
+    "Signing",
+    "Widening",
+    "Feasibility Study",
+    "Drainage Improvements",
+    "Facility Upgrade",
+    "Administration",
+    "Debt Service",
+    "Rehabilitation",
+    "Emergency Repair/Replacement",
+    "Interchange Improvement",
+    "Reconstruction",
+    "Bridge Replacement",
+    "Bridge Maintenance",
+    "Safety Improvement",
+    "New Location",
+    "Pavement Markings",
+    "Road Maintenance",
+    "New Interchange",
+    "Corridor Improvement",
+    "Intersection Improvement",
+    "New Overpass",
+    "Signal",
+    "Enhancement",
+    "Preservation"
+   ],
+   "status_values": [
+    "Design/Development",
+    "Pre-Award",
+    "Construction",
+    " "
+   ],
+   "notes": "STALE: the layer was last edited 2023-10-09 and is a one-off export from SCDOT's Programmed Project Viewer, in SCDOT's ArcGIS Online organization. Schema is good: ProjectAct separates planned ('Design/Development', 'Pre-Award') from 'Construction'; ROW_Year and CON_Year are the right-of-way and construction years (0 = none); BudgetCate is the program (e.g. 'Widening & New Location', 'Bridge'); DateOfCurr is the current completion date or 'Currently Undetermined'. There is no cost field. County is in LocationLi. A current, maintained service was not found: SCDOT's own server gis.scdot.org timed out on every request, and the live viewer (https://www.scdot.org/business/projectviewer.aspx) offers a raw data download that was not verified here.",
+   "stage": "planning"
+  },
+  {
+   "name": "SCDOT Programmed Project Points (October 2023 snapshot)",
+   "url": "https://services1.arcgis.com/VaY7cY9pvUYUP1Lf/arcgis/rest/services/ProgrammedProjectPointsOct2023/FeatureServer/0",
+   "verified": true,
+   "geometry": "point",
+   "record_count": 1066,
+   "fields": {
+    "id": "ProjectID",
+    "name": "ProjectNam",
+    "description": "ProjectDes",
+    "work_type": "ProjectTyp",
+    "status": "ProjectAct",
+    "let_date": "CON_Year",
+    "county": "LocationLi"
+   },
+   "work_type_values": [],
+   "status_values": [
+    "Design/Development",
+    "Pre-Award",
+    "Construction"
+   ],
+   "notes": "Point companion to the lines layer (bridges, intersections). Same schema and same staleness: last edited October 2023.",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "Only a stale (October 2023) copy of SCDOT's programmed projects could be verified; it has the right fields but no cost and is not maintained. Parcels not researched yet."
+}

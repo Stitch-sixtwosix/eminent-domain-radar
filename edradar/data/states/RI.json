@@ -1,0 +1,135 @@
+{
+ "state": "Rhode Island",
+ "code": "RI",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "RI STIP FFY18-27 (Amendment 26) - Pavement Capital (lines)",
+   "url": "https://risegis.ri.gov/hosting/rest/services/RIDOA/STIPMap_1827_Amend26/MapServer/13",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 188,
+   "fields": {
+    "id": "TIP_ID",
+    "name": "ProjectName",
+    "description": "Description",
+    "work_type": "ProjectType",
+    "cost": "TOTallocat",
+    "status": "ProjectSta",
+    "county": "Municipality"
+   },
+   "work_type_values": [
+    "Improvements",
+    "Pavement Management",
+    "Pavement/ ADA Ramp",
+    "Pavement/ Sidewalks",
+    "Pavement/ Sidewalks/ ADA",
+    "Reconstruction",
+    "Sidewalks"
+   ],
+   "status_values": [],
+   "notes": "RI Division of Statewide Planning STIP map for FFY2018-2027 as of Amendment 26 (2020): OUTDATED, the current STIP is FFY2022-2031 and no public GIS service for it was found. FY2018..FY2027 and TOTallocat are programmed dollars in MILLIONS by fiscal year; ProjectSta is free text, there is no clean phase field and no letting date. The map service has 15 layers by program (0-6 points, 7-13 lines, 14 polygon) with the same schema.",
+   "stage": "planning"
+  },
+  {
+   "name": "RI STIP FFY18-27 (Amendment 26) - Bridge Capital - Line",
+   "url": "https://risegis.ri.gov/hosting/rest/services/RIDOA/STIPMap_1827_Amend26/MapServer/10",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 719,
+   "fields": {
+    "id": "TIP_ID",
+    "name": "ProjectName",
+    "description": "Description",
+    "work_type": "ProjectType",
+    "cost": "TOTallocat",
+    "status": "ProjectSta",
+    "county": "Municipality"
+   },
+   "work_type_values": [],
+   "status_values": [],
+   "notes": "RI Division of Statewide Planning STIP map for FFY2018-2027 as of Amendment 26 (2020): OUTDATED, the current STIP is FFY2022-2031 and no public GIS service for it was found. FY2018..FY2027 and TOTallocat are programmed dollars in MILLIONS by fiscal year; ProjectSta is free text, there is no clean phase field and no letting date. The map service has 15 layers by program (0-6 points, 7-13 lines, 14 polygon) with the same schema.",
+   "stage": "planning"
+  },
+  {
+   "name": "RI STIP FFY18-27 (Amendment 26) - Traffic Safety Capital - Lines",
+   "url": "https://risegis.ri.gov/hosting/rest/services/RIDOA/STIPMap_1827_Amend26/MapServer/11",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 10,
+   "fields": {
+    "id": "TIP_ID",
+    "name": "ProjectName",
+    "description": "Description",
+    "work_type": "ProjectType",
+    "cost": "TOTallocat",
+    "status": "ProjectSta",
+    "county": "Municipality"
+   },
+   "work_type_values": [
+    "Bike",
+    "Guardrail",
+    "Improvements",
+    "Installation",
+    "Roundabout",
+    "Safety Improvements",
+    "Structure Replacement"
+   ],
+   "status_values": [],
+   "notes": "RI Division of Statewide Planning STIP map for FFY2018-2027 as of Amendment 26 (2020): OUTDATED, the current STIP is FFY2022-2031 and no public GIS service for it was found. FY2018..FY2027 and TOTallocat are programmed dollars in MILLIONS by fiscal year; ProjectSta is free text, there is no clean phase field and no letting date. The map service has 15 layers by program (0-6 points, 7-13 lines, 14 polygon) with the same schema.",
+   "stage": "planning"
+  },
+  {
+   "name": "RI STIP FFY18-27 (Amendment 26) - Bridge Capital (points)",
+   "url": "https://risegis.ri.gov/hosting/rest/services/RIDOA/STIPMap_1827_Amend26/MapServer/5",
+   "verified": true,
+   "geometry": "point",
+   "record_count": 719,
+   "fields": {
+    "id": "TIP_ID",
+    "name": "ProjectName",
+    "description": "Description",
+    "work_type": "ProjectType",
+    "cost": "TOTallocat",
+    "status": "ProjectSta",
+    "county": "Municipality"
+   },
+   "work_type_values": [],
+   "status_values": [],
+   "notes": "RI Division of Statewide Planning STIP map for FFY2018-2027 as of Amendment 26 (2020): OUTDATED, the current STIP is FFY2022-2031 and no public GIS service for it was found. FY2018..FY2027 and TOTallocat are programmed dollars in MILLIONS by fiscal year; ProjectSta is free text, there is no clean phase field and no letting date. The map service has 15 layers by program (0-6 points, 7-13 lines, 14 polygon) with the same schema.",
+   "stage": "planning"
+  },
+  {
+   "name": "RI Statewide Planning LRTP proposed projects (ProposedProjects_Line)",
+   "url": "https://services1.arcgis.com/EOvMKOFaeiXUzBcH/arcgis/rest/services/ProposedProjects_Line/FeatureServer/1",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 37,
+   "fields": {
+    "id": "STIPID",
+    "name": "Name",
+    "description": "Descriptio",
+    "work_type": "ProjType",
+    "cost": "Cost",
+    "status": "ProjStatus"
+   },
+   "work_type_values": [
+    "Bicycle / Pedestrian",
+    "Roadway",
+    "Roadway; Bridge",
+    "Transit - Bus",
+    "Transit - Rail"
+   ],
+   "status_values": [
+    "Construction",
+    "Design",
+    "Planning"
+   ],
+   "notes": "Small (a few dozen) set of proposed long-range plan projects from RI Statewide Planning; ProjStatus (e.g. Planning), FundStatus and STIPYr (e.g. 'FY 22 - 31') tie some to the current STIP. Cost is mostly blank. Supplementary only.",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "Only an outdated STIP map service (FFY2018-2027, 2020 amendment) and a small LRTP proposed-projects layer were found; no current RIDOT planned-projects GIS service was verified. Parcel research pending."
+}

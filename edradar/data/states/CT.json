@@ -1,0 +1,61 @@
+{
+ "state": "Connecticut",
+ "code": "CT",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "CTDOT Project Work Areas",
+   "url": "https://services1.arcgis.com/FCaUeJ5SOVtImake/arcgis/rest/services/CTDOT_Project_Work_Areas/FeatureServer/0",
+   "verified": true,
+   "geometry": "polygon",
+   "record_count": 2371,
+   "fields": {
+    "id": "ProjectNumber",
+    "name": "Title",
+    "description": "ProjectDescription",
+    "cost": "TotalProjectEstimate",
+    "status": "CurrentSchedulePhase",
+    "let_date": "CurrentADVdate",
+    "county": "Towns"
+   },
+   "work_type_values": [],
+   "status_values": [
+    "01_Planning",
+    "02_Pre-Design",
+    "03_Final-Design",
+    "04_Contract-Processing",
+    "05_Construction",
+    "05_Construction (Pending)",
+    "06_Completed",
+    "06_Completed (Closed)",
+    "Construction (Missing Dates)"
+   ],
+   "notes": "CTDOT Open Data capital project work-area POLYGONS, all stages from planning to closed. CurrentSchedulePhase (numbered values, see list) separates planning/design from construction and completed; STIPstatusDescription says whether the project is in the STIP; CurrentADVdate is the advertising date, EstConstrCompletionDate the estimated completion; DesignPercentComplete, CurrentConstructionEstimate, ROWExpenditures (right-of-way spending) also present. There is no work-type field (use Title/ProjectDescription). Location is Towns (comma-separated), no county.",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": {
+  "name": "Connecticut CAMA and Parcel Layer (CT GIS Office)",
+  "url": "https://services3.arcgis.com/3FL1kr7L4LvwA2Kb/arcgis/rest/services/Connecticut_CAMA_and_Parcel_Layer/FeatureServer/0",
+  "fields": {
+   "apn": "Parcel_ID",
+   "owner": "Owner",
+   "mailing_address": [
+    "Mailing_Address",
+    "Mailing_City",
+    "Mailing_State",
+    "Mailing_Zip"
+   ],
+   "address": "Location_1",
+   "market_value": "Appraised_Land",
+   "acres": "Land_Acres",
+   "county": "Town_Name"
+  },
+  "restrictions": "ArcGIS Online item licence is CC0 (public domain); no restriction stated.",
+  "notes": "Statewide parcels joined to municipal CAMA (assessor) data, collected annually from all towns through the Councils of Governments (C.G.S. 7-100l); current layer is the 2026 collection (Parcel_Collection_Year / CAMA_Collection_Year). Owner, Co_Owner and mailing address present; completeness varies by town. No single total market value: Appraised_Land + Appraised_Building + Appraised_Outbuilding are appraised values and Assessed_Total is the 70% assessed total. Connecticut has no county government: Town_Name is the municipality, COG the planning region. CAMA_Link is the join key; Parcel_ID is the town's local id. Year-specific copies exist as Connecticut_CAMA_and_Parcel_Layer_2025 / _2024.",
+  "verified": true,
+  "record_count": 1320686
+ },
+ "parcels_counties": [],
+ "summary": "CTDOT Project Work Areas polygons cover planning through completed projects (phase, cost, advertising date; no work-type field), and the CT GIS Office statewide CAMA and Parcel layer has owner and mailing address under CC0."
+}

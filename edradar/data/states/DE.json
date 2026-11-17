@@ -1,0 +1,75 @@
+{
+ "state": "Delaware",
+ "code": "DE",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "DelDOT CTP Capital Transportation Projects - P3E_WEB (lines)",
+   "url": "https://enterprise.firstmap.delaware.gov/arcgis/rest/services/Transportation/DE_Assets/FeatureServer/0",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 1377,
+   "fields": {
+    "id": "PROJ_ID",
+    "name": "PROJECT_TITLE",
+    "description": "DESCR",
+    "work_type": "PROJ_CATG_NAME",
+    "cost": "PROJECT_COST",
+    "status": "PHASE",
+    "let_date": "ADV_DATE",
+    "county": "COUNTY"
+   },
+   "work_type_values": [
+    "Non Pipeline"
+   ],
+   "status_values": [
+    "Advertise/Bid/Award",
+    "Capital Transportation Program",
+    "Construction",
+    "Design",
+    "Pass-through Project",
+    "Planning",
+    "Planning Studies",
+    "Project Development"
+   ],
+   "notes": "Projects published to DelDOT's public project portal (one line per project). Also has PROJECTED_CONSTRUCTION_START / PROJECTED_CONSTRUCTION_FINISH text fields. DelDOT Capital Transportation Program projects from the Primavera/TSDM system via Delaware FirstMap. PHASE gives the current phase (planning/design/right-of-way/construction etc.) and PROJ_STATUS active/complete; each milestone date has a *_FLAG of 'Est' or 'Act' (ADV_DATE advertise, BID_DATE, AWD_DATE award, REAL_EST_DATE / REAL_EST_INIT_DATE real-estate acquisition milestones, COMP_DATE completion). Planned = ADV_DATE_FLAG 'Est' (not yet advertised) or PHASE before Construction. PROJECT_COST is a padded string. FINANCE_NO is the state contract number.",
+   "stage": "planning"
+  },
+  {
+   "name": "DelDOT CTP Capital Transportation Projects - P3E_ALL_LINE",
+   "url": "https://enterprise.firstmap.delaware.gov/arcgis/rest/services/Transportation/DE_Assets/FeatureServer/2",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 21738,
+   "fields": {
+    "id": "PROJ_ID",
+    "name": "PROJECT_TITLE",
+    "description": "DESCR",
+    "work_type": "PROJ_CATG_NAME",
+    "cost": "PROJECT_COST",
+    "status": "PHASE",
+    "let_date": "ADV_DATE",
+    "county": "COUNTY"
+   },
+   "work_type_values": [
+    "Non Pipeline"
+   ],
+   "status_values": [
+    "Advertise/Bid/Award",
+    "Capital Funded Program",
+    "Capital Transportation Program",
+    "Closeout - Finance",
+    "Completed",
+    "Construction",
+    "Pass-through Project",
+    "Planning Studies",
+    "Project Development"
+   ],
+   "notes": "All project line segments including ones not published to the web portal (PUBLISH_ON_WEB, CTP_INDICATOR fields); many rows per project. Layers 1 (P3E_ALL_POINT) and 3 (P3E_ALL_POLYGONS) hold point and polygon project locations with the same schema. DelDOT Capital Transportation Program projects from the Primavera/TSDM system via Delaware FirstMap. PHASE gives the current phase (planning/design/right-of-way/construction etc.) and PROJ_STATUS active/complete; each milestone date has a *_FLAG of 'Est' or 'Act' (ADV_DATE advertise, BID_DATE, AWD_DATE award, REAL_EST_DATE / REAL_EST_INIT_DATE real-estate acquisition milestones, COMP_DATE completion). Planned = ADV_DATE_FLAG 'Est' (not yet advertised) or PHASE before Construction. PROJECT_COST is a padded string. FINANCE_NO is the state contract number.",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "DelDOT CTP project layers on FirstMap carry phase, cost and estimated/actual milestone dates (including real-estate dates), which is ideal. Parcel research pending."
+}

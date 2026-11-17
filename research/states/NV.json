@@ -1,0 +1,10 @@
+{
+ "state": "Nevada",
+ "code": "NV",
+ "checked": "2026-11-17",
+ "projects": null,
+ "projects_note": "null: NDOT's GIS servers (gis.dot.nv.gov/arcgis, /rhgis, /agsphs) answered every request with HTTP 500 'Application Error' on 2026-11-16/17, and NDOT's ArcGIS Online org lists no STIP or planned-projects layer (only ITS master plan, fiber 'Activity Line', maintenance layers). NDOT's eSTIP is a web application with no open GIS feed found.",
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "No NDOT planned-projects layer could be found or verified. Parcels not yet researched."
+}

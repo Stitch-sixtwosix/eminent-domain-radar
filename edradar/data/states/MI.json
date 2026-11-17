@@ -43,7 +43,7 @@
    "url": "https://services2.arcgis.com/67lKNkQ2TO1I3lhR/arcgis/rest/services/MdotFiveYearTransportationProgam_2026_2030/FeatureServer/8",
    "verified": true,
    "geometry": "point",
-   "record_count": null,
+   "record_count": 756,
    "fields": {
     "id": "JOBNET_ID",
     "name": "RPT_WK_DESC",
@@ -62,6 +62,72 @@
   }
  ],
  "parcels_statewide": null,
- "parcels_counties": [],
- "summary": "Projects section done; parcel research still in progress."
+ "parcels_statewide_note": "No free statewide parcel layer with owner names was found for Michigan.",
+ "parcels_counties": [
+  {
+   "county": "WAYNE (City of Detroit only)",
+   "url": "https://services2.arcgis.com/qvkbeam7Wirps6zC/arcgis/rest/services/parcel_file_current/FeatureServer/0",
+   "verified": true,
+   "record_count": 377940,
+   "fields": {
+    "apn": "parcel_id",
+    "owner": [
+     "taxpayer_1",
+     "taxpayer_2"
+    ],
+    "mailing_address": [
+     "taxpayer_address",
+     "taxpayer_city",
+     "taxpayer_state",
+     "taxpayer_zip_code"
+    ],
+    "address": "address",
+    "market_value": "amt_assessed_value",
+    "acres": "total_acreage"
+   },
+   "notes": "City of Detroit open data, not the whole county. Name is the taxpayer of record. Assessed value is about half of market value in Michigan."
+  },
+  {
+   "county": "MACOMB",
+   "url": "https://services6.arcgis.com/K0qS4r8AEJxrE8em/arcgis/rest/services/Macomb_County_Parcel_Data/FeatureServer/10",
+   "verified": true,
+   "record_count": 332993,
+   "fields": {
+    "apn": "TAX_ID",
+    "owner": "ownername1",
+    "address": [
+     "propstreetcombined",
+     "propertyCityStateZip"
+    ],
+    "market_value": "mborsev_0"
+   },
+   "notes": "Macomb County Tax Parcels. Owner name only, no mailing address. mborsev_0 is the state equalized value (about half of market value); CVT_NAME is the city/township."
+  },
+  {
+   "county": "GENESEE",
+   "url": "https://services2.arcgis.com/PrYwGqAi1wKjoFb1/arcgis/rest/services/Parcels2025County/FeatureServer/0",
+   "verified": true,
+   "record_count": 189790,
+   "fields": {
+    "apn": "ParcelID",
+    "owner": "OwnName",
+    "mailing_address": [
+     "OwnStreet",
+     "OwnCity",
+     "OwnState",
+     "OwnZip"
+    ],
+    "address": [
+     "PropComb",
+     "PropCity",
+     "PropZip"
+    ],
+    "market_value": "SEV",
+    "acres": "AcreCalcNM"
+   },
+   "notes": "Genesee County Land Records and GIS, 2025 parcels. Separate taxpayer fields (TaxName, TaxStreet, TaxCity, TaxState, TaxZip). SEV is about half of market value."
+  }
+ ],
+ "parcels_counties_note": "Not found or not reachable in the time allowed: Wayne outside Detroit, Oakland (sold, not free), Kent (server needs a token).",
+ "summary": "Projects: MDOT Five-Year Transportation Program 2027-2031 lines and points verified, with work type, budget, STIP status and scheduled let dates. Parcels: no statewide owner layer; verified Detroit (Wayne), Macomb and Genesee; Oakland, Kent and the rest of Wayne not available free."
 }

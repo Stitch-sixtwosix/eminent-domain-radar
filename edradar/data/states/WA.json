@@ -1,0 +1,55 @@
+{
+ "state": "Washington",
+ "code": "WA",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "WSDOT Project Delivery Plan - Current",
+   "url": "https://data.wsdot.wa.gov/arcgis/rest/services/Shared/WSDOTProjectDeliveryPlanCurrent/MapServer/0",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 1582,
+   "fields": {
+    "id": "ProjectNumber",
+    "name": "ProjectTitle",
+    "description": "BookDescription",
+    "work_type": "ImprovementTypeDesc",
+    "cost": "TotalDollars",
+    "let_date": "AdDate",
+    "county": "CountyName"
+   },
+   "work_type_values": [
+    "3rd Party Damage Bridge Repair",
+    "ACP over BST",
+    "ADA Upgrade (Standalone)",
+    "Access Management",
+    "Administrative Support",
+    "Asphalt Crack Sealing",
+    "At Grade Intersections (Rural) - (NHS Multi-lane>45 mph)",
+    "At Grade Intersections (Urban) - (NHS Multi-lane>45 mph)",
+    "BST over ACP",
+    "Bridge Rehabilitation (Structural) also Concrete Br. Deck Repl.",
+    "Bridge Replacement (Functionally Obsolete)",
+    "Bridge Replacement (Structural)",
+    "Capital Facilities Capitalized",
+    "Capital Facilities Non-Capitalized",
+    "Capitol Facility",
+    "Centerline & Shoulder Rumble Strips",
+    "Chip Seal (aka BST) -",
+    "Chronic Environmental Deficiency",
+    "Concrete Bridge Deck (Rigid Overlays)",
+    "Concrete Bridge Deck - Asphalt Overlay",
+    "Concrete Bridge Deck - Asphalt Overlay - Second Generation",
+    "Concrete Bridge Deck - Rigid Overlay - Second Generation",
+    "Direct Access",
+    "Economic Initiatives Study",
+    "Environmental Retrofits"
+   ],
+   "notes": "WSDOT capital Project Delivery Plan (state highway/ferry projects), polylines. No status/phase field: milestone dates instead (ProjDef, BeginPE, EnvirDoc, RWCert = right-of-way certification, AdDate = advertisement, OperComplete = operationally complete), all epoch ms. Planned = AdDate in the future (334 records on 2026-11-16) or OperComplete in the future; RWCert in the future flags pending right-of-way. WorkDescription is a short work label; ProgramDesc/SubCategoryDesc are coarser groupings. Newest LastUpdated value is Nov 2024, so check freshness. Same service also at .../FeatureServer/0. Older yearly plans are in Shared/WSDOTProjectData/MapServer.",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "WSDOT Project Delivery Plan line layer verified (1,582 projects, cost, ad date, RW certification date). Parcels not yet researched."
+}

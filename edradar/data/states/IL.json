@@ -52,7 +52,7 @@
     "5",
     "6"
    ],
-   "notes": "IDOT's published FY 2026-2031 Multi-Year Program (Publicatio = '20262031MULTI-YEAR SQ'), hosted on IDOT's ArcGIS Online account despite the service name 'MYP_Test'. All planned. Layers: 0 Structure FY 2026 (point), 1 Structure FY 2027-2031 (point), 2 Spot FY 2026 (point), 3 Spot FY 2027-2031 (point), 4 Roadway FY 2026 (polyline), 5 Roadway FY 2027-2031 (polyline). The FY 2026 layers are the current annual program (soonest to construction). No letting date: ProgramYea is the year within the program (2-6 here). Improvem_1..Improve_11 hold up to 11 improvement types; ProjectTam is the asset-management category; EstimatedC is text with commas. County1..County4.",
+   "notes": "IDOT's published FY 2026-2031 Multi-Year Program (Publicatio = '20262031MULTI-YEAR SQ'), hosted on IDOT's ArcGIS Online account despite the service name 'MYP_Test'. All planned. Layers: 0 Structure FY 2026 (point, 953), 1 Structure FY 2027-2031 (point, 1682), 2 Spot FY 2026 (point, 425), 3 Spot FY 2027-2031 (point, 1093), 4 Roadway FY 2026 (polyline, 660), 5 Roadway FY 2027-2031 (polyline, 1734). The FY 2026 layers are the current annual program (soonest to construction). No letting date: ProgramYea is the year within the program (2-6 here). Improvem_1..Improve_11 hold up to 11 improvement types; ProjectTam is the asset-management category; EstimatedC is text with commas. County1..County4.",
    "stage": "planning"
   },
   {
@@ -76,6 +76,63 @@
   }
  ],
  "parcels_statewide": null,
- "parcels_counties": [],
- "summary": "Projects section done; parcel research still in progress."
+ "parcels_statewide_note": "No free statewide parcel layer with owner names was found for Illinois.",
+ "parcels_counties": [
+  {
+   "county": "DUPAGE",
+   "url": "https://gis.dupageco.org/arcgis/rest/services/ParcelSearch/DuPageAssessmentParcelViewer/MapServer/4",
+   "verified": true,
+   "record_count": 337346,
+   "fields": {
+    "apn": "PIN",
+    "owner": "BILLNAME",
+    "mailing_address": [
+     "BILLSTNUM",
+     "BILLSTDIR",
+     "BILLSTNAME",
+     "BILLAPT",
+     "BILLCITY",
+     "BILLSTATE",
+     "BILLZIP"
+    ],
+    "address": [
+     "PROPSTNUM",
+     "PROPSTDIR",
+     "PROPSTNAME",
+     "PROPCITY",
+     "PROPZIP"
+    ],
+    "market_value": "FCVTOTAL",
+    "acres": "ACREAGE"
+   },
+   "notes": "DuPage County server. BILLNAME is the tax-bill name (taxpayer); PROPNAME is also a name field; MAJOR_PROPERTY_OWNER is filled only for large holders. Text fields are space-padded."
+  },
+  {
+   "county": "LAKE",
+   "url": "https://services3.arcgis.com/HESxeTbDliKKvec2/arcgis/rest/services/OpenData_ParcelPolygons/FeatureServer/0",
+   "verified": true,
+   "record_count": 279208,
+   "fields": {
+    "apn": "PIN",
+    "owner": "taxpayer_name",
+    "mailing_address": [
+     "taxpayer_addr_line_care_of",
+     "taxpayer_addr_line_1",
+     "taxpayer_addr_line_2",
+     "taxpayer_addr_line_3",
+     "taxpayer_addr_city",
+     "taxpayer_addr_state",
+     "taxpayer_addr_zip"
+    ],
+    "address": [
+     "situs_addr_line_1_First",
+     "situs_addr_city_First",
+     "situs_addr_zip_legdat_First"
+    ]
+   },
+   "notes": "Lake County open-data parcel polygons. Name is the taxpayer of record. No value or acreage fields."
+  }
+ ],
+ "parcels_counties_note": "Not found or not reachable in the time allowed: Cook (no owner or taxpayer name in any public GIS layer found; gis.cookcountyil.gov timed out; only a 2016 south-suburbs extract with taxpayer names exists on ArcGIS Online), Will (gis.willcountyillinois.com answered 403), Kane (public parcel layer has no owner field).",
+ "summary": "Projects: IDOT Multi-Year Program FY 2026-2031 verified as six ArcGIS Online layers (roadway lines, structure and spot points) with improvement type and cost but no letting date. Parcels: no statewide owner layer; DuPage and Lake verified with taxpayer names; Cook, Will and Kane have no usable owner layer."
 }

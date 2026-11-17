@@ -1,0 +1,24 @@
+{
+ "state": "Arkansas",
+ "code": "AR",
+ "checked": "2026-11-17",
+ "projects": [],
+ "parcels_statewide": {
+  "name": "Arkansas GIS Office statewide parcels (PARCEL_POLYGON_CAMP)",
+  "url": "https://gis.arkansas.gov/arcgis/rest/services/FEATURESERVICES/Planning_Cadastre/FeatureServer/6",
+  "verified": true,
+  "record_count": 2149447,
+  "fields": {
+   "apn": "parcelid",
+   "owner": "ownername",
+   "address": "adrlabel",
+   "market_value": "totalvalue",
+   "acres": "taxarea",
+   "county": "county"
+  },
+  "restrictions": null,
+  "notes": "Statewide county-assessor parcels assembled by the Arkansas GIS Office (CAMP program). Owner name is present; there is NO owner mailing address. The address fields (adrnum, predir, pstrnam, pstrtype, psufdir, adrcity, adrzip5, adrlabel) are the property's site address. Also countyfips, countyid (FIPS + parcel id), parcellgl (legal description), parceltype, assessvalue, landvalue, impvalue, subdivision, section/township/range, camadate, pubdate. taxarea is the assessor's acreage (1.41 in the sample, matching the legal description). Coverage is not every county: the service description says county data is integrated as counties provide it. maxRecordCount is only 200, so paging is slow. Layer 0 of the same service is parcel centroids. No use restriction stated on the service."
+ },
+ "parcels_counties": [],
+ "summary": "Statewide parcels with owner name work (no mailing address). The STIP layer has geometry and job numbers but its attributes are buried in HTML and it has no cost, phase or dates."
+}

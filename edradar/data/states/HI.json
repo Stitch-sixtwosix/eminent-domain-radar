@@ -1,0 +1,134 @@
+{
+ "state": "Hawaii",
+ "code": "HI",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "HDOT Highways - Future (Design) Projects: Dataset for Projects PDF Report | With Geometry (Socrata, NOT ArcGIS)",
+   "url": "https://highways.hidot.hawaii.gov/resource/xy86-hspc.json",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 80,
+   "fields": {
+    "id": "projectid",
+    "name": "ucprjtitle",
+    "description": "ucscope",
+    "work_type": "projectcategory",
+    "cost": "cost",
+    "status": "curr_phase",
+    "let_date": "ntpadvertisedate",
+    "county": "island"
+   },
+   "work_type_values": [
+    "capacity",
+    "compliance",
+    "congest",
+    "enhanc",
+    "modern",
+    "other",
+    "safety",
+    "syst presrv"
+   ],
+   "status_values": [
+    "DESIGN"
+   ],
+   "notes": "This is a Socrata open-data endpoint on HDOT's Highways portal, not an ArcGIS REST layer: query with SoQL, e.g. ?$limit=1000 or ?$where=island='OAHU' (.geojson also works in place of .json on Socrata). It is a saved filter of HDOT's project system holding state highway projects currently in the DESIGN phase (80 records, all with geometry). Geometry is in the 'multilines' column as a GeoJSON-style MultiLineString in lat/long. curr_phase / phase are 'DESIGN' for every record; projectstatus is Active (79) or Programmed (1). projectcategory is blank for 20 records; projectsubcategory is a comma list of tags. cost is dollars (costlow / costhigh give a range, costband a label). ntpadvertisedate is labelled by the companion column ntpadvertisedatelabel (e.g. 'Bid Opened On:'), so its meaning varies per record. island = OAHU 41, HAWAII 17, KAUAI 14, MAUI 4, MOLOKAI 1, STATEWIDE 3. prj_no is the HDOT project number; routeno/milepostbegin/milepostend locate it. The sibling dataset mm2f-zzqm is the same for projects under construction (skip), and jd6p-khhs (HIDOT Project Route Geometry) has geometry for all projects by projectstatus.",
+   "stage": "planning"
+  },
+  {
+   "name": "Oahu TIP FFYs 2025-2028 Projects (Hawaii Statewide GIS ArcGIS Online)",
+   "url": "https://services.arcgis.com/HQ0xoN0EzDPBOEci/arcgis/rest/services/TIP_FFYs_25_28_Projects/FeatureServer/0",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 90,
+   "fields": {
+    "id": "PRJ_NUM",
+    "name": "Project_Na",
+    "work_type": "Fund_Use",
+    "cost": "Est_Cost"
+   },
+   "work_type_values": [
+    "Bike/Pedestrian",
+    "Bridges",
+    "Bus/Handi-Van",
+    "Highways/Roadways",
+    "Maritime",
+    "Multimodal",
+    "Rail"
+   ],
+   "status_values": [],
+   "notes": "Transportation Improvement Program projects for federal fiscal years 2025-2028. Project numbers start 'OS-' and lead agencies are HDOT, DTS (Honolulu transportation dept), HART (rail) and Navy/NPS, so this appears to be the Oahu MPO TIP only - not the neighbour islands. Thin attributes: name, Lead_Agenc, estimated cost and funding use; no description, phase, date or county. Item last modified 2025-08-12.",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": null,
+ "parcels_statewide_no_owner": {
+  "name": "Statewide TMKs (Hawaii Statewide GIS Program)",
+  "url": "https://geodata.hawaii.gov/arcgis/rest/services/ParcelsZoning/MapServer/25",
+  "verified": true,
+  "record_count": 384035,
+  "fields": {
+   "apn": "tmk_txt",
+   "acres": "gisacres",
+   "county": "county"
+  },
+  "notes": "Statewide parcel (TMK) layer exists but has NO owner name. qpub_link is a per-parcel link to the county's qPublic assessor page (a website, not an API)."
+ },
+ "parcels_counties": [
+  {
+   "county": "KAUAI",
+   "url": "https://geodata.hawaii.gov/arcgis/rest/services/ParcelsZoning/MapServer/9",
+   "verified": true,
+   "record_count": 25119,
+   "fields": {
+    "apn": "tmk_txt",
+    "owner": "owner",
+    "acres": "taxacres"
+   },
+   "notes": "Kauai County Parcels: owner name present (e.g. 'ROBINSON,AYLMER EST'), alt_name is a second name. No mailing address, site address or value fields. Condo (CPR) units stack on the master parcel."
+  },
+  {
+   "county": "HAWAII",
+   "url": "https://geodata.hawaii.gov/arcgis/rest/services/ParcelsZoning/MapServer/5",
+   "verified": true,
+   "record_count": 135718,
+   "fields": {
+    "apn": "tmk_txt",
+    "owner": "majorowner",
+    "market_value": [
+     "landvalue",
+     "bldgvalue"
+    ],
+    "acres": "taxacres"
+   },
+   "notes": "Hawaii County Parcels: majorowner is NOT a general owner-name field - the sample value was 'Govt. State', so it looks like a major-landowner / government category (to be confirmed with a distinct-values pull). Has land and building values. No mailing address."
+  },
+  {
+   "county": "HONOLULU",
+   "url": "https://geodata.hawaii.gov/arcgis/rest/services/ParcelsZoning/MapServer/11",
+   "verified": true,
+   "record_count": 171953,
+   "fields": {
+    "apn": "tmk9txt",
+    "acres": "gisacres"
+   },
+   "notes": "Oahu Parcels: NO owner field at all (only TMK, area and a qPublic link)."
+  },
+  {
+   "county": "MAUI",
+   "url": "https://geodata.hawaii.gov/arcgis/rest/services/ParcelsZoning/MapServer/30",
+   "verified": true,
+   "record_count": 51245,
+   "fields": {
+    "apn": "tmk_txt",
+    "market_value": [
+     "landvalue",
+     "bldgvalue"
+    ],
+    "acres": "taxacres"
+   },
+   "notes": "Maui County Parcels: NO owner field (values and acres only)."
+  }
+ ],
+ "summary": "Projects found, but on HDOT's Socrata portal rather than ArcGIS: 80 state highway projects in design with line geometry, cost and scope, plus an Oahu TIP layer. No statewide owner data: only Kauai publishes owner names in the state layers; Honolulu and Maui have none and Hawaii County has only a major-owner category."
+}

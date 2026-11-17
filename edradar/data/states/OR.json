@@ -1,0 +1,97 @@
+{
+ "state": "Oregon",
+ "code": "OR",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "ODOT TransGIS - STIP 2027-2030 Lines - Current",
+   "url": "https://gis.odot.state.or.us/arcgis1006/rest/services/transgis/catalog/MapServer/417",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 207,
+   "fields": {
+    "id": "PROJ_KEY_NO",
+    "name": "PROJ_NM",
+    "description": "PROJ_DESC",
+    "cost": "PHASE_STIP_ESTIMATE_AMOUNT",
+    "status": "MNTR_CD",
+    "let_date": "BID_LET_DT",
+    "county": "COUNTYNAME"
+   },
+   "status_values": [
+    "CONST",
+    "PSEDOC"
+   ],
+   "notes": "ODOT 2027-2030 STIP projects mapped as lines, refreshed daily (GIS_PRC_DT was 11/16/2026). No work-type field: the type of work is only in PROJ_DESC free text. MNTR_CD is the monitor code: PSEDOC = still in design (plans/specs/estimate), CONST = construction phase. BID_LET_DT (epoch ms) is the bid letting date; future date = not yet let. STIP_FIRST_YR_NO / PROJ_PHASE_CURRENT_STIP_YR_NO give the STIP year. ADMINISTRATOR_ID tells ODOT vs LOCAL delivery. Layer ids in this large catalog service are not guaranteed stable; re-find by layer name if 417 changes.",
+   "stage": "planning"
+  },
+  {
+   "name": "ODOT TransGIS - STIP 2027-2030 Points - Current",
+   "url": "https://gis.odot.state.or.us/arcgis1006/rest/services/transgis/catalog/MapServer/416",
+   "verified": true,
+   "geometry": "point",
+   "record_count": 373,
+   "fields": {
+    "id": "PROJ_KEY_NO",
+    "name": "PROJ_NM",
+    "description": "PROJ_DESC",
+    "cost": "PHASE_STIP_ESTIMATE_AMOUNT",
+    "status": "MNTR_CD",
+    "let_date": "BID_LET_DT",
+    "county": "COUNTYNAME"
+   },
+   "status_values": [
+    "CONST",
+    "PSEDOC"
+   ],
+   "notes": "Point version (spot locations) of the 2027-2030 STIP; same schema.",
+   "stage": "planning"
+  },
+  {
+   "name": "ODOT TransGIS - STIP 2024-2027 Lines",
+   "url": "https://gis.odot.state.or.us/arcgis1006/rest/services/transgis/catalog/MapServer/362",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 681,
+   "fields": {
+    "id": "PROJ_KEY_NO",
+    "name": "PROJ_NM",
+    "description": "PROJ_DESC",
+    "cost": "PHASE_STIP_ESTIMATE_AMOUNT",
+    "status": "MNTR_CD",
+    "let_date": "BID_LET_DT",
+    "county": "COUNTYNAME"
+   },
+   "status_values": [
+    "CONST",
+    "PSEDOC"
+   ],
+   "notes": "Current-cycle 2024-2027 STIP lines, same schema; many already let or under construction, so filter on BID_LET_DT in the future and MNTR_CD. Points are layer 361.",
+   "stage": "planning"
+  },
+  {
+   "name": "ODOT STIP 2027-2030 Draft Lines (public comment map)",
+   "url": "https://gis.odot.state.or.us/arcgis1006/rest/services/agol/STIP_27_30_Draft/MapServer/1",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 174,
+   "fields": {
+    "id": "PROJ_KEY_NO",
+    "name": "PROJ_NM",
+    "description": "PROJ_DESC",
+    "status": "STATUS"
+   },
+   "status_values": [
+    "Construction",
+    "Design",
+    "Other",
+    "Planning"
+   ],
+   "notes": "Draft 27-30 STIP layer with a plain phase field STATUS (Planning / Design / Construction / Other) and PROGRAMMED Yes/No; no cost or dates. Join to the TransGIS layers on PROJ_KEY_NO. Points are layer 0.",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "ODOT STIP 2027-2030 and 2024-2027 line/point layers verified with cost, bid-let date and design/construction code; no structured work-type field. Parcels not yet researched."
+}

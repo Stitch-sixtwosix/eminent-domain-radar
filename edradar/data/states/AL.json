@@ -1,0 +1,85 @@
+{
+ "state": "Alabama",
+ "code": "AL",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "ALDOT GeoGIS Projects Line",
+   "url": "https://aldotgis.dot.state.al.us/pubgis1/rest/services/GeoGIS_Services/GeoGISProjects/MapServer/1",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 20733,
+   "fields": {
+    "id": "PJ_REF_ID",
+    "name": "PROJECT_CODE",
+    "description": "PJ_DS",
+    "work_type": "WORK_CD_DS",
+    "status": "SCPE_ID"
+   },
+   "work_type_values": [
+    "ADDITIONAL ROADWAY LANES",
+    "BASE AND PAVE",
+    "BASE, PAVE AND BRIDGE",
+    "BRIDGE",
+    "BRIDGE CULVERT",
+    "BRIDGE REHABILITATION",
+    "BRIDGE REPLACEMENT",
+    "BRIDGE WIDENING",
+    "BRIDGES AND APPROACHES",
+    "CLEARING AND GRUBBING",
+    "CORRIDOR STUDY",
+    "GRADE AND DRAIN",
+    "GRADE, DRAIN AND BRIDGE",
+    "GRADE, DRAIN, BASE AND PAVE",
+    "GRADE, DRAIN, BASE, PAVE AND BRG",
+    "INTERCHANGE",
+    "INTERSECTION IMPROVEMENTS",
+    "PASSING LANES",
+    "PAVEMENT REHABILITATION",
+    "PRELIMINARY DESIGN PE",
+    "RAMP REVISIONS",
+    "RESURFACING",
+    "ROADWAY WIDENING",
+    "SAFETY IMPROVEMENTS",
+    "SHOULDER WIDENING"
+   ],
+   "status_values": [
+    "CN",
+    "DB",
+    "FM",
+    "MC",
+    "MP",
+    "MR",
+    "MU",
+    "PE",
+    "RW",
+    "SM",
+    "SP",
+    "UT"
+   ],
+   "notes": "WEAK FIT. This is ALDOT's whole project inventory (20,733 line records, old and new), not a planned-projects list. It has NO status, date, fiscal year, cost or county field, so planned work cannot be told apart from completed work using this layer alone. SCPE_ID is the project scope/phase code of each record (PE = preliminary engineering, RW = right of way, UT = utilities, CN = construction, others undocumented on the service); records with SCPE_ID = 'RW' are right-of-way projects but with no date. PJ_FAMLY_ID groups the phases of one project; PRIOR_PE_ID links to the PE record. County can be derived only from geometry. It would need to be joined by PJ_REF_ID / PROJECT_CODE to ALDOT's STIP listing (published as documents, no verified GIS service found). maxRecordCount 1000.",
+   "stage": "planning"
+  },
+  {
+   "name": "ALDOT GeoGIS Projects Point",
+   "url": "https://aldotgis.dot.state.al.us/pubgis1/rest/services/GeoGIS_Services/GeoGISProjects/MapServer/0",
+   "verified": true,
+   "geometry": "point",
+   "record_count": 3171,
+   "fields": {
+    "id": "PJ_REF_ID",
+    "name": "PROJECT_CODE",
+    "description": "PJ_DS",
+    "work_type": "WORK_CD_DS",
+    "status": "SCPE_ID"
+   },
+   "work_type_values": [],
+   "status_values": [],
+   "notes": "Point companion (bridges, spot projects). Same schema and the same limits: no status, date or cost.",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "ALDOT publishes project geometry with description, work type and phase code, but with no dates, status or cost, so it does not by itself identify planned projects. Parcels not researched yet."
+}

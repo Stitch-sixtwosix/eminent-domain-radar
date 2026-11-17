@@ -88,6 +88,30 @@
   }
  ],
  "parcels_statewide": null,
- "parcels_counties": [],
- "summary": "Projects section done; parcel research still in progress."
+ "parcels_statewide_note": "No free statewide parcel layer with owner names was found for Oklahoma.",
+ "parcels_counties": [
+  {
+   "county": "TULSA",
+   "url": "https://map11.incog.org/arcgis11wa/rest/services/Parcels_TulsaCo/FeatureServer/0",
+   "verified": true,
+   "record_count": 284813,
+   "fields": {
+    "apn": "ParcelNo",
+    "owner": "Owner",
+    "mailing_address": [
+     "Address1",
+     "Address2",
+     "City",
+     "State",
+     "ZIPCode"
+    ],
+    "address": "PropertyAddress",
+    "market_value": "TotalAcctValue",
+    "acres": "GrossAcre"
+   },
+   "notes": "Tulsa County Assessor data served by INCOG. Description says 'Last updated February 3, 2025' but LoadDate/sale dates in the sample are from late 2025/2026. Name1/Name2 also hold owner names."
+  }
+ ],
+ "parcels_counties_note": "Not found or not reachable in the time allowed: Oklahoma, Cleveland, Canadian, Comanche counties (ArcGIS Online search turned up only small or third-party extracts; Rogers, Wagoner and Caddo county layers with owners exist but are not among the most populous).",
+ "summary": "Projects: ODOT 8-Year Work Plan road lines and bridge points (FFY 2027-2037) verified, all planned work with cost and program year. Parcels: no statewide owner layer; only Tulsa County verified, Oklahoma County and the others not found."
 }

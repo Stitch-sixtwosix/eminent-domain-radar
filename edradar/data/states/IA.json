@@ -50,7 +50,97 @@
    "stage": "planning"
   }
  ],
- "parcels_statewide": null,
- "parcels_counties": [],
- "summary": "Projects section done; parcel research still in progress."
+ "parcels_statewide": {
+  "name": "Iowa Statewide Parcel Data, 2017 (University of Iowa mirror of the Iowa HSEMD layer)",
+  "url": "https://services3.arcgis.com/kd9gaiUExYqUbnoq/arcgis/rest/services/Iowa_Parcels_2017/FeatureServer/0",
+  "verified": true,
+  "record_count": 2450589,
+  "fields": {
+   "apn": "PARCELNUMB",
+   "owner": "DEEDHOLDER",
+   "county": "COUNTYNAME"
+  },
+  "restrictions": null,
+  "notes": "STALE: snapshot dated 2017-11-02 (layer name Parcels_20171102). Deed holder name only: no mailing address, site address, value or acres; text fields are space-padded. STATEPARID is county number + parcel number; PARCELCLAS is the class (e.g. AGRICULTURAL). No current free statewide layer with owners was found, so use county layers for current ownership."
+ },
+ "parcels_counties": [
+  {
+   "county": "LINN",
+   "url": "https://services.arcgis.com/i14SLLmXo7Hn9vNc/arcgis/rest/services/RealEstateParcel/FeatureServer/0",
+   "verified": true,
+   "record_count": 105935,
+   "fields": {
+    "apn": "GPN",
+    "owner": "OwnerDeed",
+    "mailing_address": [
+     "OwnerAttention",
+     "OwnerAddress",
+     "OwnerCity",
+     "OwnerState",
+     "OwnerZip"
+    ],
+    "address": "SitusAddress",
+    "market_value": "ValueTotal",
+    "acres": "Acres"
+   },
+   "notes": "Linn County's own ArcGIS Online layer, assessment year 2026; OwnerContract holds contract buyers."
+  },
+  {
+   "county": "SCOTT",
+   "url": "https://services.arcgis.com/ovln19YRWV44nBqV/ArcGIS/rest/services/Cadastral/FeatureServer/3",
+   "verified": true,
+   "record_count": 75501,
+   "fields": {
+    "apn": "PIN",
+    "owner": [
+     "DeedHold",
+     "DeedHold2"
+    ],
+    "mailing_address": [
+     "MailName",
+     "MailAddr1",
+     "MailAddr2",
+     "MailAddr3",
+     "MailZip"
+    ],
+    "address": "PropertyAddress",
+    "market_value": "TotVal",
+    "acres": "Gross_AC"
+   },
+   "notes": "Scott County Cadastral service; also deed-holder address fields (DeedAddr1-3) and contract holders (ContrHold)."
+  },
+  {
+   "county": "BLACK HAWK",
+   "url": "https://services5.arcgis.com/ya62ECiavqTkK0wv/ArcGIS/rest/services/ParcelFabricPublished_gdb/FeatureServer/15",
+   "verified": true,
+   "record_count": 76143,
+   "fields": {
+    "apn": "PIN",
+    "owner": [
+     "deedholder",
+     "deedhold_1"
+    ],
+    "mailing_address": [
+     "taxmailto1",
+     "taxmailto2",
+     "taxmailto3",
+     "taxmailto4",
+     "taxmailto5"
+    ],
+    "address": [
+     "propertyad",
+     "property_2"
+    ],
+    "market_value": [
+     "landval",
+     "bldgval",
+     "dwlgval"
+    ],
+    "acres": "acres"
+   },
+   "notes": "Copyright 'Black Hawk County'. Total value is the sum of landval + bldgval + dwlgval."
+  }
+ ],
+ "parcels_counties_note": "Not found or not reachable in the time allowed: Polk (gis.polkcountyiowa.gov did not resolve; only third-party extracts found), Johnson (gis.johnsoncountyiowa.gov answered 403).",
+ "summary": "Projects: Iowa DOT Five Year Program 2027-2031 lines verified (work type, year, amount). Parcels: the only statewide owner layer is a 2017 snapshot with deed holder name only; current owner layers verified for Linn, Scott and Black Hawk counties, Polk and Johnson not reachable."
 }

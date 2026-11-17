@@ -72,7 +72,120 @@
    "stage": "planning"
   }
  ],
- "parcels_statewide": null,
- "parcels_counties": [],
- "summary": "Projects section done; parcel research still in progress."
+ "parcels_statewide": {
+  "name": "TxGIO StratMap Land Parcels (most recent)",
+  "url": "https://feature.geographic.texas.gov/arcgis/rest/services/Parcels/stratmap_land_parcels_48_most_recent/MapServer/0",
+  "verified": true,
+  "record_count": null,
+  "fields": {
+   "apn": "prop_id",
+   "owner": "owner_name",
+   "mailing_address": [
+    "mail_addr",
+    "mail_line1",
+    "mail_line2",
+    "mail_city",
+    "mail_stat",
+    "mail_zip"
+   ],
+   "address": "situs_addr",
+   "market_value": "mkt_value",
+   "acres": "legal_area",
+   "county": "county"
+  },
+  "restrictions": null,
+  "notes": "IMPORTANT LIMIT: the layer's /query operation answers 'Requested operation is not supported by this service' (count and where-queries both fail). What does work, and was verified with real data, is the map service's identify operation: .../MapServer/identify?geometry=<lon,lat>&geometryType=esriGeometryPoint&sr=4326&layers=all&tolerance=2&mapExtent=<bbox>&imageDisplay=800,800,96&returnGeometry=false&f=json returned a Travis County parcel with OWNER_NAME, MAIL_ADDR, SITUS_ADDR, MKT_VALUE (identify returns the field names in upper case). So owners can be looked up point by point along a project line, but not bulk-downloaded through this service. Other fields: geo_id, name_care, land_value, imp_value, legal_desc, fips, tax_year, source (appraisal district). Coverage and currency vary by county. Copyright text: 'TxGIO, Various Counties, Various Vendors'; no use restriction stated in the service."
+ },
+ "parcels_counties": [
+  {
+   "county": "HARRIS",
+   "url": "https://www.gis.hctx.net/arcgishcpid/rest/services/HCAD/Parcels/MapServer/0",
+   "verified": true,
+   "record_count": 1551736,
+   "fields": {
+    "apn": "HCAD_NUM",
+    "owner": "owner_name_1",
+    "mailing_address": [
+     "mail_addr_1",
+     "mail_addr_2",
+     "mail_city",
+     "mail_state",
+     "mail_zip"
+    ],
+    "address": "Situs_Address",
+    "market_value": "total_market_val",
+    "acres": "acreage_1",
+    "county": "site_county"
+   },
+   "notes": "Harris County Appraisal District official layer, tax_year 2026; owner_name_2/3 for co-owners."
+  },
+  {
+   "county": "DALLAS",
+   "url": "https://services9.arcgis.com/Csff1W9rNs7Zx9MT/arcgis/rest/services/Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 843952,
+   "fields": {
+    "apn": "Acct",
+    "owner": "OWNERNME",
+    "address": "SITEADDRESS",
+    "market_value": "CNTASSDVAL"
+   },
+   "notes": "ArcGIS Online layer with Dallas CAD account numbers and MAPGRID '(DALLAS)'; publisher not confirmed as DCAD itself. Owner name only, no mailing address. Values are text. REVALYR 2026 in sample."
+  },
+  {
+   "county": "TARRANT",
+   "url": "https://services5.arcgis.com/3ddLCBXe1bRt7mzj/arcgis/rest/services/Parcels_Public_Vview/FeatureServer/0",
+   "verified": true,
+   "record_count": 752922,
+   "fields": {
+    "apn": "ACCOUNT",
+    "owner": "OWNER_NAME",
+    "mailing_address": [
+     "OWNER_ADDRESS",
+     "OWNER_CITY_ST",
+     "OWNER_ZIP_CODE"
+    ],
+    "address": "SITUS_ADDR",
+    "market_value": "MARKET_VALUE",
+    "acres": "LAND_ACRE",
+    "county": "COUNTYNAME"
+   },
+   "notes": "Covers all of Tarrant plus parts of Denton, Johnson, Parker and Wise counties inside Fort Worth city limits/ETJ. TAX_YEAR 2026."
+  },
+  {
+   "county": "BEXAR",
+   "url": "https://services.arcgis.com/g1fRTDLeMgspWrYp/arcgis/rest/services/BCAD_Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 728815,
+   "fields": {
+    "apn": "PropID",
+    "owner": "Owner_Name",
+    "mailing_address": [
+     "addr_line1",
+     "addr_line2",
+     "addr_line3",
+     "addr_city",
+     "addr_state",
+     "zip"
+    ],
+    "address": "Situs",
+    "acres": "legal_acre"
+   },
+   "notes": "Described as Bexar County Appraisal District data, updated weekly. The one sample record fetched had empty owner/address fields (a negative PropID, likely a right-of-way polygon), so field meanings are from field names plus the layer description, not from a filled sample."
+  },
+  {
+   "county": "TRAVIS",
+   "url": "https://services1.arcgis.com/HGcSYZ5bvjRswoCb/arcgis/rest/services/TCAD_Boundaries/FeatureServer/0",
+   "verified": true,
+   "record_count": 382522,
+   "fields": {
+    "apn": "PROP_ID",
+    "owner": "py_owner_name",
+    "address": "situs_address",
+    "acres": "tcad_acres"
+   },
+   "notes": "Travis Central Appraisal District parcels assembled monthly by Travis County TNR. Owner name only; no mailing address or value fields."
+  }
+ ],
+ "summary": "Projects: TxDOT DCIS All Projects works well (73k lines with phase, cost and let dates). Parcels: the statewide TxGIO layer has owner and mailing address but only answers point 'identify' lookups, not queries; queryable owner layers verified for Harris, Dallas, Tarrant, Bexar and Travis."
 }

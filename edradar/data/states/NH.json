@@ -1,0 +1,9 @@
+{
+ "state": "New Hampshire",
+ "code": "NH",
+ "checked": "2026-11-17",
+ "projects": [],
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "NHDOT's project services exist with the right layers (in planning, in design, Ten Year Plan, right-of-way projects) but could not be verified: all data queries failed with a server error on the check dates. Parcels not yet researched."
+}

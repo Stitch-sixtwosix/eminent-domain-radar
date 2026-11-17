@@ -5,6 +5,77 @@
   "projects": [],
   "projects_note": "Not verified. NDOT lists 'ProgramBook_NDOT' on ArcGIS Online at https://gis.ne.gov/dot/rest/services/ProgramBookDOT/FeatureServer but gis.ne.gov did not resolve from the research machine (every *.ne.gov GIS host failed DNS), and no copy hosted elsewhere was found.",
   "parcels_statewide": null,
-  "parcels_counties": [],
-  "summary": "Projects section done; parcel research still in progress."
+  "parcels_statewide_note": "Not verified. Nebraska publishes statewide parcels at https://giscat.ne.gov/enterprise/rest/services/StatewideParcelsExternal/MapServer/0 (and TaxParcels2023), but no *.ne.gov GIS host resolved from the research machine, so neither the URL nor whether it carries owner names could be checked.",
+  "parcels_counties": [
+    {
+      "county": "DOUGLAS",
+      "url": "https://gis.dogis.org/arcgis/rest/services/Accela_Dynamic/MapServer/7",
+      "verified": true,
+      "record_count": 217474,
+      "fields": {
+        "apn": "PIN",
+        "owner": "OWNER_NAME",
+        "mailing_address": [
+          "ADDRESS1",
+          "ADDRESS2",
+          "OWNER_CITY",
+          "OWNER_STAT",
+          "OWNER_ZIP"
+        ],
+        "address": "PROPERTY_A",
+        "market_value": "TOTAL_VALU",
+        "acres": "ACRES"
+      },
+      "notes": "Douglas-Omaha GIS server. The layer description still reads 'Douglas County Parcels - June, 2012' although CHG_DATE and assessor links are present; currency not confirmed."
+    },
+    {
+      "county": "SARPY",
+      "url": "https://services.arcgis.com/OiG7dbwhQEWoy77N/arcgis/rest/services/Sarpy_Parcels_WFL1/FeatureServer/0",
+      "verified": true,
+      "record_count": 75287,
+      "fields": {
+        "apn": "PARCELID",
+        "owner": [
+          "OWNERNME1",
+          "OWNERNME2"
+        ],
+        "mailing_address": [
+          "PSTLADDRESS",
+          "PSTLCITY",
+          "PSTLSTATE",
+          "PSTLZIP5"
+        ],
+        "address": "SITEADDRESS",
+        "market_value": "CNTASSDVAL",
+        "acres": "ACREAGE"
+      },
+      "notes": "Third-party copy on ArcGIS Online; LASTUPDATE in the sample is December 2023. The county's own server (geodata.sarpy.gov) answered 403."
+    },
+    {
+      "county": "LANCASTER",
+      "url": "https://services2.arcgis.com/iTf0MCf7KYGMrPY1/arcgis/rest/services/Parcels_in_LPSNRD_view/FeatureServer/0",
+      "verified": true,
+      "record_count": 145535,
+      "fields": {
+        "apn": "PID",
+        "owner": [
+          "Owner1",
+          "Owner2",
+          "Owner3",
+          "Owner4"
+        ],
+        "mailing_address": [
+          "MailAddr",
+          "MailAddr2",
+          "MailCity",
+          "MailState",
+          "MailZip"
+        ],
+        "acres": "PolyAcres",
+        "county": "County"
+      },
+      "notes": "Lower Platte South NRD compilation covering Lancaster and Cass plus parts of Butler, Otoe, Saunders and Seward counties (filter on County). No site address or value. Lancaster's own server (gis.lincoln.ne.gov) did not resolve."
+    }
+  ],
+  "summary": "Projects: none verified - NDOT's Program Book service sits on gis.ne.gov, which did not resolve from the research machine. Parcels: statewide layer on giscat.ne.gov could not be checked for the same reason; owner layers verified for Douglas, Sarpy (2023 copy) and Lancaster (NRD compilation)."
 }

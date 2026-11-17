@@ -1,0 +1,113 @@
+{
+ "state": "California",
+ "code": "CA",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "Caltrans Infrastructure Project Point Prod (Rebuilding California SB1/IIJA project map)",
+   "url": "https://services1.arcgis.com/8CpMUd3fdw6aXef7/arcgis/rest/services/Infrastructure_Project_Point_Prod/FeatureServer/0",
+   "verified": true,
+   "geometry": "point",
+   "record_count": 32020,
+   "fields": {
+    "id": "ProjectID",
+    "name": "ProjectTitle",
+    "description": "ProjectDescription",
+    "work_type": "Program",
+    "cost": "TotalCost",
+    "status": "ProjectStatus",
+    "let_date": "EstStartDate",
+    "county": "CountyName"
+   },
+   "work_type_values": [
+    "Active Transportation Program",
+    "Clean California",
+    "Federal Allocated Exempt Funds",
+    "Federal Competitive Grant Programs",
+    "Federal Formula Programs",
+    "Federal Funds - Other",
+    "Field Maintenance",
+    "High Speed Rail",
+    "Highway Maintenance",
+    "Local Partnership Program - Competitive",
+    "Local Partnership Program - Formulaic",
+    "Local Streets and Roads",
+    "Non-Caltrans",
+    "Other Transportation",
+    "Port and Freight Infrastructure Program",
+    "Solutions for Congested Corridors Program",
+    "State Highway Operations & Protection Program Major",
+    "State Highway Operations & Protection Program Minor A",
+    "State Rail Assistance",
+    "State Transit Assistance",
+    "State Transportation Improvement Program",
+    "State of Good Repair",
+    "Trade Corridor Enhancement Program",
+    "Transit and Intercity Rail Capital Program"
+   ],
+   "status_values": [
+    "Completed",
+    "In Progress",
+    "Planned",
+    "To be announced"
+   ],
+   "notes": "Statewide multipoint layer behind Caltrans' SB1/IIJA infrastructure project map (owner DRISI.SB1). Covers SHOPP, STIP, local streets and roads, transit, rail, plus non-transportation items (broadband, water, energy): filter ProjectType='Transportation' and, for state highway work, IsOnSHS or Program like 'State Highway Operations & Protection Program%' / 'State Transportation Improvement Program'. Planned = ProjectStatus 'Planned' (also 'To be announced'); 'In Progress' = under way; 'Completed' = done. EstStartDate/EstEndDate are epoch ms and often null. Geometry is points only (no alignment). Category and Agency also useful. DateUpdated is a text field in mixed formats."
+  },
+  {
+   "name": "Caltrans ProjectsViewerPRSMFeatures_NR (North Region project viewer, Districts 1-3)",
+   "url": "https://services1.arcgis.com/8CpMUd3fdw6aXef7/arcgis/rest/services/DEV_ProjectsViewerPRSMFeatures_NR/FeatureServer/0",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 1091,
+   "fields": {
+    "id": "project_efis",
+    "name": "project_nickname",
+    "description": "project_description",
+    "work_type": "work_description",
+    "cost": "integer_cost",
+    "status": "project_phase",
+    "let_date": "m500_date",
+    "county": "county"
+   },
+   "work_type_values": [
+    "0.10 Cold Plane and RHMA-G/Digouts",
+    "0.10' Cold Plane and RHMA-G",
+    "0.10' Cold Plane and RHMA-O",
+    "0.15' Cold Plane and HMA, AC Pavement Repairs",
+    "0.33' Partial Depth Recycling and 0.15' HMA Cap",
+    "00\tUkiah Maintenance Station Expansion",
+    "3R Roadway Rehabilitation",
+    "800 MHz RADIO REPEATER",
+    "A multi-lane four-leg roundabout (RAB).",
+    "ALBEE STREET PARKING",
+    "APS Signal System and Census Sites Upgrade",
+    "APS Signal System and Census Sites Upgrade\n in Mendocino County",
+    "ARB Foundation, Dredging, Cofferdams",
+    "Acquire two new dormitory buildings for maintenance crews.",
+    "Add Class II Bike Lane",
+    "Add green bike lane treatment, install signs, and construct curb ramps.",
+    "Add high occupancy vehicle lane and pavement rehab.",
+    "At the Pine Park Crossing Install Rectangular Rapid Flashing Beacon (RRFB).",
+    "BRIDGE DECK MAINTENANCE",
+    "BRIDGE MAINTENANCE",
+    "BRIDGE REHAB",
+    "BRIDGE REHABILITATION",
+    "BRIDGE REPLACEMENT",
+    "BRIDGE SCOUR",
+    "BRIDGE SCOUR REHAB"
+   ],
+   "status_values": [
+    "Closeout",
+    "Construction",
+    "PAED",
+    "PID/PrePID",
+    "PSE"
+   ],
+   "notes": "Line layer from Caltrans' PRSM project system, but ONLY Districts 1, 2 and 3 (northern California); service name is prefixed DEV_ so it may be renamed. source_date was 10/06/2026. project_phase: PID/PrePID = initiation, PAED = environmental/approval, PSE = final design (all pre-construction), Construction, Closeout. m500_date and m600_date are Caltrans milestone dates stored as text M/D/YYYY (not interpreted here: confirm their meaning before using as a letting date). program_category separates shopp / STIP / MINOR-A etc.; subprogram gives asset type. county is the 2-3 letter Caltrans county code."
+  }
+ ],
+ "projects_note": "No single statewide Caltrans line layer of programmed (SHOPP/STIP) projects was found on the Caltrans GIS server (caltrans-gis.dot.ca.gov, whole directory listed) or its ArcGIS Online org. District-level layers also exist (e.g. District 5 SHOPP_PID_Map, last updated 2024) but were not recorded as they are partial and older.",
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "Statewide coverage only as points (Caltrans SB1/IIJA project map, 32k records with status and cost); a line layer with phases exists for Districts 1-3 only. Parcels not yet researched."
+}

@@ -1,0 +1,110 @@
+{
+ "state": "Ohio",
+ "code": "OH",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "ODOT TIMS Projects - Next 4 Fiscal Years (Lines)",
+   "url": "https://tims.dot.state.oh.us/ags/rest/services/Projects/Next_4_Fiscal_Years_Lines/MapServer/0",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 6044,
+   "fields": {
+    "id": "PID_NBR",
+    "name": "PROJECT_NME",
+    "description": "FMIS_PROJ_DESC",
+    "work_type": "PRIMARY_WORK_CATEGORY",
+    "cost": "EST_TOTAL_CONSTR_COST",
+    "status": "PROJECT_STATUS",
+    "let_date": "AWARD_MILESTONE_DT",
+    "county": "COUNTY_NME"
+   },
+   "work_type_values": [
+    "Add Through Lane(s)",
+    "Bike Facility",
+    "Bridge / Culvert Maintenance",
+    "Bridge Expansion",
+    "Bridge Preservation",
+    "Building Demolition",
+    "Culvert Preservation",
+    "Drainage System Maintenance",
+    "Emission Reduction",
+    "Enhanced Crossing",
+    "Environmental Mitigation",
+    "Fencing",
+    "General Engineering",
+    "Geologic Maintenance / Slide Repair",
+    "Geotechnical Services",
+    "Guardrail / Roadside Maintenance",
+    "Interchange Expansion",
+    "Interchange Improvement (Safety)",
+    "Intersection Expansion",
+    "Intersection Improvement (Safety)",
+    "Lighting (Safety)",
+    "Maritime",
+    "New Building/ Facility",
+    "New Roadway",
+    "Noise Wall"
+   ],
+   "status_values": [
+    "Awarded",
+    "Filed",
+    "Not Filed"
+   ],
+   "notes": "ODOT TIMS (Ellis project system). Projects scheduled in the next four state fiscal years; FISCAL_YEAR gives the sale year, AWARD_MILESTONE_DT the award date, BEGIN_CONSTR_MILESTONE_DT / END_CONSTR_MILESTONE_DT construction dates, STIP_FLAG whether in the STIP. Planned vs under way: PROJECT_STATUS (see values) plus AWARD_MILESTONE_DT in the future; CONSTR_VENDOR_NME is null until awarded. Sibling services in the same folder: Current_Projects_Lines/Points (active), All_Projects_Linear / All_Project_Points, Previous_4_Fiscal_Years_*, District_Work_Plan_*.",
+   "stage": "planning"
+  },
+  {
+   "name": "ODOT TIMS Projects - Next 4 Fiscal Years (Points)",
+   "url": "https://tims.dot.state.oh.us/ags/rest/services/Projects/Next_4_Fiscal_Years_Points/MapServer/0",
+   "verified": true,
+   "geometry": "point",
+   "record_count": 3784,
+   "fields": {
+    "id": "PID_NBR",
+    "name": "PROJECT_NME",
+    "description": "FMIS_PROJ_DESC",
+    "work_type": "PRIMARY_WORK_CATEGORY",
+    "cost": "EST_TOTAL_CONSTR_COST",
+    "status": "PROJECT_STATUS",
+    "let_date": "AWARD_MILESTONE_DT",
+    "county": "COUNTY_NME"
+   },
+   "work_type_values": [
+    "Add Through Lane(s)",
+    "Bridge / Culvert Maintenance",
+    "Bridge Expansion",
+    "Bridge Preservation",
+    "Culvert Preservation",
+    "Drainage System Maintenance",
+    "Geologic Maintenance / Slide Repair",
+    "Interchange Expansion",
+    "Interchange Improvement (Safety)",
+    "Intersection Improvement (Safety)",
+    "Landscaping / Aesthetics",
+    "Noise Wall",
+    "Other Building / Facility Work",
+    "Other Studies/ Tasks",
+    "Parks",
+    "Pavement Maintenance",
+    "Pedestrian Facilities",
+    "Roadside / Median Improvement (Safety)",
+    "Roadway Improvement (Safety)",
+    "Roadway Major Rehab",
+    "Roadway Minor Rehab",
+    "Shared Use Path",
+    "Traffic Control (Safety)"
+   ],
+   "status_values": [
+    "Awarded",
+    "Filed",
+    "Not Filed"
+   ],
+   "notes": "Point-located projects (bridges, intersections, culverts) with the same schema as the Lines layer. ODOT TIMS (Ellis project system). Projects scheduled in the next four state fiscal years; FISCAL_YEAR gives the sale year, AWARD_MILESTONE_DT the award date, BEGIN_CONSTR_MILESTONE_DT / END_CONSTR_MILESTONE_DT construction dates, STIP_FLAG whether in the STIP. Planned vs under way: PROJECT_STATUS (see values) plus AWARD_MILESTONE_DT in the future; CONSTR_VENDOR_NME is null until awarded. Sibling services in the same folder: Current_Projects_Lines/Points (active), All_Projects_Linear / All_Project_Points, Previous_4_Fiscal_Years_*, District_Work_Plan_*.",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "ODOT TIMS 'Next 4 Fiscal Years' line and point layers give planned projects with cost, status, work category and award/construction dates. Parcel research pending."
+}

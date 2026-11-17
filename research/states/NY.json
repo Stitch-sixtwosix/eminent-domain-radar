@@ -1,0 +1,113 @@
+{
+  "state": "New York",
+  "code": "NY",
+  "checked": "2026-11-17",
+  "projects": [
+    {
+      "name": "NYSDOT Capital Program Projects - Project Points (Planned/Development)",
+      "url": "https://gis.dot.ny.gov/hostingny/rest/services/Projects/CapitalProgramProjects/FeatureServer/0",
+      "verified": true,
+      "geometry": "point",
+      "record_count": 2542,
+      "fields": {
+        "id": "PIN",
+        "description": "PublicFriendlyDescription",
+        "work_type": "WORK_CATEGORY"
+      },
+      "work_type_values": [
+        "BRIDGE PRESERVATION",
+        "BRIDGE REHABILITATION OR REPLACEMENT",
+        "Corrective Maint",
+        "MOBILITY",
+        "OTHER",
+        "PAVEMENT PRESERVATION",
+        "PAVEMENT RECONSTRUCTION",
+        "Preventative Maint",
+        "Rehabilitation",
+        "Renewal",
+        "SAFETY"
+      ],
+      "status_values": [],
+      "notes": "NYSDOT 'Projects in Your Neighborhood' capital program. Service has three point layers split by stage (per layer renderer labels): 0 = Planned/Development, 1 = In Construction, 2 = Construction Complete; layers 3/4/5 are the matching polygons. Use layer 0 (and 3) for planned work. No cost, name or letting date fields: only PIN, PublicFriendlyDescription, WORK_CATEGORY, ConstructionCompleteDate (estimated completion), LettingOrganization, ResponsibleOrganization, and WEPIURL linking to the project detail page (which shows cost/letting). Point layers draw only when zoomed in but query fine."
+    },
+    {
+      "name": "NYSDOT Capital Program Projects - Project Polygons (Planned/Development)",
+      "url": "https://gis.dot.ny.gov/hostingny/rest/services/Projects/CapitalProgramProjects/FeatureServer/3",
+      "verified": true,
+      "geometry": "polygon",
+      "record_count": 2542,
+      "fields": {
+        "id": "PIN",
+        "description": "PublicFriendlyDescription",
+        "work_type": "WORK_CATEGORY"
+      },
+      "work_type_values": [
+        "BRIDGE PRESERVATION",
+        "BRIDGE REHABILITATION OR REPLACEMENT",
+        "Corrective Maint",
+        "MOBILITY",
+        "OTHER",
+        "PAVEMENT PRESERVATION",
+        "PAVEMENT RECONSTRUCTION",
+        "Preventative Maint",
+        "Rehabilitation",
+        "Renewal",
+        "SAFETY"
+      ],
+      "status_values": [],
+      "notes": "Polygon footprint (buffered project limits) version of layer 0, same attributes and same record set. Better than points for intersecting parcels."
+    },
+    {
+      "name": "NYSDOT Capital Program Projects - Project Points (In Construction)",
+      "url": "https://gis.dot.ny.gov/hostingny/rest/services/Projects/CapitalProgramProjects/FeatureServer/1",
+      "verified": true,
+      "geometry": "point",
+      "record_count": 1703,
+      "fields": {
+        "id": "PIN",
+        "description": "PublicFriendlyDescription",
+        "work_type": "WORK_CATEGORY"
+      },
+      "work_type_values": [
+        "BRIDGE PRESERVATION",
+        "BRIDGE REHABILITATION OR REPLACEMENT",
+        "Corrective Maint",
+        "MOBILITY",
+        "OTHER",
+        "PAVEMENT PRESERVATION",
+        "PAVEMENT RECONSTRUCTION",
+        "Preventative Maint",
+        "Rehabilitation",
+        "Renewal",
+        "SAFETY"
+      ],
+      "status_values": [],
+      "notes": "Same schema, projects already in construction (not planned). Listed so they can be excluded/distinguished; layer 4 is the polygon version."
+    }
+  ],
+  "parcels_statewide": {
+    "name": "NYS Tax Parcels Public (NYS ITS Geospatial Services, 2025 roll)",
+    "url": "https://services6.arcgis.com/EbVsqZ18sv1kVJ3k/arcgis/rest/services/NYS_Tax_Parcels_Public/FeatureServer/1",
+    "fields": {
+      "apn": "PRINT_KEY",
+      "owner": "PRIMARY_OWNER",
+      "mailing_address": [
+        "MAIL_ADDR",
+        "PO_BOX",
+        "MAIL_CITY",
+        "MAIL_STATE",
+        "MAIL_ZIP"
+      ],
+      "address": "PARCEL_ADDR",
+      "market_value": "FULL_MARKET_VAL",
+      "acres": "ACRES",
+      "county": "COUNTY_NAME"
+    },
+    "restrictions": "Item licence is a warranty/liability disclaimer only ('This map service is available to the public'); no commercial-use or solicitation restriction stated on the service.",
+    "notes": "Owner name and mailing address present (3,810,140 of 3,827,530 rows have PRIMARY_OWNER). NOT fully statewide: only the 38 counties that agreed to public sharing, including all five NYC boroughs (Bronx, Kings, NewYork, Queens, Richmond), Suffolk, Westchester, Erie, Onondaga, Albany, Orange, Rockland; missing e.g. Nassau, Monroe, Dutchess, Saratoga, Niagara. ADD_OWNER is the second owner; SWIS_SBL_ID is a statewide-unique id (SWIS + SBL); layer 0 of the service is the coverage footprint. Updated annually. The older gisservices.its.ny.gov MapServer URL answered 'service not started' on the check date.",
+    "verified": true,
+    "record_count": 3827530
+  },
+  "parcels_counties": [],
+  "summary": "NYSDOT capital-program layers separate Planned/Development from In Construction (thin attributes, no cost). NYS Tax Parcels Public has owner name and mailing address but covers only 38 of 62 counties (includes NYC, Suffolk, Westchester, Erie; not Nassau or Monroe)."
+}

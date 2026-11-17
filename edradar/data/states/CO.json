@@ -1,0 +1,46 @@
+{
+ "state": "Colorado",
+ "code": "CO",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "CDOT Ten Year Plan Project Lines (approved)",
+   "url": "https://services.arcgis.com/yzB9WM8W0BO3Ql7d/arcgis/rest/services/TenYearPlan_Approved_Lines/FeatureServer/0",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 222,
+   "fields": {
+    "id": "planningprojectid",
+    "name": "tenyearprojectname",
+    "description": "projectbenefitstatement",
+    "work_type": "ProjectTypeValue",
+    "status": "planningprojectidstatus",
+    "county": "county"
+   },
+   "work_type_values": [
+    "Active Transportation",
+    "Freight",
+    "Intersection/Operational",
+    "Interstates",
+    "Roadway Capacity",
+    "Rural Paving",
+    "Safety",
+    "Structures",
+    "Transit",
+    "Urban Highway"
+   ],
+   "status_values": [
+    "Design",
+    "New Project",
+    "Planning",
+    "Under Construction"
+   ],
+   "notes": "CDOT 10-Year Plan strategic pipeline projects as lines (ArcGIS Online item updated 2026-09, owner Planning_GIS_CDOT). planningprojectidstatus is the phase (see status_values); anything before construction is planned/in development. No cost or letting date in this layer. stip_id links to the STIP; projecttype is a second category field; route + milepoststart/milepostend locate it; adaptiveformtablewebsite is the project web page.",
+   "stage": "planning"
+  }
+ ],
+ "projects_note": "CDOT's own open-data server (dtdapps.codot.gov/server/rest/services/Webapps/open_data_sde/FeatureServer, layers 24 'Projects (all types) - Line' and 25 '- Point', listed on ArcGIS Online as updated 2026) could NOT be reached on 2026-11-16/17: connection timed out on every attempt (old host dtdapps.coloradodot.info gave HTTP 522). Not verified, so not recorded as a source; worth retrying because it probably carries all project types with cost and dates.",
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "CDOT 10-Year Plan line and point layers verified (phase and type, no cost or dates); CDOT's fuller 'Projects (all types)' server was unreachable. Parcels not yet researched."
+}

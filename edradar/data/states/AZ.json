@@ -1,0 +1,38 @@
+{
+ "state": "Arizona",
+ "code": "AZ",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "MAG Transportation Improvement Program - TIP_Lines (Maricopa Association of Governments, Phoenix region only)",
+   "url": "https://services1.arcgis.com/MdyCMZnX1raZ7TS3/arcgis/rest/services/TIP_data_gdb/FeatureServer/1",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 296,
+   "fields": {
+    "id": "SCDATALOADER_SCORPIONS_Lines_TIP_ID",
+    "name": "dbo_vwTIPMapData_ProjectName",
+    "description": "dbo_vwTIPMapData_ProjectDescription",
+    "work_type": "SCDATALOADER_SCORPIONS_Lines_PROJECT_MODE",
+    "cost": "dbo_vwTIPMapData_CostEstimate",
+    "status": "dbo_vwTIPMapData_VersionStatus",
+    "county": "dbo_vwTIPMapData_AirQualityArea"
+   },
+   "work_type_values": [
+    "Arterial",
+    "Freeway",
+    "Path",
+    "Transit"
+   ],
+   "status_values": [
+    "Approved"
+   ],
+   "notes": "REGIONAL, not statewide: projects in the MAG TIP (Maricopa County and part of Pinal), including ADOT freeway projects in the region. Field names carry long join prefixes. dbo_vwTIPMapData_Completed flags finished work; dbo_vwTIPMapData_DateActiveYear is the year the project becomes active; dbo_vwTIPMapData_AgencyName is the lead agency; dbo_vwTIPMapData_STIPID links to ADOT's eSTIP; Federal/Local/Regional amounts are in dbo_vwTIPMapData_FederalAmount, dbo_vwTIPMapData_LocalAmount, dbo_vwTIPMapData_RegionalAmount (CostEstimate was empty in the sample). Sibling layers: 0 TIP_Points, 2 TIP_Polygons, 3 TIP_Multipoints, 4 TIP_phase (table of work phases). dbo_vwTIPMapData_AirQualityArea is an air-quality area name, the nearest thing to a county field.",
+   "stage": "planning"
+  }
+ ],
+ "projects_note": "No current statewide ADOT layer found. ADOT's 2027-2031 Five-Year Program is published as a dashboard (azdot.gov/5yeardashboard returned HTTP 403 to a script) and at estip.azdot.gov; the only ADOT feature services found were old (5YRPlan2023_2024_gdb, FY2023-2024) or carried no project attributes (Updated_eSTIP, ESTIP_Update).",
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "No statewide ADOT planned-projects service verified; only the MAG (Phoenix region) TIP layers work. Parcels not yet researched."
+}

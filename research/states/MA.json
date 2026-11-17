@@ -1,0 +1,132 @@
+{
+  "state": "Massachusetts",
+  "code": "MA",
+  "checked": "2026-11-17",
+  "projects": [
+    {
+      "name": "MassDOT Highway and CIP Projects (Projects_Flat, lines)",
+      "url": "https://gis.massdot.state.ma.us/arcgis/rest/services/Projects/Projects_Flat/FeatureServer/0",
+      "verified": true,
+      "geometry": "polyline",
+      "record_count": 3202,
+      "fields": {
+        "id": "Project",
+        "name": "Location",
+        "description": "Descriptn",
+        "work_type": "Proj_Type",
+        "cost": "EstimatedTotalContractCost",
+        "status": "Status",
+        "let_date": "ScheduledAdDate",
+        "county": "MPO"
+      },
+      "work_type_values": [
+        "Accessibility Improvements",
+        "Bike Facility Construction",
+        "Bikeway/Bike Path Construction",
+        "Bridge Deck Replacement",
+        "Bridge Maintenance",
+        "Bridge Maintenance - Deck Repairs",
+        "Bridge Preservation",
+        "Bridge Reconstruction/Rehab",
+        "Bridge Rehabilitation",
+        "Bridge Replacement",
+        "Catch Basin Cleaning",
+        "Chemical Storage Sheds",
+        "Contract Highway Maintenance",
+        "Culvert Rehabilitation",
+        "Culvert Replacement",
+        "Demolition",
+        "Drainage",
+        "Drawbridge Maintenance",
+        "Dredging",
+        "Electrical",
+        "Embankment and Ledge Stabilization",
+        "Guard Rail & Fencing",
+        "Highway Relocation",
+        "Highway Sweeping",
+        "Hwy Reconstr - Added Capacity"
+      ],
+      "status_values": [
+        "COMPLETE",
+        "CONSTRUCTION",
+        "DESIGN"
+      ],
+      "notes": "All MassDOT Highway Division projects plus Capital Investment Plan projects, any stage. Status separates planned from built (see values); DesignStatus gives the design stage and constructionStatus the construction stage; ScheduledAdDate is the scheduled advertising date, bidOpenedDate / ntpDate bid and notice-to-proceed; TFPCC is total federal participating construction cost (string); extendedDescription is a longer narrative; More_Info links to the MassDOT project page. Location is the town name (no county field; MPO is the regional planning area). Layer 4 (CIP Point Projects) and 6 (cipPolygons) hold non-linear CIP projects."
+    },
+    {
+      "name": "MassDOT TIP Projects (lines)",
+      "url": "https://gis.massdot.state.ma.us/arcgis/rest/services/Projects/TIP_Projects/FeatureServer/5",
+      "verified": true,
+      "geometry": "polyline",
+      "record_count": 259,
+      "fields": {
+        "id": "Project",
+        "name": "Location",
+        "description": "Descriptn",
+        "work_type": "Proj_Type",
+        "cost": "EstimatedTotalContractCost",
+        "status": "Status",
+        "let_date": "ScheduledAdDate",
+        "county": "MPO"
+      },
+      "work_type_values": [
+        "Accessibility Improvements",
+        "Bike Facility Construction",
+        "Bridge Deck Replacement",
+        "Bridge Maintenance",
+        "Bridge Preservation",
+        "Bridge Rehabilitation",
+        "Bridge Replacement",
+        "Demolition",
+        "Drainage",
+        "Guard Rail & Fencing",
+        "Hwy Reconstr - Added Capacity",
+        "Hwy Reconstr - Major Widening",
+        "Hwy Reconstr - Minor Widening",
+        "Hwy Reconstr - No Added Capacity",
+        "Hwy Reconstr - Restr and Rehab",
+        "Intelligent Transportation Sys",
+        "Intersection Reconstruction",
+        "Landscaping",
+        "Limited Access Pavement Preservation",
+        "Milling and Cold Planing",
+        "Miscellaneous/No Prequal",
+        "New Road",
+        "Painting - Structural",
+        "Pavement Marking",
+        "Pavement Preservation"
+      ],
+      "status_values": [
+        "COMPLETE",
+        "CONSTRUCTION",
+        "DESIGN"
+      ],
+      "notes": "Subset of highway projects programmed in the regional TIPs/STIP. Same schema. Status separates planned from built (see values); DesignStatus gives the design stage and constructionStatus the construction stage; ScheduledAdDate is the scheduled advertising date, bidOpenedDate / ntpDate bid and notice-to-proceed; TFPCC is total federal participating construction cost (string); extendedDescription is a longer narrative; More_Info links to the MassDOT project page. Location is the town name (no county field; MPO is the regional planning area)."
+    }
+  ],
+  "parcels_statewide": {
+    "name": "Massachusetts Property Tax Parcels (MassGIS Level 3 parcels with assessor data)",
+    "url": "https://services1.arcgis.com/hGdibHYSPO59RG1h/arcgis/rest/services/Massachusetts_Property_Tax_Parcels/FeatureServer/0",
+    "fields": {
+      "apn": "LOC_ID",
+      "owner": "OWNER1",
+      "mailing_address": [
+        "OWN_ADDR",
+        "OWN_CITY",
+        "OWN_STATE",
+        "OWN_ZIP",
+        "OWN_CO"
+      ],
+      "address": "SITE_ADDR",
+      "market_value": "TOTAL_VAL",
+      "acres": "LOT_SIZE",
+      "county": "CITY"
+    },
+    "restrictions": "Item terms only say assessor parcel mapping is a representation, not an authoritative boundary source; no commercial-use or solicitation restriction stated.",
+    "notes": "Statewide (all 351 municipalities) with owner name and mailing address. No county field: CITY is the municipality name and TOWN_ID the MassGIS town number. MAP_PAR_ID / PROP_ID are the assessor's local ids, LOC_ID the statewide polygon id. LOT_SIZE units are given in LOT_UNITS (Acres or square feet). FY is the assessment fiscal year and varies by town. Includes USE_CODE, LS_DATE/LS_PRICE (last sale).",
+    "verified": true,
+    "record_count": 2559749
+  },
+  "parcels_counties": [],
+  "summary": "MassDOT Highway/CIP and TIP project line layers verify with status and scheduled advertising date, and MassGIS statewide parcels include owner name and mailing address."
+}

@@ -1,0 +1,67 @@
+{
+  "state": "New Hampshire",
+  "code": "NH",
+  "checked": "2026-11-17",
+  "projects": [
+    {
+      "name": "NHDOT Projects Proposals - Projects In Design",
+      "url": "https://maps.dot.nh.gov/arcgis_server/rest/services/Projects/NHDOT_PROJECTS_PROPOSALS/MapServer/1",
+      "verified": false,
+      "geometry": "polyline",
+      "record_count": null,
+      "fields": {
+        "id": "PROJ_NUMBER",
+        "name": "PROJ_NAME",
+        "description": "PROJ_DESCRIPTION",
+        "work_type": "PRIMARY_TIER",
+        "cost": "PROJECT_DOLLARS",
+        "status": "PROJECT_TYPE",
+        "let_date": "AD_DATE"
+      },
+      "work_type_values": [],
+      "status_values": [],
+      "notes": "Layer description: PROJECTS_ALL staging table queried by PROJECT_TYPE = 'Design' And HAS_ROW_PLANS = 'NO'. NOT VERIFIED WITH DATA. The layer definition (name, geometry type, field list) answered on 2026-11-16/17, but every query on every layer of this server's Projects services returned HTTP 200 with {\"error\":{\"code\":500,\"message\":\"Error performing query operation\"}} - on MapServer and FeatureServer, with count-only, ids-only and single-field queries. It looks like a database outage on NHDOT's side, so retry later. Field names are copied from the layer definition, but which field means what is a GUESS from the names because no sample record could be read (in particular PRIMARY_TIER as work type and PROJECT_DOLLARS vs TYP_INFLATED_COST vs BID_TOTAL as cost are unconfirmed; there is no town/county field in the list). Record count unknown."
+    },
+    {
+      "name": "NHDOT Projects Proposals - Projects In Planning",
+      "url": "https://maps.dot.nh.gov/arcgis_server/rest/services/Projects/NHDOT_PROJECTS_PROPOSALS/MapServer/2",
+      "verified": false,
+      "geometry": "polyline",
+      "record_count": null,
+      "fields": {
+        "id": "PROJ_NUMBER",
+        "name": "PROJ_NAME",
+        "description": "PROJ_DESCRIPTION",
+        "work_type": "PRIMARY_TIER",
+        "cost": "PROJECT_DOLLARS",
+        "status": "PROJECT_TYPE",
+        "let_date": "AD_DATE"
+      },
+      "work_type_values": [],
+      "status_values": [],
+      "notes": "Planning-stage projects. NOT VERIFIED WITH DATA. The layer definition (name, geometry type, field list) answered on 2026-11-16/17, but every query on every layer of this server's Projects services returned HTTP 200 with {\"error\":{\"code\":500,\"message\":\"Error performing query operation\"}} - on MapServer and FeatureServer, with count-only, ids-only and single-field queries. It looks like a database outage on NHDOT's side, so retry later. Field names are copied from the layer definition, but which field means what is a GUESS from the names because no sample record could be read (in particular PRIMARY_TIER as work type and PROJECT_DOLLARS vs TYP_INFLATED_COST vs BID_TOTAL as cost are unconfirmed; there is no town/county field in the list). Record count unknown."
+    },
+    {
+      "name": "NHDOT Projects Proposals - Ten Year Plan Projects",
+      "url": "https://maps.dot.nh.gov/arcgis_server/rest/services/Projects/NHDOT_PROJECTS_PROPOSALS/MapServer/5",
+      "verified": false,
+      "geometry": "polyline",
+      "record_count": null,
+      "fields": {
+        "id": "PROJ_NUMBER",
+        "name": "PROJ_NAME",
+        "description": "PROJ_DESCRIPTION",
+        "work_type": "PRIMARY_TIER",
+        "cost": "PROJECT_DOLLARS",
+        "status": "PROJECT_TYPE",
+        "let_date": "AD_DATE"
+      },
+      "work_type_values": [],
+      "status_values": [],
+      "notes": "Projects in the adopted Ten Year Plan (flag field IS_TEN_YEAR, cost TYP_INFLATED_COST). Layer 6 is the Draft Ten Year Plan (IS_DRAFT_TEN_YEAR, TYP_DRAFT_INFLATED_COST). Layer 0 is Under Construction and layer 3 Completed (skip both). A sibling service Projects/NHDOT_PROJECTS_PROPOSALS_ROW/MapServer has the same stages for projects that have right-of-way plans (HAS_ROW_PLANS) - directly relevant to land acquisition - and Projects/NHDOT_PROJECTS_ALL/MapServer/0 is everything unfiltered. NOT VERIFIED WITH DATA. The layer definition (name, geometry type, field list) answered on 2026-11-16/17, but every query on every layer of this server's Projects services returned HTTP 200 with {\"error\":{\"code\":500,\"message\":\"Error performing query operation\"}} - on MapServer and FeatureServer, with count-only, ids-only and single-field queries. It looks like a database outage on NHDOT's side, so retry later. Field names are copied from the layer definition, but which field means what is a GUESS from the names because no sample record could be read (in particular PRIMARY_TIER as work type and PROJECT_DOLLARS vs TYP_INFLATED_COST vs BID_TOTAL as cost are unconfirmed; there is no town/county field in the list). Record count unknown."
+    }
+  ],
+  "parcels_statewide": null,
+  "parcels_counties": [],
+  "summary": "NHDOT's project services exist with the right layers (in planning, in design, Ten Year Plan, right-of-way projects) but could not be verified: all data queries failed with a server error on the check dates. Parcels not yet researched."
+}

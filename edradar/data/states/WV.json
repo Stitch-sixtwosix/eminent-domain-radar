@@ -1,0 +1,107 @@
+{
+ "state": "West Virginia",
+ "code": "WV",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "WVDOT Federal STIP 2027-2032 (STIP)",
+   "url": "https://services2.arcgis.com/xLpB90lOmCXYDAWo/arcgis/rest/services/Federal_STIP_27_32/FeatureServer/0",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 717,
+   "fields": {
+    "id": "Project",
+    "name": "Project_Name",
+    "work_type": "Construction_Code",
+    "status": "Project_Status",
+    "let_date": "Federal_Fiscal_Year",
+    "county": "County"
+   },
+   "work_type_values": [
+    "101: Major Superstructure Repair",
+    "103: Major Culvert Replacement",
+    "105: Construct Interchange",
+    "11: Restabilize",
+    "14: Resurface (Surface Treatment)",
+    "17: Correct Slide/Slip",
+    "2: Reconst/Upgrade on Exist Align",
+    "20: Drainage/Box Culvert",
+    "22: Improve Sight Distance",
+    "24: Widen Roadway (minor widening less than lane width, incl curve widening)",
+    "29: Other (Roadway)",
+    "3: Relocate/Upgrade on Impr Align",
+    "31: Replace (due to condition with no added capacity <12')",
+    "32: Replace (due to roadway relocation)",
+    "35: Other Bridge Work",
+    "36: Strengthen Substructure or Superstructure",
+    "37: Renovate",
+    "38: Replace or Renovate Deck",
+    "4: Add Travel Lane (s)",
+    "40: Clean & Paint",
+    "42: HMA Overlay",
+    "47: Rehab w/Shotcrete",
+    "50: Traffic Signal",
+    "52: Signing",
+    "53: Lighting"
+   ],
+   "status_values": [
+    "Active",
+    "Complete and closed",
+    "Hold special adm action req"
+   ],
+   "notes": "WVDOT's mapped federal STIP for FFY 2027-2032 (planned, federally funded). One row per project phase/route segment: Phase_Code prefix tells the phase (e.g. CN = construction; right-of-way and engineering phases have their own codes), Phase_Est_Auth says whether authorization is Estimated or actual, Federal_Fiscal_Year is the programmed year (string, no exact letting date). No cost field. Project is the state project number.",
+   "stage": "planning"
+  },
+  {
+   "name": "WVDOT 2026 Projects - Planned_Projects",
+   "url": "https://services2.arcgis.com/xLpB90lOmCXYDAWo/arcgis/rest/services/2026_Active_Project/FeatureServer/0",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 1181,
+   "fields": {
+    "id": "Project",
+    "name": "Project_Name",
+    "work_type": "Work_Code",
+    "cost": "Phase_Amount",
+    "status": "Proj_Status",
+    "let_date": "Phase_Start_Date",
+    "county": "County"
+   },
+   "work_type_values": [
+    "Improvement: Bridge",
+    "Improvement: Other",
+    "Improvement: Roadway",
+    "New Building",
+    "Renovation and Replacement: Bridge",
+    "Renovation and Replacement: Natural Disaste",
+    "Renovation and Replacement: Other",
+    "Renovation and Replacement: Roadway",
+    "Rest Area Maintenance",
+    "System Expansion: Bridge"
+   ],
+   "status_values": [
+    "Planned"
+   ],
+   "notes": "WVDOT project-tracker service with three line layers split by stage: 0 = Planned_Projects, 2 = Active_Projects, 1 = Completed_Projects (same schema). ConstructionCode gives detailed work type, Phase_Amount the phase cost, Phase_Start_Date / Phase_End_Date scheduled dates, Fund_Type the funding source. Use layer 0 for planned work.",
+   "stage": "planning"
+  }
+ ],
+ "parcels_statewide": {
+  "name": "WV Parcels (WV GIS Technical Center / WV Property Tax Division)",
+  "url": "https://services.wvgis.wvu.edu/arcgis/rest/services/Planning_Cadastre/WV_Parcels/MapServer/0",
+  "fields": {
+   "apn": "GISPID",
+   "owner": "FullOwnerName",
+   "mailing_address": "FullOwnerAddress",
+   "address": "FullPhysicalAddress",
+   "acres": "CALC_ACRE",
+   "county": "CountyID"
+  },
+  "restrictions": "Layer description is an 'as is, public service' disclaimer (data prepared for inventory of real property, not a legal survey); no commercial-use or solicitation restriction stated.",
+  "notes": "Statewide, all 55 counties; 1,378,573 of 1,394,081 rows have FullOwnerName. FullOwnerAddress is the owner mailing address in one string; OWNER1/OWNER2 split names; CleanParcelID is a 20-digit id; CountyID/COUNTY are 2-digit county numbers, not names; FullLegalDescription present. No assessed/market value field. MapServer (maxRecordCount 2000), supports query with geometry.",
+  "verified": true,
+  "record_count": 1394081
+ },
+ "parcels_counties": [],
+ "summary": "WVDOT STIP FFY2027-2032 and Planned_Projects line layers verify, and the WVU-hosted statewide parcel layer has owner name and mailing address for all counties (no value field)."
+}

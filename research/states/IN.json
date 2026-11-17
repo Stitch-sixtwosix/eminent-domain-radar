@@ -42,6 +42,82 @@
     }
   ],
   "parcels_statewide": null,
-  "parcels_counties": [],
-  "summary": "Projects section done; parcel research still in progress."
+  "parcels_statewide_note": "Indiana's statewide layer (https://gisdata.in.gov/server/rest/services/Hosted/Parcel_Boundaries_of_Indiana_Current/FeatureServer/0, 3,682,675 parcels, verified) has NO owner name: only parcel ids (state_parcel_id, parcel_id), property address (prop_add, dlgf_prop_address), property class code and tax district. Useful for geometry and ids only.",
+  "parcels_counties": [
+    {
+      "county": "MARION",
+      "url": "https://gis.indy.gov/server/rest/services/sde_Parcel/sde_Parcel/MapServer/5",
+      "verified": true,
+      "record_count": 347234,
+      "fields": {
+        "apn": "PARCEL_C",
+        "owner": "FULLOWNERNAME",
+        "mailing_address": [
+          "OWNERADDRESS",
+          "OWNERADDRESS2",
+          "OWNERCITY",
+          "OWNERSTATE",
+          "OWNERZIP"
+        ],
+        "address": [
+          "STNUMBER",
+          "FULL_STNAME",
+          "CITY",
+          "ZIPCODE"
+        ],
+        "market_value": "ASSESSORYEAR_TOTALAV",
+        "acres": "ACREAGE"
+      },
+      "notes": "City of Indianapolis/Marion County. Slow server: an unfiltered sample query timed out, a filtered query (owner name LIKE) answered. STATEPARCELNUMBER is the 18-digit state id. Value is assessed value."
+    },
+    {
+      "county": "LAKE",
+      "url": "https://services5.arcgis.com/8CXRnvSfSpwdf0R6/arcgis/rest/services/Lake_County_Parcels/FeatureServer/0",
+      "verified": true,
+      "record_count": 245181,
+      "fields": {
+        "apn": "PARCELID",
+        "owner": "mdeededOwner",
+        "mailing_address": [
+          "Mail_Add",
+          "mailcity",
+          "mailstate",
+          "mailzipCode"
+        ],
+        "address": [
+          "Situs_Add",
+          "Loccity",
+          "LoczipCode"
+        ],
+        "acres": "macres"
+      },
+      "notes": "Lake County, Indiana. No value field."
+    },
+    {
+      "county": "HAMILTON",
+      "url": "https://gis1.hamiltoncounty.in.gov/arcgis/rest/services/HamCoParcelsPublic/FeatureServer/0",
+      "verified": true,
+      "record_count": 154229,
+      "fields": {
+        "apn": "STPRCLNO",
+        "owner": "DEEDEDOWNR",
+        "mailing_address": [
+          "OWNADDRESS",
+          "OWNCITY",
+          "OWNSTATE",
+          "OWNZIP"
+        ],
+        "address": [
+          "LOCADDRESS",
+          "LOCCITY",
+          "LOCZIP"
+        ],
+        "market_value": "AVTOTGROSS",
+        "acres": "DEEDACRES"
+      },
+      "notes": "Hamilton County's own server, exported daily (EXPORTDATE). OWNNAME repeats the owner. Value is assessed value, AVTAXYR 2026."
+    }
+  ],
+  "parcels_counties_note": "Not found or not reachable in the time allowed: Allen, St. Joseph.",
+  "summary": "Projects: weak - only a consultant-hosted STIP line layer (DES number, location, work description; no cost or dates) could be verified; INDOT's own GIS server refuses requests with 403. Parcels: statewide layer has no owner names; owner layers verified for Marion, Lake and Hamilton counties."
 }

@@ -1,0 +1,73 @@
+{
+ "state": "Louisiana",
+ "code": "LA",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "New Orleans Regional Planning Commission TIP 2023-26 Project Locations (New Orleans region only)",
+   "url": "https://services2.arcgis.com/rojlIZfHqM460MaC/arcgis/rest/services/TIP_2023-26_Project_Locations_(RPC_2022)_view/FeatureServer/0",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 340,
+   "fields": {
+    "id": "Project_Nu",
+    "name": "PROJECT_NA",
+    "description": "IMPROVEMEN",
+    "work_type": "IMPROVEMEN",
+    "cost": "Cost",
+    "status": "PhaseDescr",
+    "let_date": "CalendarYe",
+    "county": "ParishDesc"
+   },
+   "work_type_values": [
+    "free text, hundreds of values, e.g.:",
+    "BRIDGE REPLACEMENT",
+    "BRIDGE REHABILITATION",
+    "BRIDGE REPLACEMENT NO NEW ALIGNMENT",
+    "CONSTRUCT ROUNDABOUT",
+    "BIKE LANES",
+    "CONCRETE OVERLAY",
+    "OVERLAY",
+    "ASPHALT GRADE RAISING",
+    "ACCESS STUDY",
+    "CAPACITY(INCLUDES I-12 RAMP MODS)"
+   ],
+   "status_values": [
+    "FEASIBILITY",
+    "ENVIRONMENTAL",
+    "DESIGN (ENGINEERING)",
+    "RIGHT OF WAY",
+    "UTILITY RELOCATION",
+    "CONSTRUCTION",
+    "RPC STUDY"
+   ],
+   "notes": "NOT STATEWIDE: the New Orleans MPO's TIP, eight parishes (Jefferson, Orleans, Plaquemines, St. Bernard, St. Charles, St. John the Baptist, St. Tammany, Tangipahoa). One record per project phase: PhaseDescr is the phase and CalendarYe its year (2022-2031; one bad value 3031), Cost / Contingenc / FedShare its funding. PhaseDescr = 'RIGHT OF WAY' is the land-acquisition signal. Project_Nu is the DOTD state project number (H.xxxxxx). The layer is the FY2023-26 TIP adopted in 2022, so early years are already past; the same organization publishes 'Let to Construction' and 'Obligated' layers by year, which can be used to drop projects already let. IMPROVEMEN is free text, not a coded work type.",
+   "stage": "planning"
+  },
+  {
+   "name": "New Orleans Regional Planning Commission MTP Projects 2026 to 2052 (New Orleans region only)",
+   "url": "https://services2.arcgis.com/rojlIZfHqM460MaC/arcgis/rest/services/MTP_Projects_2023_to_2052_(RPC_2022)_view/FeatureServer/0",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 402,
+   "fields": {
+    "id": "PROJ_NUM",
+    "name": "PROJ_NAME",
+    "description": "IMPROVEMEN",
+    "work_type": "IMPROVEMEN",
+    "cost": "COST",
+    "status": "TIER1",
+    "let_date": "YEAR1",
+    "county": "PARISH"
+   },
+   "work_type_values": [],
+   "status_values": [],
+   "notes": "Long-range plan for the same region. YEAR1 is a year ('2022'-'2027') or 'TIER 2' / 'TIER 3' for later plan periods; CATEGORY is the funding program (e.g. 'URBAN SYSTEMS'). Free-text IMPROVEMEN again.",
+   "stage": "planning"
+  }
+ ],
+ "projects_statewide_reason": "No statewide DOTD layer could be verified. DOTD's GIS server (maps.dotd.la.gov, with services such as PublicPolicy/ProjectSystems, Highway_Priority_Program/HPP_DATA and PublicPolicy/PROTECTProjects seen in search results) answered every request with HTTP 403 from its Cloudflare protection, so nothing on it was confirmed and it may not be usable by an automated reader.",
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "Statewide DOTD project layers exist but the server refused automated requests (403), so only the New Orleans region's TIP and long-range plan are verified. Parcels not researched yet."
+}

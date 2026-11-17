@@ -1,0 +1,8 @@
+{
+  "state": "Mississippi", "code": "MS", "checked": "2026-11-17",
+  "projects": null,
+  "projects_reason": "No queryable GIS service of planned MDOT projects was found. MDOT's public project map (https://path.mdot.ms.gov/ProjMap, fetched) is a Google Maps page fed by embedded data, not a GIS service, and lists only 'Under Construction' and 'Construction Complete' projects, not planned ones. ArcGIS Online catalog searches for MDOT / Mississippi STIP layers returned nothing relevant, the state service www.gisonline.ms.gov/arcgis/rest/services/MDEQ/Mississippi_Transportation_Projects/MapServer (fetched) holds only road-centerline index layers despite its name, and the guessed MDOT GIS hostnames do not resolve. The STIP is published as documents only.",
+  "parcels_statewide": null,
+  "parcels_counties": [],
+  "summary": "No planned-projects GIS source found for Mississippi. Parcels not researched yet."
+}
