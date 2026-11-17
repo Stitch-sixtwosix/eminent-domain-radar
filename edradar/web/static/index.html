@@ -759,6 +759,14 @@ function staticLeads(q) {
 async function staticApi(path) {
   // The data file is requested with this page's build stamp, so a browser can never pair a new page with an old,
   // cached data file (which is what left the hub stuck on "Loading").
+  if (!SNAP && window.EDRADAR_PRIVATE) {
+    // The data lives in a private store: it is fetched with this visitor's own sign-in and unpacked here.
+    const token = await window.ET_TOKEN, auth = window.ET_AUTH;
+    const r = await fetch(auth.url + "/storage/v1/object/authenticated/app-data/data.json.gz?v=" + encodeURIComponent(window.EDRADAR_BUILD || ""),
+                          {headers: {Authorization: "Bearer " + token, apikey: auth.key}});
+    if (!r.ok) throw new Error("the data could not be opened for this account (" + r.status + ")");
+    SNAP = await new Response(r.body.pipeThrough(new DecompressionStream("gzip"))).json();
+  }
   if (!SNAP) { const r = await fetch("data.json?v=" + encodeURIComponent(window.EDRADAR_BUILD || "")); if (!r.ok) throw new Error("data.json returned " + r.status); SNAP = await r.json(); }
   const [route, qs] = path.split("?"), q = new URLSearchParams(qs || "");
   if (route === "/api/stats") return SNAP.stats;

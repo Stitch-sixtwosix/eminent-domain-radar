@@ -381,7 +381,35 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
     return app
 
 
-def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40) -> Dict[str, int]:
+PRIVATE_BUCKET, PRIVATE_OBJECT = "app-data", "data.json.gz"
+
+
+def _upload_private(cfg: Dict[str, Any], payload: bytes, client: Any = None) -> bool:
+    """Put the snapshot's data, gzipped, in the private Supabase bucket. True when it is safely there."""
+    import gzip
+    import os
+    import sys
+
+    import httpx
+
+    url, key = (cfg.get("site") or {}).get("supabase_url"), os.environ.get("SUPABASE_SECRET_KEY")
+    if not url or not key:
+        return False
+    try:
+        r = (client or httpx.Client(timeout=180)).post(
+            "%s/storage/v1/object/%s/%s" % (url.rstrip("/"), PRIVATE_BUCKET, PRIVATE_OBJECT), content=gzip.compress(payload, 6),
+            headers={"Authorization": "Bearer " + key, "apikey": key, "x-upsert": "true",
+                     "Content-Type": "application/gzip", "Cache-Control": "max-age=300"})
+        if r.status_code >= 400:
+            raise RuntimeError("%s %s" % (r.status_code, r.text[:200]))
+        return True
+    except Exception as e:               # never publish a page that points at data which is not there
+        print("WARNING: the private data upload failed (%s); the data file was published openly instead." % e,
+              file=sys.stderr)
+        return False
+
+
+def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload_client: Any = None) -> Dict[str, int]:
     """Write a read-only copy of the dashboard (index.html + data.json) that any static host can serve."""
     from datetime import date
 
@@ -476,16 +504,26 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40) -> Dic
         # Signed-in firms only: the page stays blank until a session is confirmed, otherwise it goes to sign-in.
         # This keeps visitors out of the screen; the data file itself is still a public file on the host.
         gate = ('<meta name="robots" content="noindex">\n<style>html.gate body { visibility: hidden; }</style>\n'
-                '<script>document.documentElement.classList.add("gate");</script>\n<script src="../auth-config.js"></script>\n'
-                '<script type="module">import {currentUser} from "../auth.js";\n'
-                'const u = await currentUser().catch(() => null);\n'
-                'if (u) document.documentElement.classList.remove("gate"); else location.replace("../login.html?next=app");</script>\n')
+                '<script>document.documentElement.classList.add("gate"); window.ET_TOKEN = new Promise(r => window.__etToken = r);</script>\n'
+                '<script src="../auth-config.js"></script>\n'
+                '<script type="module">import {supa} from "../auth.js";\n'
+                'const s = await supa(), got = await s.auth.getSession().catch(() => ({data: {}}));\n'
+                'const session = got.data && got.data.session;\n'
+                'if (session) { document.documentElement.classList.remove("gate"); window.__etToken(session.access_token); }\n'
+                'else location.replace("../login.html?next=app");</script>\n')
         html = html.replace("</head>", gate + "</head>", 1)
         assert "login.html?next=app" in html
+    payload = json.dumps({"stats": stats, "projects": projects, "leads": leads, "layers": layers,
+                          "template": outreach.template(cfg), "hub": hub, "contacts": {}}, separators=(",", ":")).encode()
+    # With a Supabase secret key the data goes to a private bucket only signed-in users can read, and no copy is
+    # published on the open site. Without one (or if the upload fails) the data file is published as before.
+    private = _upload_private(cfg, payload, upload_client)
+    if private:
+        html = html.replace('window.EDRADAR_STATIC = true;', 'window.EDRADAR_STATIC = true; window.EDRADAR_PRIVATE = true;', 1)
+        (out / "data.json").unlink(missing_ok=True)
+    else:
+        (out / "data.json").write_bytes(payload)
     (out / "index.html").write_text(html)
-    (out / "data.json").write_text(json.dumps({"stats": stats, "projects": projects, "leads": leads, "layers": layers, "template": outreach.template(cfg), "hub": hub,
-                                               "contacts": {}},
-                                              separators=(",", ":")))
     (site / ".nojekyll").write_text("")
     (site / "robots.txt").write_text("User-agent: *\nDisallow: /app/\n")
     domain = (cfg.get("site") or {}).get("domain")

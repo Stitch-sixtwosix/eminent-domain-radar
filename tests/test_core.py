@@ -547,3 +547,31 @@ def test_client_lists_run_postcards_and_email(tmp_path, monkeypatch):
     assert client.post("/api/lists/%d/remove" % made["id"], json={"lead_ids": [ids["B-5"]]}).json()["leads"] == 3
     assert client.delete("/api/lists/%d" % made["id"]).json() == {"deleted": made["id"]}
     assert client.get("/api/lists").json() == [] and client.post("/api/lists/%d/campaign" % made["id"], json={}).status_code == 404
+
+
+def test_private_data_upload(tmp_path, monkeypatch):
+    import gzip
+    import httpx
+    from edradar.web.app import export_static
+
+    path = str(tmp_path / "t.db")
+    seeded_db(path)
+    cfg = {"database": path, "site": {"supabase_url": "https://x.supabase.co", "supabase_anon_key": "pub"}}
+    seen = {}
+
+    def handler(req):
+        seen["path"], seen["auth"], seen["body"] = req.url.path, req.headers["authorization"], req.content
+        return httpx.Response(200, json={"Key": "app-data/data.json.gz"})
+
+    monkeypatch.setenv("SUPABASE_SECRET_KEY", "sec")
+    export_static(cfg, str(tmp_path / "site"), upload_client=httpx.Client(transport=httpx.MockTransport(handler)))
+    page = (tmp_path / "site" / "app" / "index.html").read_text()
+    assert seen["path"] == "/storage/v1/object/app-data/data.json.gz" and seen["auth"] == "Bearer sec"
+    assert "leads" in json.loads(gzip.decompress(seen["body"]))
+    assert not (tmp_path / "site" / "app" / "data.json").exists() and "EDRADAR_PRIVATE = true" in page
+    assert "sec" not in page and "login.html?next=app" in page
+    # a failed upload falls back to the open file, so the page never points at data that is not there
+    bad = httpx.Client(transport=httpx.MockTransport(lambda req: httpx.Response(403, json={"error": "no"})))
+    export_static(cfg, str(tmp_path / "site2"), upload_client=bad)
+    assert (tmp_path / "site2" / "app" / "data.json").exists()
+    assert "EDRADAR_PRIVATE = true" not in (tmp_path / "site2" / "app" / "index.html").read_text()
