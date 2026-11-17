@@ -130,10 +130,13 @@ def test_static_export(tmp_path):
     from edradar.web.app import export_static
     counts = export_static({"database": path, "site": {"domain": "example.test"}}, str(tmp_path / "site"))
     assert (tmp_path / "site" / "CNAME").read_text() == "example.test\n"
+    home = (tmp_path / "site" / "index.html").read_text()
+    assert "for eminent domain attorneys" in home and "{{" not in home and (tmp_path / "site" / "signup.html").exists()
+    assert (tmp_path / "site" / "site.css").exists() and (tmp_path / "site" / "img" / "overview.jpg").exists()
     assert counts == {"projects": 1, "leads": 1}
-    data = json.loads((tmp_path / "site" / "data.json").read_text())
+    data = json.loads((tmp_path / "site" / "app" / "data.json").read_text())
     assert data["leads"][0]["owner"] == "Jane Roe" and data["stats"]["generated"]
-    page = (tmp_path / "site" / "index.html").read_text()
+    page = (tmp_path / "site" / "app" / "index.html").read_text()
     assert "EDRADAR_STATIC = true" in page and "EDRADAR_BUILD" in page and "data.json?v=" in page
 
 
@@ -372,7 +375,7 @@ def test_campaign_filter_and_snapshot(tmp_path, monkeypatch):
     assert client.get("/api/leads", params={"outreach": "email"}).json() == []      # nobody found, so not an email lead
 
     counts = export_static(cfg, str(tmp_path / "site"))
-    snap = json.loads((tmp_path / "site" / "data.json").read_text())
+    snap = json.loads((tmp_path / "site" / "app" / "data.json").read_text())
     row = next(r for r in snap["leads"] if r["owner"] == "Jane Roe")
     assert snap["hub"]["status"]["postcard"]["enabled"] is False and snap["hub"]["contacts"] == []
     assert snap["hub"]["sent"]["postcards"] == 1 and all(a["proof_url"] is None for a in snap["hub"]["activity"])

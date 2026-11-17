@@ -384,6 +384,69 @@
     .cards { grid-template-columns: 1fr; }
     #parcel { top: 0; }
   }
+  #panes { display: none; }
+  @media (max-width: 720px) {
+    /* A phone shows one thing at a time: the project list, the map or the lead table, switched from a bar at the foot. */
+    header { padding: 8px 12px 4px; gap: 4px 14px; }
+    .stats, .mode { display: none; }
+    .views { margin-left: auto; }
+    main { display: flex; flex-direction: column; padding: 0 8px calc(60px + env(safe-area-inset-bottom)); overflow: hidden; }
+    main > * { flex: 1 1 auto; min-height: 0; }
+    body[data-pane="projects"] :is(#map, #detail), body[data-pane="map"] :is(#sidebar, #detail), body[data-pane="leads"] :is(#sidebar, #map) { display: none; }
+    #sidebar { border-bottom: 0; }
+    .filters { padding: 4px 4px 12px; }
+    .proj { padding-left: 8px; padding-right: 8px; }
+    #map, #detail { border-radius: 16px; }
+    #detail { min-height: 0; }
+    #detail-head { padding: 10px 12px; gap: 8px; }
+    #detail-head h1 { flex: 1 1 100%; font-size: 17px; order: -1; }
+    #btn-all { order: -2; }
+    #detail-head select { flex: 1 1 150px; min-width: 0; }
+    #detail-head button, #detail-head select { min-height: 40px; }
+    #summary, #breakdown, #stagebar { padding-left: 12px; padding-right: 12px; }
+    #panes { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 900; padding: 6px 8px calc(6px + env(safe-area-inset-bottom)); gap: 4px; background: var(--paper); }
+    body[data-view="hub"] #panes { display: none; }
+    #panes button { flex: 1; min-height: 44px; justify-content: center; text-align: center; border: 0; border-radius: 10px; background: transparent; color: var(--ink-2); font-weight: 500; font-size: 14px; }
+    #panes button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+    /* each lead is a card, not a row of a table that runs off the screen */
+    #leads-wrap thead { display: none; }
+    #leads-wrap table, #leads-wrap tbody { display: block; }
+    #leads-wrap tr { display: grid; grid-template-columns: auto 44px minmax(0, 1fr) auto; gap: 2px 10px; padding: 12px; border-bottom: 1px solid var(--line); }
+    #leads-wrap td { display: block; padding: 0; border: 0; grid-column: 3 / -1; font-size: 13px; }
+    #leads-wrap td.pick { grid-column: 1; grid-row: 1; width: auto; padding-top: 4px; }
+    #leads-wrap td.pick input { width: 20px; height: 20px; }
+    #leads-wrap td.c-score { grid-column: 2; grid-row: 1; }
+    #leads-wrap td.owner { grid-column: 3; grid-row: 1; font-size: 14px; }
+    #leads-wrap td.c-val { grid-column: 4; grid-row: 1; text-align: right; }
+    #leads-wrap td.c-prop, #leads-wrap td.c-match, #leads-wrap td.c-proj { color: var(--ink-2); }
+    #leads-wrap td.c-prop .sub, #leads-wrap td.c-match .sub { display: inline; margin-left: 6px; }
+    #leads-wrap td.acts { margin-top: 8px; }
+    #leads-wrap td.acts .sm { min-height: 36px; padding: 0 12px; }
+    #leads-wrap td.c-status { display: none; }
+    #leads-wrap tr.skel { display: flex; } #leads-wrap tr.skel td { flex: 1; }
+    .total { padding: 12px; }
+    #leads-wrap td.c-prop > .dash { display: none; } #leads-wrap td.c-prop > .dash + .sub { margin-left: 0; }
+    /* the timeline keeps its six dots; only the current stage is named, the rest are in the panel */
+    #stagebar .stages li { font-size: 0; padding-right: 0; } #stagebar .stages li[data-state=current] { font-size: 12.5px; white-space: nowrap; overflow: visible; }
+    #parcel { top: 0; left: 0; width: 100vw; }
+    #hub { padding: 0 8px 8px; min-width: 0; max-width: 100vw; }
+    .hub, .hub > *, .hub .panel, .hub-row { min-width: 0; max-width: 100%; }
+    .hub .panel { overflow: hidden; }
+    .hub-row, .hub-row.three, .hub-row.split, .tpl-view { grid-template-columns: minmax(0, 1fr); }
+    .panel-head { gap: 6px 14px; }
+    .hub { padding: 16px 12px 40px; border-radius: 16px; }
+    .hub .figs { grid-template-columns: 1fr 1fr; }
+    .hub .scroll { overflow-x: auto; }
+    .lists thead { display: none; } .lists table, .lists tbody { display: block; }
+    .lists tr { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 8px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .lists td { display: block; padding: 0; border: 0; text-align: left; }
+    .lists td:first-child, .lists td:last-child { grid-column: 1 / -1; }
+    .lists td[data-l]::before { content: attr(data-l); display: block; font-size: 12px; color: var(--ink-2); }
+    .lists td[data-l] { font-size: 17px; font-variant-numeric: tabular-nums; }
+    .lists .row-acts { justify-content: flex-start; flex-wrap: wrap; } .lists .row-acts button { min-height: 40px; }
+    dialog { width: calc(100vw - 16px); max-width: none; margin: auto 8px 8px; max-height: 88vh; }
+    .camp { grid-template-columns: 1fr; }
+  }
   @media (prefers-reduced-motion: reduce) {   /* keep the fades that explain state, drop the travel */
     dialog, dialog[open], #tip { transform: none; }
     #parcel, #parcel[data-open] { transition: none; }
@@ -396,7 +459,7 @@
 <header>
   <div class="brand"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7.5" fill="#1b2333"/><path d="M8 7h16v4.2H12.2v13.6H24V29H8z" fill="#fff" transform="translate(0 -2)"/><path d="M12.2 13.9H32v4.2H12.2z" fill="#e0662e"/></svg><b class="wordmark" aria-label="EminentTracker">Eminent<span>Tracker</span></b></div>
   <nav class="views" id="views" hidden aria-label="Views">
-    <button type="button" data-view="leads" aria-pressed="true">Leads</button><button type="button" data-view="hub" aria-pressed="false">Outreach hub</button>
+    <button type="button" data-view="leads" aria-pressed="true">Leads</button><button type="button" data-view="hub" aria-pressed="false">Outreach</button>
   </nav>
   <div class="stats">
     <span><b id="st-projects">–</b>projects scoring 60+</span>
@@ -407,7 +470,7 @@
   <button id="btn-usage" hidden></button><button id="btn-template" hidden></button>
   <span class="mode" id="mode" hidden></span>
 </header>
-<section id="hub" hidden aria-label="Outreach hub"></section>
+<section id="hub" hidden aria-label="Outreach"></section>
 <main>
   <aside id="sidebar">
     <div class="filters">
@@ -456,6 +519,9 @@
   </section>
 </main>
 
+<nav id="panes" aria-label="Leads view">
+  <button type="button" data-pane="projects" aria-pressed="false">Projects</button><button type="button" data-pane="map" aria-pressed="false">Map</button><button type="button" data-pane="leads" aria-pressed="true">Leads</button>
+</nav>
 <aside id="parcel" aria-label="Parcel details"></aside>
 <dialog id="dlg" aria-labelledby="dlg-title"></dialog>
 <div id="tip" role="tooltip"></div>
@@ -698,7 +764,7 @@ async function staticApi(path) {
   if (route === "/api/stats") return SNAP.stats;
   if (route === "/api/outreach/template") return SNAP.template;
   if (route === "/api/outreach/hub") {
-    if (!SNAP.hub) throw new Error("This snapshot was published before the Outreach hub existed. Reload the page to get the current one");
+    if (!SNAP.hub) throw new Error("This snapshot was published before the Outreach page existed. Reload the page to get the current one");
     return SNAP.hub;
   }
   if (route === "/api/usage") return {...SNAP.hub.usage, rates: SNAP.hub.rates};
@@ -843,14 +909,14 @@ async function loadLeads() {
     ${th("County value", "value", "num")}${th("Match", "match")}${p ? "" : th("Project", "project")}${STATIC ? "" : th("Outreach", "outreach")}${STATIC ? "" : th("Status", "status")}</tr></thead><tbody>` +
     leadRows.map(r => `<tr data-row="${r.id}" tabindex="0"${openLead === r.id ? ' class="sel"' : ""}>
       ${STATIC ? "" : `<td class="pick"><input type="checkbox" data-pick="${r.id}" aria-label="Select ${esc(r.owner || r.apn)}"${picked.has(r.id) ? " checked" : ""}></td>`}
-      <td><span class="score ${scoreClass(r.score)}" data-tip-lead="${r.id}">${r.score}</span></td>
+      <td class="c-score"><span class="score ${scoreClass(r.score)}" data-tip-lead="${r.id}">${r.score}</span></td>
       <td class="owner">${r.owner ? esc(r.owner) : '<span class="lookup">Look up at county</span>'}${r.mailing_address ? `<div class="sub">${esc(r.mailing_address)}</div>` : ""}</td>
-      <td>${r.address ? esc(r.address) : '<span class="dash">–</span>'}<div class="sub"><span class="id">${esc(r.apn)}</span>${r.parcel_county ? " · " + esc(r.parcel_county[0] + r.parcel_county.slice(1).toLowerCase()) : ""}</div></td>
-      <td class="num">${dollars(r.market_value)}</td>
-      <td>${esc(REASON[r.match_reason] || r.match_reason)}${r.distance_m != null ? `<div class="sub">${Math.round(r.distance_m)} m away</div>` : ""}</td>
-      ${p ? "" : `<td><a href="#" data-project="${r.project_id}">${esc(pname(r.project))}</a></td>`}
+      <td class="c-prop">${r.address ? esc(r.address) : '<span class="dash">–</span>'}<div class="sub"><span class="id">${esc(r.apn)}</span>${r.parcel_county ? " · " + esc(r.parcel_county[0] + r.parcel_county.slice(1).toLowerCase()) : ""}</div></td>
+      <td class="num c-val">${dollars(r.market_value)}</td>
+      <td class="c-match">${esc(REASON[r.match_reason] || r.match_reason)}${r.distance_m != null ? `<div class="sub">${Math.round(r.distance_m)} m away</div>` : ""}</td>
+      ${p ? "" : `<td class="c-proj"><a href="#" data-project="${r.project_id}">${esc(pname(r.project))}</a></td>`}
       ${outreachCell(r)}
-      ${STATIC ? "" : `<td><select data-status="${r.id}" aria-label="Lead status">${STATUSES.map(st =>
+      ${STATIC ? "" : `<td class="c-status"><select data-status="${r.id}" aria-label="Lead status">${STATUSES.map(st =>
         `<option${st === r.status ? " selected" : ""}>${st}</option>`).join("")}</select></td>`}</tr>`).join("") +
     "</tbody></table>" + `<div class="total">${p ? `${leadRows.length.toLocaleString()} of ${p.lead_count.toLocaleString()} parcels for this project` : ($("f-outreach").value || $("f-owner").checked || $("f-county").value || $("f-stage").value) ? `${leadRows.length >= 300 ? "First 300" : leadRows.length.toLocaleString()} leads matching these filters` : `Top ${leadRows.length.toLocaleString()} of ${TOTAL_LEADS.toLocaleString()} leads`}, highest score first${leadRows.length >= 300 ? ". Export CSV for the full list" : ""}.</div>`;
 }
@@ -951,8 +1017,17 @@ $("dlg").addEventListener("close", () => $("dlg").classList.remove("wide"));
 
 /* ---- outreach hub: postcards, email, skip tracing, template, billing and activity in one place ---- */
 let view = "leads";
+const phone = matchMedia("(max-width: 720px)");
+function setPane(name) {                       // on a phone the project list, the map and the lead table take turns
+  document.body.dataset.pane = name;
+  document.querySelectorAll("#panes button").forEach(b => b.setAttribute("aria-pressed", b.dataset.pane === name));
+  if (name === "map") { map.invalidateSize(); try { map.fitBounds(selected && layers[selected.id] ? layers[selected.id].getBounds() : HOME, {animate: false}); } catch (e) { map.fitBounds(HOME); } }
+}
+$("panes").addEventListener("click", e => { const b = e.target.closest("[data-pane]"); if (b) setPane(b.dataset.pane); });
+phone.addEventListener("change", () => map.invalidateSize());
+document.body.dataset.pane = "leads";
 function setView(name) {
-  view = name;
+  view = name; document.body.dataset.view = name;
   document.querySelector("main").hidden = name !== "leads";
   $("hub").hidden = name !== "hub";
   document.querySelectorAll("#views button").forEach(b => b.setAttribute("aria-pressed", b.dataset.view === name));
@@ -986,9 +1061,9 @@ function cardMocks(t, sample) {
 let HUB_LISTS = [];
 async function loadHub() {
   const box = $("hub");
-  if (!box.innerHTML) box.innerHTML = `<div class="hub"><p class="meta">Loading the outreach hub…</p></div>`;
+  if (!box.innerHTML) box.innerHTML = `<div class="hub"><p class="meta">Loading outreach…</p></div>`;
   try { renderHub(await api("/api/outreach/hub")); }
-  catch (e) { box.innerHTML = `<div class="hub"><div class="alert bad">The outreach hub could not be shown: ${esc(e.message)}.</div></div>`; }
+  catch (e) { box.innerHTML = `<div class="hub"><div class="alert bad">Outreach could not be shown: ${esc(e.message)}.</div></div>`; }
 }
 function renderHub(h) {
   const box = $("hub");
@@ -1009,13 +1084,13 @@ function renderHub(h) {
       <td>${c.phone ? esc(c.phone) : '<span class="dash">–</span>'}</td></tr>`).join("")}</tbody></table></div>`
     : `<p>${STATIC ? "Contacts found through Apollo are kept in the running app and are not published here." : "No contacts yet. Open a company-owned lead and choose Find contacts in Apollo."}</p>`;
   box.innerHTML = `<div class="hub">
-    <div class="hub-head"><h1>Outreach hub</h1>${pcState}${STATIC ? "" : `<span class="state ${em.enabled ? "on" : ""}">Email ${em.enabled ? "on" : "off"}</span><span class="state ${sk.enabled ? "on" : ""}">Skip tracing ${sk.enabled ? "on" : "off"}</span>`}</div>
+    <div class="hub-head"><h1>Outreach</h1>${pcState}${STATIC ? "" : `<span class="state ${em.enabled ? "on" : ""}">Email ${em.enabled ? "on" : "off"}</span><span class="state ${sk.enabled ? "on" : ""}">Skip tracing ${sk.enabled ? "on" : "off"}</span>`}</div>
     <div class="figs">${fig("Postcards mailed", h.sent.postcards.toLocaleString())}${fig("Test proofs", h.sent.test_proofs.toLocaleString())}${fig("Emails started", h.sent.emails.toLocaleString())}${fig("Owners skip traced", h.sent.skip_traces.toLocaleString())}${fig("Billed this month", usd(month))}</div>
     <div class="panel lists"><div class="panel-head"><h3>Client lists</h3><span class="meta">Save the owners you want, then run postcards and email for the whole list in one step.</span></div>
       ${STATIC ? "<p>Client lists are private to each firm, so they are kept in the running app and are not part of this public page.</p>"
         : (h.lists || []).length ? `<div class="scroll"><table><thead><tr><th>List</th><th class="num">Owners</th><th class="num">Postcard-ready</th><th class="num">Email-ready</th><th class="num">Contacted</th><th></th></tr></thead><tbody>${h.lists.map(x => `<tr>
           <td><b>${esc(x.name)}</b><div class="sub">${plural(x.leads, "parcel")} · created ${esc(day(x.created_at))}</div></td>
-          <td class="num">${x.owners}</td><td class="num">${x.postcard_ready}</td><td class="num">${x.email_ready}</td><td class="num">${x.contacted}</td>
+          <td class="num" data-l="Owners">${x.owners}</td><td class="num" data-l="Postcard-ready">${x.postcard_ready}</td><td class="num" data-l="Email-ready">${x.email_ready}</td><td class="num" data-l="Contacted">${x.contacted}</td>
           <td><div class="row-acts"><button class="primary" data-hub="list-run" data-id="${x.id}">Run campaign</button><button data-hub="list-open" data-id="${x.id}">View</button><button data-hub="list-delete" data-id="${x.id}" aria-label="Delete the list ${esc(x.name)}">Delete</button></div></td></tr>`).join("")}</tbody></table></div>`
         : `<ol class="steps"><li>Open <b>Leads</b> and filter to the owners you want (a project, a county, postcard-ready, email leads).</li><li>Tick the rows, or leave them unticked to take everything shown, and choose <b>Add to list</b>.</li><li>Come back here and choose <b>Run campaign</b>.</li></ol>
            <div class="row-acts" style="margin-top:10px"><button class="primary" data-hub="leads-">Go to Leads</button></div>`}</div>
@@ -1311,7 +1386,7 @@ async function openAddToList() {
   const what = picked.size ? plural(ids.length, "selected lead") : `all ${plural(ids.length, "lead")} shown`;
   dlg.innerHTML = `<div class="dlg-head"><h2 id="dlg-title">Add to a client list</h2><p>Saving ${what}. Tick rows in the table first to save only some of them.</p></div>
     <div class="dlg-body"><div class="camp one" id="l-form"><p class="meta">Loading your lists…</p></div><div id="l-out"></div></div>
-    <div class="dlg-foot"><span class="note">A list can be run as one postcard and email campaign from the Outreach hub.</span>
+    <div class="dlg-foot"><span class="note">A list can be run as one postcard and email campaign from Outreach.</span>
       <button data-close>Cancel</button><button class="primary" id="l-go" disabled>Save to list</button></div>`;
   dlg.showModal();
   let lists = [];
@@ -1366,7 +1441,7 @@ async function openListCampaign(list) {
       const res = await jpost(`/api/lists/${list.id}/campaign`, {...chosen(), dry_run: false});
       const failed = [...res.postcard.failed, ...res.email.failed];
       $("c-out").innerHTML = `<div class="alert">${plural(res.postcard.sent.length, res.postcard.mode === "live" ? "postcard mailed" : "test proof created", res.postcard.mode === "live" ? "postcards mailed" : "test proofs created")}, ${plural(res.email.sent.length, "email started", "emails started")}${failed.length ? `, ${failed.length} failed` : ""}.</div>${people(failed)}`;
-      dlg.querySelector(".dlg-foot").innerHTML = `<span class="note">Every item is in the hub's Activity log.</span><button data-close class="primary">Done</button>`;
+      dlg.querySelector(".dlg-foot").innerHTML = `<span class="note">Every item is in the Activity log under Outreach.</span><button data-close class="primary">Done</button>`;
       if (view === "leads") loadLeads();
     } catch (e) { $("c-out").insertAdjacentHTML("afterbegin", `<div class="alert bad">${esc(e.message)}</div>`); sync(); }
   });
@@ -1475,6 +1550,7 @@ function showAllProjects() {
 $("projects").addEventListener("click", e => {
   const el = e.target.closest(".proj");
   if (!el) return;
+  if (phone.matches) setPane("leads");          // picking a project shows its parcels
   selected && selected.id === +el.dataset.id ? showAllProjects() : select(+el.dataset.id);   // clicking the open project closes it
 });
 $("projects").addEventListener("keydown", e => {
@@ -1539,7 +1615,9 @@ for (const id of ["f-county", "f-type", "f-source", "f-stage", "f-score", "f-q"]
   $("f-stage").insertAdjacentHTML("beforeend", (s.stages || []).map((x, i) => `<option value="${esc(x.key)}">${i + 1}. ${esc(x.label)} (${x.projects})</option>`).join(""));
   await loadProjects();
   await loadLeads();
-  if (new URLSearchParams(location.search).get("view") === "hub") setView("hub");   // a link can open the hub directly
+  const want = new URLSearchParams(location.search);       // links can open the hub, a project or a parcel directly
+  if (want.get("view") === "hub") setView("hub");
+  else if (want.get("project")) { await select(+want.get("project"), true, false); if (want.get("lead")) openParcel(+want.get("lead")); }
 })().catch(e => { $("leads-wrap").innerHTML = `<div class="empty">The data could not be loaded: ${esc(e.message)}. Reload the page to try again.</div>`; });
 </script>
 </body>

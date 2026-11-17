@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Request access · EminentTracker</title>
+<meta name="description" content="Request access to EminentTracker for your firm. Built by eminent domain attorneys, for eminent domain attorneys.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7.5' fill='%231b2333'/%3E%3Cpath d='M8 5h16v4.200H12.200v13.600H24V27H8z' fill='%23fff'/%3E%3Cpath d='M12.200 13.900H32v4.200H12.200z' fill='%23e0662e'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Serif:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+</head>
+<body>
+
+<header class="bar">
+  <a class="brand" href="./" aria-label="EminentTracker home"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7.5" fill="#1b2333"/><path d="M8 5h16v4.200H12.200v13.600H24V27H8z" fill="#fff"/><path d="M12.200 13.900H32v4.200H12.200z" fill="#e0662e"/></svg><b>Eminent<span>Tracker</span></b></a>
+  <nav aria-label="Site">
+    <a href="./#how">How it works</a>
+    <a href="./#about">Who built it</a>
+    <a href="app/">Live Pennsylvania data</a>
+  </nav>
+</header>
+
+<main class="signup">
+  <div class="why">
+    <h1 style="font-size: var(--s-title)">Request access for your firm</h1>
+    <p>Built by eminent domain attorneys, for eminent domain attorneys. Tell us about your practice and we will set your firm up.</p>
+    <ul>
+      <li><b>Leads before the notice</b>Parcels in the path of planned projects, with the owner of record.</li>
+      <li><b>Outreach in your firm's name</b>Postcards and email from one template, marked as attorney advertising.</li>
+      <li><b>Pennsylvania today</b>Tell us which other states you need. They are added in the order firms ask.</li>
+    </ul>
+  </div>
+
+  <div>
+    <form class="card" id="request" novalidate>
+      <div class="grid">
+        <label>Your name<input type="text" name="name" autocomplete="name" required></label>
+        <label>Law firm<input type="text" name="firm" autocomplete="organization" required></label>
+        <label>Work email<input type="email" name="email" autocomplete="email" required></label>
+        <label>Phone <span>(optional)</span><input type="tel" name="phone" autocomplete="tel"></label>
+        <label>Firm city and state<input type="text" name="location" autocomplete="address-level2" placeholder="Fort Washington, PA"></label>
+        <label>Firm website <span>(optional)</span><input type="text" name="website" autocomplete="url" inputmode="url"></label>
+        <label class="full">States where you handle eminent domain matters<input type="text" name="states" placeholder="Pennsylvania, New Jersey" required></label>
+        <fieldset class="full"><legend>Who do you represent?</legend>
+          <div class="choices">
+            <label><input type="radio" name="side" value="Property owners" checked> Property owners</label>
+            <label><input type="radio" name="side" value="Condemning authorities"> Condemning authorities</label>
+            <label><input type="radio" name="side" value="Both"> Both</label>
+          </div></fieldset>
+        <label class="full">Anything we should know <span>(optional)</span><textarea name="note"></textarea></label>
+        <div class="full send">
+          <button class="btn" type="submit">Request access</button>
+          <p>This opens an email to us in your mail program with these details filled in. Nothing is sent until you press send there.</p>
+        </div>
+      </div>
+    </form>
+    <div class="done" id="done" hidden tabindex="-1">
+      <h2>Your request is ready to send</h2>
+      <p>Your mail program should have opened with the message below. If it did not, copy the text and send it to <a href="mailto:info@duerrlawpc.com">info@duerrlawpc.com</a>.</p>
+      <pre id="done-text"></pre>
+      <div class="send"><a class="btn" id="done-mail" href="#">Open the email again</a><button class="btn plain" type="button" id="done-copy">Copy the text</button><a class="btn plain" href="app/">See the live data</a></div>
+    </div>
+  </div>
+</main>
+
+<script>
+const form = document.getElementById("request"), done = document.getElementById("done");
+const TO = "info@duerrlawpc.com";
+function check(field) {
+  const bad = !field.checkValidity();
+  field.setAttribute("aria-invalid", String(bad));
+  let msg = field.parentNode.querySelector(".err");
+  if (bad && !msg) { msg = document.createElement("span"); msg.className = "err"; msg.id = "err-" + field.name; field.setAttribute("aria-describedby", msg.id); field.parentNode.appendChild(msg); }
+  if (msg) { msg.textContent = bad ? (field.validity.valueMissing ? "This is needed." : "Enter a full email address, like name@firm.com.") : ""; if (!bad) msg.remove(); }
+  return !bad;
+}
+form.addEventListener("blur", e => { if (e.target.matches("input[required]") && e.target.value) check(e.target); }, true);
+form.addEventListener("input", e => { if (e.target.getAttribute("aria-invalid") === "true") check(e.target); });
+form.addEventListener("submit", e => {
+  e.preventDefault();
+  const required = [...form.querySelectorAll("[required]")], bad = required.filter(f => !check(f));
+  if (bad.length) { bad[0].focus(); return; }
+  const d = Object.fromEntries(new FormData(form));
+  const lines = ["Name: " + d.name, "Firm: " + d.firm, "Email: " + d.email, d.phone && "Phone: " + d.phone, d.location && "Firm location: " + d.location,
+    d.website && "Website: " + d.website, "States: " + d.states, "Represents: " + d.side, d.note && "\n" + d.note].filter(Boolean);
+  const body = "Please set up EminentTracker access for my firm.\n\n" + lines.join("\n");
+  const href = "mailto:" + TO + "?subject=" + encodeURIComponent("EminentTracker access request: " + d.firm) + "&body=" + encodeURIComponent(body);
+  document.getElementById("done-text").textContent = body;
+  document.getElementById("done-mail").href = href;
+  form.hidden = true; done.hidden = false; done.focus();
+  location.href = href;
+});
+document.getElementById("done-copy").addEventListener("click", async e => {
+  try { await navigator.clipboard.writeText(document.getElementById("done-text").textContent); e.target.textContent = "Copied"; }
+  catch (err) { e.target.textContent = "Select the text above to copy"; }
+});
+</script>
+</body>
+</html>

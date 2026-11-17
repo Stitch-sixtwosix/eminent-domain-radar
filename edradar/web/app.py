@@ -428,8 +428,28 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40) -> Dic
                      "skiptrace": dict(hub["status"]["skiptrace"], enabled=False, why=off)}
     for a in hub["activity"]:
         a["proof_url"] = None        # proof links are signed URLs for the account holder
-    out = Path(out_dir)
-    out.mkdir(parents=True, exist_ok=True)
+    site = Path(out_dir)
+    site.mkdir(parents=True, exist_ok=True)
+    # The public site: a landing page and a request-access page at the root, the read-only app under /app.
+    import shutil
+
+    landing = STATIC.parent / "landing"
+    owner_counties = len({c for layer in cfg.get("parcel_layers") or [] for c in layer.get("counties") or []
+                          if (layer.get("fields") or {}).get("owner") or layer.get("provider") == "carto_phl"})
+    fill = {"leads": "{:,}".format(stats["leads"]), "projects": "{:,}".format(stats["projects"]),
+            "owners": "{:,}".format(stats["leads_with_owner"]), "counties": str(len(stats["counties"])),
+            "owner_counties": str(owner_counties), "date": date.today().strftime("%B %-d, %Y")}
+    for name in ("index.html", "signup.html"):
+        page = (landing / name).read_text()
+        for k, v in fill.items():
+            page = page.replace("{{%s}}" % k, v)
+        (site / name).write_text(page)
+    shutil.copyfile(landing / "site.css", site / "site.css")
+    shutil.copytree(landing / "img", site / "img", dirs_exist_ok=True)
+    for stale in ("data.json",):                 # the app used to live at the root
+        (site / stale).unlink(missing_ok=True)
+    out = site / "app"
+    out.mkdir(exist_ok=True)
     html = (STATIC / "index.html").read_text()
     from datetime import datetime
 
@@ -441,8 +461,8 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40) -> Dic
     (out / "data.json").write_text(json.dumps({"stats": stats, "projects": projects, "leads": leads, "layers": layers, "template": outreach.template(cfg), "hub": hub,
                                                "contacts": {}},
                                               separators=(",", ":")))
-    (out / ".nojekyll").write_text("")
+    (site / ".nojekyll").write_text("")
     domain = (cfg.get("site") or {}).get("domain")
     if domain:                       # GitHub Pages serves the snapshot at this address while the file is present
-        (out / "CNAME").write_text(domain.strip() + "\n")
+        (site / "CNAME").write_text(domain.strip() + "\n")
     return {"projects": len(projects), "leads": len(leads)}
