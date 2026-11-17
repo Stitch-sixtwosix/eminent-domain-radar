@@ -88,12 +88,13 @@ def lead_score(project_score: int, reason: str) -> int:
 def match(cfg: Dict[str, Any], db: DB, limit: Optional[int] = None) -> int:
     m = cfg["matching"]
     layers = cfg.get("parcel_layers") or []
-    http = Http(cfg["user_agent"], timeout=90)
+    http = Http(cfg["user_agent"], timeout=60, retries=2)
+    failures: Dict[str, int] = {}      # a parcel server that is down should cost one run a few minutes, not hours
     projects = db.projects_to_match(int(m["min_project_score"]), int(limit or m["projects_per_run"]))
     total = 0
     for p in projects:
         layer = P.pick_layer(layers, p["county"])
-        if layer is None:
+        if layer is None or failures.get(layer["name"], 0) >= 3:
             continue
         found = []
         try:
@@ -104,7 +105,10 @@ def match(cfg: Dict[str, Any], db: DB, limit: Optional[int] = None) -> int:
                 for r in P.near(layer, http, json.loads(p["geometry"]), m):
                     found.append(dict(r, reason="abuts_alignment" if r["abuts"] else "within_buffer"))
         except Exception as e:
-            print("  project %s (%s): %s" % (p["id"], layer["name"], e))
+            print("  project %s (%s): %s" % (p["id"], layer["name"], str(e)[:120]))
+            failures[layer["name"]] = failures.get(layer["name"], 0) + 1
+            if failures[layer["name"]] == 3:
+                print("  %s is not answering; skipping it for the rest of this run" % layer["name"])
             continue  # left unmatched so the next run retries it
         for r in found:
             r.setdefault("county", None)
