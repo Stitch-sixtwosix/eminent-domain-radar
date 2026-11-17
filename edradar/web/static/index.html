@@ -384,6 +384,7 @@
     .cards { grid-template-columns: 1fr; }
     #parcel { top: 0; }
   }
+  .demo .mode, .demo .done { display: none; }
   #panes { display: none; }
   @media (max-width: 720px) {
     /* A phone shows one thing at a time: the project list, the map or the lead table, switched from a bar at the foot. */
@@ -602,6 +603,11 @@ const ICON = {
   check: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>',
 };
 
+const DEMO = new URLSearchParams(location.search).has("demo");
+const DEMO_OWNERS = [["SAMPLE FAMILY TRUST", "100 EXAMPLE RD, ANYTOWN, ST 00000"], ["DOE JOHN A & JANE B", "214 SAMPLE LN, ANYTOWN, ST 00000"],
+  ["RIVERBEND HOLDINGS LLC", "7 PLACEHOLDER AVE, ANYTOWN, ST 00000"], ["ROE RICHARD", "31 EXAMPLE CT, ANYTOWN, ST 00000"],
+  ["NORTHFIELD FARMS LP", "880 SAMPLE PIKE, ANYTOWN, ST 00000"], ["PUBLIC MARY & DAVID", "52 PLACEHOLDER ST, ANYTOWN, ST 00000"]];
+if (DEMO) document.documentElement.classList.add("demo");
 let leadTicket = 0, TOTAL_LEADS = 0, STATUSES = [], OUT = null, projects = [], selected = null, layers = {}, leadRows = [], listView = null;
 const picked = new Set();     // leads ticked in the table, to be saved to a client list
 const HOME = [[39.72, -80.52], [42.27, -74.69]];
@@ -903,6 +909,13 @@ async function loadLeads() {
   const ticket = ++leadTicket;                      // a slower, older request must not overwrite a newer one
   const rows = await api("/api/leads?" + leadParams());
   if (ticket !== leadTicket) return;
+  if (DEMO) rows.forEach((r, i) => {            // marketing screenshots never show a real owner
+    const d = DEMO_OWNERS[i % DEMO_OWNERS.length];
+    if (r.owner) r.owner = d[0];
+    if (r.mailing_address) r.mailing_address = d[1];
+    if (r.address) r.address = d[1].split(",")[0];
+    r.apn = "00-000-" + String(100 + i);
+  });
   leadRows = rows;
   for (const id of [...picked]) if (!rows.some(r => r.id === id)) picked.delete(id);
   syncPicked();

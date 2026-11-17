@@ -88,6 +88,11 @@ MERGE_FIELDS = {
     "firm_name": "Your firm", "attorney_name": "Attorney signing the letter", "firm_phone": "Firm phone",
     "firm_email": "Firm email", "firm_website": "Firm website",
 }
+# Required on every letter and email (lawyer advertising rules, CAN-SPAM): what it is, who sent it, how to stop it.
+OPT_OUT_MARK = "will not contact you again"
+OPT_OUT = ("ADVERTISEMENT. This message is from {{firm_name}}. If you would rather not hear from us, reply or call "
+           "{{firm_phone}} and we will not contact you again.")
+
 DEFAULT_TEMPLATE = {
     "email_subject": "About {{property}} and the {{project_name}} project",
     "letter": (
@@ -95,9 +100,9 @@ DEFAULT_TEMPLATE = {
         "Public records list {{owner_name}} as the owner of {{property}} in {{county}} County. That parcel lies along the "
         "planned {{project_name}} project, which {{agency}} currently has in {{project_stage}}.\n\n"
         "Projects like this can require the government to acquire private land or easements. No taking of your property "
-        "has been announced, and it may never be needed. If it is, Pennsylvania law entitles you to just compensation, "
+        "has been announced, and it may never be needed. If it is, the law entitles you to just compensation, "
         "and the first offer an owner receives is not always the full amount owed.\n\n"
-        "{{firm_name}} represents Pennsylvania property owners in eminent domain matters. We do not represent the agencies "
+        "{{firm_name}} represents property owners in eminent domain matters. We do not represent the agencies "
         "that take land. If you would like to understand your rights before anyone contacts you about the project, "
         "a first conversation costs nothing.\n\n"
         "You can reach us at {{firm_phone}} or {{firm_email}}.\n\n"
@@ -108,7 +113,7 @@ DEFAULT_TEMPLATE = {
                          "private land or easements. Owners are entitled to just compensation, and the first offer is not "
                          "always the full amount."),
     "postcard_back": ("Know your rights before you sign. Public records show your parcel ({{parcel_id}}) lies along the planned "
-                      "route. {{firm_name}} represents Pennsylvania property owners, not the agencies taking the land. "
+                      "route. {{firm_name}} represents property owners, not the agencies taking the land. "
                       "A first conversation costs nothing: {{firm_phone}}."),
 }
 
@@ -116,9 +121,12 @@ DEFAULT_TEMPLATE = {
 def template(cfg: Dict[str, Any]) -> Dict[str, Any]:
     o = cfg.get("outreach") or {}
     saved = o.get("template") or {}
-    return {"firm": {k: (o.get("firm") or {}).get(k) or "" for k in FIRM_FIELDS},
+    out = {"firm": {k: (o.get("firm") or {}).get(k) or "" for k in FIRM_FIELDS},
             **{k: saved.get(k) or v for k, v in DEFAULT_TEMPLATE.items()},
             "fields": MERGE_FIELDS}
+    if OPT_OUT_MARK not in out["letter"]:
+        out["letter"] = out["letter"].rstrip() + "\n\n" + OPT_OUT
+    return out
 
 
 def apply_saved(cfg: Dict[str, Any], db: Any) -> None:
@@ -259,7 +267,9 @@ def postcard_check(cfg: Dict[str, Any], lead: Dict[str, Any]) -> Dict[str, Any]:
     kind = owner_kind(lead.get("owner"))
     to = parse_address(lead.get("mailing_address"))
     blocker = None
-    if kind == "government":
+    if lead.get("status") == "do not contact":
+        blocker = "This owner asked not to be contacted."
+    elif kind == "government":
         blocker = "This parcel is owned by a public body."
     elif kind == "unknown":
         blocker = "No owner of record for this parcel."
@@ -363,6 +373,8 @@ class Apollo:
 # ---------------------------------------------------------------- postcard campaigns
 POSTCARD_ELIGIBLE = """
     pa.mailable = 1 AND pa.owner_kind IN ('individual', 'company') AND l.status NOT IN ('rejected', 'retained')
+    AND NOT EXISTS (SELECT 1 FROM leads l9 JOIN parcels p9 ON p9.id = l9.parcel_id
+                    WHERE l9.status = 'do not contact' AND p9.owner = pa.owner)
     AND NOT EXISTS (SELECT 1 FROM outreach o JOIN leads l2 ON l2.id = o.lead_id JOIN parcels p2 ON p2.id = l2.parcel_id
                     WHERE o.channel = 'postcard' AND o.status = 'sent'
                       AND p2.owner = pa.owner AND p2.mailing_address = pa.mailing_address)
@@ -428,6 +440,8 @@ def _mail(cfg: Dict[str, Any], db: Any, leads: List[Dict[str, Any]], out: Dict[s
 # ---------------------------------------------------------------- client lists
 # company owners Apollo can search; hidden once a scan found nobody there
 EMAIL_ELIGIBLE = ("pa.owner_kind = 'company' AND COALESCE(pa.email_contacts, 1) > 0 "
+                  "AND NOT EXISTS (SELECT 1 FROM leads l9 JOIN parcels p9 ON p9.id = l9.parcel_id "
+                  "WHERE l9.status = 'do not contact' AND p9.owner = pa.owner) "
                   "AND NOT EXISTS (SELECT 1 FROM outreach o WHERE o.lead_id = l.id AND o.channel = 'email')")
 IN_LIST = "l.id IN (SELECT lead_id FROM list_members WHERE list_id = ?)"
 MAX_PER_RUN = 200
@@ -463,7 +477,7 @@ def list_plan(db: Any, list_id: int) -> Dict[str, List[Dict[str, Any]]]:
             continue
         kind = r["owner_kind"] or owner_kind(r["owner"])
         why = ("No owner of record" if not r["owner"] else "Public body" if kind == "government"
-               else "Marked " + r["status"] if r["status"] in ("rejected", "retained")
+               else "Marked " + r["status"] if r["status"] in ("rejected", "retained", "do not contact")
                else "Already contacted" if r["postcard_at"] or r["email_at"] or r["mailable"]
                else "Mailing address could not be read")
         skipped.append({"lead_id": r["id"], "owner": r["owner"] or "Unknown owner", "why": why})

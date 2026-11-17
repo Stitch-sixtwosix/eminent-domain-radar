@@ -39,7 +39,13 @@
         <label>Phone <span>(optional)</span><input type="tel" name="phone" autocomplete="tel"></label>
         <label>Firm city and state<input type="text" name="location" autocomplete="address-level2"></label>
         <label class="full">Firm website <span>(optional)</span><input type="text" name="website" autocomplete="url" inputmode="url"></label>
-        <label class="full">States where you handle eminent domain matters<input type="text" name="states" required></label>
+        <fieldset class="full"><legend>Plan</legend>
+          <div class="choices plans-pick">
+            <label><input type="radio" name="plan" value="Single state ($499 a month)" checked> <span><b>Single state</b> $499 a month</span></label>
+            <label><input type="radio" name="plan" value="All 50 states ($999 a month)"> <span><b>All 50 states</b> $999 a month</span></label>
+          </div></fieldset>
+        <label class="full" id="state-row">Your state<select name="plan_state"><option value="">Choose a state</option>{{state_options}}</select></label>
+        <label class="full">Other states where you handle eminent domain matters <span>(optional)</span><input type="text" name="states" autocomplete="off"></label>
         <fieldset class="full"><legend>Who do you represent?</legend>
           <div class="choices">
             <label><input type="radio" name="side" value="Property owners" checked> Property owners</label>
@@ -54,6 +60,25 @@
   </div>
 </main>
 
+<footer>
+  <div class="in">
+    <span>© 2026 EminentTracker, a product of Duerr Imports, LLC</span>
+    <nav aria-label="Footer"><a href="terms.html">Terms of use</a><a href="privacy.html">Privacy</a><a href="compliance.html">Compliance</a><a href="privacy.html#owners">Property owners: opt out</a><a href="signup.html">Sign up</a><a class="auth-only" href="login.html">Sign in</a><a href="mailto:info@duerrlawpc.com?subject=EminentTracker">Contact</a></nav>
+    <div class="rules">
+      <p><b>Rules this service is run under.</b> Subscribers agree to follow them; the software enforces the ones it can. <a href="compliance.html">Read the full compliance page.</a></p>
+      <ul>
+        <li>State rules of professional conduct on lawyer advertising and solicitation (ABA Model Rules 7.1 to 7.3 and each state’s version)</li>
+        <li>CAN-SPAM Act for commercial email</li>
+        <li>Telephone Consumer Protection Act, the National Do Not Call Registry and state telemarketing laws</li>
+        <li>Fair Credit Reporting Act: data may not be used for credit, employment, insurance or tenant decisions</li>
+        <li>Deceptive Mail Prevention and Enforcement Act and U.S. Postal Service mailing standards</li>
+        <li>State privacy laws and each public agency’s terms for using its records</li>
+      </ul>
+    </div>
+    <p class="legal">EminentTracker is a research and marketing tool for licensed attorneys. It is not a law firm, does not give legal advice and does not create an attorney-client relationship. Records come from public sources and can be incomplete or out of date. A project on a planning list may never take any land, and appearing here does not mean a property will be taken. Map data © OpenStreetMap contributors.</p>
+  </div>
+</footer>
+
 <script type="module">
 import {authOn, supa, firmOf, firmData, say, watch, valid} from "./auth.js";
 const form = document.getElementById("firm"), status = document.getElementById("status"), who = document.getElementById("who");
@@ -65,8 +90,11 @@ if (!data.session) location.replace("login.html");
 else {
   const user = data.session.user, f = firmOf(user);
   who.textContent = "Signed in as " + user.email + ".";
-  for (const [k, v] of Object.entries(f)) { const el = form.elements[k]; if (!el) continue; if (k === "side") { if (v) form.querySelectorAll("[name=side]").forEach(r => r.checked = r.value === v); } else el.value = v; }
-  document.getElementById("nudge").hidden = !!(f.firm && f.states);
+  for (const [k, v] of Object.entries(f)) { const el = form.elements[k]; if (!el) continue; if (k === "side" || k === "plan") { if (v) form.querySelectorAll("[name=" + k + "]").forEach(r => r.checked = r.value === v); } else el.value = v; }
+  document.getElementById("nudge").hidden = !!(f.firm && f.plan);
+  const stateRow = document.getElementById("state-row");
+  const syncPlan = () => { stateRow.hidden = !form.elements.plan.value.startsWith("Single"); };
+  form.addEventListener("change", e => { if (e.target.name === "plan") syncPlan(); }); syncPlan();
   form.hidden = false; watch(form);
   form.addEventListener("submit", async e => {
     e.preventDefault();

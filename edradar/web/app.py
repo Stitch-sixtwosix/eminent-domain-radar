@@ -16,7 +16,7 @@ from ..classify import STAGE_ORDER, score_breakdown, timeline
 from ..db import DB
 
 STATIC = Path(__file__).parent / "static"
-STATUSES = ["new", "reviewing", "contacted", "retained", "rejected"]
+STATUSES = ["new", "reviewing", "contacted", "retained", "rejected", "do not contact"]
 
 LEAD_SQL = """
 SELECT l.id, l.score, l.match_reason, l.distance_m, l.status, l.notes, l.created_at,
@@ -381,6 +381,12 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
     return app
 
 
+US_STATES = ("Alabama Alaska Arizona Arkansas California Colorado Connecticut Delaware Florida Georgia Hawaii Idaho Illinois "
+             "Indiana Iowa Kansas Kentucky Louisiana Maine Maryland Massachusetts Michigan Minnesota Mississippi Missouri Montana "
+             "Nebraska Nevada New_Hampshire New_Jersey New_Mexico New_York North_Carolina North_Dakota Ohio Oklahoma Oregon "
+             "Pennsylvania Rhode_Island South_Carolina South_Dakota Tennessee Texas Utah Vermont Virginia Washington West_Virginia "
+             "Wisconsin Wyoming").replace("_", "\u00a0").split()
+US_STATES = [n.replace("\u00a0", " ") for n in US_STATES]
 PRIVATE_BUCKET, PRIVATE_OBJECT = "app-data", "data.json.gz"
 
 
@@ -475,7 +481,10 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
     # The owner's portrait appears once a photo is saved as landing/img/william-duerr.jpg.
     fill["photo"] = ('<figure class="portrait"><img src="img/william-duerr.jpg" width="520" height="520" loading="lazy" '
                      'alt="William Christopher Duerr"></figure>') if (landing / "img" / "william-duerr.jpg").exists() else ""
-    for name in ("index.html", "signup.html", "login.html", "account.html"):
+    live = (cfg.get("site") or {}).get("live_states") or ["Pennsylvania"]
+    fill["live_states"] = ", ".join(live)
+    fill["state_options"] = "".join('<option value="%s">%s%s</option>' % (n, n, "" if n in live else " (coming)") for n in US_STATES)
+    for name in ("index.html", "signup.html", "login.html", "account.html", "terms.html", "privacy.html", "compliance.html"):
         page = (landing / name).read_text()
         for k, v in fill.items():
             page = page.replace("{{%s}}" % k, v)

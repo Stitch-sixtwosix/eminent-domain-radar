@@ -25,9 +25,9 @@ export async function currentUser() {
   const {data} = await s.auth.getSession();
   return data.session ? data.session.user : null;
 }
-export const FIRM_FIELDS = ["name", "firm", "phone", "location", "website", "states", "side"];
+export const FIRM_FIELDS = ["name", "firm", "phone", "location", "website", "plan", "plan_state", "states", "side"];
 export const firmOf = user => Object.fromEntries(FIRM_FIELDS.map(k => [k, (user.user_metadata || {})[k === "name" ? "full_name" : k] || (k === "name" ? (user.user_metadata || {}).name : "") || ""]));
-export const firmData = d => ({full_name: d.name, firm: d.firm, phone: d.phone || "", location: d.location || "", website: d.website || "", states: d.states, side: d.side});
+export const firmData = d => ({full_name: d.name, firm: d.firm, phone: d.phone || "", location: d.location || "", website: d.website || "", plan: d.plan || "", plan_state: d.plan_state || "", states: d.states || "", side: d.side});
 export function say(el, text, bad) { el.textContent = text; el.hidden = !text; el.classList.toggle("bad", !!bad); }
 export function checkField(field) {
   const bad = !field.checkValidity();
