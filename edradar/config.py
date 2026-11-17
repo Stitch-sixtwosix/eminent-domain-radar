@@ -42,6 +42,73 @@ def load_env_file(path: str = ".env") -> None:
             os.environ.setdefault(key.strip(), value.strip().strip('"').strip("'"))
 
 
+def state_files() -> list:
+    import json
+
+    out = []
+    for f in sorted((Path(__file__).parent / "data" / "states").glob("*.json")):
+        try:
+            out.append(json.loads(f.read_text()))
+        except ValueError as e:
+            print("  ignoring %s: %s" % (f.name, e))
+    return out
+
+
+def _usable(item: Any, need_owner: bool = False) -> bool:
+    """A researched layer is used only if it was verified with a live query and carries no unreviewed
+    restriction on commercial use. A human sets "approved": true to clear a restriction."""
+    if not isinstance(item, dict) or not item.get("verified") or not item.get("url"):
+        return False
+    if item.get("restrictions") and not item.get("approved"):
+        return False
+    return bool((item.get("fields") or {}).get("owner")) if need_owner else True
+
+
+def add_states(cfg: Dict[str, Any]) -> None:
+    """Turn each researched state file (edradar/data/states/XX.json) into a project source and parcel layers."""
+    dot_layers, parcel_layers = [], []
+    for st in state_files():
+        code = (st.get("code") or "").upper()
+        if len(code) != 2 or code == "PA":            # Pennsylvania has its own reader and county catalog
+            continue
+        for i, p in enumerate(st.get("projects") or []):
+            if _usable(p) and p.get("fields"):
+                dot_layers.append({"state": code, "name": p.get("name") or "%s projects" % code, "key": "%s%d" % (code.lower(), i),
+                                   "url": p["url"], "fields": p["fields"], "where": p.get("where"),
+                                   "agency": p.get("agency") or "%s DOT" % st.get("state", code), "info_url": p.get("info_url")})
+        sw = st.get("parcels_statewide")
+        counties = [c for c in (st.get("parcels_counties") or []) if _usable(c, need_owner=True)]
+        for c in counties:                            # a county's own layer is preferred over the statewide one
+            parcel_layers.append({"state": code, "name": "%s %s County" % (code, str(c.get("county", "")).title()),
+                                  "provider": "arcgis", "counties": [str(c["county"]).upper()], "url": c["url"], "fields": c["fields"]})
+        if _usable(sw) and (sw.get("fields") or {}).get("apn"):
+            parcel_layers.append({"state": code, "name": "%s statewide parcels" % code, "provider": "arcgis",
+                                  "url": sw["url"], "fields": sw["fields"]})
+    if dot_layers:
+        src = cfg.setdefault("sources", {}).setdefault("dot_arcgis", {})
+        src.setdefault("enabled", True)
+        src["layers"] = (src.get("layers") or []) + dot_layers
+    cfg["parcel_layers"] = (cfg.get("parcel_layers") or []) + parcel_layers
+
+
+def coverage(cfg: Dict[str, Any]) -> list:
+    """What each state has: a project source, owner records statewide or by county, and anything held back."""
+    rows = [{"code": "PA", "state": "Pennsylvania", "projects": True, "owners": "35 counties",
+             "held": None, "note": "PennDOT program plus federal notices and Pittsburgh legislation"}]
+    for st in state_files():
+        code = (st.get("code") or "").upper()
+        if len(code) != 2 or code == "PA":
+            continue
+        sw, counties = st.get("parcels_statewide"), st.get("parcels_counties") or []
+        ok_counties = [c for c in counties if _usable(c, need_owner=True)]
+        held = [x.get("name") or x.get("county") for x in [sw] + counties if isinstance(x, dict) and x.get("restrictions") and not x.get("approved")]
+        rows.append({"code": code, "state": st.get("state") or code,
+                     "projects": any(_usable(p) for p in st.get("projects") or []),
+                     "owners": "statewide" if _usable(sw, need_owner=True) else ("%d counties" % len(ok_counties) if ok_counties else "none"),
+                     "held": ", ".join(str(h) for h in held if h) or None, "note": st.get("summary")})
+    return sorted(rows, key=lambda r: r["state"])
+
+
 def load_config(path: Optional[str] = None) -> Dict[str, Any]:
     load_env_file()
     path = path or os.environ.get("EDRADAR_CONFIG") or "config.yaml"
@@ -58,6 +125,7 @@ def load_config(path: Optional[str] = None) -> Dict[str, Any]:
         builtin = [b for b in builtin if b["counties"][0] not in covered]
         cfg["parcel_layers"] = ([x for x in mine if x.get("counties")] + builtin
                                 + [x for x in mine if not x.get("counties")])
+    add_states(cfg)
     if os.environ.get("EDRADAR_DB"):
         cfg["database"] = os.environ["EDRADAR_DB"]
     return cfg

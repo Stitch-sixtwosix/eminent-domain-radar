@@ -658,6 +658,11 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
     else:
         (out / "data.json").write_bytes(payload)
     (out / "index.html").write_text(html)
+    from ..config import coverage as _coverage
+
+    counts = {x["code"]: x["projects"] for x in stats.get("states") or []}
+    (site / "coverage.json").write_text(json.dumps(
+        [dict(r, live=r["code"] in counts, scored_projects=counts.get(r["code"], 0)) for r in _coverage(cfg)]))
     (site / ".nojekyll").write_text("")
     domain = (cfg.get("site") or {}).get("domain")
     (site / "robots.txt").write_text("User-agent: *\nDisallow: /app/\nDisallow: /account.html\nDisallow: /admin.html\n"

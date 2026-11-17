@@ -823,14 +823,18 @@ function downloadCsv(rows) {
   a.href = URL.createObjectURL(blob); a.download = "eminent-tracker-leads.csv"; a.click();
 }
 
+// In the working app the state is chosen in the top bar and kept in the address (?state=OH). Empty means every state.
+const LIVE_STATE = STATIC ? "" : (new URLSearchParams(location.search).get("state") || "").toUpperCase();
 function projectParams() {
   const p = new URLSearchParams({min_score: $("f-score").value});
+  if (LIVE_STATE) p.set("state", LIVE_STATE);
   for (const [id, key] of [["f-county", "county"], ["f-type", "project_type"], ["f-source", "source"], ["f-stage", "stage"], ["f-q", "q"]])
     if ($(id).value) p.set(key, $(id).value);
   return p;
 }
 function leadParams() {
   const p = new URLSearchParams();
+  if (LIVE_STATE) p.set("state", LIVE_STATE);
   if (selected) p.set("project_id", selected.id);
   else {
     p.set("min_score", 60);
@@ -856,8 +860,18 @@ function drawProject(p) {
   layers[p.id] = layer;
 }
 
+let framed = false;
 async function loadProjects() {
   projects = await api("/api/projects?" + projectParams());
+  if (!STATIC && !framed && projects.length) {           // frame the map on whatever is loaded, not on one fixed state
+    framed = true;
+    const pts = projects.filter(p => p.lat != null && p.lon != null);
+    if (pts.length) {
+      const lat = pts.map(p => p.lat), lon = pts.map(p => p.lon);
+      HOME = [[Math.min(...lat) - 0.15, Math.min(...lon) - 0.15], [Math.max(...lat) + 0.15, Math.max(...lon) + 0.15]];
+      if (!selected) map.fitBounds(HOME, {animate: false});
+    }
+  }
   group.clearLayers(); layers = {};
   const box = $("projects");
   if (!projects.length) {
@@ -1633,8 +1647,14 @@ for (const id of ["f-county", "f-type", "f-source", "f-stage", "f-score", "f-q"]
 
 (async () => {
   skeleton();
-  const s = await api("/api/stats");
+  const s = await api("/api/stats" + (LIVE_STATE ? "?state=" + LIVE_STATE : ""));
   STATUSES = s.statuses; TOTAL_LEADS = s.leads;
+  if (!STATIC && (s.states || []).length > 1) {          // more than one state is loaded: offer the choice
+    const pick = $("f-state");
+    pick.innerHTML = '<option value="">All states</option>' + s.states.map(x => `<option value="${x.code}"${x.code === LIVE_STATE ? " selected" : ""}>${esc(x.name)} (${x.projects.toLocaleString()})</option>`).join("");
+    pick.hidden = false;
+    pick.onchange = () => { const u = new URL(location.href); pick.value ? u.searchParams.set("state", pick.value) : u.searchParams.delete("state"); u.searchParams.delete("project"); u.searchParams.delete("lead"); location.href = u; };
+  }
   if (s.updated) $("st-updated").textContent = "Data from " + day(s.updated);
   $("st-projects").textContent = s.projects.toLocaleString();
   $("st-leads").textContent = s.leads.toLocaleString();

@@ -611,3 +611,26 @@ def test_state_dot_source_and_classifier(tmp_path):
     layers = [{"name": "PA county", "counties": ["FRANKLIN"]}, {"name": "Ohio statewide", "state": "OH"}]
     assert pick_layer(layers, "FRANKLIN", "OH")["name"] == "Ohio statewide"       # same county name, different state
     assert pick_layer(layers, "FRANKLIN", "PA")["name"] == "PA county" and pick_layer(layers, "ADAMS", "NJ") is None
+
+
+def test_state_files_become_sources(tmp_path, monkeypatch):
+    from edradar import config
+
+    files = [{"state": "Ohio", "code": "OH", "summary": "ok",
+              "projects": [{"name": "ODOT", "url": "https://x/0", "verified": True, "fields": {"id": "PID", "name": "N"}},
+                           {"name": "guess", "url": "https://x/1", "verified": False, "fields": {"id": "PID"}}],
+              "parcels_statewide": {"name": "OH parcels", "url": "https://p/0", "verified": True, "fields": {"apn": "PIN", "owner": "OWNER"}},
+              "parcels_counties": [{"county": "Franklin", "url": "https://f/0", "verified": True, "fields": {"apn": "ID", "owner": "OWN"}}]},
+             {"state": "Texas", "code": "TX", "projects": [], "parcels_statewide": {
+                 "name": "TX parcels", "url": "https://t/0", "verified": True, "restrictions": "no solicitation",
+                 "fields": {"apn": "ID", "owner": "OWN"}}, "parcels_counties": []}]
+    monkeypatch.setattr(config, "state_files", lambda: files)
+    cfg = {"sources": {}, "parcel_layers": [{"name": "PA county", "counties": ["FRANKLIN"]}]}
+    config.add_states(cfg)
+    layers = cfg["sources"]["dot_arcgis"]["layers"]
+    assert [x["url"] for x in layers] == ["https://x/0"] and layers[0]["state"] == "OH"          # unverified layers are never used
+    names = [x["name"] for x in cfg["parcel_layers"]]
+    assert names == ["PA county", "OH Franklin County", "OH statewide parcels"]                  # the restricted Texas layer is held back
+    cov = {r["code"]: r for r in config.coverage(cfg)}
+    assert cov["OH"]["owners"] == "statewide" and cov["TX"]["owners"] == "none" and cov["TX"]["held"] == "TX parcels"
+    assert cov["PA"]["projects"] and not cov["TX"]["projects"]
