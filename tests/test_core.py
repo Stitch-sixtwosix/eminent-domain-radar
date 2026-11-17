@@ -603,6 +603,10 @@ def test_state_dot_source_and_classifier(tmp_path):
     assert out["acquisition_likelihood"] == 85 and out["stage"] == "design" and out["project_type"] == "highway" and out["score"] >= 80
     paving = dot_arcgis.to_signal(layer, dict(attrs, PID=78, TYPE="Resurfacing", PROJECT_NAME="FRA-33 paving", DESCR="Mill and overlay"), None)
     assert classify_dot(paving)["acquisition_likelihood"] <= 10
+    row = classify_dot(dot_arcgis.to_signal(layer, dict(attrs, PID=80, TYPE="86:RIGHT OF WAY", PHASE=None), None))
+    assert row["acquisition_likelihood"] >= 95 and row["stage"] == "row_acquisition"
+    lanes = classify_dot(dot_arcgis.to_signal(layer, dict(attrs, PID=81, TYPE="Statewide Highway", PROJECT_NAME="I-440", DESCR="Construct 2 lanes in each direction."), None))
+    assert lanes["acquisition_likelihood"] >= 75
     built = dot_arcgis.to_signal(layer, dict(attrs, PID=79, PHASE="Under Construction"), None)
     assert classify_dot(built)["stage"] == "construction"
 

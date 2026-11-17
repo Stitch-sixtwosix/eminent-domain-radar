@@ -228,6 +228,7 @@ DOT_WORK = [
     (r"new (?:road|route|highway|alignment|location|corridor|connector|interchange|freeway|expressway)|bypass|\bextension\b|extend ", 95, "highway"),
     (r"new interchange", 95, "interchange"),
     (r"realign|relocat", 90, "highway"),
+    (r"construct(?:ion of)? (?:\w+ ){0,3}lanes|multi-?lan|upgrade (?:\w+ ){0,6}to (?:a |an )?(?:freeway|expressway|interstate|interchange|superstreet)|superstreet|super[- ]?2|reduced conflict", 85, "highway"),
     (r"widen|add(?:ed|ing|itional)? (?:travel |through |general purpose )?lanes?|capacity|duali[sz]|(?:four|six|4|6)[- ]lan(?:e|ing)|two[- ]way left|passing lane|auxiliary lane", 85, "highway"),
     (r"grade separation|overpass|underpass|new bridge|flyover", 75, "bridge"),
     (r"interchange", 70, "interchange"),
@@ -268,6 +269,8 @@ def classify_dot(signal: Dict[str, Any]) -> Dict[str, Any]:
     status = str(raw.get("_status") or "")
     # A program of future work (a STIP, a five-year plan) is "planning" unless its status says something more specific.
     stage = next((st for pat, st in DOT_STAGE if re.search(pat, status, re.I)), raw.get("_stage") or ("planning" if not status else "unknown"))
+    if stage in ("planning", "unknown", "design") and re.search(r"right[- ]of[- ]way|\brow\b|r/w", str(raw.get("_work_type") or ""), re.I):
+        stage = "row_acquisition"              # the job itself is the land purchase
     cost = raw.get("_cost")
     geometry = json.loads(signal["geometry"]) if isinstance(signal.get("geometry"), str) else signal.get("geometry")
     c = geo.center(geometry)
