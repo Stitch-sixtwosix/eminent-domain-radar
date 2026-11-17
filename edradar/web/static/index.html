@@ -743,7 +743,7 @@ async function loadLeads() {
     return;
   }
   $("leads-wrap").innerHTML = `<table><thead><tr>${th("Score", "score")}${th("Owner of record", "owner")}${th("Property", "property")}
-    ${th("County value", "value", "num")}${th("Match", "match")}${p ? "" : th("Project", "project")}${STATIC ? "" : th("Outreach", "outreach")}${th("Status", "status")}</tr></thead><tbody>` +
+    ${th("County value", "value", "num")}${th("Match", "match")}${p ? "" : th("Project", "project")}${STATIC ? "" : th("Outreach", "outreach")}${STATIC ? "" : th("Status", "status")}</tr></thead><tbody>` +
     leadRows.map(r => `<tr data-row="${r.id}" tabindex="0"${openLead === r.id ? ' class="sel"' : ""}>
       <td><span class="score ${scoreClass(r.score)}" data-tip-lead="${r.id}">${r.score}</span></td>
       <td class="owner">${r.owner ? esc(r.owner) : '<span class="lookup">Look up at county</span>'}${r.mailing_address ? `<div class="sub">${esc(r.mailing_address)}</div>` : ""}</td>
@@ -752,8 +752,8 @@ async function loadLeads() {
       <td>${esc(REASON[r.match_reason] || r.match_reason)}${r.distance_m != null ? `<div class="sub">${Math.round(r.distance_m)} m away</div>` : ""}</td>
       ${p ? "" : `<td><a href="#" data-project="${r.project_id}">${esc(r.project)}</a></td>`}
       ${outreachCell(r)}
-      <td><select data-status="${r.id}" aria-label="Lead status"${STATIC ? " disabled" : ""}>${STATUSES.map(s =>
-        `<option${s === r.status ? " selected" : ""}>${s}</option>`).join("")}</select></td></tr>`).join("") +
+      ${STATIC ? "" : `<td><select data-status="${r.id}" aria-label="Lead status">${STATUSES.map(st =>
+        `<option${st === r.status ? " selected" : ""}>${st}</option>`).join("")}</select></td>`}</tr>`).join("") +
     "</tbody></table>" + `<div class="total">${p ? `${leadRows.length.toLocaleString()} of ${p.lead_count.toLocaleString()} parcels for this project` : ($("f-outreach").value || $("f-owner").checked || $("f-county").value || $("f-stage").value) ? `${leadRows.length >= 300 ? "First 300" : leadRows.length.toLocaleString()} leads matching these filters` : `Top ${leadRows.length.toLocaleString()} of ${TOTAL_LEADS.toLocaleString()} leads`}, highest score first${leadRows.length >= 300 ? ". Export CSV for the full list" : ""}.</div>`;
 }
 
