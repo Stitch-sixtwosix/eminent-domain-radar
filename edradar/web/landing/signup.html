@@ -84,7 +84,7 @@
     </form>
     <div class="done" id="done" hidden tabindex="-1">
       <h2 id="done-h">Your request is ready to send</h2>
-      <p id="done-p">Your mail program should have opened with the message below. If it did not, copy the text and send it to <a href="mailto:info@duerrlawpc.com">info@duerrlawpc.com</a>.</p>
+      <p id="done-p">Your mail program should have opened with the message below. If it did not, copy the text and send it to <a href="mailto:{{contact_email}}">{{contact_email}}</a>.</p>
       <pre id="done-text"></pre>
       <div class="send" id="done-acts"><a class="btn" id="done-mail" href="#">Open the email again</a><button class="btn plain" type="button" id="done-copy">Copy the text</button></div>
     </div>
@@ -94,7 +94,7 @@
 <footer>
   <div class="in">
     <span>© 2026 EminentTracker, a product of Duerr Imports, LLC</span>
-    <nav aria-label="Footer"><a href="terms.html">Terms of use</a><a href="privacy.html">Privacy</a><a href="compliance.html">Compliance</a><a href="privacy.html#owners">Property owners: opt out</a><a href="signup.html">Sign up</a><a class="auth-only" href="login.html">Sign in</a><a href="mailto:info@duerrlawpc.com?subject=EminentTracker">Contact</a></nav>
+    <nav aria-label="Footer"><a href="terms.html">Terms of use</a><a href="privacy.html">Privacy</a><a href="compliance.html">Compliance</a><a href="privacy.html#owners">Property owners: opt out</a><a href="signup.html">Sign up</a><a class="auth-only" href="login.html">Sign in</a><a href="mailto:{{contact_email}}?subject=EminentTracker">Contact</a></nav>
     <div class="rules">
       <p><b>Rules this service is run under.</b> Subscribers agree to follow them; the software enforces the ones it can. <a href="compliance.html">Read the full compliance page.</a></p>
       <ul>
@@ -113,7 +113,7 @@
 <script type="module">
 import {authOn, supa, google, here, firmData, say, watch, valid} from "./auth.js";
 const form = document.getElementById("request"), done = document.getElementById("done"), status = document.getElementById("status"), go = document.getElementById("go");
-const TO = "info@duerrlawpc.com";
+const TO = "{{contact_email}}";
 if (!authOn) form.querySelector("[name=password]").required = false;
 watch(form);
 const stateRow = document.getElementById("state-row"), stateSel = form.elements.plan_state;

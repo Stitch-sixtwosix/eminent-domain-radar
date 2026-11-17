@@ -5,6 +5,7 @@ database: data/edradar.db
 # The public snapshot's own web address. Written into the published site so the host keeps serving it there.
 # site:
 #   domain: eminenttracker.com
+#   contact_email: info@eminenttracker.com   # shown on every page; set it once the mailbox can receive mail
 #   # Accounts (email or Google sign-in) switch on when both are set. Use the project's public "anon" key only.
 #   supabase_url: https://YOUR-PROJECT.supabase.co
 #   supabase_anon_key: ""

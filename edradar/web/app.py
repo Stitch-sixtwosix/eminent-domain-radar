@@ -481,6 +481,7 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
     # The owner's portrait appears once a photo is saved as landing/img/william-duerr.jpg.
     fill["photo"] = ('<figure class="portrait"><img src="img/william-duerr.jpg" width="520" height="520" loading="lazy" '
                      'alt="William Christopher Duerr"></figure>') if (landing / "img" / "william-duerr.jpg").exists() else ""
+    fill["contact_email"] = (cfg.get("site") or {}).get("contact_email") or "info@duerrlawpc.com"
     live = (cfg.get("site") or {}).get("live_states") or ["Pennsylvania"]
     fill["live_states"] = ", ".join(live)
     fill["state_options"] = "".join('<option value="%s">%s%s</option>' % (n, n, "" if n in live else " (coming)") for n in US_STATES)
