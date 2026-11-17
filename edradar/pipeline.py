@@ -107,7 +107,24 @@ def match(cfg: Dict[str, Any], db: DB, limit: Optional[int] = None) -> int:
     layers = cfg.get("parcel_layers") or []
     http = Http(cfg["user_agent"], timeout=60, retries=2)
     failures: Dict[str, int] = {}      # a parcel server that is down should cost one run a few minutes, not hours
-    projects = db.projects_to_match(int(m["min_project_score"]), int(limit or m["projects_per_run"]))
+    budget = int(limit or m["projects_per_run"])
+    # Only projects in places with parcel records can be matched, and every state gets a share of each run,
+    # so one large state cannot use the whole budget.
+    pool = [p for p in db.projects_to_match(int(m["min_project_score"]), 200000)
+            if P.pick_layer(layers, p["county"], p["state"]) is not None]
+    states = sorted({p["state"] for p in pool})
+    share = max(1, budget // max(1, len(states)))
+    taken: Dict[str, int] = {}
+    projects = []
+    for p in pool:                                   # highest score first within each state's share
+        if taken.get(p["state"], 0) < share and len(projects) < budget:
+            taken[p["state"]] = taken.get(p["state"], 0) + 1
+            projects.append(p)
+    for p in pool:                                   # then fill what is left with the best remaining
+        if len(projects) >= budget:
+            break
+        if p not in projects:
+            projects.append(p)
     total = 0
     for p in projects:
         layer = P.pick_layer(layers, p["county"], p["state"])
