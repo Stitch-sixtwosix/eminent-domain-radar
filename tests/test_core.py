@@ -132,7 +132,8 @@ def test_static_export(tmp_path):
     assert counts == {"projects": 1, "leads": 1}
     data = json.loads((tmp_path / "site" / "data.json").read_text())
     assert data["leads"][0]["owner"] == "Jane Roe" and data["stats"]["generated"]
-    assert "EDRADAR_STATIC = true" in (tmp_path / "site" / "index.html").read_text()
+    page = (tmp_path / "site" / "index.html").read_text()
+    assert "EDRADAR_STATIC = true" in page and "EDRADAR_BUILD" in page and "data.json?v=" in page
 
 
 def test_owner_kind_and_address_parsing():

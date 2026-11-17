@@ -378,7 +378,11 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40) -> Dic
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     html = (STATIC / "index.html").read_text()
-    html = html.replace("<script>\nconst $", "<script>window.EDRADAR_STATIC = true;</script>\n<script>\nconst $", 1)
+    from datetime import datetime
+
+    build = datetime.now().strftime("%Y%m%d%H%M%S")
+    html = html.replace("<script>\nconst $", "<script>window.EDRADAR_STATIC = true; window.EDRADAR_BUILD = \"%s\";</script>"
+                        "\n<script>\nconst $" % build, 1)
     assert "EDRADAR_STATIC = true" in html
     (out / "index.html").write_text(html)
     (out / "data.json").write_text(json.dumps({"stats": stats, "projects": projects, "leads": leads, "layers": layers, "template": outreach.template(cfg), "hub": hub,

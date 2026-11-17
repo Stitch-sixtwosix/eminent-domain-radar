@@ -659,11 +659,16 @@ function staticLeads(q) {
     .map(l => { const p = byId[l.project_id] || {}; return {...l, project: p.name, project_type: p.project_type, stage: p.stage, agency: p.agency, source: p.source, url: p.url}; });
 }
 async function staticApi(path) {
-  if (!SNAP) { const r = await fetch("data.json"); if (!r.ok) throw new Error("data.json returned " + r.status); SNAP = await r.json(); }
+  // The data file is requested with this page's build stamp, so a browser can never pair a new page with an old,
+  // cached data file (which is what left the hub stuck on "Loading").
+  if (!SNAP) { const r = await fetch("data.json?v=" + encodeURIComponent(window.EDRADAR_BUILD || "")); if (!r.ok) throw new Error("data.json returned " + r.status); SNAP = await r.json(); }
   const [route, qs] = path.split("?"), q = new URLSearchParams(qs || "");
   if (route === "/api/stats") return SNAP.stats;
   if (route === "/api/outreach/template") return SNAP.template;
-  if (route === "/api/outreach/hub") return SNAP.hub;
+  if (route === "/api/outreach/hub") {
+    if (!SNAP.hub) throw new Error("This snapshot was published before the Outreach hub existed. Reload the page to get the current one");
+    return SNAP.hub;
+  }
   if (route === "/api/usage") return {...SNAP.hub.usage, rates: SNAP.hub.rates};
   if (route === "/api/projects") {
     const min = +(q.get("min_score") || 0), text = (q.get("q") || "").toLowerCase();
@@ -933,9 +938,11 @@ function cardMocks(t, sample) {
 async function loadHub() {
   const box = $("hub");
   if (!box.innerHTML) box.innerHTML = `<div class="hub"><p class="meta">Loading the outreach hub…</p></div>`;
-  let h;
-  try { h = await api("/api/outreach/hub"); }
-  catch (e) { box.innerHTML = `<div class="hub"><div class="alert bad">${esc(e.message)}</div></div>`; return; }
+  try { renderHub(await api("/api/outreach/hub")); }
+  catch (e) { box.innerHTML = `<div class="hub"><div class="alert bad">The outreach hub could not be shown: ${esc(e.message)}.</div></div>`; }
+}
+function renderHub(h) {
+  const box = $("hub");
   OUT = {...h.status, rates: h.rates}; TPL = h.template;
   const pc = h.status.postcard, em = h.status.email, sk = h.status.skiptrace, r = h.ready, t = h.template, f = t.firm;
   const fig = (label, v) => `<div><span>${label}</span><b>${v}</b></div>`;
