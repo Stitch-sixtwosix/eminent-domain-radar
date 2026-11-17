@@ -767,9 +767,12 @@ async function staticApi(path) {
   // cached data file (which is what left the hub stuck on "Loading").
   if (!SNAP && window.EDRADAR_PRIVATE) {
     // The data lives in a private store: it is fetched with this visitor's own sign-in and unpacked here.
-    const token = await window.ET_TOKEN, auth = window.ET_AUTH;
-    const r = await fetch(auth.url + "/storage/v1/object/authenticated/app-data/data.json.gz?v=" + encodeURIComponent(window.EDRADAR_BUILD || ""),
-                          {headers: {Authorization: "Bearer " + token, apikey: auth.key}});
+    const who = await window.ET_TOKEN, auth = window.ET_AUTH, live = window.EDRADAR_STATES || [];
+    // An all-states plan opens any live state; a single-state plan can only ever load its own.
+    const state = who.plan === "all" ? live[0] : String(who.state || "").toLowerCase().replace(/ /g, "-");
+    if (!live.includes(state)) throw new Error("your plan's state is not live yet. We will email you as soon as it is");
+    const r = await fetch(auth.url + "/storage/v1/object/authenticated/app-data/states/" + state + ".json.gz?v=" + encodeURIComponent(window.EDRADAR_BUILD || ""),
+                          {headers: {Authorization: "Bearer " + who.token, apikey: auth.key}});
     if (!r.ok) throw new Error("the data could not be opened for this account (" + r.status + ")");
     SNAP = await new Response(r.body.pipeThrough(new DecompressionStream("gzip"))).json();
   }

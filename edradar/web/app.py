@@ -387,10 +387,14 @@ US_STATES = ("Alabama Alaska Arizona Arkansas California Colorado Connecticut De
              "Pennsylvania Rhode_Island South_Carolina South_Dakota Tennessee Texas Utah Vermont Virginia Washington West_Virginia "
              "Wisconsin Wyoming").replace("_", "\u00a0").split()
 US_STATES = [n.replace("\u00a0", " ") for n in US_STATES]
-PRIVATE_BUCKET, PRIVATE_OBJECT = "app-data", "data.json.gz"
+PRIVATE_BUCKET = "app-data"
 
 
-def _upload_private(cfg: Dict[str, Any], payload: bytes, client: Any = None) -> bool:
+def state_slug(name: str) -> str:
+    return name.strip().lower().replace(" ", "-")
+
+
+def _upload_private(cfg: Dict[str, Any], payload: bytes, client: Any = None, state: str = "pennsylvania") -> bool:
     """Put the snapshot's data, gzipped, in the private Supabase bucket. True when it is safely there."""
     import gzip
     import os
@@ -403,7 +407,7 @@ def _upload_private(cfg: Dict[str, Any], payload: bytes, client: Any = None) -> 
         return False
     try:
         r = (client or httpx.Client(timeout=180)).post(
-            "%s/storage/v1/object/%s/%s" % (url.rstrip("/"), PRIVATE_BUCKET, PRIVATE_OBJECT), content=gzip.compress(payload, 6),
+            "%s/storage/v1/object/%s/states/%s.json.gz" % (url.rstrip("/"), PRIVATE_BUCKET, state), content=gzip.compress(payload, 6),
             headers={"Authorization": "Bearer " + key, "apikey": key, "x-upsert": "true",
                      "Content-Type": "application/gzip", "Cache-Control": "max-age=300"})
         if r.status_code >= 400:
@@ -599,17 +603,22 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
                 '<script type="module">import {supa} from "../auth.js";\n'
                 'const s = await supa(), got = await s.auth.getSession().catch(() => ({data: {}}));\n'
                 'const session = got.data && got.data.session;\n'
-                'if (session) { document.documentElement.classList.remove("gate"); window.__etToken(session.access_token); }\n'
-                'else location.replace("../login.html?next=app");</script>\n')
+                'const meta = (session && session.user.app_metadata) || {};\n'
+                'if (!session) location.replace("../login.html?next=app");\n'
+                'else if (meta.access !== "active") location.replace("../account.html?subscribe=1");\n'
+                'else { document.documentElement.classList.remove("gate");\n'
+                '  window.__etToken({token: session.access_token, plan: meta.plan, state: meta.state}); }</script>\n')
         html = html.replace("</head>", gate + "</head>", 1)
         assert "login.html?next=app" in html
     payload = json.dumps({"stats": stats, "projects": projects, "leads": leads, "layers": layers,
                           "template": outreach.template(cfg), "hub": hub, "contacts": {}}, separators=(",", ":")).encode()
     # With a Supabase secret key the data goes to a private bucket only signed-in users can read, and no copy is
     # published on the open site. Without one (or if the upload fails) the data file is published as before.
-    private = _upload_private(cfg, payload, upload_client)
+    live_slugs = [state_slug(n) for n in ((cfg.get("site") or {}).get("live_states") or ["Pennsylvania"])]
+    private = _upload_private(cfg, payload, upload_client, live_slugs[0])
     if private:
-        html = html.replace('window.EDRADAR_STATIC = true;', 'window.EDRADAR_STATIC = true; window.EDRADAR_PRIVATE = true;', 1)
+        html = html.replace('window.EDRADAR_STATIC = true;', 'window.EDRADAR_STATIC = true; window.EDRADAR_PRIVATE = true; '
+                            'window.EDRADAR_STATES = %s;' % json.dumps(live_slugs), 1)
         (out / "data.json").unlink(missing_ok=True)
     else:
         (out / "data.json").write_bytes(payload)

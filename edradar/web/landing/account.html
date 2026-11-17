@@ -27,7 +27,15 @@
   <div class="why">
     <h1 style="font-size: var(--s-title)">Your firm</h1>
     <p id="who">Checking who is signed in.</p>
-    <p style="margin-top: 28px"><a class="btn" href="app/" id="open-app">Open EminentTracker</a></p>
+    <div class="sub" id="sub" hidden>
+      <p class="status" id="sub-status"></p>
+      <p style="margin-top: 20px" id="sub-open" hidden><a class="btn" href="app/">Open EminentTracker</a></p>
+      <div id="sub-pay" hidden>
+        <p style="margin-top: 16px; font-size: var(--s-small)">Choose a plan to start. Your account opens as soon as payment is confirmed.</p>
+        <p style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap"><a class="btn" data-pay href="{{pay_state_monthly}}">Single state · $499 a month</a><a class="btn plain" data-pay href="{{pay_all_monthly}}">All 50 states · $999 a month</a></p>
+        <p style="margin-top: 12px; font-size: 14px" id="sub-soon" hidden>Online payment is being switched on. Email <a href="mailto:{{contact_email}}?subject=EminentTracker%20subscription">{{contact_email}}</a> and we will activate your plan today.</p>
+      </div>
+    </div>
     <p style="font-size: var(--s-small); margin-top: 20px"><button class="linkish" type="button" id="out">Sign out</button></p>
   </div>
   <div>
@@ -91,6 +99,18 @@ if (!data.session) location.replace("login.html");
 else {
   const user = data.session.user, f = firmOf(user);
   who.textContent = "Signed in as " + user.email + ".";
+  // What the account may open is set by us when payment is confirmed; nothing on this page can change it.
+  const plan = user.app_metadata || {}, active = plan.access === "active";
+  document.getElementById("sub").hidden = false;
+  document.getElementById("sub-status").textContent = active
+    ? "Subscription active: " + (plan.plan === "all" ? "all 50 states" : "single state" + (plan.state ? ", " + plan.state.replace(/\b\w/g, c => c.toUpperCase()) : "")) + "."
+    : "No active subscription yet.";
+  document.getElementById("sub-open").hidden = !active;
+  document.getElementById("sub-pay").hidden = active;
+  const ready = [...document.querySelectorAll("[data-pay]")].every(a => /^https:\/\//.test(a.getAttribute("href")));
+  document.getElementById("sub-soon").hidden = ready;
+  if (!ready) document.querySelectorAll("[data-pay]").forEach(a => a.hidden = true);
+  if (ready) document.querySelectorAll("[data-pay]").forEach(a => { const u = new URL(a.href); u.searchParams.set("prefilled_email", user.email); u.searchParams.set("client_reference_id", user.id); a.href = u; });
   for (const [k, v] of Object.entries(f)) { const el = form.elements[k]; if (!el) continue; if (k === "side" || k === "plan") { if (v) form.querySelectorAll("[name=" + k + "]").forEach(r => r.checked = r.value === v); } else el.value = v; }
   document.getElementById("nudge").hidden = !!(f.firm && f.plan);
   const stateRow = document.getElementById("state-row");

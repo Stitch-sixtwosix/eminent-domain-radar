@@ -571,10 +571,11 @@ def test_private_data_upload(tmp_path, monkeypatch):
     monkeypatch.setenv("SUPABASE_SECRET_KEY", "sb_secret_test_zz9")
     export_static(cfg, str(tmp_path / "site"), upload_client=httpx.Client(transport=httpx.MockTransport(handler)))
     page = (tmp_path / "site" / "app" / "index.html").read_text()
-    assert seen["path"] == "/storage/v1/object/app-data/data.json.gz" and seen["auth"] == "Bearer sb_secret_test_zz9"
+    assert seen["path"] == "/storage/v1/object/app-data/states/pennsylvania.json.gz" and seen["auth"] == "Bearer sb_secret_test_zz9"
     assert "leads" in json.loads(gzip.decompress(seen["body"]))
     assert not (tmp_path / "site" / "app" / "data.json").exists() and "EDRADAR_PRIVATE = true" in page
     assert "sb_secret_test_zz9" not in page and "login.html?next=app" in page
+    assert 'meta.access !== "active"' in page and 'EDRADAR_STATES = ["pennsylvania"]' in page
     # a failed upload falls back to the open file, so the page never points at data that is not there
     bad = httpx.Client(transport=httpx.MockTransport(lambda req: httpx.Response(403, json={"error": "no"})))
     export_static(cfg, str(tmp_path / "site2"), upload_client=bad)
