@@ -27,7 +27,7 @@
   <div class="why">
     <h1 style="font-size: var(--s-title)">Your firm</h1>
     <p id="who">Checking who is signed in.</p>
-    <p style="margin-top: 28px"><a class="btn" href="app/">Open EminentTracker</a></p>
+    <p style="margin-top: 28px"><a class="btn" href="app/" id="open-app">Open EminentTracker</a></p>
     <p style="font-size: var(--s-small); margin-top: 20px"><button class="linkish" type="button" id="out">Sign out</button></p>
   </div>
   <div>
@@ -52,6 +52,7 @@
             <label><input type="radio" name="side" value="Condemning authorities"> Condemning authorities</label>
             <label><input type="radio" name="side" value="Both"> Both</label>
           </div></fieldset>
+        <label class="full agree" id="agree-row" hidden><input type="checkbox" name="agree" value="yes"> <span>I am an attorney licensed in the United States, or I work under the supervision of one, and I agree to the <a href="terms.html" target="_blank" rel="noopener">Terms of use</a>, the <a href="privacy.html" target="_blank" rel="noopener">Privacy policy</a> and the <a href="compliance.html" target="_blank" rel="noopener">compliance rules</a>.</span></label>
         <label class="full" id="newpass" hidden>New password <span>(8 characters or more)</span><input type="password" name="password" autocomplete="new-password" minlength="8"></label>
         <p class="full status" id="status" role="status" hidden></p>
         <div class="full send"><button class="btn" type="submit" id="go">Save</button></div>
@@ -95,11 +96,14 @@ else {
   const stateRow = document.getElementById("state-row");
   const syncPlan = () => { stateRow.hidden = !form.elements.plan.value.startsWith("Single"); };
   form.addEventListener("change", e => { if (e.target.name === "plan") syncPlan(); }); syncPlan();
+  const agreed = !!(user.user_metadata || {}).agreed_terms_at, agreeRow = document.getElementById("agree-row");
+  agreeRow.hidden = agreed; form.elements.agree.required = !agreed;       // people who signed up with Google agree here
   form.hidden = false; watch(form);
   form.addEventListener("submit", async e => {
     e.preventDefault();
     if (!valid(form)) return;
     const d = Object.fromEntries(new FormData(form)), change = {data: firmData(d)};
+    if (!agreed) Object.assign(change.data, {agreed_terms_at: new Date().toISOString(), terms_version: "2026-11-16"});
     if (d.password) change.password = d.password;
     const {error} = await s.auth.updateUser(change);
     say(status, error ? "Not saved: " + error.message : "Saved.", !!error);

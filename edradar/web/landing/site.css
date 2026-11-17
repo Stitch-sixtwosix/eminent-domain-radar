@@ -132,6 +132,14 @@ footer .rules li::before { content: ""; position: absolute; left: 0; top: .75em;
 .doc ul { padding-left: 20px; list-style: disc; }
 .doc li + li { margin-top: 8px; }
 .doc a { color: var(--accent); }
+.terms-box { background: var(--tone); border-radius: 8px; padding: 18px 20px; }
+.terms-box h2 { font-size: 16px; letter-spacing: 0; }
+.terms-box ul { margin-top: 10px; padding-left: 18px; list-style: disc; font-size: 14px; line-height: 1.5; color: var(--muted); }
+.terms-box li + li { margin-top: 6px; }
+form .agree { display: flex; align-items: flex-start; gap: 10px; font-weight: 400; cursor: pointer; }
+form .agree input { width: 18px; height: 18px; margin: 3px 0 0; flex: none; accent-color: var(--accent); }
+form .agree a { color: var(--accent); }
+form .agree .err { flex-basis: 100%; }
 form .hint { display: block; margin-top: 6px; font-weight: 400; font-size: 14px; color: var(--muted); }
 .plans-pick label { align-items: flex-start; padding: 12px 14px; border: 1px solid var(--line-strong); border-radius: 6px; flex: 1 1 220px; }
 .plans-pick label:has(input:checked) { border-color: var(--accent); box-shadow: inset 0 0 0 1px var(--accent); }

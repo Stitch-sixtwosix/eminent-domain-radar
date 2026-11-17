@@ -34,7 +34,7 @@ export function checkField(field) {
   field.setAttribute("aria-invalid", String(bad));
   let msg = field.parentNode.querySelector(".err");
   if (bad && !msg) { msg = document.createElement("span"); msg.className = "err"; msg.id = "err-" + field.name; field.setAttribute("aria-describedby", msg.id); field.parentNode.appendChild(msg); }
-  if (msg) { if (bad) msg.textContent = field.validity.valueMissing ? "This is needed." : field.validity.tooShort ? "Use at least 8 characters." : "Enter a full email address, like name@firm.com."; else msg.remove(); }
+  if (msg) { if (bad) msg.textContent = field.type === "checkbox" ? "Tick this box to continue." : field.validity.valueMissing ? "This is needed." : field.validity.tooShort ? "Use at least 8 characters." : "Enter a full email address, like name@firm.com."; else msg.remove(); }
   return !bad;
 }
 export function watch(form) {

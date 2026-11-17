@@ -62,11 +62,23 @@
             <label><input type="radio" name="side" value="Both"> Both</label>
           </div></fieldset>
         <label class="full auth-off">Anything we should know <span>(optional)</span><textarea name="note"></textarea></label>
+        <div class="full terms-box">
+          <h2>Terms and agreement</h2>
+          <ul>
+            <li>EminentTracker is a research and marketing tool. It is not a law firm and gives no legal advice.</li>
+            <li>Records and scores come from public sources and automated analysis, and can be wrong. You verify before you act.</li>
+            <li>Every postcard, letter and email you send is your firm’s advertising. You follow your state’s rules, and you are responsible for what you send.</li>
+            <li>You do not call or text owners from this data, and you stop contacting anyone who asks.</li>
+            <li>You indemnify EminentTracker for claims arising from your communications or your breach of the terms.</li>
+            <li>The service is provided as is, and our liability is limited as the Terms of use set out.</li>
+          </ul>
+        </div>
+        <label class="full agree"><input type="checkbox" name="agree" value="yes" required> <span>I am an attorney licensed in the United States, or I work under the supervision of one, and I agree to the <a href="terms.html" target="_blank" rel="noopener">Terms of use</a>, the <a href="privacy.html" target="_blank" rel="noopener">Privacy policy</a> and the <a href="compliance.html" target="_blank" rel="noopener">compliance rules</a>.</span></label>
         <p class="full status" id="status" role="alert" hidden></p>
         <div class="full send">
           <button class="btn" type="submit" id="go"><span class="auth-only">Create account</span><span class="auth-off">Request access</span></button>
           <p class="auth-off">This opens an email to us in your mail program with these details filled in. Nothing is sent until you press send there.</p>
-          <p class="auth-only">We will email you a link to confirm your address. By creating an account you agree to the <a href="terms.html">Terms of use</a>, the <a href="privacy.html">Privacy policy</a> and the <a href="compliance.html">compliance rules</a>.</p>
+          <p class="auth-only">We will email you a link to confirm your address.</p>
         </div>
       </div>
     </form>
@@ -116,7 +128,7 @@ form.addEventListener("submit", async e => {
     go.disabled = true; say(status, "");
     try {
       const s = await supa();
-      const {data, error} = await s.auth.signUp({email: d.email, password: d.password, options: {data: firmData(d), emailRedirectTo: here("account.html")}});
+      const {data, error} = await s.auth.signUp({email: d.email, password: d.password, options: {data: {...firmData(d), agreed_terms_at: new Date().toISOString(), terms_version: "2026-11-16"}, emailRedirectTo: here("account.html")}});
       if (error) throw error;
       if (data.session) { location.href = "account.html"; return; }
       document.getElementById("done-h").textContent = "Check your email";
@@ -127,7 +139,7 @@ form.addEventListener("submit", async e => {
     return;
   }
   const lines = ["Name: " + d.name, "Firm: " + d.firm, "Email: " + d.email, d.phone && "Phone: " + d.phone, d.location && "Firm location: " + d.location,
-    d.website && "Website: " + d.website, "Plan: " + d.plan + (d.plan_state ? ", " + d.plan_state : ""), d.states && "Other states: " + d.states, "Represents: " + d.side, d.note && "\n" + d.note].filter(Boolean);
+    d.website && "Website: " + d.website, "Plan: " + d.plan + (d.plan_state ? ", " + d.plan_state : ""), d.states && "Other states: " + d.states, "Represents: " + d.side, "Agreed to the terms, privacy policy and compliance rules: yes", d.note && "\n" + d.note].filter(Boolean);
   const body = "Please set up EminentTracker access for my firm.\n\n" + lines.join("\n");
   const href = "mailto:" + TO + "?subject=" + encodeURIComponent("EminentTracker access request: " + d.firm) + "&body=" + encodeURIComponent(body);
   document.getElementById("done-text").textContent = body;
