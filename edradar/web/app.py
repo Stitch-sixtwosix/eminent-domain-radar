@@ -364,13 +364,24 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40) -> Dic
                 layers.append({"name": x["layer"], "url": q.pop("url"), "provider": q.pop("provider"), "field": q.pop("field")})
             row["bq"] = dict({k: v for k, v in q.items() if k not in ("url", "provider", "field")}, l=layer_index[x["layer"]])
         leads.append(row)
+    # The hub is published read-only: totals, the template and the activity log, with sending switched off and
+    # Apollo-sourced contacts left out.
+    hub = client.get("/api/outreach/hub").json()
+    hub["contacts"] = []
+    off = "Sending is only available in the running app."
+    hub["status"] = {"firm_ready": hub["status"]["firm_ready"],
+                     "postcard": {"enabled": False, "mode": "off", "why": off},
+                     "email": {"enabled": False, "from": hub["status"]["email"].get("from"), "why": off},
+                     "skiptrace": dict(hub["status"]["skiptrace"], enabled=False, why=off)}
+    for a in hub["activity"]:
+        a["proof_url"] = None        # proof links are signed URLs for the account holder
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
     html = (STATIC / "index.html").read_text()
     html = html.replace("<script>\nconst $", "<script>window.EDRADAR_STATIC = true;</script>\n<script>\nconst $", 1)
     assert "EDRADAR_STATIC = true" in html
     (out / "index.html").write_text(html)
-    (out / "data.json").write_text(json.dumps({"stats": stats, "projects": projects, "leads": leads, "layers": layers, "template": outreach.template(cfg),
+    (out / "data.json").write_text(json.dumps({"stats": stats, "projects": projects, "leads": leads, "layers": layers, "template": outreach.template(cfg), "hub": hub,
                                                "contacts": {}},
                                               separators=(",", ":")))
     (out / ".nojekyll").write_text("")

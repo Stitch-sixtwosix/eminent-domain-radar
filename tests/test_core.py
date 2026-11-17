@@ -372,6 +372,8 @@ def test_campaign_filter_and_snapshot(tmp_path, monkeypatch):
     counts = export_static(cfg, str(tmp_path / "site"))
     snap = json.loads((tmp_path / "site" / "data.json").read_text())
     row = next(r for r in snap["leads"] if r["owner"] == "Jane Roe")
+    assert snap["hub"]["status"]["postcard"]["enabled"] is False and snap["hub"]["contacts"] == []
+    assert snap["hub"]["sent"]["postcards"] == 1 and all(a["proof_url"] is None for a in snap["hub"]["activity"])
     assert counts["leads"] == 6 and row["owner_kind"] == "individual" and row["own"][0] == "Pennsylvania" and "facts" in row
 
 

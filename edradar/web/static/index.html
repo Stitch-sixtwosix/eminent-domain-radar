@@ -237,6 +237,27 @@
   .panel td { padding: 7px 12px 7px 0; }
   .panel th:first-child, .panel td:first-child { padding-left: 0; }
   .panel .scroll { overflow-x: auto; margin-top: 12px; }
+  .panel h4 { margin: 14px 0 8px; font-size: 13px; font-weight: 600; }
+  .panel h4:first-of-type { margin-top: 10px; }
+  .mocks { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .mocks figure { margin: 0; min-width: 0; }
+  .mocks figcaption { font-size: 12px; color: var(--ink-3); margin-top: 5px; }
+  .mock { aspect-ratio: 6 / 4; border: 1px solid var(--line-strong); border-radius: 4px; padding: 5.5%; position: relative; overflow: hidden;
+          font-size: clamp(7px, 0.78vw, 10.5px); line-height: 1.38; color: #14202b; box-shadow: 0 2px 8px oklch(24% 0.03 258 / .1); }
+  .mock.front { background: #f4f5f7; }
+  .mock.front b { display: block; font: 700 1.75em/1.14 Georgia, "Times New Roman", serif; }
+  .mock.front p { margin: .8em 0 0; color: #14202b; font-size: 1em; max-width: none; }
+  .mock .bar { position: absolute; left: 5.5%; right: 5.5%; bottom: 6%; border-top: 1.5px solid #14202b; padding-top: .5em; display: flex;
+               justify-content: space-between; font-weight: 600; }
+  .mock .bar span:last-child { font-weight: 400; }
+  .mock.back { background: #fff; }
+  .mock.back p { margin: 0; color: #14202b; font-size: .95em; max-width: none; }
+  .mock .fine { position: absolute; left: 5.5%; bottom: 6%; width: 36%; font-size: .62em; line-height: 1.3; color: #3d4a57; }
+  .mock .addr { position: absolute; right: 5.5%; bottom: 14%; width: 50%; font-size: .8em; line-height: 1.25; }
+  .mock .addr span { display: block; font-size: .7em; margin-bottom: 1.6em; }
+  .mock .addr i { position: absolute; right: 0; top: -.6em; border: 1px solid #14202b; padding: .5em .7em; font-style: normal; font-size: .75em; }
+  .mock .addr b { font-weight: 400; }
+  @media (max-width: 1100px) { .mocks { grid-template-columns: 1fr; } .mock { font-size: clamp(9px, 2.2vw, 12px); } }
   .state { display: inline-block; font-size: 12px; font-weight: 500; border-radius: 4px; padding: 1px 7px; background: var(--rail); color: var(--ink-2); white-space: nowrap; }
   .state.on { background: var(--ok-bg); color: var(--ok); } .state.warn { background: var(--warm-bg); color: var(--warm); }
   .state.live { background: var(--danger-bg); color: var(--danger); }
@@ -641,6 +662,8 @@ async function staticApi(path) {
   const [route, qs] = path.split("?"), q = new URLSearchParams(qs || "");
   if (route === "/api/stats") return SNAP.stats;
   if (route === "/api/outreach/template") return SNAP.template;
+  if (route === "/api/outreach/hub") return SNAP.hub;
+  if (route === "/api/usage") return {...SNAP.hub.usage, rates: SNAP.hub.rates};
   if (route === "/api/projects") {
     const min = +(q.get("min_score") || 0), text = (q.get("q") || "").toLowerCase();
     return SNAP.projects.filter(p => p.score >= min && (!q.get("county") || p.county === q.get("county")) &&
@@ -896,6 +919,16 @@ async function showLeads(filter) {
   setView("leads");
   await loadLeads();
 }
+function cardMocks(t, sample) {
+  const v = mergeValues(sample, t), f = t.firm || {};
+  const addr = [f.address_line1, [f.city, f.state].filter(Boolean).join(", ") + (f.zip ? " " + f.zip : "")].filter(x => x && x.trim()).join(", ");
+  return `<div class="mocks">
+    <figure><div class="mock front"><b>${esc(renderTpl(t.postcard_headline, v))}</b><p>${esc(renderTpl(t.postcard_message, v))}</p>
+      <div class="bar"><span>${esc(v.firm_name)}</span><span>${esc(f.phone || "")}</span></div></div><figcaption>Postcard front</figcaption></figure>
+    <figure><div class="mock back"><p>${esc(renderTpl(t.postcard_back, v))}</p>
+      <div class="fine">ADVERTISEMENT. ${esc(v.firm_name)}${addr ? ", " + esc(addr) : ""}. This notice is based on public planning records. No taking of your property has been announced, and receiving this card does not mean one will occur.</div>
+      <div class="addr"><span>${esc(v.firm_name.toUpperCase())}</span><i>Postage</i><b>${esc(sample.owner)}<br>12 MAIN ST<br>ANYTOWN, PA 19000</b></div></div><figcaption>Postcard back. The address block is added by the mail service.</figcaption></figure></div>`;
+}
 async function loadHub() {
   const box = $("hub");
   if (!box.innerHTML) box.innerHTML = `<div class="hub"><p class="meta">Loading the outreach hub…</p></div>`;
@@ -906,7 +939,7 @@ async function loadHub() {
   const pc = h.status.postcard, em = h.status.email, sk = h.status.skiptrace, r = h.ready, t = h.template, f = t.firm;
   const fig = (label, v) => `<div><span>${label}</span><b>${v}</b></div>`;
   const month = h.usage.this_month.reduce((a, x) => a + (x.billed || 0), 0);
-  const pcState = pc.mode === "live" ? '<span class="state live">Live: cards are mailed and billed</span>' : pc.mode === "test" ? '<span class="state warn">Test mode: proofs only</span>' : '<span class="state">Off</span>';
+  const pcState = STATIC ? '<span class="state">Read-only snapshot: sending happens in the running app</span>' : pc.mode === "live" ? '<span class="state live">Live: cards are mailed and billed</span>' : pc.mode === "test" ? '<span class="state warn">Test mode: proofs only</span>' : '<span class="state">Off</span>';
   const sample = {owner: "SAMPLE OWNER", address: "12 MAIN ST", apn: "00-000-000", parcel_county: "MONTGOMERY", project: "US 22 Widening", stage: "planning", agency: "PennDOT District 05"};
   const L_ = letterFor(sample, t);
   const firmLine = [f.name, f.attorney, f.phone, f.email].filter(Boolean).join(" · ") || "Firm details not entered yet";
@@ -914,7 +947,7 @@ async function loadHub() {
   const usageRows = rows => rows.length ? rows.map(x => `<tr><td>${x.kind === "skip_trace" ? "Skip traces" : "Postcards"}</td><td class="num">${x.count}</td><td class="num">${usd(x.cost)}</td><td class="num">${usd(x.billed)}</td><td class="num">${usd(x.margin)}</td></tr>`).join("")
     : `<tr><td colspan="5" class="meta">Nothing billable yet. Test proofs are free and are not recorded.</td></tr>`;
   box.innerHTML = `<div class="hub">
-    <div class="hub-head"><h2>Outreach hub</h2>${pcState}<span class="state ${em.enabled ? "on" : ""}">Email ${em.enabled ? "on" : "off"}</span><span class="state ${sk.enabled ? "on" : ""}">Skip tracing ${sk.enabled ? "on" : "off"}</span></div>
+    <div class="hub-head"><h2>Outreach hub</h2>${pcState}${STATIC ? "" : `<span class="state ${em.enabled ? "on" : ""}">Email ${em.enabled ? "on" : "off"}</span><span class="state ${sk.enabled ? "on" : ""}">Skip tracing ${sk.enabled ? "on" : "off"}</span>`}</div>
     <div class="figs">${fig("Postcards mailed", h.sent.postcards.toLocaleString())}${fig("Test proofs", h.sent.test_proofs.toLocaleString())}${fig("Emails started", h.sent.emails.toLocaleString())}${fig("Owners skip traced", h.sent.skip_traces.toLocaleString())}${fig("Billed this month", usd(month))}</div>
     <div class="hub-grid"><div class="hub-col">
       <div class="panel"><h3>Postcards</h3>
@@ -936,13 +969,16 @@ async function loadHub() {
     </div><div class="hub-col">
       <div class="panel"><h3>Template</h3>
         <p>${esc(firmLine)}</p>
+        <h4>Postcard</h4>
+        ${cardMocks(t, sample)}
+        <h4>Email and printed letter</h4>
         <div class="letter" style="max-height:230px"><b>${esc(L_.subject)}</b>\n\n${esc(L_.body)}</div>
-        <p style="margin-top:8px">Shown with sample details. The same wording fills the email, the printed letter and the postcard.</p>
-        <div class="row-acts"><button data-hub="template">Edit template</button></div></div>
+        <p style="margin-top:8px">Shown with sample details. Each owner's name, property, project and stage are filled in when it is sent.</p>
+        <div class="row-acts"><button data-hub="template">${STATIC ? "Open the template editor (preview only)" : "Edit postcard and email wording"}</button></div></div>
       <div class="panel"><h3>Usage and billing</h3>
         <table><thead><tr><th>This month</th><th class="num">Count</th><th class="num">Your cost</th><th class="num">Billed</th><th class="num">Margin</th></tr></thead><tbody>${usageRows(h.usage.this_month)}</tbody></table>
         <p style="margin-top:10px">Rates: postcard ${usd(h.rates.postcard.cost)} cost, ${usd(h.rates.postcard.price)} billed · skip trace ${usd(h.rates.skip_trace.cost)} cost, ${usd(h.rates.skip_trace.price)} billed.</p>
-        <div class="row-acts"><button data-hub="usage">All usage</button><a class="btn" href="/api/usage.csv">Download CSV</a></div></div>
+        <div class="row-acts"><button data-hub="usage">All usage</button>${STATIC ? "" : '<a class="btn" href="/api/usage.csv">Download CSV</a>'}</div></div>
     </div></div>
     <div class="panel" style="margin-top:20px"><h3>Activity</h3>
       ${h.activity.length ? `<div class="scroll"><table><thead><tr><th>Date</th><th>Owner</th><th>Channel</th><th>Status</th><th>Project</th><th>Result</th></tr></thead><tbody>${h.activity.map(a => `<tr>
@@ -982,7 +1018,7 @@ function traceBlock(d, r, o) {
 }
 async function openUsage() {
   dlg.innerHTML = `<div class="dlg-head"><h2 id="dlg-title">Usage and billing</h2><p>What each skip trace and mailed postcard cost, and what the client is charged.</p></div><div class="dlg-body"><p class="meta">Loading…</p></div>
-    <div class="dlg-foot"><span class="note">Rates are set under billing in config.yaml.</span><a class="btn" href="/api/usage.csv">Download CSV</a><button data-close>Close</button></div>`;
+    <div class="dlg-foot"><span class="note">Rates are set under billing in config.yaml.</span>${STATIC ? "" : '<a class="btn" href="/api/usage.csv">Download CSV</a>'}<button data-close>Close</button></div>`;
   dlg.showModal();
   let u;
   try { u = await api("/api/usage"); } catch (e) { dlg.querySelector(".dlg-body").innerHTML = `<div class="alert bad">${esc(e.message)}</div>`; return; }
@@ -1319,7 +1355,7 @@ for (const id of ["f-county", "f-type", "f-source", "f-stage", "f-score", "f-q"]
     mode.hidden = false;
   }
   TPL = await api("/api/outreach/template");
-  if (STATIC) { $("btn-template").hidden = false; $("btn-template").className = "sm"; $("btn-template").textContent = "Outreach template"; }
+  $("views").hidden = false;
   const title = c => c[0] + c.slice(1).toLowerCase();
   $("f-county").insertAdjacentHTML("beforeend", s.counties.map(c => `<option value="${esc(c)}">${esc(title(c))}</option>`).join(""));
   $("f-type").insertAdjacentHTML("beforeend", s.types.map(c => `<option>${esc(c)}</option>`).join(""));
