@@ -25,6 +25,7 @@
   --s-small: 15px;
 }
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }      /* a hidden field stays hidden whatever its own display rule says */
 html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 400 var(--s-body)/1.6 var(--sans); -webkit-font-smoothing: antialiased; }
 img { display: block; max-width: 100%; height: auto; }
