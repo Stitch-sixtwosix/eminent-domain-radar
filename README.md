@@ -65,6 +65,12 @@ To run without a local machine, enable the GitHub Actions workflows: move the tw
 could not write workflow files). **Refresh leads** then runs the pipeline from the Actions tab and
 saves the SQLite database as a downloadable artifact; **CI** runs the tests on every push.
 
+## Daily updates
+
+`scripts/daily_update.sh` runs the whole pipeline, republishes the public snapshot and prints how many new
+signals, parcels and leads it found. Schedule it however you like (cron, launchd, a scheduled task). Set
+`EDRADAR_PUBLISH=0` to refresh the data without republishing.
+
 ## Parcel details
 
 Click any lead to open its parcel panel:
