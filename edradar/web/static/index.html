@@ -48,20 +48,21 @@
   code { font: 500 12.5px ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--rail); padding: 1px 5px; border-radius: 4px; }
 
   /* ---- top bar ---- */
-  header { display: flex; align-items: center; gap: 28px; padding: 0 16px 0 20px; height: 48px; }   /* on the frame: no fill, no rule */
+  header { display: flex; align-items: center; gap: 28px; padding: 0 16px 0 20px; height: 48px; min-width: 0; }
+  body { overflow-x: hidden; }   /* on the frame: no fill, no rule */
   .id { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .95em; letter-spacing: -0.01em; }
   .brand { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
   .logo { width: 28px; height: 28px; flex: none; }
   .brand b { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; }
   .wordmark span { font-weight: 400; color: var(--ink-2); }   /* one word, two weights: the split stays readable */
-  .stats { display: flex; gap: 22px; margin-left: auto; min-width: 0; overflow: hidden; color: var(--ink-2); font-size: 13px; white-space: nowrap; }
+  .stats { display: flex; gap: 22px; flex: 1 1 0; justify-content: flex-end; flex-wrap: wrap; height: 20px; min-width: 0; overflow: hidden; color: var(--ink-2); font-size: 13px; white-space: nowrap; }
   .stats b { color: var(--ink); font-weight: 600; margin-right: 5px; }
-  .mode { min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 12px; color: var(--ink-2); border: 1px solid var(--line-strong); border-radius: 99px;
+  .mode { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 12px; color: var(--ink-2); border: 1px solid var(--line-strong); border-radius: 99px;
           padding: 2px 10px; white-space: nowrap; }
   .mode[data-live] { color: var(--danger); background: var(--danger-bg); border-color: transparent; font-weight: 500; }
 
   /* ---- layout ---- */
-  main { display: grid; grid-template-columns: 356px 1fr; grid-template-rows: minmax(0, 46%) minmax(0, 54%); min-height: 0;
+  main { display: grid; grid-template-columns: 356px minmax(0, 1fr); grid-template-rows: minmax(0, 46%) minmax(0, 54%); min-height: 0;
          padding: 0 8px 8px 0; }                     /* the sheet is inset 8px from the right and bottom edges */
   #sidebar { grid-row: 1 / 3; display: flex; flex-direction: column; min-height: 0; }   /* part of the frame */
 
@@ -127,8 +128,9 @@
   .check { display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); font-size: 13px; cursor: pointer; }
   .check input { accent-color: var(--primary); width: 15px; height: 15px; margin: 0; }
   #summary { padding: 9px 16px; color: var(--ink-2); font-size: 13px; border-bottom: 1px solid var(--line); background: var(--rail);
-             max-height: 5.4em; overflow-y: auto; white-space: pre-line; max-width: none; }
-  #leads-wrap { overflow: auto; flex: 1; }
+             white-space: pre-line; max-width: none; }
+  #detail-scroll { overflow: auto; flex: 1; min-height: 0; }
+  #detail, #map { min-width: 0; }
   table { border-collapse: collapse; width: 100%; font-size: 13px; }
   th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
   th:first-child, td:first-child { padding-left: 16px; }
@@ -386,15 +388,15 @@
 <body>
 <header>
   <div class="brand"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7.5" fill="#1b2333"/><path d="M8 7h16v4.2H12.2v13.6H24V29H8z" fill="#fff" transform="translate(0 -2)"/><path d="M12.2 13.9H32v4.2H12.2z" fill="#e0662e"/></svg><b class="wordmark" aria-label="EminentTracker">Eminent<span>Tracker</span></b></div>
+  <nav class="views" id="views" hidden aria-label="Views">
+    <button type="button" data-view="leads" aria-pressed="true">Leads</button><button type="button" data-view="hub" aria-pressed="false">Outreach hub</button>
+  </nav>
   <div class="stats">
     <span><b id="st-projects">–</b>projects scoring 60+</span>
     <span><b id="st-leads">–</b>parcel leads</span>
     <span><b id="st-owners">–</b>with owner of record</span>
     <span id="st-updated"></span>
   </div>
-  <nav class="views" id="views" hidden aria-label="Views">
-    <button type="button" data-view="leads" aria-pressed="true">Leads</button><button type="button" data-view="hub" aria-pressed="false">Outreach hub</button>
-  </nav>
   <button id="btn-usage" hidden></button><button id="btn-template" hidden></button>
   <span class="mode" id="mode" hidden></span>
 </header>
@@ -424,6 +426,7 @@
   </div>
   <section id="detail">
     <div id="detail-head">
+      <button id="btn-all" hidden><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.500 3.500 5 8l4.500 4.500"/></svg>All projects</button>
       <h1 id="d-title">Top leads across all projects</h1>
       <select id="f-outreach" aria-label="Outreach filter">
         <option value="">All leads</option><option value="email">Email leads (company owners)</option>
@@ -431,14 +434,15 @@
         <option value="contacted">Already contacted</option>
       </select>
       <label class="check"><input type="checkbox" id="f-owner"> Owner known</label>
-      <button id="btn-all" hidden>All projects</button>
       <button id="btn-campaign" hidden>Postcard campaign</button>
       <button id="btn-csv"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8m0 0L5 7m3 3 3-3M3 13h10"/></svg>Export CSV</button>
     </div>
-    <div id="summary" hidden></div>
-    <div id="breakdown" hidden></div>
-    <div id="stagebar" hidden></div>
-    <div id="leads-wrap"></div>
+    <div id="detail-scroll">
+      <div id="summary" hidden></div>
+      <div id="breakdown" hidden></div>
+      <div id="stagebar" hidden></div>
+      <div id="leads-wrap"></div>
+    </div>
   </section>
 </main>
 
@@ -1173,7 +1177,10 @@ panel.addEventListener("click", async e => {
     catch (err) { find.disabled = false; find.textContent = "Try again"; find.insertAdjacentHTML("afterend", `<span class="meta">${esc(err.message)}</span>`); }
   }
 });
-document.addEventListener("keydown", e => { if (e.key === "Escape" && openLead && !dlg.open) closeParcel(); });
+document.addEventListener("keydown", e => {
+  if (e.key !== "Escape" || dlg.open) return;
+  if (openLead) closeParcel(); else if (selected && view === "leads") showAllProjects();   // Escape steps back one level at a time
+});
 document.querySelector(".basemap").addEventListener("click", e => { const b = e.target.closest("[data-base]"); if (b) { baseChosen = true; setBase(b.dataset.base); } });
 
 /* ---- outreach dialogs ---- */
@@ -1335,7 +1342,17 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") hideTip(); }
 document.addEventListener("scroll", hideTip, true);
 
 /* ---- events ---- */
-$("projects").addEventListener("click", e => { const el = e.target.closest(".proj"); if (el) select(+el.dataset.id); });
+function showAllProjects() {
+  if (!selected) return;
+  selected = null; markSelected(); closeParcel();
+  reduceMotion ? map.fitBounds(HOME, {animate: false}) : map.flyToBounds(HOME, {duration: 0.45, easeLinearity: 0.3});
+  loadLeads();
+}
+$("projects").addEventListener("click", e => {
+  const el = e.target.closest(".proj");
+  if (!el) return;
+  selected && selected.id === +el.dataset.id ? showAllProjects() : select(+el.dataset.id);   // clicking the open project closes it
+});
 $("projects").addEventListener("keydown", e => {
   if (e.key !== "Enter" && e.key !== " ") return;
   const el = e.target.closest(".proj");
@@ -1355,7 +1372,7 @@ $("leads-wrap").addEventListener("click", e => {
 $("leads-wrap").addEventListener("keydown", e => {
   if (e.key === "Enter" && e.target.matches("tr[data-row]")) openParcel(+e.target.dataset.row);
 });
-$("btn-all").addEventListener("click", () => { selected = null; markSelected(); reduceMotion ? map.fitBounds(HOME, {animate: false}) : map.flyToBounds(HOME, {duration: 0.45, easeLinearity: 0.3}); loadLeads(); });
+$("btn-all").addEventListener("click", showAllProjects);
 $("btn-csv").addEventListener("click", () => {
   if (STATIC) downloadCsv(staticLeads(leadParams())); else location.href = "/api/leads.csv?" + leadParams();
 });
