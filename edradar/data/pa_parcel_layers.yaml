@@ -1,0 +1,74 @@
+# County parcel layers that publish the owner of record. Each was verified with a live query on 2026-11-16.
+# `source` records who hosts the layer:
+#   county       published by the county itself
+#   pasda        snapshot hosted by Penn State's PASDA (the layer name carries its date, YYYYMM)
+#   third-party  a copy published by another organisation; check its age before relying on it
+# `market_value` holds whatever value the county publishes (often an assessed value, not market value).
+- {name: Bedford County, counties: [BEDFORD], source: pasda 2023-07, url: "https://mapservices.pasda.psu.edu/server/rest/services/pasda/BedfordCounty/MapServer/0",
+   fields: {apn: MAP_NO, owner: [OWNER_NAME, OWNER_NA_1], owner_sep: " ", mailing_address: [OWNER_ADDR, OWNER_AD_1, OWNER_CITY, OWNER_STAT, OWNER_ZIP], market_value: TOT_VAL, acres: ACRES}}
+- {name: Berks County, counties: [BERKS], source: pasda 2026-01, url: "https://mapservices.pasda.psu.edu/server/rest/services/pasda/BerksCounty/MapServer/6",
+   fields: {apn: PIN, owner: NAME1, address: FULLSITEAD, mailing_address: FULLMAILAD, market_value: VALULNDMKT, acres: ACREAGE}}
+- {name: Bradford County, counties: [BRADFORD], source: pasda 2025-11, url: "https://mapservices.pasda.psu.edu/server/rest/services/pasda/BradfordCounty/MapServer/5",
+   fields: {apn: ParcelJoin, owner: NAME, mailing_address: [ADDRESS, CITY, STATE, ZIPCODE], acres: ACREAGE}}
+- {name: Bucks County, counties: [BUCKS], source: pasda 2026-05, url: "https://mapservices.pasda.psu.edu/server/rest/services/pasda/BucksCounty/MapServer/17",
+   fields: {apn: PARCEL_NUM, owner: [OWNER1, OWNER2], address: ADDRESS, market_value: TOTAL_VALU}}
+- {name: Butler County, counties: [BUTLER], source: pasda 2023-04, url: "https://mapservices.pasda.psu.edu/server/rest/services/pasda/ButlerCounty/MapServer/0",
+   fields: {apn: DPIN, owner: Own1, mailing_address: [Paddr1, Paddr2, Paddr3], market_value: AssessedVa}}
+- {name: Chester County, counties: [CHESTER], source: pasda 2026-11, url: "https://mapservices.pasda.psu.edu/server/rest/services/pasda/ChesterCounty/MapServer/11",
+   fields: {apn: UPI, owner: [OWN1, OWN2], owner_sep: " ", address: LOC_ADDRES, mailing_address: [ADDR1, ADDR2, ADDR3, ZIP1], market_value: TOT_ASSESS, acres: ACRE_PLAN_}}
+- {name: Dauphin County, counties: [DAUPHIN], source: pasda 2022-05, url: "https://mapservices.pasda.psu.edu/server/rest/services/pasda/DauphinCounty/MapServer/0",
+   fields: {apn: PID, owner: [first_name, middle_ini, last_name, suffix], owner_sep: " ", mailing_address: [address1, address2, city, state_code, zip_code], acres: acres}}
+- {name: Forest County, counties: [FOREST], source: pasda 2026-02, url: "https://mapservices.pasda.psu.edu/server/rest/services/pasda/ForestCounty/MapServer/3",
+   fields: {apn: PARCEL, owner: OWNER1, address: SITUS, mailing_address: [ADDR1, ADDR2, CITY, ST, ZIP], market_value: TOTAL_VALU, acres: ACRES}}
+- {name: Indiana County, counties: [INDIANA], source: pasda 2023-11, url: "https://mapservices.pasda.psu.edu/server/rest/services/pasda/IndianaCounty/MapServer/5",
+   fields: {apn: PARCEL_ID, owner: LAST_NAME, address: COMBINED_S, mailing_address: [CARE_OF, ADDRESS_1, ADDRESS_2, CITY, STATE, ZIP], market_value: NEW_MV_TOT, acres: GIS_ACRES}}
+- {name: Juniata County, counties: [JUNIATA], source: pasda 2024-08, url: "https://mapservices.pasda.psu.edu/server/rest/services/pasda/JuniataCounty/MapServer/0",
+   fields: {apn: PIN, owner: [Owners_Nam, Owners_N_1, Owners_N_2], address: Physical_A, mailing_address: [Care_Of, Billing_Ad, Billing__1, City, State, Zip_Code], market_value: Total_Valu}}
+- {name: Mercer County, counties: [MERCER], source: pasda 2026-03, url: "https://mapservices.pasda.psu.edu/server/rest/services/pasda/MercerCounty/MapServer/0",
+   fields: {apn: Parcel_Id, owner: Comb_Owner, address: Situs_Desc, mailing_address: Comb_Own_1, acres: Acreage}}
+- {name: Montgomery County, counties: [MONTGOMERY], source: pasda 2025-12, url: "https://mapservices.pasda.psu.edu/server/rest/services/pasda/MontgomeryCounty/MapServer/14",
+   fields: {apn: TAXPIN, owner: [OWN1, OWN2], address: LOCATION1, mailing_address: [CAREOF, ADDR1, ADDR2, ADDR3, ZIP1_ZIP2], market_value: TOTAL_APPR, acres: LAND_ACRES}}
+- {name: Wyoming County, counties: [WYOMING], source: pasda 2024-05, url: "https://mapservices.pasda.psu.edu/server/rest/services/pasda/WyomingCounty/MapServer/2",
+   fields: {apn: Pin, owner: [Owner, Owner_2], address: Situs_Addr, mailing_address: [Mailing_Ad, Mailing__1, City, State], market_value: TOTAL_FAV}}
+- {name: York County, counties: [YORK], source: pasda 2022-09, url: "https://mapservices.pasda.psu.edu/server/rest/services/pasda/YorkCounty/MapServer/31",
+   fields: {apn: PIDN, owner: OWNER_FULL, address: PROPADR, mailing_address: [MAIL_ADDR1, MAIL_ADDR2, MAIL_ADDR3], market_value: APRTOTAL, acres: ACRES}}
+- {name: Beaver County, counties: [BEAVER], source: third-party copy (2026), url: "https://services5.arcgis.com/beeAx3XQCWXfcm0Q/arcgis/rest/services/Beaver_County__Parcels/FeatureServer/0",
+   fields: {apn: Parcel_ID, owner: [Owner_Name, Owner_Na_1], owner_sep: " ", address: [Location_N, Location_S], mailing_address: [Mail_Addre, Mail_City, Mail_State, Mail_Zipco], market_value: Total_Mark, acres: Total_Acre}}
+- {name: Cambria County, counties: [CAMBRIA], source: county, url: "https://services1.arcgis.com/Fw15y9AZK02r2ZNA/ArcGIS/rest/services/GIS_Layers/FeatureServer/8",
+   fields: {apn: MAP_NUMBER, owner: [OWNER_NAME_1, OWNER_NAME_2], owner_sep: " ", address: SITUS_DESC_1, mailing_address: [OWNER_ADDR_1, OWNER_ADDR_2, OWNER_ADDR_3, OWNER_CITY, OWNER_STATE, OWNER_ZIP], market_value: CUR_TOTAL_VALUE, acres: ACREAGE}}
+- {name: Cameron County, counties: [CAMERON], source: county 2025-09, url: "https://services5.arcgis.com/NN66N9nlzcCXJ9he/arcgis/rest/services/Parcels_(September_2025)/FeatureServer/0",
+   fields: {apn: PIN, owner: [OwnerName1, OwnerName2], mailing_address: [OwnerAddr1, OwnerAddr2, OwnerCity, OwnerSt, OwnerZip1], market_value: CurTotlVal, acres: Acreage}}
+- {name: Carbon County, counties: [CARBON], source: county, url: "https://gis.carboncounty.com/arcgis/rest/services/Parcels_Universal/MapServer/0",
+   fields: {apn: ParcelID, owner: Owner, address: Location, mailing_address: [Address1, Address2, City, State]}}
+- {name: Clinton County, counties: [CLINTON], source: county, url: "https://maps.clintoncountypa.gov/arcgis/rest/services/Testing/PARCELS417/MapServer/0",
+   fields: {apn: PARCEL_ID, owner: OwnerName, address: [SitusNumbe, SitusStree], mailing_address: [InCareOf, AddressLin, AddressL_1, City, State, Zip], market_value: TotalValue, acres: ACREAGE}}
+- {name: Columbia County, counties: [COLUMBIA], source: third-party copy (2022), url: "https://services6.arcgis.com/2yV7RkwOU8zZaabr/arcgis/rest/services/Base_Layers/FeatureServer/2",
+   fields: {apn: PIN, owner: [OWNERNAME, OWNERNAME2], owner_sep: " ", mailing_address: [ADDRESS, CITY, STATE], market_value: TOTALFAIRM}}
+- {name: Cumberland County, counties: [CUMBERLAND], source: county, url: "https://services1.arcgis.com/1Cfo0re3un0w6a30/arcgis/rest/services/Tax_Parcels/FeatureServer/0",
+   fields: {apn: PIN, owner: OWNER, address: [SITUS, SITUS_ZIP], market_value: TOTAL_VAL, acres: CalcAcre}}
+- {name: Erie County, counties: [ERIE], source: third-party copy (2025-11), url: "https://services1.arcgis.com/7JdoMDJpRvFzASy7/arcgis/rest/services/Erie_County_Parcels_(NOV_2025)_pa_erie_shp/FeatureServer/0",
+   fields: {apn: parcelnumb, owner: [owner, owner2], address: address, mailing_address: [careof, mailadd, mail_city, mail_state, mail_zip], market_value: parval}}
+- {name: Fayette County, counties: [FAYETTE], source: third-party copy (2023, PA Dept. of Agriculture), url: "https://services5.arcgis.com/n3KaqXoFYDuIhfyz/arcgis/rest/services/Fayette_County_Parcels/FeatureServer/0",
+   fields: {apn: taxidnum, owner: [OWN1, OWN2], address: [ADDR_PHYSI, ADDR_PHY_1, ADDR_PHY_2], mailing_address: [ADDR_MAILI, ADDR_MAI_1, ZIP1], market_value: ASSESSED_T, acres: CALCACRES}}
+- {name: Huntingdon County, counties: [HUNTINGDON], source: county, url: "https://services3.arcgis.com/liWtJPxLI3mlx8pH/arcgis/rest/services/Property_Lines/FeatureServer/1",
+   fields: {apn: PIN, owner: Owner_Name, mailing_address: [Owner_Addr, Owner_Ad_1, Owner_Ad_2], market_value: Total_Valu, acres: Acres}}
+- {name: Lancaster County, counties: [LANCASTER], source: county, url: "https://services1.arcgis.com/I6XnrlnguPDoEObn/arcgis/rest/services/Parcels_HUBnew/FeatureServer/0",
+   fields: {apn: ACCOUNT, owner: OWNER_NAME, address: ADDRESS, mailing_address: [OWNERADD1, OWNERADD2, OWNER_CITY, OWNERSTATE, OWNER_ZIP], market_value: TOTLASSESS}}
+- {name: Lebanon County, counties: [LEBANON], source: county, url: "https://utility.arcgis.com/usrsvcs/servers/7072ca11c43c43feb1ab453851e847b9/rest/services/LandRecords/TaxParcels/MapServer/0",
+   fields: {apn: GEO_PIN, owner: OWNER, address: [SITUS_ADDR, SITUS_CITY], mailing_address: [MAILING_AD, CITY, STATE], market_value: TOTAL_ASSE}}
+- {name: Northampton County, counties: [NORTHAMPTON], source: third-party copy (2024, City of Bethlehem), url: "https://services2.arcgis.com/NlbUAihbvA50xxJw/arcgis/rest/services/Northampton_Parcels/FeatureServer/0",
+   fields: {apn: PARCEL_ID, owner: [OWNER_LN1, OWNER_LN2], address: LOCATION, mailing_address: [MAIL_ADDR1, MAIL_ADDR2, MAIL_ADDR3], market_value: TOT_VALUE}}
+- {name: Potter County, counties: [POTTER], source: county, url: "https://maps.pottercountypa.net/arcgis/rest/services/TaxParcel/TaxParcels/MapServer/0",
+   fields: {apn: Map_Number, owner: [Owner_Name_1, Owner_Name_2], address: Situs_Complete, mailing_address: [Owner_Address_1, Owner_City, Owner_State, Owner_Zip], market_value: Current_Total_Value, acres: Acreage}}
+- {name: Snyder County, counties: [SNYDER], source: county 2025-07, url: "https://services1.arcgis.com/oX0kbxItOpLtURFa/arcgis/rest/services/SnyderOnlineParcels_July302025/FeatureServer/2",
+   fields: {apn: PIN, owner: [Owner, Owner2], owner_sep: " ", mailing_address: [OwnerAddr, OwnerAddr2, OwnerCity, OwnerSt, OwnerZip], market_value: CurTotlVal, acres: Acreage}}
+- {name: Sullivan County, counties: [SULLIVAN], source: county (2021), url: "https://services.arcgis.com/v23hD9oBVGlp45Zy/arcgis/rest/services/Parcels_3_20/FeatureServer/0",
+   fields: {apn: PARCEL_ID, owner: [OWNER_NA_1, OWNER_NA_2], owner_sep: " ", address: LOCATION, mailing_address: [MAILING__A, CITY, STATE, ZIP], acres: ACRES}}
+- {name: Susquehanna County, counties: [SUSQUEHANNA], source: county, url: "https://services5.arcgis.com/lmuC4NmaSm4GH9h5/arcgis/rest/services/Parcel/FeatureServer/0",
+   fields: {apn: PIN, owner: [FIRST_NAME, LAST_NAME], owner_sep: " ", mailing_address: [ADDRESS_2, CITY, STATE, ZIP], acres: DEEDED_ACR}}
+- {name: Tioga County, counties: [TIOGA], source: county, url: "https://tiogagis.tiogacountypa.us/arcgis2017/rest/services/01_Parcel_Fabric_CAMA_Lines_REG/MapServer/0",
+   fields: {apn: PARCELID, owner: [SLH_OWN_NAME, SLH_CO_OWN_NAME], address: LOCATION, mailing_address: [SLH_OWN_ADDR, SLH_CITY, SLH_ZIP], market_value: PRC_TTL_APPRAIS, acres: PRC_TTL_LND_AREA_ACRES}}
+- {name: Union County, counties: [UNION], source: county 2026-02, url: "https://services1.arcgis.com/oX0kbxItOpLtURFa/arcgis/rest/services/UnionParcels02102026/FeatureServer/269",
+   fields: {apn: ParcelNumber, owner: OwnName, address: LocationAddress, mailing_address: [OwnCareOfline, OwnMailingLine1, OwnCity, OwnState, OwnZip], market_value: Total_Assessed_Parcel_Value, acres: GISAcres}}
+- {name: Wayne County, counties: [WAYNE], source: county, url: "https://services1.arcgis.com/VMKRr2Ecl6EFwJpm/arcgis/rest/services/TaxParcels/FeatureServer/0",
+   fields: {apn: TAXMAPNO_1, owner: [Name, AddlName], owner_sep: " ", mailing_address: [Address, City, State, ZIP], market_value: WtdMktValue, acres: Acreage}}
