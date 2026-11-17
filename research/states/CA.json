@@ -108,6 +108,8 @@
  ],
  "projects_note": "No single statewide Caltrans line layer of programmed (SHOPP/STIP) projects was found on the Caltrans GIS server (caltrans-gis.dot.ca.gov, whole directory listed) or its ArcGIS Online org. District-level layers also exist (e.g. District 5 SHOPP_PID_Map, last updated 2024) but were not recorded as they are partial and older.",
  "parcels_statewide": null,
+ "parcels_statewide_note": "null: California has no free statewide parcel layer with owner names. Owner names are withheld from public GIS layers under California Government Code 7928.205 (cited in San Bernardino County's own layer).",
  "parcels_counties": [],
- "summary": "Statewide coverage only as points (Caltrans SB1/IIJA project map, 32k records with status and cost); a line layer with phases exists for Districts 1-3 only. Parcels not yet researched."
+ "parcels_counties_note": "None usable. Checked: Los Angeles County parcel service (cache.gis.lacounty.gov/.../LACounty_Parcel/MapServer/0, 2.43M records) has no owner field; San Bernardino County (services.arcgis.com/aA3snZwJfFkVyDuP/.../Parcels_for_San_Bernardino_County/FeatureServer/0, 840k records) has an OwnerName field but every record reads 'Protected Per CA Gov Code 7928.205' (0 records otherwise). No owner-bearing county layer found for San Diego, Orange or Riverside.",
+ "summary": "Projects: statewide coverage only as points (Caltrans SB1/IIJA project map, 32k records with status and cost); a line layer with phases exists for Districts 1-3 only. Parcels: no owner names available statewide or in the five largest counties (redacted under CA Gov Code 7928.205)."
 }

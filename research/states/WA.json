@@ -49,6 +49,32 @@
   }
  ],
  "parcels_statewide": null,
- "parcels_counties": [],
- "summary": "WSDOT Project Delivery Plan line layer verified (1,582 projects, cost, ad date, RW certification date). Parcels not yet researched."
+ "parcels_statewide_note": "null for owners: Washington's statewide Current Parcels (https://services.arcgis.com/jsIt88o09Q0r1j8h/arcgis/rest/services/Current_Parcels/FeatureServer/0, 3.3M records, verified) has parcel id, situs address, land use and land/building value but NO owner name. Washington law (RCW 42.56.070(8)) bars agencies from providing lists of individuals for commercial purposes, which is why most counties leave names out.",
+ "parcels_counties": [
+  {
+   "county": "CLARK",
+   "name": "Clark County WA taxlots (copy published by City of Battle Ground: Taxlots - Outside Battle Ground)",
+   "url": "https://services6.arcgis.com/EryudxPhATqan49t/arcgis/rest/services/Taxlots_OutsideBG/FeatureServer/0",
+   "verified": true,
+   "record_count": 186679,
+   "owner_filled_count": 186678,
+   "fields": {
+    "apn": "Assr_sn",
+    "owner": "Owner",
+    "mailing_address": [
+     "MailName",
+     "Addrs",
+     "City",
+     "State",
+     "Zip1"
+    ],
+    "address": "SitAddrs",
+    "market_value": "TotProp",
+    "acres": "Assr_Ac"
+   },
+   "restrictions": "None seen on the layer; RCW 42.56.070(8) restricts use of public-record lists of individuals for commercial purposes.",
+   "notes": "Third-party city copy of Clark County assessor taxlots EXCLUDING parcels inside Battle Ground city limits; PublishDt 2026 in the sample. Clark County's own 'Taxlots for Public Use' layer carries only MainOwnerID, not names. OwnAddrs is a concatenated owner address."
+  }
+ ],
+ "summary": "WSDOT Project Delivery Plan line layer verified (1,582 projects, cost, ad date, RW certification date). Parcels: statewide layer has no owner names; only a city-hosted copy of Clark County taxlots with owners was verified. King and Pierce county layers checked have no owner name (Pierce has mailing address only); Snohomish and Spokane not found."
 }

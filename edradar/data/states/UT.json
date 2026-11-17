@@ -66,6 +66,51 @@
   }
  ],
  "parcels_statewide": null,
- "parcels_counties": [],
- "summary": "UDOT ePM STIP project line layer verified (3,219 projects with status, concept, value, advertise date). Parcels not yet researched."
+ "parcels_statewide_note": "null for owners: UGRC's Utah Statewide Parcels (https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/UtahStatewideParcels/FeatureServer/0, 1.6M records, verified) has parcel id, address, county and OWN_TYPE (ownership class) but NO owner name.",
+ "parcels_counties": [
+  {
+   "county": "SALT LAKE",
+   "name": "Salt Lake County - Land / Parcels",
+   "url": "https://apps.saltlakecounty.gov/slcogis/rest/services/Land/MapServer/1",
+   "verified": true,
+   "record_count": 398880,
+   "owner_filled_count": 395994,
+   "fields": {
+    "apn": "parcel_id",
+    "owner": "own_name",
+    "mailing_address": [
+     "own_addr",
+     "own_apt_num",
+     "own_citystate",
+     "own_zip",
+     "own_zip_four"
+    ],
+    "address": "prop_location",
+    "market_value": "total_full_mkt",
+    "acres": "parcel_acres"
+   },
+   "restrictions": "None seen on the layer.",
+   "notes": "County's own server, tax year 2026. own_name was blank on the first (state-owned) sample record; care_of and multi_names also present. Text fields are space-padded: trim them."
+  },
+  {
+   "county": "UTAH",
+   "name": "UGRC - Utah County Parcels (Parcels_Utah)",
+   "url": "https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/Parcels_Utah/FeatureServer/0",
+   "verified": true,
+   "record_count": 285970,
+   "owner_filled_count": 86740,
+   "fields": {
+    "apn": "PARCEL_ID",
+    "owner": "OWNERNAME",
+    "address": [
+     "PARCEL_ADD",
+     "PARCEL_CITY",
+     "PARCEL_ZIP"
+    ]
+   },
+   "restrictions": "None seen on the layer.",
+   "notes": "State-hosted snapshot of Utah County parcels that, unlike other UGRC county layers, carries an OWNERNAME field, BUT it is filled on only about 86,700 of 285,970 parcels (197,495 are empty strings), so it is a partial source. No mailing address, value or acres. The UGRC layers for Davis, Weber and Washington counties (Parcels_Davis, Parcels_Weber, Parcels_Washington) were checked and have no owner name."
+  }
+ ],
+ "summary": "UDOT ePM STIP line layer verified (3,219 projects with status, concept, value, advertise date). Parcels: statewide layer has no owner names; Salt Lake County verified with owner + mailing address; Utah County has owner name on only ~30% of parcels; Davis, Weber, Washington county owner layers not found."
 }

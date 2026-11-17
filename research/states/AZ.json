@@ -32,6 +32,59 @@
  ],
  "projects_note": "No current statewide ADOT layer found. ADOT's 2027-2031 Five-Year Program is published as a dashboard (azdot.gov/5yeardashboard returned HTTP 403 to a script) and at estip.azdot.gov; the only ADOT feature services found were old (5YRPlan2023_2024_gdb, FY2023-2024) or carried no project attributes (Updated_eSTIP, ESTIP_Update).",
  "parcels_statewide": null,
- "parcels_counties": [],
- "summary": "No statewide ADOT planned-projects service verified; only the MAG (Phoenix region) TIP layers work. Parcels not yet researched."
+ "parcels_statewide_note": "null: Arizona publishes no free statewide parcel layer with owner names (none found on AZGeo / ArcGIS Online).",
+ "parcels_counties": [
+  {
+   "county": "MARICOPA",
+   "name": "Maricopa County Assessor - Parcels",
+   "url": "https://gis.mcassessor.maricopa.gov/arcgis/rest/services/Parcels/MapServer/0",
+   "verified": true,
+   "record_count": 1763231,
+   "owner_filled_count": 1759443,
+   "fields": {
+    "apn": "APN",
+    "owner": "OWNER_NAME",
+    "mailing_address": [
+     "MAIL_ADDR1",
+     "MAIL_ADDR2",
+     "MAIL_CITY",
+     "MAIL_STATE",
+     "MAIL_ZIP"
+    ],
+    "address": [
+     "PHYSICAL_ADDRESS",
+     "PHYSICAL_CITY",
+     "PHYSICAL_ZIP"
+    ],
+    "market_value": "FCV_CUR",
+    "acres": "LAND_SIZE"
+   },
+   "restrictions": "Not checked beyond the layer metadata; review the Maricopa County Assessor's data terms before commercial or mailing use.",
+   "notes": "Assessor's own server, 1.76M parcels, tax year 2027 values in the sample. FCV_CUR (full cash value) is TEXT with commas and padding; LAND_SIZE is in square feet, not acres; MAIL_ADDRESS is a concatenated mailing address; INCAREOF, SALE_DATE, SALE_PRICE, DEED_DATE, JURISDICTION also present."
+  },
+  {
+   "county": "PINAL",
+   "name": "Pinal County tax parcels (copy published by City of Maricopa, TaxParcel_8_26)",
+   "url": "https://services7.arcgis.com/MlfUGd2UJYefAS7v/arcgis/rest/services/TaxParcel_8_26/FeatureServer/0",
+   "verified": true,
+   "record_count": 286959,
+   "owner_filled_count": 278131,
+   "fields": {
+    "apn": "PARCELID",
+    "owner": "OWNERNME1",
+    "mailing_address": [
+     "PSTLADDRES",
+     "PSTLCITY",
+     "PSTLSTATE",
+     "PSTLZIP5"
+    ],
+    "address": "SITEADDRES",
+    "market_value": "CNTASSDVAL",
+    "acres": "GROSSAC"
+   },
+   "restrictions": "None seen on the layer.",
+   "notes": "Third-party (city) copy of county tax parcels, dated by its name (8/26); the first sample record had blank attributes, see owner_filled_count. Pinal County's own server was not located."
+  }
+ ],
+ "summary": "Projects: no statewide ADOT planned-projects service verified, only the MAG (Phoenix region) TIP layers. Parcels: no statewide owner layer; Maricopa County Assessor parcels with owner and mailing address verified, plus a city-hosted copy of Pinal County. Pima (server returned 403), Yavapai (403) and Mohave not verified."
 }

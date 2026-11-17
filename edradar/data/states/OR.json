@@ -92,6 +92,56 @@
   }
  ],
  "parcels_statewide": null,
- "parcels_counties": [],
- "summary": "ODOT STIP 2027-2030 and 2024-2027 line/point layers verified with cost, bid-let date and design/construction code; no structured work-type field. Parcels not yet researched."
+ "parcels_statewide_note": "null: no free statewide Oregon taxlot layer with owner names found. Portland Metro's regional RLIS 'Taxlots (Public)' covers Multnomah, Washington and Clackamas counties but has no owner name (only PUBLIC_OWN / OWNERTYPE).",
+ "parcels_counties": [
+  {
+   "county": "LANE",
+   "name": "Lane County - PlanMaps/AddressParcel - Parcels",
+   "url": "https://lcmaps.lanecounty.org/arcgis/rest/services/PlanMaps/AddressParcel/MapServer/1",
+   "verified": true,
+   "record_count": 159183,
+   "owner_filled_count": 155531,
+   "fields": {
+    "apn": "MAPTAXLOT",
+    "owner": "OWNNAME",
+    "mailing_address": [
+     "ADDR1",
+     "ADDR2",
+     "ADDR3",
+     "OWNERCITY",
+     "OWNERPRVST",
+     "OWNERZIP"
+    ],
+    "market_value": "ASSDTOTVAL",
+    "acres": "MAPACRES"
+   },
+   "restrictions": "None seen on the layer; ORS 192.355 / county terms not reviewed.",
+   "notes": "County's own server (Eugene/Springfield). Owner fields were blank on the first sample record, see owner_filled_count. No situs address field in this layer (addresses are layer 0 of the same service, not inspected). ASSDTOTVAL = assessed total; LANDVAL, IMPVAL also present."
+  },
+  {
+   "county": "MARION",
+   "name": "Marion County parcels (copy published by City of Stayton: Parcels)",
+   "url": "https://services3.arcgis.com/SXXjryU22GsO8OEC/arcgis/rest/services/Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 115385,
+   "owner_filled_count": 115385,
+   "fields": {
+    "apn": "TAXLOT",
+    "owner": "OWNERNAME",
+    "mailing_address": [
+     "OWNERADDR",
+     "OWNERCSZ"
+    ],
+    "address": [
+     "SITUS",
+     "SITUSCSZ"
+    ],
+    "market_value": "RMVTOTAL",
+    "acres": "ACRES"
+   },
+   "restrictions": "None seen on the layer.",
+   "notes": "Third-party city copy of Marion County (Salem) assessor parcels, 115k records, LASTUPDATE Feb 2025 in the sample, so not live. RMVTOTAL = real market value; SALEPRICE, INSTDATE also present."
+  }
+ ],
+ "summary": "ODOT STIP 2027-2030 and 2024-2027 line/point layers verified with cost, bid-let date and design/construction code (no structured work-type field). Parcels: no statewide owner layer; Lane County and a city-hosted copy of Marion County verified. Multnomah/Washington/Clackamas (Metro RLIS) have no owner names in public layers; portlandmaps.com timed out."
 }

@@ -640,3 +640,12 @@ def test_state_files_become_sources(tmp_path, monkeypatch):
     assert cov["OH"]["owners"] == "statewide" and cov["OH"]["counties_owners"] == cov["OH"]["counties"] == 88
     assert cov["TX"]["owners"] == "none" and cov["TX"]["held"] == "TX parcels" and cov["TX"]["counties_owners"] == 0
     assert cov["PA"]["projects"] and not cov["TX"]["projects"] and not cov["CA"]["researched"]
+
+
+def test_federal_notices_are_filed_by_state():
+    from edradar.sources.federal_register import state_of
+
+    assert state_of("Notice of Intent for the I-11 corridor in Clark County, Nevada") == "NV"
+    assert state_of("Transmission line from West Virginia to Virginia") == "WV"
+    assert state_of("Meeting in Washington, DC on pipeline safety") is None
+    assert state_of("Corps permit, Puget Sound, Washington") == "WA" and state_of("A notice naming no place") is None

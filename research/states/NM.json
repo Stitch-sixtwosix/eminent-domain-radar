@@ -38,6 +38,74 @@
  ],
  "projects_note": "No current (FFY 2026+) NMDOT STIP geometry service was found in NMDOT's ArcGIS Online org. NMDOT's live eSTIP is a web application, not checked for an open GIS feed.",
  "parcels_statewide": null,
- "parcels_counties": [],
- "summary": "Only an out-of-date NMDOT eSTIP line layer (FFY 2023-2025, 44 records for 2025) was verified; no current planned-projects layer found. Parcels not yet researched."
+ "parcels_statewide_note": "null: no free statewide New Mexico parcel layer with owner names was found (ArcGIS Online search returned only land-management/ownership-class layers).",
+ "parcels_counties": [
+  {
+   "county": "BERNALILLO",
+   "name": "Bernalillo County Assessor Parcels (published by City of Albuquerque AGIS, berncoparcels_forIDO)",
+   "url": "https://services.arcgis.com/CWv1abTnC3urn4bV/arcgis/rest/services/berncoparcels_forIDO/FeatureServer/0",
+   "verified": true,
+   "record_count": 257283,
+   "owner_filled_count": 257283,
+   "fields": {
+    "apn": "UPC",
+    "owner": "OWNER",
+    "mailing_address": [
+     "OWNADD",
+     "OWNADD2"
+    ],
+    "address": [
+     "SITUSADD",
+     "SITUSADD2"
+    ],
+    "acres": "ACREAGE"
+   },
+   "restrictions": "None seen on the layer; not checked beyond the service metadata.",
+   "notes": "TAXYR 2026 in the sample. CompleteOwnerAddress / CompleteSiteAddress are concatenated versions. No value field."
+  },
+  {
+   "county": "DONA ANA",
+   "name": "Dona Ana County Assessed Parcels (DAC_Parcels)",
+   "url": "https://services7.arcgis.com/JMIoqakAkedEx0oU/arcgis/rest/services/DAC_Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 96814,
+   "owner_filled_count": 96724,
+   "fields": {
+    "apn": "PARCELNUMBER",
+    "owner": "OWNERNAME",
+    "mailing_address": [
+     "MAILADDR1",
+     "MAILADDR2",
+     "CITY",
+     "STATE",
+     "ZIP"
+    ],
+    "address": "SITUSADDRS",
+    "market_value": [
+     "LANDVALUE",
+     "BLDGVALUE"
+    ],
+    "acres": "TOTALACRES"
+   },
+   "restrictions": "None seen on the layer.",
+   "notes": "County-published, edited 2026. CAREOFNAME, DEEDHOLDER, ACCOUNTNUMBER also present. No single total-value field: land and building values are separate."
+  },
+  {
+   "county": "SANDOVAL",
+   "name": "Sandoval_County_Parcels (Sandoval County Assessor GIS)",
+   "url": "https://services3.arcgis.com/CkhxOCyQmitz4nLa/arcgis/rest/services/Sandoval_County_Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 151990,
+   "owner_filled_count": 149061,
+   "fields": {
+    "apn": "Parcel_ID",
+    "owner": "Owner_List",
+    "acres": "Acrage"
+   },
+   "restrictions": "None seen on the layer.",
+   "notes": "Owner name only: no mailing address, situs address or value. Account_No is the assessor account; Acrage is text such as '160.949 ac'."
+  }
+ ],
+ "parcels_counties_note": "Santa Fe County's TaxParcels layer (https://sfcomaps.santafecountynm.gov/restsvc/rest/services/TaxParcelsDB/MapServer/0, 90,742 records, fields ownernme1/ownernme2/pstladdress/siteaddress) answered for metadata and count but every record query timed out (60-90 s, three attempts), so it is NOT verified and not listed.",
+ "summary": "Projects: only an out-of-date NMDOT eSTIP line layer (FFY 2023-2025) verified, nothing current. Parcels: no statewide owner layer; Bernalillo, Dona Ana and Sandoval county layers with owner names verified (Santa Fe has owner fields but its server timed out on queries)."
 }

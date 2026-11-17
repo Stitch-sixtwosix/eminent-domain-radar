@@ -5,6 +5,39 @@
  "projects": [],
  "projects_note": "null: NDOT's GIS servers (gis.dot.nv.gov/arcgis, /rhgis, /agsphs) answered every request with HTTP 500 'Application Error' on 2026-11-16/17, and NDOT's ArcGIS Online org lists no STIP or planned-projects layer (only ITS master plan, fiber 'Activity Line', maintenance layers). NDOT's eSTIP is a web application with no open GIS feed found.",
  "parcels_statewide": null,
- "parcels_counties": [],
- "summary": "No NDOT planned-projects layer could be found or verified. Parcels not yet researched."
+ "parcels_statewide_note": "null: no free statewide Nevada parcel layer with owner names found.",
+ "parcels_counties": [
+  {
+   "county": "WASHOE",
+   "name": "Washoe County - Parcels (Nightly_OpenData_Update)",
+   "url": "https://services.arcgis.com/iCGWaR7ZHc5saRIl/arcgis/rest/services/Nightly_OpenData_Update/FeatureServer/1",
+   "verified": true,
+   "record_count": 194381,
+   "owner_filled_count": 194137,
+   "fields": {
+    "apn": "PIN",
+    "owner": [
+     "LASTNAME",
+     "FIRSTNAME"
+    ],
+    "mailing_address": [
+     "MAILING1",
+     "MAILING2",
+     "MAILCITY",
+     "MAILSTATE",
+     "MAILZIP"
+    ],
+    "address": [
+     "FullAddress",
+     "CITY",
+     "SITUSZIP"
+    ],
+    "market_value": "TOTALAPR",
+    "acres": "ACREAGE"
+   },
+   "restrictions": "None seen on the layer.",
+   "notes": "County open data refreshed nightly, tax year 2026. Owner is split into LASTNAME (holds the whole name for organisations) and FIRSTNAME. APN is numeric; PIN is the formatted parcel number (001-020-00). TOTALAPR = total appraised value, TOTALASS = assessed."
+  }
+ ],
+ "summary": "Projects: none found (NDOT GIS servers returned HTTP 500 and no STIP layer is published on ArcGIS Online). Parcels: no statewide layer; Washoe County verified with owner and mailing address. Clark County (Las Vegas): the county server maps.clarkcountynv.gov answered but no parcel layer with owner names was found there in the time allowed."
 }
