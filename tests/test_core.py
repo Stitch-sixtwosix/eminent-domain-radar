@@ -631,7 +631,7 @@ def test_state_files_become_sources(tmp_path, monkeypatch):
     monkeypatch.setattr(config, "state_files", lambda: files)
     cfg = {"sources": {}, "parcel_layers": [{"name": "PA county", "counties": ["FRANKLIN"]}]}
     config.add_states(cfg)
-    layers = cfg["sources"]["dot_arcgis"]["layers"]
+    layers = [x for x in cfg["sources"]["dot_arcgis"]["layers"] if x.get("source_prefix") != "gis"]     # the state files' own
     assert [x["url"] for x in layers] == ["https://x/0"] and layers[0]["state"] == "OH"          # unverified layers are never used
     names = [x["name"] for x in cfg["parcel_layers"]]
     assert names == ["PA county", "OH Franklin County", "OH statewide parcels"]                  # the restricted Texas layer is held back
