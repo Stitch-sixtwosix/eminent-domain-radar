@@ -11,131 +11,100 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7.5' fill='%231b2333'/%3E%3Cpath d='M8 5h16v4.200H12.200v13.600H24V27H8z' fill='%23fff'/%3E%3Cpath d='M12.200 13.900H32v4.200H12.200z' fill='%23e0662e'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Serif:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="site.css">
 <script src="auth-config.js"></script>
 <script>if ((window.ET_AUTH || {}).url) document.documentElement.classList.add("auth-on");</script>
-<script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
 
+<a class="skip" href="#main">Skip to content</a>
 <header class="bar">
   <a class="brand" href="./" aria-label="EminentTracker home"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7.5" fill="#1b2333"/><path d="M8 5h16v4.200H12.200v13.600H24V27H8z" fill="#fff"/><path d="M12.200 13.900H32v4.200H12.200z" fill="#e0662e"/></svg><b>Eminent<span>Tracker</span></b></a>
   <nav aria-label="Sections">
     <a href="#how">What it does</a>
     <a href="#pricing">Pricing</a>
     <a href="#about">Who built it</a>
-    <a href="app/">Live Pennsylvania data</a>
+    <a href="app/">Live data</a>
     <a class="auth-only" href="login.html">Sign in</a>
   </nav>
   <a class="btn small" href="signup.html"><span class="auth-off">Request access</span><span class="auth-only">Create account</span></a>
 </header>
 
-<main>
-<section class="hero" aria-labelledby="title">
-  <div class="talk">
-    <p>Built by eminent domain attorneys, for eminent domain attorneys.</p>
-    <a class="btn" href="signup.html"><span class="auth-off">Request access</span><span class="auth-only">Create account</span></a>
-    <a class="alt text-link" href="app/">See the live Pennsylvania data</a>
+<main id="main">
+<section class="hero in" aria-labelledby="title">
+  <div>
+    <h1 id="title">Eminent domain leads, years before the notice</h1>
+    <p class="lede">EminentTracker reads public project plans every day, finds each parcel in the path, and gives you the owner’s name and mailing address.</p>
+    <div class="acts">
+      <a class="btn" href="signup.html"><span class="auth-off">Request access</span><span class="auth-only">Create account</span></a>
+      <a class="text-link" href="app/">See the live data</a>
+    </div>
+    <p class="by"><b>Built by eminent domain attorneys, for eminent domain attorneys.</b> Made inside a working practice, for the way condemnation cases are actually found.</p>
   </div>
-  <div class="head">
-    <h1 id="title"><span><i>Find the land</i></span><span><i>before the notice.</i></span></h1>
-    <p class="stand">EminentTracker reads public project plans every day, finds each parcel in the path, and gives you the owner of record years before a condemnation notice is filed.</p>
-  </div>
+  <figure><img src="img/overview.jpg" width="2160" height="1350" fetchpriority="high" alt="EminentTracker showing planned public projects on a map and a ranked table of affected parcels with their owners of record."></figure>
 </section>
 
-<div class="shot">
-  <div class="frame"><img src="img/overview.jpg" width="2160" height="1350" alt="The EminentTracker lead screen: a map of Pennsylvania with planned projects marked in orange, a ranked list of projects, and a table of affected parcels with their owners of record."></div>
-  <p class="figure"><b>{{leads}}</b><span>parcel leads on file in Pennsylvania as of {{date}}, matched to {{projects}} planned projects</span></p>
-</div>
+<div class="in"><p class="today">On file today: <b>{{leads}}</b> parcels along <b>{{projects}}</b> planned projects, <b>{{owners}}</b> with an owner of record. Updated every day.</p></div>
 
-<section class="how wrap" id="how" aria-labelledby="how-h">
-  <div class="axis" data-in>
-    <h2 id="how-h">What it does for your practice</h2>
-  </div>
-  <ol class="steps3">
-    <li data-in><h3>Find clients years earlier.</h3>
+<section class="band in" id="how" aria-labelledby="how-h">
+  <h2 id="how-h">What it does for your practice</h2>
+  <ul class="three">
+    <li><h3>Find clients years earlier</h3>
       <p>See which owners a road, bridge or pipeline will reach while the project is still on a planning list, long before any notice goes out.</p></li>
-    <li data-in><h3>Know exactly who to call.</h3>
+    <li><h3>Know exactly who to contact</h3>
       <p>Every affected parcel comes with its owner of record, mailing address, boundary and assessed value, ranked by how likely a taking is.</p></li>
-    <li data-in><h3>Reach them before anyone else.</h3>
-      <p>Send postcards and email in your firm's name with one click, marked as attorney advertising.</p></li>
-  </ol>
+    <li><h3>Reach them before anyone else</h3>
+      <p>Send postcards and email in your firm’s name from one template, marked as attorney advertising.</p></li>
+  </ul>
 </section>
 
-<section class="pricing wrap" id="pricing" aria-labelledby="pricing-h">
-  <div class="axis" data-in>
-    <h2 id="pricing-h">One plan, everything included</h2>
-    <p class="lede">Every lead, owner record and outreach tool, for your whole firm. Postcards and skip tracing are billed as you use them.</p>
-  </div>
-  <div class="plans axis">
-    <div class="plan" data-in>
+<section class="band in" id="pricing" aria-labelledby="pricing-h">
+  <h2 id="pricing-h">Pricing</h2>
+  <p class="lede">One plan for your whole firm, with every lead, owner record and outreach tool.</p>
+  <div class="plans">
+    <div class="plan">
       <h3>Monthly</h3>
-      <p class="price"><b>$999</b> per month</p>
+      <p class="price"><b>$999</b>per month</p>
       <p>Billed each month. Cancel any time.</p>
-      <a class="btn" href="{{pay_monthly}}">Start monthly</a>
+      <a class="btn" href="{{pay_monthly}}">Choose monthly</a>
     </div>
-    <div class="plan best" data-in>
-      <h3>Annual</h3>
-      <p class="price"><b>$799</b> per month</p>
-      <p>20% off: $9,590.40 billed once a year.</p>
-      <a class="btn accent" href="{{pay_annual}}">Start annual</a>
+    <div class="plan best">
+      <h3>Annual<span class="save">Save 20%</span></h3>
+      <p class="price"><b>$799</b>per month</p>
+      <p>$9,590.40 billed once a year.</p>
+      <a class="btn" href="{{pay_annual}}">Choose annual</a>
+    </div>
+  </div>
+  <p class="fine">Postcards and skip tracing are optional and billed as you use them.</p>
+</section>
+
+<section class="band in" id="about" aria-labelledby="about-h">
+  <div class="about{{photo_class}}">{{photo}}
+    <div>
+      <h2 id="about-h">Who built it</h2>
+      <p>We built EminentTracker for our own practice. Condemnation filings tell you who is losing land when it is already late. Planning lists say it years earlier, but nobody has time to read them and trace every route to a deed.</p>
+      <p>The software does that reading every day. It covers Pennsylvania today, and more states are being added.</p>
+      <p class="sig"><b>William Christopher Duerr</b>Owner, EminentTracker</p>
     </div>
   </div>
 </section>
 
-<section class="about wrap" id="about" aria-labelledby="about-h">
-  <div class="who">{{photo}}
-    <p class="name">William Christopher Duerr</p>
-    <p class="role">Owner, EminentTracker<br>Duerr Law, PC · Fort Washington, Pennsylvania</p>
-  </div>
-  <div data-in>
-    <h2 id="about-h">Built by eminent domain attorneys</h2>
-    <p class="statement">We built EminentTracker for our own practice, to learn who is about to lose land before the condemnation is filed.</p>
-    <p class="more">Planning lists name projects years ahead, but nobody has time to read them and trace every route to a deed. The software does that reading every day. It covers Pennsylvania now, and other states are being added.</p>
-  </div>
-</section>
-
-<section class="close on-navy" aria-labelledby="close-h">
-  <h2 id="close-h">Be there before the notice.</h2>
-  <div class="row">
-    <p><span class="auth-off">Access is opening firm by firm. Tell us where you practice and we will set your firm up.</span><span class="auth-only">Create your firm's account with your work email or with Google. It takes a minute.</span></p>
+<section class="cta" aria-labelledby="cta-h">
+  <div class="in">
+    <div><h2 id="cta-h">See who is in the path of the next project</h2>
+      <p><span class="auth-off">Tell us where you practice and we will set your firm up.</span><span class="auth-only">Create your firm’s account in about a minute.</span></p></div>
     <a class="btn accent" href="signup.html"><span class="auth-off">Request access</span><span class="auth-only">Create account</span></a>
   </div>
-
-  <footer>
-    <p class="name" aria-hidden="true">Eminent<span>Tracker</span></p>
-    <div class="cols">
-      <div class="reach">
-        <a href="signup.html"><span class="auth-off">Request access</span><span class="auth-only">Create account</span></a>
-        <a class="auth-only" href="login.html">Sign in</a>
-        <a href="app/">Open the live data</a>
-      </div>
-      <div class="links">
-            <a href="#how">What it does</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#about">Who built it</a>
-      </div>
-      <div class="links">
-        <a href="app/?view=hub">Outreach</a>
-        <a href="mailto:info@duerrlawpc.com?subject=EminentTracker">info@duerrlawpc.com</a>
-      </div>
-    </div>
-    <div class="legal">
-      <p>© 2026 EminentTracker. Owned and operated by William Christopher Duerr. EminentTracker is a research tool and does not give legal advice. Records come from public sources and can be incomplete or out of date; a project on a planning list may never take any land. Map data © OpenStreetMap contributors.</p>
-      <a href="#title">Back to top</a>
-    </div>
-  </footer>
 </section>
 </main>
 
-<script>
-// Sections enter once, as they come into view. Without IntersectionObserver everything is simply shown.
-const parts = document.querySelectorAll("[data-in]");
-if ("IntersectionObserver" in window) {
-  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), {rootMargin: "0px 0px -8% 0px"});
-  parts.forEach(p => io.observe(p));
-} else parts.forEach(p => p.classList.add("in"));
-</script>
+<footer>
+  <div class="in">
+    <span>© 2026 EminentTracker</span>
+    <nav aria-label="Footer"><a href="app/">Live data</a><a href="signup.html">Sign up</a><a class="auth-only" href="login.html">Sign in</a><a href="mailto:info@duerrlawpc.com?subject=EminentTracker">Contact</a></nav>
+    <p class="legal">EminentTracker is owned and operated by William Christopher Duerr. It is a research tool and does not give legal advice. Records come from public sources and can be incomplete or out of date; a project on a planning list may never take any land. Map data © OpenStreetMap contributors.</p>
+  </div>
+</footer>
 </body>
 </html>

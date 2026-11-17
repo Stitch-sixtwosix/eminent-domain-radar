@@ -439,12 +439,13 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40) -> Dic
     fill = {"leads": "{:,}".format(stats["leads"]), "projects": "{:,}".format(stats["projects"]),
             "owners": "{:,}".format(stats["leads_with_owner"]), "counties": str(len(stats["counties"])),
             "owner_counties": str(owner_counties), "date": date.today().strftime("%B %-d, %Y")}
+    fill["photo_class"] = "" if (landing / "img" / "william-duerr.jpg").exists() else " no-photo"
     # Subscribe buttons go to Stripe payment links once they exist; until then they lead to sign-up.
     pay = cfg.get("site") or {}
     fill["pay_monthly"] = pay.get("stripe_monthly_link") or "signup.html"
     fill["pay_annual"] = pay.get("stripe_annual_link") or "signup.html"
     # The owner's portrait appears once a photo is saved as landing/img/william-duerr.jpg.
-    fill["photo"] = ('<figure class="portrait"><img src="img/william-duerr.jpg" width="680" height="850" loading="lazy" '
+    fill["photo"] = ('<figure class="portrait"><img src="img/william-duerr.jpg" width="400" height="500" loading="lazy" '
                      'alt="William Christopher Duerr"></figure>') if (landing / "img" / "william-duerr.jpg").exists() else ""
     for name in ("index.html", "signup.html", "login.html", "account.html"):
         page = (landing / name).read_text()
