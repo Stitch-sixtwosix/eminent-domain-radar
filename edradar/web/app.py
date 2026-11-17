@@ -10,7 +10,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 
-from .. import outreach, parceldetail
+from .. import outreach, parceldetail, skiptrace
 from .. import outreach as outreach_mod
 from ..classify import STAGE_ORDER, score_breakdown, timeline
 from ..db import DB
@@ -54,6 +54,8 @@ OUTREACH_FILTERS = {
     "postcard": outreach.POSTCARD_ELIGIBLE,
     "contacted": "EXISTS (SELECT 1 FROM outreach o WHERE o.lead_id = l.id)",
     "none": "NOT EXISTS (SELECT 1 FROM outreach o WHERE o.lead_id = l.id)",
+    "traced": "EXISTS (SELECT 1 FROM skiptraces t WHERE t.owner = pa.owner AND t.mailing_address IS pa.mailing_address "
+              "AND t.matched = 1)",
 }
 
 
@@ -160,7 +162,8 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
         bg, others = parceldetail.background(parcel), parceldetail.related(db, lead)
         return {"lead": lead, "layer": parcel["layer"], "boundary": parceldetail.boundary(cfg, db, parcel),
                 "background": bg, "related": others, "owner": parceldetail.owner_profile(lead, bg["facts"], others),
-                "contacts": db.contacts_for(lead["owner"]), "company": db.company_for(lead["owner"])}
+                "contacts": db.contacts_for(lead["owner"]), "company": db.company_for(lead["owner"]),
+                "skiptrace": skiptrace.cached(db, lead)}
 
     @app.get("/api/leads/{lead_id}/cases")
     def lead_cases(lead_id: int) -> Dict[str, Any]:
@@ -176,7 +179,27 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
 
     @app.get("/api/outreach/status")
     def outreach_status() -> Dict[str, Any]:
-        return outreach.status(cfg)
+        return dict(outreach.status(cfg), skiptrace=skiptrace.status(cfg), rates=skiptrace.rates(cfg))
+
+    @app.post("/api/leads/{lead_id}/skip-trace")
+    def skip_trace(lead_id: int) -> Dict[str, Any]:
+        lead = one_lead(lead_id)
+        return guard(lambda: skiptrace.trace(cfg, db, lead))
+
+    @app.get("/api/usage")
+    def usage() -> Dict[str, Any]:
+        return dict(skiptrace.usage_summary(db), rates=skiptrace.rates(cfg))
+
+    @app.get("/api/usage.csv")
+    def usage_csv() -> StreamingResponse:
+        rows = db.rows("SELECT created_at, kind, owner, lead_id, cost, price, ROUND(price - cost, 2) AS margin FROM usage "
+                       "ORDER BY created_at DESC")
+        buf = io.StringIO()
+        w = csv.writer(buf)
+        w.writerow(["date", "item", "owner", "lead_id", "cost", "billed", "margin"])
+        w.writerows([list(r.values()) for r in rows])
+        return StreamingResponse(iter([buf.getvalue()]), media_type="text/csv",
+                                 headers={"Content-Disposition": "attachment; filename=eminent-tracker-usage.csv"})
 
     @app.post("/api/postcards/campaign")
     def postcard_campaign(body: Campaign) -> Dict[str, Any]:
@@ -199,6 +222,9 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
         result = guard(lambda: outreach.send_postcard(cfg, lead))
         db.log_outreach(lead_id, "postcard", "sent" if result["mode"] == "live" else "test",
                         result["external_id"], result)
+        if result["mode"] == "live":
+            rate = skiptrace.rates(cfg)["postcard"]
+            skiptrace.record_usage(db, "postcard", lead_id, lead["owner"], rate["cost"], rate["price"])
         return result
 
     @app.get("/api/leads/{lead_id}/email/contacts")

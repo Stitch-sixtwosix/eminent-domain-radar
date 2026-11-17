@@ -226,6 +226,13 @@
             padding: 12px 14px; background: var(--paper); max-height: 300px; overflow-y: auto; overflow-wrap: anywhere; }
   .letter b { font-weight: 600; }
   .row-acts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .flag { display: inline-block; font-size: 11.5px; font-weight: 500; border-radius: 4px; padding: 0 6px; margin-left: 6px;
+          background: var(--danger-bg); color: var(--danger); white-space: nowrap; }
+  .flag.ok { background: var(--ok-bg); color: var(--ok); }
+  .usage { width: 100%; font-size: 13px; margin-bottom: 14px; }
+  .usage caption { text-align: left; font-weight: 600; font-size: 13px; padding-bottom: 6px; }
+  .usage th { position: static; box-shadow: none; height: auto; padding: 6px 12px; }
+  .usage th:first-child, .usage td:first-child { padding-left: 0; }
   .contacts { list-style: none; margin: 8px 0 0; padding: 0; font-size: 13px; }
   .contacts li { padding: 7px 0; border-top: 1px solid var(--line); }
   .contacts b { font-weight: 500; }
@@ -316,6 +323,7 @@
     <span><b id="st-owners">–</b>with owner of record</span>
     <span id="st-updated"></span>
   </div>
+  <button id="btn-usage" class="sm" hidden>Usage</button>
   <button id="btn-template" class="sm" hidden>Outreach template</button>
   <span class="mode" id="mode" hidden></span>
 </header>
@@ -347,7 +355,7 @@
       <h2 id="d-title">Top leads across all projects</h2>
       <select id="f-outreach" aria-label="Outreach filter">
         <option value="">All leads</option><option value="email">Email leads (company owners)</option>
-        <option value="postcard">Postcard-ready</option><option value="none">Not contacted yet</option>
+        <option value="postcard">Postcard-ready</option><option value="traced">Phone or email found</option><option value="none">Not contacted yet</option>
         <option value="contacted">Already contacted</option>
       </select>
       <label class="check"><input type="checkbox" id="f-owner"> Owner known</label>
@@ -461,7 +469,7 @@ async function api(path, opts) {
 function staticOutreach(l, f) {   // a snapshot has no outreach history, so "contacted" is always empty
   if (f === "email") return l.owner_kind === "company" && (l.email_contacts ?? 1) > 0;
   if (f === "postcard") return !!l.mailable && (l.owner_kind === "individual" || l.owner_kind === "company");
-  return f !== "contacted";
+  return f !== "contacted" && f !== "traced";
 }
 function ringMetrics(rings) {
   const pts = rings.flat(), lat0 = pts.reduce((a, p) => a + p[1], 0) / pts.length * Math.PI / 180;
@@ -782,6 +790,35 @@ async function openTemplate() {
 }
 $("dlg").addEventListener("close", () => $("dlg").classList.remove("wide"));
 
+/* ---- skip tracing (individual owners) and the usage ledger ---- */
+const usd = n => "$" + Number(n || 0).toFixed(2);
+const phoneFmt = n => { const d = String(n || "").replace(/\D/g, "").slice(-10); return d.length === 10 ? `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}` : String(n || ""); };
+function traceBlock(d, r, o) {
+  if (STATIC || o.kind_key !== "individual") return "";
+  const t = d.skiptrace, st = OUT && OUT.skiptrace;
+  if (!t) return `<div class="row-acts"><button class="sm" data-trace="${r.id}" ${st && st.enabled ? "" : "disabled"}>Skip trace this owner</button>
+      <span class="meta">${st && st.enabled ? `Looks up phone numbers and email. Billed to the client at ${usd(st.price)} if a match is found.` : esc((st && st.why) || "")}</span></div>`;
+  if (!t.matched) return `<p style="margin-top:8px">Skip traced ${esc(day(t.fetched_at))}: no phone or email was found for this owner. No charge was recorded.</p>`;
+  return `<ul class="contacts"><li><b>${esc(t.name || "Name not returned")}</b>${t.name_match ? '<span class="flag ok">matches owner of record</span>' : '<span class="flag">name differs from owner of record</span>'}${t.litigator ? '<span class="flag">known TCPA litigator</span>' : ""}
+      <div class="sub">Skip traced ${esc(day(t.fetched_at))}</div></li>
+    ${t.phones.map(p => `<li>${esc(phoneFmt(p.number))}<span class="meta"> · ${esc([p.type, p.reachable === false ? "not reachable" : "", p.score != null ? "confidence " + p.score : ""].filter(Boolean).join(" · "))}</span>${p.dnc ? '<span class="flag">Do Not Call</span>' : ""}${p.tcpa ? '<span class="flag">TCPA flagged</span>' : ""}</li>`).join("")}
+    ${t.emails.map(e => `<li><a href="mailto:${esc(e)}">${esc(e)}</a></li>`).join("")}</ul>
+    <p style="margin-top:8px">${t.name_match ? "" : "The person found at this address has a different surname and may be a tenant or relative. "}Pa. R.P.C. 7.3 restricts live telephone solicitation by lawyers. Check with ethics counsel before calling.</p>`;
+}
+async function openUsage() {
+  dlg.innerHTML = `<div class="dlg-head"><h2 id="dlg-title">Usage and billing</h2><p>What each skip trace and mailed postcard cost, and what the client is charged.</p></div><div class="dlg-body"><p class="meta">Loading…</p></div>
+    <div class="dlg-foot"><span class="note">Rates are set under billing in config.yaml.</span><a class="btn" href="/api/usage.csv">Download CSV</a><button data-close>Close</button></div>`;
+  dlg.showModal();
+  let u;
+  try { u = await api("/api/usage"); } catch (e) { dlg.querySelector(".dlg-body").innerHTML = `<div class="alert bad">${esc(e.message)}</div>`; return; }
+  const NAME = {skip_trace: "Skip traces", postcard: "Postcards"};
+  const table = (title, rows) => `<table class="usage"><caption>${title}</caption><thead><tr><th>Item</th><th class="num">Count</th><th class="num">Your cost</th><th class="num">Billed to client</th><th class="num">Margin</th></tr></thead><tbody>${
+    rows.length ? rows.map(x => `<tr><td>${esc(NAME[x.kind] || x.kind)}</td><td class="num">${x.count}</td><td class="num">${usd(x.cost)}</td><td class="num">${usd(x.billed)}</td><td class="num">${usd(x.margin)}</td></tr>`).join("")
+      : `<tr><td colspan="5" class="meta">Nothing billable yet. A skip trace is recorded when a match is found, a postcard when it is mailed with a live key.</td></tr>`}</tbody></table>`;
+  dlg.querySelector(".dlg-body").innerHTML = table("This month", u.this_month) + table("All time", u.all_time) +
+    `<p class="meta">Current rates: skip trace ${usd(u.rates.skip_trace.cost)} cost, ${usd(u.rates.skip_trace.price)} billed · postcard ${usd(u.rates.postcard.cost)} cost, ${usd(u.rates.postcard.price)} billed.</p>`;
+}
+
 /* ---- parcel panel: boundary on the map, land background, related parcels, similar cases ---- */
 const panel = $("parcel");
 let openLead = null;
@@ -839,9 +876,11 @@ async function openParcel(leadId) {
   const contactSec = `<div class="p-sec" id="p-contact"><h3>Contact information</h3><dl class="facts">${row("Mail to", o.mailing_address)}${row("Care of", careOf ? titleCase(careOf) : "")}${row("Property", r.address)}${row("Agency contact", proj && proj.contact)}${d.company && d.company.phone ? row("Company phone", d.company.phone) : ""}${d.company && d.company.website ? `<dt>Website</dt><dd><a href="${esc(safeUrl(d.company.website))}" target="_blank" rel="noopener">${esc(d.company.website.replace(/^https?:\/\/(www\.)?/, ""))}</a></dd>` : ""}</dl>
     ${people.length ? `<ul class="contacts">${people.map(c => `<li><b>${esc(c.name || "Contact")}</b>${c.title ? " · " + esc(c.title) : ""}
         <div class="sub">${[c.email ? `<a href="mailto:${esc(c.email)}">${esc(c.email)}</a>` : "email available in Apollo, not revealed yet", c.phone ? esc(c.phone) : "", c.linkedin ? `<a href="${esc(safeUrl(c.linkedin))}" target="_blank" rel="noopener">LinkedIn</a>` : ""].filter(Boolean).join(" · ")}</div></li>`).join("")}</ul>` : ""}
+    ${traceBlock(d, r, o)}
     ${canFind ? `<div class="row-acts"><button class="sm" data-find-contacts="${r.id}">${people.length ? "Refresh contacts from Apollo" : "Find contacts in Apollo"}</button></div>` : ""}
     <p style="margin-top:8px">${o.kind_key === "company" ? (people.length ? "People found at this company in Apollo. An email address appears once you add the person to a sequence." : STATIC ? "No Apollo contacts have been stored for this company yet." : OUT && OUT.email.enabled ? "No contacts looked up yet." : "Set an Apollo key to look up the people behind this company.") : o.kind_key === "individual" ? "For individual owners the public record gives a mailing address only. Phone numbers and email addresses are not in county files." : ""}</p></div>`;
-  const L_ = TPL ? letterFor(r) : null, to = (people.find(c => c.email) || {}).email || "";
+  const traced = d.skiptrace && d.skiptrace.matched && d.skiptrace.name_match ? d.skiptrace.emails[0] : "";
+  const L_ = TPL ? letterFor(r) : null, to = (people.find(c => c.email) || {}).email || traced || "";
   const letterSec = L_ && o.kind_key !== "government" && o.kind_key !== "unknown" ? `<div class="p-sec"><h3>Outreach letter</h3>
     <div class="letter"><b>${esc(L_.subject)}</b>\n\n${esc(L_.body)}</div>
     <div class="row-acts"><a class="btn" href="mailto:${esc(to)}?subject=${encodeURIComponent(L_.subject)}&body=${encodeURIComponent(L_.body)}">${ICON.mail}Open as email</a>
@@ -875,6 +914,14 @@ panel.addEventListener("click", async e => {
     const L_ = letterFor(lead(copy.dataset.copyLetter));
     try { await navigator.clipboard.writeText(L_.subject + "\n\n" + L_.body); copy.textContent = "Copied"; } catch (err) { copy.textContent = "Copy failed"; }
     setTimeout(() => { copy.textContent = "Copy"; }, 1600);
+  }
+  const tr = e.target.closest("[data-trace]");
+  if (tr) {
+    if (!tr.dataset.armed) { tr.dataset.armed = "1"; tr.textContent = `Confirm lookup (${usd(OUT.skiptrace.price)} if matched)`; tr.classList.add("primary"); return; }
+    tr.disabled = true; tr.textContent = "Looking up…";
+    try { await api(`/api/leads/${tr.dataset.trace}/skip-trace`, {method: "POST"}); await openParcel(+tr.dataset.trace); }
+    catch (err) { tr.disabled = false; tr.textContent = "Try again"; tr.insertAdjacentHTML("afterend", `<span class="meta">${esc(err.message)}</span>`); }
+    return;
   }
   if (find) {
     find.disabled = true; find.textContent = "Searching Apollo…";
@@ -1072,6 +1119,7 @@ $("f-owner").addEventListener("change", loadLeads);
 $("f-outreach").addEventListener("change", loadLeads);
 $("btn-campaign").addEventListener("click", openCampaign);
 $("btn-template").addEventListener("click", openTemplate);
+$("btn-usage").addEventListener("click", openUsage);
 let timer;
 for (const id of ["f-county", "f-type", "f-source", "f-stage", "f-score", "f-q"])
   $(id).addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(async () => { await loadProjects(); await loadLeads(); }, 250); });
@@ -1091,6 +1139,7 @@ for (const id of ["f-county", "f-type", "f-source", "f-stage", "f-score", "f-q"]
     mode.textContent = "Postcards: " + ({live: "live", test: "test mode", off: "off"}[OUT.postcard.mode]) + " · Email: " + (OUT.email.enabled ? "on" : "off");
     if (OUT.postcard.mode === "live") mode.dataset.live = "";
     $("btn-campaign").hidden = false;
+    $("btn-usage").hidden = false;
     mode.hidden = false;
   }
   TPL = await api("/api/outreach/template");

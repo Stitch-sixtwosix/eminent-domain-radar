@@ -105,6 +105,17 @@ Postcard actions. The template is saved in the database and also applies to comm
 manager, and for company owners the people Apollo finds there. County files carry no phone or email for
 individual owners, and Pa. R.P.C. 7.3 restricts live telephone solicitation, so none is collected for them.
 
+**Skip tracing.** For individual owners, "Skip trace this owner" in the parcel panel (or
+`edradar skip-trace --min-score 90 --limit 25`, a dry run unless `--run`) looks up phone numbers and email through
+[BatchData](https://batchdata.io) once `BATCHDATA_API_KEY` is set. Each owner and address is looked up once and the
+answer is kept. A result whose surname does not match the owner of record is flagged, as are Do Not Call, TCPA and
+known-litigator markers. Skip-traced details never go into the public snapshot.
+
+**Billing clients.** Every matched skip trace and every postcard mailed with a live key is written to a usage ledger
+with your cost and the client price from `billing:` in `config.yaml`. "Usage" in the top bar (or `edradar usage`)
+shows counts, cost, amount billed and margin for the month and all time, with a CSV download. The app records
+usage; it does not charge a card or send invoices.
+
 **Finding email leads.** The lead table's outreach filter has "Email leads (company owners)" and
 "Postcard-ready". `edradar find-emails` asks Apollo which company owners actually have contacts (search only,
 no credits) so the filter and the Email button show real availability.

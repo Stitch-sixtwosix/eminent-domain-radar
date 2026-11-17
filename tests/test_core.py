@@ -379,3 +379,56 @@ def test_outreach_template(tmp_path):
     lead_id = client.get("/api/leads").json()[0]["id"]
     db.conn.execute("UPDATE parcels SET geometry='[[[0,0],[0,1],[1,1],[0,0]]]'"); db.commit()
     assert client.get("/api/leads/%d/detail" % lead_id).json()["contacts"][0]["name"] == "Jane Roe"
+
+
+def test_skip_trace_and_usage(tmp_path, monkeypatch):
+    import httpx
+    from edradar import skiptrace
+
+    path = str(tmp_path / "t.db")
+    db = seeded_db(path)
+    db.conn.execute("UPDATE parcels SET owner='ROE, JANE', mailing_address='12 MAIN ST, ERIE, PA, 16501'")
+    db.commit()
+    db.conn.execute("UPDATE parcels SET owner_kind=NULL"); db.commit(); db.refresh_outreach_flags()
+    cfg = {"database": path, "parcel_layers": [], "user_agent": "t", "billing": {"skip_trace": {"cost": 0.25, "price": 1.0}},
+           "outreach": {"firm": {}, "postcard": {}, "apollo": {}}}
+    client = TestClient(create_app(cfg))
+    lead = client.get("/api/leads").json()[0]
+
+    req = skiptrace.build_request(lead)
+    assert req["requests"][0]["propertyAddress"] == {"street": "12 MAIN ST", "city": "ERIE", "state": "PA", "zip": "16501"}
+    assert req["requests"][0]["name"] == {"first": "Jane", "last": "Roe"} and req["options"] == {"includeTCPABlacklistedPhones": False}
+    assert "name" not in skiptrace.build_request(dict(lead, owner="OSMAN DENNE L & TONYA MARIE"))["requests"][0]
+    assert skiptrace.build_request(dict(lead, mailing_address="ERIE PA", parcel_county="ERIE"))["requests"][0]["apn"] == "A-1"
+    assert skiptrace.build_request(dict(lead, mailing_address="ERIE PA", parcel_county=None)) is None
+
+    monkeypatch.delenv("BATCHDATA_API_KEY", raising=False)
+    r = client.post("/api/leads/%d/skip-trace" % lead["id"])
+    assert r.status_code == 409 and "BATCHDATA_API_KEY" in r.json()["detail"]
+    assert skiptrace.trace_batch(cfg, db, 0) == {"dry_run": True, "owners": 1, "matched": 0, "failed": 0, "max_cost": 0.25, "max_billed": 1.0}
+
+    calls = []
+
+    def api(request):
+        calls.append(json.loads(request.content))
+        assert request.headers["Authorization"] == "Bearer k"
+        return httpx.Response(200, json={"results": {"persons": [{
+            "name": {"first": "jane", "last": "roe"}, "litigator": False, "meta": {"matched": True},
+            "emails": [{"email": "jane@roe.test"}],
+            "phoneNumbers": [{"number": "8145550101", "type": "Land Line", "score": 80, "reachable": True},
+                             {"number": "8145550100", "type": "Mobile", "score": 100, "reachable": True}]}]}})
+
+    monkeypatch.setenv("BATCHDATA_API_KEY", "k")
+    http = httpx.Client(transport=httpx.MockTransport(api))
+    out = skiptrace.trace(cfg, db, lead, http)
+    assert out["matched"] and out["name_match"] and out["phones"][0]["number"] == "8145550100" and out["emails"] == ["jane@roe.test"]
+    assert skiptrace.trace(cfg, db, lead, http)["cached"] and len(calls) == 1          # never paid for twice
+    assert not skiptrace.parse_response("ROE, JANE", {"results": {"persons": [{"name": {"last": "Smith"}, "emails": [{"email": "x@y.z"}]}]}})["name_match"]
+    assert skiptrace.parse_response("X", {"results": {"persons": []}})["matched"] is False
+
+    usage = client.get("/api/usage").json()
+    assert usage["all_time"] == [{"kind": "skip_trace", "count": 1, "cost": 0.25, "billed": 1.0, "margin": 0.75}]
+    assert "skip_trace" in client.get("/api/usage.csv").text
+    assert client.get("/api/leads/%d/detail" % lead["id"]).json()["skiptrace"]["emails"] == ["jane@roe.test"]
+    assert len(client.get("/api/leads", params={"outreach": "traced"}).json()) == 1
+    assert client.get("/api/outreach/status").json()["skiptrace"] == {"enabled": True, "why": None, "price": 1.0, "cost": 0.25}

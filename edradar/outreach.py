@@ -391,6 +391,11 @@ def run_campaign(cfg: Dict[str, Any], db: Any, min_score: int = 80, project_id: 
         try:
             res = send_postcard(cfg, r, client)
             db.log_outreach(r["id"], "postcard", "sent" if res["mode"] == "live" else "test", res["external_id"], res)
+            if res["mode"] == "live":
+                from . import skiptrace
+
+                rate = skiptrace.rates(cfg)["postcard"]
+                skiptrace.record_usage(db, "postcard", r["id"], r["owner"], rate["cost"], rate["price"])
             out["sent"].append({"lead_id": r["id"], "owner": r["owner"], "id": res["external_id"]})
         except (ValueError, RuntimeError, httpx.HTTPError) as e:
             out["failed"].append({"lead_id": r["id"], "owner": r["owner"], "why": str(e)[:160]})

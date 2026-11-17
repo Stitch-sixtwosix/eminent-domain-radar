@@ -30,6 +30,11 @@ def main() -> None:
     p.add_argument("--send", action="store_true", help="actually send; without it the batch is only listed")
     p = sub.add_parser("find-emails", help="ask Apollo which company owners have contacts (search only, no credits)")
     p.add_argument("--limit", type=int, default=50)
+    p = sub.add_parser("skip-trace", help="find phones and emails for individual owners (dry run unless --run)")
+    p.add_argument("--min-score", type=int, default=90)
+    p.add_argument("--limit", type=int, default=25, help="most owners to look up in this batch")
+    p.add_argument("--run", action="store_true", help="actually look them up; without it only the count and cost are shown")
+    sub.add_parser("usage", help="billable usage: lookups and postcards, cost and client price")
     p = sub.add_parser("export", help="write a read-only static copy of the dashboard")
     p.add_argument("--out", default="site")
     args = ap.parse_args()
@@ -73,6 +78,23 @@ def main() -> None:
             print("%d sent in %s mode, %d failed" % (len(res["sent"]), res["mode"], len(res["failed"])))
             for f in res["failed"]:
                 print("  failed: %s: %s" % (f["owner"], f["why"]))
+    elif args.cmd == "skip-trace":
+        from . import skiptrace
+
+        res = skiptrace.trace_batch(cfg, db, args.min_score, args.limit, dry_run=not args.run)
+        if res["dry_run"]:
+            print("%d owners would be looked up: up to $%.2f cost, $%.2f billed to the client. Add --run to do it."
+                  % (res["owners"], res["max_cost"], res["max_billed"]))
+        else:
+            print("%d owners looked up, %d matched, %d failed" % (res["owners"], res["matched"], res["failed"]))
+    elif args.cmd == "usage":
+        from . import skiptrace
+
+        for label, rows in skiptrace.usage_summary(db).items():
+            print(label.replace("_", " "))
+            for r in rows or [{"kind": "nothing yet", "count": 0, "cost": 0, "billed": 0, "margin": 0}]:
+                print("  %-12s %5d  cost $%8.2f  billed $%8.2f  margin $%8.2f" % (r["kind"], r["count"], r["cost"] or 0,
+                                                                                  r["billed"] or 0, r["margin"] or 0))
     elif args.cmd == "find-emails":
         from . import outreach
 

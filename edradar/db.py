@@ -90,6 +90,19 @@ CREATE INDEX IF NOT EXISTS idx_outreach_lead ON outreach(lead_id);
 -- Dashboard-editable settings (the outreach template lives here as JSON).
 CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);
 
+-- One skip-trace answer per owner and mailing address (kept even when nothing was found).
+CREATE TABLE IF NOT EXISTS skiptraces (
+    owner TEXT NOT NULL, mailing_address TEXT, matched INTEGER NOT NULL, result TEXT NOT NULL,
+    fetched_at TEXT DEFAULT (datetime('now')),
+    UNIQUE(owner, mailing_address)
+);
+
+-- Billable usage: what each lookup or postcard cost and what the client is charged for it.
+CREATE TABLE IF NOT EXISTS usage (
+    id INTEGER PRIMARY KEY, kind TEXT NOT NULL, lead_id INTEGER, owner TEXT, cost REAL NOT NULL, price REAL NOT NULL,
+    created_at TEXT DEFAULT (datetime('now'))
+);
+
 -- What is known about a company that owns parcels (website, Apollo organization).
 CREATE TABLE IF NOT EXISTS companies (
     owner TEXT PRIMARY KEY, name TEXT, website TEXT, phone TEXT, apollo_org_id TEXT,

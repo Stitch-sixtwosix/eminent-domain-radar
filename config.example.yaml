@@ -119,3 +119,9 @@ outreach:
     from_email: ""              # the connected Apollo mailbox to send from
     email_account_id: ""        # that mailbox's id in Apollo
     sequence_id: ""             # the Apollo sequence owners are added to
+
+# Billing. Each skip-trace match and each mailed postcard is written to a usage ledger with what it cost you
+# and what you charge the client, so the difference is your margin. Set these to your real rates.
+billing:
+  skip_trace: {cost: 0.20, price: 0.75}    # per matched owner (BATCHDATA_API_KEY turns skip tracing on)
+  postcard:   {cost: 0.91, price: 1.95}    # per card mailed with a live key
