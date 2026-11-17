@@ -216,6 +216,32 @@
   #stagebar .when b { font-weight: 600; }
   #stagebar .when span { color: var(--ink-2); }
 
+  /* ---- view switch and outreach hub ---- */
+  .views { display: flex; background: var(--rail); border: 1px solid var(--line-strong); border-radius: var(--radius); padding: 2px; gap: 2px; }
+  .views button { height: 26px; padding: 0 12px; border: 0; background: transparent; font-size: 13px; }
+  .views button[aria-pressed=true] { background: var(--ink); color: oklch(98.5% 0.004 258); }
+  #hub { overflow-y: auto; min-height: 0; background: var(--paper); }
+  .hub { max-width: 1240px; margin: 0 auto; padding: 22px 24px 48px; }
+  .hub-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
+  .hub-head h2 { margin: 0; font-size: 22px; line-height: 28px; font-weight: 600; letter-spacing: -0.015em; }
+  .hub .figs { grid-template-columns: repeat(5, 1fr); background: var(--surface); margin-bottom: 20px; }
+  .hub-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+  .hub-col { display: grid; gap: 20px; min-width: 0; }
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px 18px; min-width: 0; }
+  .panel h3 { margin: 0 0 6px; font-size: 15px; font-weight: 600; }
+  .panel p { margin: 0 0 10px; color: var(--ink-2); font-size: 13.5px; max-width: 68ch; }
+  .panel p b { color: var(--ink); font-weight: 600; }
+  .panel .row-acts { margin: 2px 0 0; }
+  .panel table { font-size: 13px; }
+  .panel th { position: static; box-shadow: none; height: auto; padding: 6px 12px 6px 0; border-bottom: 1px solid var(--line-strong); }
+  .panel td { padding: 7px 12px 7px 0; }
+  .panel th:first-child, .panel td:first-child { padding-left: 0; }
+  .panel .scroll { overflow-x: auto; margin-top: 12px; }
+  .state { display: inline-block; font-size: 12px; font-weight: 500; border-radius: 4px; padding: 1px 7px; background: var(--rail); color: var(--ink-2); white-space: nowrap; }
+  .state.on { background: var(--ok-bg); color: var(--ok); } .state.warn { background: var(--warm-bg); color: var(--warm); }
+  .state.live { background: var(--danger-bg); color: var(--danger); }
+  @media (max-width: 900px) { .hub-grid { grid-template-columns: 1fr; } .hub .figs { grid-template-columns: repeat(2, 1fr); } .hub { padding: 16px; } }
+
   /* ---- template editor and letter ---- */
   .tpl { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
   .tpl h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; }
@@ -330,8 +356,10 @@
     <span><b id="st-owners">–</b>with owner of record</span>
     <span id="st-updated"></span>
   </div>
-  <button id="btn-usage" class="sm" hidden>Usage</button>
-  <button id="btn-template" class="sm" hidden>Outreach template</button>
+  <nav class="views" id="views" hidden aria-label="Views">
+    <button type="button" data-view="leads" aria-pressed="true">Leads</button><button type="button" data-view="hub" aria-pressed="false">Outreach hub</button>
+  </nav>
+  <button id="btn-usage" hidden></button><button id="btn-template" hidden></button>
   <span class="mode" id="mode" hidden></span>
 </header>
 <main>
@@ -376,6 +404,7 @@
     <div id="leads-wrap"></div>
   </section>
 </main>
+<section id="hub" hidden aria-label="Outreach hub"></section>
 <aside id="parcel" aria-label="Parcel details"></aside>
 <dialog id="dlg" aria-labelledby="dlg-title"></dialog>
 <div id="tip" role="tooltip"></div>
@@ -851,6 +880,90 @@ async function openTemplate() {
 }
 $("dlg").addEventListener("close", () => $("dlg").classList.remove("wide"));
 
+/* ---- outreach hub: postcards, email, skip tracing, template, billing and activity in one place ---- */
+let view = "leads";
+function setView(name) {
+  view = name;
+  document.querySelector("main").hidden = name !== "leads";
+  $("hub").hidden = name !== "hub";
+  document.querySelectorAll("#views button").forEach(b => b.setAttribute("aria-pressed", b.dataset.view === name));
+  if (name === "hub") { closeParcel(); loadHub(); } else map.invalidateSize();
+}
+async function showLeads(filter) {
+  selected = null; markSelected();
+  $("f-outreach").value = filter;
+  setView("leads");
+  await loadLeads();
+}
+async function loadHub() {
+  const box = $("hub");
+  if (!box.innerHTML) box.innerHTML = `<div class="hub"><p class="meta">Loading the outreach hub…</p></div>`;
+  let h;
+  try { h = await api("/api/outreach/hub"); }
+  catch (e) { box.innerHTML = `<div class="hub"><div class="alert bad">${esc(e.message)}</div></div>`; return; }
+  OUT = {...h.status, rates: h.rates}; TPL = h.template;
+  const pc = h.status.postcard, em = h.status.email, sk = h.status.skiptrace, r = h.ready, t = h.template, f = t.firm;
+  const fig = (label, v) => `<div><span>${label}</span><b>${v}</b></div>`;
+  const month = h.usage.this_month.reduce((a, x) => a + (x.billed || 0), 0);
+  const pcState = pc.mode === "live" ? '<span class="state live">Live: cards are mailed and billed</span>' : pc.mode === "test" ? '<span class="state warn">Test mode: proofs only</span>' : '<span class="state">Off</span>';
+  const sample = {owner: "SAMPLE OWNER", address: "12 MAIN ST", apn: "00-000-000", parcel_county: "MONTGOMERY", project: "US 22 Widening", stage: "planning", agency: "PennDOT District 05"};
+  const L_ = letterFor(sample, t);
+  const firmLine = [f.name, f.attorney, f.phone, f.email].filter(Boolean).join(" · ") || "Firm details not entered yet";
+  const CH = {postcard: "Postcard", email: "Email"}, ST = {sent: "Sent", test: "Test proof"};
+  const usageRows = rows => rows.length ? rows.map(x => `<tr><td>${x.kind === "skip_trace" ? "Skip traces" : "Postcards"}</td><td class="num">${x.count}</td><td class="num">${usd(x.cost)}</td><td class="num">${usd(x.billed)}</td><td class="num">${usd(x.margin)}</td></tr>`).join("")
+    : `<tr><td colspan="5" class="meta">Nothing billable yet. Test proofs are free and are not recorded.</td></tr>`;
+  box.innerHTML = `<div class="hub">
+    <div class="hub-head"><h2>Outreach hub</h2>${pcState}<span class="state ${em.enabled ? "on" : ""}">Email ${em.enabled ? "on" : "off"}</span><span class="state ${sk.enabled ? "on" : ""}">Skip tracing ${sk.enabled ? "on" : "off"}</span></div>
+    <div class="figs">${fig("Postcards mailed", h.sent.postcards.toLocaleString())}${fig("Test proofs", h.sent.test_proofs.toLocaleString())}${fig("Emails started", h.sent.emails.toLocaleString())}${fig("Owners skip traced", h.sent.skip_traces.toLocaleString())}${fig("Billed this month", usd(month))}</div>
+    <div class="hub-grid"><div class="hub-col">
+      <div class="panel"><h3>Postcards</h3>
+        <p><b>${r.postcard_owners.toLocaleString()}</b> owners scoring ${r.min_score} or higher have a usable mailing address and have not been mailed. One card goes to each owner and address, highest score first.</p>
+        ${pc.enabled ? "" : `<p>${esc(pc.why || "")}</p>`}
+        <div class="row-acts"><button class="primary" data-hub="campaign" ${pc.enabled ? "" : "disabled"}>${pc.mode === "live" ? "Start a postcard campaign" : "Run a test campaign"}</button><button data-hub="leads-postcard">Show these leads</button></div></div>
+      <div class="panel"><h3>Email</h3>
+        <p><b>${r.email_companies.toLocaleString()}</b> company owners can be looked up in Apollo. So far <b>${r.companies_with_contacts}</b> ${r.companies_with_contacts === 1 ? "company has" : "companies have"} named contacts and <b>${r.contacts_with_email}</b> ${r.contacts_with_email === 1 ? "contact has" : "contacts have"} a verified email. Emails go from ${esc(em.from || f.email || "your mailbox")}.</p>
+        ${em.enabled ? "" : `<p>${esc(em.why || "")} Until then, each contact's letter opens in your own mail program.</p>`}
+        <div class="row-acts"><button data-hub="leads-email">Show email leads</button></div>
+        ${h.contacts.length ? `<div class="scroll"><table><thead><tr><th>Contact</th><th>Owner</th><th>Email</th><th>Company phone</th></tr></thead><tbody>${h.contacts.map(c => `<tr>
+          <td>${esc(c.name || "")}<div class="sub">${esc(c.title || "")}</div></td><td>${esc(titleCase(c.owner))}</td>
+          <td>${c.email ? `<a href="mailto:${esc(c.email)}?subject=${encodeURIComponent(renderTpl(t.email_subject, mergeValues({...sample, owner: c.owner, address: "", apn: "on file"}, t)))}">${esc(c.email)}</a>` : '<span class="meta">not revealed</span>'}</td>
+          <td>${c.phone ? esc(c.phone) : '<span class="dash">–</span>'}</td></tr>`).join("")}</tbody></table></div>` : ""}</div>
+      <div class="panel"><h3>Skip tracing</h3>
+        <p><b>${r.individuals_untraced.toLocaleString()}</b> individual owners scoring ${r.min_score} or higher have not been looked up for a phone number or email. Each match is billed to the client at ${usd(h.rates.skip_trace.price)}.</p>
+        ${sk.enabled ? "" : `<p>${esc(sk.why || "")}</p>`}
+        <div class="row-acts"><button data-hub="leads-traced">Show owners with a phone or email</button></div></div>
+    </div><div class="hub-col">
+      <div class="panel"><h3>Template</h3>
+        <p>${esc(firmLine)}</p>
+        <div class="letter" style="max-height:230px"><b>${esc(L_.subject)}</b>\n\n${esc(L_.body)}</div>
+        <p style="margin-top:8px">Shown with sample details. The same wording fills the email, the printed letter and the postcard.</p>
+        <div class="row-acts"><button data-hub="template">Edit template</button></div></div>
+      <div class="panel"><h3>Usage and billing</h3>
+        <table><thead><tr><th>This month</th><th class="num">Count</th><th class="num">Your cost</th><th class="num">Billed</th><th class="num">Margin</th></tr></thead><tbody>${usageRows(h.usage.this_month)}</tbody></table>
+        <p style="margin-top:10px">Rates: postcard ${usd(h.rates.postcard.cost)} cost, ${usd(h.rates.postcard.price)} billed · skip trace ${usd(h.rates.skip_trace.cost)} cost, ${usd(h.rates.skip_trace.price)} billed.</p>
+        <div class="row-acts"><button data-hub="usage">All usage</button><a class="btn" href="/api/usage.csv">Download CSV</a></div></div>
+    </div></div>
+    <div class="panel" style="margin-top:20px"><h3>Activity</h3>
+      ${h.activity.length ? `<div class="scroll"><table><thead><tr><th>Date</th><th>Owner</th><th>Channel</th><th>Status</th><th>Project</th><th>Result</th></tr></thead><tbody>${h.activity.map(a => `<tr>
+        <td style="white-space:nowrap">${esc(day(a.created_at))}</td><td>${esc(titleCase(a.owner))}<div class="sub">${esc(a.mailing_address || "")}</div></td>
+        <td>${CH[a.channel] || esc(a.channel)}</td><td><span class="state ${a.status === "sent" ? "on" : "warn"}">${ST[a.status] || esc(a.status)}</span></td>
+        <td>${esc((a.project || "").replace(/\s*\(MPMS \d+\)/, ""))}</td>
+        <td>${a.proof_url ? `<a href="${esc(safeUrl(a.proof_url))}" target="_blank" rel="noopener">Open proof</a>` : a.email ? esc(a.email) : '<span class="dash">–</span>'}${a.expected_delivery && a.status === "sent" ? `<div class="sub">due ${esc(a.expected_delivery)}</div>` : ""}</td></tr>`).join("")}</tbody></table></div>`
+        : `<p>Nothing has gone out yet. Postcards, test proofs and emails will be listed here as they are sent.</p>`}</div>
+  </div>`;
+}
+$("hub").addEventListener("click", e => {
+  const b = e.target.closest("[data-hub]");
+  if (!b) return;
+  const a = b.dataset.hub;
+  if (a === "campaign") openCampaign();
+  else if (a === "template") openTemplate();
+  else if (a === "usage") openUsage();
+  else if (a.startsWith("leads-")) showLeads(a.slice(6));
+});
+$("views").addEventListener("click", e => { const b = e.target.closest("[data-view]"); if (b) setView(b.dataset.view); });
+$("dlg").addEventListener("close", () => { if (view === "hub") loadHub(); });
+
 /* ---- skip tracing (individual owners) and the usage ledger ---- */
 const usd = n => "$" + Number(n || 0).toFixed(2);
 const phoneFmt = n => { const d = String(n || "").replace(/\D/g, "").slice(-10); return d.length === 10 ? `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}` : String(n || ""); };
@@ -1201,11 +1314,11 @@ for (const id of ["f-county", "f-type", "f-source", "f-stage", "f-score", "f-q"]
     mode.textContent = "Postcards: " + ({live: "live", test: "test mode", off: "off"}[OUT.postcard.mode]) + " · Email: " + (OUT.email.enabled ? "on" : "off");
     if (OUT.postcard.mode === "live") mode.dataset.live = "";
     $("btn-campaign").hidden = false;
-    $("btn-usage").hidden = false;
+    $("views").hidden = false;
     mode.hidden = false;
   }
   TPL = await api("/api/outreach/template");
-  $("btn-template").hidden = false;
+  if (STATIC) { $("btn-template").hidden = false; $("btn-template").className = "sm"; $("btn-template").textContent = "Outreach template"; }
   const title = c => c[0] + c.slice(1).toLowerCase();
   $("f-county").insertAdjacentHTML("beforeend", s.counties.map(c => `<option value="${esc(c)}">${esc(title(c))}</option>`).join(""));
   $("f-type").insertAdjacentHTML("beforeend", s.types.map(c => `<option>${esc(c)}</option>`).join(""));

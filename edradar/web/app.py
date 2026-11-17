@@ -172,6 +172,48 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
     def lead_cases(lead_id: int) -> Dict[str, Any]:
         return parceldetail.cases(one_lead(lead_id))
 
+    @app.get("/api/outreach/hub")
+    def outreach_hub(min_score: int = 60) -> Dict[str, Any]:
+        """Everything the Outreach hub shows: what has gone out, who is ready to contact, and recent activity."""
+        one = lambda sql, *a: db.rows(sql, a)[0]["n"]
+        owners = lambda where: one(
+            "SELECT COUNT(*) n FROM (SELECT DISTINCT pa.owner, pa.mailing_address FROM leads l JOIN parcels pa "
+            "ON pa.id = l.parcel_id WHERE l.score >= ? AND " + where + ")", min_score)
+        activity = db.rows(
+            """SELECT o.id, o.created_at, o.channel, o.status, o.external_id, o.detail, l.id AS lead_id, l.score,
+                      pa.owner, pa.mailing_address, pa.address, p.name AS project
+               FROM outreach o JOIN leads l ON l.id = o.lead_id JOIN parcels pa ON pa.id = l.parcel_id
+               JOIN projects p ON p.id = l.project_id ORDER BY o.created_at DESC, o.id DESC LIMIT 100""")
+        for a in activity:
+            d = json.loads(a.pop("detail") or "{}")
+            a["proof_url"], a["email"], a["expected_delivery"] = d.get("proof_url"), d.get("email"), d.get("expected_delivery")
+        return {
+            "status": dict(outreach.status(cfg), skiptrace=skiptrace.status(cfg)),
+            "sent": {
+                "postcards": one("SELECT COUNT(*) n FROM outreach WHERE channel='postcard' AND status='sent'"),
+                "test_proofs": one("SELECT COUNT(*) n FROM outreach WHERE channel='postcard' AND status='test'"),
+                "emails": one("SELECT COUNT(*) n FROM outreach WHERE channel='email' AND status='sent'"),
+                "skip_traces": one("SELECT COUNT(*) n FROM skiptraces WHERE matched=1"),
+            },
+            "ready": {
+                "min_score": min_score,
+                "postcard_owners": owners(outreach.POSTCARD_ELIGIBLE),
+                "email_companies": owners(OUTREACH_FILTERS["email"]),
+                "companies_with_contacts": one("SELECT COUNT(DISTINCT owner) n FROM contacts"),
+                "contacts_with_email": one("SELECT COUNT(*) n FROM contacts WHERE email IS NOT NULL"),
+                "individuals_untraced": owners(
+                    "pa.owner_kind = 'individual' AND NOT EXISTS (SELECT 1 FROM skiptraces t WHERE t.owner = pa.owner "
+                    "AND t.mailing_address IS pa.mailing_address)"),
+            },
+            "contacts": db.rows("""SELECT c.owner, c.name, c.title, c.email, c.linkedin, co.website, co.phone
+                                   FROM contacts c LEFT JOIN companies co ON co.owner = c.owner
+                                   ORDER BY c.email IS NULL, c.owner, c.name LIMIT 100"""),
+            "activity": activity,
+            "usage": skiptrace.usage_summary(db),
+            "rates": skiptrace.rates(cfg),
+            "template": outreach.template(cfg),
+        }
+
     @app.get("/api/outreach/template")
     def get_template() -> Dict[str, Any]:
         return outreach.template(cfg)

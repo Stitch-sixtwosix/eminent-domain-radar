@@ -356,6 +356,11 @@ def test_campaign_filter_and_snapshot(tmp_path, monkeypatch):
     assert {r["owner"] for r in emails} == {"ROE HOLDINGS LLC"}
     assert {r["owner"] for r in client.get("/api/leads", params={"outreach": "postcard"}).json()} == {"Jane Roe", "POE ANN"}
     assert len(client.get("/api/leads", params={"outreach": "contacted"}).json()) == 1
+    hub = client.get("/api/outreach/hub").json()
+    assert hub["sent"] == {"postcards": 1, "test_proofs": 1, "emails": 0, "skip_traces": 0}
+    assert hub["ready"]["postcard_owners"] == 2 and hub["ready"]["email_companies"] == 1
+    assert {a["status"] for a in hub["activity"]} == {"sent", "test"} and hub["activity"][0]["owner"]
+    assert hub["usage"]["all_time"][0]["kind"] == "postcard" and hub["template"]["firm"]["name"] == "Test Law"
     preview = client.post("/api/postcards/campaign", json={"min_score": 80}).json()
     assert preview["dry_run"] and preview["eligible"] == 1
 
