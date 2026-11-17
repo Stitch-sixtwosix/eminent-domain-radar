@@ -41,7 +41,11 @@ def classify(cfg: Dict[str, Any], db: DB) -> int:
         if signal["source"] == "penndot":
             engine, result = "rules", C.classify_penndot(signal)
         elif signal["source"].startswith("dot:"):
-            engine, result = "rules", C.classify_dot(signal)
+            try:
+                engine, result = "rules", C.classify_dot(signal)
+            except Exception as e:                  # one malformed record must not stop a run of thousands
+                print("  skipped %s %s: %s" % (signal["source"], signal["external_id"], str(e)[:100]))
+                continue
         else:
             if text_classifier is None:
                 text_classifier = C.make_text_classifier(cfg.get("classifier") or {})

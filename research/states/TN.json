@@ -112,8 +112,33 @@
       "county": "COUNTY_NAME"
     },
     "restrictions": "The layer description says: 'This data is intended for use by state agencies with approved access.' It is nevertheless published without login as 'Public Use'. No statement on commercial use or solicitation.",
-    "notes": "NOT fully statewide. A distinct query on COUNTY_NAME returned 86 counties; the 9 missing are the largest ones that run their own systems: Davidson (Nashville), Shelby (Memphis), Knox, Hamilton (Chattanooga), Rutherford, Williamson, Montgomery, Bradley is present, so the missing set is Chester, Davidson, Hamilton, Hickman, Knox, Montgomery, Rutherford, Shelby, Williamson (derived by comparing the returned list with the 95 counties). Owner name is in OWNER plus OWNER2 (second line, e.g. 'AND WIFE ...'). There is NO mailing address and no value field; LINK_TPAD is a per-parcel link to the Comptroller's assessment page (which shows mailing address and values, as a web page, not a service). ADDRESS is the site address written street-then-number ('DUNCAN LN 419'). GISLINK is the parcel key used by the state. maxRecordCount 2000."
+    "notes": "NOT fully statewide. A distinct query on COUNTY_NAME returned 86 counties. Comparing that list with Tennessee's 95 counties, the 9 missing are: Chester, Davidson (Nashville), Hamilton (Chattanooga), Hickman, Knox (Knoxville), Montgomery (Clarksville), Rutherford (Murfreesboro), Shelby (Memphis), Williamson; queries for Davidson, Shelby, Knox, Hamilton and Rutherford each returned 0. Owner name is in OWNER plus OWNER2 (second line, e.g. 'AND WIFE ...'). There is NO mailing address and no value field; LINK_TPAD is a per-parcel link to the Comptroller's assessment web page (not a service). ADDRESS is the site address written street-then-number ('DUNCAN LN 419'). GISLINK is the state parcel key; DEEDAC = deeded acres. maxRecordCount 2000."
   },
-  "parcels_counties": [],
-  "summary": "TDOT project layers are right but only the test-server copy answered. Parcels: the Comptroller layer gives owner names for 86 counties with no mailing address; the big metro counties are not in it."
+  "parcels_counties": [
+    {
+      "county": "DAVIDSON",
+      "url": "https://maps.nashville.gov/arcgis/rest/services/Cadastral/Parcels/MapServer/0",
+      "verified": true,
+      "record_count": 287888,
+      "fields": {
+        "apn": "APN",
+        "owner": "Owner",
+        "mailing_address": [
+          "OwnAddr1",
+          "OwnAddr2",
+          "OwnAddr3",
+          "OwnCity",
+          "OwnState",
+          "OwnZip",
+          "OwnCountry"
+        ],
+        "address": "PropAddr",
+        "market_value": "TotlAppr",
+        "acres": "Acres"
+      },
+      "notes": "Metro Nashville 'Ownership Parcels'. ParID / STANPAR are alternative parcel ids; LandAppr, ImprAppr, TotlAppr appraised and LandAssd / TotlAssd assessed values; SalePrice, OwnDate; LUDesc land use; PropCity, PropZip."
+    }
+  ],
+  "summary": "Projects: TDOT publishes the right layers (all projects with status and current phase; STIP with cost and funding years) but only the copy on TDOT's test server answered; production timed out. Parcels: the Comptroller layer gives owner names (no mailing address) for 86 counties; of the 9 missing metro counties only Davidson is verified, with owner and mailing address.",
+  "parcels_counties_not_found": "The other large counties missing from the state layer could not be verified: Shelby (gis.shelbycountytn.gov answered 403; a Memphis layer requires a token), Knox (www.kgis.org timed out), Hamilton (server error 522), Rutherford (county server returned a non-JSON page; a Murfreesboro layer found covers only 15,724 special-interest points)."
 }

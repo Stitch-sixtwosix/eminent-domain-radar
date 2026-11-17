@@ -1,22 +1,108 @@
 {
-  "state": "Louisiana", "code": "LA", "checked": "2026-11-17",
+  "state": "Louisiana",
+  "code": "LA",
+  "checked": "2026-11-17",
   "projects": [
-    {"name": "New Orleans Regional Planning Commission TIP 2023-26 Project Locations (New Orleans region only)", "url": "https://services2.arcgis.com/rojlIZfHqM460MaC/arcgis/rest/services/TIP_2023-26_Project_Locations_(RPC_2022)_view/FeatureServer/0", "verified": true,
-     "geometry": "polyline", "record_count": 340,
-     "fields": {"id": "Project_Nu", "name": "PROJECT_NA", "description": "IMPROVEMEN", "work_type": "IMPROVEMEN",
-                "cost": "Cost", "status": "PhaseDescr", "let_date": "CalendarYe", "county": "ParishDesc"},
-     "work_type_values": ["free text, hundreds of values, e.g.:", "BRIDGE REPLACEMENT", "BRIDGE REHABILITATION", "BRIDGE REPLACEMENT NO NEW ALIGNMENT", "CONSTRUCT ROUNDABOUT", "BIKE LANES", "CONCRETE OVERLAY", "OVERLAY", "ASPHALT GRADE RAISING", "ACCESS STUDY", "CAPACITY(INCLUDES I-12 RAMP MODS)"],
-     "status_values": ["FEASIBILITY", "ENVIRONMENTAL", "DESIGN (ENGINEERING)", "RIGHT OF WAY", "UTILITY RELOCATION", "CONSTRUCTION", "RPC STUDY"],
-     "notes": "NOT STATEWIDE: the New Orleans MPO's TIP, eight parishes (Jefferson, Orleans, Plaquemines, St. Bernard, St. Charles, St. John the Baptist, St. Tammany, Tangipahoa). One record per project phase: PhaseDescr is the phase and CalendarYe its year (2022-2031; one bad value 3031), Cost / Contingenc / FedShare its funding. PhaseDescr = 'RIGHT OF WAY' is the land-acquisition signal. Project_Nu is the DOTD state project number (H.xxxxxx). The layer is the FY2023-26 TIP adopted in 2022, so early years are already past; the same organization publishes 'Let to Construction' and 'Obligated' layers by year, which can be used to drop projects already let. IMPROVEMEN is free text, not a coded work type."},
-    {"name": "New Orleans Regional Planning Commission MTP Projects 2026 to 2052 (New Orleans region only)", "url": "https://services2.arcgis.com/rojlIZfHqM460MaC/arcgis/rest/services/MTP_Projects_2023_to_2052_(RPC_2022)_view/FeatureServer/0", "verified": true,
-     "geometry": "polyline", "record_count": 402,
-     "fields": {"id": "PROJ_NUM", "name": "PROJ_NAME", "description": "IMPROVEMEN", "work_type": "IMPROVEMEN",
-                "cost": "COST", "status": "TIER1", "let_date": "YEAR1", "county": "PARISH"},
-     "work_type_values": [], "status_values": [],
-     "notes": "Long-range plan for the same region. YEAR1 is a year ('2022'-'2027') or 'TIER 2' / 'TIER 3' for later plan periods; CATEGORY is the funding program (e.g. 'URBAN SYSTEMS'). Free-text IMPROVEMEN again."}
+    {
+      "name": "New Orleans Regional Planning Commission TIP 2023-26 Project Locations (New Orleans region only)",
+      "url": "https://services2.arcgis.com/rojlIZfHqM460MaC/arcgis/rest/services/TIP_2023-26_Project_Locations_(RPC_2022)_view/FeatureServer/0",
+      "verified": true,
+      "geometry": "polyline",
+      "record_count": 340,
+      "fields": {
+        "id": "Project_Nu",
+        "name": "PROJECT_NA",
+        "description": "IMPROVEMEN",
+        "work_type": "IMPROVEMEN",
+        "cost": "Cost",
+        "status": "PhaseDescr",
+        "let_date": "CalendarYe",
+        "county": "ParishDesc"
+      },
+      "work_type_values": [
+        "free text, hundreds of values, e.g.:",
+        "BRIDGE REPLACEMENT",
+        "BRIDGE REHABILITATION",
+        "BRIDGE REPLACEMENT NO NEW ALIGNMENT",
+        "CONSTRUCT ROUNDABOUT",
+        "BIKE LANES",
+        "CONCRETE OVERLAY",
+        "OVERLAY",
+        "ASPHALT GRADE RAISING",
+        "ACCESS STUDY",
+        "CAPACITY(INCLUDES I-12 RAMP MODS)"
+      ],
+      "status_values": [
+        "FEASIBILITY",
+        "ENVIRONMENTAL",
+        "DESIGN (ENGINEERING)",
+        "RIGHT OF WAY",
+        "UTILITY RELOCATION",
+        "CONSTRUCTION",
+        "RPC STUDY"
+      ],
+      "notes": "NOT STATEWIDE: the New Orleans MPO's TIP, eight parishes (Jefferson, Orleans, Plaquemines, St. Bernard, St. Charles, St. John the Baptist, St. Tammany, Tangipahoa). One record per project phase: PhaseDescr is the phase and CalendarYe its year (2022-2031; one bad value 3031), Cost / Contingenc / FedShare its funding. PhaseDescr = 'RIGHT OF WAY' is the land-acquisition signal. Project_Nu is the DOTD state project number (H.xxxxxx). The layer is the FY2023-26 TIP adopted in 2022, so early years are already past; the same organization publishes 'Let to Construction' and 'Obligated' layers by year, which can be used to drop projects already let. IMPROVEMEN is free text, not a coded work type."
+    },
+    {
+      "name": "New Orleans Regional Planning Commission MTP Projects 2026 to 2052 (New Orleans region only)",
+      "url": "https://services2.arcgis.com/rojlIZfHqM460MaC/arcgis/rest/services/MTP_Projects_2023_to_2052_(RPC_2022)_view/FeatureServer/0",
+      "verified": true,
+      "geometry": "polyline",
+      "record_count": 402,
+      "fields": {
+        "id": "PROJ_NUM",
+        "name": "PROJ_NAME",
+        "description": "IMPROVEMEN",
+        "work_type": "IMPROVEMEN",
+        "cost": "COST",
+        "status": "TIER1",
+        "let_date": "YEAR1",
+        "county": "PARISH"
+      },
+      "work_type_values": [],
+      "status_values": [],
+      "notes": "Long-range plan for the same region. YEAR1 is a year ('2022'-'2027') or 'TIER 2' / 'TIER 3' for later plan periods; CATEGORY is the funding program (e.g. 'URBAN SYSTEMS'). Free-text IMPROVEMEN again."
+    }
   ],
   "projects_statewide_reason": "No statewide DOTD layer could be verified. DOTD's GIS server (maps.dotd.la.gov, with services such as PublicPolicy/ProjectSystems, Highway_Priority_Program/HPP_DATA and PublicPolicy/PROTECTProjects seen in search results) answered every request with HTTP 403 from its Cloudflare protection, so nothing on it was confirmed and it may not be usable by an automated reader.",
   "parcels_statewide": null,
-  "parcels_counties": [],
-  "summary": "Statewide DOTD project layers exist but the server refused automated requests (403), so only the New Orleans region's TIP and long-range plan are verified. Parcels not researched yet."
+  "parcels_counties": [
+    {
+      "county": "EAST BATON ROUGE",
+      "url": "https://maps.brla.gov/gis/rest/services/Cadastral/Tax_Parcel/MapServer/0",
+      "verified": true,
+      "record_count": 205820,
+      "fields": {
+        "apn": "ASSESSMENT_NUM",
+        "owner": "OWNER",
+        "mailing_address": [
+          "OWNER_ADDRESS",
+          "OWNER_CITY_STATE_ZIP"
+        ],
+        "address": "PHYSICAL_ADDRESS",
+        "market_value": "SUM_FAIR_MARKET_VALUE"
+      },
+      "notes": "City-Parish of Baton Rouge 'Tax Parcel'. 201,436 records have an owner. QUIRKS: the object id field is 'ID'; this MapServer does not support paging (page with where=ID>=a AND ID<b); and a query with outFields=* returned no features, while naming the fields explicitly worked, so always list the fields (ID, ASSESSMENT_NUM, PRONO, OWNER, OWNER_ADDRESS, OWNER_CITY_STATE_ZIP, PHYSICAL_ADDRESS, SUBDIVISION, LOT, LEGAL_DESCRIPTION, SUM_LAND_VALUE, SUM_IMPROVEMENT_VALUE, SUM_FAIR_MARKET_VALUE, SUM_ASSESSED_VALUE). No acres field. SUM_FAIR_MARKET_VALUE was 0 in the three sample records."
+    },
+    {
+      "county": "CALCASIEU",
+      "url": "https://lak-dc-arcgis2.cppj.net/arcgis/rest/services/HubLayers/Parcels/FeatureServer/0",
+      "verified": true,
+      "record_count": 168029,
+      "fields": {
+        "apn": "PIN",
+        "owner": "NAME",
+        "mailing_address": [
+          "ADDRESS1",
+          "ADDRESS2"
+        ],
+        "address": "PHYSICALAD",
+        "market_value": "ASSESSMENT"
+      },
+      "notes": "Calcasieu Parish Police Jury (Lake Charles) hub layer; parcels joined to zoning. ADDRESS2 holds city, state and ZIP in one string. ASSESSMENT's meaning (assessed value vs assessment number) was not confirmed: it was empty in the sample. No acres field."
+    }
+  ],
+  "summary": "Projects: statewide DOTD layers exist but the server refused automated requests (403); only the New Orleans region's TIP and long-range plan are verified. Parcels: no statewide layer; East Baton Rouge and Calcasieu parish layers with owner and mailing address are verified; Orleans and Jefferson are not usable.",
+  "parcels_statewide_reason": "No free statewide Louisiana parcel layer was found (ArcGIS Online catalog search returned none; parcels are held by each parish assessor).",
+  "parcels_counties_not_found": "Orleans: https://gis.nola.gov/arcgis/rest/services/ParcelSearch/MapServer/0 has owner fields (OWNERNME1, OWNERNME2, SITEADDRESS) in its schema but returned no records or timed out (504) on every query, so it is not verified. Jefferson Parish: https://eweb.jeffparish.net/arcgis/rest/services/Cadastre/Cadastre/MapServer/1 (fetched, 155,077 parcels) has lot and zoning data but no owner. St. Tammany: the published certified-parcel layer has only an id. Lafayette assessor's server timed out; Caddo's requires a token."
 }

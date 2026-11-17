@@ -649,3 +649,9 @@ def test_federal_notices_are_filed_by_state():
     assert state_of("Transmission line from West Virginia to Virginia") == "WV"
     assert state_of("Meeting in Washington, DC on pipeline safety") is None
     assert state_of("Corps permit, Puget Sound, Washington") == "WA" and state_of("A notice naming no place") is None
+
+
+def test_geometry_helpers_survive_bad_points():
+    assert geo.center({"paths": [[["NaN", 1], [-80.0, 40.0], [None, None], [-79.0, 41.0]]]}) == (40.5, -79.5)
+    assert geo.center({"rings": [[[-100.0, 30.0], [-99.0, 31.0]]]}) == (30.5, -99.5)
+    assert geo.center({"x": "bad", "y": 2}) is None and geo.center({"points": [[900000.0, 5000000.0]]}) is None

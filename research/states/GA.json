@@ -1,22 +1,166 @@
 {
-  "state": "Georgia", "code": "GA", "checked": "2026-11-17",
+  "state": "Georgia",
+  "code": "GA",
+  "checked": "2026-11-17",
   "projects": [
-    {"name": "GDOT STIP Projects - STIP Project Type (GDOT ArcGIS Online)", "url": "https://services3.arcgis.com/6RaeG1zfsIoM9Lze/arcgis/rest/services/STIP_Projects/FeatureServer/0", "verified": true,
-     "geometry": "polyline", "record_count": 259,
-     "fields": {"id": "PROJECT_ID", "name": "PROJECT_NA", "description": "PROJECT_DE", "work_type": "PRIM_WORK_",
-                "status": "STATUS", "county": "COUNTIES"},
-     "work_type_values": ["Bridges", "Culvert", "Drainage Improvements", "Grade Separation", "Interchange", "Passing Lanes", "Roadway Project", "Roundabout", "Slope Repair", "Widening"],
-     "status_values": ["Construction Work Program", "Long Range Program", "Temporarily Shored Bridges"],
-     "notes": "PARTIAL AND DATED. Hosted in GDOT's ArcGIS Online organization; only 259 projects, and the data was last edited 2023-06-16 (schema touched 2026-01-15), so it looks like the mapped subset of an earlier STIP rather than the current FY27-30 one. PROJECT_ID is the GDOT PI number. PROJECT_TY = New Construction / Reconstruction/Rehabilitation / Replacement / Safety. STATUS: 'Construction Work Program' = programmed in the near-term work program, 'Long Range Program' = later years. Useful extra: 'PreParcelCount' (20 in the sample) appears to be GDOT's preliminary count of parcels affected; meaning not documented on the service. Cost, phase and year are not on the layer: they are in table 5 'Financials' of the same service (https://services3.arcgis.com/6RaeG1zfsIoM9Lze/arcgis/rest/services/STIP_Projects/FeatureServer/5, 1,176 rows: PINumber, PropYear, Phase e.g. 'ROW', FundCode, TotalAmt, FedAmt, StAmt, OthAmt), joined PINumber = PROJECT_ID; rows with Phase = 'ROW' give the right-of-way year and amount. Layer 1 of the service is the same projects for search (307 records). GDOT's main project system (GeoPI, https://rnhp.dot.ga.gov/hosting/rest/services/GEOPI_APP/MapServer and .../STIP/STIP_Program_Type/FeatureServer) is the full, current source, but that server rejected every automated request with a firewall 'Request Rejected' page, so it is NOT verified and may not be usable by an automated reader."},
-    {"name": "Atlanta Regional Commission Metropolitan Transportation Plan - Lines (Atlanta region only)", "url": "https://services1.arcgis.com/Ug5xGQbHsD8zuZzM/arcgis/rest/services/ARC_MTP/FeatureServer/1", "verified": true,
-     "geometry": "polyline", "record_count": 414,
-     "fields": {"id": "ARCID", "name": "PRJ_DESC", "description": "EXTENTS", "work_type": "PRJ_TYPE",
-                "status": "STATUS", "county": "COUNTY"},
-     "work_type_values": ["Bicycle Facility", "Bicycle/Pedestrian Facility", "Bridge Upgrade", "BRT Capital", "Bus Capital", "Complete Street Retrofit", "Electrification", "Express Lanes", "Facilities Capital", "General Purpose Capacity", "Interchange Capacity", "Maintenance", "Managed Lanes", "Operations & Maintenance", "Operations & Safety", "Pedestrian Facility", "Rail Capital", "Scoping", "Sidepaths and Trails", "Transit Facilities Capital"],
-     "status_values": ["Programmed", "Long Range", "Completed"],
-     "notes": "Not statewide: the Atlanta MPO's TIP and long-range plan (about 20 counties), maintained (edited October 2026). STATUS 'Programmed' = in the TIP, 'Long Range' = plan years, 'Completed' = done (exclude). GDOTPI holds the matching GDOT PI number(s); Exist_Lane / Prop_Lanes show widening; SPONSOR; Fact_Sheet_Link is a PDF per project. No cost or date fields. Layer 0 of the same service is the point projects (134 records, same fields) and layer 2 polygons."}
+    {
+      "name": "GDOT STIP Projects - STIP Project Type (GDOT ArcGIS Online)",
+      "url": "https://services3.arcgis.com/6RaeG1zfsIoM9Lze/arcgis/rest/services/STIP_Projects/FeatureServer/0",
+      "verified": true,
+      "geometry": "polyline",
+      "record_count": 259,
+      "fields": {
+        "id": "PROJECT_ID",
+        "name": "PROJECT_NA",
+        "description": "PROJECT_DE",
+        "work_type": "PRIM_WORK_",
+        "status": "STATUS",
+        "county": "COUNTIES"
+      },
+      "work_type_values": [
+        "Bridges",
+        "Culvert",
+        "Drainage Improvements",
+        "Grade Separation",
+        "Interchange",
+        "Passing Lanes",
+        "Roadway Project",
+        "Roundabout",
+        "Slope Repair",
+        "Widening"
+      ],
+      "status_values": [
+        "Construction Work Program",
+        "Long Range Program",
+        "Temporarily Shored Bridges"
+      ],
+      "notes": "PARTIAL AND DATED. Hosted in GDOT's ArcGIS Online organization; only 259 projects, and the data was last edited 2023-06-16 (schema touched 2026-01-15), so it looks like the mapped subset of an earlier STIP rather than the current FY27-30 one. PROJECT_ID is the GDOT PI number. PROJECT_TY = New Construction / Reconstruction/Rehabilitation / Replacement / Safety. STATUS: 'Construction Work Program' = programmed in the near-term work program, 'Long Range Program' = later years. Useful extra: 'PreParcelCount' (20 in the sample) appears to be GDOT's preliminary count of parcels affected; meaning not documented on the service. Cost, phase and year are not on the layer: they are in table 5 'Financials' of the same service (https://services3.arcgis.com/6RaeG1zfsIoM9Lze/arcgis/rest/services/STIP_Projects/FeatureServer/5, 1,176 rows: PINumber, PropYear, Phase e.g. 'ROW', FundCode, TotalAmt, FedAmt, StAmt, OthAmt), joined PINumber = PROJECT_ID; rows with Phase = 'ROW' give the right-of-way year and amount. Layer 1 of the service is the same projects for search (307 records). GDOT's main project system (GeoPI, https://rnhp.dot.ga.gov/hosting/rest/services/GEOPI_APP/MapServer and .../STIP/STIP_Program_Type/FeatureServer) is the full, current source, but that server rejected every automated request with a firewall 'Request Rejected' page, so it is NOT verified and may not be usable by an automated reader."
+    },
+    {
+      "name": "Atlanta Regional Commission Metropolitan Transportation Plan - Lines (Atlanta region only)",
+      "url": "https://services1.arcgis.com/Ug5xGQbHsD8zuZzM/arcgis/rest/services/ARC_MTP/FeatureServer/1",
+      "verified": true,
+      "geometry": "polyline",
+      "record_count": 414,
+      "fields": {
+        "id": "ARCID",
+        "name": "PRJ_DESC",
+        "description": "EXTENTS",
+        "work_type": "PRJ_TYPE",
+        "status": "STATUS",
+        "county": "COUNTY"
+      },
+      "work_type_values": [
+        "Bicycle Facility",
+        "Bicycle/Pedestrian Facility",
+        "Bridge Upgrade",
+        "BRT Capital",
+        "Bus Capital",
+        "Complete Street Retrofit",
+        "Electrification",
+        "Express Lanes",
+        "Facilities Capital",
+        "General Purpose Capacity",
+        "Interchange Capacity",
+        "Maintenance",
+        "Managed Lanes",
+        "Operations & Maintenance",
+        "Operations & Safety",
+        "Pedestrian Facility",
+        "Rail Capital",
+        "Scoping",
+        "Sidepaths and Trails",
+        "Transit Facilities Capital"
+      ],
+      "status_values": [
+        "Programmed",
+        "Long Range",
+        "Completed"
+      ],
+      "notes": "Not statewide: the Atlanta MPO's TIP and long-range plan (about 20 counties), maintained (edited October 2026). STATUS 'Programmed' = in the TIP, 'Long Range' = plan years, 'Completed' = done (exclude). GDOTPI holds the matching GDOT PI number(s); Exist_Lane / Prop_Lanes show widening; SPONSOR; Fact_Sheet_Link is a PDF per project. No cost or date fields. Layer 0 of the same service is the point projects (134 records, same fields) and layer 2 polygons."
+    }
   ],
   "parcels_statewide": null,
-  "parcels_counties": [],
-  "summary": "No complete, current statewide GDOT layer could be verified: GDOT's own server blocks automated requests, and the reachable GDOT STIP layer is small and dated (but has a right-of-way financial table). The Atlanta region is well covered by ARC's plan layer. Parcels not researched yet."
+  "parcels_counties": [
+    {
+      "county": "FULTON",
+      "url": "https://services1.arcgis.com/AQDHTHDrZzfsFsB5/arcgis/rest/services/Tax_Parcels/FeatureServer/0",
+      "verified": true,
+      "record_count": 373401,
+      "fields": {
+        "apn": "ParcelID",
+        "owner": "Owner",
+        "mailing_address": [
+          "OwnerAddr1",
+          "OwnerAddr2"
+        ],
+        "address": "Address",
+        "acres": "LandAcres"
+      },
+      "notes": "Fulton County tax parcels (ArcGIS Online). OwnerAddr2 holds city, state and ZIP in one string. TaxYear was 2027 in the sample. No value field. maxRecordCount 1000."
+    },
+    {
+      "county": "GWINNETT",
+      "url": "https://services3.arcgis.com/RfpmnkSAQleRbndX/arcgis/rest/services/FYT_Owner_Data/FeatureServer/1",
+      "verified": true,
+      "record_count": 305466,
+      "fields": {
+        "apn": "PIN",
+        "owner": "OWNER1",
+        "mailing_address": [
+          "MAILADDR",
+          "MAILCITY",
+          "MAILSTAT",
+          "MAILZIP"
+        ],
+        "address": "LOCADDR",
+        "market_value": "TOTVAL1",
+        "acres": "CALCULATEDACREAGE"
+      },
+      "notes": "Gwinnett County GIS 'FYT_Owner_Data' (parcels joined to owner data). Also OWNER2, LOCCITY, LOCZIP, LANDVAL1, DWLGVAL1, LEGALAC, ZONING, GRANTOR1-3. The county's main layer Property_and_Tax/FeatureServer/0 has NO owner fields; use this one."
+    },
+    {
+      "county": "COBB",
+      "url": "https://gis.cobbcounty.gov/gisserver/rest/services/cobbpublic/Parcels/MapServer/3",
+      "verified": true,
+      "record_count": 283363,
+      "fields": {
+        "apn": "PARID",
+        "owner": "OWNER_NAM1",
+        "mailing_address": [
+          "OWNER_ADDR",
+          "OWNER_CITY",
+          "OWNER_STAT",
+          "OWNER_ZIP"
+        ],
+        "address": "SITUS_ADDR",
+        "market_value": "FMV_TOTAL",
+        "acres": "ACRES"
+      },
+      "notes": "Cobb County's own server. OWNER_NAM2 is the second owner. FMV_LAND / FMV_BLDG / FMV_TOTAL are fair market values, ASV_* assessed. 278,712 of the records have an owner name (the rest are right-of-way and similar polygons with PIN '000'). maxRecordCount 1000."
+    },
+    {
+      "county": "CHATHAM",
+      "url": "https://pub.sagis.org/arcgis/rest/services/OpenData/Parcels/MapServer/27",
+      "verified": true,
+      "record_count": 125326,
+      "fields": {
+        "apn": "PIN",
+        "owner": "Owner",
+        "mailing_address": [
+          "Mailing_Address",
+          "Mailing_City",
+          "Mailing_State",
+          "Mailing_Zip"
+        ],
+        "address": "PropAddress_Full",
+        "market_value": "FairMarketValue",
+        "acres": "Acres"
+      },
+      "notes": "Savannah Area GIS (SAGIS) 'Parcel Digest 2025'. The layer number is one per year (26 = 2024, 27 = 2025), so a 2026 digest will be a new layer id. Also Owner2, FMV_Land, FMV_Building, Property_Use, Sale_Price, Legal_Description."
+    }
+  ],
+  "summary": "Projects: no complete current statewide GDOT layer could be verified (GDOT's own server blocks automated requests; the reachable GDOT STIP layer is small and dated; ARC covers the Atlanta region). Parcels: no statewide layer; Fulton, Gwinnett, Cobb and Chatham county layers with owner and mailing address are verified; DeKalb publishes no owner names.",
+  "parcels_statewide_reason": "No free statewide Georgia parcel layer with owner names was found (ArcGIS Online catalog search returned none; Georgia parcels are published county by county).",
+  "parcels_counties_not_found": "DeKalb: the county's Tax_Parcels_2025 layer (https://services2.arcgis.com/IxVN2oUE9EYLSnPE/arcgis/rest/services/Tax_Parcels_2025/FeatureServer/0, fetched) has parcel id and values but no owner fields."
 }

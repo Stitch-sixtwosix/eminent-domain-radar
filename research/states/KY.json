@@ -1,21 +1,128 @@
 {
-  "state": "Kentucky", "code": "KY", "checked": "2026-11-17",
+  "state": "Kentucky",
+  "code": "KY",
+  "checked": "2026-11-17",
   "projects": [
-    {"name": "KYTC Current Highway Plan Projects (Active Highway Plan)", "url": "https://maps.kytc.ky.gov/arcgis/rest/services/Apps/ActiveHighwayPlan_Ext_Prd/MapServer/1", "verified": true,
-     "geometry": "polyline", "record_count": 1656,
-     "fields": {"id": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.DIST_ITEM",
-                "name": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.LOCUNIQUE",
-                "description": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.SYP_RPT_DESC",
-                "work_type": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.SYP_RPT_TYPEWORK",
-                "cost": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.SYP_RPT_CSYFUNDCOSTC",
-                "status": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.SYP_RPT_PRECONFLAG",
-                "let_date": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.SYP_RPT_CSYFISYEARC",
-                "county": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.COUNTYNAME"},
-     "work_type_values": ["AIR QUALITY(P)", "AM-ASSET MGT(P)", "AM-BRIDGE (P)", "AM-PAVEMENT (INT)(P)", "AM-PAVEMENT (PKY)(P)", "AM-PAVEMENT (PRI)(P)", "BIKE/PED FACIL(O)", "BRIDGE REPLACEMENT(P)", "CONGESTION MITIGATION", "CONGESTION MITIGTN(O)", "DESIGN ENGINEERING(O)", "DRAINAGE IMPROVE(P)", "ECONOMIC DEVEL(O)", "I-CHANGE RECONST(O)", "INDUSTRIAL ACCESS", "MAJOR WIDENING", "MAJOR WIDENING(O)", "MINOR WIDENING", "MINOR WIDENING(O)", "NEW INTERCHANGE", "NEW ROUTE", "REALIGNMENT", "RECONSTRUCTION", "RELOCATION(O)", "SAFETY"],
-     "status_values": ["A", "Awarded", "I", "Rejected", "TentativeLetting", "Withdrawn"],
-     "notes": "Enacted six-year highway plan joined to route geometry; the layer is a join, so every field name carries the full table prefix (KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.* and KYTCDynamic_Highways.DBO.Project_Locations_Line.*) and must be used that way in outFields. There is one set of phase columns per phase, suffixed P (planning), D (design), R (right of way), U (utilities), C (construction): SYP_RPT_PHASECODEx, SYP_RPT_CSYFUNDCOSTx (cost), SYP_RPT_CSYFISYEARx (fiscal year), SYP_RPT_STAGEx (ESTIMATED / REESTIMATED / AUTHORIZED / SENTTOFHWA / NOTREQUIRED / NON-SIXYEAR / UNK), SYP_RPT_AUTHAMOUNTx, SYP_RPT_AUTHDATEx. Planned vs under way: construction stage 'ESTIMATED' with a future SYP_RPT_CSYFISYEARC = planned; 'AUTHORIZED' = funded/under way; a non-null R phase (SYP_RPT_CSYFISYEARR, values 2021-2032) flags right-of-way acquisition. SYP_RPT_PRECONFLAG meaning of 'A'/'I' is not documented on the service (the awarded layer uses the same field). There is no letting date, only fiscal years. PRECON_INFO_LINK gives a per-project report URL. Total cost = sum of the five phase costs. Layer 0 of the same service ('Awarded Current Highway Plan Projects', 52 records) is the already-awarded subset; layer 2 is the previous plan. maxRecordCount 1000."}
+    {
+      "name": "KYTC Current Highway Plan Projects (Active Highway Plan)",
+      "url": "https://maps.kytc.ky.gov/arcgis/rest/services/Apps/ActiveHighwayPlan_Ext_Prd/MapServer/1",
+      "verified": true,
+      "geometry": "polyline",
+      "record_count": 1656,
+      "fields": {
+        "id": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.DIST_ITEM",
+        "name": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.LOCUNIQUE",
+        "description": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.SYP_RPT_DESC",
+        "work_type": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.SYP_RPT_TYPEWORK",
+        "cost": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.SYP_RPT_CSYFUNDCOSTC",
+        "status": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.SYP_RPT_PRECONFLAG",
+        "let_date": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.SYP_RPT_CSYFISYEARC",
+        "county": "KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.COUNTYNAME"
+      },
+      "work_type_values": [
+        "AIR QUALITY(P)",
+        "AM-ASSET MGT(P)",
+        "AM-BRIDGE (P)",
+        "AM-PAVEMENT (INT)(P)",
+        "AM-PAVEMENT (PKY)(P)",
+        "AM-PAVEMENT (PRI)(P)",
+        "BIKE/PED FACIL(O)",
+        "BRIDGE REPLACEMENT(P)",
+        "CONGESTION MITIGATION",
+        "CONGESTION MITIGTN(O)",
+        "DESIGN ENGINEERING(O)",
+        "DRAINAGE IMPROVE(P)",
+        "ECONOMIC DEVEL(O)",
+        "I-CHANGE RECONST(O)",
+        "INDUSTRIAL ACCESS",
+        "MAJOR WIDENING",
+        "MAJOR WIDENING(O)",
+        "MINOR WIDENING",
+        "MINOR WIDENING(O)",
+        "NEW INTERCHANGE",
+        "NEW ROUTE",
+        "REALIGNMENT",
+        "RECONSTRUCTION",
+        "RELOCATION(O)",
+        "SAFETY"
+      ],
+      "status_values": [
+        "A",
+        "Awarded",
+        "I",
+        "Rejected",
+        "TentativeLetting",
+        "Withdrawn"
+      ],
+      "notes": "Enacted six-year highway plan joined to route geometry; the layer is a join, so every field name carries the full table prefix (KYTCDynamic_Highways.DBO.TED_CHIPS_ACTIVEPLAN.* and KYTCDynamic_Highways.DBO.Project_Locations_Line.*) and must be used that way in outFields. There is one set of phase columns per phase, suffixed P (planning), D (design), R (right of way), U (utilities), C (construction): SYP_RPT_PHASECODEx, SYP_RPT_CSYFUNDCOSTx (cost), SYP_RPT_CSYFISYEARx (fiscal year), SYP_RPT_STAGEx (ESTIMATED / REESTIMATED / AUTHORIZED / SENTTOFHWA / NOTREQUIRED / NON-SIXYEAR / UNK), SYP_RPT_AUTHAMOUNTx, SYP_RPT_AUTHDATEx. Planned vs under way: construction stage 'ESTIMATED' with a future SYP_RPT_CSYFISYEARC = planned; 'AUTHORIZED' = funded/under way; a non-null R phase (SYP_RPT_CSYFISYEARR, values 2021-2032) flags right-of-way acquisition. SYP_RPT_PRECONFLAG meaning of 'A'/'I' is not documented on the service (the awarded layer uses the same field). There is no letting date, only fiscal years. PRECON_INFO_LINK gives a per-project report URL. Total cost = sum of the five phase costs. Layer 0 of the same service ('Awarded Current Highway Plan Projects', 52 records) is the already-awarded subset; layer 2 is the previous plan. maxRecordCount 1000."
+    }
   ],
   "parcels_statewide": null,
-  "parcels_counties": [],
-  "summary": "KYTC's enacted highway plan is a good planned-projects source with per-phase cost and fiscal year, including a right-of-way phase. Parcels not researched yet."
+  "parcels_counties": [
+    {
+      "county": "KENTON",
+      "url": "https://maps.linkgis.org/server/rest/services/Parcel_QueryOnly/MapServer/1",
+      "verified": true,
+      "record_count": 64644,
+      "fields": {
+        "apn": "PIDN",
+        "owner": "OWNER",
+        "mailing_address": [
+          "MAIL_ADD",
+          "MAIL_ADD2",
+          "MAIL_CITY",
+          "MAIL_ST",
+          "MAIL_ZIP"
+        ],
+        "address": "ADDRESS",
+        "acres": "ACREAGE"
+      },
+      "notes": "LINK-GIS (Northern Kentucky) layer 'Parcels_KC_PVA'. OWNER2 and OWNERICO (in care of) also present; OWNER_NAME / MAIL_ADD1 / MAIL_STATE duplicate the same data. ACREAGE is text ('.350'). No value field."
+    },
+    {
+      "county": "CAMPBELL",
+      "url": "https://maps.linkgis.org/server/rest/services/Parcel_QueryOnly/MapServer/0",
+      "verified": true,
+      "record_count": 38058,
+      "fields": {
+        "apn": "PIDN",
+        "owner": "OWNER_NAME_1",
+        "mailing_address": [
+          "OWNER_ADDRESS_1",
+          "OWNER_ADDRESS_2",
+          "OWNER_CITY",
+          "OWNER_STATE",
+          "OWNER_ZIP_CODE"
+        ],
+        "address": "LOC_ADD",
+        "market_value": "TOTAL_ASSESSMENT",
+        "acres": "LOT_ACRE"
+      },
+      "notes": "LINK-GIS layer 'Parcels_CC' (Campbell County PVA). OWNER_NAME_2, BUSINESS_NAME; LAND_VALUE, IMPROVEMENT_VALUE, TAXABLE_ASSESSMENT; SALE_DATE, SALE_PRICE; TAX_YEAR 2026 in the sample. Layer 2 of the same service is Pendleton County (not inspected)."
+    },
+    {
+      "county": "BOONE",
+      "url": "https://services1.arcgis.com/kleO5B3qko1eLO4Z/arcgis/rest/services/Tax_Parcels/FeatureServer/0",
+      "verified": true,
+      "record_count": 55348,
+      "fields": {
+        "apn": "PIDN",
+        "owner": "PRCLOWNR1",
+        "mailing_address": [
+          "MAILADD1",
+          "MAILADD2",
+          "MAILPOST",
+          "MAILSTATE",
+          "MAILZIP"
+        ],
+        "address": "SITEADD1",
+        "market_value": "ASSESSVALU",
+        "acres": "GMDACRE"
+      },
+      "notes": "Boone County Planning Commission (ArcGIS Online, updated November 2026). PRCLOWNR2 second owner; MAILPOST is the mailing city; SITEPOST / SITEZIP site city and ZIP; SALEDATE1 / SALEPRICE1; ASSESSVALU was empty in the sample record."
+    }
+  ],
+  "summary": "Projects: KYTC's enacted highway plan is a good planned-projects source with per-phase cost and fiscal year, including a right-of-way phase. Parcels: no statewide layer; Kenton, Campbell and Boone county layers with owner and mailing address are verified; Louisville and Lexington are not.",
+  "parcels_statewide_reason": "No free statewide Kentucky parcel layer with owner names was found (ArcGIS Online catalog search returned none; parcels are held by each county PVA).",
+  "parcels_counties_not_found": "Jefferson (Louisville): LOJIC's open-data parcel layer https://gis.lojic.org/maps/rest/services/LojicSolutions/OpenDataPVA/MapServer/1 timed out and is not verified. Fayette (Lexington) and Warren: no public parcel service with owner names found in the time allowed. The three verified counties are the Northern Kentucky ones, not the most populous."
 }

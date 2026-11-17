@@ -80,6 +80,76 @@
   }
  ],
  "parcels_statewide": null,
- "parcels_counties": [],
- "summary": "ALDOT publishes project geometry with description, work type and phase code, but with no dates, status or cost, so it does not by itself identify planned projects. Parcels not researched yet."
+ "parcels_counties": [
+  {
+   "county": "MOBILE",
+   "url": "https://services8.arcgis.com/HND1NcQt6vgOGn1z/arcgis/rest/services/MCRC_Public_Parcels/FeatureServer/1",
+   "verified": true,
+   "record_count": 214092,
+   "fields": {
+    "apn": "Parcel_Number",
+    "owner": "Name1",
+    "address": [
+     "PropAddr1",
+     "PropAddr2",
+     "PropCity",
+     "PropState",
+     "PropZip"
+    ],
+    "acres": "Acreage"
+   },
+   "notes": "Mobile County Revenue Commission public parcels. Owner in Name1 with Name2 as second line (e.g. 'ATTN: ...'). NO mailing address and no value: the Prop* fields are the property location. Text is padded with trailing spaces; trim. KeyNum / Account_Number are the revenue keys. (Layer 0 of this service is road centerlines.)"
+  },
+  {
+   "county": "MONTGOMERY",
+   "url": "https://gis.montgomeryal.gov/server/rest/services/Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 106251,
+   "fields": {
+    "apn": "ParcelNo",
+    "owner": "OwnerName",
+    "mailing_address": [
+     "MailAddress1",
+     "MailAddress2",
+     "MailCity",
+     "MailState",
+     "MailZip"
+    ],
+    "address": [
+     "PropertyAddr1",
+     "PropertyCity",
+     "PropertyState",
+     "PropertyZip"
+    ],
+    "market_value": "TotalValue",
+    "acres": "Calc_Acre"
+   },
+   "notes": "City/County of Montgomery. OwnerName2 is the second owner. TotalLandValue, TotalImpValue; RecordYear; InstDate. Text is padded with trailing spaces; trim."
+  },
+  {
+   "county": "TUSCALOOSA",
+   "url": "https://services.arcgis.com/AWzSDaKZ41uuVges/arcgis/rest/services/Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 111787,
+   "fields": {
+    "apn": "pclnum",
+    "owner": "pcloNAME",
+    "mailing_address": [
+     "addSTRTNUM",
+     "addSTRT1",
+     "addSTRT2",
+     "addCITY",
+     "stABBR",
+     "addZIP"
+    ],
+    "address": "pcliLocati",
+    "market_value": "appraised",
+    "acres": "rtMAP_ACRE"
+   },
+   "notes": "Tuscaloosa County (ArcGIS Online, updated November 2026). 'Name' also holds the parcel number; ppin is the property index number; AddlNames = additional owners; rtDEED_ACR deeded acres. The add* fields look like the owner's mailing address (sample: city TUSCALOOSA, ZIP 35403 for a rural parcel) but this is inferred from one record; confirm on more records."
+  }
+ ],
+ "summary": "Projects: ALDOT publishes project geometry with description, work type and phase code but no dates, status or cost, so it cannot by itself identify planned work. Parcels: no statewide layer; Mobile (owner only), Montgomery and Tuscaloosa county layers are verified; Jefferson refused automated access.",
+ "parcels_statewide_reason": "No free statewide Alabama parcel layer was found (ArcGIS Online catalog search returned none; parcels are published by county revenue offices).",
+ "parcels_counties_not_found": "Jefferson (Birmingham): https://jccgis.jccal.org/server/rest/services/Basemap/Parcels/MapServer/0 answered HTTP 403 to an automated request. Madison (Huntsville) and Baldwin: no public parcel service with owner names found in the time allowed."
 }

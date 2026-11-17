@@ -6,15 +6,29 @@ from typing import Any, Dict, List, Optional, Tuple
 
 
 def coords(geometry: Optional[Dict[str, Any]]) -> List[List[float]]:
+    """Every [x, y] in the geometry. Sources differ, so polygons ("rings") are read too, and any point that is
+    not a pair of finite numbers (text, NaN, a point outside the globe) is dropped instead of crashing a run."""
     if not geometry:
         return []
     if "paths" in geometry:
-        return [pt for path in geometry["paths"] for pt in path]
-    if "points" in geometry:
-        return list(geometry["points"])
-    if "x" in geometry and "y" in geometry:
-        return [[geometry["x"], geometry["y"]]]
-    return []
+        raw = [pt for path in geometry["paths"] or [] for pt in path or []]
+    elif "rings" in geometry:
+        raw = [pt for ring in geometry["rings"] or [] for pt in ring or []]
+    elif "points" in geometry:
+        raw = list(geometry["points"] or [])
+    elif "x" in geometry and "y" in geometry:
+        raw = [[geometry["x"], geometry["y"]]]
+    else:
+        return []
+    out: List[List[float]] = []
+    for pt in raw:
+        try:
+            x, y = float(pt[0]), float(pt[1])
+        except (TypeError, ValueError, IndexError):
+            continue
+        if math.isfinite(x) and math.isfinite(y) and -180 <= x <= 180 and -90 <= y <= 90:
+            out.append([x, y])
+    return out
 
 
 def center(geometry: Optional[Dict[str, Any]]) -> Optional[Tuple[float, float]]:
