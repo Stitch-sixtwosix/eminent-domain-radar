@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Serif:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="site.css">
+<script src="auth-config.js"></script>
 </head>
 <body>
 
@@ -19,26 +20,30 @@
     <a href="./#how">How it works</a>
     <a href="./#about">Who built it</a>
     <a href="app/">Live Pennsylvania data</a>
+    <a class="auth-only" href="login.html">Sign in</a>
   </nav>
 </header>
 
 <main class="signup">
   <div class="why">
-    <h1 style="font-size: var(--s-title)">Request access for your firm</h1>
-    <p>Built by eminent domain attorneys, for eminent domain attorneys. Tell us about your practice and we will set your firm up.</p>
+    <h1 style="font-size: var(--s-title)"><span class="auth-only">Create your firm's account</span><span class="auth-off">Request access for your firm</span></h1>
+    <p>Built by eminent domain attorneys, for eminent domain attorneys. Tell us about your practice<span class="auth-off"> and we will set your firm up</span>.</p>
     <ul>
       <li><b>Leads before the notice</b>Parcels in the path of planned projects, with the owner of record.</li>
       <li><b>Outreach in your firm's name</b>Postcards and email from one template, marked as attorney advertising.</li>
       <li><b>Pennsylvania today</b>Tell us which other states you need. They are added in the order firms ask.</li>
     </ul>
+    <p class="auth-only" style="font-size: var(--s-small); margin-top: 28px">Already have an account? <a href="login.html">Sign in</a></p>
   </div>
 
   <div>
     <form class="card" id="request" novalidate>
+      <div class="auth-only gate"><button class="btn google" type="button" id="google"><svg viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.640 9.200c0-.640-.060-1.250-.160-1.840H9v3.480h4.840a4.140 4.140 0 0 1-1.800 2.720v2.260h2.920c1.700-1.570 2.680-3.880 2.680-6.620z"/><path fill="#34A853" d="M9 18c2.430 0 4.470-.800 5.960-2.180l-2.920-2.260c-.800.540-1.830.860-3.040.860-2.340 0-4.330-1.580-5.040-3.710H.960v2.330A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.960 10.710a5.400 5.400 0 0 1 0-3.420V4.960H.960a9 9 0 0 0 0 8.080l3-2.330z"/><path fill="#EA4335" d="M9 3.580c1.320 0 2.500.450 3.440 1.350l2.580-2.590A9 9 0 0 0 .960 4.960l3 2.330C4.670 5.160 6.660 3.580 9 3.580z"/></svg>Continue with Google</button><p class="or">or use your work email</p></div>
       <div class="grid">
         <label>Your name<input type="text" name="name" autocomplete="name" required></label>
         <label>Law firm<input type="text" name="firm" autocomplete="organization" required></label>
         <label>Work email<input type="email" name="email" autocomplete="email" required></label>
+        <label class="auth-only">Password <span>(8 characters or more)</span><input type="password" name="password" autocomplete="new-password" minlength="8" required></label>
         <label>Phone <span>(optional)</span><input type="tel" name="phone" autocomplete="tel"></label>
         <label>Firm city and state<input type="text" name="location" autocomplete="address-level2" placeholder="Fort Washington, PA"></label>
         <label>Firm website <span>(optional)</span><input type="text" name="website" autocomplete="url" inputmode="url"></label>
@@ -49,40 +54,49 @@
             <label><input type="radio" name="side" value="Condemning authorities"> Condemning authorities</label>
             <label><input type="radio" name="side" value="Both"> Both</label>
           </div></fieldset>
-        <label class="full">Anything we should know <span>(optional)</span><textarea name="note"></textarea></label>
+        <label class="full auth-off">Anything we should know <span>(optional)</span><textarea name="note"></textarea></label>
+        <p class="full status" id="status" role="alert" hidden></p>
         <div class="full send">
-          <button class="btn" type="submit">Request access</button>
-          <p>This opens an email to us in your mail program with these details filled in. Nothing is sent until you press send there.</p>
+          <button class="btn" type="submit" id="go"><span class="auth-only">Create account</span><span class="auth-off">Request access</span></button>
+          <p class="auth-off">This opens an email to us in your mail program with these details filled in. Nothing is sent until you press send there.</p>
+          <p class="auth-only">We will email you a link to confirm your address.</p>
         </div>
       </div>
     </form>
     <div class="done" id="done" hidden tabindex="-1">
-      <h2>Your request is ready to send</h2>
-      <p>Your mail program should have opened with the message below. If it did not, copy the text and send it to <a href="mailto:info@duerrlawpc.com">info@duerrlawpc.com</a>.</p>
+      <h2 id="done-h">Your request is ready to send</h2>
+      <p id="done-p">Your mail program should have opened with the message below. If it did not, copy the text and send it to <a href="mailto:info@duerrlawpc.com">info@duerrlawpc.com</a>.</p>
       <pre id="done-text"></pre>
-      <div class="send"><a class="btn" id="done-mail" href="#">Open the email again</a><button class="btn plain" type="button" id="done-copy">Copy the text</button><a class="btn plain" href="app/">See the live data</a></div>
+      <div class="send" id="done-acts"><a class="btn" id="done-mail" href="#">Open the email again</a><button class="btn plain" type="button" id="done-copy">Copy the text</button><a class="btn plain" href="app/">See the live data</a></div>
     </div>
   </div>
 </main>
 
-<script>
-const form = document.getElementById("request"), done = document.getElementById("done");
+<script type="module">
+import {authOn, supa, google, here, firmData, say, watch, valid} from "./auth.js";
+const form = document.getElementById("request"), done = document.getElementById("done"), status = document.getElementById("status"), go = document.getElementById("go");
 const TO = "info@duerrlawpc.com";
-function check(field) {
-  const bad = !field.checkValidity();
-  field.setAttribute("aria-invalid", String(bad));
-  let msg = field.parentNode.querySelector(".err");
-  if (bad && !msg) { msg = document.createElement("span"); msg.className = "err"; msg.id = "err-" + field.name; field.setAttribute("aria-describedby", msg.id); field.parentNode.appendChild(msg); }
-  if (msg) { msg.textContent = bad ? (field.validity.valueMissing ? "This is needed." : "Enter a full email address, like name@firm.com.") : ""; if (!bad) msg.remove(); }
-  return !bad;
-}
-form.addEventListener("blur", e => { if (e.target.matches("input[required]") && e.target.value) check(e.target); }, true);
-form.addEventListener("input", e => { if (e.target.getAttribute("aria-invalid") === "true") check(e.target); });
-form.addEventListener("submit", e => {
+if (!authOn) form.querySelector("[name=password]").required = false;
+watch(form);
+document.getElementById("google").addEventListener("click", async () => { try { await google(); } catch (e) { say(status, "Google sign-in did not start: " + e.message, true); } });
+form.addEventListener("submit", async e => {
   e.preventDefault();
-  const required = [...form.querySelectorAll("[required]")], bad = required.filter(f => !check(f));
-  if (bad.length) { bad[0].focus(); return; }
+  if (!valid(form)) return;
   const d = Object.fromEntries(new FormData(form));
+  if (authOn) {
+    go.disabled = true; say(status, "");
+    try {
+      const s = await supa();
+      const {data, error} = await s.auth.signUp({email: d.email, password: d.password, options: {data: firmData(d), emailRedirectTo: here("account.html")}});
+      if (error) throw error;
+      if (data.session) { location.href = "account.html"; return; }
+      document.getElementById("done-h").textContent = "Check your email";
+      document.getElementById("done-p").textContent = "We sent a confirmation link to " + d.email + ". Open it to finish creating your firm's account.";
+      document.getElementById("done-text").hidden = true; document.getElementById("done-acts").hidden = true;
+      form.hidden = true; done.hidden = false; done.focus();
+    } catch (err) { say(status, /registered/i.test(err.message) ? "That email already has an account. Sign in instead." : "The account could not be created: " + err.message, true); go.disabled = false; }
+    return;
+  }
   const lines = ["Name: " + d.name, "Firm: " + d.firm, "Email: " + d.email, d.phone && "Phone: " + d.phone, d.location && "Firm location: " + d.location,
     d.website && "Website: " + d.website, "States: " + d.states, "Represents: " + d.side, d.note && "\n" + d.note].filter(Boolean);
   const body = "Please set up EminentTracker access for my firm.\n\n" + lines.join("\n");

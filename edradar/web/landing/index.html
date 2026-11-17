@@ -13,6 +13,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Serif:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="site.css">
+<script src="auth-config.js"></script>
+<script>if ((window.ET_AUTH || {}).url) document.documentElement.classList.add("auth-on");</script>
 <script>document.documentElement.classList.add("js");</script>
 </head>
 <body>
@@ -20,19 +22,19 @@
 <header class="bar">
   <a class="brand" href="./" aria-label="EminentTracker home"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7.5" fill="#1b2333"/><path d="M8 5h16v4.200H12.200v13.600H24V27H8z" fill="#fff"/><path d="M12.200 13.900H32v4.200H12.200z" fill="#e0662e"/></svg><b>Eminent<span>Tracker</span></b></a>
   <nav aria-label="Sections">
-    <a href="#example">An example</a>
     <a href="#how">How it works</a>
     <a href="#about">Who built it</a>
     <a href="app/">Live Pennsylvania data</a>
+    <a class="auth-only" href="login.html">Sign in</a>
   </nav>
-  <a class="btn small" href="signup.html">Request access</a>
+  <a class="btn small" href="signup.html"><span class="auth-off">Request access</span><span class="auth-only">Create account</span></a>
 </header>
 
 <main>
 <section class="hero" aria-labelledby="title">
   <div class="talk">
     <p>Built by eminent domain attorneys, for eminent domain attorneys.</p>
-    <a class="btn" href="signup.html">Request access</a>
+    <a class="btn" href="signup.html"><span class="auth-off">Request access</span><span class="auth-only">Create account</span></a>
     <a class="alt text-link" href="app/">See the live Pennsylvania data</a>
   </div>
   <div class="head">
@@ -43,71 +45,22 @@
 
 <div class="shot">
   <div class="frame"><img src="img/overview.jpg" width="2160" height="1350" alt="The EminentTracker lead screen: a map of Pennsylvania with planned projects marked in orange, a ranked list of projects, and a table of affected parcels with their owners of record."></div>
-  <p class="figure"><b>{{leads}}</b><span>parcel leads on file in Pennsylvania as of {{date}}</span></p>
+  <p class="figure"><b>{{leads}}</b><span>parcel leads on file in Pennsylvania as of {{date}}, matched to {{projects}} planned projects</span></p>
 </div>
 
-<section class="split" id="example" aria-label="From the plan to the parcel">
-  <div class="raw on-navy">
-    <div class="picker" role="group" aria-label="Choose a real project">
-      <button type="button" aria-pressed="true" data-pick="0">A realignment</button>
-      <button type="button" aria-pressed="false" data-pick="1">A widening</button>
-      <button type="button" aria-pressed="false" data-pick="2">A new road</button>
-    </div>
-    <p class="record" id="record"></p>
-    <p class="note">This is the whole public record, as the agency publishes it. No parcels, no owners, no notice to anyone.</p>
-    <h2>From the plan</h2>
-  </div>
-  <div class="made">
-    <div class="lead-card" data-ui id="lead-card" aria-live="polite"></div>
-    <p class="note" style="margin-top:20px">Every lead is scored out of 100 on four published measures, so you can see exactly why it ranks where it does.</p>
-    <h2>to the parcel</h2>
-  </div>
-</section>
-
-<section class="how wrap" id="how">
+<section class="how wrap" id="how" aria-labelledby="how-h">
   <div class="axis" data-in>
-    <h2>How it works</h2>
+    <h2 id="how-h">How it works</h2>
     <p class="lede">Three steps run every day. You open the list and the work is already done.</p>
   </div>
-
-  <div class="step">
-    <div class="say" data-in>
-      <h3>First, it reads the plans.</h3>
-      <p>Long before right-of-way plans are filed, agencies publish what they intend to build.</p>
-      <ul>
-        <li>PennDOT's Twelve Year Program and Four Year Plan</li>
-        <li>Federal environmental notices for highways, rail and pipelines</li>
-        <li>City legislation authorizing acquisition or condemnation</li>
-      </ul>
-    </div>
-    <figure data-in><div class="crop"><img class="right" src="img/project.jpg" width="2160" height="1350" loading="lazy" alt="A planned realignment drawn on the map, with the agency's description, its score and its place on the six-stage timeline from planning to construction."></div>
-      <figcaption>Each project with its route, its budget, the agency contact and how far it is from construction.</figcaption></figure>
-  </div>
-
-  <div class="step">
-    <div class="say" data-in>
-      <h3>Then it finds every parcel on the route.</h3>
-      <p>The mapped route is laid over county parcel records. Each parcel that abuts it becomes a lead, with its boundary, its assessed value and its owner of record.</p>
-    </div>
-    <figure data-in><div class="crop"><img class="right" src="img/parcel.jpg" width="2160" height="1350" loading="lazy" alt="One parcel outlined on an aerial photograph with the length of each side, beside the owner's name, mailing address and the points that make up its score."></div>
-      <figcaption>One parcel: its exact boundary against the route, the owner, the mailing address and the reasons for its score.</figcaption></figure>
-  </div>
-
-  <div class="step">
-    <div class="say" data-in>
-      <h3>Finally, you reach the owner first.</h3>
-      <p>Save the owners you want to a list. One click sends each a postcard and each company an email, written in your firm's name and marked as attorney advertising.</p>
-    </div>
-    <figure data-in><div class="crop"><img class="low" src="img/hub.jpg" width="1920" height="1620" loading="lazy" alt="The outreach screen: a saved client list ready to run, and the postcard and letter that will be sent, filled in with the owner's property and the project's name."></div>
-      <figcaption>The postcard and letter are one template. Enter your firm's details once.</figcaption></figure>
-  </div>
-</section>
-
-<section class="count" aria-labelledby="count-h">
-  <h2 id="count-h" data-in><span>On file today</span></h2>
-  <p class="big">{{leads}}</p>
-  <p class="cap">parcels matched to {{projects}} Pennsylvania projects that score 60 or higher for taking private land. {{owners}} of them carry an owner of record.</p>
-  <p class="side">Counted on {{date}}. The list is rebuilt every day at 5pm Eastern.</p>
+  <ol class="steps3">
+    <li data-in><h3>It reads the plans.</h3>
+      <p>Agencies publish what they intend to build years before right-of-way plans are filed: PennDOT's Twelve Year Program, federal environmental notices and city legislation.</p></li>
+    <li data-in><h3>It finds every parcel on the route.</h3>
+      <p>Each mapped route is laid over county parcel records. Every parcel it touches becomes a lead, with its boundary, assessed value and owner of record.</p></li>
+    <li data-in><h3>You reach the owner first.</h3>
+      <p>Save the owners you want to a list. One click sends each a postcard or email in your firm's name, marked as attorney advertising.</p></li>
+  </ol>
 </section>
 
 <section class="about wrap" id="about" aria-labelledby="about-h">
@@ -143,20 +96,20 @@
 <section class="close on-navy" aria-labelledby="close-h">
   <h2 id="close-h">Be there before the notice.</h2>
   <div class="row">
-    <p>Access is opening firm by firm. Tell us where you practice and we will set your firm up.</p>
-    <a class="btn accent" href="signup.html">Request access</a>
+    <p><span class="auth-off">Access is opening firm by firm. Tell us where you practice and we will set your firm up.</span><span class="auth-only">Create your firm's account with your work email or with Google. It takes a minute.</span></p>
+    <a class="btn accent" href="signup.html"><span class="auth-off">Request access</span><span class="auth-only">Create account</span></a>
   </div>
 
   <footer>
     <p class="name" aria-hidden="true">Eminent<span>Tracker</span></p>
     <div class="cols">
       <div class="reach">
-        <a href="signup.html">Request access</a>
+        <a href="signup.html"><span class="auth-off">Request access</span><span class="auth-only">Create account</span></a>
+        <a class="auth-only" href="login.html">Sign in</a>
         <a href="app/">Open the live data</a>
       </div>
       <div class="links">
-        <a href="#example">An example</a>
-        <a href="#how">How it works</a>
+            <a href="#how">How it works</a>
         <a href="#about">Who built it</a>
       </div>
       <div class="links">
@@ -173,31 +126,6 @@
 </main>
 
 <script>
-// Three real Pennsylvania projects as the agency publishes them, and the lead EminentTracker makes of each.
-const EXAMPLES = [
-  {record: "<b>MPMS 49057 · Pleasantville Mountain Improvements</b>\nRelocation/Realignment. On PA 56 beginning 0.20 miles east of Mountain Road (T-614).\nBedford County. Program: Under Development. Status: Candidate.",
-   name: "Pleasantville Mountain Improvements", meta: "Bedford County · PennDOT District 09 · $60.0M", score: 99, parcels: 45,
-   parts: [["Need for private land", "A realignment needs new right-of-way", 59, 60], ["How early it is", "Planning: the earliest stage", 15, 15], ["Size of the project", "Budget of $50M or more", 10, 10], ["Where the parcel sits", "Abuts the mapped route", 15, 15]]},
-  {record: "<b>MPMS 96384 · US 22 Widening</b>\nWiden. US 22 from 15th Street to Airport Road. South Whitehall, Whitehall and Hanover Townships and City of Bethlehem.\nLehigh County. Program: Twelve Year Program. Status: Active.",
-   name: "US 22 Widening", meta: "Lehigh County · PennDOT District 05 · $230.0M", score: 96, parcels: 92,
-   parts: [["Need for private land", "A widening takes strips of frontage", 56, 60], ["How early it is", "Planning: the earliest stage", 15, 15], ["Size of the project", "Budget of $50M or more", 10, 10], ["Where the parcel sits", "Abuts the mapped route", 15, 15]]},
-  {record: "<b>MPMS 112784 · State College Area Connector</b>\nNew Roadway. Potter, Harris, Spring, Benner and College Townships and Centre Hall Borough.\nCentre County. Program: Four Year Plan.",
-   name: "State College Area Connector", meta: "Centre County · PennDOT District 02 · $1.08B", score: 94, parcels: 176,
-   parts: [["Need for private land", "A new road is built on land the state does not own", 57, 60], ["How early it is", "Design: the route is being fixed", 12, 15], ["Size of the project", "Budget of $50M or more", 10, 10], ["Where the parcel sits", "Abuts the mapped route", 15, 15]]},
-];
-function show(i, animate) {
-  const x = EXAMPLES[i], rec = document.getElementById("record"), card = document.getElementById("lead-card");
-  rec.innerHTML = x.record;
-  card.innerHTML = `<header><span class="score" aria-label="Score ${x.score} of 100">${x.score}</span><div><h3>${x.name}</h3><p>${x.meta}</p></div></header>
-    <table><tbody>${x.parts.map(p => `<tr><td>${p[0]}<small>${p[1]}</small></td><td>${p[2]} / ${p[3]}</td></tr>`).join("")}</tbody>
-    <tfoot><tr><td>Lead score</td><td>${x.score} / 100</td></tr></tfoot></table>
-    <p class="found"><b>${x.parcels} parcels</b> found along this route, each with its boundary and county record.</p>`;
-  document.querySelectorAll("[data-pick]").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.pick === i)));
-  if (animate) for (const el of [rec, card]) { el.classList.remove("swap"); void el.offsetWidth; el.classList.add("swap"); }
-}
-document.querySelector(".picker").addEventListener("click", e => { const b = e.target.closest("[data-pick]"); if (b) show(+b.dataset.pick, true); });
-show(0, false);
-
 // Sections enter once, as they come into view. Without IntersectionObserver everything is simply shown.
 const parts = document.querySelectorAll("[data-in]");
 if ("IntersectionObserver" in window) {

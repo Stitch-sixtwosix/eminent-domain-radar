@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your firm · EminentTracker</title>
+<meta name="description" content="Your EminentTracker account. Built by eminent domain attorneys, for eminent domain attorneys.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7.5' fill='%231b2333'/%3E%3Cpath d='M8 5h16v4.200H12.200v13.600H24V27H8z' fill='%23fff'/%3E%3Cpath d='M12.200 13.900H32v4.200H12.200z' fill='%23e0662e'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Serif:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<script src="auth-config.js"></script>
+</head>
+<body>
+
+<header class="bar">
+  <a class="brand" href="./" aria-label="EminentTracker home"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7.5" fill="#1b2333"/><path d="M8 5h16v4.200H12.200v13.600H24V27H8z" fill="#fff"/><path d="M12.200 13.900H32v4.200H12.200z" fill="#e0662e"/></svg><b>Eminent<span>Tracker</span></b></a>
+  <nav aria-label="Site">
+    <a href="./#how">How it works</a>
+    <a href="./#about">Who built it</a>
+    <a href="app/">Live Pennsylvania data</a>
+    <a class="auth-only" href="login.html">Sign in</a>
+  </nav>
+</header>
+
+<main class="signup">
+  <div class="why">
+    <h1 style="font-size: var(--s-title)">Your firm</h1>
+    <p id="who">Checking who is signed in.</p>
+    <p style="margin-top: 28px"><a class="btn" href="app/">Open the live data</a></p>
+    <p style="font-size: var(--s-small); margin-top: 20px"><button class="linkish" type="button" id="out">Sign out</button></p>
+  </div>
+  <div>
+    <form class="card" id="firm" novalidate hidden>
+      <p class="status" id="nudge" hidden>Add your firm's details to finish setting up.</p>
+      <div class="grid">
+        <label>Your name<input type="text" name="name" autocomplete="name" required></label>
+        <label>Law firm<input type="text" name="firm" autocomplete="organization" required></label>
+        <label>Phone <span>(optional)</span><input type="tel" name="phone" autocomplete="tel"></label>
+        <label>Firm city and state<input type="text" name="location" autocomplete="address-level2"></label>
+        <label class="full">Firm website <span>(optional)</span><input type="text" name="website" autocomplete="url" inputmode="url"></label>
+        <label class="full">States where you handle eminent domain matters<input type="text" name="states" required></label>
+        <fieldset class="full"><legend>Who do you represent?</legend>
+          <div class="choices">
+            <label><input type="radio" name="side" value="Property owners" checked> Property owners</label>
+            <label><input type="radio" name="side" value="Condemning authorities"> Condemning authorities</label>
+            <label><input type="radio" name="side" value="Both"> Both</label>
+          </div></fieldset>
+        <label class="full" id="newpass" hidden>New password <span>(8 characters or more)</span><input type="password" name="password" autocomplete="new-password" minlength="8"></label>
+        <p class="full status" id="status" role="status" hidden></p>
+        <div class="full send"><button class="btn" type="submit" id="go">Save</button></div>
+      </div>
+    </form>
+  </div>
+</main>
+
+<script type="module">
+import {authOn, supa, firmOf, firmData, say, watch, valid} from "./auth.js";
+const form = document.getElementById("firm"), status = document.getElementById("status"), who = document.getElementById("who");
+if (!authOn) location.replace("signup.html");
+const s = await supa();
+s.auth.onAuthStateChange(ev => { if (ev === "PASSWORD_RECOVERY") document.getElementById("newpass").hidden = false; });
+const {data} = await s.auth.getSession();
+if (!data.session) location.replace("login.html");
+else {
+  const user = data.session.user, f = firmOf(user);
+  who.textContent = "Signed in as " + user.email + ".";
+  for (const [k, v] of Object.entries(f)) { const el = form.elements[k]; if (!el) continue; if (k === "side") { if (v) form.querySelectorAll("[name=side]").forEach(r => r.checked = r.value === v); } else el.value = v; }
+  document.getElementById("nudge").hidden = !!(f.firm && f.states);
+  form.hidden = false; watch(form);
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    if (!valid(form)) return;
+    const d = Object.fromEntries(new FormData(form)), change = {data: firmData(d)};
+    if (d.password) change.password = d.password;
+    const {error} = await s.auth.updateUser(change);
+    say(status, error ? "Not saved: " + error.message : "Saved.", !!error);
+    if (!error) document.getElementById("nudge").hidden = true;
+  });
+}
+document.getElementById("out").addEventListener("click", async () => { await s.auth.signOut(); location.href = "./"; });
+</script>
+</body>
+</html>

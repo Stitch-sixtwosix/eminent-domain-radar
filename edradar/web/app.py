@@ -439,12 +439,18 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40) -> Dic
     fill = {"leads": "{:,}".format(stats["leads"]), "projects": "{:,}".format(stats["projects"]),
             "owners": "{:,}".format(stats["leads_with_owner"]), "counties": str(len(stats["counties"])),
             "owner_counties": str(owner_counties), "date": date.today().strftime("%B %-d, %Y")}
-    for name in ("index.html", "signup.html"):
+    for name in ("index.html", "signup.html", "login.html", "account.html"):
         page = (landing / name).read_text()
         for k, v in fill.items():
             page = page.replace("{{%s}}" % k, v)
         (site / name).write_text(page)
     shutil.copyfile(landing / "site.css", site / "site.css")
+    shutil.copyfile(landing / "auth.js", site / "auth.js")
+    # Accounts switch on when a Supabase project is configured. Its URL and "anon" key are public by design;
+    # the service key must never be put here.
+    web = cfg.get("site") or {}
+    (site / "auth-config.js").write_text("window.ET_AUTH = %s;\n" % json.dumps(
+        {"url": web.get("supabase_url") or "", "key": web.get("supabase_anon_key") or ""}))
     shutil.copytree(landing / "img", site / "img", dirs_exist_ok=True)
     for stale in ("data.json",):                 # the app used to live at the root
         (site / stale).unlink(missing_ok=True)
