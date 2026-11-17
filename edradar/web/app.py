@@ -160,7 +160,7 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
         bg, others = parceldetail.background(parcel), parceldetail.related(db, lead)
         return {"lead": lead, "layer": parcel["layer"], "boundary": parceldetail.boundary(cfg, db, parcel),
                 "background": bg, "related": others, "owner": parceldetail.owner_profile(lead, bg["facts"], others),
-                "contacts": db.contacts_for(lead["owner"])}
+                "contacts": db.contacts_for(lead["owner"]), "company": db.company_for(lead["owner"])}
 
     @app.get("/api/leads/{lead_id}/cases")
     def lead_cases(lead_id: int) -> Dict[str, Any]:
@@ -300,8 +300,7 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40) -> Dic
     assert "EDRADAR_STATIC = true" in html
     (out / "index.html").write_text(html)
     (out / "data.json").write_text(json.dumps({"stats": stats, "projects": projects, "leads": leads, "layers": layers, "template": outreach.template(cfg),
-                                               "contacts": {o["owner"]: db.contacts_for(o["owner"]) for o in
-                                                            db.rows("SELECT DISTINCT owner FROM contacts")}},
+                                               "contacts": {}},
                                               separators=(",", ":")))
     (out / ".nojekyll").write_text("")
     return {"projects": len(projects), "leads": len(leads)}

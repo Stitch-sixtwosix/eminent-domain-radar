@@ -90,6 +90,12 @@ CREATE INDEX IF NOT EXISTS idx_outreach_lead ON outreach(lead_id);
 -- Dashboard-editable settings (the outreach template lives here as JSON).
 CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);
 
+-- What is known about a company that owns parcels (website, Apollo organization).
+CREATE TABLE IF NOT EXISTS companies (
+    owner TEXT PRIMARY KEY, name TEXT, website TEXT, phone TEXT, apollo_org_id TEXT,
+    fetched_at TEXT DEFAULT (datetime('now'))
+);
+
 -- People found at company owners (Apollo). Email is filled in once it has been revealed.
 CREATE TABLE IF NOT EXISTS contacts (
     id INTEGER PRIMARY KEY,
@@ -293,6 +299,19 @@ class DB:
                  c.get("phone"), c.get("linkedin")))
         self.conn.execute("UPDATE parcels SET email_contacts=? WHERE owner=?", (len(people), owner))
         self.conn.commit()
+
+    def save_company(self, owner: str, name: Optional[str], website: Optional[str], phone: Optional[str] = None,
+                     apollo_org_id: Optional[str] = None) -> None:
+        self.conn.execute(
+            """INSERT INTO companies (owner, name, website, phone, apollo_org_id) VALUES (?,?,?,?,?)
+               ON CONFLICT(owner) DO UPDATE SET name=excluded.name, website=COALESCE(excluded.website, companies.website),
+                 phone=COALESCE(excluded.phone, companies.phone), apollo_org_id=excluded.apollo_org_id,
+                 fetched_at=datetime('now')""", (owner, name, website, phone, apollo_org_id))
+        self.conn.commit()
+
+    def company_for(self, owner: Optional[str]) -> Optional[Dict[str, Any]]:
+        rows = self.rows("SELECT name, website, phone FROM companies WHERE owner=?", (owner,)) if owner else []
+        return rows[0] if rows else None
 
     def contacts_for(self, owner: Optional[str]) -> List[Dict[str, Any]]:
         if not owner:
