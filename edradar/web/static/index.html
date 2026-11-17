@@ -789,7 +789,8 @@ async function loadLeads() {
 
 /* ---- outreach template: one text drives the email, the printed letter and the postcard ---- */
 let TPL = null;
-const titleCase = t => (t || "").split(/\s+/).filter(Boolean).map(w => /[a-z]/.test(w) ? w : w.length > 3 || (/^[A-Z]+$/.test(w) && w.length > 1) ? w[0] + w.slice(1).toLowerCase() : w).join(" ");
+const KEEP_UPPER = new Set(["LLC", "LP", "LLP", "PC", "INC", "II", "III", "IV", "USA", "PA", "NJ", "NY"]);
+const titleCase = t => (t || "").split(/\s+/).filter(Boolean).map(w => KEEP_UPPER.has(w.replace(/[.,]/g, "")) ? w : /[a-z]/.test(w) ? w : w.length > 3 || (/^[A-Z]+$/.test(w) && w.length > 1) ? w[0] + w.slice(1).toLowerCase() : w).join(" ");
 function mergeValues(r, tpl = TPL) {
   const f = (tpl && tpl.firm) || {}, addr = r.address && /^\s*\d/.test(r.address) ? titleCase(r.address) : "";
   return {

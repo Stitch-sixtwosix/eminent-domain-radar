@@ -140,8 +140,11 @@ def save_template(cfg: Dict[str, Any], db: Any, body: Dict[str, Any]) -> Dict[st
     return template(cfg)
 
 
+KEEP_UPPER = {"LLC", "LP", "LLP", "PC", "INC", "II", "III", "IV", "USA", "PA", "NJ", "NY"}
+
+
 def _title(text: Optional[str]) -> str:
-    return " ".join(w if any(c.islower() for c in w) else w.capitalize() if len(w) > 3 or w.isalpha() and len(w) > 1 else w
+    return " ".join(w if any(c.islower() for c in w) or w.strip(".,") in KEEP_UPPER else w.capitalize() if len(w) > 3 or w.isalpha() and len(w) > 1 else w
                     for w in (text or "").split())
 
 
