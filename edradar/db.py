@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import sqlite3
+import threading
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional
 
@@ -140,14 +141,32 @@ def _json(v: Any) -> Optional[str]:
 
 
 class DB:
+    def _open(self) -> sqlite3.Connection:
+        conn = sqlite3.connect(self._path, check_same_thread=False, timeout=120)
+        # The dashboard reads while a long collection or matching run writes: with a write-ahead log neither blocks the other.
+        conn.execute("PRAGMA journal_mode = WAL")
+        conn.execute("PRAGMA busy_timeout = 120000")
+        conn.execute("PRAGMA foreign_keys = ON")
+        conn.row_factory = sqlite3.Row
+        return conn
+
+    @property
+    def conn(self) -> sqlite3.Connection:
+        """One connection per thread: the web server answers several requests at once, and one shared
+        connection used from several threads at the same moment crashes the process."""
+        if self._shared is not None:
+            return self._shared
+        conn = getattr(self._local, "conn", None)
+        if conn is None:
+            conn = self._local.conn = self._open()
+        return conn
+
     def __init__(self, path: str):
         if path != ":memory:":
             Path(path).parent.mkdir(parents=True, exist_ok=True)
-        self.conn = sqlite3.connect(path, check_same_thread=False, timeout=120)
-        # The dashboard reads while a long collection or matching run writes: with a write-ahead log neither blocks the other.
-        self.conn.execute("PRAGMA journal_mode = WAL")
-        self.conn.execute("PRAGMA busy_timeout = 120000")
-        self.conn.row_factory = sqlite3.Row
+        self._path, self._local, self._shared = path, threading.local(), None
+        if path == ":memory:":                       # an in-memory database exists on one connection only
+            self._shared = self._open()
         self.conn.execute("PRAGMA foreign_keys = ON")
         self.conn.executescript(SCHEMA)
         if "duplicate_of" not in [r["name"] for r in self.conn.execute("PRAGMA table_info(projects)")]:
