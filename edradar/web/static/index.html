@@ -478,6 +478,7 @@
   </div>
   <button id="btn-usage" hidden></button><button id="btn-template" hidden></button>
   <span class="mode" id="mode" hidden></span>
+  <a class="acct" id="adminlink" href="../admin.html" hidden>Admin</a>
   <a class="acct" id="acct" href="../account.html" hidden>My account</a>
 </header>
 <section id="hub" hidden aria-label="Outreach"></section>
@@ -1779,6 +1780,7 @@ for (const id of ["f-county", "f-type", "f-source", "f-stage", "f-score", "f-q"]
   $("st-leads").textContent = s.leads.toLocaleString();
   $("st-owners").textContent = s.leads_with_owner.toLocaleString();
   const mode = $("mode");
+  if (window.ET_TOKEN) window.ET_TOKEN.then(t => { $("adminlink").hidden = !t.admin; });      // the administrator's figures live on their own page
   if (window.ET_TOKEN) $("acct").hidden = false;      // signed-in firms on the published site: plan, billing, sign out
   if (SUB) {
     OUT = await api("/api/outreach/status");

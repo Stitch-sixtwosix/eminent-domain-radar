@@ -67,7 +67,10 @@ import {authOn, supa, google, here, currentUser, say, watch, valid, checkField} 
 const form = document.getElementById("login"), status = document.getElementById("status"), go = document.getElementById("go");
 if (authOn) {
   const next = new URLSearchParams(location.search).get("next") === "app" ? "app/" : "account.html";
-  if (await currentUser()) location.replace(next);
+  // The administrator lands on the admin page unless they asked for the app.
+  const where = user => next === "account.html" && ((user && user.app_metadata) || {}).role === "admin" ? "admin.html" : next;
+  const already = await currentUser();
+  if (already) location.replace(where(already));
   watch(form);
   document.getElementById("google").addEventListener("click", async () => { try { await google(); } catch (e) { say(status, "Google sign-in did not start: " + e.message, true); } });
   form.addEventListener("submit", async e => {
@@ -75,9 +78,9 @@ if (authOn) {
     if (!valid(form)) return;
     go.disabled = true; say(status, "");
     const d = Object.fromEntries(new FormData(form)), s = await supa();
-    const {error} = await s.auth.signInWithPassword({email: d.email, password: d.password});
+    const {data: signed, error} = await s.auth.signInWithPassword({email: d.email, password: d.password});
     if (error) { say(status, /confirm/i.test(error.message) ? "Confirm your email first: open the link we sent you." : "That email and password do not match an account.", true); go.disabled = false; return; }
-    location.href = next;
+    location.href = where(signed.user);
   });
   document.getElementById("forgot").addEventListener("click", async () => {
     const email = form.elements.email;
