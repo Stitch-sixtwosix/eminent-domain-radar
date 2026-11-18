@@ -91,8 +91,8 @@ def _arcgis_query(layer: Dict[str, Any], http: Http, extra: Dict[str, Any], limi
     params = dict({"outFields": "*", "returnGeometry": "false", "resultRecordCount": limit, "f": "json"}, **extra)
     url = layer["url"].rstrip("/") + "/query"
     data = http.post_json(url, params)
-    if "Pagination" in str((data.get("error") or {}).get("message")):  # older servers reject a record limit
-        del params["resultRecordCount"]
+    if "error" in data and "resultRecordCount" in params:   # older servers, and Florida's statewide file with a
+        del params["resultRecordCount"]                     # spatial filter, reject a record limit
         data = http.post_json(url, params)
     if "error" in data:
         raise RuntimeError("%s: %s" % (layer["name"], data["error"]))
@@ -147,6 +147,9 @@ def _arcgis_spatial(layer, http, geometry, distance_m, limit):
         gtype, gjson = "esriGeometryMultipoint", {"points": geo.coords(g), "spatialReference": {"wkid": 4326}}
     return _arcgis_query(layer, http, {
         "where": "1=1", "geometry": json.dumps(gjson), "geometryType": gtype, "inSR": 4326,
+        # outSR is needed even though no geometry is returned: without it the Florida and Connecticut statewide
+        # files reject a distance search ("The spatial reference identifier (SRID) is not valid").
+        "outSR": 4326,
         "spatialRel": "esriSpatialRelIntersects", "distance": distance_m, "units": "esriSRUnit_Meter"}, limit)
 
 
