@@ -30,9 +30,12 @@
     <div class="sub" id="sub" hidden>
       <p class="status" id="sub-status"></p>
       <p style="margin-top: 20px" id="sub-open" hidden><a class="btn" href="app/">Open EminentTracker</a></p>
+      <p style="margin-top: 14px" id="sub-bill" hidden><button class="btn plain" type="button" id="bill">Change card or cancel</button></p>
       <div id="sub-pay" hidden>
-        <p style="margin-top: 16px; font-size: var(--s-small)">Choose a plan to start. Your account opens as soon as payment is confirmed.</p>
-        <p style="margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap"><a class="btn" data-pay href="{{pay_state_monthly}}">Single state · $499 a month</a><a class="btn plain" data-pay href="{{pay_all_monthly}}">All 50 states · $999 a month</a></p>
+        <p style="margin-top: 16px; font-size: var(--s-small)" id="pay-what"></p>
+        <p style="margin-top: 14px"><button class="btn" type="button" id="pay">Pay and open my account</button></p>
+        <p style="margin-top: 12px; font-size: 14px">Your card is charged today and your account opens as soon as the payment goes through. The plan renews automatically each period until you cancel, which you can do here at any time.</p>
+        <p class="status" id="pay-status" role="status" hidden></p>
         <p style="margin-top: 12px; font-size: 14px" id="sub-soon" hidden>Online payment is being switched on. Email <a href="mailto:{{contact_email}}?subject=EminentTracker%20subscription">{{contact_email}}</a> and we will activate your plan today.</p>
       </div>
     </div>
@@ -51,6 +54,11 @@
           <div class="choices plans-pick">
             <label><input type="radio" name="plan" value="Single state ($499 a month)" checked> <span><b>Single state</b> $499 a month</span></label>
             <label><input type="radio" name="plan" value="All 50 states ($999 a month)"> <span><b>All 50 states</b> $999 a month</span></label>
+          </div></fieldset>
+        <fieldset class="full"><legend>Billing</legend>
+          <div class="choices">
+            <label><input type="radio" name="bill" value="month" checked> Monthly</label>
+            <label><input type="radio" name="bill" value="year"> Yearly, save 20%</label>
           </div></fieldset>
         <label class="full" id="state-row">Your state<select name="plan_state"><option value="">Choose a state</option>{{state_options}}</select></label>
         <label class="full">Other states where you handle eminent domain matters <span>(optional)</span><input type="text" name="states" autocomplete="off"></label>
@@ -90,6 +98,7 @@
 
 <script type="module">
 import {authOn, supa, firmOf, firmData, say, watch, valid} from "./auth.js";
+const CFG = window.ET_AUTH || {};
 const invited = /type=(invite|recovery)/.test(location.hash);      // read before the sign-in library clears the address
 const form = document.getElementById("firm"), status = document.getElementById("status"), who = document.getElementById("who");
 if (!authOn) location.replace("signup.html");
@@ -100,34 +109,87 @@ if (!data.session) location.replace("login.html");
 else {
   const user = data.session.user, f = firmOf(user);
   who.textContent = "Signed in as " + user.email + ".";
-  // What the account may open is set by us when payment is confirmed; nothing on this page can change it.
-  const plan = user.app_metadata || {}, active = plan.access === "active";
-  document.getElementById("admin-link").hidden = plan.role !== "admin";
-  document.getElementById("sub").hidden = false;
-  document.getElementById("sub-status").textContent = active
-    ? "Subscription active: " + (plan.plan === "all" ? "all 50 states" : "single state" + (plan.state ? ", " + plan.state.replace(/\b\w/g, c => c.toUpperCase()) : "")) + "."
-    : "No active subscription yet.";
-  document.getElementById("sub-open").hidden = !active;
-  document.getElementById("sub-pay").hidden = active;
-  const ready = [...document.querySelectorAll("[data-pay]")].every(a => /^https:\/\//.test(a.getAttribute("href")));
-  document.getElementById("sub-soon").hidden = ready;
-  if (!ready) document.querySelectorAll("[data-pay]").forEach(a => a.hidden = true);
-  if (ready) document.querySelectorAll("[data-pay]").forEach(a => { const u = new URL(a.href); u.searchParams.set("prefilled_email", user.email); u.searchParams.set("client_reference_id", user.id); a.href = u; });
-  for (const [k, v] of Object.entries(f)) { const el = form.elements[k]; if (!el) continue; if (k === "side" || k === "plan") { if (v) form.querySelectorAll("[name=" + k + "]").forEach(r => r.checked = r.value === v); } else el.value = v; }
+  // What the account may open is set by our server when Stripe confirms payment; nothing on this page can change it.
+  let plan = user.app_metadata || {}, active = plan.access === "active";
+  const q = new URLSearchParams(location.search), payStatus = document.getElementById("pay-status");
+  const showSub = () => {
+    active = plan.access === "active";
+    document.getElementById("admin-link").hidden = plan.role !== "admin";
+    document.getElementById("sub").hidden = false;
+    document.getElementById("sub-status").textContent = active
+      ? "Subscription active: " + (plan.plan === "all" ? "all 50 states" : "single state" + (plan.state ? ", " + plan.state.replace(/\b\w/g, c => c.toUpperCase()) : "")) + "."
+      : "No active subscription yet.";
+    document.getElementById("sub-open").hidden = !active;
+    document.getElementById("sub-pay").hidden = active;
+    document.getElementById("sub-bill").hidden = !(active && plan.stripe_customer);
+  };
+  showSub();
+  const fn = async body => {
+    const {data: fresh} = await s.auth.getSession();
+    const r = await fetch(CFG.url + "/functions/v1/billing", {method: "POST", body: JSON.stringify(body),
+      headers: {"Content-Type": "application/json", apikey: CFG.key, Authorization: "Bearer " + fresh.session.access_token}});
+    const out = await r.json().catch(() => ({}));
+    if (!r.ok) { const e = new Error(out.error || "The payment page could not be opened (" + r.status + ")."); e.status = r.status; throw e; }
+    return out;
+  };
+  const chosen = () => { const d = Object.fromEntries(new FormData(form)); return {plan: d.plan || "", state: d.plan_state || "", bill: d.bill === "year" ? "year" : "month"}; };
+  const PRICE = {single: {month: "$499 a month", year: "$4,790.40 a year"}, all: {month: "$999 a month", year: "$9,590.40 a year"}};
+  const describe = () => {
+    const c = chosen(), all = c.plan.startsWith("All"), ok = all || (c.plan && c.state);
+    document.getElementById("pay-what").textContent = !ok ? "Choose a plan" + (c.plan ? " and your state" : "") + " in the form, then pay to open your account."
+      : (all ? "All 50 states" : "Single state, " + c.state) + ": " + PRICE[all ? "all" : "single"][c.bill] + ".";
+    return ok;
+  };
+  const pay = async () => {
+    if (!describe()) { say(payStatus, "Choose a plan" + (chosen().plan.startsWith("All") ? "" : " and your state") + " first.", true); return; }
+    if (!agreed && !form.elements.agree.checked) { say(payStatus, "Tick the box agreeing to the terms in the form first.", true); return; }
+    const b = document.getElementById("pay"); b.disabled = true; say(payStatus, "Opening the secure payment page…");
+    try {
+      const c = chosen(), change = {data: firmData(Object.fromEntries(new FormData(form)))};       // the plan paid for is the plan on file
+      if (!agreed) Object.assign(change.data, {agreed_terms_at: new Date().toISOString(), terms_version: "2026-11-18"});
+      await s.auth.updateUser(change);
+      location.href = (await fn({action: "checkout", plan: c.plan, state: c.state, bill: c.bill})).url;
+    } catch (e) {
+      b.disabled = false;
+      // not switched on yet, or not reachable: say so and offer the manual route instead of a bare error
+      if (!e.status || e.status === 503 || e.status === 404) { document.getElementById("sub-soon").hidden = false; say(payStatus, ""); } else say(payStatus, e.message, true);
+    }
+  };
+  document.getElementById("pay").addEventListener("click", pay);
+  document.getElementById("bill").addEventListener("click", async e => {
+    e.target.disabled = true;
+    try { location.href = (await fn({action: "portal"})).url; } catch (err) { e.target.disabled = false; say(payStatus, err.message, true); document.getElementById("sub-pay").hidden = false; }
+  });
+  if (q.get("paid") && !active) {
+    // Back from Stripe. The payment notice reaches us within a few seconds; the sign-in is renewed until it shows.
+    document.getElementById("sub-status").textContent = "Payment received. Opening your account…";
+    document.getElementById("sub-pay").hidden = true;
+    for (let i = 0; i < 15 && !active; i++) {
+      await new Promise(r => setTimeout(r, 2000));
+      const {data: again} = await s.auth.refreshSession();
+      if (again.session) { plan = again.session.user.app_metadata || {}; active = plan.access === "active"; }
+    }
+    showSub();
+    if (!active) document.getElementById("sub-status").textContent = "Your payment went through, but the account has not opened yet. Reload this page in a minute. If it still shows this, email {{contact_email}} and we will open it by hand.";
+  }
+  for (const [k, v] of Object.entries(f)) { const el = form.elements[k]; if (!el) continue; if (k === "side" || k === "plan" || k === "bill") { if (v) form.querySelectorAll("[name=" + k + "]").forEach(r => r.checked = r.value === v); } else el.value = v; }
   document.getElementById("nudge").hidden = !!(f.firm && f.plan);
   const stateRow = document.getElementById("state-row");
   const syncPlan = () => { stateRow.hidden = !form.elements.plan.value.startsWith("Single"); };
-  form.addEventListener("change", e => { if (e.target.name === "plan") syncPlan(); }); syncPlan();
+  form.addEventListener("change", e => { if (e.target.name === "plan") syncPlan(); if (!active) describe(); }); syncPlan();
   const agreed = !!(user.user_metadata || {}).agreed_terms_at, agreeRow = document.getElementById("agree-row");
   agreeRow.hidden = agreed; form.elements.agree.required = !agreed;       // people who signed up with Google agree here
   if (invited) { const np = document.getElementById("newpass"); np.hidden = false; np.querySelector("input").required = true;
     document.getElementById("nudge").textContent = "Welcome. Choose a password and add your firm's details to finish setting up."; document.getElementById("nudge").hidden = false; }
   form.hidden = false; watch(form);
+  if (!active) describe();
+  // Straight from sign-up: the plan and the terms are already on file, so go to payment without another click.
+  if (!active && q.get("pay") && agreed && describe()) pay();
   form.addEventListener("submit", async e => {
     e.preventDefault();
     if (!valid(form)) return;
     const d = Object.fromEntries(new FormData(form)), change = {data: firmData(d)};
-    if (!agreed) Object.assign(change.data, {agreed_terms_at: new Date().toISOString(), terms_version: "2026-11-16"});
+    if (!agreed) Object.assign(change.data, {agreed_terms_at: new Date().toISOString(), terms_version: "2026-11-18"});
     if (d.password) change.password = d.password;
     const {error} = await s.auth.updateUser(change);
     say(status, error ? "Not saved: " + error.message : "Saved.", !!error);

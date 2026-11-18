@@ -239,11 +239,12 @@
   .hub > * { max-width: 1240px; margin-left: auto; margin-right: auto; }
   .hub-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
   .hub-head h1 { margin: 0; font-size: 22px; line-height: 28px; font-weight: 600; letter-spacing: -0.015em; }
-  .hub .figs { grid-template-columns: repeat(5, 1fr); margin-bottom: 24px; border-radius: 8px; }
+  .hub .figs { grid-template-columns: repeat(var(--n, 5), 1fr); margin-bottom: 24px; border-radius: 8px; }
   .hub .figs b { font-size: 26px; font-weight: 400; line-height: 34px; }
   .hub > .panel, .hub-row { margin-bottom: 24px; }
   .hub-row { display: grid; gap: 24px; }
   .hub-row.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .hub-row.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hub-row.split { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
   .hub-row .panel { display: flex; flex-direction: column; }
   .hub-row .panel .row-acts { margin-top: auto; padding-top: 6px; }
@@ -274,7 +275,7 @@
   .state.on { background: var(--ok-bg); color: var(--ok); } .state.warn { background: var(--warm-bg); color: var(--warm); }
   .state.live { background: var(--danger-bg); color: var(--danger); }
   @media (max-width: 1100px) { .tpl-view { grid-template-columns: 1fr 1fr; } .tpl-view > figure:last-child { grid-column: 1 / 3; } }
-  @media (max-width: 900px) { .hub-row.three, .hub-row.split, .tpl-view { grid-template-columns: 1fr; } .tpl-view > figure:last-child { grid-column: auto; }
+  @media (max-width: 900px) { .hub-row.three, .hub-row.two, .hub-row.split, .tpl-view { grid-template-columns: 1fr; } .tpl-view > figure:last-child { grid-column: auto; }
     .hub .figs { grid-template-columns: repeat(2, 1fr); } .hub { padding: 16px; } }
 
   /* ---- template editor and letter ---- */
@@ -439,7 +440,7 @@
     #hub { padding: 0 8px 8px; min-width: 0; max-width: 100vw; }
     .hub, .hub > *, .hub .panel, .hub-row { min-width: 0; max-width: 100%; }
     .hub .panel { overflow: hidden; }
-    .hub-row, .hub-row.three, .hub-row.split, .tpl-view { grid-template-columns: minmax(0, 1fr); }
+    .hub-row, .hub-row.three, .hub-row.two, .hub-row.split, .tpl-view { grid-template-columns: minmax(0, 1fr); }
     .panel-head { gap: 6px 14px; }
     .hub { padding: 16px 12px 40px; border-radius: 16px; }
     .hub .figs { grid-template-columns: 1fr 1fr; }
@@ -547,7 +548,7 @@ const scoreClass = s => s >= 80 ? "s-hot" : s >= 60 ? "s-warm" : "s-cool";
 const scoreColor = s => s >= 80 ? "oklch(50% 0.16 38)" : s >= 60 ? "oklch(66% 0.13 70)" : "oklch(58% 0.02 258)";
 const REASON = {named_in_document: "Named in document", abuts_alignment: "Abuts alignment", within_buffer: "Nearby"};
 const safeUrl = u => /^https?:\/\//i.test(u || "") ? u : "#";
-const day = s => s ? new Date(s.replace(" ", "T") + "Z").toLocaleDateString(undefined, {month: "short", day: "numeric"}) : "";
+const day = s => s ? new Date(/[zZ]|[+-]\d\d:?\d\d$/.test(s) ? s : s.replace(" ", "T") + "Z").toLocaleDateString(undefined, {month: "short", day: "numeric"}) : "";
 const signed = n => (n > 0 ? "+" : n < 0 ? "−" : "") + Math.abs(n).toLocaleString(undefined, {maximumFractionDigits: 1});
 const TIPS = {
   score: "Lead score out of 100, in whole points from four parts. Need for private land: up to 60. How early the project is: up to 15. Size of the project: up to 10. Where the parcel sits: 15 on the alignment or named in the document, 5 if only nearby. Hover any score, or open the lead, to see its points.",
@@ -679,8 +680,67 @@ const group = L.featureGroup().addTo(map);
 // Two modes: live (FastAPI backend) and static (a published snapshot: data.json, read-only).
 const STATIC = !!window.EDRADAR_STATIC;
 let SNAP = null;
+// A signed-in subscriber on the published site can order postcards and owner lookups. Those requests go to our
+// server functions with the subscriber's own sign-in; everything else is read from the data file.
+const SUB = STATIC && !!window.ET_TOKEN;
+let LIVE = null;          // what the server says this firm may do, its saved wording and the lookups it has bought
+async function fn(body) {
+  const auth = window.ET_AUTH, token = window.ET_FRESH ? await window.ET_FRESH() : (await window.ET_TOKEN).token;
+  const r = await fetch(auth.url + "/functions/v1/outreach", {method: "POST", body: JSON.stringify(body),
+    headers: {"Content-Type": "application/json", apikey: auth.key, Authorization: "Bearer " + token}});
+  const out = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(out.error || "The request could not be completed (" + r.status + ")");
+  return out;
+}
+async function liveStatus(force) {
+  if (LIVE && !force) return LIVE;
+  try { LIVE = await fn({action: "status"}); }
+  catch (e) {        // the server is not answering: the app stays usable, with ordering switched off
+    const why = "Ordering is not available right now.";
+    LIVE = {off: true, lookups: {}, firm: {}, template: {}, firm_ready: false, postcard: {enabled: false, mode: "off", why, price: 1.95},
+            skiptrace: {enabled: false, why, price: 0.75, restricted: []}, usage: {postcards: 0, lookups: 0, billed: 0, pending: 0}};
+  }
+  return LIVE;
+}
+const pkey = l => [SNAP.state, l.parcel_county, l.apn || l.address].map(x => String(x || "").trim().toUpperCase().replace(/\s+/g, " ")).join("|");
+// An owner this firm paid to look up stands in where the county publishes none.
+function withBought(l) {
+  const t = SUB && LIVE && !l.owner && LIVE.lookups[pkey(l)];
+  return t && t.matched && t.name ? {...l, owner: t.name.toUpperCase(), mailing_address: t.mailing_address || l.mailing_address, owner_kind: "individual", mailable: !!t.mailing_address, looked_up: true} : l;
+}
+function fullLead(id) {
+  const l = SNAP.leads.find(x => x.id === id), p = SNAP.projects.find(x => x.id === l.project_id) || {};
+  return {...withBought(l), project: p.name, stage: p.stage, agency: p.agency, state: SNAP.state};
+}
+// The firm's own wording and return address. The operator's details in the data file are never used for a subscriber.
+const liveTpl = () => ({...SNAP.template, ...Object.fromEntries(Object.entries(LIVE.template || {}).filter(([, v]) => v)),
+  firm: Object.fromEntries(Object.keys(SNAP.template.firm).map(k => [k, (LIVE.firm || {})[k] || ""]))});
+async function subApi(route, opts) {
+  const method = (opts && opts.method) || "GET", live = await liveStatus();
+  const state = () => ({firm_ready: live.firm_ready, postcard: LIVE.postcard, skiptrace: LIVE.skiptrace, email: {enabled: false, why: "Email outreach runs from your own mail program."}});
+  if (route === "/api/outreach/status") return state();
+  if (route === "/api/outreach/template") {
+    if (method === "PUT") { const t = JSON.parse(opts.body); LIVE = await fn({action: "save_template", firm: t.firm, template: t}); }
+    return liveTpl();
+  }
+  if (route === "/api/outreach/hub") return {...SNAP.hub, status: state(), template: liveTpl(), live: LIVE};
+  if (route === "/api/usage") return fn({action: "usage"});
+  const m = route.match(/^\/api\/leads\/(\d+)\/(postcard|skip-trace)$/);
+  if (!m) return undefined;
+  const lead = fullLead(+m[1]);
+  if (m[2] === "postcard") {
+    if (method !== "POST") return {...await fn({action: "postcard_preview", lead}), project: lead.project};
+    const res = await fn({action: "postcard_send", lead});
+    await liveStatus(true);
+    return res;
+  }
+  const raw = SNAP.leads.find(x => x.id === +m[1]);
+  const res = await fn({action: "skiptrace_buy", lead_id: raw.id, parcel: {state: SNAP.state, county: raw.parcel_county, apn: raw.apn, address: raw.address, owner: raw.owner, mailing_address: raw.mailing_address}});
+  LIVE.lookups[pkey(raw)] = {...res, fetched_at: res.fetched_at || new Date().toISOString()};
+  return res;
+}
 async function api(path, opts) {
-  if (STATIC) return staticApi(path);
+  if (STATIC) return staticApi(path, opts);
   const r = await fetch(path, opts);
   if (!r.ok) {
     let detail = "";
@@ -739,13 +799,16 @@ async function staticBoundary(l) {   // the page asks the county's public map se
 const KIND = {individual: "Individual", company: "Company or organization", government: "Public body", unknown: "Not published"};
 async function staticDetail(id) {
   const byId = Object.fromEntries(SNAP.projects.map(p => [p.id, p]));
-  const l = SNAP.leads.find(x => x.id === id), fact = k => (l.facts.find(f => f[0] === k) || [])[1] || null;
+  const raw = SNAP.leads.find(x => x.id === id), l = withBought(raw), fact = k => (l.facts.find(f => f[0] === k) || [])[1] || null;
+  const t = SUB && LIVE ? LIVE.lookups[pkey(raw)] : null, last = t && t.name ? t.name.toUpperCase().split(" ").pop() : "";
+  // a lookup by address can return a tenant: say whether the surname found is the one on the county's record
+  const skiptrace = t ? {...t, phones: t.phones || [], emails: t.emails || [], name_match: raw.owner ? !!last && raw.owner.toUpperCase().includes(last) : null} : null;
   const others = !l.owner ? [] : SNAP.leads.filter(x => x.owner === l.owner && x.id !== l.id).slice(0, 12)
     .map(x => ({id: x.id, score: x.score, apn: x.apn, address: x.address, county: x.parcel_county, market_value: x.market_value, project: (byId[x.project_id] || {}).name}));
   const kind = l.owner_kind || "unknown", vals = [l, ...others].map(x => x.market_value).filter(Boolean);
   return {lead: l, layer: l.bq ? SNAP.layers[l.bq.l].name : "county parcel file", boundary: await staticBoundary(l),
     background: {facts: l.facts.map(([label, value]) => ({label, value})), record: []}, related: others,
-    contacts: (SNAP.contacts || {})[l.owner] || [],
+    contacts: (SNAP.contacts || {})[l.owner] || [], skiptrace,
     owner: {name: l.owner, kind: KIND[kind], kind_key: kind, mailing_address: l.mailing_address, location: l.own[0], occupancy: l.own[1],
             owned_since: fact("Last sale date"), purchase_price: fact("Last sale price"), parcels_in_list: 1 + others.length,
             holdings_value: vals.reduce((a, b) => a + b, 0) || null}};
@@ -768,9 +831,9 @@ function staticLeads(q) {
   const byId = Object.fromEntries(SNAP.projects.map(p => [p.id, p]));
   return SNAP.leads.filter(l => (!pid || l.project_id === +pid) && l.score >= min && (!stage || (byId[l.project_id] || {}).stage === stage) &&
       (!county || (l.parcel_county || "").toUpperCase() === county) && (!own || l.owner) && staticOutreach(l, q.get("outreach")))
-    .map(l => { const p = byId[l.project_id] || {}; return {...l, project: p.name, project_type: p.project_type, stage: p.stage, agency: p.agency, source: p.source, url: p.url}; });
+    .map(l => { const p = byId[l.project_id] || {}; l = withBought(l); return {...l, project: p.name, project_type: p.project_type, stage: p.stage, agency: p.agency, source: p.source, url: p.url}; });
 }
-async function staticApi(path) {
+async function staticApi(path, opts) {
   // The data file is requested with this page's build stamp, so a browser can never pair a new page with an old,
   // cached data file (which is what left the hub stuck on "Loading").
   if (!SNAP && window.EDRADAR_PRIVATE) {
@@ -802,6 +865,7 @@ async function staticApi(path) {
   }
   if (!SNAP) { const r = await fetch("data.json?v=" + encodeURIComponent(window.EDRADAR_BUILD || "")); if (!r.ok) throw new Error("data.json returned " + r.status); SNAP = await r.json(); }
   const [route, qs] = path.split("?"), q = new URLSearchParams(qs || "");
+  if (SUB) { const live = await subApi(route, opts); if (live !== undefined) return live; }
   if (route === "/api/stats") return SNAP.stats;
   if (route === "/api/outreach/template") return SNAP.template;
   if (route === "/api/outreach/hub") {
@@ -917,7 +981,8 @@ async function select(id, fromList = true, animate = true) {
 }
 
 function outreachCell(r) {
-  if (STATIC) return "";
+  if (STATIC && !SUB) return "";
+  if (SUB) return `<td class="acts"><button class="sm" data-act="postcard" data-lead="${r.id}" ${r.owner ? "" : 'disabled title="No owner of record. Open the parcel to look the owner up."'}>${ICON.card}Postcard</button></td>`;
   const done = (at, label) => `<span class="done">${ICON.check}${label} ${esc(day(at))}</span>`;
   const btn = (kind, label, at, sentLabel) => at ? done(at, sentLabel)
     : `<button class="sm" data-act="${kind}" data-lead="${r.id}" ${r.owner ? "" : 'disabled title="No owner of record for this parcel"'}>${ICON[kind === "postcard" ? "card" : "mail"]}${label}</button>`;
@@ -968,7 +1033,7 @@ async function loadLeads() {
     return;
   }
   $("leads-wrap").innerHTML = `<table><thead><tr>${STATIC ? "" : '<th class="pick"><input type="checkbox" id="pick-all" aria-label="Select every lead shown"></th>'}${th("Score", "score")}${th("Owner of record", "owner")}${th("Property", "property")}
-    ${th("County value", "value", "num")}${th("Match", "match")}${p ? "" : th("Project", "project")}${STATIC ? "" : th("Outreach", "outreach")}${STATIC ? "" : th("Status", "status")}</tr></thead><tbody>` +
+    ${th("County value", "value", "num")}${th("Match", "match")}${p ? "" : th("Project", "project")}${STATIC ? (SUB ? "<th>Outreach</th>" : "") : th("Outreach", "outreach")}${STATIC ? "" : th("Status", "status")}</tr></thead><tbody>` +
     leadRows.map(r => `<tr data-row="${r.id}" tabindex="0"${openLead === r.id ? ' class="sel"' : ""}>
       ${STATIC ? "" : `<td class="pick"><input type="checkbox" data-pick="${r.id}" aria-label="Select ${esc(r.owner || r.apn)}"${picked.has(r.id) ? " checked" : ""}></td>`}
       <td class="c-score"><span class="score ${scoreClass(r.score)}" data-tip-lead="${r.id}">${r.score}</span></td>
@@ -1040,8 +1105,8 @@ async function openTemplate() {
       <h3>Postcard front</h3><div class="letter" id="t-card"></div>
       <h3>Postcard back</h3><div class="letter" id="t-back"></div>
     </div></div></div>
-    <div class="dlg-foot"><span class="note" id="t-note">${STATIC ? "This published snapshot is read-only. Edits here are a preview and are not saved." : "Saved templates apply to every postcard, email and letter from now on."}</span>
-      <button data-close>Cancel</button><button class="primary" id="t-save"${STATIC ? " disabled" : ""}>Save template</button></div>`;
+    <div class="dlg-foot"><span class="note" id="t-note">${STATIC && !SUB ? "This published snapshot is read-only. Edits here are a preview and are not saved." : "Saved templates apply to every postcard, email and letter from now on."}</span>
+      <button data-close>Cancel</button><button class="primary" id="t-save"${STATIC && !SUB ? " disabled" : ""}>Save template</button></div>`;
   dlg.showModal();
   let last = dlg.querySelector('[data-text="letter"]');
   const read = () => {
@@ -1127,7 +1192,50 @@ async function loadHub() {
   try { renderHub(await api("/api/outreach/hub")); }
   catch (e) { box.innerHTML = `<div class="hub"><div class="alert bad">Outreach could not be shown: ${esc(e.message)}.</div></div>`; }
 }
+function renderSubHub(h) {
+  const live = h.live, pc = h.status.postcard, sk = h.status.skiptrace, t = h.template, f = t.firm, r = h.ready, u = live.usage;
+  OUT = {...h.status, rates: h.rates}; TPL = t; HUB_LISTS = [];
+  const fig = (label, v) => `<div><span>${label}</span><b>${v}</b></div>`;
+  const sample = {owner: "SAMPLE OWNER", address: "12 MAIN ST", apn: "00-000-000", parcel_county: "MONTGOMERY", project: "US 22 Widening", stage: "planning", agency: "State DOT"};
+  const L_ = letterFor(sample, t), firmLine = [f.name, f.attorney, f.phone, f.email].filter(Boolean).join(" · ") || "Firm details not entered yet";
+  const pcState = pc.mode === "live" ? '<span class="state on">Postcards on</span>' : pc.mode === "test" ? '<span class="state warn">Postcards in test mode: proofs only</span>' : '<span class="state">Postcards off</span>';
+  $("hub").innerHTML = `<div class="hub">
+    <div class="hub-head"><h1>Outreach</h1>${pcState}<span class="state ${sk.enabled ? "on" : ""}">Owner lookups ${sk.enabled ? "on" : "off"}</span></div>
+    <div class="figs" style="--n:4">${fig("Postcards mailed this month", u.postcards.toLocaleString())}${fig("Owner lookups this month", u.lookups.toLocaleString())}${fig("Charges this month", usd(u.billed))}${fig("On your next invoice", usd(u.pending))}</div>
+    ${live.firm_ready ? "" : `<div class="alert" style="margin-bottom:24px">Add your firm's name and return address before mailing. <button class="sm" data-hub="template">Enter firm details</button></div>`}
+    <div class="hub-row two">
+      <div class="panel"><h3>Postcards</h3>
+        <p><b>${r.postcard_owners.toLocaleString()}</b> owners scoring ${r.min_score} or higher have a usable mailing address. Open a lead and choose Postcard to see the proof before anything is sent.</p>
+        <p>${pc.mode === "live" ? `Each card is printed and mailed first class in your firm's name, marked as attorney advertising. ${usd(pc.price)} a card, added to your next invoice.` : pc.mode === "test" ? "Test mode: each card is made as a proof. Nothing is mailed or charged." : esc(pc.why || "")}</p>
+        <div class="row-acts"><button class="primary" data-hub="leads-postcard">Show these leads</button></div></div>
+      <div class="panel"><h3>Owner lookups</h3>
+        <p>Where a county does not publish owner names, a lookup finds the owner's name and mailing address from a commercial records service, with any phone number and email. For owners already on file it adds phone and email.</p>
+        <p>${sk.enabled ? `${usd(sk.price)} for each match, added to your next invoice. Nothing is charged when no match is found, and an answer you paid for is kept.` : esc(sk.why || "")}</p>
+        <div class="row-acts"><button data-hub="leads-">Go to Leads</button></div></div>
+    </div>
+    <div class="panel"><div class="panel-head"><h3>Template</h3><span class="meta">${esc(firmLine)}</span>
+        <button data-hub="template">Edit firm details and wording</button></div>
+      <div class="tpl-view">${cardMocks(t, sample)}
+        <figure><div class="letter"><b>${esc(L_.subject)}</b>\n\n${esc(L_.body)}</div><figcaption>Email and printed letter</figcaption></figure></div>
+      <p style="margin-top:12px">Shown with sample details. Each owner's name, property, project and stage are filled in when it is sent.</p></div>
+    <div class="panel"><h3>Usage and billing</h3>
+      <p>Postcards and owner lookups are added to your next subscription invoice. If they reach $50 before then, they are charged to your card at that point.</p>
+      <div class="row-acts"><button data-hub="usage">All usage</button><a class="btn" href="../account.html">Billing and card</a></div></div>
+  </div>`;
+}
+async function openSubUsage() {
+  dlg.innerHTML = `<div class="dlg-head"><h2 id="dlg-title">Usage and billing</h2><p>Every postcard and owner lookup your firm has ordered.</p></div><div class="dlg-body"><p class="meta">Loading…</p></div>
+    <div class="dlg-foot"><span class="note">Charges appear on your next invoice.</span><button data-close>Close</button></div>`;
+  dlg.showModal();
+  let u;
+  try { u = await api("/api/usage"); } catch (e) { dlg.querySelector(".dlg-body").innerHTML = `<div class="alert bad">${esc(e.message)}</div>`; return; }
+  dlg.querySelector(".dlg-body").innerHTML = u.rows.length ? `<table class="usage"><thead><tr><th>Date</th><th>Item</th><th>Owner</th><th class="num">Charge</th><th>Status</th></tr></thead><tbody>${u.rows.map(x => `<tr>
+      <td style="white-space:nowrap">${esc(day(x.created_at))}</td><td>${x.kind === "skip_trace" ? "Owner lookup" : x.mode === "live" ? "Postcard" : "Postcard test proof"}</td><td>${esc(titleCase(x.owner || ""))}</td>
+      <td class="num">${usd(x.price)}</td><td>${x.price ? (x.invoiced ? "Invoiced" : "On next invoice") : "No charge"}</td></tr>`).join("")}</tbody></table>`
+    : `<p class="meta">Nothing ordered yet. A postcard is recorded when it is mailed, an owner lookup when a match is found.</p>`;
+}
 function renderHub(h) {
+  if (SUB && h.live && !h.live.off) return renderSubHub(h);
   const box = $("hub");
   OUT = {...h.status, rates: h.rates}; TPL = h.template; HUB_LISTS = h.lists || [];
   const pc = h.status.postcard, em = h.status.email, sk = h.status.skiptrace, r = h.ready, t = h.template, f = t.firm;
@@ -1176,7 +1284,7 @@ function renderHub(h) {
         <figure><div class="letter"><b>${esc(L_.subject)}</b>\n\n${esc(L_.body)}</div><figcaption>Email and printed letter</figcaption></figure></div>
       <p style="margin-top:12px">Shown with sample details. Each owner's name, property, project and stage are filled in when it is sent.</p></div>
     <div class="panel"><h3>Company contacts</h3>${contactsTable}</div>
-    <div class="panel"><h3>Usage and billing</h3>
+    <div class="panel"${STATIC ? " hidden" : ""}><h3>Usage and billing</h3>
         <table><thead><tr><th>This month</th><th class="num">Count</th><th class="num">Your cost</th><th class="num">Billed</th><th class="num">Margin</th></tr></thead><tbody>${usageRows(h.usage.this_month)}</tbody></table>
         <p style="margin-top:10px">Rates: postcard ${usd(h.rates.postcard.cost)} cost, ${usd(h.rates.postcard.price)} billed · skip trace ${usd(h.rates.skip_trace.cost)} cost, ${usd(h.rates.skip_trace.price)} billed.</p>
         <div class="row-acts"><button data-hub="usage">All usage</button>${STATIC ? "" : '<a class="btn" href="/api/usage.csv">Download CSV</a>'}</div></div>
@@ -1213,18 +1321,23 @@ $("dlg").addEventListener("close", () => { if (view === "hub") loadHub(); });
 const usd = n => "$" + Number(n || 0).toFixed(2);
 const phoneFmt = n => { const d = String(n || "").replace(/\D/g, "").slice(-10); return d.length === 10 ? `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}` : String(n || ""); };
 function traceBlock(d, r, o) {
-  if (STATIC || o.kind_key !== "individual") return "";
-  const t = d.skiptrace, st = OUT && OUT.skiptrace;
-  if (!t) return `<div class="row-acts"><button class="sm" data-trace="${r.id}" ${st && st.enabled ? "" : "disabled"}>Skip trace this owner</button>
-      <span class="meta">${st && st.enabled ? `Looks up phone numbers and email. Billed to the client at ${usd(st.price)} if a match is found.` : esc((st && st.why) || "")}</span></div>`;
-  if (!t.matched) return `<p style="margin-top:8px">Skip traced ${esc(day(t.fetched_at))}: no phone or email was found for this owner. No charge was recorded.</p>`;
-  return `<ul class="contacts"><li><b>${esc(t.name || "Name not returned")}</b>${t.name_match ? '<span class="flag ok">matches owner of record</span>' : '<span class="flag">name differs from owner of record</span>'}${t.litigator ? '<span class="flag">known TCPA litigator</span>' : ""}
-      <div class="sub">Skip traced ${esc(day(t.fetched_at))}</div></li>
+  if (STATIC && !SUB) return "";
+  const t = d.skiptrace, st = OUT && OUT.skiptrace, find = SUB && o.kind_key === "unknown";
+  if (!SUB && o.kind_key !== "individual") return "";
+  if (SUB && !t && o.kind_key !== "individual" && !find) return "";
+  if (SUB && !t && st && (st.restricted || []).includes(SNAP.state)) return `<p style="margin-top:8px">Owner lookups are not offered in this state: its law limits using owner records for solicitation.</p>`;
+  if (!t) return `<div class="row-acts"><button class="sm" data-trace="${r.id}" ${st && st.enabled ? "" : "disabled"}>${find ? "Look up this owner" : SUB ? "Look up phone and email" : "Skip trace this owner"}</button>
+      <span class="meta">${st && st.enabled ? (SUB ? `${find ? "Finds the owner's name and mailing address, with any phone number and email, from a commercial records service." : "Finds phone numbers and email from a commercial records service."} ${usd(st.price)} is added to your next invoice if a match is found. Nothing is charged if none is.`
+        : `Looks up phone numbers and email. Billed to the client at ${usd(st.price)} if a match is found.`) : esc((st && st.why) || "")}</span></div>`;
+  if (!t.matched) return `<p style="margin-top:8px">Looked up ${esc(day(t.fetched_at))}: ${find ? "no owner was found for this parcel" : "no phone or email was found for this owner"}. Nothing was charged.</p>`;
+  return `<ul class="contacts"><li><b>${esc(t.name || "Name not returned")}</b>${t.name_match == null ? "" : t.name_match ? '<span class="flag ok">matches owner of record</span>' : '<span class="flag">name differs from owner of record</span>'}${t.litigator ? '<span class="flag">known TCPA litigator</span>' : ""}
+      <div class="sub">Looked up ${esc(day(t.fetched_at))}${t.mailing_address ? " · mail to " + esc(titleCase(t.mailing_address)) : ""}</div></li>
     ${t.phones.map(p => `<li>${esc(phoneFmt(p.number))}<span class="meta"> · ${esc([p.type, p.reachable === false ? "not reachable" : "", p.score != null ? "confidence " + p.score : ""].filter(Boolean).join(" · "))}</span>${p.dnc ? '<span class="flag">Do Not Call</span>' : ""}${p.tcpa ? '<span class="flag">TCPA flagged</span>' : ""}</li>`).join("")}
     ${t.emails.map(e => `<li><a href="mailto:${esc(e)}">${esc(e)}</a></li>`).join("")}</ul>
-    <p style="margin-top:8px">${t.name_match ? "" : "The person found at this address has a different surname and may be a tenant or relative. "}Pa. R.P.C. 7.3 restricts live telephone solicitation by lawyers. Check with ethics counsel before calling.</p>`;
+    <p style="margin-top:8px">${t.name_match === false ? "The person found at this address has a different surname and may be a tenant or relative. " : ""}${t.name_match == null ? "This name comes from a commercial records service, not the county. Confirm it before you rely on it. " : ""}Your state's version of Rule 7.3 restricts live telephone solicitation by lawyers, and numbers marked Do Not Call must not be called. This data may not be used for credit, employment, insurance or tenant decisions.</p>`;
 }
 async function openUsage() {
+  if (SUB && LIVE && !LIVE.off) return openSubUsage();
   dlg.innerHTML = `<div class="dlg-head"><h2 id="dlg-title">Usage and billing</h2><p>What each skip trace and mailed postcard cost, and what the client is charged.</p></div><div class="dlg-body"><p class="meta">Loading…</p></div>
     <div class="dlg-foot"><span class="note">Rates are set under billing in config.yaml.</span>${STATIC ? "" : '<a class="btn" href="/api/usage.csv">Download CSV</a>'}<button data-close>Close</button></div>`;
   dlg.showModal();
@@ -1289,7 +1402,7 @@ async function openParcel(leadId) {
   const o = d.owner, proj = projects.find(x => x.id === r.project_id);
   const row = (k, v) => v ? `<dt>${k}</dt><dd>${esc(v)}</dd>` : "";
   const ownerSec = `<div class="p-sec"><h3>Owner of record</h3><dl class="facts">${row("Name", o.name)}${row("Type", o.kind)}${row("Mailing address", o.mailing_address)}${row("Based in", o.location)}${row("Occupancy", o.occupancy)}${row("Owned since", o.owned_since)}${row("Paid", o.purchase_price)}${row("Parcels on this list", o.parcels_in_list > 1 ? String(o.parcels_in_list) : "")}${row("Combined county value", o.parcels_in_list > 1 && o.holdings_value ? "$" + Math.round(o.holdings_value).toLocaleString() : "")}</dl>
-    <p style="margin-top:8px">${o.kind_key === "company" ? (STATIC ? "Company owners can be looked up in Apollo from the live app." : "Use Email on this row to look up decision-makers at this company in Apollo.") : o.kind_key === "government" ? "Public bodies are not offered outreach." : o.kind_key === "unknown" ? "This county does not publish owner names online. Look the parcel ID up at the county assessment office." : "County parcel files publish no phone number or email. A postcard reaches the mailing address above."}</p></div>`;
+    <p style="margin-top:8px">${o.kind_key === "company" ? (STATIC ? "Company owners can be looked up in Apollo from the live app." : "Use Email on this row to look up decision-makers at this company in Apollo.") : o.kind_key === "government" ? "Public bodies are not offered outreach." : o.kind_key === "unknown" ? "This county does not publish owner names online. Look the parcel ID up at the county assessment office" + (SUB ? ", or use the owner lookup under Contact information." : ".") : "County parcel files publish no phone number or email. A postcard reaches the mailing address above."}</p></div>`;
   const careOf = ((r.mailing_address || "").match(/\b(?:C\/O|ATTN:?|%)\s*([^,]+)/i) || [])[1];
   const people = d.contacts || [];
   const canFind = !STATIC && OUT && OUT.email.enabled && o.kind_key === "company";
@@ -1305,7 +1418,7 @@ async function openParcel(leadId) {
     <div class="letter"><b>${esc(L_.subject)}</b>\n\n${esc(L_.body)}</div>
     <div class="row-acts"><a class="btn" href="mailto:${esc(to)}?subject=${encodeURIComponent(L_.subject)}&body=${encodeURIComponent(L_.body)}">${ICON.mail}Open as email</a>
       <button class="sm" data-copy-letter="${r.id}">Copy</button><button class="sm" data-print-letter="${r.id}">Print letter</button>
-      ${STATIC ? "" : `<button class="sm" data-act="postcard" data-lead="${r.id}">${ICON.card}Postcard</button>`}</div>
+      ${STATIC && !SUB ? "" : `<button class="sm" data-act="postcard" data-lead="${r.id}">${ICON.card}Postcard</button>`}</div>
     <p style="margin-top:8px">${to ? "The email opens addressed to " + esc(to) + "." : "No email address is on file, so the email opens without a recipient."} Edit the wording under Outreach template.</p></div>` : "";
   const stageSec = proj && proj.timeline ? `<div class="p-sec"><h3>Project stage</h3>${stageHead(proj.timeline)}${stageList(proj.timeline, true)}</div>` : "";
   const rel = d.related.length ? `<div class="p-sec"><h3>Other parcels held by this owner</h3><ul class="plain">${d.related.map(x =>
@@ -1339,7 +1452,7 @@ panel.addEventListener("click", async e => {
   if (tr) {
     if (!tr.dataset.armed) { tr.dataset.armed = "1"; tr.textContent = `Confirm lookup (${usd(OUT.skiptrace.price)} if matched)`; tr.classList.add("primary"); return; }
     tr.disabled = true; tr.textContent = "Looking up…";
-    try { await api(`/api/leads/${tr.dataset.trace}/skip-trace`, {method: "POST"}); await openParcel(+tr.dataset.trace); }
+    try { await api(`/api/leads/${tr.dataset.trace}/skip-trace`, {method: "POST"}); if (SUB) await loadLeads(); await openParcel(+tr.dataset.trace); }
     catch (err) { tr.disabled = false; tr.textContent = "Try again"; tr.insertAdjacentHTML("afterend", `<span class="meta">${esc(err.message)}</span>`); }
     return;
   }
@@ -1367,7 +1480,7 @@ async function openPostcard(leadId) {
   let pv;
   try { pv = await api(`/api/leads/${leadId}/postcard`); }
   catch (e) { dlg.innerHTML += `<div class="dlg-body"><div class="alert bad">${esc(e.message)}</div></div><div class="dlg-foot"><span class="note"></span><button value="cancel" data-close>Close</button></div>`; return; }
-  const pc = OUT.postcard, blocker = pv.blocker || (pc.enabled ? null : pc.why);
+  const pc = OUT.postcard, blocker = pv.blocker || (pc.enabled ? null : pc.why) || (pv.already_mailed ? "Your firm already mailed this owner a postcard on " + day(pv.already_mailed) + "." : null);
   const to = pv.to;
   dlg.innerHTML = `
     <div class="dlg-head"><h2 id="dlg-title">Postcard to ${esc(lead.owner)}</h2><p>${esc(pv.project || "")}</p></div>
@@ -1380,8 +1493,8 @@ async function openPostcard(leadId) {
         <div><div class="card-frame"><iframe title="Postcard back" sandbox="allow-same-origin" srcdoc="${esc(pv.back)}"></iframe></div><div class="cap">Back. The address and postage print on the right half.</div></div>
       </div>
     </div>
-    <div class="dlg-foot"><span class="note">${pc.mode === "live" ? "Live mode: this mails a real postcard and bills your Lob account."
-        : pc.mode === "test" ? "Test mode: Lob renders a proof. Nothing is mailed or billed." : esc(pc.why || "")}</span>
+    <div class="dlg-foot"><span class="note">${pc.mode === "live" ? (SUB ? `This mails a real postcard. ${usd(pc.price)} is added to your next invoice.` : "Live mode: this mails a real postcard and bills your Lob account.")
+        : pc.mode === "test" ? "Test mode: a proof is made. Nothing is mailed or charged." : esc(pc.why || "")}</span>
       <button data-close>Cancel</button>
       <button class="primary" id="dlg-go" ${blocker ? "disabled" : ""}>${pc.mode === "live" ? "Mail postcard" : "Create test proof"}</button></div>`;
   fitCards();
@@ -1667,7 +1780,11 @@ for (const id of ["f-county", "f-type", "f-source", "f-stage", "f-score", "f-q"]
   $("st-owners").textContent = s.leads_with_owner.toLocaleString();
   const mode = $("mode");
   if (window.ET_TOKEN) $("acct").hidden = false;      // signed-in firms on the published site: plan, billing, sign out
-  if (STATIC) { mode.textContent = `Snapshot of ${s.generated || "an earlier run"}, read-only`; mode.hidden = false; }
+  if (SUB) {
+    OUT = await api("/api/outreach/status");
+    mode.textContent = `Data from ${s.generated || "an earlier run"}` + (OUT.postcard.mode === "live" ? " · Postcards on" : OUT.postcard.mode === "test" ? " · Postcards in test mode" : "");
+    mode.hidden = false;
+  } else if (STATIC) { mode.textContent = `Snapshot of ${s.generated || "an earlier run"}, read-only`; mode.hidden = false; }
   else {
     OUT = await api("/api/outreach/status");
     mode.textContent = "Postcards: " + ({live: "live", test: "test mode", off: "off"}[OUT.postcard.mode]) + " · Email: " + (OUT.email.enabled ? "on" : "off");

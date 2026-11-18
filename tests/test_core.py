@@ -385,7 +385,9 @@ def test_campaign_filter_and_snapshot(tmp_path, monkeypatch):
     snap = json.loads((tmp_path / "site" / "app" / "data.json").read_text())
     row = next(r for r in snap["leads"] if r["owner"] == "Jane Roe")
     assert snap["hub"]["status"]["postcard"]["enabled"] is False and snap["hub"]["contacts"] == []
-    assert snap["hub"]["sent"]["postcards"] == 1 and all(a["proof_url"] is None for a in snap["hub"]["activity"])
+    # what the operator mailed, paid and earned stays in the running app: subscribers see only their own usage
+    assert snap["hub"]["sent"]["postcards"] == 0 and snap["hub"]["activity"] == [] and snap["hub"]["usage"]["all_time"] == []
+    assert all("cost" not in v for v in snap["hub"]["rates"].values()) and snap["state"] is None
     assert counts["leads"] == 6 and row["owner_kind"] == "individual" and row["own"][0] == "Pennsylvania" and "facts" in row
 
 

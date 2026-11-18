@@ -1,0 +1,12 @@
+# Each function checks the caller itself (see _shared/svc.ts), so the gateway's own check is off.
+# stripe-webhook is called by Stripe, which has no Supabase sign-in; it is protected by Stripe's signature instead.
+project_id = "jsvwmwyczjhwlqkcrmhz"
+
+[functions.billing]
+verify_jwt = false
+
+[functions.outreach]
+verify_jwt = false
+
+[functions.stripe-webhook]
+verify_jwt = false

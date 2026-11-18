@@ -564,7 +564,7 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
                     layers.append({"name": x["layer"], "url": bq.pop("url"), "provider": bq.pop("provider"), "field": bq.pop("field")})
                 row["bq"] = dict({k: v for k, v in bq.items() if k not in ("url", "provider", "field")}, l=layer_index[x["layer"]])
             rows_out.append(row)
-        return {"stats": st, "projects": projs, "leads": rows_out, "layers": layers}
+        return {"stats": st, "projects": projs, "leads": rows_out, "layers": layers, "state": code}
 
     # With several states, every lead is written once, in its own state's file. Building them all a second time
     # for a combined file took most of an hour, so that is done only if the private upload fails.
@@ -583,8 +583,12 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
                      "postcard": {"enabled": False, "mode": "off", "why": off},
                      "email": {"enabled": False, "from": hub["status"]["email"].get("from"), "why": off},
                      "skiptrace": dict(hub["status"]["skiptrace"], enabled=False, why=off)}
-    for a in hub["activity"]:
-        a["proof_url"] = None        # proof links are signed URLs for the account holder
+    # Subscribers see their own usage, fetched live with their sign-in. What the operator mailed, paid and earned
+    # in the running app is never published.
+    hub["activity"] = []
+    hub["usage"] = {"this_month": [], "all_time": []}
+    hub["rates"] = {k: {"price": v["price"]} for k, v in hub["rates"].items()}
+    hub["sent"] = {k: 0 for k in hub["sent"]}
     site = Path(out_dir)
     site.mkdir(parents=True, exist_ok=True)
     # The public site: a landing page and a request-access page at the root, the read-only app under /app.
@@ -597,10 +601,9 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
             "owners": "{:,}".format(stats["leads_with_owner"]), "counties": str(len(stats["counties"])),
             "owner_counties": str(owner_counties), "date": date.today().strftime("%B %-d, %Y")}
     fill["photo_class"] = "" if (landing / "img" / "william-duerr.jpg").exists() else " no-photo"
-    # Subscribe buttons go to Stripe payment links once they exist; until then they lead to sign-up.
-    pay = cfg.get("site") or {}
-    for plan in ("state_monthly", "state_annual", "all_monthly", "all_annual"):
-        fill["pay_" + plan] = pay.get("stripe_%s_link" % plan) or "signup.html"
+    # Subscribe buttons lead to sign-up with the plan preselected; payment follows as soon as the account exists.
+    fill.update(pay_state_monthly="signup.html", pay_state_annual="signup.html?bill=year",
+                pay_all_monthly="signup.html?plan=all", pay_all_annual="signup.html?plan=all&amp;bill=year")
     # The owner's portrait appears once a photo is saved as landing/img/william-duerr.jpg.
     fill["photo"] = ('<figure class="portrait"><img src="img/william-duerr.jpg" width="520" height="520" loading="lazy" '
                      'alt="William Christopher Duerr"></figure>') if (landing / "img" / "william-duerr.jpg").exists() else ""
@@ -649,7 +652,9 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
                 'if (!session) location.replace("../login.html?next=app");\n'
                 'else if (meta.access !== "active") location.replace("../account.html?subscribe=1");\n'
                 'else { document.documentElement.classList.remove("gate");\n'
-                '  window.__etToken({token: session.access_token, plan: meta.plan, state: meta.state}); }</script>\n')
+                '  // The sign-in is renewed in the background, so a page left open still has a valid one when it orders something.\n'
+                '  window.ET_FRESH = async () => { const g = await s.auth.getSession(); return g.data.session ? g.data.session.access_token : session.access_token; };\n'
+                '  window.__etToken({token: session.access_token, plan: meta.plan, state: meta.state, admin: meta.role === "admin"}); }</script>\n')
         html = html.replace("</head>", gate + "</head>", 1)
         assert "login.html?next=app" in html
     common = {"template": outreach.template(cfg), "hub": hub, "contacts": {}}
