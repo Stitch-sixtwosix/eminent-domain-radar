@@ -179,7 +179,8 @@ class DB:
                 self.conn.execute("UPDATE %s SET state='PA' WHERE state IS NULL" % table)
         self.conn.execute("CREATE INDEX IF NOT EXISTS idx_signals_state ON signals(state)")
         for name, cols in (("idx_leads_project", "leads(project_id)"), ("idx_leads_parcel", "leads(parcel_id)"),
-                           ("idx_parcels_state", "parcels(state)"), ("idx_projects_stage", "projects(stage, score)")):
+                           ("idx_parcels_state", "parcels(state)"), ("idx_signals_fetched", "signals(fetched_at)"),
+                           ("idx_signals_state_fetched", "signals(state, fetched_at)"), ("idx_projects_type", "projects(project_type)"), ("idx_projects_stage", "projects(stage, score)")):
             self.conn.execute("CREATE INDEX IF NOT EXISTS %s ON %s" % (name, cols))
         if "owner_kind" not in [r["name"] for r in self.conn.execute("PRAGMA table_info(parcels)")]:
             self.conn.execute("ALTER TABLE parcels ADD COLUMN owner_kind TEXT")       # individual, company, government, unknown

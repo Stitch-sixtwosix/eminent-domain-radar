@@ -3,6 +3,7 @@ from __future__ import annotations
 import csv
 import io
 import json
+import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
@@ -109,15 +110,22 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
         # no-cache: the browser revalidates, so an updated dashboard shows up without a hard refresh
         return FileResponse(STATIC / "index.html", headers={"Cache-Control": "no-cache"})
 
+    _stats_cache: Dict[Any, Any] = {}
+
     @app.get("/api/stats")
     def stats(state: Optional[str] = None) -> Dict[str, Any]:
         st = state.upper() if state else None
         w = " AND s.state = '%s'" % st if st and st.isalpha() and len(st) == 2 else ""
+        hit = _stats_cache.get(st)
+        if hit and time.time() - hit[0] < 60:        # a dozen counts over the whole database: once a minute is plenty
+            return hit[1]
         one = lambda sql: db.rows(sql)[0]["n"]
+        by_stage = {r["stage"]: r["n"] for r in db.rows("SELECT p.stage, COUNT(*) AS n " + (
+            "FROM projects p JOIN signals s ON s.id = p.signal_id WHERE p.score >= 60 AND p.duplicate_of IS NULL" + w) + " GROUP BY p.stage")}
         proj = "FROM projects p JOIN signals s ON s.id = p.signal_id WHERE p.score >= 60 AND p.duplicate_of IS NULL" + w
         lead = "FROM leads l JOIN parcels pa ON pa.id = l.parcel_id JOIN projects p ON p.id = l.project_id " \
                "JOIN signals s ON s.id = p.signal_id WHERE 1=1" + w
-        return {
+        out = {
             "state": st,
             "states": [dict(r, name=STATE_NAMES.get(r["code"], r["code"])) for r in db.rows(
                 "SELECT s.state AS code, COUNT(*) AS projects FROM projects p JOIN signals s ON s.id = p.signal_id "
@@ -130,12 +138,13 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
             "counties": [r["county"] for r in db.rows(
                 "SELECT DISTINCT s.county FROM signals s WHERE s.county IS NOT NULL" + w + " ORDER BY s.county")],
             "types": [r["project_type"] for r in db.rows(
-                "SELECT DISTINCT p.project_type FROM projects p JOIN signals s ON s.id = p.signal_id WHERE 1=1" + w
-                + " ORDER BY p.project_type")],
+                ("SELECT DISTINCT p.project_type FROM projects p JOIN signals s ON s.id = p.signal_id WHERE 1=1" + w
+                 if w else "SELECT DISTINCT p.project_type FROM projects p") + " ORDER BY p.project_type")],
             "statuses": STATUSES,
-            "stages": [{"key": k, "label": label, "projects": n} for (k, label, _), n in
-                       ((sg, one("SELECT COUNT(*) n " + proj + " AND p.stage = '%s'" % sg[0])) for sg in STAGE_ORDER)],
+            "stages": [{"key": k, "label": label, "projects": by_stage.get(k, 0)} for k, label, _ in STAGE_ORDER],
         }
+        _stats_cache[st] = (time.time(), out)
+        return out
 
     @app.get("/api/projects")
     def projects(min_score: int = 60, county: Optional[str] = None, project_type: Optional[str] = None,
