@@ -110,8 +110,205 @@
     "acres": "GrossAcre"
    },
    "notes": "Tulsa County Assessor data served by INCOG. Description says 'Last updated February 3, 2025' but LoadDate/sale dates in the sample are from late 2025/2026. Name1/Name2 also hold owner names."
+  },
+  {
+   "county": "OKLAHOMA",
+   "url": "https://services5.arcgis.com/2mOVdIcRtNH2JsSF/arcgis/rest/services/Parcels_Townships_in_OKC_WFL1/FeatureServer/3",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 503169,
+   "fields": {
+    "apn": "AccountNo",
+    "owner": "Owner_Name1",
+    "mailing_address": [
+     "Mail_Address1",
+     "Mail_Address2",
+     "Mail_City",
+     "Mail_State",
+     "Mail_Zipcode"
+    ],
+    "address": [
+     "Address",
+     "City",
+     "Zipcode"
+    ],
+    "market_value": "Market_Value",
+    "acres": "Acres"
+   },
+   "restrictions": "terms not found",
+   "notes": "STALE: layer 'TriCountyParcels4Q2021', a fourth-quarter-2021 parcel snapshot published by a City of Oklahoma City staff account (Holly.Jacobson_OKC) in the map 'Parcels & Townships'; rows created 2023-02-08. Holds Oklahoma County Assessor accounts (PARCEL_HYPERLINK points to docs.oklahomacounty.org/AssessorWP5); the name says three counties, coverage outside Oklahoma County not checked. Pin / ParcelNB alternative ids; Owner_Name2; Taxable_Value, Assessed_Value, Land_Value, Improvement_Value. No current Oklahoma County Assessor service was found: no assessor layer in the ArcGIS Online catalog, www.oklahomacounty.org answers 403.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "CANADIAN",
+   "url": "https://services2.arcgis.com/0NjdXxmJp53hZWPd/arcgis/rest/services/ParcelDataService_2_view/FeatureServer/3",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 85668,
+   "fields": {
+    "apn": "parcel_id",
+    "owner": "owners_name",
+    "mailing_address": [
+     "mail_info",
+     "mail_info2",
+     "mail_address",
+     "mail_city",
+     "mail_state",
+     "mail_zip"
+    ],
+    "address": [
+     "situs",
+     "situs_city",
+     "situs_zip"
+    ],
+    "market_value": "total_val",
+    "acres": [
+     "parcel_size",
+     "parcel_size_units"
+    ]
+   },
+   "restrictions": null,
+   "notes": "Canadian County Assessor 'Canadian County Parcel Data (Public)', edited 2026-11-13. SPATIAL QUERY CAVEAT: a point query with distance=200 fails ('24204: The spatial reference identifier (SRID) is not valid'; the layer is in State Plane, wkid 103133) but an envelope query works: geometry=<xmin>,<ymin>,<xmax>,<ymax>&geometryType=esriGeometryEnvelope&inSR=4326 returned 138 parcels in El Reno. Terms read (item licence, https://www.arcgis.com/home/item.html?id=7bbc6322290241a891f237dc43ed16bd): 'This data was created and assembled by the Canadian County Assessor's Office for your informational, planning reference and guidance only ... Canadian County makes no warranty, express or implied'; no commercial or solicitation limit stated. account is the assessor account number; parcel_size is in the unit named by parcel_size_units (Acres or Lots); land_val, bldg_val, total_assess, taxable_val also present.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "CLEVELAND",
+   "url": "https://services.arcgis.com/rt1leD4Hj3sLGHNL/arcgis/rest/services/Cleveland_County_Ownership_October_2023/FeatureServer/28",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 120227,
+   "fields": {
+    "apn": "ACCOUNT",
+    "owner": "OWNER1",
+    "mailing_address": [
+     "BILLING_ADDRESS1",
+     "BILLING_ADDRESS2",
+     "BILLING_ADDRESS3",
+     "BILLING_CITY",
+     "BILLING_STATE",
+     "BILLING_ZIPCODE"
+    ],
+    "address": [
+     "LOCATIONADDRESS",
+     "LOCATIONCITY",
+     "LOCATIONZIP"
+    ],
+    "acres": "ACREAGE"
+   },
+   "restrictions": "terms not found",
+   "notes": "STALE: 'Cleveland County Ownership Parcels Current as of October 2023', published by the City of Norman GIS account (GIS_normanok), not by the county assessor; last edited 2023-11-04. OWNER2, OWNER3; GEONUMBER second key; OWNER_CHANGE_DATE, LAST_SALE_DATE as text. No value field. Norman's current parcel layer (.../Parcels/FeatureServer/1, 46,482 rows) has no owner fields. No Cleveland County Assessor service found.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "COMANCHE",
+   "url": "https://services2.arcgis.com/baoUryRiOxhCY0yb/arcgis/rest/services/ENERGOV_SERVICE/FeatureServer/3",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 56522,
+   "fields": {
+    "apn": "ParcelId",
+    "owner": "OwnerName",
+    "address": "AdrLabel"
+   },
+   "restrictions": "terms not found",
+   "notes": "City of Lawton GIS (account gis.admin_colgis) service for its permitting system, layer 'PARCELS'; item text says 'UPDATED: 09/14/2026 parcel and owner information'. Owner name only: NO mailing address on the polygons, and the address fields were empty in the rows sampled. CAMAKey links to the assessor. The same service has table 15 'owner_info.csv' (48,609 rows: Account, ParcelID, Asmnt_Parcel_OwnersName, MailingInfo, Address1, Address2, City, State, ZipCode, TotalAcres) which carries the mailing address and can be joined on ParcelID, but a table takes no spatial query and its date is unknown (a sibling table is named Assessor_data_20221102). Layer 8 'Parcels (Lawton)' (35,284 rows, CAMADate Sept 2022) adds AssesValue / TotalValue. Coverage of the whole county not confirmed.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "ROGERS",
+   "url": "https://map11.incog.org/arcgis11wa/rest/services/Parcels_RogersCo/FeatureServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 51965,
+   "fields": {
+    "apn": "ACCOUNT",
+    "owner": "OWNERSNAM",
+    "address": "SITUS",
+    "acres": "LOTSIZE"
+   },
+   "restrictions": "terms not found",
+   "notes": "Rogers County Assessor data served by INCOG; description says 'It was last updated July 2023'. Owner name only: NO mailing address and no value fields. CADASTRAL is the map parcel number; LOTSIZE is text.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "WAGONER",
+   "url": "https://map11.incog.org/arcgis11wa/rest/services/Parcels_WagonerCo/FeatureServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 53795,
+   "fields": {
+    "apn": "PARCELID",
+    "owner": "OWNERS",
+    "mailing_address": [
+     "MAILINFO",
+     "ADD1",
+     "ADD2",
+     "CITY",
+     "STATE",
+     "ZIPCODE"
+    ],
+    "address": "SITUS",
+    "market_value": "TOTALV",
+    "acres": [
+     "LOTSIZE",
+     "LOTSIZET"
+    ]
+   },
+   "restrictions": "terms not found",
+   "notes": "Wagoner County Assessor data served by INCOG; description says 'It was last updated July 2023'. ACCOUNT is the assessor account; MAILINFO is a care-of line; LOTSIZE is in the unit named by LOTSIZET; LANDV, IMPRV, TAXABLEV also present.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "CREEK",
+   "url": "https://map11.incog.org/arcgis11wa/rest/services/Parcels_CreekCo/FeatureServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 46422,
+   "fields": {
+    "apn": "parcelid",
+    "owner": "ownername",
+    "mailing_address": [
+     "address1",
+     "address2",
+     "citystate",
+     "zipcode"
+    ],
+    "address": "situs",
+    "market_value": "totalvalue",
+    "acres": "acres"
+   },
+   "restrictions": "terms not found",
+   "notes": "Creek County Assessor data served by INCOG; description says 'It was last updated July 2023' (a sale dated 10/10/2023 was seen). account is the assessor account; landvalue, imprvalue, taxable, saledate, saleprice also present.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "PAYNE",
+   "url": "https://services.arcgis.com/RPfJX2yEEVtopacQ/arcgis/rest/services/Parcels/FeatureServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 33322,
+   "fields": {
+    "apn": "ParcelID",
+    "owner": "Owner",
+    "mailing_address": [
+     "Addr1",
+     "Addr2",
+     "Addr3",
+     "ZipCode"
+    ],
+    "address": "Situs",
+    "market_value": "TotalMarke",
+    "acres": [
+     "LandSize",
+     "LandUnits"
+    ]
+   },
+   "restrictions": "terms not found",
+   "notes": "VERY STALE: layer 'Payne Country Parcel' in the City of Stillwater's ArcGIS Online organization (account WWW_stw); item description says 'Payne County Parcels 2/23/2016'. Addr3 holds city and state. MapNum is the map parcel number. Usable only as a fallback; no current Payne County Assessor service found.",
+   "checked": "2026-11-17"
   }
  ],
  "parcels_counties_note": "Not found or not reachable in the time allowed: Oklahoma, Cleveland, Canadian, Comanche counties (ArcGIS Online search turned up only small or third-party extracts; Rogers, Wagoner and Caddo county layers with owners exist but are not among the most populous).",
- "summary": "Projects: ODOT 8-Year Work Plan road lines and bridge points (FFY 2027-2037) verified, all planned work with cost and program year. Parcels: no statewide owner layer; only Tulsa County verified, Oklahoma County and the others not found."
+ "summary": "Projects: ODOT 8-Year Work Plan road lines and bridge points (FFY 2027-2037) verified, all planned work with cost and program year. Parcels: no statewide owner layer; only Tulsa County verified, Oklahoma County and the others not found.",
+ "parcels_second_pass": "Second pass 2026-11-17 (parcels only). Statewide / multi-county: no statewide owner layer found. INCOG (Tulsa regional council) serves assessor parcels for five counties from map11.incog.org: Tulsa (already on file), Creek, Rogers, Wagoner (added) and also Osage (https://map11.incog.org/arcgis11wa/rest/services/Parcels_OsageCo/FeatureServer/0, 42,072 rows, OwnerName plus MailingAdd / MailingCty / MailingSt / MailingZip, PubDate Sept 2026, spatial query works; not requested, so not added to the list). The Lawton and Osage layers share a schema (ParcelId, OwnerName, CAMAProv, PubDate, NatCooSys) that looks like a statewide standard, and an ArcGIS Online item 'Parcels (OWRB)' at https://maps.owrb.ok.gov/arcgis/rest/services/Hazard/Parcels/MapServer, registered by account okdot_gis_statewide, may be a statewide parcel service: it timed out on three attempts and is NOT verified. Worth one retry from another network. Oklahoma, Cleveland and Payne are covered only by old snapshots (2021, 2023, 2016) republished by cities. INCOG publishes no terms on the services; no INCOG data-terms page was found."
 }

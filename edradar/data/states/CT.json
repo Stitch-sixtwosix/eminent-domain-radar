@@ -52,9 +52,24 @@
    "county": "Town_Name"
   },
   "restrictions": "ArcGIS Online item licence is CC0 (public domain); no restriction stated.",
-  "notes": "Statewide parcels joined to municipal CAMA (assessor) data, collected annually from all towns through the Councils of Governments (C.G.S. 7-100l); current layer is the 2026 collection (Parcel_Collection_Year / CAMA_Collection_Year). Owner, Co_Owner and mailing address present; completeness varies by town. No single total market value: Appraised_Land + Appraised_Building + Appraised_Outbuilding are appraised values and Assessed_Total is the 70% assessed total. Connecticut has no county government: Town_Name is the municipality, COG the planning region. CAMA_Link is the join key; Parcel_ID is the town's local id. Year-specific copies exist as Connecticut_CAMA_and_Parcel_Layer_2025 / _2024.",
+  "notes": "Statewide parcels joined to municipal CAMA (assessor) data, collected annually from all towns through the Councils of Governments (C.G.S. 7-100l); current layer is the 2026 collection (Parcel_Collection_Year / CAMA_Collection_Year). Owner, Co_Owner and mailing address present; completeness varies by town. No single total market value: Appraised_Land + Appraised_Building + Appraised_Outbuilding are appraised values and Assessed_Total is the 70% assessed total. Connecticut has no county government: Town_Name is the municipality, COG the planning region. CAMA_Link is the join key; Parcel_ID is the town's local id. Year-specific copies exist as Connecticut_CAMA_and_Parcel_Layer_2025 / _2024. SPATIAL QUERIES (checked 2026-11-17): the 2026 layer is stored in NAD83(2011) Connecticut State Plane (wkid 103016 / EPSG 6434; earlier years were Web Mercator) and a distance buffer fails with error 400 unless an output spatial reference is given. Add outSR=4326 to every point+distance request. Working example: https://services3.arcgis.com/3FL1kr7L4LvwA2Kb/arcgis/rest/services/Connecticut_CAMA_and_Parcel_Layer/FeatureServer/0/query?geometry=-72.6734,41.7658&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=200&units=esriSRUnit_Meter&outSR=4326&outFields=*&returnGeometry=false&f=json . Envelope, point-in-parcel and polyline queries work without it. Ownership suppression: the item description says some towns have fully suppressed ownership, shown as Owner = 'Current Owner' with the mailing address set to the property address; 2,355 records had exactly Owner='Current Owner' on 2026-11-17, so treat that value as no owner.",
   "verified": true,
   "record_count": 1320686,
+  "spatial_query": {
+   "works": true,
+   "checked": "2026-11-17",
+   "working_form": "point + distance WITH outSR=4326 (or outSR=3857) added; GET",
+   "example_url": "https://services3.arcgis.com/3FL1kr7L4LvwA2Kb/arcgis/rest/services/Connecticut_CAMA_and_Parcel_Layer/FeatureServer/0/query?geometry=-72.6734,41.7658&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=200&units=esriSRUnit_Meter&outSR=4326&outFields=*&returnGeometry=false&f=json",
+   "example_result": "50 parcels (downtown Hartford)",
+   "fails": "the same request without outSR returns error 400 'Cannot perform query. Invalid query parameters.' / '24204: The spatial reference identifier (SRID) is not valid' (also for returnCountOnly, units in feet, and POST)",
+   "also_works": [
+    "envelope without distance: geometry=-72.675,41.764,-72.671,41.767&geometryType=esriGeometryEnvelope&inSR=4326 (362 records, no outSR needed)",
+    "point without distance when the point is inside a parcel",
+    "polyline JSON geometry with spatialReference wkid 4326 (count 334)",
+    "resultRecordCount with a spatial filter (unlike Florida)",
+    "returnGeometry=true with outSR=4326, and f=geojson"
+   ]
+  },
   "approved": true,
   "approved_note": "Approved by the account owner on 2026-11-17: no restriction on commercial use stated."
  },

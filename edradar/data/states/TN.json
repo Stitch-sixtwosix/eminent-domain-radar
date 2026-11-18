@@ -139,8 +139,83 @@
     "acres": "Acres"
    },
    "notes": "Metro Nashville 'Ownership Parcels'. ParID / STANPAR are alternative parcel ids; LandAppr, ImprAppr, TotlAppr appraised and LandAssd / TotlAssd assessed values; SalePrice, OwnDate; LUDesc land use; PropCity, PropZip."
+  },
+  {
+   "county": "RUTHERFORD",
+   "url": "https://services5.arcgis.com/A5C0MR9xfkxVRwat/arcgis/rest/services/Parcel_Data/FeatureServer/1",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 123334,
+   "fields": {
+    "apn": "ParcelID",
+    "owner": "Owner1",
+    "mailing_address": [
+     "MailingAddress",
+     "MailingAddress2",
+     "MailingCity",
+     "MailingState",
+     "MailingZipCode"
+    ],
+    "address": [
+     "FormattedLocation",
+     "LocationCity",
+     "LocationZip"
+    ],
+    "market_value": "TotalValue",
+    "acres": "CALCACRES"
+   },
+   "restrictions": "terms not found for this item (its licence field is empty; it is published by the City of Murfreesboro GIS manager's account, GBLee2). Rutherford County's own GIS disclaimer was read (https://rutherfordcountytn.gov/gis): warranty and liability only, e.g. 'Any user of this information accepts the same AS IS, WITH ALL FAULTS, and assumes all responsibility for the use or misuse or interpretation of this data and information'; it states no limit on commercial use, resale or solicitation. The Tennessee Comptroller's parcel page says Rutherford is 'NOT MAINTAINED BY THE TENNESSEE OFFICE OF THE COMPTROLLER OF THE TREASURY AND CANNOT BE SHARED BY OUR OFFICE'.",
+   "notes": "'Parcel Data' feature service, layer 1 'Parcels', described as 'Comprehensive parcel and special interest property data for Rutherford County, Tennessee'; edited 2026-11-04, YearID 2027. Whole county (Smyrna and Murfreesboro rows seen). Owner2, Owner3; CAMAACCT / UserAccount assessor account; TotalLandValue, TotalBuildingValue, TotalAssessedValue, DEEDACRES, SaleDate. Layer 0 of the same service is the 15,724-point 'Special Interest' layer noted earlier. The county's own service maps.rutherfordcountytn.gov/ags03/.../Assessor/ParcelOwners asks for a token.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "HAMILTON",
+   "url": "https://pwgis.chattanooga.gov/arcgis/rest/services/Misc/Parcels/FeatureServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 86104,
+   "fields": {
+    "apn": "TAX_MAP_NO",
+    "owner": "OWNERNAME1",
+    "mailing_address": [
+     "MASTNAME",
+     "MACITY",
+     "MASTATE",
+     "MAZIP"
+    ],
+    "address": "ADDRESS",
+    "market_value": "APPVALUE",
+    "acres": "CALCACRES"
+   },
+   "restrictions": "terms not found (the service and its item record carry no licence or description text; no City of Chattanooga or Hamilton County data-terms page for this layer was found). The Tennessee Comptroller's parcel page says Hamilton is 'NOT MAINTAINED BY THE TENNESSEE OFFICE OF THE COMPTROLLER OF THE TREASURY AND CANNOT BE SHARED BY OUR OFFICE'.",
+   "notes": "City of Chattanooga Public Works server, layer 'Parcels' (database name chattgis.GIS_ADMIN.Parcels; the same data is also at .../WaterQuality/CityCountyParcels/MapServer/0 under the name 'ChattanoogaHamiltonParcels'). PARTIAL COVERAGE LIKELY: 86,104 rows is about half of what Hamilton County should hold, so this is probably the city and nearby area only; not measured. OWNERNAME1 / OWNERNAME2 are space-padded and need trimming; one row reads 'Update in Progress'. MASTNAME is the mailing street line. LANDVALUE, BUILDVALUE, ASSVALUE, DEEDACRES, SALE1DATE also present. Update date not published. Hamilton County's own server (mapsdev.hamiltontn.gov) timed out.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "WILLIAMSON",
+   "url": "https://services1.arcgis.com/du2kAhlOU8gWyWb5/arcgis/rest/services/Parcels/FeatureServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 32769,
+   "fields": {
+    "apn": "PARCEL_ID",
+    "owner": "OWNER1",
+    "mailing_address": [
+     "OWN_STREET",
+     "OWN_CITY",
+     "OWN_STATE",
+     "OWN_ZIP"
+    ],
+    "address": "PROP_STREE",
+    "market_value": "total_market",
+    "acres": "CALC_ACRE"
+   },
+   "restrictions": "terms not found (item licence field is empty). The Tennessee Comptroller's parcel page says Williamson is 'NOT MAINTAINED BY THE TENNESSEE OFFICE OF THE COMPTROLLER OF THE TREASURY AND CANNOT BE SHARED BY OUR OFFICE'.",
+   "notes": "STALE AND PARTIAL: City of Franklin ArcGIS Online 'Parcels', last edited 2019-07-29, 32,769 rows: the Franklin area only, not all of Williamson County. OWNER2; GISLINK; LEGAL_ACRE; land_market, imp_value, total_assess. Fallback only. Williamson County's own server (arcgis2.williamson-tn.org) timed out; no county layer verified.",
+   "checked": "2026-11-17"
   }
  ],
  "summary": "Projects: TDOT publishes the right layers (all projects with status and current phase; STIP with cost and funding years) but only the copy on TDOT's test server answered; production timed out. Parcels: the Comptroller layer gives owner names (no mailing address) for 86 counties; of the 9 missing metro counties only Davidson is verified, with owner and mailing address.",
- "parcels_counties_not_found": "The other large counties missing from the state layer could not be verified: Shelby (gis.shelbycountytn.gov answered 403; a Memphis layer requires a token), Knox (www.kgis.org timed out), Hamilton (server error 522), Rutherford (county server returned a non-JSON page; a Murfreesboro layer found covers only 15,724 special-interest points)."
+ "parcels_counties_not_found": "The other large counties missing from the state layer could not be verified: Shelby (gis.shelbycountytn.gov answered 403; a Memphis layer requires a token), Knox (www.kgis.org timed out), Hamilton (server error 522), Rutherford (county server returned a non-JSON page; a Murfreesboro layer found covers only 15,724 special-interest points).",
+ "parcels_second_pass": "Second pass 2026-11-17 (parcels only). Statewide: nothing new; the Comptroller layer on file still stands. Terms now read for it at https://comptroller.tn.gov/office-functions/pa/gisredistricting/redistricting-and-land-use-maps/parcel-data.html: 'Any company or organization can use, save, and maintain the shapefile data for any use case, including consumption in a commercial application/software or for historical purposes.' The same page says: 'We do not offer bulk or historical downloads, nor any recurring extracts or other automated downloads' and 'We do not provide statewide extracts of either assessment data or parcel shapefile data.' Those sentences are about the requested shapefile download, not expressly about the ArcGIS layer, whose own description still reads 'intended for use by state agencies with approved access'. The page also confirms the nine counties outside the state system: 'CHESTER, DAVIDSON, HAMILTON, HICKMAN, KNOX, MONTGOMERY, RUTHERFORD, SHELBY, AND WILLIAMSON COUNTIES ARE NOT MAINTAINED BY THE TENNESSEE OFFICE OF THE COMPTROLLER OF THE TREASURY AND CANNOT BE SHARED BY OUR OFFICE.' Added Rutherford (good), Hamilton (Chattanooga server, probably partial), Williamson (Franklin only, 2019). Davidson was already on file. WILSON and SUMNER: no county layer found (county host names did not resolve; nothing in the ArcGIS Online catalog); both are inside the Comptroller layer, which has owner names but no mailing address. NOT FOUND: SHELBY - gis.shelbycountytn.gov answers 403, the assessor host timed out, Memphis's ArcGIS Online organization has no parcel layer, Collierville's 'Certified Parcels' has no owner fields. KNOX - www.kgis.org timed out again and maps.knoxmpc.org presents an expired certificate (not bypassed)."
 }

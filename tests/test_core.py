@@ -731,3 +731,21 @@ def test_search_distance_is_corrected_for_layers_stored_in_feet():
     assert P.reach_factor({"ymin": 30.0, "ymax": 31.0}, degrees) == 1.0                           # degrees
     assert P.reach_factor({}, degrees) == 1.0
     assert P.reach({"url": "https://gis.county.example/arcgis/rest/services/P/MapServer/0"}, None) == 1.0
+
+
+def test_a_city_sharing_a_county_name_is_kept_apart():
+    from edradar import counties
+    from edradar import parcels as P
+
+    square = lambda x, y, s: [[x, y], [x + s, y], [x + s, y + s], [x, y + s], [x, y]]
+    shapes = counties.shapes([
+        {"attributes": {"BASENAME": "Richmond", "LSADC": "06"}, "geometry": {"rings": [square(0, 0, 2)]}},
+        {"attributes": {"BASENAME": "Richmond", "LSADC": "25"}, "geometry": {"rings": [square(10, 10, 2)]}},
+        {"attributes": {"BASENAME": "Norfolk", "LSADC": "25"}, "geometry": {"rings": [square(20, 20, 2)]}},
+    ])
+    assert counties.find(shapes, 1, 1) == "RICHMOND"
+    assert counties.find(shapes, 11, 11) == "RICHMOND CITY"
+    assert counties.find(shapes, 21, 21) == "NORFOLK"
+    layers = [{"name": "a", "state": "MO", "counties": ["ST. LOUIS COUNTY"]}]
+    assert P.pick_layer(layers, "St. Louis", "MO") is layers[0]
+    assert P.pick_layer(layers, "St. Louis City", "MO") is None

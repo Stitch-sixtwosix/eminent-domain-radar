@@ -17,10 +17,17 @@ Shape = Tuple[str, Tuple[float, float, float, float], List[List[List[float]]]]
 
 
 def shapes(features: List[Dict[str, Any]]) -> List[Shape]:
+    """County shapes by name. An independent city that shares its name with a county of the same state
+    (Richmond, Roanoke and Fairfax in Virginia, Baltimore, St. Louis) is named "X CITY" to keep the two apart."""
+    base = lambda f: ((f.get("attributes") or {}).get("BASENAME") or "").strip().upper()
+    is_city = lambda f: str((f.get("attributes") or {}).get("LSADC") or "") == "25"
+    county_names = {base(f) for f in features if not is_city(f)}
     out = []
     for f in features:
         rings = (f.get("geometry") or {}).get("rings") or []
-        name = ((f.get("attributes") or {}).get("BASENAME") or "").strip().upper()
+        name = base(f)
+        if name and is_city(f) and name in county_names:
+            name += " CITY"
         pts = [p for r in rings for p in r]
         if name and pts:
             xs, ys = [p[0] for p in pts], [p[1] for p in pts]
@@ -49,7 +56,7 @@ def find(state_shapes: List[Shape], lon: float, lat: float) -> Optional[str]:
 
 
 def fetch(http: Any, state: str) -> List[Shape]:
-    data = http.get_json(URL, {"where": "STATE='%s'" % FIPS[state], "outFields": "BASENAME", "returnGeometry": "true",
+    data = http.get_json(URL, {"where": "STATE='%s'" % FIPS[state], "outFields": "BASENAME,LSADC", "returnGeometry": "true",
                                "outSR": 4326, "maxAllowableOffset": 0.001, "f": "json"})
     return shapes(data.get("features") or [])
 
@@ -72,7 +79,9 @@ def fill(db: Any, http: Any) -> int:
             continue
         if not state_shapes:
             continue
-        real = {name for name, _, _ in state_shapes}
+        names = [name for name, _, _ in state_shapes]
+        # a name shared by a county and a city says nothing about which one is meant, so the map decides
+        real = {n for n in names if n + " CITY" not in names}
         todo = [r for r in by_state[state] if (r["county"] or "").strip().upper() not in real]
         done = 0
         for r in todo:

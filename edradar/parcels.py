@@ -22,6 +22,7 @@ def pick_layer(layers: List[Dict[str, Any]], county: Optional[str], state: Optio
         if (layer.get("state") or "PA").upper() != state:
             continue
         wanted = [c.upper() for c in layer.get("counties") or []]
+        wanted += [c[:-7] for c in wanted if c.endswith(" COUNTY")]      # "ST. LOUIS COUNTY" also answers to "ST. LOUIS"
         if not wanted or county in wanted:
             return layer
     return None

@@ -200,7 +200,70 @@
       "notes": "City of Cranston parcels in RIGIS standard format joined to the assessor CAMA extract (tax roll year in CAMAExtract_TaxRollYear). Rhode Island has no county government; parcels are kept by the 39 cities and towns.",
       "verified": true,
       "record_count": 36632
+    },
+    {
+      "county": "PROVIDENCE (city)",
+      "name": "City of Providence - Parcels w CAMA",
+      "url": "https://services6.arcgis.com/wv9mHoqblhTsnqdG/arcgis/rest/services/Parcels_wCAMA/FeatureServer/0",
+      "verified": true,
+      "record_count": 44128,
+      "owner_filled_count": 43850,
+      "fields": {
+        "apn": "MAP_PAR_ID",
+        "owner": [
+          "Owner1",
+          "Owner2"
+        ],
+        "mailing_address": [
+          "OwnerAddress",
+          "OwnerCity",
+          "OwnerState",
+          "Owner_Zip"
+        ],
+        "address": "ParcAddress",
+        "market_value": "AssessedValueTotal",
+        "acres": "AreaAC"
+      },
+      "restrictions": "terms not found",
+      "notes": "Municipality, not a county: Rhode Island parcel data is kept by city/town, so the 'county' field holds the municipality name. Published by the City of Providence GIS office on ArcGIS Online (item owner PVDGIS_Admin, item last modified Sept 2024); parcels in RIGIS standard format joined to the assessor CAMA extract, TaxRollYear 2023 in the samples, so the ownership is about three years old. PROPID is the plat-lot-unit id (e.g. 019-0102-0407); condominium units are separate records on one lot. Numeric values are stored as text (AssessedValueTotal '226900', AreaAC '0.073830'). SalePrice, SaleDate, MuniUseCodeDesc, YearBuilt also present. Spatial point+distance query works as-is (native wkid 102730/3438): 1,166 records at -71.4128,41.8240 (.../query?geometry=-71.4128,41.8240&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=200&units=esriSRUnit_Meter&outFields=*&returnGeometry=false&f=json). A sibling service Parcels_with_CAMA (44,161 records, same fields) exists in the same organization. The ArcGIS Online item has no licence or description text and no city terms page was found.",
+      "checked": "2026-11-17"
     }
   ],
-  "summary": "Projects: only an outdated STIP map service (FFY2018-2027, 2020 amendment) and a small LRTP proposed-projects layer were found; no current RIDOT planned-projects GIS service was verified. Parcels: no statewide owner layer (RIGIS publishes none; parcels are municipal, many on vendor viewers without open services); only Cranston's city layer with owner and mailing address was verified, Providence was not found."
+  "summary": "Projects: only an outdated STIP map service (FFY2018-2027, 2020 amendment) and a small LRTP proposed-projects layer were found; no current RIDOT planned-projects GIS service was verified. Parcels: no statewide owner layer (RIGIS publishes none; parcels are municipal, many on vendor viewers without open services); only Cranston's city layer with owner and mailing address was verified, Providence was not found. Second pass 2026-11-17: Providence city parcels with owner and mailing address verified (2023 tax roll) and answering spatial queries; Warwick has linework only, Pawtucket only 63 city-owned parcels, and there is still no statewide owner layer.",
+  "parcels_counties_checked": [
+    {
+      "county": "WARWICK (city)",
+      "name": "AxisGISDataSync / ParcelPolys (CAI Technologies for City of Warwick)",
+      "url": "https://services.arcgis.com/FULpfKXdE8WhHh1Y/arcgis/rest/services/AxisGISDataSync/FeatureServer/2",
+      "verified": false,
+      "record_count": 38076,
+      "has_owner_name": false,
+      "has_mailing_address": false,
+      "spatial_query_works": true,
+      "restrictions": "not reviewed: layer not usable (no owner name)",
+      "notes": "Municipality, not a county. No owner name published: Map, Lot, Parcel_Num, Full_Num, Area only (the linework behind the city's AxisGIS viewer; the assessor data is not in an open service).",
+      "checked": "2026-11-17"
+    },
+    {
+      "county": "PAWTUCKET (city)",
+      "name": "PA_PRA_CAMA (Pawtucket DPW)",
+      "url": "https://services5.arcgis.com/KTVE1BfEqewed0ZV/arcgis/rest/services/PA_PRA_CAMA/FeatureServer/0",
+      "verified": false,
+      "record_count": 63,
+      "has_owner_name": true,
+      "has_mailing_address": true,
+      "spatial_query_works": true,
+      "restrictions": "not reviewed: layer not usable (63 parcels)",
+      "notes": "Municipality, not a county. Not a citywide layer: only 63 parcels owned by the City of Pawtucket and the Pawtucket Redevelopment Agency (OWN_NAME1, MAD_MAIL_A...). No citywide Pawtucket parcel service was found among the city's 44 public ArcGIS Online services.",
+      "checked": "2026-11-17"
+    },
+    {
+      "county": "statewide",
+      "name": null,
+      "url": null,
+      "verified": false,
+      "notes": "Re-checked 2026-11-17: no statewide parcel layer with owners. The RIGIS ArcGIS Online organization (services2.arcgis.com/S8zZg9pg23JUEexQ, 465 services) has only coastal sea-level-rise (SLAMM) parcel subsets, and the state server risegis.ri.gov/hosting lists no parcel service (its Hosted folder needs a token).",
+      "checked": "2026-11-17"
+    }
+  ]
 }

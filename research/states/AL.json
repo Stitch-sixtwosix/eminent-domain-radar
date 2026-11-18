@@ -145,9 +145,223 @@
         "acres": "rtMAP_ACRE"
       },
       "notes": "Tuscaloosa County (ArcGIS Online, updated November 2026). 'Name' also holds the parcel number; ppin is the property index number; AddlNames = additional owners; rtDEED_ACR deeded acres. The add* fields look like the owner's mailing address (sample: city TUSCALOOSA, ZIP 35403 for a rural parcel) but this is inferred from one record; confirm on more records."
+    },
+    {
+      "county": "BALDWIN",
+      "url": "https://web6.kcsgis.com/kcsgis/rest/services/Baldwin/Baldwin_Public_ISV/MapServer/31",
+      "verified": true,
+      "record_count": 162615,
+      "fields": {
+        "apn": "PARCELID",
+        "owner": "Owner",
+        "mailing_address": [
+          "MailAdd1",
+          "MailAdd2",
+          "MailAdd3",
+          "MailCity",
+          "MailState",
+          "MailZip1",
+          "MailZip2"
+        ],
+        "address": [
+          "SitusAddNumber",
+          "SitusAddName"
+        ],
+        "market_value": "TTV",
+        "acres": "CalcAcre"
+      },
+      "spatial_query": true,
+      "restrictions": null,
+      "terms_url": "https://isv.kcsgis.com/al.baldwin_revenue/js/viewer/options.js (disclaimer text shown by https://isv.kcsgis.com/al.baldwin_revenue/)",
+      "notes": "Baldwin County Revenue Commission parcels. PID is the formatted parcel number, PPIN/PIN the property index number; TTV total value (CLandValue + CImpValue), TAV assessed; PreviousOwner; DeedRecorded; TaxYearDue 2027 in the sample. Spatial query at Daphne returned 37 parcels. One request got a connection reset and succeeded on retry: go slowly. maxRecordCount 2000. County parcel viewer disclaimer read (warranty/accuracy only: \"No warranty or representation is made as to the accuracy and availability of said information\"); it states no limit on commercial use, resale or mailing lists. Hosted by the county's GIS vendor (KCS); this is the service the county's public parcel viewer calls. The viewer page loads reCAPTCHA and some sibling KCS services answer 'Token Required', but this endpoint answered every request without a token; it could be closed later.",
+      "checked": "2026-11-17"
+    },
+    {
+      "county": "MADISON",
+      "url": "https://web3.kcsgis.com/kcsgis/rest/services/Madison/Madison_Public_ISV/MapServer/185",
+      "verified": true,
+      "record_count": 193899,
+      "fields": {
+        "apn": "ParcelNum",
+        "owner": "PropertyOwner",
+        "mailing_address": "MailingAddress",
+        "address": "PropertyAddress",
+        "market_value": "TotalAppraisedValue",
+        "acres": "Acres"
+      },
+      "spatial_query": true,
+      "restrictions": null,
+      "terms_url": "https://isv.kcsgis.com/al.madison_revenue/js/viewer/options.js (disclaimer text shown by https://isv.kcsgis.com/al.madison_revenue/)",
+      "notes": "Madison County (Huntsville) Tax Assessor parcels. MailingAddress is ONE string ('305 CHURCH ST SW STE 750, HUNTSVILLE, AL 35801-5056'). PIN is the property index number; AccountOwner, PreviousOwners; TotalLandValue, TotalBuildingValue, TotalAssessedValue; DeedDate; TaxYear 2027 in the sample. Spatial query at downtown Huntsville returned 113 parcels. maxRecordCount 2000. County parcel viewer disclaimer read (warranty/accuracy only: \"No warranty or representation is made as to the accuracy and availability of said information\"); it states no limit on commercial use, resale or mailing lists. Hosted by the county's GIS vendor (KCS); this is the service the county's public parcel viewer calls. The viewer page loads reCAPTCHA and some sibling KCS services answer 'Token Required', but this endpoint answered every request without a token; it could be closed later.",
+      "checked": "2026-11-17"
+    },
+    {
+      "county": "DEKALB",
+      "url": "https://al28portal.kcsgis.com/al28server/rest/services/Dekalb_Public_ISV/MapServer/48",
+      "verified": true,
+      "record_count": 52861,
+      "fields": {
+        "apn": "PARCELID",
+        "owner": "Owner",
+        "mailing_address": [
+          "MailAdd1",
+          "MailAdd2",
+          "MailAdd3",
+          "MailCity",
+          "MailState",
+          "MailZip1",
+          "MailZip2"
+        ],
+        "address": [
+          "SitusAddNumber",
+          "SitusAddName"
+        ],
+        "market_value": "TTV",
+        "acres": "CALCULATEDACREAGE"
+      },
+      "spatial_query": true,
+      "restrictions": null,
+      "terms_url": "https://isv.kcsgis.com/al.dekalb_revenue/js/viewer/options.js (disclaimer text shown by https://isv.kcsgis.com/al.dekalb_revenue/)",
+      "notes": "DeKalb County Revenue Commission 'Current Parcels'. PARCELNUMBER is the formatted number; TTV total value, TAV assessed; PreviousOwner; DeedRecorded. Spatial query at Fort Payne returned 79 parcels. (The older address web4.kcsgis.com/kcsgis/rest/services/Dekalb/Public/MapServer no longer has a parcel layer.) maxRecordCount 2000. County parcel viewer disclaimer read (warranty/accuracy only: \"No warranty or representation is made as to the accuracy and availability of said information\"); it states no limit on commercial use, resale or mailing lists. Hosted by the county's GIS vendor (KCS); this is the service the county's public parcel viewer calls. The viewer page loads reCAPTCHA and some sibling KCS services answer 'Token Required', but this endpoint answered every request without a token; it could be closed later.",
+      "checked": "2026-11-17"
+    },
+    {
+      "county": "TALLADEGA",
+      "url": "https://al61portal.kcsgis.com/al61server/rest/services/Talladega_Public_ISV/MapServer/51",
+      "verified": true,
+      "record_count": 58002,
+      "fields": {
+        "apn": "PARCELID",
+        "owner": "Owner",
+        "mailing_address": [
+          "MailAdd1",
+          "MailAdd2",
+          "MailAdd3",
+          "MailCity",
+          "MailState",
+          "MailZip1",
+          "MailZip2"
+        ],
+        "address": [
+          "SitusAddNumber",
+          "SitusAddName"
+        ],
+        "market_value": "TTV",
+        "acres": "CALC_ACRE"
+      },
+      "spatial_query": true,
+      "restrictions": null,
+      "terms_url": "https://isv.kcsgis.com/al.talladega_revenue/js/viewer/options.js (disclaimer text shown by https://isv.kcsgis.com/al.talladega_revenue/)",
+      "notes": "Talladega County Revenue Commission parcels. PIN/PPIN property index number; TTV total value, TAV assessed; PreviousOwner; ModifiedDate. Spatial query at Talladega returned 83 parcels. maxRecordCount 2000. County parcel viewer disclaimer read (warranty/accuracy only: \"No warranty or representation is made as to the accuracy and availability of said information\"); it states no limit on commercial use, resale or mailing lists. Hosted by the county's GIS vendor (KCS); this is the service the county's public parcel viewer calls. The viewer page loads reCAPTCHA and some sibling KCS services answer 'Token Required', but this endpoint answered every request without a token; it could be closed later.",
+      "checked": "2026-11-17"
+    },
+    {
+      "county": "ELMORE",
+      "url": "https://web5.kcsgis.com/kcsgis/rest/services/Elmore/Public_2022/MapServer/133",
+      "verified": true,
+      "record_count": 54699,
+      "fields": {
+        "apn": "PARCELID",
+        "owner": "OwnerName",
+        "mailing_address": [
+          "MailAddress1",
+          "MailAddress2",
+          "MailCity",
+          "MailState",
+          "MailZip"
+        ],
+        "address": "PropertyAddr1",
+        "market_value": "TotalValue",
+        "acres": "CALC_ACRE"
+      },
+      "spatial_query": true,
+      "restrictions": null,
+      "terms_url": "https://isv.kcsgis.com/al.elmore_revenue/js/viewer/options.js (disclaimer text shown by https://isv.kcsgis.com/al.elmore_revenue/)",
+      "notes": "Elmore County parcels. 52,055 of 54,699 records have OwnerName; the rest (including the first parcel returned by the spatial test at Wetumpka, 54 parcels) have null owner fields. ParcelNo is the formatted number; OwnerName2; TotalLandValue, TotalImpValue; RecordYear 2025 in the sample. Text is padded with trailing spaces; trim. maxRecordCount 2000. County parcel viewer disclaimer read (warranty/accuracy only: \"No warranty or representation is made as to the accuracy and availability of said information\"); it states no limit on commercial use, resale or mailing lists. Hosted by the county's GIS vendor (KCS); this is the service the county's public parcel viewer calls. The viewer page loads reCAPTCHA and some sibling KCS services answer 'Token Required', but this endpoint answered every request without a token; it could be closed later.",
+      "checked": "2026-11-17"
+    },
+    {
+      "county": "HOUSTON",
+      "url": "https://al38portal.kcsgis.com/al38server/rest/services/Revenue/Houston_Public_ISV/MapServer/42",
+      "verified": true,
+      "record_count": 61714,
+      "fields": {
+        "apn": "PARCEL_NUMBER",
+        "owner": "Owner",
+        "mailing_address": [
+          "MailAddr1",
+          "MailAddr2",
+          "CityName",
+          "StateAbbr",
+          "ZipCode"
+        ],
+        "address": "PhysAddr",
+        "market_value": "TotalMktValue",
+        "acres": "MIN_CALC_ACRES"
+      },
+      "spatial_query": true,
+      "restrictions": null,
+      "terms_url": "https://isv.kcsgis.com/al.houston_revenue/js/viewer/options.js (disclaimer text shown by https://isv.kcsgis.com/al.houston_revenue/)",
+      "notes": "Houston County (Dothan) Revenue Commissioner parcels. PPIN, AccountNum; LandValue, ImprovementsValue, TotalAssdValue; PrevOwner; DeedDate, SalePrice; TaxYear 2026. Spatial query at Dothan returned 109 parcels. A second open copy with the same fields is https://al38portal.kcsgis.com/al38server/rest/services/Houston_Parcels/MapServer/0 (61,746 records, also verified). maxRecordCount 2000. County parcel viewer disclaimer read (warranty/accuracy only: \"No warranty or representation is made as to the accuracy and availability of said information\"); it states no limit on commercial use, resale or mailing lists. Hosted by the county's GIS vendor (KCS); this is the service the county's public parcel viewer calls. The viewer page loads reCAPTCHA and some sibling KCS services answer 'Token Required', but this endpoint answered every request without a token; it could be closed later.",
+      "checked": "2026-11-17"
+    },
+    {
+      "county": "ST. CLAIR",
+      "url": "https://web3.kcsgis.com/kcsgis/rest/services/StClair/Public/MapServer/57",
+      "verified": true,
+      "record_count": 61242,
+      "fields": {
+        "apn": "PARCELID",
+        "owner": "NAME_1",
+        "mailing_address": [
+          "ADDRESS_1",
+          "ADDRESS_2",
+          "ADDRESS_3",
+          "CITY",
+          "STATE",
+          "ZIPCODE"
+        ],
+        "address": "STREET_ADD",
+        "market_value": "TOTAL_VALU",
+        "acres": "CALCULAT_1"
+      },
+      "spatial_query": true,
+      "restrictions": null,
+      "terms_url": "https://isv.kcsgis.com/al.stclair_revenue/js/viewer/options.js (disclaimer text shown by https://isv.kcsgis.com/al.stclair_revenue/)",
+      "notes": "St. Clair County Revenue Commissioner 'Owner Parcels'. That ADDRESS_1-3/CITY/STATE/ZIPCODE are the owner's MAILING address and STREET_ADD the property location is INFERRED from two records (one had ADDRESS_2 '1210 BLUE HOLE RD' with STREET_ADD '1915 COGSWELL AVE'); confirm on more records. PPIN; TOTAL_LAND, TOTAL_IMPR, TOTAL_ASSD; PREVIOUS_O; SALE_PRICE, SALE_DATE; DEEDED_ACR. Spatial query at Pell City returned 116 parcels. The county's own server map.stclairco.com timed out. maxRecordCount 2000. County parcel viewer disclaimer read (warranty/accuracy only: \"No warranty or representation is made as to the accuracy and availability of said information\"); it states no limit on commercial use, resale or mailing lists. Hosted by the county's GIS vendor (KCS); this is the service the county's public parcel viewer calls. The viewer page loads reCAPTCHA and some sibling KCS services answer 'Token Required', but this endpoint answered every request without a token; it could be closed later.",
+      "checked": "2026-11-17"
     }
   ],
   "summary": "Projects: ALDOT publishes project geometry with description, work type and phase code but no dates, status or cost, so it cannot by itself identify planned work. Parcels: no statewide layer; Mobile (owner only), Montgomery and Tuscaloosa county layers are verified; Jefferson refused automated access.",
   "parcels_statewide_reason": "No free statewide Alabama parcel layer was found (ArcGIS Online catalog search returned none; parcels are published by county revenue offices).",
-  "parcels_counties_not_found": "Jefferson (Birmingham): https://jccgis.jccal.org/server/rest/services/Basemap/Parcels/MapServer/0 answered HTTP 403 to an automated request. Madison (Huntsville) and Baldwin: no public parcel service with owner names found in the time allowed."
+  "parcels_counties_not_found": "Jefferson (Birmingham): https://jccgis.jccal.org/server/rest/services/Basemap/Parcels/MapServer/0 answered HTTP 403 to an automated request. Madison (Huntsville) and Baldwin: no public parcel service with owner names found in the time allowed.",
+  "parcels_statewide_recheck": "Rechecked 2026-11-17: still no official statewide Alabama parcel layer. The only statewide-looking item found, 'Alabama Parcel Data' (https://services6.arcgis.com/VUsVQlvugJlIRS3I/arcgis/rest/services/Alabama_Parcel_Data/FeatureServer, posted by a utility's account), is a per-county re-upload of a commercial parcel vendor's product (vendor id fields LL_UUID / LL_GISACRE), not a government publication; it was not recorded.",
+  "parcels_counties_not_found_detail": [
+    {
+      "county": "JEFFERSON",
+      "reason": "Not verified. https://jccgis.jccal.org/server/rest/services answered HTTP 403 (bot-protection page) again; gis.jccal.org (catalog pointer .../Accela/AccelaParcels/MapServer/1) does not resolve; City of Birmingham gisweb.birminghamal.gov timed out.",
+      "checked": "2026-11-17"
+    },
+    {
+      "county": "SHELBY",
+      "reason": "Not verified. Catalog pointer https://maps.shelbyal.com/arcgis/rest/services/Basemaps/Cadastral_Current_Dynamic/MapServer/91 and the whole maps.shelbyal.com host timed out on every request from this network; fields unknown.",
+      "checked": "2026-11-17"
+    },
+    {
+      "county": "COFFEE",
+      "reason": "Not found. County parcel site is coffee.alabamagis.com (a vendor viewer that returned an empty page to a plain request; no ArcGIS REST layer found).",
+      "checked": "2026-11-17"
+    },
+    {
+      "county": "MARENGO",
+      "reason": "Not found. marengo.alabamagis.com vendor viewer only (empty page to a plain request); a catalog item 'Parcels2024Rev view' could not be tied to the county and had no layer 0.",
+      "checked": "2026-11-17"
+    },
+    {
+      "county": "LEE",
+      "reason": "No owner names. City of Opelika's copy https://explore.opelika-al.gov/server/rest/services/Lee_County_Parcels/MapServer/0 (124,250 parcels, spatial query works) has only the parcel key (KEY_) and acres. Auburn's PublicService/Parcels service is stopped; gis.leeco.us timed out.",
+      "checked": "2026-11-17"
+    }
+  ],
+  "parcels_recheck_note": "County parcel recheck 2026-11-17. Every entry dated 2026-11-17 passed three live requests: layer metadata, one sample record, and a 200 m point spatial query. Many county-run servers did not answer at all from the network used for this check (connection timeouts), so 'not verified' below often means unreachable from here, not absent; retry from a U.S. network."
 }

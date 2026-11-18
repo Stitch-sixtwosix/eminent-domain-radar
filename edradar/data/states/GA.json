@@ -160,9 +160,197 @@
     "acres": "Acres"
    },
    "notes": "Savannah Area GIS (SAGIS) 'Parcel Digest 2025'. The layer number is one per year (26 = 2024, 27 = 2025), so a 2026 digest will be a new layer id. Also Owner2, FMV_Land, FMV_Building, Property_Use, Sale_Price, Legal_Description."
+  },
+  {
+   "county": "DEKALB",
+   "url": "https://services2.arcgis.com/IxVN2oUE9EYLSnPE/arcgis/rest/services/TaxParcelsOD/FeatureServer/0",
+   "verified": true,
+   "record_count": 246604,
+   "fields": {
+    "apn": "PARCELID",
+    "owner": "OWNERNME1",
+    "mailing_address": [
+     "PSTLADDRESS",
+     "PSTLCITY",
+     "PSTLSTATE",
+     "PSTLZIP5",
+     "PSTLZIP4"
+    ],
+    "address": "SITEADDRESS",
+    "market_value": "TOTAPR1",
+    "acres": "ACREAGE"
+   },
+   "spatial_query": true,
+   "restrictions": null,
+   "notes": "DeKalb County GIS 'Tax Parcels Current' open-data layer (ArcGIS Online, owner DeKalbGISAdmin). The item's licence field reads 'CC0' and states no limit on commercial use or mailing lists; no separate county terms page was read. 246,098 of 246,604 records have OWNERNME1; OWNERNME2 second owner; CNTASSDVAL assessed value; newest LASTUPDATE was November 2026. Contains repeated geometry for condominium units. Spatial query at Decatur returned 223 parcels. maxRecordCount 1000. (This replaces the earlier finding that DeKalb publishes no owner names: the yearly Tax_Parcels_2025 layer has none, this one does.)",
+   "checked": "2026-11-17",
+   "terms_url": "https://www.arcgis.com/home/item.html?id=e383e80264c24402b5d5711b671acb56"
+  },
+  {
+   "county": "CLAYTON",
+   "url": "https://services5.arcgis.com/m528W8U8YDYeMPrQ/arcgis/rest/services/Basemap/FeatureServer/15",
+   "verified": true,
+   "record_count": 90294,
+   "fields": {
+    "apn": "parcelid",
+    "owner": "ownernme",
+    "mailing_address": [
+     "pstladdres",
+     "pstlcity",
+     "pstlstate",
+     "pstlzip5"
+    ],
+    "address": [
+     "siteaddres",
+     "sitecity",
+     "sitezip5"
+    ],
+    "market_value": "apprval",
+    "acres": "acerage"
+   },
+   "spatial_query": true,
+   "restrictions": "terms not found",
+   "notes": "Clayton County GIS hosted 'Basemap' service, layer 'Parcels' (ArcGIS Online, a county staff account; item modified 2026-10-01, no licence text on the item). assessval, landfmv, saledate (yyyymmdd number), saleprice, zone, propcard link. Spatial query at Jonesboro returned 81 parcels. The county's own server weba.co.clayton.ga.us:5443 timed out from this network.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "FORSYTH",
+   "url": "https://services2.arcgis.com/StQaZGYzUARPnrpL/arcgis/rest/services/TylerParcels/FeatureServer/90",
+   "verified": true,
+   "record_count": 131836,
+   "fields": {
+    "apn": "Name",
+    "owner": "O_OWN1",
+    "mailing_address": [
+     "O_ADDR1",
+     "O_ADDR2",
+     "O_ADDR3",
+     "O_CITYNAME",
+     "O_STATECOD",
+     "O_ZIP1",
+     "O_ZIP2"
+    ],
+    "address": "SITEADDRES",
+    "acres": "L_ACRES"
+   },
+   "spatial_query": true,
+   "restrictions": "terms not found",
+   "notes": "Forsyth County hosted layer 'TylerParcels' ('Parcels with iasWorld Field Names', posted by a county staff account, item modified 2026-02-20, no licence text). NOT the county's main parcel service: TAXYEAR is 2024 on 131,599 records, so owners may be a year or more old. 131,599 records have O_OWN1; O_OWN2 second owner / care-of; PSTLADDRES repeats the mailing street; values are text (VAL_TOTCOM, VAL_TOTRES, A_APRLAND); VAL_PARID repeats the parcel id. Spatial query at Cumming returned 37 parcels. The county's main service geo.forsythco.com/gis2/rest/services/Public/Tax_Parcel/FeatureServer/0 timed out from this network and is unverified.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "BARROW",
+   "url": "https://services5.arcgis.com/OVFGXfRTCVcPwl55/ArcGIS/rest/services/Barrow_Parcels_w_Owner/FeatureServer/0",
+   "verified": true,
+   "record_count": 38071,
+   "fields": {
+    "apn": "Parcel_no",
+    "owner": "lastname",
+    "mailing_address": [
+     "address1",
+     "address2",
+     "address3",
+     "city",
+     "state",
+     "zip"
+    ]
+   },
+   "spatial_query": true,
+   "restrictions": "terms not found",
+   "notes": "Barrow County Planning hosted layer 'Barrow Parcels w Owner' (ArcGIS Online, owner BarrowCountyPlanning). STALE: item last modified 2024-09-24, and it has 38,071 records against 44,460 in the county's current Barrow_Parcels layer (which has no owner). 'lastname' holds the full owner name; that address1-3/city/state/zip are the MAILING address is inferred (sample 'P O BOX 883'). No site address, value or acres. Spatial query at Winder returned 572 parcels.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "BARTOW",
+   "url": "https://services.arcgis.com/0tQ9yX5b2VG5RHei/arcgis/rest/services/ParcelInfo/FeatureServer/11",
+   "verified": true,
+   "record_count": 57516,
+   "fields": {
+    "apn": "PARCELID",
+    "owner": "Owner1",
+    "mailing_address": [
+     "Mailing_Address_1",
+     "Mailing_Address_2",
+     "Mailing_City",
+     "Mailing_State",
+     "Mailing_Zip"
+    ],
+    "address": [
+     "HOUSE_NO",
+     "STREET_NAM",
+     "Property_Zip"
+    ],
+    "market_value": "Total_Taxable_FMV",
+    "acres": "TOTALACRES"
+   },
+   "spatial_query": true,
+   "restrictions": "No terms on this item, but the same publisher's companion parcel layer is marked \"Bartow County, GA official use only.\" (https://www.arcgis.com/home/item.html?id=45e31db7eb074f6f95b813b5288fa740). Treat as restricted until the county confirms.",
+   "notes": "Bartow County GIS hosted 'ParcelInfo' (ArcGIS Online, a county staff account). STALE: item says 'updated FEB 2023. Data on non-disclosure parcels is not included.' Owner2; LandValue, BuildingValue; text padded with spaces, trim. Spatial query at Cartersville returned 845 parcels. The county's own server www.bartowgis.org timed out from this network.",
+   "checked": "2026-11-17",
+   "terms_url": "https://www.arcgis.com/home/item.html?id=45e31db7eb074f6f95b813b5288fa740"
+  },
+  {
+   "county": "LOWNDES",
+   "url": "https://services3.arcgis.com/fYt1jp3hqamxgSvI/arcgis/rest/services/TaxParcels_OwnerName/FeatureServer/0",
+   "verified": true,
+   "record_count": 52603,
+   "fields": {
+    "apn": "PARCEL_NO",
+    "owner": "LASTNAME",
+    "mailing_address": [
+     "ADDRESS2",
+     "CITY",
+     "STATE",
+     "ZIP"
+    ],
+    "acres": "D_ACRES"
+   },
+   "spatial_query": true,
+   "restrictions": "terms not found",
+   "notes": "VALOR (Valdosta-Lowndes regional GIS) hosted layer 'TaxParcels_OwnerName', 'Current Tax Parcels Information for Lowndes County' (ArcGIS Online, item modified 2025-01-06, no licence text). LASTNAME holds the full owner name; that ADDRESS2/CITY/STATE/ZIP are the MAILING address is inferred (City of Valdosta parcel shows 216 E CENTRAL AVE). No value field here; the sibling TaxParcel/FeatureServer/0 (updated 6/30/2026) has CURR_VAL and street fields but only OWNKEY, no owner name; the two join on REALKEY. Spatial query at Valdosta returned 735 parcels. www.valorgis.com timed out from this network.",
+   "checked": "2026-11-17"
   }
  ],
  "summary": "Projects: no complete current statewide GDOT layer could be verified (GDOT's own server blocks automated requests; the reachable GDOT STIP layer is small and dated; ARC covers the Atlanta region). Parcels: no statewide layer; Fulton, Gwinnett, Cobb and Chatham county layers with owner and mailing address are verified; DeKalb publishes no owner names.",
  "parcels_statewide_reason": "No free statewide Georgia parcel layer with owner names was found (ArcGIS Online catalog search returned none; Georgia parcels are published county by county).",
- "parcels_counties_not_found": "DeKalb: the county's Tax_Parcels_2025 layer (https://services2.arcgis.com/IxVN2oUE9EYLSnPE/arcgis/rest/services/Tax_Parcels_2025/FeatureServer/0, fetched) has parcel id and values but no owner fields."
+ "parcels_counties_not_found": "DeKalb: the county's Tax_Parcels_2025 layer (https://services2.arcgis.com/IxVN2oUE9EYLSnPE/arcgis/rest/services/Tax_Parcels_2025/FeatureServer/0, fetched) has parcel id and values but no owner fields.",
+ "parcels_statewide_recheck": "Rechecked 2026-11-17: still no free statewide Georgia parcel layer with owner names; catalog search found only county layers.",
+ "parcels_counties_not_found_detail": [
+  {
+   "county": "HENRY",
+   "reason": "Not found: no public parcel service located in the ArcGIS Online catalog; guessed county host does not resolve.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "CHEROKEE",
+   "reason": "Not verified: catalog pointer https://gis.cherokeega.com/arcgis/rest/services/MainLayers/MapServer/1 timed out / refused connection on every request from this network; fields unknown.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "HALL",
+   "reason": "Not verified: catalog pointer https://webmap.hallcounty.org/server/rest/services/GHCGIS_WebData/MapServer/1 does not resolve; no hosted copy found.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "TROUP",
+   "reason": "Not found from the county. The only layer found (https://services6.arcgis.com/WjqAE1SlQxuk7dsk/arcgis/rest/services/Troup_County_GA_Parcel_Feature_Layer/FeatureServer/0, 35,511 parcels with owner and mailing address, spatial query works) is a third party's upload of a commercial parcel vendor's product (ll_uuid fields), not a county publication; not recorded as a source.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "PAULDING",
+   "reason": "No owner names. County hosted layer https://services8.arcgis.com/7YXQzPPGs9Uc4qKl/arcgis/rest/services/Paulding_Map_Auto_Updated_WFL3/FeatureServer/25 (75,770 parcels, updated daily, spatial query works) has only parcel ids and an OWNKEY number, no owner table. Catalog pointer arcgis5.roktech.net/arcgis/rest/services/Paulding/GoMaps4/MapServer/36 answers 'service not started'.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "TIFT",
+   "reason": "Not verified: https://www.sgrcmaps.com/alma/rest/services/Tift/Tift_Parcels/MapServer/0 (regional commission server) timed out from this network; no hosted copy found.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "COWETA",
+   "reason": "Not found. Catalog pointer cccjcgiswa.coweta.ga.us does not resolve. County hosted layer https://services1.arcgis.com/AaPyNbrJpNGryRqh/arcgis/rest/services/WinGapParcels_DroneSense/FeatureServer/1 has OwnerName and address fields in its schema but holds 0 records and rejects queries.",
+   "checked": "2026-11-17"
+  }
+ ],
+ "parcels_recheck_note": "County parcel recheck 2026-11-17. Every entry dated 2026-11-17 passed three live requests: layer metadata, one sample record, and a 200 m point spatial query. Many county-run servers did not answer at all from the network used for this check (connection timeouts), so 'not verified' below often means unreachable from here, not absent; retry from a U.S. network."
 }

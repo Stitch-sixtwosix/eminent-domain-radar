@@ -40,6 +40,17 @@ APPROVED = {"NY": ["STATEWIDE"], "MA": ["STATEWIDE"], "CT": ["STATEWIDE"], "WV":
             "UT": ["SALT LAKE", "UTAH"]}
 
 
+# Owner files held on review, whatever the research recorded: {state: {county or "*": reason}}. A held file is
+# listed in the registry but not used until the account owner approves it.
+HOLD = {
+    "SC": {"*": "S.C. Code 30-2-50 bars using personal information obtained from a public body for commercial "
+                "solicitation directed to a person in South Carolina (https://www.scstatehouse.gov/code/t30c002.php)"},
+    "AL": {c: "served by the county's mapping vendor behind a viewer that uses a bot check; the endpoint answers "
+              "without a token but the county's intent for automated use is unclear" for c in
+           ("BALDWIN", "MADISON", "DEKALB", "TALLADEGA", "ELMORE", "HOUSTON", "ST. CLAIR")},
+}
+
+
 def adopt(code: str) -> str:
     d = json.loads((SRC / ("%s.json" % code)).read_text())
     rev = REVIEW.get(code, {})
@@ -74,6 +85,13 @@ def adopt(code: str) -> str:
         for item in items:
             if isinstance(item, dict):
                 item["approved"], item["approved_note"] = True, APPROVED_NOTE
+    for who, why in HOLD.get(code, {}).items():
+        items = [d.get("parcels_statewide")] + list(d.get("parcels_counties") or []) if who == "*" else \
+            [c for c in d.get("parcels_counties") or [] if c and str(c.get("county") or "").upper() == who]
+        for item in items:
+            if isinstance(item, dict):
+                item["restrictions"] = why
+                item.pop("approved", None)
     (DST / ("%s.json" % code)).write_text(json.dumps(d, indent=1))
     return "%s: %d project layer(s), statewide owners %s, %d county layer(s)" % (
         code, len(kept), "yes" if (d.get("parcels_statewide") or {}).get("verified") else "no",

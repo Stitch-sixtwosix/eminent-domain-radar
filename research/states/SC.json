@@ -124,9 +124,136 @@
         "acres": "deededacres"
       },
       "notes": "York County (Rock Hill area; not one of the five most populous, but the only other county verified). Owner2, Owner3, PreviousOwner; AprLandVal / AprBldgVal appraised values; GISSizeAC; DateSold, SalePrice; LandUseDesc."
+    },
+    {
+      "county": "CHARLESTON",
+      "url": "https://gisccapps.charlestoncounty.org/arcgis/rest/services/CDC/CDC_ParcelMap/MapServer/0",
+      "verified": true,
+      "record_count": 197795,
+      "fields": {
+        "apn": "PID",
+        "owner": "OWNER1",
+        "mailing_address": [
+          "MAIL_ST_NO",
+          "MAIL_ST_NAME",
+          "MAIL_ST_TYPE",
+          "MAIL_2ND_ADDR",
+          "MAIL_2ND_ADDT",
+          "MAIL_CITY",
+          "MAIL_STATE",
+          "MAIL_ZIP",
+          "MAIL_COUNTRY"
+        ],
+        "address": [
+          "PROP_ST_NO",
+          "PROP_ST_NAME",
+          "PROP_TYPE",
+          "PROP_CITY",
+          "PROP_STATE",
+          "PROP_ZIP"
+        ],
+        "market_value": "APPRAISAL",
+        "acres": "ACRES_CAL"
+      },
+      "spatial_query": true,
+      "restrictions": "STATE LAW applies to every South Carolina public body: S.C. Code 30-2-50(A) \"A person or private entity shall not knowingly obtain or use personal information obtained from a state agency, a local government, or other political subdivision of the State for commercial solicitation directed to any person in this State\" (misdemeanor; personal information includes names and home addresses) https://www.scstatehouse.gov/code/t30c002.php . County website legal disclaimer (https://www.charlestoncounty.gov/legal-disclaimer.php) read: warranty disclaimer only, no data-use limit of its own.",
+      "notes": "ALTERNATE Charleston endpoint, layer 'PARCELS_W_ATTR' on the same county server. Better than the layer on file: it adds the property address (PROP_*) and values (LAND_APPR, IMP_APPR, APPRAISAL) and a calculated acreage. OWNER2; SALE_PRICE, RECORDED_DATE; text padded with spaces, trim. Spatial query at downtown Charleston returned 190 parcels. maxRecordCount 1000. Two more working copies: .../ProVal/ParcelMap/MapServer/0 (same data, field names prefixed 'SDE.CAMA.' / 'SDE.P_POLY_PARCEL.') and .../GIS_VIEWER/External_GIS_Website/MapServer/7 (same fields as the layer on file). The layer on file (GIS_VIEWER/New_Public_Search/MapServer/7) answered normally today with 197,793 records and passed the spatial test, so the HTTP 500 seen earlier looks intermittent.",
+      "checked": "2026-11-17",
+      "terms_url": "https://www.charlestoncounty.gov/legal-disclaimer.php"
+    },
+    {
+      "county": "BERKELEY",
+      "url": "https://gis.berkeleycountysc.gov/arcgis/rest/services/desktop/internet_map/MapServer/4",
+      "verified": true,
+      "record_count": 123473,
+      "fields": {
+        "apn": "ParcelID",
+        "owner": "OwnerName",
+        "mailing_address": [
+          "StreetAddress1",
+          "StreetAddress2",
+          "City",
+          "StateProvince",
+          "Zip"
+        ],
+        "address": "GIS_Address",
+        "market_value": "TotalTaxValue",
+        "acres": "TotalAcres"
+      },
+      "spatial_query": true,
+      "restrictions": "STATE LAW applies to every South Carolina public body: S.C. Code 30-2-50(A) \"A person or private entity shall not knowingly obtain or use personal information obtained from a state agency, a local government, or other political subdivision of the State for commercial solicitation directed to any person in this State\" (misdemeanor; personal information includes names and home addresses) https://www.scstatehouse.gov/code/t30c002.php . County GIS terms page: terms not found (gis.berkeleycountysc.gov home page has none; the county notes digital data is sold by request).",
+      "notes": "Berkeley County GIS public map service, layer 'Parcel Lines' (polygons despite the name). O_TMS is the parcel number without dashes; StreetAddress1/City/StateProvince/Zip are the owner's mailing address (samples include a PO box and an address different from GIS_Address, the property location); SalePrice, SaleDate, DeedBook, DeedPage. Spatial query at Moncks Corner returned 35 parcels. maxRecordCount 1000. The same layer is also at .../internet/MapServer/4 and .../mobile/mobile_map/MapServer/3.",
+      "checked": "2026-11-17"
+    },
+    {
+      "county": "BEAUFORT",
+      "url": "https://gis.beaufortcountysc.gov/server/rest/services/EnerGov/MapServer/1",
+      "verified": true,
+      "record_count": 141568,
+      "fields": {
+        "apn": "GisFile_PIN",
+        "owner": "GisFile_Owner1",
+        "mailing_address": [
+          "GisFile_MailingAdd",
+          "GisFile_City",
+          "GisFile_State",
+          "GisFile_ZIP"
+        ],
+        "address": "GisFile_SitusAddre",
+        "market_value": "GisFile_Appraised",
+        "acres": "GisFile_Acres"
+      },
+      "spatial_query": true,
+      "restrictions": "STATE LAW applies to every South Carolina public body: S.C. Code 30-2-50(A) \"A person or private entity shall not knowingly obtain or use personal information obtained from a state agency, a local government, or other political subdivision of the State for commercial solicitation directed to any person in this State\" (misdemeanor; personal information includes names and home addresses) https://www.scstatehouse.gov/code/t30c002.php . County GIS terms page: terms not found.",
+      "notes": "Beaufort County's own server, 'EnerGov' map service, layer 'Parcels'. GisFile_Owner2; GisFile_AIN account number; GisFile_Land, GisFile_Improvemen, GisFile_Assessed, GisFile_Taxable; GisFile_SaleDate / GisFile_SalePrice / GisFile_Acres are text; GisFile_SitusAddre was blank on both samples. Includes mobile-home records (PIN starting 'M'). Spatial query at Beaufort returned 159 parcels. maxRecordCount 10000. An older hosted copy with the same attributes (ArcGIS Online 'ParcelsFromPro', 111,233 records) also passed but looks dated.",
+      "checked": "2026-11-17"
     }
   ],
   "summary": "Projects: only a stale (October 2023) copy of SCDOT's programmed projects could be verified; right fields, no cost, not maintained. Parcels: no statewide layer; Charleston and York county layers with owner and mailing address are verified; Greenville, Richland, Horry and Spartanburg could not be reached.",
   "parcels_statewide_reason": "No free statewide South Carolina parcel layer with owner names could be verified. An SCDOT-hosted per-county parcel service was seen in catalog results (smpesri.scdot.org/arcgis/rest/services/GISMapping/SC_Parcels/MapServer) but that server timed out on every request, so its contents are unknown.",
-  "parcels_counties_not_found": "Greenville (www.gcgis.org), Horry (www.horrycounty.org/parcelapp) and Spartanburg (maps.spartanburgcounty.org) county servers timed out on every request; Richland's guessed server returned 404. None of these four could be verified."
+  "parcels_counties_not_found": "Greenville (www.gcgis.org), Horry (www.horrycounty.org/parcelapp) and Spartanburg (maps.spartanburgcounty.org) county servers timed out on every request; Richland's guessed server returned 404. None of these four could be verified.",
+  "parcels_statewide_recheck": "Rechecked 2026-11-17: still no verified statewide layer. SCDOT's per-county service smpesri.scdot.org/arcgis/rest/services/GISMapping/SC_Parcels/MapServer (layers 0-45, one per county) timed out again on every request. SC DNR's 'SC_County_Parcel_Viewers' (https://arcweb.dnr.sc.gov/server/rest/services/Hosted/SC_County_Parcel_Viewers/FeatureServer, fetched) is only a table of links to each county's viewer, no parcels.",
+  "parcels_counties_not_found_detail": [
+    {
+      "county": "GREENVILLE",
+      "reason": "Not verified: www.gcgis.org server timed out on every request from this network; only third-party copies in the catalog.",
+      "checked": "2026-11-17"
+    },
+    {
+      "county": "RICHLAND",
+      "reason": "Not found: www.richlandmaps.com has no ArcGIS REST directory (404); the county's GIS page offers data for purchase under a licence agreement (per search result, page not read).",
+      "checked": "2026-11-17"
+    },
+    {
+      "county": "LEXINGTON",
+      "reason": "Not verified: maps.lex-co.com server timed out on every request from this network.",
+      "checked": "2026-11-17"
+    },
+    {
+      "county": "HORRY",
+      "reason": "Not verified: county catalog lists https://www.horrycounty.org/gispublic/rest/services/Public/Parcels/MapServer/1 and https://gisportal.horrycounty.org/server/rest/services/OpenData/Parcels/FeatureServer, but both hosts timed out on every request from this network; fields unknown.",
+      "checked": "2026-11-17"
+    },
+    {
+      "county": "SPARTANBURG",
+      "reason": "Not verified: county catalog lists https://maps.spartanburgcounty.org/server/rest/services/GIS/CAMA_Parcels/FeatureServer, but the host timed out on every request from this network; fields unknown.",
+      "checked": "2026-11-17"
+    },
+    {
+      "county": "DORCHESTER",
+      "reason": "Not found: guessed county host refused connection; no public parcel service in the catalog.",
+      "checked": "2026-11-17"
+    },
+    {
+      "county": "ANDERSON",
+      "reason": "Not verified: propertyviewer.andersoncountysc.org server timed out on every request from this network.",
+      "checked": "2026-11-17"
+    },
+    {
+      "county": "AIKEN",
+      "reason": "Not found: no county parcel service located; only a planning consultant's copy in the catalog.",
+      "checked": "2026-11-17"
+    }
+  ],
+  "parcels_recheck_note": "County parcel recheck 2026-11-17. Every entry dated 2026-11-17 passed three live requests: layer metadata, one sample record, and a 200 m point spatial query. Many county-run servers did not answer at all from the network used for this check (connection timeouts), so 'not verified' below often means unreachable from here, not absent; retry from a U.S. network."
 }

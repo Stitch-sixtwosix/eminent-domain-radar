@@ -91,7 +91,24 @@
    "county": "CO_NO"
   },
   "restrictions": null,
-  "notes": "Statewide parcels joined to the Department of Revenue tax roll (NAL fields), all 67 counties. JV = just (market) value; LND_VAL = land value. There is no acres field: LND_SQFOOT is land area in square feet (divide by 43,560). CO_NO is the DOR county number (11 = Alachua in the sample), not FIPS and not a name. ASMNT_YR was 2026 in the sample. DOR_UC = land use code; sale fields SALE_PRC1 / SALE_YR1. maxRecordCount 2000. No use restriction is stated on the service. A centroid version exists in the same organization: Florida_Statewide_Parcel_Centroid_Version."
+  "notes": "Statewide parcels joined to the Department of Revenue tax roll (NAL fields), all 67 counties. JV = just (market) value; LND_VAL = land value. There is no acres field: LND_SQFOOT is land area in square feet (divide by 43,560). CO_NO is the DOR county number (11 = Alachua in the sample), not FIPS and not a name. ASMNT_YR was 2026 in the sample. DOR_UC = land use code; sale fields SALE_PRC1 / SALE_YR1. maxRecordCount 2000. No use restriction is stated on the service. A centroid version exists in the same organization: Florida_Statewide_Parcel_Centroid_Version. SPATIAL QUERIES (checked 2026-11-17): the layer is stored in a custom Florida state-plane spatial reference (wkid 102967 / 6439) and a distance buffer fails unless an output spatial reference is given. Add outSR=4326 to every point+distance request. Working example: https://services9.arcgis.com/Gh9awoU677aKree0/arcgis/rest/services/Florida_Statewide_Cadastral/FeatureServer/0/query?geometry=-81.3790,28.5385&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=200&units=esriSRUnit_Meter&outSR=4326&outFields=*&returnGeometry=false&f=json . Envelope and polyline intersects queries work without it. Do not combine resultRecordCount with a spatial filter (error 400). Terms: the ArcGIS Online item (owner FloridaGIO, id efa909d6b1c841d298b0a649e7f71cf2) licence text was read; it is an accuracy disclaimer only and states no limit on commercial use or solicitation.",
+  "spatial_query": {
+   "works": true,
+   "checked": "2026-11-17",
+   "working_form": "point + distance WITH outSR=4326 (or outSR=3857) added; GET",
+   "example_url": "https://services9.arcgis.com/Gh9awoU677aKree0/arcgis/rest/services/Florida_Statewide_Cadastral/FeatureServer/0/query?geometry=-81.3790,28.5385&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=200&units=esriSRUnit_Meter&outSR=4326&outFields=*&returnGeometry=false&f=json",
+   "example_result": "39 parcels (downtown Orlando), first PARCEL_ID 262229814800002",
+   "fails": "the same request without outSR returns error 400 'Cannot perform query. Invalid query parameters.' / '24204: The spatial reference identifier (SRID) is not valid' (HTTP status 200, error in the JSON body), also for returnCountOnly and for units in feet",
+   "also_works": [
+    "envelope without distance: geometry=-81.381,28.537,-81.377,28.540&geometryType=esriGeometryEnvelope&inSR=4326 (39 parcels, no outSR needed)",
+    "polyline JSON geometry with spatialReference wkid 4326, no distance (count 9)",
+    "returnGeometry=true with outSR=4326, and f=geojson"
+   ],
+   "also_fails": [
+    "resultRecordCount=1 together with a spatial filter returned error 400 in every form tried (with where, with orderByFields): page spatial results by maxRecordCount 2000 / exceededTransferLimit instead",
+    "a point with no distance only matches when it falls inside a parcel (returns 0 features on a street)"
+   ]
+  }
  },
  "parcels_counties": [],
  "summary": "Both needs are met statewide: FDOT's adopted five-year work program with a right-of-way phase, and statewide parcels with owner name and mailing address. The work program layer is per phase and its URL changes each program year."

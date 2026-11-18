@@ -94,7 +94,10 @@
    "county": "county"
   },
   "restrictions": null,
-  "notes": "IMPORTANT LIMIT: the layer's /query operation answers 'Requested operation is not supported by this service' (count and where-queries both fail). What does work, and was verified with real data, is the map service's identify operation: .../MapServer/identify?geometry=<lon,lat>&geometryType=esriGeometryPoint&sr=4326&layers=all&tolerance=2&mapExtent=<bbox>&imageDisplay=800,800,96&returnGeometry=false&f=json returned a Travis County parcel with OWNER_NAME, MAIL_ADDR, SITUS_ADDR, MKT_VALUE (identify returns the field names in upper case). So owners can be looked up point by point along a project line, but not bulk-downloaded through this service. Other fields: geo_id, name_care, land_value, imp_value, legal_desc, fips, tax_year, source (appraisal district). Coverage and currency vary by county. Copyright text: 'TxGIO, Various Counties, Various Vendors'; no use restriction stated in the service.",
+  "notes": "IMPORTANT LIMIT: the layer's /query operation answers 'Requested operation is not supported by this service' (count and where-queries both fail). What does work, and was verified with real data, is the map service's identify operation: .../MapServer/identify?geometry=<lon,lat>&geometryType=esriGeometryPoint&sr=4326&layers=all&tolerance=2&mapExtent=<bbox>&imageDisplay=800,800,96&returnGeometry=false&f=json returned a Travis County parcel with OWNER_NAME, MAIL_ADDR, SITUS_ADDR, MKT_VALUE (identify returns the field names in upper case). So owners can be looked up point by point along a project line, but not bulk-downloaded through this service. Other fields: geo_id, name_care, land_value, imp_value, legal_desc, fips, tax_year, source (appraisal district). Coverage and currency vary by county. Copyright text: 'TxGIO, Various Counties, Various Vendors'; no use restriction stated in the service. RE-CHECKED 2026-11-17: /query still rejects every request (count, where, objectIds, spatial point, GET and POST) with 'Requested operation is not supported by this service', although the service lists capabilities 'Query,Map'; /find is rejected too; there is no FeatureServer. So it is marked verified=false under the rule that a layer must answer spatial queries. The identify operation does work as a point lookup (use layers=all:0, tolerance in pixels, and a mapExtent/imageDisplay that give a map scale between 1:1,000 and 1:500,000; a 0.02-degree extent at 800x800 with tolerance=20 reaches roughly 55 m). Johnson County is the one target county where this is the only owner source found; its sample had OWNER_NAME filled and MAIL_ADDR 'Null'. Terms read: the TxGIO DataHub catalog (https://api.tnris.org/api/v1/collections?search=parcels) lists every 'Land Parcels' collection, including the one acquired 2026-09-25, under 'Creative Commons Zero v1.0 Universal' (https://spdx.org/licenses/CC0-1.0.html); no limit on commercial use or solicitation is stated. The same data can be downloaded per county as shapefiles from data.geographic.texas.gov (not tested here). No TxGIO-owned copy was found on arcgis.com; copies there are uploads by unrelated users.",
+  "checked": "2026-11-17",
+  "spatial_query": false,
+  "coverage": "Statewide service (not split by county). Point lookups via identify returned 2026 tax-year parcels with owner names in all 16 counties tested on 2026-11-17: Hidalgo, Denton, Johnson, Williamson, Collin, Galveston, Brazoria, Hays, El Paso, Ellis, Fort Bend, Montgomery, Harris, Dallas, Tarrant, Bexar (plus Travis). Full county list could not be counted because /query is disabled.",
   "held": "the layer refuses area queries; only single-point lookups return owners"
  },
  "parcels_counties": [
@@ -186,7 +189,343 @@
     "acres": "tcad_acres"
    },
    "notes": "Travis Central Appraisal District parcels assembled monthly by Travis County TNR. Owner name only; no mailing address or value fields."
+  },
+  {
+   "county": "HIDALGO",
+   "name": "RGV911 Basemap - Hidalgo Parcels (Hidalgo CAD attributes)",
+   "url": "https://gis.rgv911.org/server/rest/services/RGV911_Basemap_MIL1/MapServer/7",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 334098,
+   "fields": {
+    "apn": "prop_id",
+    "owner": "file_as_name",
+    "mailing_address": [
+     "addr_line1"
+    ],
+    "address": "situs",
+    "acres": "land_acres"
+   },
+   "restrictions": "terms not found",
+   "notes": "Published by the Rio Grande Valley 911 district, not by Hidalgo CAD; rows carry Hidalgo CAD editor codes and were loaded 2026-08. Owner name filled on 331,009 of 334,098. MAILING ADDRESS IS PARTIAL: only addr_line1 (street line) is filled; addr_city, addr_state, zip and market are null on every record, so city/state/ZIP must come from the statewide identify lookup (MAIL_ADDR). Hidalgo CAD's own server (propaccess.hidalgoad.org) no longer resolves. 200 m spatial query at McAllen returned 81 parcels.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "DENTON",
+   "name": "Denton County GIS Parcels_FC (Denton CAD data)",
+   "url": "https://gis.dentoncounty.gov/arcgis/rest/services/Parcels_FC/MapServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 385908,
+   "fields": {
+    "apn": "pid",
+    "owner": "name",
+    "mailing_address": [
+     "addrDeliveryLine",
+     "addrUnitDesignator",
+     "addrFreeForm3",
+     "addrCity",
+     "addrState",
+     "addrZip",
+     "addrCountry"
+    ],
+    "address": "situs_full_address",
+    "market_value": "ownerMarketValue",
+    "acres": "legalAcreage"
+   },
+   "restrictions": "terms not found",
+   "notes": "Denton County's own ArcGIS server; item summary says \"DCAD's Update Parcel data - 01/05/2026\", sample pYear 2027. nameSecondary holds care-of lines; 'confidential' flag field present. 200 m spatial query at Denton returned 82 parcels.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "JOHNSON",
+   "name": "JohnsonCADWebService - Parcels",
+   "url": "https://services5.arcgis.com/SNQMi91A9RRB0qcO/arcgis/rest/services/JohnsonCADWebService/FeatureServer/0",
+   "verified": false,
+   "spatial_query": true,
+   "record_count": 100415,
+   "fields": {
+    "apn": "prop_id",
+    "owner": "file_as_name",
+    "mailing_address": [
+     "addr_line1",
+     "addr_line2",
+     "addr_line3",
+     "addr_city",
+     "addr_state",
+     "zip"
+    ],
+    "address": [
+     "situs_num",
+     "situs_street_prefx",
+     "situs_street",
+     "situs_street_sufix",
+     "situs_city",
+     "situs_state",
+     "situs_zip"
+    ],
+    "market_value": "market",
+    "acres": "legal_acreage"
+   },
+   "restrictions": "terms not found",
+   "notes": "NOT USABLE FOR OWNERS: the layer answers spatial queries (geometry and prop_id/geo_id only) but file_as_name is null on all 100,415 records and the address and value fields are blank, so it is marked verified=false. Johnson CAD's other services need a token (jcadgis.johnsoncad.com ParcelsPublic: 'Token Required'). Owner names for Johnson come only from the statewide identify lookup, or for the Fort Worth fringe from the Tarrant layer already on file.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "WILLIAMSON",
+   "name": "WCAD Tax Parcels",
+   "url": "https://services1.arcgis.com/Xff0bbfp6vwIWmlU/arcgis/rest/services/WCAD_Tax_Parcels/FeatureServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 292084,
+   "fields": {
+    "apn": "PARCELID",
+    "owner": "OWNERNME1",
+    "mailing_address": [
+     "PSTLADDRESS",
+     "PSTLCITY",
+     "PSTLSTATE",
+     "PSTLZIP5",
+     "PSTLZIP4"
+    ],
+    "address": "SITEADDRESS",
+    "market_value": "PRVASSDVAL",
+    "acres": "AssessedAc"
+   },
+   "restrictions": null,
+   "notes": "Published by Williamson Central Appraisal District (gisadmin_WCAD), 'Updated Nightly'. OWNERNME2 for a second owner; PropertyID is the numeric id. CNTASSDVAL (current value) was 0 in samples while PRVASSDVAL (prior) was filled. Terms read at https://www.wcad.org/data-downloads/ : only an 'As Is' no-warranty disclaimer, no limit on commercial use or solicitation. Williamson County also publishes a slimmer copy with owner (FullName) but no mailing address: https://services.arcgis.com/5ZjkDcAQQjFnTEkh/arcgis/rest/services/wcad_parcels_view/FeatureServer/0 . DISTANCE CAVEAT: the layer is stored in State Plane feet and a point query with distance=200&units=esriSRUnit_Meter reaches about 3.28 times too far (returned several hundred parcels; a 400 m bounding box returns about 100). Use geometryType=esriGeometryEnvelope, or divide the distance by 3.28.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "COLLIN",
+   "name": "CCAD Parcel Feature Set - Parcels",
+   "url": "https://services2.arcgis.com/uXyoacYrZTPTKD3R/arcgis/rest/services/CCAD_Parcel_Feature_Set/FeatureServer/4",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 441831,
+   "fields": {
+    "apn": "propID",
+    "owner": "ownerName",
+    "mailing_address": [
+     "ownerAddrLine1",
+     "ownerAddrLine2",
+     "ownerAddrCity",
+     "ownerAddrState",
+     "ownerAddrZip",
+     "ownerAddrCountry"
+    ],
+    "address": "situsConcat",
+    "market_value": "currValMarket",
+    "acres": "landSizeAcres"
+   },
+   "restrictions": null,
+   "notes": "Published by Collin Central Appraisal District (CCAD_Maps); propYear 2027 in sample. ownerNameAddtl for additional name; geoID is the long account number. Terms read: item licence says 'For public use ... informational purposes only'; https://collincad.org/open-data-portal/ says the data 'is considered public domain and is distributed \"as is\" without warranty'. No limit on commercial use or solicitation stated. DISTANCE CAVEAT: the layer is stored in State Plane feet and a point query with distance=200&units=esriSRUnit_Meter reaches about 3.28 times too far (returned several hundred parcels; a 400 m bounding box returns about 100). Use geometryType=esriGeometryEnvelope, or divide the distance by 3.28.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "GALVESTON",
+   "name": "Galveston CAD Parcels (MyMapService)",
+   "url": "https://services2.arcgis.com/7Zo7vX4Yxo9Z7Vw3/arcgis/rest/services/MyMapService/FeatureServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 190324,
+   "fields": {
+    "apn": "PID",
+    "owner": "NAME",
+    "mailing_address": [
+     "ADDRESS",
+     "ADDRESS2",
+     "ADDRESS3",
+     "CITY",
+     "ST",
+     "ZIP"
+    ],
+    "address": "SITUS",
+    "market_value": "VAL26TOT",
+    "acres": "ACRES"
+   },
+   "restrictions": null,
+   "notes": "The parcel layer behind Galveston Central Appraisal District's own interactive map (linked from galvestoncad.org/gis-data); item last modified 2026-10. Value fields are named by year (VAL26LAND, VAL26IMP, VAL26TOT) so the names will change next year; values and ACRES are text. GEOID is the long account number. maxRecordCount 1000. Terms read at https://galvestoncad.org/gis-data/ : only an 'informational purposes ... not suitable for legal, engineering, or surveying purposes' disclaimer; no limit on commercial use or solicitation. An older copy by the City of Galveston (2025 data, fields ID/VAL_TOT) is at https://services2.arcgis.com/uGo7PKALPg93ZiO2/arcgis/rest/services/Galveston_County_Appraisal_District_Parcels_and_Lot_Lines/FeatureServer/2 . DISTANCE CAVEAT: the layer is stored in State Plane feet and a point query with distance=200&units=esriSRUnit_Meter reaches about 3.28 times too far (returned several hundred parcels; a 400 m bounding box returns about 100). Use geometryType=esriGeometryEnvelope, or divide the distance by 3.28.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "BRAZORIA",
+   "name": "BrazoriaCADWebService - Parcels",
+   "url": "https://services6.arcgis.com/j94FvPaik4etwHFk/arcgis/rest/services/BrazoriaCADWebService/FeatureServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 280818,
+   "fields": {
+    "apn": "prop_id",
+    "owner": "file_as_name",
+    "mailing_address": [
+     "addr_line1",
+     "addr_line2",
+     "addr_line3",
+     "addr_city",
+     "addr_state",
+     "zip"
+    ],
+    "address": [
+     "situs_num",
+     "situs_street_prefx",
+     "situs_street",
+     "situs_street_sufix",
+     "situs_city",
+     "situs_state",
+     "situs_zip"
+    ],
+    "market_value": "market",
+    "acres": "legal_acreage"
+   },
+   "restrictions": null,
+   "notes": "Hosted by BIS Consultants, Brazoria CAD's website/GIS vendor; owner_tax_yr 2027, item modified 2026-11. Situs is split across several fields. Terms read: brazoriacad.org footer says 'All information contained herein, is considered in the public domain and is distributed without warranty of any kind'; no limit on commercial use or solicitation. DISTANCE CAVEAT: the layer is stored in State Plane feet and a point query with distance=200&units=esriSRUnit_Meter reaches about 3.28 times too far (returned several hundred parcels; a 400 m bounding box returns about 100). Use geometryType=esriGeometryEnvelope, or divide the distance by 3.28.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "HAYS",
+   "name": "HaysCADWebService1 - Parcels",
+   "url": "https://services6.arcgis.com/j94FvPaik4etwHFk/arcgis/rest/services/HaysCADWebService1/FeatureServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 123481,
+   "fields": {
+    "apn": "prop_id",
+    "owner": "file_as_name",
+    "mailing_address": [
+     "addr_line1",
+     "addr_line2",
+     "addr_line3",
+     "addr_city",
+     "addr_state",
+     "zip"
+    ],
+    "address": [
+     "situs_num",
+     "situs_street_prefx",
+     "situs_street",
+     "situs_street_sufix",
+     "situs_city",
+     "situs_state",
+     "situs_zip"
+    ],
+    "market_value": "market",
+    "acres": "legal_acreage"
+   },
+   "restrictions": "terms not found",
+   "notes": "Hosted by BIS Consultants for Hays CAD; owner_tax_yr 2026, item modified 2026-11. In the samples 'market' was empty while land_val and imprv_val were filled, so add those two if market is blank. hayscad.com refused automated requests (403) and no data-terms page was found. Hays County GIS publishes the same schema at https://services5.arcgis.com/bVphnK8rPe5MHUSr/arcgis/rest/services/Hays_County_Parcels/FeatureServer/0 (120,913 records, also verified with a spatial query). DISTANCE CAVEAT: the layer is stored in State Plane feet and a point query with distance=200&units=esriSRUnit_Meter reaches about 3.28 times too far (returned several hundred parcels; a 400 m bounding box returns about 100). Use geometryType=esriGeometryEnvelope, or divide the distance by 3.28.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "EL PASO",
+   "name": "ElPasoCADWebService - Parcels",
+   "url": "https://services2.arcgis.com/fKvlzLJczghwPYHS/arcgis/rest/services/ElPasoCADWebService/FeatureServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 402077,
+   "fields": {
+    "apn": "prop_id",
+    "owner": "file_as_name",
+    "mailing_address": [
+     "addr_line1",
+     "addr_line2",
+     "addr_line3",
+     "addr_city",
+     "addr_state",
+     "zip"
+    ],
+    "address": [
+     "situs_num",
+     "situs_street_prefx",
+     "situs_street",
+     "situs_street_sufix",
+     "situs_city",
+     "situs_state",
+     "situs_zip"
+    ],
+    "market_value": "market",
+    "acres": "legal_acreage"
+   },
+   "restrictions": "terms not found",
+   "notes": "Hosted by BIS Consultants for El Paso CAD; owner_tax_yr 2027, item modified 2026-11. geo_id is the long account number. epcad.org refused automated requests (403) and no data-terms page was found. DISTANCE CAVEAT: the layer is stored in State Plane feet and a point query with distance=200&units=esriSRUnit_Meter reaches about 3.28 times too far (returned several hundred parcels; a 400 m bounding box returns about 100). Use geometryType=esriGeometryEnvelope, or divide the distance by 3.28.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "ELLIS",
+   "name": "Ellis County Parcel Ownership Data (copy of Ellis CAD shapefile)",
+   "url": "https://services7.arcgis.com/URKkSE6MsjA926qB/arcgis/rest/services/Ellis_County_Parcel_Ownership/FeatureServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 101505,
+   "fields": {
+    "apn": "pid",
+    "owner": "fileasname",
+    "mailing_address": [
+     "owneraddr",
+     "ownersuite",
+     "ownercity",
+     "ownerstate",
+     "ownerzip"
+    ],
+    "address": [
+     "streetnum",
+     "streetpre",
+     "streetnam",
+     "streetsuf",
+     "streetcity",
+     "streetstat",
+     "streetzip"
+    ],
+    "market_value": "ownermarke",
+    "acres": "legalacre"
+   },
+   "restrictions": null,
+   "notes": "THIRD-PARTY COPY: uploaded by an individual ArcGIS Online user (jbinford1), credited to 'Ellis County, Texas Appraisal District. https://www.elliscad.com/gis-data'; valueyear 2026, last edited 2026-08, so it may go stale or disappear. Ellis CAD itself offers only a shapefile download on that page, and the county server (ecgis.co.ellis.tx.us) timed out. secondname for a second owner; refid2 is the R-number. Terms read at https://www.elliscad.com/gis-data : only an 'informational purposes ... not suitable for legal, engineering, or surveying purposes' disclaimer; no limit on commercial use or solicitation. 200 m spatial query at Waxahachie returned 123 parcels.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "FORT BEND",
+   "name": "FBCAD Public Data - FBCAD Public Parcel Data",
+   "url": "https://services2.arcgis.com/D4saGHECICkCeoJm/arcgis/rest/services/FBCAD_Public_Data/FeatureServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 386860,
+   "fields": {
+    "apn": "QUICKREFID",
+    "owner": "OWNERNAME",
+    "mailing_address": [
+     "OADDR1",
+     "OADDR2",
+     "OADDR3",
+     "OWNERCITY",
+     "OWNERSTATE",
+     "OWNERZIP"
+    ],
+    "address": "SITUS",
+    "market_value": "TOTALVALUE",
+    "acres": "LANDSIZEAC"
+   },
+   "restrictions": null,
+   "notes": "Fort Bend Central Appraisal District public layer ('intended for public use ... managed by the GIS Development division'), item modified 2026-11. PROPNUMBER is the long account number. OADDR1 and OADDR2 often repeat the same street line. Terms read at https://www.fbcad.org/gis-data/ : 'as is' disclaimer plus 'The user shall hold harmless, indemnify and defend the Fort Bend Central Appraisal District'; no limit on commercial use or solicitation. Fort Bend County's own server (gisweb.fortbendcountytx.gov) answered 403. DISTANCE CAVEAT: the layer is stored in State Plane feet and a point query with distance=200&units=esriSRUnit_Meter reaches about 3.28 times too far (returned several hundred parcels; a 400 m bounding box returns about 100). Use geometryType=esriGeometryEnvelope, or divide the distance by 3.28.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "MONTGOMERY",
+   "name": "MCAD Tax Parcel View",
+   "url": "https://services1.arcgis.com/PRoAPGnMSUqvTrzq/arcgis/rest/services/Tax_Parcel_view/FeatureServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 347560,
+   "fields": {
+    "apn": "pid",
+    "owner": "ownerName",
+    "mailing_address": "ownerAddress",
+    "address": "situs"
+   },
+   "restrictions": "Item licence: \"Users must comply with Montgomery County's data access policies. The data is provided for GIS and mapping purposes.\" and \"should not be used for general parcel mapping\" (https://www.arcgis.com/home/item.html?id=44060ff2f5d94a2381f4c8f52ded3c34). The county policies it refers to were not found.",
+   "notes": "Published by Montgomery County GIS (GIS.Data_MOCO) from Montgomery Central Appraisal District data; pYear 2027. ownerAddress is one string (street, city, state, ZIP). No value or acreage fields. mcad-tx.org/gis-data only points to the county open data site (data-moco.opendata.arcgis.com), which shows no terms page. DISTANCE CAVEAT: the layer is stored in State Plane feet and a point query with distance=200&units=esriSRUnit_Meter reaches about 3.28 times too far (returned several hundred parcels; a 400 m bounding box returns about 100). Use geometryType=esriGeometryEnvelope, or divide the distance by 3.28.",
+   "checked": "2026-11-17"
   }
  ],
- "summary": "Projects: TxDOT DCIS All Projects works well (73k lines with phase, cost and let dates). Parcels: the statewide TxGIO layer has owner and mailing address but only answers point 'identify' lookups, not queries; queryable owner layers verified for Harris, Dallas, Tarrant, Bexar and Travis."
+ "summary": "Projects: TxDOT DCIS All Projects works well (73k lines with phase, cost and let dates). Parcels: the statewide TxGIO layer has owner and mailing address (CC0) for every county tested but still rejects /query; only point 'identify' lookups work. Queryable owner layers verified for Harris, Dallas, Tarrant, Bexar, Travis, and (added 2026-11-17) Hidalgo, Denton, Williamson, Collin, Galveston, Brazoria, Hays, El Paso, Ellis, Fort Bend and Montgomery. Johnson has no queryable owner layer (its CAD layer has blank owner fields)."
 }

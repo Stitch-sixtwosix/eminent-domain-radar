@@ -1,181 +1,347 @@
 {
-  "state": "Virginia",
-  "code": "VA",
-  "checked": "2026-11-17",
-  "projects": [
-    {
-      "name": "VDOT SYIP Approved Projects - lines (STE_VDOT_SYIP_APPRVD_LINE)",
-      "url": "https://services.arcgis.com/p5v98VHDX9Atv3l7/arcgis/rest/services/SYIP_Approved_Projects/FeatureServer/1",
-      "verified": true,
-      "geometry": "polyline",
-      "record_count": 2583,
-      "fields": {
-        "id": "UPC",
-        "name": "DESCRIPTION",
-        "description": "PROJECT_PURPOSE",
-        "work_type": "SCOPE_OF_WORK_DESC",
-        "cost": "TOTAL_EST_CURRENT",
-        "status": "POOL_PRJ_STATUS_DSC",
-        "let_date": "CN_START_DATE",
-        "county": "JURISDICTION_DESC"
-      },
-      "work_type_values": [
-        "Acqusition Of Scenic Easement Or Sites",
-        "Bridge Rehab W/ Added Capacity",
-        "Bridge Rehab W/O Added Capacity",
-        "Bridge Replacement W/ Added Capacity",
-        "Bridge Replacement W/O Added Capacity",
-        "Bridge, New Construction",
-        "Environmental Only",
-        "Facilities For Pedestrians And Bicycles",
-        "Ferry Boats",
-        "Landscaping/Beautification",
-        "Mitigation Of Water Pollution Due To Highway Runof",
-        "New Construction Roadway",
-        "Other",
-        "Preliminary Engineering",
-        "Preservation Of Abandoned Railway Corridors",
-        "Rail/Highway Crossing",
-        "Reconstruction W/ Added Capacity",
-        "Reconstruction W/O Added Capacity",
-        "Rehabilitation Of Historic Bldgs/Facilities",
-        "Relocation",
-        "Restoration And Rehabilitation",
-        "Resurfacing",
-        "Safety",
-        "Safety And Education Of Pedestrians /Bicyclisits",
-        "Traffic Management/Engineering"
-      ],
-      "status_values": [
-        "Activity Dates Set",
-        "Activity Dates Set - RW Started",
-        "Advertised",
-        "Awarded",
-        "Canceled",
-        "Claims - RW",
-        "Construction Completed",
-        "Construction Started",
-        "Critical Decision Needed",
-        "Monitoring Funds",
-        "No Dates Set Yet",
-        "No Dates Set Yet - PE Open",
-        "Project Closeout Complete",
-        "Study Only",
-        "Waiting Financial Closure"
-      ],
-      "notes": "VDOT Six-Year Improvement Program (SYIP) approved projects. HAS_PE / HAS_RW / HAS_CN flag preliminary-engineering, right-of-way and construction phases; PE_START_DATE, RW_START_DATE, CN_START_DATE, CN_END_DATE are phase dates; CURRENT_PE_ESTIMATE / CURRENT_RW_ESTIMATE / CURRENT_CN_ESTIMATE and TOTAL_EST_CURRENT are cost estimates. Planned vs under construction: POOL_PRJ_STATUS_DSC (see values) and CN_START_DATE in the future. HAS_RW='1' with a future RW_START_DATE marks upcoming right-of-way acquisition."
-    },
-    {
-      "name": "VDOT SYIP Approved Projects - points (STE_VDOT_SYIP_APPRVD_SUM)",
-      "url": "https://services.arcgis.com/p5v98VHDX9Atv3l7/arcgis/rest/services/SYIP_Approved_Projects/FeatureServer/0",
-      "verified": true,
-      "geometry": "point",
-      "record_count": 2736,
-      "fields": {
-        "id": "UPC",
-        "name": "DESCRIPTION",
-        "description": "PROJECT_PURPOSE",
-        "work_type": "SCOPE_OF_WORK_DESC",
-        "cost": "TOTAL_EST_CURRENT",
-        "status": "POOL_PRJ_STATUS_DSC",
-        "let_date": "CN_START_DATE",
-        "county": "JURISDICTION_DESC"
-      },
-      "work_type_values": [
-        "Acqusition Of Scenic Easement Or Sites",
-        "Bridge Rehab W/ Added Capacity",
-        "Bridge Rehab W/O Added Capacity",
-        "Bridge Replacement W/ Added Capacity",
-        "Bridge Replacement W/O Added Capacity",
-        "Bridge, New Construction",
-        "Environmental Only",
-        "Facilities For Pedestrians And Bicycles",
-        "Ferry Boats",
-        "Landscaping/Beautification",
-        "Mitigation Of Water Pollution Due To Highway Runof",
-        "New Construction Roadway",
-        "Other",
-        "Preliminary Engineering",
-        "Preservation Of Abandoned Railway Corridors",
-        "Rail/Highway Crossing",
-        "Reconstruction W/ Added Capacity",
-        "Reconstruction W/O Added Capacity",
-        "Rehabilitation Of Historic Bldgs/Facilities",
-        "Relocation",
-        "Restoration And Rehabilitation",
-        "Resurfacing",
-        "Safety",
-        "Safety And Education Of Pedestrians /Bicyclisits",
-        "Scenic Or Historic Highway Programs"
-      ],
-      "status_values": [
-        "Activity Dates Set",
-        "Activity Dates Set - RW Started",
-        "Advertised",
-        "Awarded",
-        "Canceled",
-        "Claims - RW",
-        "Construction Completed",
-        "Construction Started",
-        "Critical Decision Needed",
-        "Monitoring Funds",
-        "No Dates Set Yet",
-        "No Dates Set Yet - PE Open",
-        "Project Closeout Complete",
-        "Study Only",
-        "Waiting Financial Closure"
-      ],
-      "notes": "Point summary of SYIP projects. VDOT Six-Year Improvement Program (SYIP) approved projects. HAS_PE / HAS_RW / HAS_CN flag preliminary-engineering, right-of-way and construction phases; PE_START_DATE, RW_START_DATE, CN_START_DATE, CN_END_DATE are phase dates; CURRENT_PE_ESTIMATE / CURRENT_RW_ESTIMATE / CURRENT_CN_ESTIMATE and TOTAL_EST_CURRENT are cost estimates. Planned vs under construction: POOL_PRJ_STATUS_DSC (see values) and CN_START_DATE in the future. HAS_RW='1' with a future RW_START_DATE marks upcoming right-of-way acquisition."
-    }
-  ],
-  "parcels_statewide": null,
-  "parcels_counties": [
-    {
-      "county": "PRINCE WILLIAM",
-      "url": "https://gisweb.pwcva.gov/arcgis/rest/services/OpenData/OpenData/MapServer/0",
-      "fields": {
-        "apn": "GPIN",
-        "owner": "CAMA_OWNER_CUR",
-        "mailing_address": [
-          "CAMA_ADDRESS2",
-          "CAMA_ADDRESS3",
-          "CAMA_CITY",
-          "CAMA_STATE",
-          "CAMA_ZIPCODE"
-        ],
-        "address": [
-          "ST_NO",
-          "ST_NAME",
-          "ST_TYPE",
-          "CITY",
-          "ZIP"
-        ],
-        "acres": "DEED_ACREAGE"
-      },
-      "notes": "Prince William County open-data parcels joined to CAMA; 156,428 of 160,086 rows have an owner (names look truncated at about 30 characters). The CAMA_ADDRESS*/CAMA_CITY/STATE/ZIPCODE fields appear to be the owner's mailing address (not confirmed by documentation). No value field.",
-      "verified": true,
-      "record_count": 160086
-    },
-    {
-      "county": "CHESTERFIELD",
-      "url": "https://services3.arcgis.com/TsynfzBSE6sXfoLq/arcgis/rest/services/Cadastral_ProdA/FeatureServer/3",
-      "fields": {
-        "apn": "GPIN",
-        "owner": "OwnerName",
-        "mailing_address": [
-          "OwnerAddress",
-          "OwnerCity",
-          "OwnerState",
-          "OwnerZip"
-        ],
-        "address": "Address",
-        "market_value": "FairMarketValue",
-        "acres": "DeededAcres"
-      },
-      "notes": "Chesterfield County 'ParcelsEnriched' layer (county ArcGIS Online org); 150,861 of 151,015 rows have OwnerName (rows without it are non-parcel polygons with all-null attributes). TotalAssessment also present.",
-      "verified": true,
-      "record_count": 151015
-    }
-  ],
-  "summary": "VDOT's SYIP approved-projects line and point layers verify with status, scope, cost and right-of-way/construction phase dates. The VGIN statewide parcel layer (https://vginmaps.vdem.virginia.gov/arcgis/rest/services/VA_Base_Layers/VA_Parcels/FeatureServer/0, 4,174,364 parcels, verified) has only FIPS, LOCALITY, PARCELID, no owner. Owner names verified for Prince William and Chesterfield only; Fairfax's open-data parcel layer has no owner fields, and the Loudoun, Virginia Beach and Henrico servers timed out from the research network."
+ "state": "Virginia",
+ "code": "VA",
+ "checked": "2026-11-17",
+ "projects": [
+  {
+   "name": "VDOT SYIP Approved Projects - lines (STE_VDOT_SYIP_APPRVD_LINE)",
+   "url": "https://services.arcgis.com/p5v98VHDX9Atv3l7/arcgis/rest/services/SYIP_Approved_Projects/FeatureServer/1",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 2583,
+   "fields": {
+    "id": "UPC",
+    "name": "DESCRIPTION",
+    "description": "PROJECT_PURPOSE",
+    "work_type": "SCOPE_OF_WORK_DESC",
+    "cost": "TOTAL_EST_CURRENT",
+    "status": "POOL_PRJ_STATUS_DSC",
+    "let_date": "CN_START_DATE",
+    "county": "JURISDICTION_DESC"
+   },
+   "work_type_values": [
+    "Acqusition Of Scenic Easement Or Sites",
+    "Bridge Rehab W/ Added Capacity",
+    "Bridge Rehab W/O Added Capacity",
+    "Bridge Replacement W/ Added Capacity",
+    "Bridge Replacement W/O Added Capacity",
+    "Bridge, New Construction",
+    "Environmental Only",
+    "Facilities For Pedestrians And Bicycles",
+    "Ferry Boats",
+    "Landscaping/Beautification",
+    "Mitigation Of Water Pollution Due To Highway Runof",
+    "New Construction Roadway",
+    "Other",
+    "Preliminary Engineering",
+    "Preservation Of Abandoned Railway Corridors",
+    "Rail/Highway Crossing",
+    "Reconstruction W/ Added Capacity",
+    "Reconstruction W/O Added Capacity",
+    "Rehabilitation Of Historic Bldgs/Facilities",
+    "Relocation",
+    "Restoration And Rehabilitation",
+    "Resurfacing",
+    "Safety",
+    "Safety And Education Of Pedestrians /Bicyclisits",
+    "Traffic Management/Engineering"
+   ],
+   "status_values": [
+    "Activity Dates Set",
+    "Activity Dates Set - RW Started",
+    "Advertised",
+    "Awarded",
+    "Canceled",
+    "Claims - RW",
+    "Construction Completed",
+    "Construction Started",
+    "Critical Decision Needed",
+    "Monitoring Funds",
+    "No Dates Set Yet",
+    "No Dates Set Yet - PE Open",
+    "Project Closeout Complete",
+    "Study Only",
+    "Waiting Financial Closure"
+   ],
+   "notes": "VDOT Six-Year Improvement Program (SYIP) approved projects. HAS_PE / HAS_RW / HAS_CN flag preliminary-engineering, right-of-way and construction phases; PE_START_DATE, RW_START_DATE, CN_START_DATE, CN_END_DATE are phase dates; CURRENT_PE_ESTIMATE / CURRENT_RW_ESTIMATE / CURRENT_CN_ESTIMATE and TOTAL_EST_CURRENT are cost estimates. Planned vs under construction: POOL_PRJ_STATUS_DSC (see values) and CN_START_DATE in the future. HAS_RW='1' with a future RW_START_DATE marks upcoming right-of-way acquisition."
+  },
+  {
+   "name": "VDOT SYIP Approved Projects - points (STE_VDOT_SYIP_APPRVD_SUM)",
+   "url": "https://services.arcgis.com/p5v98VHDX9Atv3l7/arcgis/rest/services/SYIP_Approved_Projects/FeatureServer/0",
+   "verified": true,
+   "geometry": "point",
+   "record_count": 2736,
+   "fields": {
+    "id": "UPC",
+    "name": "DESCRIPTION",
+    "description": "PROJECT_PURPOSE",
+    "work_type": "SCOPE_OF_WORK_DESC",
+    "cost": "TOTAL_EST_CURRENT",
+    "status": "POOL_PRJ_STATUS_DSC",
+    "let_date": "CN_START_DATE",
+    "county": "JURISDICTION_DESC"
+   },
+   "work_type_values": [
+    "Acqusition Of Scenic Easement Or Sites",
+    "Bridge Rehab W/ Added Capacity",
+    "Bridge Rehab W/O Added Capacity",
+    "Bridge Replacement W/ Added Capacity",
+    "Bridge Replacement W/O Added Capacity",
+    "Bridge, New Construction",
+    "Environmental Only",
+    "Facilities For Pedestrians And Bicycles",
+    "Ferry Boats",
+    "Landscaping/Beautification",
+    "Mitigation Of Water Pollution Due To Highway Runof",
+    "New Construction Roadway",
+    "Other",
+    "Preliminary Engineering",
+    "Preservation Of Abandoned Railway Corridors",
+    "Rail/Highway Crossing",
+    "Reconstruction W/ Added Capacity",
+    "Reconstruction W/O Added Capacity",
+    "Rehabilitation Of Historic Bldgs/Facilities",
+    "Relocation",
+    "Restoration And Rehabilitation",
+    "Resurfacing",
+    "Safety",
+    "Safety And Education Of Pedestrians /Bicyclisits",
+    "Scenic Or Historic Highway Programs"
+   ],
+   "status_values": [
+    "Activity Dates Set",
+    "Activity Dates Set - RW Started",
+    "Advertised",
+    "Awarded",
+    "Canceled",
+    "Claims - RW",
+    "Construction Completed",
+    "Construction Started",
+    "Critical Decision Needed",
+    "Monitoring Funds",
+    "No Dates Set Yet",
+    "No Dates Set Yet - PE Open",
+    "Project Closeout Complete",
+    "Study Only",
+    "Waiting Financial Closure"
+   ],
+   "notes": "Point summary of SYIP projects. VDOT Six-Year Improvement Program (SYIP) approved projects. HAS_PE / HAS_RW / HAS_CN flag preliminary-engineering, right-of-way and construction phases; PE_START_DATE, RW_START_DATE, CN_START_DATE, CN_END_DATE are phase dates; CURRENT_PE_ESTIMATE / CURRENT_RW_ESTIMATE / CURRENT_CN_ESTIMATE and TOTAL_EST_CURRENT are cost estimates. Planned vs under construction: POOL_PRJ_STATUS_DSC (see values) and CN_START_DATE in the future. HAS_RW='1' with a future RW_START_DATE marks upcoming right-of-way acquisition."
+  }
+ ],
+ "parcels_statewide": null,
+ "parcels_counties": [
+  {
+   "county": "PRINCE WILLIAM",
+   "url": "https://gisweb.pwcva.gov/arcgis/rest/services/OpenData/OpenData/MapServer/0",
+   "fields": {
+    "apn": "GPIN",
+    "owner": "CAMA_OWNER_CUR",
+    "mailing_address": [
+     "CAMA_ADDRESS2",
+     "CAMA_ADDRESS3",
+     "CAMA_CITY",
+     "CAMA_STATE",
+     "CAMA_ZIPCODE"
+    ],
+    "address": [
+     "ST_NO",
+     "ST_NAME",
+     "ST_TYPE",
+     "CITY",
+     "ZIP"
+    ],
+    "acres": "DEED_ACREAGE"
+   },
+   "notes": "Prince William County open-data parcels joined to CAMA; 156,428 of 160,086 rows have an owner (names look truncated at about 30 characters). The CAMA_ADDRESS*/CAMA_CITY/STATE/ZIPCODE fields appear to be the owner's mailing address (not confirmed by documentation). No value field.",
+   "verified": true,
+   "record_count": 160086
+  },
+  {
+   "county": "CHESTERFIELD",
+   "url": "https://services3.arcgis.com/TsynfzBSE6sXfoLq/arcgis/rest/services/Cadastral_ProdA/FeatureServer/3",
+   "fields": {
+    "apn": "GPIN",
+    "owner": "OwnerName",
+    "mailing_address": [
+     "OwnerAddress",
+     "OwnerCity",
+     "OwnerState",
+     "OwnerZip"
+    ],
+    "address": "Address",
+    "market_value": "FairMarketValue",
+    "acres": "DeededAcres"
+   },
+   "notes": "Chesterfield County 'ParcelsEnriched' layer (county ArcGIS Online org); 150,861 of 151,015 rows have OwnerName (rows without it are non-parcel polygons with all-null attributes). TotalAssessment also present.",
+   "verified": true,
+   "record_count": 151015
+  },
+  {
+   "county": "RICHMOND CITY",
+   "url": "https://services1.arcgis.com/k3vhq11XkBNeeOfM/arcgis/rest/services/Parcels/FeatureServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 76961,
+   "fields": {
+    "apn": "PIN",
+    "owner": "OwnerName",
+    "mailing_address": [
+     "MailAddress",
+     "MailCity",
+     "MailState",
+     "MailZip"
+    ],
+    "address": "AsrLocationBldgNo",
+    "market_value": "TotalValue",
+    "acres": "LandSqFt"
+   },
+   "restrictions": null,
+   "notes": "City of Richmond (ArcGIS Online account richmondvagis) 'Parcels', parcel geometry joined to assessor CAMA ownership; data last edited 2026-11-14. Terms read: the item's licence text is only 'No warranty is expressed or implied regarding the use of this data, nor does the act of distribution constitute any such warranty.' (https://www.arcgis.com/home/item.html?id=fbfce2aab2a44c05bc0abc2d6ea7e54a); no commercial or solicitation limit stated there. Parcels with several ownership records are stacked (one polygon per PIN; CountOfPIN). AsrLocationBldgNo is the building number only (no street-name field); LandSqFt is square feet, not acres. LandValue, DwellingValue, Mailable and MaskedOwner fields also present. A 200 m point query downtown returned 771 rows.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "HANOVER",
+   "url": "https://services2.arcgis.com/sKZWgJlU6SekCzQV/arcgis/rest/services/Hanover_Parcels/FeatureServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 52587,
+   "fields": {
+    "apn": "GPIN",
+    "owner": "OWN_NAME1",
+    "mailing_address": [
+     "MAIL_ADDRESS",
+     "MAIL_CITY",
+     "MAIL_STATE",
+     "MAIL_ZIP",
+     "MAIL_COUNTRY"
+    ],
+    "address": [
+     "ADDRESS",
+     "ST_PREFIX",
+     "ST_NAME",
+     "ST_TYPE",
+     "ST_SUFFIX",
+     "APT",
+     "CITY",
+     "STATE",
+     "ZIP"
+    ],
+    "market_value": [
+     "LAND_VALUE",
+     "IMPROVEMENTS_VALUE"
+    ],
+    "acres": "LOT_ACRES"
+   },
+   "restrictions": "terms not found (item licence field is empty). Unconfirmed: a web-search summary of the county parcel viewer https://parcelmap.hanovercounty.gov reported wording that the information is proprietary and 'any resale of this information is prohibited'; the viewer is a script-only page and the text could not be read directly.",
+   "notes": "Hanover County (ArcGIS Online account hanovercounty) 'Hanover Parcels', edited 2026-11-17. OWN_NAME2 second owner. ADDRESS holds the house number only. No single total-value field. Same account also has Hanover_County_Parcels (51,608 rows, truncated field names, floodplain extract) and yearly archives.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "LOUDOUN",
+   "url": "https://services1.arcgis.com/MxjRokvPm7bjslyR/arcgis/rest/services/Stacked_Parcels_Owner/FeatureServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 154354,
+   "fields": {
+    "apn": "PA_MCPI",
+    "owner": "OWNER",
+    "mailing_address": [
+     "OWNER_ADDRESS1",
+     "OWNER_ADDRESS2",
+     "OWNER_ADDRESS3",
+     "OWNER_CITY",
+     "OWNER_STATE",
+     "OWNER_ZIP1",
+     "OWNER_ZIP2",
+     "OWNER_COUNTRY",
+     "OWNER_POSTCODE"
+    ],
+    "address": "PRI_PREMISE_ADD",
+    "acres": "PA_LEGAL_ACRE"
+   },
+   "restrictions": "terms not found (item licence field says only 'Loudoun County, VA'; the county disclaimer page https://logis.loudoun.gov/loudoun/disclaimer.html refused the connection).",
+   "notes": "Loudoun County (ArcGIS Online account LoudounCounty) 'Stacked_Parcels_Owner', overwritten by a county script; edited 2026-11-16. HIDENAME flag is 'Y' on 1,804 rows and 'N' on 150,959, yet OWNER is still filled on the 'Y' rows sampled: the county appears to mark owners whose names it hides in its own viewer, so treat HIDENAME='Y' rows as not to be used. PA_GIS_ACRE also present; no value field. The county's own server logis.loudoun.gov timed out.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "ROANOKE",
+   "url": "https://services1.arcgis.com/VlZ73DcE2ya6FnSK/arcgis/rest/services/Parcels_Hosted/FeatureServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 47574,
+   "fields": {
+    "apn": "ParcelID",
+    "owner": "Owner1_LastAndFirst",
+    "mailing_address": [
+     "MailingAddressLine1",
+     "MailingAddressLine2",
+     "MailingAddressLine3",
+     "MailingAddressZipCode"
+    ],
+    "address": "Full_Address_String",
+    "market_value": "SumAllCardsTotalMarketValue",
+    "acres": "Calc_Acreage"
+   },
+   "restrictions": "terms not found",
+   "notes": "Roanoke COUNTY (not the City of Roanoke) 'Parcels Open Data', ArcGIS Online account wrayda, copyright 'Roanoke County', edited 2026-11-07; 342 fields. 47,355 rows have Owner1_LastAndFirst. Owner2_LastAndFirst and Owner1_2LastFirst (both owners) also present; MailingAddressLine2 holds city and state. OwnerInfoIsProtected is YES/NO: skip YES rows. GPIN is a second parcel key. Redundant geometry where a parcel has several condominium units. City of Roanoke was not searched.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "NEWPORT NEWS",
+   "url": "https://services6.arcgis.com/SiUAoHzWN11AIADA/arcgis/rest/services/Parcel_Polygon_View_Layer/FeatureServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 54472,
+   "fields": {
+    "apn": "PARCELID",
+    "owner": "OWNERNME1",
+    "mailing_address": [
+     "PSTLADDRESS1",
+     "PSTLADDRESS2",
+     "PSTLCITY",
+     "PSTLSTATE",
+     "PSTLZIP5",
+     "PSTLZIP4"
+    ],
+    "address": "SITEADDRESS",
+    "market_value": [
+     "CNTLNDVAL",
+     "CNTIMPVAL"
+    ],
+    "acres": "STATEDAREA"
+   },
+   "restrictions": "terms not found",
+   "notes": "City of Newport News staff account (scottbr_nngov) 'Parcel Polygon View Layer'. FRESHNESS UNCERTAIN: the service reports a data edit on 2025-11-13 but the newest LASTUPDATE value on any row is May 2020, so ownership may be years old. OWNERNME2 second owner line; STATEDAREA is acres as text; CNT* = current land / improvement value, PRV* = previous. The city's own server maps.nnva.gov timed out.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "CHESAPEAKE",
+   "url": "https://services1.arcgis.com/OAphVRUvJVpBRovs/arcgis/rest/services/Parcel_2020/FeatureServer/0",
+   "verified": true,
+   "spatial_query": true,
+   "record_count": 90536,
+   "fields": {
+    "apn": "MAP_PARCEL",
+    "owner": "OWNER",
+    "mailing_address": [
+     "CAREOF",
+     "MADDRESS",
+     "MCITY",
+     "MSTATE",
+     "MZIP"
+    ],
+    "address": [
+     "ADDRESS",
+     "ADDRESSZIP"
+    ],
+    "market_value": "ASMT_TOTAL",
+    "acres": "CALCACREAGE"
+   },
+   "restrictions": "This item has no licence text, but the City of Chesapeake's current open-data items (Parcels, Zoning, Easements) carry: 'Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International' (licence field of the city's 'Parcels' item, https://gis.cityofchesapeake.net/mapping/rest/services/OpenData/OpenData/MapServer/15, read through the ArcGIS Online item record). Non-commercial licence: treat as restricted.",
+   "notes": "STALE: a December 2020 snapshot ('Chesapeake Property Parcel (2020)') in the city's ArcGIS Online organization, last edited 2020-12-11. PARNO second key; ASMT_LD / ASMT_BL land and building assessments. The city's current Parcels layer (gis.cityofchesapeake.net ... OpenData/MapServer/15) timed out from the research network, so its fields are not known. A newer city layer Zoning_and_Parcel_Ownership/FeatureServer/0 (91,324 rows, edited 2024-01-31) has OWNER and ASMT_TOTAL but no parcel number and no mailing address.",
+   "checked": "2026-11-17"
+  }
+ ],
+ "summary": "VDOT's SYIP approved-projects line and point layers verify with status, scope, cost and right-of-way/construction phase dates. The VGIN statewide parcel layer (https://vginmaps.vdem.virginia.gov/arcgis/rest/services/VA_Base_Layers/VA_Parcels/FeatureServer/0, 4,174,364 parcels, verified) has only FIPS, LOCALITY, PARCELID, no owner. Owner names verified for Prince William and Chesterfield only; Fairfax's open-data parcel layer has no owner fields, and the Loudoun, Virginia Beach and Henrico servers timed out from the research network.",
+ "parcels_second_pass": "Second pass 2026-11-17 (parcels only). Statewide: unchanged, VGIN statewide parcels have no owner. Added Richmond city, Hanover, Loudoun, Roanoke County, Newport News, Chesapeake (2020 snapshot). NOT FOUND: FAIRFAX - no public layer with owner names: county ArcGIS Online Parcels (services1.arcgis.com/ioennV6PpG5Xodq0/.../Parcels/FeatureServer/0, 369,686 rows) has only PIN; www.fairfaxcounty.gov/mercator/.../GIS/ParcelsPlus/MapServer/0 has only PIN; the Tax Administration Real Estate tables (Legal, Parcels, Sales, Assessed Values) are keyed by PARID with site address and values but no owner field, and being tables they take no spatial query. ARLINGTON - arlgis.arlingtonva.us/arcgis/rest/services/StaffMap/Property_Map_public/MapServer/3 answers spatial queries and has the owner MAILING address (OWN_STREET, OWN_CITY, OWN_STATE, OWN_ZIP) and values but NO owner-name field; open-data REA Property Polygons has only RPCMSTR. SPOTSYLVANIA - county SpotsyParcels layer (70,181 rows) has parcel ids only, no owner; county server timed out. NORFOLK - ArcGIS Online Parcels layer has only GPIN/TAX_ACCT; gisshare.norfolk.gov timed out. VIRGINIA BEACH (geo.vbgov.com Basemaps/Property_Information/MapServer/12), HENRICO (portal.henrico.gov Layers/Tax_Parcels_and_CAMA_Data_External), AUGUSTA (gis.co.augusta.va.us): services are listed in ArcGIS Online but every request from the research network timed out or was refused, so nothing is verified; the only reachable Henrico layer with owners is a 735-row county-owned extract from 2022. Third-party re-uploads of county parcels by unrelated accounts were ignored."
 }
