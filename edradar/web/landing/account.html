@@ -31,6 +31,11 @@
       <p class="status" id="sub-status"></p>
       <p style="margin-top: 20px" id="sub-open" hidden><a class="btn" href="app/">Open EminentTracker</a></p>
       <p style="margin-top: 14px" id="sub-bill" hidden><button class="btn plain" type="button" id="bill">Change card or cancel</button></p>
+      <div id="sub-card" hidden>
+        <p style="margin-top: 16px; font-size: 14px">Your access has no subscription charge. Postcards and owner lookups are charged as you order them, so they need a card on file. Adding it charges nothing.</p>
+        <p style="margin-top: 14px"><button class="btn plain" type="button" id="card">Add a card for postcards and lookups</button></p>
+        <p class="status" id="card-status" role="status" hidden></p>
+      </div>
       <div id="sub-pay" hidden>
         <p style="margin-top: 16px; font-size: var(--s-small)" id="pay-what"></p>
         <p style="margin-top: 14px"><button class="btn" type="button" id="pay">Pay and open my account</button></p>
@@ -117,11 +122,13 @@ else {
     document.getElementById("admin-link").hidden = plan.role !== "admin";
     document.getElementById("sub").hidden = false;
     document.getElementById("sub-status").textContent = active
-      ? "Subscription active: " + (plan.plan === "all" ? "all 50 states" : "single state" + (plan.state ? ", " + plan.state.replace(/\b\w/g, c => c.toUpperCase()) : "")) + "."
+      ? (plan.stripe_subscription || plan.role === "admin" ? "Subscription active: " : "Access open, no subscription charge: ") + (plan.plan === "all" ? "all 50 states" : "single state" + (plan.state ? ", " + plan.state.replace(/\b\w/g, c => c.toUpperCase()) : "")) + "."
       : "No active subscription yet.";
     document.getElementById("sub-open").hidden = !active;
     document.getElementById("sub-pay").hidden = active;
     document.getElementById("sub-bill").hidden = !(active && plan.stripe_customer);
+    document.getElementById("bill").textContent = plan.stripe_subscription ? "Change card or cancel" : "Change card";
+    document.getElementById("sub-card").hidden = !(active && !plan.stripe_customer && plan.role !== "admin");
   };
   showSub();
   const fn = async body => {
@@ -160,6 +167,20 @@ else {
     e.target.disabled = true;
     try { location.href = (await fn({action: "portal"})).url; } catch (err) { e.target.disabled = false; say(payStatus, err.message, true); document.getElementById("sub-pay").hidden = false; }
   });
+  document.getElementById("card").addEventListener("click", async e => {
+    const st = document.getElementById("card-status"); e.target.disabled = true; say(st, "Opening the secure card page…");
+    try { location.href = (await fn({action: "card"})).url; }
+    catch (err) { e.target.disabled = false; say(st, !err.status || err.status === 503 || err.status === 404 ? "Card payments are being switched on. Try again shortly." : err.message, true); }
+  });
+  if (q.get("card") && !plan.stripe_customer) {
+    // Back from Stripe with a card saved. The notice reaches us within a few seconds.
+    for (let i = 0; i < 15 && !plan.stripe_customer; i++) {
+      await new Promise(r => setTimeout(r, 2000));
+      const {data: again} = await s.auth.refreshSession();
+      if (again.session) plan = again.session.user.app_metadata || {};
+    }
+    showSub();
+  }
   if (q.get("paid") && !active) {
     // Back from Stripe. The payment notice reaches us within a few seconds; the sign-in is renewed until it shows.
     document.getElementById("sub-status").textContent = "Payment received. Opening your account…";

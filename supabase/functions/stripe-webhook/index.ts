@@ -18,6 +18,14 @@ Deno.serve(async (req) => {
         // The card that paid becomes the customer's default, so postcards and lookups can go on later invoices.
         if (sub.default_payment_method) await stripe("POST", "customers/" + obj.customer, { invoice_settings: { default_payment_method: sub.default_payment_method } });
       }
+    } else if (event.type === "checkout.session.completed" && obj.mode === "setup" && obj.setup_intent && obj.customer) {
+      // A card saved with no charge, for an account that is open without a subscription.
+      const uid = obj.client_reference_id || (obj.metadata || {}).user_id;
+      const intent = await stripe("GET", "setup_intents/" + obj.setup_intent);
+      if (uid && intent.status === "succeeded" && intent.payment_method) {
+        await stripe("POST", "customers/" + obj.customer, { invoice_settings: { default_payment_method: intent.payment_method } });
+        await setAccess(uid, { stripe_customer: obj.customer, stripe_pending: null });
+      }
     } else if (event.type === "customer.subscription.updated" || event.type === "customer.subscription.deleted") {
       const uid = (obj.metadata || {}).user_id;
       if (uid) {

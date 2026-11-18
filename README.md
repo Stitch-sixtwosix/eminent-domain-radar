@@ -172,7 +172,7 @@ The published site is static, so anything that needs a secret runs in three Supa
 
 - `billing`: opens Stripe Checkout for the plan a firm chose at sign-up (charged at once, renews monthly or yearly) and Stripe's page for changing the card or cancelling.
 - `stripe-webhook`: the only thing that opens or closes an account for payment reasons. Point a Stripe webhook at `https://<project>.supabase.co/functions/v1/stripe-webhook` with the events `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted` and `invoice.paid`.
-- `outreach`: postcards through Lob and owner lookups through BatchData, with a usage ledger. Charges go on the firm's next invoice, or are charged at once when they reach $50.
+- `outreach`: postcards through Lob and owner lookups through BatchData, with a usage ledger. Charges go on the firm's next invoice, or are charged at once when they reach $50. An account opened by hand with no subscription (`access: active`, no `stripe_subscription`) adds a card from its account page and is charged for each order as it is made.
 
 Set up once:
 

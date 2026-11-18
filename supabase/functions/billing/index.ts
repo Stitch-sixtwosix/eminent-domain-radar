@@ -1,5 +1,6 @@
 // Subscriptions. "checkout" sends a signed-in firm to Stripe to pay for the plan it chose; the account opens when
 // Stripe tells stripe-webhook the payment went through. "portal" opens Stripe's page for changing the card or cancelling.
+// "card" saves a card, with no charge, for an account that is open without a subscription.
 import { PLANS, planChoice } from "../_shared/core.js";
 import { caller, Refused, serve, setAccess, SITE, stripe } from "../_shared/svc.ts";
 
@@ -11,6 +12,21 @@ Deno.serve((req) => serve(req, async () => {
   if (body.action === "portal") {
     if (!customer) throw new Refused("There is no payment on file for this account yet.");
     const s = await stripe("POST", "billing_portal/sessions", { customer, return_url: SITE + "/account.html" });
+    return { url: s.url };
+  }
+
+  if (body.action === "card") {
+    // An open account with no subscription (one we opened by hand) puts a card on file so postcards and lookups can be charged.
+    // Nothing is charged here. The customer is only written to the account once Stripe confirms the card was saved.
+    if (meta.access !== "active") throw new Refused("Subscribe first; the card you pay with is used for postcards and lookups too.");
+    if (customer) throw new Refused("This account already has a card on file. Use Change card to replace it.");
+    let pending = meta.stripe_pending as string | undefined;
+    if (!pending) {
+      pending = (await stripe("POST", "customers", { email: user.email, name: firm.firm || firm.full_name || undefined, metadata: { user_id: user.id } }, "cust-" + user.id)).id;
+      await setAccess(user.id, { stripe_pending: pending });
+    }
+    const s = await stripe("POST", "checkout/sessions", { mode: "setup", customer: pending, client_reference_id: user.id, currency: "usd",
+      metadata: { user_id: user.id }, success_url: SITE + "/account.html?card=1", cancel_url: SITE + "/account.html" });
     return { url: s.url };
   }
 

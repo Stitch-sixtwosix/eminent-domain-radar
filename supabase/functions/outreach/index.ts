@@ -29,7 +29,7 @@ async function saved(userId: string) {
 async function billable(user: User): Promise<string | null> {
   if (isAdmin(user)) return null;
   const customer = (user.app_metadata || {}).stripe_customer as string | undefined;
-  if (!customer) throw new Refused("Paid outreach needs a card on file. Subscribe from your account page first.", 402);
+  if (!customer) throw new Refused("Paid outreach needs a card on file. Add one from your account page first.", 402);
   const open = await stripe("GET", "invoices", { customer, status: "open", limit: 1 });
   if ((open.data || []).length) throw new Refused("Your last invoice has not been paid. Update your card from your account page, then try again.", 402);
   return customer;
@@ -49,7 +49,8 @@ async function bill(user: User, customer: string | null, row: Record<string, unk
   if (!customer || !item) return;
   const { data } = await db.from("usage").select("price_cents").eq("user_id", user.id).eq("invoiced", false);
   const pending = (data || []).reduce((a: number, r: { price_cents: number }) => a + r.price_cents, 0);
-  if (pending < BILL_AT) return;
+  // With a subscription the charges ride on the next invoice. Without one there is no next invoice, so each order is charged as it is made.
+  if (pending < BILL_AT && (user.app_metadata || {}).stripe_subscription) return;
   try {
     const inv = await stripe("POST", "invoices", { customer, collection_method: "charge_automatically", pending_invoice_items_behavior: "include", auto_advance: true,
       description: "EminentTracker postcards and owner lookups" });
