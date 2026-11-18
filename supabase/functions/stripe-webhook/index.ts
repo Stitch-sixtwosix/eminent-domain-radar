@@ -30,10 +30,11 @@ Deno.serve(async (req) => {
       const uid = (obj.metadata || {}).user_id;
       if (uid) {
         const { data } = await admin().auth.admin.getUserById(uid);
-        const current = ((data.user && data.user.app_metadata) || {}).stripe_subscription;
+        const was = (data.user && data.user.app_metadata) || {}, current = was.stripe_subscription;
         // An old, cancelled subscription must never close an account that has since paid for a new one.
         if (!current || current === obj.id)
-          await setAccess(uid, { access: event.type.endsWith("deleted") ? "none" : accessFor(obj.status), stripe_subscription: obj.id, paid_through: obj.current_period_end || null });
+          // An account the administrator put on hold stays closed whatever Stripe reports, until it is released.
+          await setAccess(uid, { access: was.held || event.type.endsWith("deleted") ? "none" : accessFor(obj.status), stripe_subscription: obj.id, paid_through: obj.current_period_end || null });
       }
     } else if (event.type === "invoice.paid" && obj.customer) {
       // Usage that was waiting on this invoice is now paid for.

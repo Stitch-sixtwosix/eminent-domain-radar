@@ -47,6 +47,7 @@ language sql stable security definer set search_path = '' as $$
     'has_card', coalesce(u.raw_app_meta_data ->> 'stripe_customer', '') <> '',
     'has_subscription', coalesce(u.raw_app_meta_data ->> 'stripe_subscription', '') <> '',
     'paid_through', u.raw_app_meta_data -> 'paid_through',
+    'held', coalesce((u.raw_app_meta_data ->> 'held')::boolean, false), 'held_at', u.raw_app_meta_data ->> 'held_at',
     'full_name', coalesce(u.raw_user_meta_data ->> 'full_name', u.raw_user_meta_data ->> 'name'),
     'firm', u.raw_user_meta_data ->> 'firm', 'location', u.raw_user_meta_data ->> 'location', 'phone', u.raw_user_meta_data ->> 'phone',
     'chosen_plan', u.raw_user_meta_data ->> 'plan', 'chosen_state', u.raw_user_meta_data ->> 'plan_state',

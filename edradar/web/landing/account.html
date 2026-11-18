@@ -140,6 +140,10 @@ else {
     document.getElementById("sub-pay").hidden = active;
     document.getElementById("sub-bill").hidden = !(active && plan.stripe_customer);
     document.getElementById("bill").textContent = plan.stripe_subscription ? "Change card or cancel" : "Change card";
+    if (plan.held) {      // put on hold by the administrator: say so, and do not offer to pay again
+      document.getElementById("sub-status").textContent = "This account is on hold. Email {{contact_email}} and we will sort it out.";
+      document.getElementById("sub-pay").hidden = true;
+    }
     document.getElementById("sub-card").hidden = !(active && !plan.stripe_customer && plan.role !== "admin");
   };
   showSub();

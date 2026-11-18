@@ -37,7 +37,7 @@ export function mustBeActive(user: { app_metadata?: Record<string, unknown> }) {
   if ((user.app_metadata || {}).access !== "active") throw new Refused("This needs an active subscription.", 402);
 }
 
-export async function stripe(method: "GET" | "POST", path: string, params: Record<string, unknown> = {}, idempotencyKey?: string) {
+export async function stripe(method: "GET" | "POST" | "DELETE", path: string, params: Record<string, unknown> = {}, idempotencyKey?: string) {
   const key = Deno.env.get("STRIPE_SECRET_KEY");
   if (!key) throw new Refused("Online payment is not switched on yet.", 503);
   const body = form(params);
