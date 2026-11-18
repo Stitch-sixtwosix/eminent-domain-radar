@@ -720,3 +720,14 @@ def test_county_is_found_from_a_map_position():
     assert counties.find(shapes, 1, 1) == "ST. CLAIR"
     assert counties.find(shapes, 5, 5) == "SHELBY"          # inside the hole of the first, so it belongs to the second
     assert counties.find(shapes, 20, 20) is None
+
+
+def test_search_distance_is_corrected_for_layers_stored_in_feet():
+    from edradar import parcels as P
+
+    degrees = {"ymin": 30.0, "ymax": 31.0}
+    assert P.reach_factor({"ymin": 0, "ymax": 111320 * 3.28084}, degrees) == P.FEET_PER_METER     # feet
+    assert P.reach_factor({"ymin": 0, "ymax": 111320}, degrees) == 1.0                            # meters
+    assert P.reach_factor({"ymin": 30.0, "ymax": 31.0}, degrees) == 1.0                           # degrees
+    assert P.reach_factor({}, degrees) == 1.0
+    assert P.reach({"url": "https://gis.county.example/arcgis/rest/services/P/MapServer/0"}, None) == 1.0

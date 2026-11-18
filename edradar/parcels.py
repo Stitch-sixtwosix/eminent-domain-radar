@@ -99,7 +99,47 @@ def _arcgis_query(layer: Dict[str, Any], http: Http, extra: Dict[str, Any], limi
     return [f.get("attributes") or {} for f in data.get("features") or []]
 
 
+FEET_PER_METER = 3.28084
+
+
+def reach(layer: Dict[str, Any], http: Http) -> float:
+    """How far a layer really searches for each meter asked.
+
+    Layers hosted on ArcGIS Online and stored in feet search about 3.28 times too far when given a distance in
+    meters (measured on Williamson and Collin, Texas, on 2026-11-17; a county's own server in feet was correct).
+    The layer's units are worked out by comparing its extent in its own coordinates with the same extent in
+    degrees. Checked once per layer per run; any failure leaves the distance alone.
+    """
+    if "_reach" in layer:
+        return layer["_reach"]
+    factor = 1.0
+    try:
+        url = layer["url"].rstrip("/")
+        if ".arcgis.com/" in url.lower():
+            own = (http.get_json(url, {"f": "json"}).get("extent") or {})
+            deg = (http.get_json(url + "/query", {"where": "1=1", "returnExtentOnly": "true", "outSR": 4326,
+                                                  "f": "json"}).get("extent") or {})
+            factor = reach_factor(own, deg)
+    except Exception:
+        factor = 1.0
+    layer["_reach"] = factor
+    return factor
+
+
+def reach_factor(own: Dict[str, Any], deg: Dict[str, Any]) -> float:
+    """3.28 when the layer's own coordinates are feet, otherwise 1."""
+    try:
+        meters = (float(deg["ymax"]) - float(deg["ymin"])) * 111320.0
+        units = float(own["ymax"]) - float(own["ymin"])
+    except (KeyError, TypeError, ValueError):
+        return 1.0
+    if meters <= 0 or units <= 0:
+        return 1.0
+    return FEET_PER_METER if 2.6 <= units / meters <= 4.0 else 1.0
+
+
 def _arcgis_spatial(layer, http, geometry, distance_m, limit):
+    distance_m = round(distance_m / reach(layer, http), 2)
     g = geo.thin(geometry)
     if geo.is_linear(g):
         gtype, gjson = "esriGeometryPolyline", {"paths": g["paths"], "spatialReference": {"wkid": 4326}}
