@@ -132,6 +132,9 @@ CREATE TABLE IF NOT EXISTS list_members (
 );
 
 CREATE INDEX IF NOT EXISTS idx_leads_score ON leads(score DESC);
+-- Outreach counts ask "is any lead for this owner marked do not contact?" once per lead. Without this the whole
+-- table was read each time, which took the publish from minutes to hours once there were 600,000 leads.
+CREATE INDEX IF NOT EXISTS idx_leads_status ON leads(status);
 CREATE INDEX IF NOT EXISTS idx_projects_score ON projects(score DESC);
 """
 
