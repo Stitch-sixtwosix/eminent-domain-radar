@@ -663,6 +663,11 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
     counts = {x["code"]: x["projects"] for x in stats.get("states") or []}
     (site / "coverage.json").write_text(json.dumps(
         [dict(r, live=r["code"] in counts, scored_projects=counts.get(r["code"], 0)) for r in _coverage(cfg)]))
+    from ..config import registry as _registry
+
+    reg = _registry(cfg, db)
+    reg["generated"] = datetime.now().strftime("%Y-%m-%d %H:%M")
+    (site / "sources.json").write_text(json.dumps(reg, separators=(",", ":")))
     (site / ".nojekyll").write_text("")
     domain = (cfg.get("site") or {}).get("domain")
     (site / "robots.txt").write_text("User-agent: *\nDisallow: /app/\nDisallow: /account.html\nDisallow: /admin.html\n"

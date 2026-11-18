@@ -15,6 +15,7 @@ def main() -> None:
     p.add_argument("--source", choices=sorted(pipeline.SOURCES))
     sub.add_parser("classify", help="score unclassified signals")
     sub.add_parser("dedupe", help="hide projects that are listed more than once")
+    sub.add_parser("sources", help="list every source on file and the gaps still open")
     sub.add_parser("geocode", help="geocode text-sourced projects")
     p = sub.add_parser("match", help="find parcels around scored projects")
     p.add_argument("--limit", type=int, help="projects to match this run")
@@ -62,6 +63,19 @@ def main() -> None:
         pipeline.ingest(cfg, db, args.source)
     elif args.cmd == "classify":
         pipeline.classify(cfg, db)
+    elif args.cmd == "sources":
+        from .config import registry
+
+        reg = registry(cfg, db)
+        count = lambda kind, status: sum(1 for x in reg["sources"] if x["kind"] == kind and x["status"] == status)
+        print("%d sources: %d project sources on, %d owner files on, %d owner files held, %d off" % (
+            len(reg["sources"]), count("projects", "on"), count("owners", "on"), count("owners", "held"),
+            count("owners", "off") + count("projects", "off")))
+        print("on but nothing loaded: %d" % sum(1 for x in reg["sources"] if x["kind"] == "projects" and x["status"] == "on" and not x["loaded"]))
+        for g in sorted(reg["gaps"], key=lambda g: -g["missing_count"]):
+            if g["missing_count"] or not g["statewide_projects"]:
+                print("  %s: %d of %d counties without an owner file%s" % (
+                    g["code"], g["missing_count"], g["counties"], "" if g["statewide_projects"] else "; no statewide project source"))
     elif args.cmd == "dedupe":
         from . import dedupe as _dedupe
         print("%(copies)d repeats hidden of %(checked)d mapped projects" % _dedupe.run(db))

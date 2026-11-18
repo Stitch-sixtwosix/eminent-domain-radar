@@ -690,3 +690,19 @@ def test_duplicate_projects_are_merged_conservatively():
         p(14, "Unmapped", lat=None), p(15, "Unmapped", lat=None),
     ])
     assert got == {1: 2, 13: 12}
+
+
+def test_registry_lists_every_source_and_gap(tmp_path):
+    from edradar import config
+    from edradar.db import DB
+
+    cfg = config.load_config()
+    reg = config.registry(cfg, DB(str(tmp_path / "t.db")))
+    kinds = {(s["kind"], s["status"]) for s in reg["sources"]}
+    assert ("projects", "on") in kinds and ("owners", "on") in kinds and ("owners", "held") in kinds
+    assert all(s["name"] and s["how"] and s["state"] for s in reg["sources"])
+    held = next(s for s in reg["sources"] if s["status"] == "held")
+    assert held["why"]                                    # a held file always says why
+    gaps = {g["code"]: g for g in reg["gaps"]}
+    assert len(gaps) == 50 and gaps["NC"]["missing_count"] == 0 and gaps["TX"]["missing_count"] > 200
+    assert len(gaps["TX"]["missing"]) == gaps["TX"]["missing_count"]

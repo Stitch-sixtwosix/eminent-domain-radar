@@ -228,3 +228,7 @@ form.narrow { max-width: 480px; }
   .signup .why { padding: 0 0 32px; }
   form .grid { grid-template-columns: 1fr; }
 }
+
+.srcbar { display: flex; flex-wrap: wrap; gap: 12px 20px; margin-top: 12px; font-size: 14px; }
+.srcbar select { margin-left: 6px; min-height: 36px; }
+#src td span, #gaps td span { display: block; }

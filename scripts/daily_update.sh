@@ -10,7 +10,7 @@ count() { [ -f "$DB" ] && sqlite3 "$DB" "select count(*) from $1" || echo 0; }
 signals_before=$(count signals); leads_before=$(count leads); parcels_before=$(count parcels)
 
 # EDRADAR_SKIP_RUN=1 republishes the site (a new blog post, a page edit) without collecting data first.
-[ "${EDRADAR_SKIP_RUN:-0}" = "1" ] || "$EDRADAR" run --limit "${EDRADAR_MATCH_LIMIT:-150}"
+[ "${EDRADAR_SKIP_RUN:-0}" = "1" ] || "$EDRADAR" run --limit "${EDRADAR_MATCH_LIMIT:-1500}"
 "$EDRADAR" export --out site
 
 if [ "${EDRADAR_PUBLISH:-1}" = "1" ]; then

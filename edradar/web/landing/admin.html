@@ -36,6 +36,15 @@
     <h2>State coverage</h2>
     <p id="cov-note">What each state has today. "Live" means subscribers can open it.</p>
     <div class="tablewrap"><table id="cov"><thead><tr><th>State</th><th>Live</th><th>Projects scoring 60+</th><th>Project source covers</th><th>Owner records</th><th>Held back</th></tr></thead><tbody></tbody></table></div>
+    <h2>Every data source</h2>
+    <p id="src-note">Loading the list of sources…</p>
+    <p class="srcbar"><label>State <select id="src-state"><option value="">All states</option></select></label>
+      <label>Kind <select id="src-kind"><option value="">Projects and owners</option><option value="projects">Project sources</option><option value="owners">Owner files</option></select></label>
+      <label>Status <select id="src-status"><option value="">Any</option><option value="on">On</option><option value="held">Held</option><option value="off">Off</option></select></label></p>
+    <div class="tablewrap"><table id="src"><thead><tr><th>State</th><th>Source</th><th>How it reports</th><th>Publishes</th><th>Status</th><th>Loaded</th><th>Last read</th></tr></thead><tbody></tbody></table></div>
+    <h2>Gaps still open</h2>
+    <p id="gap-note"></p>
+    <div class="tablewrap"><table id="gaps"><thead><tr><th>State</th><th>Project sources on</th><th>Counties with no owner file</th></tr></thead><tbody></tbody></table></div>
     <h2>Not tracked yet</h2>
     <p>Payments and renewals appear here once Stripe is live. How often each firm opens the app, and how many postcards or emails they send, is not recorded yet.</p>
   </div>
@@ -78,6 +87,28 @@ fetch("coverage.json").then(r => r.json()).then(rows => {
     <td>${(r.scored_projects || 0).toLocaleString()}</td><td>${r.projects ? "All " + r.counties + " counties" : "Not connected"}</td>
     <td>${r.counties_owners} of ${r.counties} counties<span>${esc(r.owners)}</span></td><td>${esc(r.held || "")}</td></tr>`).join("");
 }).catch(() => { $("cov-note").textContent = "The coverage table could not be loaded."; });
+
+fetch("sources.json").then(r => r.json()).then(reg => {
+  const S = reg.sources, sel = $("src-state");
+  [...new Set(S.map(x => x.state))].sort().forEach(c => sel.add(new Option(c, c)));
+  const n = (k, st) => S.filter(x => x.kind === k && (!st || x.status === st)).length;
+  $("src-note").textContent = `${S.length} sources on file as of ${reg.generated || "the last update"}: ${n("projects", "on")} project sources in use, ${n("owners", "on")} owner files in use, ${n("owners", "held")} owner files held for a terms review, ${n("owners", "off") + n("projects", "off")} switched off. The list is rebuilt with every daily update.`;
+  const draw = () => {
+    const st = sel.value, k = $("src-kind").value, u = $("src-status").value;
+    const rows = S.filter(x => (!st || x.state === st) && (!k || x.kind === k) && (!u || x.status === u));
+    document.querySelector("#src tbody").innerHTML = rows.slice(0, 600).map(x => `<tr><td>${esc(x.state)}</td>
+      <td><b>${esc(x.name || "")}</b><span>${x.kind === "owners" ? "Owner file" : "Project source"}${x.covers ? " · " + esc(x.covers) : ""}</span>${x.url ? `<span><a href="${esc(x.url)}" rel="noopener" target="_blank">Open the source</a></span>` : ""}</td>
+      <td>${esc(x.how || "")}${x.filter ? `<span>Filter: ${esc(x.filter)}</span>` : ""}</td><td>${esc((x.reports || []).join(", ") || "not mapped")}</td>
+      <td>${esc(x.status)}${x.why ? `<span>${esc(x.why)}</span>` : ""}</td><td>${(x.loaded || 0).toLocaleString()}</td><td>${esc((x.updated || "").slice(0, 10))}</td></tr>`).join("")
+      || '<tr><td colspan="7">No source matches these filters.</td></tr>';
+  };
+  [sel, $("src-kind"), $("src-status")].forEach(e => e.addEventListener("change", draw)); draw();
+  const G = reg.gaps, open = G.reduce((a, g) => a + (g.missing_count || 0), 0), all = G.reduce((a, g) => a + g.counties, 0);
+  $("gap-note").textContent = `${open.toLocaleString()} of ${all.toLocaleString()} counties have no owner file yet. ${G.filter(g => !g.statewide_projects).map(g => g.state).join(", ") || "No state"} ${G.filter(g => !g.statewide_projects).length === 1 ? "has" : "have"} no statewide project source. The 5pm run works through this list.`;
+  document.querySelector("#gaps tbody").innerHTML = G.filter(g => g.missing_count || !g.statewide_projects).map(g => `<tr><td><b>${esc(g.state)}</b></td>
+    <td>${g.projects_on}${g.statewide_projects ? "" : "<span>No statewide source</span>"}</td>
+    <td>${g.missing_count} of ${g.counties}<span>${g.missing.length ? esc(g.missing.join(", ")) : (g.partial_statewide ? "The state file covers " + esc(g.partial_statewide) + "; the rest are not named" : "")}</span></td></tr>`).join("");
+}).catch(() => { $("src-note").textContent = "The list of sources could not be loaded."; });
 
 async function load() {
   const {data: rows, error} = await s.rpc("admin_overview");

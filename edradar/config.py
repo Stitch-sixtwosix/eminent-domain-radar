@@ -161,3 +161,111 @@ def load_config(path: Optional[str] = None) -> Dict[str, Any]:
     if os.environ.get("EDRADAR_DB"):
         cfg["database"] = os.environ["EDRADAR_DB"]
     return cfg
+
+
+OWNER_FIELDS = [("owner", "owner name"), ("mailing_address", "mailing address"), ("address", "property address"),
+                ("market_value", "value"), ("acres", "acreage"), ("apn", "parcel number")]
+PROJECT_FIELDS = [("name", "name"), ("description", "description"), ("work_type", "type of work"), ("status", "status"),
+                  ("cost", "cost"), ("let_date", "letting date"), ("date", "date"), ("county", "county")]
+
+
+def _reports(fields: Any, known: list) -> list:
+    """Which of the things we look for a source actually publishes, in plain words."""
+    f = fields if isinstance(fields, dict) else {}
+    alias = {"mailing_address": ("mailing_address", "mail", "mail_address", "mailing"), "address": ("address", "situs", "site_address"),
+             "market_value": ("market_value", "value", "assessed_value", "total_value")}
+    return [label for key, label in known if any(f.get(k) for k in alias.get(key, (key,)))]
+
+
+def registry(cfg: Dict[str, Any], db: Any = None) -> Dict[str, Any]:
+    """Every source the system knows about, in use or not: what it is, where it lives, how it reports its data,
+    whether it is on, why not if it is off, and what has been loaded from it. Plus every county with no owner file."""
+    import json
+
+    loaded: Dict[Any, Any] = {}
+    parcels: Dict[str, int] = {}
+    if db is not None:
+        for r in db.rows("SELECT source, CASE WHEN instr(external_id, ':') > 0 THEN substr(external_id, 1, instr(external_id, ':') - 1) "
+                         "ELSE '' END AS k, COUNT(*) AS n, MAX(fetched_at) AS at FROM signals GROUP BY 1, 2"):
+            loaded[(r["source"], r["k"])] = (r["n"], r["at"])
+            n0, at0 = loaded.get(r["source"], (0, ""))
+            loaded[r["source"]] = (n0 + r["n"], max(at0 or "", r["at"] or ""))
+        parcels = {r["layer"]: r["n"] for r in db.rows("SELECT layer, COUNT(*) AS n FROM parcels GROUP BY 1")}
+    out = []
+
+    def add(kind, state, name, url, how, reports, status, why=None, records=None, at=None, covers=None, flt=None):
+        out.append({"kind": kind, "state": state, "name": name, "url": url, "how": how, "reports": reports, "status": status,
+                    "why": why, "loaded": records or 0, "updated": at, "covers": covers, "filter": flt})
+
+    src = cfg.get("sources") or {}
+    active = {l.get("key") for l in (src.get("dot_arcgis") or {}).get("layers") or []}
+    for l in (src.get("dot_arcgis") or {}).get("layers") or []:
+        prefix = l.get("source_prefix") or "dot"
+        n, at = loaded.get(("%s:%s" % (prefix, l["state"].upper()), l.get("key")), (0, None))
+        add("projects", l["state"].upper(), l.get("name"), l.get("url"), "Map service, queried record by record",
+            _reports(l.get("fields"), PROJECT_FIELDS), "on", None, n, at,
+            l.get("coverage") or ("statewide" if prefix == "dot" else None),
+            l.get("where") or "none: every record is loaded")
+    n, at = loaded.get("penndot", (0, None))
+    for l in (src.get("penndot") or {}).get("layers") or []:
+        add("projects", "PA", "PennDOT: %s" % (l.get("name") if isinstance(l, dict) else l), (l.get("url") if isinstance(l, dict) else None),
+            "Map service, queried record by record", ["name", "description", "type of work", "status", "cost", "letting date", "county"],
+            "on", None, n, at, "statewide")
+    n, at = loaded.get("federal_register", (0, None))
+    add("projects", "US", "Federal Register notices", "https://www.federalregister.gov/api/v1/documents.json", "Search API, notice text read for the project",
+        ["name", "description", "agency", "date"], "on" if (src.get("federal_register") or {}).get("enabled") else "off", None, n, at, "nationwide")
+    for c in (src.get("legistar") or {}).get("clients") or []:
+        n, at = loaded.get("legistar:%s" % c.get("slug"), (0, None))
+        add("projects", (c.get("state") or "PA").upper(), "%s council legislation" % (c.get("name") or c.get("slug")),
+            "https://webapi.legistar.com/v1/%s/matters" % c.get("slug"), "Legislation API, matter text read for takings and acquisitions",
+            ["name", "description", "status", "date"], "on", None, n, at, c.get("name"))
+    for st in state_files():
+        code = (st.get("code") or "").upper()
+        for p in st.get("projects") or []:
+            if isinstance(p, dict) and not (_usable(p) and p.get("fields")) and code != "PA":
+                add("projects", code, p.get("name"), p.get("url"), "Map service", _reports(p.get("fields"), PROJECT_FIELDS), "off",
+                    p.get("held") or ("not confirmed by a live query" if not p.get("verified") else "no usable field mapping"))
+        entries = [("statewide", st.get("parcels_statewide"))] + [(str(c.get("county") or "").title() + " County", c)
+                                                                    for c in st.get("parcels_counties") or [] if isinstance(c, dict)]
+        for where, item in entries:
+            if not isinstance(item, dict) or not item.get("url"):
+                continue
+            layer = "%s statewide parcels" % code if where == "statewide" else "%s %s" % (code, where)
+            if item.get("held"):
+                status, why = "off", str(item["held"])
+            elif not item.get("verified"):
+                status, why = "off", "not confirmed by a live query"
+            elif item.get("restrictions") and not item.get("approved"):
+                status, why = "held", str(item["restrictions"])
+            elif not (item.get("fields") or {}).get("owner"):
+                status, why = "off", "publishes no owner name"
+            else:
+                status, why = "on", item.get("approved_note")
+            add("owners", code, item.get("name") or layer, item.get("url"), "Parcel map service, queried around each project",
+                _reports(item.get("fields"), OWNER_FIELDS), status, why, parcels.get(layer), None,
+                ("%d counties" % item["counties_covered"]) if item.get("counties_covered") else where)
+    for l in cfg.get("parcel_layers") or []:
+        if not l.get("state"):                       # Pennsylvania's county catalog
+            add("owners", "PA", l.get("name"), l.get("url"), "Parcel service (%s), queried around each project" % (l.get("provider") or "arcgis"),
+                _reports(l.get("fields"), OWNER_FIELDS) or ["owner name", "mailing address", "property address"], "on", None,
+                parcels.get(l.get("name")), None, ", ".join(str(c).title() for c in l.get("counties") or []))
+    counties = json.loads((Path(__file__).parent / "data" / "us_counties.json").read_text())
+    names = {(st.get("code") or "").upper(): st.get("state") for st in state_files()}
+    names["PA"] = "Pennsylvania"
+    gaps = []
+    for code in sorted(counties):
+        on = [s for s in out if s["kind"] == "owners" and s["state"] == code and s["status"] == "on"]
+        whole = any(s["covers"] == "statewide" for s in on)
+        partial = next((s["covers"] for s in on if str(s["covers"]).endswith("counties") and "statewide" in str(s["name"]).lower()), None)
+        have = set()
+        for s in on:
+            for c in str(s["covers"] or "").split(","):
+                have.add(c.replace(" County", "").strip().upper())
+        missing = [] if (whole or partial) else [c for c in counties[code] if c.upper() not in have]
+        n_missing = max(0, len(counties[code]) - int(str(partial).split()[0])) if partial and not whole else len(missing)
+        gaps.append({"code": code, "state": names.get(code) or code, "counties": len(counties[code]), "missing_count": n_missing,
+                     "missing": [c.title() for c in missing], "partial_statewide": partial,
+                     "projects_on": sum(1 for s in out if s["kind"] == "projects" and s["state"] == code and s["status"] == "on"),
+                     "statewide_projects": any(s["kind"] == "projects" and s["state"] == code and s["status"] == "on"
+                                               and s["covers"] == "statewide" for s in out)})
+    return {"sources": out, "gaps": gaps}
