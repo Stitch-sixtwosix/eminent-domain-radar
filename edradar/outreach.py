@@ -371,10 +371,13 @@ class Apollo:
 
 
 # ---------------------------------------------------------------- postcard campaigns
+# No owner with a lead marked "do not contact" is ever offered for outreach. Written as one list worked out once per
+# query: as a per-lead lookup it reread every lead for every lead and took hours at 600,000 leads.
+NOT_BLOCKED = ("pa.owner NOT IN (SELECT p9.owner FROM leads l9 INDEXED BY idx_leads_status JOIN parcels p9 ON p9.id = l9.parcel_id "
+               "WHERE l9.status = 'do not contact' AND p9.owner IS NOT NULL)")
 POSTCARD_ELIGIBLE = """
     pa.mailable = 1 AND pa.owner_kind IN ('individual', 'company') AND l.status NOT IN ('rejected', 'retained')
-    AND NOT EXISTS (SELECT 1 FROM leads l9 JOIN parcels p9 ON p9.id = l9.parcel_id
-                    WHERE l9.status = 'do not contact' AND p9.owner = pa.owner)
+    AND """ + NOT_BLOCKED + """
     AND NOT EXISTS (SELECT 1 FROM outreach o JOIN leads l2 ON l2.id = o.lead_id JOIN parcels p2 ON p2.id = l2.parcel_id
                     WHERE o.channel = 'postcard' AND o.status = 'sent'
                       AND p2.owner = pa.owner AND p2.mailing_address = pa.mailing_address)
@@ -440,8 +443,7 @@ def _mail(cfg: Dict[str, Any], db: Any, leads: List[Dict[str, Any]], out: Dict[s
 # ---------------------------------------------------------------- client lists
 # company owners Apollo can search; hidden once a scan found nobody there
 EMAIL_ELIGIBLE = ("pa.owner_kind = 'company' AND COALESCE(pa.email_contacts, 1) > 0 "
-                  "AND NOT EXISTS (SELECT 1 FROM leads l9 JOIN parcels p9 ON p9.id = l9.parcel_id "
-                  "WHERE l9.status = 'do not contact' AND p9.owner = pa.owner) "
+                  "AND " + NOT_BLOCKED + " "
                   "AND NOT EXISTS (SELECT 1 FROM outreach o WHERE o.lead_id = l.id AND o.channel = 'email')")
 IN_LIST = "l.id IN (SELECT lead_id FROM list_members WHERE list_id = ?)"
 MAX_PER_RUN = 200
