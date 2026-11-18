@@ -42,7 +42,7 @@ async function bill(user: User, customer: string | null, row: Record<string, unk
   if (customer && price > 0) {
     try {
       item = (await stripe("POST", "invoiceitems", { customer, amount: price, currency: "usd", description, metadata: { user_id: user.id, kind: row.kind, ref: row.ref } },
-        "ii-" + (await sha1Hex(user.id + "|" + row.kind + "|" + row.ref + "|" + (row.external_id || "")))).id;
+        "ii-" + (await sha1Hex(user.id + "|" + row.kind + "|" + row.ref + "|" + (row.external_id || ""))))).id;
     } catch (e) { console.error("invoice item failed", e); }       // the ledger still records it, so it can be billed by hand
   }
   await db.from("usage").insert({ ...row, user_id: user.id, stripe_customer: customer, stripe_item: item, invoiced: !customer || price === 0 });
