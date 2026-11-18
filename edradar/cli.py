@@ -17,6 +17,7 @@ def main() -> None:
     sub.add_parser("dedupe", help="hide projects that are listed more than once")
     sub.add_parser("sources", help="list every source on file and the gaps still open")
     sub.add_parser("geocode", help="geocode text-sourced projects")
+    sub.add_parser("counties", help="work out the county of located projects that have none")
     p = sub.add_parser("match", help="find parcels around scored projects")
     p.add_argument("--limit", type=int, help="projects to match this run")
     p = sub.add_parser("run", help="ingest + classify + geocode + match")
@@ -81,6 +82,8 @@ def main() -> None:
         print("%(copies)d repeats hidden of %(checked)d mapped projects" % _dedupe.run(db))
     elif args.cmd == "geocode":
         pipeline.geocode(cfg, db)
+    elif args.cmd == "counties":
+        pipeline.fill_counties(cfg, db)
     elif args.cmd == "match":
         pipeline.match(cfg, db, args.limit)
     elif args.cmd == "run":

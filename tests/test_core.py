@@ -706,3 +706,17 @@ def test_registry_lists_every_source_and_gap(tmp_path):
     gaps = {g["code"]: g for g in reg["gaps"]}
     assert len(gaps) == 50 and gaps["NC"]["missing_count"] == 0 and gaps["TX"]["missing_count"] > 200
     assert len(gaps["TX"]["missing"]) == gaps["TX"]["missing_count"]
+
+
+def test_county_is_found_from_a_map_position():
+    from edradar import counties
+
+    square = lambda x, y, s: [[x, y], [x + s, y], [x + s, y + s], [x, y + s], [x, y]]
+    shapes = counties.shapes([
+        {"attributes": {"BASENAME": "St. Clair"}, "geometry": {"rings": [square(0, 0, 10), square(4, 4, 2)]}},
+        {"attributes": {"BASENAME": "Shelby"}, "geometry": {"rings": [square(4, 4, 2)]}},
+        {"attributes": {"BASENAME": ""}, "geometry": {"rings": [square(50, 50, 1)]}},
+    ])
+    assert counties.find(shapes, 1, 1) == "ST. CLAIR"
+    assert counties.find(shapes, 5, 5) == "SHELBY"          # inside the hole of the first, so it belongs to the second
+    assert counties.find(shapes, 20, 20) is None

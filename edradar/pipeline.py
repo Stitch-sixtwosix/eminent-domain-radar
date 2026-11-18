@@ -5,6 +5,7 @@ import json
 from typing import Any, Dict, Optional
 
 from . import classify as C
+from . import counties
 from . import dedupe
 from . import parcels as P
 from .db import DB
@@ -161,11 +162,19 @@ def match(cfg: Dict[str, Any], db: DB, limit: Optional[int] = None) -> int:
     return total
 
 
+def fill_counties(cfg: Dict[str, Any], db: DB) -> int:
+    """Owner files are chosen by county, so a located project with no county is given one from the Census map."""
+    n = counties.fill(db, Http(cfg["user_agent"], timeout=90, retries=2))
+    print("  %d projects given a county" % n)
+    return n
+
+
 def run_all(cfg: Dict[str, Any], db: DB, limit: Optional[int] = None) -> None:
     print("Ingest"); ingest(cfg, db)
     print("Classify"); classify(cfg, db)
     print("Merge duplicates"); print("  %(copies)d repeats hidden of %(checked)d mapped projects" % dedupe.run(db))
     print("Geocode"); geocode(cfg, db)
+    print("Counties"); fill_counties(cfg, db)
     print("Match"); match(cfg, db, limit)
     db.refresh_outreach_flags()
     auto_postcards(cfg, db)
