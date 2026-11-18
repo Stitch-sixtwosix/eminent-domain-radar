@@ -530,6 +530,12 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
 
     client = TestClient(create_app(cfg))
     db = DB(cfg["database"])
+    # Parcels added by a matching run that was started by hand have not been sorted into owner types and usable
+    # mailing addresses yet. Without this they publish with no Postcard button and count as having no address.
+    try:
+        db.refresh_outreach_flags()
+    except Exception as e:           # another run holds the database: publish with what is already classified
+        print("  owner types were not refreshed: %s" % str(e)[:100])
     layer_cfg = {x.get("name"): x for x in cfg.get("parcel_layers") or []}
     keep = ("id", "project_id", "project_score", "score", "match_reason", "distance_m", "status", "apn", "parcel_county", "address",
             "owner", "mailing_address", "market_value", "acres", "owner_kind", "mailable", "email_contacts")
@@ -613,6 +619,29 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
     fill["live_states"] = ", ".join(live)
     fill["state_options"] = "".join('<option value="%s">%s%s</option>' % (n, n, "" if n in live else " (coming)") for n in US_STATES)
     fill["state_names"] = "|".join(US_STATES)
+    # What each state holds today, shown before anyone pays: projects, parcels in their path, and how many of those
+    # parcels come with an owner and a usable mailing address.
+    per = {r["code"]: r for r in db.rows(
+        """SELECT s.state AS code, COUNT(DISTINCT l.parcel_id) AS parcels,
+                  COUNT(DISTINCT CASE WHEN pa.owner IS NOT NULL THEN l.parcel_id END) AS owners,
+                  COUNT(DISTINCT CASE WHEN pa.mailable = 1 AND pa.owner_kind IN ('individual', 'company') THEN l.parcel_id END) AS mailable
+           FROM leads l JOIN parcels pa ON pa.id = l.parcel_id JOIN projects p ON p.id = l.project_id
+           JOIN signals s ON s.id = p.signal_id GROUP BY s.state""")}
+    by_state = []
+    for x in stats.get("states") or []:
+        name, c = STATE_NAMES.get(x["code"], x["code"]), per.get(x["code"]) or {}
+        if name in US_STATES:
+            by_state.append({"code": x["code"], "state": name, "projects": x["projects"], "parcels": c["parcels"] if c else 0,
+                             "owners": c["owners"] if c else 0, "mailable": c["mailable"] if c else 0})
+    by_state.sort(key=lambda r: r["state"])
+    num = "{:,}".format
+    fill["coverage_rows"] = "".join(
+        '<tr><th scope="row">%s</th><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (
+            r["state"], num(r["projects"]), num(r["parcels"]), num(r["owners"]), num(r["mailable"])) for r in by_state)
+    fill["coverage_total"] = '<tr><th scope="row">All %d states</th><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (
+        len(by_state), *(num(sum(r[k] for r in by_state)) for k in ("projects", "parcels", "owners", "mailable")))
+    fill["state_counts"] = json.dumps({r["state"]: [r["projects"], r["parcels"], r["owners"], r["mailable"]] for r in by_state})
+    (site / "states.json").write_text(json.dumps(by_state))
     for name in ("index.html", "signup.html", "login.html", "account.html", "terms.html", "privacy.html", "compliance.html", "admin.html"):
         page = (landing / name).read_text()
         for k, v in fill.items():

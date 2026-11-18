@@ -23,6 +23,7 @@
   <a class="brand" href="./" aria-label="EminentTracker home"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7.5" fill="#1b2333"/><path d="M8 5h16v4.200H12.200v13.600H24V27H8z" fill="#fff"/><path d="M12.200 13.900H32v4.200H12.200z" fill="#e0662e"/></svg><b>Eminent<span>Tracker</span></b></a>
   <nav aria-label="Sections">
     <a href="#how">What it does</a>
+    <a href="#states">Coverage</a>
     <a href="#pricing">Pricing</a>
     <a href="#about">Who built it</a>
     <a href="blog/">Blog</a>
@@ -57,6 +58,17 @@
     <li><h3>Reach them before anyone else</h3>
       <p>Send postcards and email in your firm’s name from one template, marked as attorney advertising.</p></li>
   </ul>
+</section>
+
+<section class="band in" id="states" aria-labelledby="states-h">
+  <h2 id="states-h">What is in each state today</h2>
+  <p class="lede">Check your state before you subscribe. These are the live counts as of {{date}}, and they grow every day.</p>
+  <div class="tablewrap cov"><table>
+    <thead><tr><th scope="col">State</th><th scope="col">Planned projects</th><th scope="col">Parcels in their path</th><th scope="col">Parcels with a named owner</th><th scope="col">Owners with a mailing address</th></tr></thead>
+    <tbody>{{coverage_rows}}</tbody>
+    <tfoot>{{coverage_total}}</tfoot>
+  </table></div>
+  <p class="covnote">A project is counted once it scores as likely to need land. Owner names come from county and state parcel files, and some counties do not publish them. Where they do not, an owner lookup is available for $0.75 a match.</p>
 </section>
 
 <section class="band in" id="pricing" aria-labelledby="pricing-h">

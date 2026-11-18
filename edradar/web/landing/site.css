@@ -232,3 +232,14 @@ form.narrow { max-width: 480px; }
 .srcbar { display: flex; flex-wrap: wrap; gap: 12px 20px; margin-top: 12px; font-size: 14px; }
 .srcbar select { margin-left: 6px; min-height: 36px; }
 #src td span, #gaps td span { display: block; }
+
+/* state coverage table on the home page */
+.cov { max-height: 560px; overflow: auto; border: 1px solid var(--line-strong); border-radius: 10px; margin-top: 32px; }
+.cov table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 640px; font-variant-numeric: tabular-nums; }
+.cov th, .cov td { padding: 10px 16px; text-align: right; border-bottom: 1px solid var(--line); white-space: nowrap; }
+.cov th:first-child { text-align: left; }
+.cov thead th { position: sticky; top: 0; background: #fff; font-size: 14px; font-weight: 600; color: var(--muted); border-bottom: 1px solid var(--line-strong); white-space: normal; vertical-align: bottom; }
+.cov tbody th { font-weight: 500; }
+.cov tfoot th, .cov tfoot td { position: sticky; bottom: 0; background: #fff; font-weight: 700; border-top: 1px solid var(--line-strong); border-bottom: 0; }
+.covnote { margin-top: 14px; font-size: 14px; color: var(--muted); max-width: 760px; }
+.statefacts { font-size: 14px; color: var(--muted); margin-top: 6px; display: block; }

@@ -388,6 +388,11 @@ def test_campaign_filter_and_snapshot(tmp_path, monkeypatch):
     # what the operator mailed, paid and earned stays in the running app: subscribers see only their own usage
     assert snap["hub"]["sent"]["postcards"] == 0 and snap["hub"]["activity"] == [] and snap["hub"]["usage"]["all_time"] == []
     assert all("cost" not in v for v in snap["hub"]["rates"].values()) and snap["state"] is None
+    by_state = json.loads((tmp_path / "site" / "states.json").read_text())      # shown to firms before they pay
+    assert by_state == [{"code": "PA", "state": "Pennsylvania", "projects": 1, "parcels": 6, "owners": 6, "mailable": 4}]
+    home = (tmp_path / "site" / "index.html").read_text()
+    assert '<th scope="row">Pennsylvania</th><td>1</td><td>6</td><td>6</td><td>4</td>' in home and "{{" not in home
+    assert '"Pennsylvania": [1, 6, 6, 4]' in (tmp_path / "site" / "signup.html").read_text()
     assert counts["leads"] == 6 and row["owner_kind"] == "individual" and row["own"][0] == "Pennsylvania" and "facts" in row
 
 

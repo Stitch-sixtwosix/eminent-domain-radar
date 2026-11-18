@@ -60,7 +60,7 @@
             <label><input type="radio" name="bill" value="month" checked> Monthly</label>
             <label><input type="radio" name="bill" value="year"> Yearly, save 20%</label>
           </div></fieldset>
-        <label class="full" id="state-row">Your state<select name="plan_state"><option value="">Choose a state</option>{{state_options}}</select></label>
+        <label class="full" id="state-row">Your state<select name="plan_state"><option value="">Choose a state</option>{{state_options}}</select><span class="statefacts" id="state-facts" hidden></span></label>
         <label class="full">Other states where you handle eminent domain matters <span>(optional)</span><input type="text" name="states" autocomplete="off"></label>
         <fieldset class="full"><legend>Who do you represent?</legend>
           <div class="choices">
@@ -174,9 +174,15 @@ else {
   }
   for (const [k, v] of Object.entries(f)) { const el = form.elements[k]; if (!el) continue; if (k === "side" || k === "plan" || k === "bill") { if (v) form.querySelectorAll("[name=" + k + "]").forEach(r => r.checked = r.value === v); } else el.value = v; }
   document.getElementById("nudge").hidden = !!(f.firm && f.plan);
+const COUNTS = {{state_counts}};        // what each live state holds today, so a firm can judge it before paying
+const facts = document.getElementById("state-facts"), n = v => v.toLocaleString();
+const showFacts = () => { const name = form.elements.plan_state.value, c = COUNTS[name];
+  facts.hidden = !name;
+  facts.textContent = !name ? "" : c ? `${name} today: ${n(c[0])} planned projects, ${n(c[1])} parcels in their path, ${n(c[3])} owners with a mailing address.` : `${name} is not live yet. We will email you when it is.`; };
+form.elements.plan_state.addEventListener("change", showFacts);
   const stateRow = document.getElementById("state-row");
   const syncPlan = () => { stateRow.hidden = !form.elements.plan.value.startsWith("Single"); };
-  form.addEventListener("change", e => { if (e.target.name === "plan") syncPlan(); if (!active) describe(); }); syncPlan();
+  form.addEventListener("change", e => { if (e.target.name === "plan") syncPlan(); if (!active) describe(); }); syncPlan(); showFacts();
   const agreed = !!(user.user_metadata || {}).agreed_terms_at, agreeRow = document.getElementById("agree-row");
   agreeRow.hidden = agreed; form.elements.agree.required = !agreed;       // people who signed up with Google agree here
   if (invited) { const np = document.getElementById("newpass"); np.hidden = false; np.querySelector("input").required = true;
