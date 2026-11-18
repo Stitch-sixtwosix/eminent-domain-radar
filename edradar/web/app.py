@@ -536,7 +536,7 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
     extra = {r["lead_id"]: r for r in db.rows(
         "SELECT l.id AS lead_id, pa.layer, pa.attributes, pa.apn FROM leads l JOIN parcels pa ON pa.id = l.parcel_id")}
 
-    def state_data(code: Optional[str]) -> Dict[str, Any]:
+    def state_data(code: Optional[str], with_leads: bool = True) -> Dict[str, Any]:
         """Everything the app shows for one state (or for all of them when code is None)."""
         q = {"state": code} if code else {}
         st = client.get("/api/stats", params=q).json()
@@ -546,7 +546,7 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
         layer_index: Dict[str, int] = {}
         rows_out = []
         where, params = (" WHERE s.state = ?", (code,)) if code else ("", ())
-        for r in db.rows(LEAD_SQL + where + " ORDER BY l.score DESC, pa.market_value DESC", params):
+        for r in (db.rows(LEAD_SQL + where + " ORDER BY l.score DESC, pa.market_value DESC", params) if with_leads else []):
             x = extra.get(r["id"])
             if x is None:        # added by a matching run after this export began; it goes out with the next one
                 continue
@@ -566,8 +566,13 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
             rows_out.append(row)
         return {"stats": st, "projects": projs, "leads": rows_out, "layers": layers}
 
-    whole = state_data(None)
-    stats, projects, leads, layers = whole["stats"], whole["projects"], whole["leads"], whole["layers"]
+    # With several states, every lead is written once, in its own state's file. Building them all a second time
+    # for a combined file took most of an hour, so that is done only if the private upload fails.
+    whole = state_data(None, with_leads=False)
+    stats, projects = whole["stats"], whole["projects"]
+    many = len(stats.get("states") or []) > 1
+    if not many:
+        whole = state_data(None)
     # The hub is published read-only: totals, the template and the activity log, with sending switched off and
     # Apollo-sourced contacts left out.
     hub = client.get("/api/outreach/hub").json()
@@ -648,7 +653,7 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
         html = html.replace("</head>", gate + "</head>", 1)
         assert "login.html?next=app" in html
     common = {"template": outreach.template(cfg), "hub": hub, "contacts": {}}
-    payload = json.dumps(dict(whole, **common), separators=(",", ":")).encode()
+    payload = None if many else json.dumps(dict(whole, **common), separators=(",", ":")).encode()
     # With a Supabase secret key each state's data goes to a private bucket that only subscribers to that state
     # can read, and no copy is published on the open site. Without one (or if an upload fails) the data file is
     # published openly as before.
@@ -667,7 +672,7 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
                             'window.EDRADAR_STATES = %s;' % json.dumps(live_slugs), 1)
         (out / "data.json").unlink(missing_ok=True)
     else:
-        (out / "data.json").write_bytes(payload)
+        (out / "data.json").write_bytes(payload or json.dumps(dict(state_data(None), **common), separators=(",", ":")).encode())
     (out / "index.html").write_text(html)
     from ..config import coverage as _coverage
 
@@ -686,4 +691,4 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
     domain = (cfg.get("site") or {}).get("domain")
     if domain:                       # GitHub Pages serves the snapshot at this address while the file is present
         (site / "CNAME").write_text(domain.strip() + "\n")
-    return {"projects": len(projects), "leads": len(leads)}
+    return {"projects": len(projects), "leads": stats["leads"]}
