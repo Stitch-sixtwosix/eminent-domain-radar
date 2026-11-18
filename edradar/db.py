@@ -143,7 +143,10 @@ class DB:
     def __init__(self, path: str):
         if path != ":memory:":
             Path(path).parent.mkdir(parents=True, exist_ok=True)
-        self.conn = sqlite3.connect(path, check_same_thread=False)
+        self.conn = sqlite3.connect(path, check_same_thread=False, timeout=120)
+        # The dashboard reads while a long collection or matching run writes: with a write-ahead log neither blocks the other.
+        self.conn.execute("PRAGMA journal_mode = WAL")
+        self.conn.execute("PRAGMA busy_timeout = 120000")
         self.conn.row_factory = sqlite3.Row
         self.conn.execute("PRAGMA foreign_keys = ON")
         self.conn.executescript(SCHEMA)
@@ -156,6 +159,9 @@ class DB:
                 self.conn.execute("ALTER TABLE %s ADD COLUMN state TEXT DEFAULT 'PA'" % table)
                 self.conn.execute("UPDATE %s SET state='PA' WHERE state IS NULL" % table)
         self.conn.execute("CREATE INDEX IF NOT EXISTS idx_signals_state ON signals(state)")
+        for name, cols in (("idx_leads_project", "leads(project_id)"), ("idx_leads_parcel", "leads(parcel_id)"),
+                           ("idx_parcels_state", "parcels(state)"), ("idx_projects_stage", "projects(stage, score)")):
+            self.conn.execute("CREATE INDEX IF NOT EXISTS %s ON %s" % (name, cols))
         if "owner_kind" not in [r["name"] for r in self.conn.execute("PRAGMA table_info(parcels)")]:
             self.conn.execute("ALTER TABLE parcels ADD COLUMN owner_kind TEXT")       # individual, company, government, unknown
             self.conn.execute("ALTER TABLE parcels ADD COLUMN mailable INTEGER")      # 1 when the mailing address parses
