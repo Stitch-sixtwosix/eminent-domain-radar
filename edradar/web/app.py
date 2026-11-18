@@ -547,8 +547,10 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
         rows_out = []
         where, params = (" WHERE s.state = ?", (code,)) if code else ("", ())
         for r in db.rows(LEAD_SQL + where + " ORDER BY l.score DESC, pa.market_value DESC", params):
+            x = extra.get(r["id"])
+            if x is None:        # added by a matching run after this export began; it goes out with the next one
+                continue
             row = {k: r[k] for k in keep}
-            x = extra[r["id"]]
             parcel = {"apn": x["apn"], "attributes": json.loads(x["attributes"] or "{}")}
             facts = parceldetail.background(parcel)["facts"]
             prof = parceldetail.owner_profile(r, facts, [])
