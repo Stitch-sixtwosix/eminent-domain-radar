@@ -84,7 +84,9 @@
     "acres": "GROSSAC"
    },
    "restrictions": "None seen on the layer.",
-   "notes": "Third-party (city) copy of county tax parcels, dated by its name (8/26); the first sample record had blank attributes, see owner_filled_count. Pinal County's own server was not located."
+   "notes": "Third-party (city) copy of county tax parcels, dated by its name (8/26); the first sample record had blank attributes, see owner_filled_count. Pinal County's own server was not located.",
+   "approved": true,
+   "approved_note": "Approved by the account owner on 2026-11-17: no restriction on commercial use stated."
   }
  ],
  "summary": "Projects: no statewide ADOT planned-projects service verified, only the MAG (Phoenix region) TIP layers. Parcels: no statewide owner layer; Maricopa County Assessor parcels with owner and mailing address verified, plus a city-hosted copy of Pinal County. Pima (server returned 403), Yavapai (403) and Mohave not verified."

@@ -91,7 +91,9 @@
    "county": "countyName"
   },
   "restrictions": "No commercial-use or solicitation restriction stated. Licence text is a warranty disclaimer only (data used at one's own risk; State of Colorado makes no warranty of accuracy or completeness).",
-  "notes": "Statewide composite collected annually from counties in one schema (dateReceived shows when each county's data arrived, e.g. 4/23/2026). owner2 = second owner; account = assessor account; apprValTot/asedValTot/salePrice are stored as text; saleDate text; landUseDsc, zoningDesc, legalDesc also present. The 'sharing' field is 'Public' in the sample; counties that do not share publicly may be missing or have blank owner fields, so check coverage by countyName."
+  "notes": "Statewide composite collected annually from counties in one schema (dateReceived shows when each county's data arrived, e.g. 4/23/2026). owner2 = second owner; account = assessor account; apprValTot/asedValTot/salePrice are stored as text; saleDate text; landUseDsc, zoningDesc, legalDesc also present. The 'sharing' field is 'Public' in the sample; counties that do not share publicly may be missing or have blank owner fields, so check coverage by countyName.",
+  "approved": true,
+  "approved_note": "Approved by the account owner on 2026-11-17: no restriction on commercial use stated."
  },
  "parcels_counties": [],
  "summary": "Statewide parcels with owner and mailing address verified (2.6M records). Projects: CDOT 10-Year Plan lines/points verified (phase and type, no cost or dates); CDOT's fuller 'Projects (all types)' server was unreachable and is unverified."

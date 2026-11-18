@@ -127,7 +127,9 @@
   "restrictions": "Item terms only say assessor parcel mapping is a representation, not an authoritative boundary source; no commercial-use or solicitation restriction stated.",
   "notes": "Statewide (all 351 municipalities) with owner name and mailing address. No county field: CITY is the municipality name and TOWN_ID the MassGIS town number. MAP_PAR_ID / PROP_ID are the assessor's local ids, LOC_ID the statewide polygon id. LOT_SIZE units are given in LOT_UNITS (Acres or square feet). FY is the assessment fiscal year and varies by town. Includes USE_CODE, LS_DATE/LS_PRICE (last sale).",
   "verified": true,
-  "record_count": 2559749
+  "record_count": 2559749,
+  "approved": true,
+  "approved_note": "Approved by the account owner on 2026-11-17: no restriction on commercial use stated."
  },
  "parcels_counties": [],
  "summary": "MassDOT Highway/CIP and TIP project line layers verify with status and scheduled advertising date, and MassGIS statewide parcels include owner name and mailing address."

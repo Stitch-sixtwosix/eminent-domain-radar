@@ -100,7 +100,9 @@
   "restrictions": "Layer description is an 'as is, public service' disclaimer (data prepared for inventory of real property, not a legal survey); no commercial-use or solicitation restriction stated.",
   "notes": "Statewide, all 55 counties; 1,378,573 of 1,394,081 rows have FullOwnerName. FullOwnerAddress is the owner mailing address in one string; OWNER1/OWNER2 split names; CleanParcelID is a 20-digit id; CountyID/COUNTY are 2-digit county numbers, not names; FullLegalDescription present. No assessed/market value field. MapServer (maxRecordCount 2000), supports query with geometry.",
   "verified": true,
-  "record_count": 1394081
+  "record_count": 1394081,
+  "approved": true,
+  "approved_note": "Approved by the account owner on 2026-11-17: no restriction on commercial use stated."
  },
  "parcels_counties": [],
  "summary": "WVDOT STIP FFY2027-2032 and Planned_Projects line layers verify, and the WVU-hosted statewide parcel layer has owner name and mailing address for all counties (no value field)."

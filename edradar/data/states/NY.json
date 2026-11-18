@@ -110,7 +110,9 @@
   "notes": "Owner name and mailing address present (3,810,140 of 3,827,530 rows have PRIMARY_OWNER). NOT fully statewide: only the 38 counties that agreed to public sharing, including all five NYC boroughs (Bronx, Kings, NewYork, Queens, Richmond), Suffolk, Westchester, Erie, Onondaga, Albany, Orange, Rockland; missing e.g. Nassau, Monroe, Dutchess, Saratoga, Niagara. ADD_OWNER is the second owner; SWIS_SBL_ID is a statewide-unique id (SWIS + SBL); layer 0 of the service is the coverage footprint. Updated annually. The older gisservices.its.ny.gov MapServer URL answered 'service not started' on the check date.",
   "verified": true,
   "record_count": 3827530,
-  "counties_covered": 38
+  "counties_covered": 38,
+  "approved": true,
+  "approved_note": "Approved by the account owner on 2026-11-17: no restriction on commercial use stated."
  },
  "parcels_counties": [],
  "summary": "NYSDOT capital-program layers separate Planned/Development from In Construction (thin attributes, no cost). NYS Tax Parcels Public has owner name and mailing address but covers only 38 of 62 counties (includes NYC, Suffolk, Westchester, Erie; not Nassau or Monroe)."

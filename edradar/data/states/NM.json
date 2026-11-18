@@ -89,7 +89,9 @@
     "acres": "TOTALACRES"
    },
    "restrictions": "None seen on the layer.",
-   "notes": "County-published, edited 2026. CAREOFNAME, DEEDHOLDER, ACCOUNTNUMBER also present. No single total-value field: land and building values are separate."
+   "notes": "County-published, edited 2026. CAREOFNAME, DEEDHOLDER, ACCOUNTNUMBER also present. No single total-value field: land and building values are separate.",
+   "approved": true,
+   "approved_note": "Approved by the account owner on 2026-11-17: no restriction on commercial use stated."
   },
   {
    "county": "SANDOVAL",
@@ -104,7 +106,9 @@
     "acres": "Acrage"
    },
    "restrictions": "None seen on the layer.",
-   "notes": "Owner name only: no mailing address, situs address or value. Account_No is the assessor account; Acrage is text such as '160.949 ac'."
+   "notes": "Owner name only: no mailing address, situs address or value. Account_No is the assessor account; Acrage is text such as '160.949 ac'.",
+   "approved": true,
+   "approved_note": "Approved by the account owner on 2026-11-17: no restriction on commercial use stated."
   }
  ],
  "parcels_counties_note": "Santa Fe County's TaxParcels layer (https://sfcomaps.santafecountynm.gov/restsvc/rest/services/TaxParcelsDB/MapServer/0, 90,742 records, fields ownernme1/ownernme2/pstladdress/siteaddress) answered for metadata and count but every record query timed out (60-90 s, three attempts), so it is NOT verified and not listed.",

@@ -54,7 +54,9 @@
   "restrictions": "ArcGIS Online item licence is CC0 (public domain); no restriction stated.",
   "notes": "Statewide parcels joined to municipal CAMA (assessor) data, collected annually from all towns through the Councils of Governments (C.G.S. 7-100l); current layer is the 2026 collection (Parcel_Collection_Year / CAMA_Collection_Year). Owner, Co_Owner and mailing address present; completeness varies by town. No single total market value: Appraised_Land + Appraised_Building + Appraised_Outbuilding are appraised values and Assessed_Total is the 70% assessed total. Connecticut has no county government: Town_Name is the municipality, COG the planning region. CAMA_Link is the join key; Parcel_ID is the town's local id. Year-specific copies exist as Connecticut_CAMA_and_Parcel_Layer_2025 / _2024.",
   "verified": true,
-  "record_count": 1320686
+  "record_count": 1320686,
+  "approved": true,
+  "approved_note": "Approved by the account owner on 2026-11-17: no restriction on commercial use stated."
  },
  "parcels_counties": [],
  "summary": "CTDOT Project Work Areas polygons cover planning through completed projects (phase, cost, advertising date; no work-type field), and the CT GIS Office statewide CAMA and Parcel layer has owner and mailing address under CC0."

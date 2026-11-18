@@ -31,6 +31,14 @@ NO_STATEWIDE = {"TX": "the layer refuses area queries; only single-point lookups
 # Statewide owner layers that do not hold every county: how many they do hold.
 PARTIAL = {"NY": 38, "MN": 60}
 
+# Owner files whose only "restriction" note says no limit on commercial use was found. The account owner
+# approved turning these on. Files with a real legal limit on mailing lists (Idaho, Montana, Washington,
+# Tennessee) and files whose terms nobody has read (Maricopa AZ, Bernalillo NM, Lane OR) are not listed.
+APPROVED_NOTE = "Approved by the account owner on 2026-11-17: no restriction on commercial use stated."
+APPROVED = {"NY": ["STATEWIDE"], "MA": ["STATEWIDE"], "CT": ["STATEWIDE"], "WV": ["STATEWIDE"], "CO": ["STATEWIDE"],
+            "AZ": ["PINAL"], "NM": ["DONA ANA", "SANDOVAL"], "NV": ["WASHOE"], "OR": ["MARION"],
+            "UT": ["SALT LAKE", "UTAH"]}
+
 
 def adopt(code: str) -> str:
     d = json.loads((SRC / ("%s.json" % code)).read_text())
@@ -60,6 +68,12 @@ def adopt(code: str) -> str:
     if code in PARTIAL and d.get("parcels_statewide"):
         d["parcels_statewide"]["counties_covered"] = PARTIAL[code]
     DST.mkdir(parents=True, exist_ok=True)
+    for who in APPROVED.get(code, ()):               # cleared by the account owner, not by the research
+        items = [d.get("parcels_statewide")] if who == "STATEWIDE" else \
+            [c for c in d.get("parcels_counties") or [] if c and str(c.get("county") or "").upper() == who]
+        for item in items:
+            if isinstance(item, dict):
+                item["approved"], item["approved_note"] = True, APPROVED_NOTE
     (DST / ("%s.json" % code)).write_text(json.dumps(d, indent=1))
     return "%s: %d project layer(s), statewide owners %s, %d county layer(s)" % (
         code, len(kept), "yes" if (d.get("parcels_statewide") or {}).get("verified") else "no",

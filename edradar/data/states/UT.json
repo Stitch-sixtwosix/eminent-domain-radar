@@ -90,7 +90,9 @@
     "acres": "parcel_acres"
    },
    "restrictions": "None seen on the layer.",
-   "notes": "County's own server, tax year 2026. own_name was blank on the first (state-owned) sample record; care_of and multi_names also present. Text fields are space-padded: trim them."
+   "notes": "County's own server, tax year 2026. own_name was blank on the first (state-owned) sample record; care_of and multi_names also present. Text fields are space-padded: trim them.",
+   "approved": true,
+   "approved_note": "Approved by the account owner on 2026-11-17: no restriction on commercial use stated."
   },
   {
    "county": "UTAH",
@@ -109,7 +111,9 @@
     ]
    },
    "restrictions": "None seen on the layer.",
-   "notes": "State-hosted snapshot of Utah County parcels that, unlike other UGRC county layers, carries an OWNERNAME field, BUT it is filled on only about 86,700 of 285,970 parcels (197,495 are empty strings), so it is a partial source. No mailing address, value or acres. The UGRC layers for Davis, Weber and Washington counties (Parcels_Davis, Parcels_Weber, Parcels_Washington) were checked and have no owner name."
+   "notes": "State-hosted snapshot of Utah County parcels that, unlike other UGRC county layers, carries an OWNERNAME field, BUT it is filled on only about 86,700 of 285,970 parcels (197,495 are empty strings), so it is a partial source. No mailing address, value or acres. The UGRC layers for Davis, Weber and Washington counties (Parcels_Davis, Parcels_Weber, Parcels_Washington) were checked and have no owner name.",
+   "approved": true,
+   "approved_note": "Approved by the account owner on 2026-11-17: no restriction on commercial use stated."
   }
  ],
  "summary": "UDOT ePM STIP line layer verified (3,219 projects with status, concept, value, advertise date). Parcels: statewide layer has no owner names; Salt Lake County verified with owner + mailing address; Utah County has owner name on only ~30% of parcels; Davis, Weber, Washington county owner layers not found."
