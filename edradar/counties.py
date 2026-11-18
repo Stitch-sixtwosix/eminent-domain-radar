@@ -55,9 +55,10 @@ def fetch(http: Any, state: str) -> List[Shape]:
 
 
 def fill(db: Any, http: Any) -> int:
-    """Give a county to every located project that has none. Returns how many were filled."""
-    rows = db.rows("SELECT s.id AS signal_id, s.state, p.lat, p.lon FROM projects p JOIN signals s ON s.id = p.signal_id "
-                   "WHERE (s.county IS NULL OR s.county = '') AND p.lat IS NOT NULL AND p.lon IS NOT NULL")
+    """Give a county to every located project that has none, or whose list stores something that is not a county
+    of its state (a county number, a city, an agency name). Returns how many were changed."""
+    rows = db.rows("SELECT s.id AS signal_id, s.state, s.county, p.lat, p.lon FROM projects p "
+                   "JOIN signals s ON s.id = p.signal_id WHERE p.lat IS NOT NULL AND p.lon IS NOT NULL")
     by_state: Dict[str, List[Any]] = {}
     for r in rows:
         if (r["state"] or "").upper() in FIPS:
@@ -69,13 +70,18 @@ def fill(db: Any, http: Any) -> int:
         except Exception as e:
             print("  counties for %s: %s" % (state, str(e)[:120]))
             continue
+        if not state_shapes:
+            continue
+        real = {name for name, _, _ in state_shapes}
+        todo = [r for r in by_state[state] if (r["county"] or "").strip().upper() not in real]
         done = 0
-        for r in by_state[state]:
+        for r in todo:
             county = find(state_shapes, r["lon"], r["lat"])
             if county:
                 db.conn.execute("UPDATE signals SET county=? WHERE id=?", (county, r["signal_id"]))
                 done += 1
         db.conn.commit()
         total += done
-        print("  %s: county found for %d of %d located projects" % (state, done, len(by_state[state])))
+        if todo:
+            print("  %s: county set for %d of %d located projects that had none or an unusable one" % (state, done, len(todo)))
     return total
