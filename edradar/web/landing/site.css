@@ -153,8 +153,19 @@ form .agree .err { flex-basis: 100%; }
 .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-top: 28px; }
 .tiles div { background: var(--tone); border-radius: 8px; padding: 14px 16px; }
 .tiles dt { font-size: 14px; color: var(--muted); }
+.tiles div span { display: block; margin-top: 2px; font-size: 13px; color: var(--muted); }
 .tiles dd { margin-top: 4px; font-size: 26px; font-weight: 700; letter-spacing: -0.02em; font-variant-numeric: tabular-nums; }
 .tablewrap { overflow-x: auto; margin-top: 16px; }
+.admin h2 { scroll-margin-top: 24px; }
+.admin h3 { margin-top: 28px; font-size: 17px; }
+.admin .jump { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-top: 20px; font-size: 15px; }
+.admin .pair { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 0 40px; }
+.admin table.slim { min-width: 0; }
+.admin td.bar { width: 45%; padding-right: 0; }
+.admin td.bar i { display: block; height: 14px; min-width: 2px; background: var(--accent); border-radius: 2px; }
+.admin td .msg { margin: 8px 0 0; max-width: 60ch; font-size: 15px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.admin td input[type=text], .admin .srcbar input { font: inherit; font-size: 15px; padding: 7px 8px; border: 1px solid var(--line-strong); border-radius: 6px; background: #fff; color: var(--ink); width: 100%; max-width: 240px; }
+.admin td input[type=text] { display: block; margin: 8px 0 6px; }
 .admin table { width: 100%; border-collapse: collapse; font-size: 15px; min-width: 860px; }
 .admin th { text-align: left; font-weight: 600; font-size: 14px; color: var(--muted); padding: 8px 12px 8px 0; border-bottom: 1px solid var(--line-strong); }
 .admin td { padding: 12px 12px 12px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
@@ -173,6 +184,11 @@ form .hint { display: block; margin-top: 6px; font-weight: 400; font-size: 14px;
 .signup .why p { margin-top: 20px; max-width: 34ch; font-size: var(--s-lead); line-height: 1.4; }
 .signup .why ul { margin-top: 36px; max-width: 36ch; }
 .signup .why li { padding: 12px 0; }
+.signup .help { margin-top: 48px; padding-top: 28px; border-top: 1px solid var(--line-strong); }
+.signup .help h2 { font-size: var(--s-title); }
+.signup .help form { margin-top: 20px; display: grid; gap: 18px; max-width: 420px; }
+.signup .help p.status { margin-top: 0; font-size: var(--s-small); }
+.signup .help ul { margin-top: 24px; font-size: var(--s-small); }
 .signup .why li b { display: block; font-weight: 600; }
 form.card { background: var(--surface); padding: clamp(24px, 3.4vw, 48px); }
 form .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px 24px; }

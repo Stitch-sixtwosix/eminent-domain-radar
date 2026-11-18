@@ -45,6 +45,18 @@
       </div>
     </div>
     <p style="font-size: var(--s-small); margin-top: 20px"><a href="admin.html" id="admin-link" hidden>Admin</a> <button class="linkish" type="button" id="out">Sign out</button></p>
+    <section class="help" id="help" hidden>
+      <h2>Need help?</h2>
+      <p>Send us a question about billing, the data, postcards or your account. We answer by email at the address you sign in with.</p>
+      <form id="case" novalidate>
+        <label>What is it about?<select name="topic"><option value="billing">Billing</option><option value="data">Data or coverage</option><option value="postcards">Postcards</option><option value="lookups">Owner lookups</option><option value="account">Account or sign-in</option><option value="other" selected>Something else</option></select></label>
+        <label>Subject<input type="text" name="subject" minlength="3" maxlength="160" required></label>
+        <label>Your question<textarea name="body" minlength="10" maxlength="4000" required></textarea></label>
+        <p class="status" id="case-status" role="status" hidden></p>
+        <div class="send"><button class="btn plain" type="submit" id="case-go">Send to support</button></div>
+      </form>
+      <ul id="my-cases" hidden></ul>
+    </section>
   </div>
   <div>
     <form class="card" id="firm" novalidate hidden>
@@ -193,6 +205,27 @@ else {
     showSub();
     if (!active) document.getElementById("sub-status").textContent = "Your payment went through, but the account has not opened yet. Reload this page in a minute. If it still shows this, email {{contact_email}} and we will open it by hand.";
   }
+  // Support cases: filed here, answered by email. The list shows what this account has sent and any closing note.
+  const caseForm = document.getElementById("case"), caseStatus = document.getElementById("case-status"), mine = document.getElementById("my-cases");
+  const when = t => new Date(t).toLocaleDateString(undefined, {year: "numeric", month: "short", day: "numeric"});
+  const myCases = async () => {
+    const {data: list, error} = await s.from("support_cases").select("id, subject, status, admin_note, created_at").eq("user_id", user.id).order("created_at", {ascending: false}).limit(10);
+    if (error) return false;                                       // not installed yet: the section stays hidden
+    mine.replaceChildren(...list.map(c => { const li = document.createElement("li"), b = document.createElement("b");
+      b.textContent = c.subject; li.append(b, " " + (c.status === "open" ? "Open" : "Closed") + ", sent " + when(c.created_at) + (c.admin_note ? ". Our note: " + c.admin_note : "")); return li; }));
+    mine.hidden = !list.length; return true;
+  };
+  myCases().then(ok => { document.getElementById("help").hidden = !ok; });
+  caseForm.addEventListener("submit", async e => {
+    e.preventDefault();
+    const d = Object.fromEntries(new FormData(caseForm)), subject = d.subject.trim(), text = d.body.trim();
+    if (subject.length < 3 || text.length < 10) { say(caseStatus, "Add a subject and a few words about the problem.", true); return; }
+    const b = document.getElementById("case-go"); b.disabled = true;
+    const {error} = await s.from("support_cases").insert({topic: d.topic, subject, body: text});
+    b.disabled = false;
+    if (error) { say(caseStatus, "Your question could not be sent: " + error.message + " Email {{contact_email}} instead.", true); return; }
+    caseForm.reset(); say(caseStatus, "Sent. We will answer by email at " + user.email + "."); myCases();
+  });
   for (const [k, v] of Object.entries(f)) { const el = form.elements[k]; if (!el) continue; if (k === "side" || k === "plan" || k === "bill") { if (v) form.querySelectorAll("[name=" + k + "]").forEach(r => r.checked = r.value === v); } else el.value = v; }
   document.getElementById("nudge").hidden = !!(f.firm && f.plan);
 const COUNTS = {{state_counts}};        // what each live state holds today, so a firm can judge it before paying

@@ -29,11 +29,40 @@
   <p class="updated" id="who">Checking who is signed in…</p>
   <p class="status bad" id="err" role="alert" hidden></p>
   <div id="panel" hidden>
-    <dl class="tiles" id="tiles"></dl>
-    <h2>Accounts</h2>
-    <p>Set a plan to open the app for an account. A change takes effect the next time that person signs in.</p>
-    <div class="tablewrap"><table id="accounts"><thead><tr><th>Account</th><th>Firm</th><th>Signed up</th><th>Last sign-in</th><th>Asked for</th><th>Access</th><th></th></tr></thead><tbody></tbody></table></div>
-    <h2>State coverage</h2>
+    <p class="jump"><a href="#signups">Sign-ups</a><a href="#subs">Subscriptions</a><a href="#money">Outreach and revenue</a><a href="#support">Support cases</a><a href="#accts">Accounts</a><a href="#data">Data coverage</a></p>
+    <p class="status" id="old-note" hidden>The admin database update has not been installed yet, so paying and free accounts cannot be told apart, and outreach and support cases are empty.</p>
+
+    <h2 id="signups">Sign-ups</h2>
+    <dl class="tiles" id="t-signups"></dl>
+    <div class="pair">
+      <div><h3>From sign-up to paying</h3><div class="tablewrap"><table class="slim" id="funnel"><thead><tr><th>Step</th><th>Accounts</th><th>Of sign-ups</th></tr></thead><tbody></tbody></table></div></div>
+      <div><h3>New accounts by week</h3><div class="tablewrap"><table class="slim" id="weeks"><thead><tr><th>Week starting</th><th>New</th><th aria-hidden="true"></th></tr></thead><tbody></tbody></table></div></div>
+    </div>
+
+    <h2 id="subs">Subscriptions</h2>
+    <dl class="tiles" id="t-subs"></dl>
+    <div class="pair">
+      <div><h3>Needs attention</h3><div class="tablewrap"><table class="slim" id="watch"><thead><tr><th>Account</th><th>Why</th></tr></thead><tbody></tbody></table></div></div>
+      <div><h3>Single-state subscribers by state</h3><div class="tablewrap"><table class="slim" id="bystate"><thead><tr><th>State</th><th>Subscribers</th></tr></thead><tbody></tbody></table></div></div>
+    </div>
+
+    <h2 id="money">Outreach and revenue</h2>
+    <p id="use-note">Postcards and owner lookups ordered by subscribers this month.</p>
+    <dl class="tiles" id="t-use"></dl>
+    <div class="tablewrap"><table id="use"><thead><tr><th>Firm</th><th>Postcards</th><th>Owner lookups</th><th>Charged</th><th>Our cost</th><th>Not yet invoiced</th></tr></thead><tbody></tbody></table></div>
+
+    <h2 id="support">Support cases</h2>
+    <p id="case-note">Questions sent from the account page. Reply by email, then close the case with a note the person can read.</p>
+    <dl class="tiles" id="t-cases"></dl>
+    <p class="srcbar"><label>Show <select id="case-show"><option value="open">Open</option><option value="closed">Closed</option><option value="">All</option></select></label></p>
+    <div class="tablewrap"><table id="cases"><thead><tr><th>Received</th><th>From</th><th>Case</th><th>Status</th><th></th></tr></thead><tbody></tbody></table></div>
+
+    <h2 id="accts">Accounts</h2>
+    <p>Set a plan to open the app for an account without a payment. A change takes effect the next time that person signs in. <button class="linkish" type="button" id="csv">Download the list (CSV)</button></p>
+    <p class="srcbar"><label>Find <input type="search" id="acct-find" placeholder="Email, name or firm"></label>
+      <label>Show <select id="acct-show"><option value="">Everyone</option><option value="paying">Paying</option><option value="free">Free access</option><option value="none">No access</option><option value="lapsed">Cancelled or unpaid</option></select></label></p>
+    <div class="tablewrap"><table id="accounts"><thead><tr><th>Account</th><th>Firm</th><th>Signed up</th><th>Last sign-in</th><th>Asked for</th><th>Billing</th><th>Access</th><th></th></tr></thead><tbody></tbody></table></div>
+    <h2 id="data">State coverage</h2>
     <p id="cov-note">What each state has today. "Live" means subscribers can open it.</p>
     <div class="tablewrap"><table id="cov"><thead><tr><th>State</th><th>Live</th><th>Projects scoring 60+</th><th>Project source covers</th><th>Owner records</th><th>Held back</th></tr></thead><tbody></tbody></table></div>
     <h2>Every data source</h2>
@@ -45,8 +74,6 @@
     <h2>Gaps still open</h2>
     <p id="gap-note"></p>
     <div class="tablewrap"><table id="gaps"><thead><tr><th>State</th><th>Project sources on</th><th>Counties with no owner file</th></tr></thead><tbody></tbody></table></div>
-    <h2>Not tracked yet</h2>
-    <p>Payments and renewals appear here once Stripe is live. How often each firm opens the app, and how many postcards or emails they send, is not recorded yet.</p>
   </div>
 </main>
 
@@ -110,25 +137,126 @@ fetch("sources.json").then(r => r.json()).then(reg => {
     <td>${g.missing_count} of ${g.counties}<span>${g.missing.length ? esc(g.missing.join(", ")) : (g.partial_statewide ? "The state file covers " + esc(g.partial_statewide) + "; the rest are not named" : "")}</span></td></tr>`).join("");
 }).catch(() => { $("src-note").textContent = "The list of sources could not be loaded."; });
 
+const DAY = 864e5, ago = t => t ? (Date.now() - new Date(t)) / DAY : Infinity;
+const usd = c => "$" + (c / 100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+const tiles = (id, list) => { $(id).innerHTML = list.map(([k, v, note]) => `<div><dt>${k}</dt><dd>${v}</dd>${note ? `<span>${esc(note)}</span>` : ""}</div>`).join(""); };
+const body = (id, html, cols, empty) => { document.querySelector("#" + id + " tbody").innerHTML = html || `<tr><td colspan="${cols}">${empty}</td></tr>`; };
+const LIST = {single: {month: 49900, year: 479040}, all: {month: 99900, year: 959040}};
+// What an account is to us. Without the database update only "active" is known, so every active account counts as paying.
+const kind = r => r.role === "admin" ? "admin" : r.access === "active" ? (OLD || r.has_subscription ? "paying" : "free") : (r.has_subscription ? "lapsed" : "none");
+const monthly = r => { const p = LIST[r.plan === "all" ? "all" : "single"]; return r.bill === "year" ? p.year / 12 : p.month; };
+const who = r => `<b>${esc(r.email)}</b><span>${esc(r.firm || r.full_name || "")}</span>`;
+let ROWS = [], OLD = false, CASES = [];
+
 async function load() {
-  const {data: rows, error} = await s.rpc("admin_overview");
-  if (error) { $("err").textContent = "The account list could not be loaded: " + error.message; $("err").hidden = false; return; }
-  $("err").hidden = true; $("panel").hidden = false;
-  const active = rows.filter(r => r.access === "active" && r.role !== "admin"), single = active.filter(r => r.plan !== "all").length, all = active.filter(r => r.plan === "all").length;
-  const week = rows.filter(r => Date.now() - new Date(r.created_at) < 7 * 864e5).length;
-  $("tiles").innerHTML = [["Sign-ups", rows.length], ["New in 7 days", week], ["Email confirmed", rows.filter(r => r.confirmed).length],
-    ["Active subscriptions", active.length], ["Single state", single], ["All states", all], ["Monthly value at list price", "$" + (single * 499 + all * 999).toLocaleString()]]
-    .map(([k, v]) => `<div><dt>${k}</dt><dd>${v}</dd></div>`).join("");
-  document.querySelector("#accounts tbody").innerHTML = rows.map(r => {
+  let res = await s.rpc("admin_accounts"); OLD = false;
+  if (res.error) { res = await s.rpc("admin_overview"); OLD = true; }
+  if (res.error) { $("err").textContent = "The account list could not be loaded: " + res.error.message; $("err").hidden = false; return; }
+  ROWS = res.data || []; $("err").hidden = true; $("panel").hidden = false; $("old-note").hidden = !OLD;
+  const people = ROWS.filter(r => r.role !== "admin"), of = k => people.filter(r => kind(r) === k);
+  const paying = of("paying"), free = of("free"), lapsed = of("lapsed"), none = of("none");
+  const pct = n => people.length ? Math.round(100 * n / people.length) + "%" : "0%";
+
+  // sign-ups
+  const within = d => people.filter(r => ago(r.created_at) < d).length;
+  tiles("t-signups", [["Accounts", people.length, "not counting administrators"], ["New in 7 days", within(7)], ["New in 30 days", within(30)],
+    ["Email confirmed", people.filter(r => r.confirmed).length], ["Never signed in", people.filter(r => !r.last_sign_in_at).length],
+    ["Signed up, not paying", none.length, none.filter(r => r.chosen_plan).length + " chose a plan"]]);
+  const steps = [["Signed up", people.length], ["Confirmed their email", people.filter(r => r.confirmed).length], ["Chose a plan", people.filter(r => r.chosen_plan).length],
+    ["Agreed to the terms", people.filter(r => r.agreed_terms_at).length], ["Paying now", paying.length]];
+  body("funnel", steps.map(([k, v]) => `<tr><td>${k}</td><td>${v}</td><td>${pct(v)}</td></tr>`).join(""), 3, "");
+  const monday = new Date(); monday.setHours(0, 0, 0, 0); monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
+  const weeks = [...Array(12)].map((_, i) => { const from = new Date(monday - i * 7 * DAY), to = new Date(+from + 7 * DAY);
+    return [from, people.filter(r => new Date(r.created_at) >= from && new Date(r.created_at) < to).length]; });
+  const top = Math.max(1, ...weeks.map(w => w[1]));
+  body("weeks", weeks.map(([d, n]) => `<tr><td>${day(d)}</td><td>${n}</td><td class="bar"><i style="width:${Math.round(100 * n / top)}%"></i></td></tr>`).join(""), 3, "");
+
+  // subscriptions
+  const mrr = paying.reduce((a, r) => a + monthly(r), 0), due = paying.filter(r => r.paid_through && r.paid_through * 1000 - Date.now() < 7 * DAY && r.paid_through * 1000 > Date.now());
+  tiles("t-subs", [["Paying subscribers", paying.length], ["Monthly revenue from plans", usd(mrr), "yearly plans counted as a twelfth"], ["Single state", paying.filter(r => r.plan !== "all").length],
+    ["All states", paying.filter(r => r.plan === "all").length], ["Billed yearly", paying.filter(r => r.bill === "year").length], ["Renewing in 7 days", due.length],
+    ["Free access", free.length, "opened by hand, no plan charge"], ["Cancelled or unpaid", lapsed.length]]);
+  const flags = [];
+  for (const r of lapsed) flags.push([r, "Subscription ended or payment failed. Access is closed."]);
+  for (const r of paying.concat(free)) if (ago(r.last_sign_in_at) > 30) flags.push([r, r.last_sign_in_at ? "Has access but has not signed in for " + Math.floor(ago(r.last_sign_in_at)) + " days." : "Has access but has never signed in."]);
+  for (const r of none) if (r.chosen_plan && ago(r.created_at) > 1 && ago(r.created_at) < 30) flags.push([r, "Chose " + r.chosen_plan.replace(/ \(.*/, "").toLowerCase() + " " + Math.floor(ago(r.created_at)) + " days ago and has not paid."]);
+  for (const r of free) if (!OLD && !r.has_card) flags.push([r, "Free access with no card on file, so it cannot order postcards or lookups."]);
+  for (const r of due) flags.push([r, "Renews " + day(r.paid_through * 1000) + "."]);
+  body("watch", flags.map(([r, why]) => `<tr><td>${who(r)}</td><td>${esc(why)}</td></tr>`).join(""), 2, "Nothing needs attention.");
+  const by = {}; for (const r of paying) if (r.plan !== "all") by[r.state || "not set"] = (by[r.state || "not set"] || 0) + 1;
+  body("bystate", Object.entries(by).sort((x, y) => y[1] - x[1]).map(([k, v]) => `<tr><td>${esc(k.replace(/\b\w/g, c => c.toUpperCase()))}</td><td>${v}</td></tr>`).join(""), 2, "No single-state subscribers yet.");
+
+  drawAccounts(); loadUsage(); loadCases();
+}
+
+function drawAccounts() {
+  const find = $("acct-find").value.trim().toLowerCase(), show = $("acct-show").value;
+  const rows = ROWS.filter(r => (!show || kind(r) === show) && (!find || [r.email, r.full_name, r.firm, r.location].join(" ").toLowerCase().includes(find)));
+  const billing = r => ({admin: "Administrator<span>not billed</span>", paying: OLD ? "Active" : `Paying ${r.bill === "year" ? "yearly" : "monthly"}<span>${r.paid_through ? "renews " + day(r.paid_through * 1000) : ""}</span>`,
+    free: `Free access<span>${r.has_card ? "card on file for outreach" : "no card on file"}</span>`, lapsed: "Cancelled or unpaid", none: "Not paying"}[kind(r)]);
+  body("accounts", rows.map(r => {
     const cur = r.access === "active" ? (r.plan === "all" ? "all" : "single") : "none";
-    return `<tr data-id="${r.id}"><td><b>${esc(r.email)}</b><span>${esc(r.full_name || "")}${r.role === "admin" ? " · administrator" : ""}${r.confirmed ? "" : " · email not confirmed"}${r.provider === "google" ? " · Google" : ""}</span></td>
+    return `<tr data-id="${r.id}"><td><b>${esc(r.email)}</b><span>${esc(r.full_name || "")}${r.role === "admin" ? " · administrator" : ""}${r.confirmed ? "" : " · email not confirmed"}${r.invited ? " · invited" : ""}${r.provider === "google" ? " · Google" : ""}</span></td>
       <td>${esc(r.firm || "")}<span>${esc(r.location || "")}${r.phone ? " · " + esc(r.phone) : ""}</span></td>
       <td>${day(r.created_at)}<span>${r.agreed_terms_at ? "agreed to terms" : "terms not agreed"}</span></td><td>${day(r.last_sign_in_at)}</td>
-      <td>${esc((r.chosen_plan || "").replace(/ \(.*/, ""))}<span>${esc(r.chosen_state || "")}</span></td>
+      <td>${esc((r.chosen_plan || "").replace(/ \(.*/, ""))}<span>${esc(r.chosen_state || "")}</span></td><td>${billing(r)}</td>
       <td><select data-plan aria-label="Plan for ${esc(r.email)}"><option value="none"${cur === "none" ? " selected" : ""}>No access</option><option value="single"${cur === "single" ? " selected" : ""}>Single state</option><option value="all"${cur === "all" ? " selected" : ""}>All states</option></select>
         <select data-state aria-label="State for ${esc(r.email)}"${cur === "single" ? "" : " hidden"}>${STATES.map(n => `<option${(r.state || r.chosen_state || "").toLowerCase() === n.toLowerCase() ? " selected" : ""}>${n}</option>`).join("")}</select></td>
-      <td><button class="btn small" data-save>Save</button></td></tr>`; }).join("");
+      <td><button class="btn small" data-save>Save</button></td></tr>`; }).join(""), 8, "No account matches.");
 }
+$("acct-find").addEventListener("input", drawAccounts); $("acct-show").addEventListener("change", drawAccounts);
+$("csv").addEventListener("click", () => {
+  const cols = ["email", "full_name", "firm", "location", "phone", "created_at", "last_sign_in_at", "chosen_plan", "chosen_state", "access", "plan", "state", "bill"];
+  const cell = v => { v = String(v == null ? "" : v); if (/^[=+\-@]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; };      // a leading = would run as a formula in a spreadsheet
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([[cols.join(","), ...ROWS.map(r => cols.map(c => cell(r[c])).join(","))].join("\n")], {type: "text/csv"}));
+  a.download = "eminenttracker-accounts-" + new Date().toISOString().slice(0, 10) + ".csv"; a.click(); URL.revokeObjectURL(a.href);
+});
+
+async function loadUsage() {
+  const first = new Date(); first.setDate(1); first.setHours(0, 0, 0, 0); const prev = new Date(first); prev.setMonth(prev.getMonth() - 1);
+  const {data, error} = await s.from("usage").select("user_id, kind, mode, price_cents, cost_cents, invoiced, created_at").gte("created_at", prev.toISOString()).eq("mode", "live").limit(20000);
+  if (error) { $("use-note").textContent = "The usage ledger is not installed yet, so there is nothing to show here."; $("t-use").innerHTML = ""; body("use", "", 6, "No orders recorded."); return; }
+  const now = data.filter(u => new Date(u.created_at) >= first), last = data.filter(u => new Date(u.created_at) < first), sum = (list, k) => list.reduce((a, u) => a + (u[k] || 0), 0);
+  const n = (list, k) => list.filter(u => u.kind === k).length;
+  tiles("t-use", [["Postcards mailed", n(now, "postcard"), n(last, "postcard") + " last month"], ["Owner lookups", n(now, "skip_trace"), n(last, "skip_trace") + " last month"],
+    ["Charged to firms", usd(sum(now, "price_cents")), usd(sum(last, "price_cents")) + " last month"], ["Our cost", usd(sum(now, "cost_cents"))],
+    ["Margin", usd(sum(now, "price_cents") - sum(now, "cost_cents"))], ["Not yet invoiced", usd(sum(data.filter(u => !u.invoiced), "price_cents"))]]);
+  const name = Object.fromEntries(ROWS.map(r => [r.id, r])), firms = {};
+  for (const u of now) (firms[u.user_id] = firms[u.user_id] || []).push(u);
+  body("use", Object.entries(firms).sort((x, y) => sum(y[1], "price_cents") - sum(x[1], "price_cents")).map(([id, list]) => `<tr><td>${name[id] ? who(name[id]) : "Account removed"}</td>
+    <td>${n(list, "postcard")}</td><td>${n(list, "skip_trace")}</td><td>${usd(sum(list, "price_cents"))}</td><td>${usd(sum(list, "cost_cents"))}</td><td>${usd(sum(list.filter(u => !u.invoiced), "price_cents"))}</td></tr>`).join(""), 6, "No postcards or lookups ordered this month.");
+}
+
+const TOPIC = {billing: "Billing", data: "Data or coverage", postcards: "Postcards", lookups: "Owner lookups", account: "Account or sign-in", other: "Other"};
+async function loadCases() {
+  const {data, error} = await s.from("support_cases").select("*").order("created_at", {ascending: false}).limit(500);
+  if (error) { $("case-note").textContent = "Support cases are not installed yet, so there is nothing to show here."; $("t-cases").innerHTML = ""; body("cases", "", 5, "No cases."); return; }
+  CASES = data; drawCases();
+}
+function drawCases() {
+  const open = CASES.filter(c => c.status === "open"), oldest = open.length ? Math.floor(Math.max(...open.map(c => ago(c.created_at)))) : 0;
+  tiles("t-cases", [["Open", open.length], ["Oldest open", open.length ? (oldest ? oldest + (oldest === 1 ? " day" : " days") : "today") : "none"],
+    ["Received in 7 days", CASES.filter(c => ago(c.created_at) < 7).length], ["Closed in 30 days", CASES.filter(c => c.status === "closed" && ago(c.closed_at) < 30).length]]);
+  const show = $("case-show").value, name = Object.fromEntries(ROWS.map(r => [r.id, r]));
+  body("cases", CASES.filter(c => !show || c.status === show).map(c => `<tr data-case="${c.id}"><td>${day(c.created_at)}<span>Case ${c.id}</span></td>
+    <td><b>${esc(c.email)}</b><span>${esc((name[c.user_id] || {}).firm || "")}</span></td>
+    <td><b>${esc(c.subject)}</b><span>${esc(TOPIC[c.topic] || c.topic)}</span><p class="msg">${esc(c.body)}</p>${c.admin_note ? `<span>Our note: ${esc(c.admin_note)}</span>` : ""}</td>
+    <td>${c.status === "open" ? "Open" : "Closed<span>" + day(c.closed_at) + "</span>"}</td>
+    <td><a class="btn small plain" href="mailto:${encodeURIComponent(c.email)}?subject=${encodeURIComponent("Re: " + c.subject + " (EminentTracker case " + c.id + ")")}">Reply by email</a>
+      ${c.status === "open" ? `<input type="text" data-note aria-label="Closing note for case ${c.id}" placeholder="Note the person will see"><button class="btn small" data-close>Close case</button>` : `<button class="btn small plain" data-reopen>Reopen</button>`}</td></tr>`).join(""),
+    5, show === "open" ? "No open cases." : "No cases.");
+}
+$("case-show").addEventListener("change", drawCases);
+document.querySelector("#cases").addEventListener("click", async e => {
+  const b = e.target.closest("[data-close], [data-reopen]"); if (!b) return;
+  const tr = b.closest("tr"), closing = b.hasAttribute("data-close"), note = closing ? tr.querySelector("[data-note]").value.trim() : null;
+  b.disabled = true;
+  const change = closing ? {status: "closed", admin_note: note || null, closed_at: new Date().toISOString()} : {status: "open", closed_at: null};
+  const {error} = await s.from("support_cases").update(change).eq("id", tr.dataset.case);
+  if (error) { $("err").textContent = "The case was not saved: " + error.message; $("err").hidden = false; b.disabled = false; return; }
+  Object.assign(CASES.find(c => String(c.id) === tr.dataset.case), change); drawCases();
+});
 document.querySelector("#accounts").addEventListener("change", e => { if (e.target.matches("[data-plan]")) e.target.closest("tr").querySelector("[data-state]").hidden = e.target.value !== "single"; });
 document.querySelector("#accounts").addEventListener("click", async e => {
   const b = e.target.closest("[data-save]"); if (!b) return;

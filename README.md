@@ -172,6 +172,8 @@ The published site is static, so anything that needs a secret runs in three Supa
 
 - `billing`: opens Stripe Checkout for the plan a firm chose at sign-up (charged at once, renews monthly or yearly) and Stripe's page for changing the card or cancelling.
 - `stripe-webhook`: the only thing that opens or closes an account for payment reasons. Point a Stripe webhook at `https://<project>.supabase.co/functions/v1/stripe-webhook` with the events `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted` and `invoice.paid`.
+- `supabase/migrations/20261119_admin_support.sql`: support cases filed from the account page, and `admin_accounts()`, which the admin page reads for sign-up, subscription and billing figures. Until it is run the admin page falls back to the older account list and says so.
+- `scripts/account_emails.py`: the account emails (invitation, confirmation, password reset). `--preview DIR` writes them out; with `SUPABASE_ACCESS_TOKEN` set it installs them.
 - `outreach`: postcards through Lob and owner lookups through BatchData, with a usage ledger. Charges go on the firm's next invoice, or are charged at once when they reach $50. An account opened by hand with no subscription (`access: active`, no `stripe_subscription`) adds a card from its account page and is charged for each order as it is made.
 
 Set up once:
