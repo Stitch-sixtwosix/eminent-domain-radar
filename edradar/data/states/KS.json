@@ -1,7 +1,7 @@
 {
  "state": "Kansas",
  "code": "KS",
- "checked": "2026-11-17",
+ "checked": "2026-11-18",
  "projects": [
   {
    "name": "winCMPSCentroid (third-party copy of KDOT WinCPMS project list, published by a KDOT consultant)",
@@ -81,7 +81,8 @@
     ],
     "acres": "ACRE"
    },
-   "notes": "Unified Government of Wyandotte County/Kansas City KS. Owner name and site address only; no mailing address or value. STATE_ID is the state parcel id."
+   "notes": "Unified Government of Wyandotte County/Kansas City KS. Owner name and site address only; no mailing address or value. STATE_ID is the state parcel id.",
+   "restrictions": "K.S.A. 45-230 (read 2026-11-18 at https://www.ksrevisor.org/statutes/chapters/ch45/045_002_0030.html): 'No person shall knowingly sell, give or receive, for the purpose of selling or offering for sale any property or service to persons listed therein, any list of names and addresses contained in or derived from public records', with exceptions that do not cover property-owner lists. A state-law limit on using this file for solicitation."
   },
   {
    "county": "DOUGLAS",
@@ -104,9 +105,10 @@
     "address": "situs",
     "acres": "SYSCALACRES"
    },
-   "notes": "Published by the City of Lawrence GIS account; 41,800 parcels (appears to be county-wide or close to it; not confirmed). No value field."
+   "notes": "Published by the City of Lawrence GIS account; 41,800 parcels (appears to be county-wide or close to it; not confirmed). No value field.",
+   "restrictions": "K.S.A. 45-230 (read 2026-11-18 at https://www.ksrevisor.org/statutes/chapters/ch45/045_002_0030.html): 'No person shall knowingly sell, give or receive, for the purpose of selling or offering for sale any property or service to persons listed therein, any list of names and addresses contained in or derived from public records', with exceptions that do not cover property-owner lists. A state-law limit on using this file for solicitation."
   }
  ],
  "parcels_counties_note": "Not found or not reachable in the time allowed: Johnson (maps.jocogov.org answered 403), Sedgwick (gis.sedgwick.gov timed out), Shawnee (gis.snco.us timed out).",
- "summary": "Projects: only a consultant-hosted point copy of KDOT's WinCPMS project list could be verified (no cost); KDOT's own KanPlan server did not resolve from here. Parcels: no statewide owner layer; Wyandotte and Douglas verified, Johnson/Sedgwick/Shawnee not reachable."
+ "summary": "Projects: only a consultant-hosted point copy of KDOT's WinCPMS project list could be verified (no cost); KDOT's own KanPlan server did not resolve from here. Parcels: no statewide owner layer; Wyandotte and Douglas verified, Johnson/Sedgwick/Shawnee not reachable. 2026-11-18: K.S.A. 45-230 bars using name-and-address lists derived from public records to sell a service to the people listed; recorded as a restriction on every Kansas owner file (Wyandotte, Douglas). No further Kansas county owner layers were found in the ArcGIS catalogue (Johnson County's server refuses automated requests; Sedgwick, Shawnee, Riley did not answer)."
 }

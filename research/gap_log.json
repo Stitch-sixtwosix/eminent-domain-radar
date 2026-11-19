@@ -1,0 +1,51 @@
+[
+  {
+    "date": "2026-11-18",
+    "state": "MO",
+    "target": "county owner files",
+    "tried": "ArcGIS catalogue search by county; county and city servers for Jackson, Greene, Clay, Jefferson, Boone, St. Louis City, Cass, Platte, Franklin, Christian, Cole",
+    "result": "added Platte (45,056, commercial use allowed with attribution) and Jasper (60,742, disclaimer only); Clay (98,112) and Greene (123,884) recorded but held, terms not found. Jackson, Boone, Clay county servers did not answer; St. Louis City, Jefferson: no owner layer found"
+  },
+  {
+    "date": "2026-11-18",
+    "state": "IL",
+    "target": "county owner files",
+    "tried": "ArcGIS catalogue search; county servers for Cook, Will, Kane, McHenry, McLean, Madison, Peoria, Kendall, St. Clair, Tazewell",
+    "result": "added Morgan (22,489, disclaimer only); Madison (136,799), McHenry (150,159), Peoria (90,350, licence page unreadable), Tazewell (68,098), Whiteside (36,523), Adams (38,785) recorded but held. Cook timed out, Will and McHenry servers 403, Kane public layer has no owner field; Winnebago, Champaign, Sangamon, Kendall, Rock Island: nothing found"
+  },
+  {
+    "date": "2026-11-18",
+    "state": "KS",
+    "target": "county owner files",
+    "tried": "ArcGIS catalogue search for Johnson, Sedgwick, Shawnee, Leavenworth, Riley, Butler, Saline; read K.S.A. 45-230",
+    "result": "no new layer (Johnson server 403; others did not answer; only third-party 2021 copies in the catalogue). K.S.A. 45-230 limits using public-record name lists to sell services: recorded as a restriction on Wyandotte and Douglas, which are now held"
+  },
+  {
+    "date": "2026-11-18",
+    "state": "NE",
+    "target": "statewide project source",
+    "tried": "NDOT Program Book service https://gis.ne.gov/dot/rest/services/ProgramBookDOT/FeatureServer",
+    "result": "failed: host did not answer (same as 2026-11-17)"
+  },
+  {
+    "date": "2026-11-18",
+    "state": "NV",
+    "target": "statewide project source",
+    "tried": "ArcGIS catalogue search for NDOT STIP / planned projects",
+    "result": "nothing found; only an ITS master plan layer is published"
+  },
+  {
+    "date": "2026-11-18",
+    "state": "US",
+    "target": "sources on but nothing loaded",
+    "tried": "queried Legistar clients visalia, cabq, miamifl, cityofno, lausd and the Hawaii DOT Socrata feed xy86-hspc",
+    "result": "all answer with records; the 23 Legistar clients simply have no matter titles matching the search phrases; Hawaii feed returns records, so its empty load is a reader matter, not an address change. Nothing to fix in research"
+  },
+  {
+    "date": "2026-11-18",
+    "state": "US",
+    "target": "new kinds of sources",
+    "tried": "California CEQAnet CSV export; CourtListener search API for nature-of-suit 210",
+    "result": "CEQAnet verified (dated CSV, no login) and written to research/sources/ideas.md; CourtListener needs an account token, not usable"
+  }
+]

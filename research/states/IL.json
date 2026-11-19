@@ -1,7 +1,7 @@
 {
   "state": "Illinois",
   "code": "IL",
-  "checked": "2026-11-17",
+  "checked": "2026-11-18",
   "projects": [
     {
       "name": "IDOT Multi-Year Improvement Program - Roadway FY 2027-2031",
@@ -146,8 +146,165 @@
         ]
       },
       "notes": "Lake County open-data parcel polygons. Name is the taxpayer of record. No value or acreage fields."
+    },
+    {
+      "county": "MORGAN",
+      "url": "https://services3.arcgis.com/95PFahBF8eyGEfuc/arcgis/rest/services/TaxParcels/FeatureServer/0",
+      "verified": true,
+      "record_count": 22489,
+      "fields": {
+        "apn": "pin",
+        "owner": "owner1_nam",
+        "mailing_address": [
+          "owner1_add",
+          "owner1_csz"
+        ],
+        "address": "site_addre",
+        "acres": "gross_acre"
+      },
+      "restrictions": null,
+      "notes": "Morgan County GIS (item a4b77333978b44359dc1065a1e72c8c0, 'Morgan County Tax Parcels', service description 'Updated on 7/2/2026'). Terms read on the item 2026-11-18: a warranty and liability disclaimer only ('for convenience only ... provided \"as is\"'); no limit on commercial use, redistribution or mailing stated. total_asse is assessed value. maxRecordCount 1000."
+    },
+    {
+      "county": "MADISON",
+      "url": "https://services.arcgis.com/Z0kKj2K728ngqqrp/arcgis/rest/services/County_Parcels/FeatureServer/12",
+      "verified": true,
+      "record_count": 136799,
+      "fields": {
+        "apn": "PIN",
+        "owner": "OWN_FULL",
+        "mailing_address": [
+          "OWN_ADD",
+          "OWN_ADD_2",
+          "OWN_CITY",
+          "OWN_STATE",
+          "OWN_ZIP"
+        ],
+        "address": [
+          "NUM",
+          "ST_PRE",
+          "ST_NAME",
+          "ST_TYPE",
+          "CITY",
+          "ZIP"
+        ],
+        "acres": "ACRES"
+      },
+      "restrictions": "terms not found (the item licence field and the layer description are empty; the county's own terms page was not located on 2026-11-18)",
+      "notes": "Madison County GIS account (MadCoGISAdmin), item 1bd63878b0194f85862cf55d69759db6, modified November 2026. Owner name is also split into OWN_FIRST/OWN_MID_IN/OWN_LAST/OWN_SUFF. No value field. maxRecordCount 2000."
+    },
+    {
+      "county": "MCHENRY",
+      "url": "https://services1.arcgis.com/6iYC5AXXYapRVNzl/arcgis/rest/services/McHenry_County_TaxParcels/FeatureServer/0",
+      "verified": true,
+      "record_count": 150159,
+      "fields": {
+        "apn": "ParcelNumber",
+        "owner": "Owner",
+        "mailing_address": [
+          "MailToAddress1",
+          "MailToAddress2",
+          "MailToCity",
+          "MailToState",
+          "MailToZip"
+        ],
+        "address": [
+          "SiteAddress",
+          "SiteCity",
+          "SiteZip"
+        ]
+      },
+      "restrictions": "terms not found (the item licence field and the layer description are empty; the county's own terms page was not located on 2026-11-18)",
+      "notes": "McHenry County account (McHenryCounty), item 723960c3086940dd9784f69d897c1c7b, modified November 2026. The county's own server (www.mchenrycountygis.org) refuses automated requests (403); this ArcGIS Online copy answers. ParcelArea is square feet. No value field. maxRecordCount 2000."
+    },
+    {
+      "county": "PEORIA",
+      "url": "https://services.arcgis.com/iPiPjILCMYxPZWTc/arcgis/rest/services/Tax_Parcels/FeatureServer/5",
+      "verified": true,
+      "record_count": 90350,
+      "fields": {
+        "apn": "PIN",
+        "owner": "owner_name",
+        "mailing_address": [
+          "ADDR1",
+          "ADDR2",
+          "OWNCTY",
+          "OWNSTE",
+          "OWZIP"
+        ],
+        "address": [
+          "prop_street",
+          "CITY",
+          "PZIP"
+        ],
+        "acres": "Acres"
+      },
+      "restrictions": "The item's licence field is a link titled 'License Agreement' (https://peoriacountygis.hub.arcgis.com/pages/a979f2ceac8d4fffb7ea1e5712f45bd6). That page is script-only and its text could not be read on 2026-11-18, so the agreement's terms are unknown. Treat as restricted until it is read.",
+      "notes": "Peoria County GIS (item 00b0e55fe72d414395418dd76691daf4, credits 'Peoria County, The Sidwell Company, Esri'). total_assessed_value is assessed value, not market. maxRecordCount 2000."
+    },
+    {
+      "county": "TAZEWELL",
+      "url": "https://gis.tazewell-il.gov/arcgis/rest/services/WAB/TazCo_Parcels_WithOwner/MapServer/1",
+      "verified": true,
+      "record_count": 68098,
+      "fields": {
+        "apn": "PIN",
+        "owner": "owner1_name",
+        "mailing_address": [
+          "mailto_address1",
+          "mailto_address2",
+          "mailto_csz"
+        ],
+        "address": [
+          "site_address",
+          "site_csz"
+        ],
+        "acres": "gross_acres"
+      },
+      "restrictions": "terms not found (Tazewell County's own server; the layer has no description, copyright or terms; no terms page was located on 2026-11-18)",
+      "notes": "Tazewell County server, view dbo.vw_webgis_parcels. Has owner1/owner2/owner3 names, a separate mail-to name and address, tax-bill name, last sale date and price. maxRecordCount 2000."
+    },
+    {
+      "county": "WHITESIDE",
+      "url": "https://services.arcgis.com/l0M0OC6J9QAHCiGx/arcgis/rest/services/Tax_Parcels_Ver_2_Parcels_Only/FeatureServer/0",
+      "verified": true,
+      "record_count": 36523,
+      "fields": {
+        "apn": "PARCELID",
+        "owner": "OWNERNME1",
+        "mailing_address": [
+          "PSTLADDRESS",
+          "PSTLADDRESS2",
+          "PSTLCITY"
+        ],
+        "address": [
+          "SITEADDRESS",
+          "SITEADDRESS2"
+        ]
+      },
+      "restrictions": "terms not found (the item licence field and the layer description are empty; the county's own terms page was not located on 2026-11-18)",
+      "notes": "Item 0cc6f8d25a1e4ae585e5123dd84fdf4f 'Tax Parcels - Whiteside County', credit 'Whiteside County IL GIS', modified November 2026. PSTLCITY holds city, state and ZIP in one string. CNTASSDVAL is assessed value. maxRecordCount 2000."
+    },
+    {
+      "county": "ADAMS",
+      "url": "https://services3.arcgis.com/BXTAaNPMn1VANOeH/arcgis/rest/services/ParcelsOnlineMap/FeatureServer/0",
+      "verified": true,
+      "record_count": 38785,
+      "fields": {
+        "apn": "PIN",
+        "owner": "OwnerName",
+        "mailing_address": [
+          "OwnerAddress",
+          "OwnerAddress2",
+          "OwnerCSZ"
+        ],
+        "address": "SiteAddress",
+        "acres": "Acres"
+      },
+      "restrictions": "terms not found (item licence field is empty; the item is published by an account that appears to be the county health department, not the assessor; checked 2026-11-18)",
+      "notes": "Item d2ad725fdbdc4536a2921bfb80ae9bfa 'Adams County, IL Parcels' (account KevinD_ACHD), modified mid-2026. TotalValue looks like assessed value. maxRecordCount 2000."
     }
   ],
   "parcels_counties_note": "Not found or not reachable in the time allowed: Cook (no owner or taxpayer name in any public GIS layer found; gis.cookcountyil.gov timed out; only a 2016 south-suburbs extract with taxpayer names exists on ArcGIS Online), Will (gis.willcountyillinois.com answered 403), Kane (public parcel layer has no owner field).",
-  "summary": "Projects: IDOT Multi-Year Program FY 2026-2031 verified as six ArcGIS Online layers (roadway lines, structure and spot points) with improvement type and cost but no letting date. Parcels: no statewide owner layer; DuPage and Lake verified with taxpayer names; Cook, Will and Kane have no usable owner layer."
+  "summary": "Projects: IDOT Multi-Year Program FY 2026-2031 verified as six ArcGIS Online layers (roadway lines, structure and spot points) with improvement type and cost but no letting date. Parcels: no statewide owner layer; DuPage and Lake verified with taxpayer names; Cook, Will and Kane have no usable owner layer. Added 2026-11-18: Morgan verified with disclaimer-only terms; Madison, McHenry, Peoria, Tazewell, Whiteside and Adams verified with owner and mailing address but no readable terms. Cook, Will, Winnebago, St. Clair, Champaign, Sangamon and Kendall: no public owner layer found (Cook and Will servers refused or timed out; Kane's public layer has no owner field)."
 }

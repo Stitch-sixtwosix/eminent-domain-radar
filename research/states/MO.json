@@ -1,7 +1,7 @@
 {
   "state": "Missouri",
   "code": "MO",
-  "checked": "2026-11-17",
+  "checked": "2026-11-18",
   "projects": [
     {
       "name": "MoDOT STIP (BusinessInt/STIP)",
@@ -58,8 +58,89 @@
         "market_value": "TotalMarke"
       },
       "notes": "Third-party copy on ArcGIS Online, data dated 2020-03 in the sample; includes four previous owners and sale history. The county's own server (map.sccmo.org) timed out."
+    },
+    {
+      "county": "PLATTE",
+      "url": "https://services.arcgis.com/KP64F8Xif9MkUwD4/arcgis/rest/services/Parkville_Parcels_2024/FeatureServer/0",
+      "verified": true,
+      "record_count": 45056,
+      "fields": {
+        "apn": "PARCELNUM",
+        "owner": "DEEDHOLDER",
+        "mailing_address": [
+          "Mailing_ad",
+          "Mailing__1",
+          "Mailing__2",
+          "Mailing__3",
+          "Mailing__4"
+        ],
+        "address": [
+          "HOUSENUM",
+          "ADDRESS"
+        ],
+        "acres": "Calc_Acres"
+      },
+      "restrictions": null,
+      "notes": "Published by the City of Parkville (item 0ef0d612f9a14424ab63f91f91615ea6, titled 'Parkville Parcels 2024') but the layer extent and the 45,056 records cover all of Platte County: parcels taxed in 2024. Terms read on the item 2026-11-18: 'Users are granted permission to use, copy, and distribute the data for personal, educational, or commercial purposes, provided attribution is given to the City of Parkville and/or Platte County as appropriate'; the rest is a warranty and liability disclaimer. Attribution is required. DEEDHOLD_1 is a second holder; Mailing__2/3/4 are city, state, ZIP. Current-value fields (Curr_Total) are present. maxRecordCount 2000."
+    },
+    {
+      "county": "JASPER",
+      "url": "https://services6.arcgis.com/f6278XvXrNz6PmsX/arcgis/rest/services/Parcels/FeatureServer/1",
+      "verified": true,
+      "record_count": 60742,
+      "fields": {
+        "apn": "PIN",
+        "owner": "Own_Name",
+        "mailing_address": "Own_Addres",
+        "address": "Address",
+        "acres": "Legal_Ac"
+      },
+      "restrictions": null,
+      "notes": "Jasper County GIS account (JascoGIS), item ee8439f9194f421db8faa5d0b00396c7, 'Jasper County Land Parcels for Taxing Purposes'. Terms read on the item 2026-11-18: a warranty and liability disclaimer only ('for convenience only ... provided \"as is\" with no warranties of any kind'); no limit on commercial use, redistribution or mailing stated. Own_Addres is one string with street, city, state and ZIP separated by semicolons. The item was last modified in June 2022, so ownership may be dated. maxRecordCount 2000."
+    },
+    {
+      "county": "CLAY",
+      "url": "https://services7.arcgis.com/3c8lLdmDNevrTlaV/arcgis/rest/services/ClayCountyParcelService/FeatureServer/0",
+      "verified": true,
+      "record_count": 98112,
+      "fields": {
+        "apn": "parcel_id",
+        "owner": "current_owner",
+        "mailing_address": [
+          "owner_addr_1",
+          "owner_addr_2",
+          "owner_city",
+          "owner_state",
+          "owner_zip"
+        ],
+        "address": "situs_display",
+        "acres": "acres_calc"
+      },
+      "restrictions": "terms not found (the item licence field and the layer description are empty; the county's own terms page was not located on 2026-11-18)",
+      "notes": "Clay County, MO GIS account (clayco_gisadmin), item 37dd84175f9b4568b3daf1892a586d3c: 'Clay County, MO GIS Parcels Data with Parcel ID, Owner names, Situs, Mailing Address, and Taxing Districts'. Item modified in 2026. co_owner holds a second name or 'ETAL'/'TRUST'. No value field. maxRecordCount 2000."
+    },
+    {
+      "county": "GREENE",
+      "url": "https://maps.springfieldmo.gov/arcgis/rest/services/Maps/PublicSafety/MapServer/21",
+      "verified": true,
+      "record_count": 123884,
+      "fields": {
+        "apn": "PIN",
+        "owner": "OWN1",
+        "mailing_address": [
+          "Own_Addr",
+          "CITYNAME",
+          "STATECODE",
+          "ZIP1"
+        ],
+        "address": "PropAdr",
+        "market_value": "P_VALAPR3",
+        "acres": "ACRES"
+      },
+      "restrictions": "terms not found (served by the City of Springfield GIS server; the service carries only the credit 'City of Springfield GIS' and no terms; no terms page was located on 2026-11-18)",
+      "notes": "'Parcels Greene' layer on the City of Springfield server: county assessor attributes for all 123,884 Greene County parcels. OWN2 is a second owner, CAREOF a care-of line; ADRNO/ADRSTR/CITYNAME/STATECODE/ZIP1 are the owner's mailing address and the L_ fields the property location. maxRecordCount 1000. The same server has 'Parcels Christian' (layer 20, 36,132 parcels) with a name field but no mailing address."
     }
   ],
   "parcels_counties_note": "Not found or not reachable in the time allowed: Jackson (jcgis.jacksongov.org timed out), St. Louis City, Greene.",
-  "summary": "Projects: MoDOT STIP lines for SFY 2027-2031 verified (description and cost, no work-type or status field). Parcels: no statewide owner layer; St. Louis County and St. Charles County layers verified but both look like 2020 data; Jackson, St. Louis City and Greene not found."
+  "summary": "Projects: MoDOT STIP lines for SFY 2027-2031 verified (description and cost, no work-type or status field). Parcels: no statewide owner layer; St. Louis County and St. Charles County layers verified but both look like 2020 data; Added 2026-11-18: Platte (commercial use expressly allowed) and Jasper (disclaimer only) verified; Clay and Greene verified but no terms found. Jackson, St. Louis City, Jefferson and Boone still not found (their servers did not answer or publish no owner layer)."
 }
