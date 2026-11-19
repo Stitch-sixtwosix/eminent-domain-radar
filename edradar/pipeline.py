@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import re
 from typing import Any, Dict, Optional
 
 from . import classify as C
@@ -32,7 +33,49 @@ def ingest(cfg: Dict[str, Any], db: DB, only: Optional[str] = None) -> Dict[str,
             print("  %s failed after %d records: %s" % (name, total, e))
         counts[name] = new
         print("  %-17s %5d fetched, %5d new" % (name, total, new))
+        if name == "penndot" and hasattr(module, "statuses"):
+            try:
+                print("  %-17s %5d projects already bid, in construction or finished" % ("", db.save_agency_status("penndot", module.statuses(scfg, http))))
+            except Exception as e:
+                print("  penndot status failed: %s" % e)
     return counts
+
+
+MPMS = re.compile(r"mpms\D{0,3}(\d{3,7})", re.I)
+
+
+def restage(db: DB) -> Dict[str, int]:
+    """Move every agency project to the stage its own schedule implies, and rescore. Runs on every update.
+
+    A project already matched to parcels keeps its record, so its stage is never recomputed by classify; without this
+    a job stays "in design" until long after it is built. A stage only ever moves forward.
+    """
+    status = {r["ext_id"]: r for r in db.rows("SELECT * FROM agency_status WHERE source='penndot'")}
+    changed = 0
+    for p in db.rows("""SELECT p.id, p.stage, s.source, s.external_id, s.title, s.state, s.raw FROM projects p
+                        JOIN signals s ON s.id = p.signal_id WHERE s.source = 'penndot' OR s.source LIKE 'dot:%' OR s.source LIKE 'gis:%'"""):
+        try:
+            raw = json.loads(p["raw"] or "{}")
+        except ValueError:
+            continue
+        if p["source"] == "penndot":
+            let, bid, building, pid = (raw.get("LET_DATE") or raw.get("LET_DATE_DISPLAY"), "A" in (raw.get("LET_IND"), raw.get("NTP_IND")),
+                                       raw.get("UNDER_CONSTRUCTION") == "Y", str(raw.get("PROJ_ID") or p["external_id"]))
+        else:
+            let, bid, building, pid = raw.get("_let"), False, False, None
+            if (p["state"] or "") == "PA":       # another body's list of a PennDOT job: find PennDOT's own number
+                pid = next((str(int(v)) for k, v in raw.items() if "mpms" in k.lower() and str(v).replace(".0", "").isdigit()), None)
+                m = pid or MPMS.search(p["title"] or "")
+                pid = pid or (m.group(1) if m else None)
+        known = status.get(pid) if pid else None
+        if known:
+            bid, building, let = bid or bool(known["let_actual"]) or bool(known["completed"]), building or bool(known["building"]), let or known["let_date"]
+        new = C.later_stage(p["stage"], C.stage_from_schedule(let, bid, building))
+        if new != (p["stage"] or "unknown"):
+            db.conn.execute("UPDATE projects SET stage=? WHERE id=?", (new, p["id"]))
+            changed += 1
+    db.commit()
+    return dict(rescore(db), stages_changed=changed)
 
 
 def classify(cfg: Dict[str, Any], db: DB) -> int:
@@ -172,6 +215,7 @@ def fill_counties(cfg: Dict[str, Any], db: DB) -> int:
 def run_all(cfg: Dict[str, Any], db: DB, limit: Optional[int] = None) -> None:
     print("Ingest"); ingest(cfg, db)
     print("Classify"); classify(cfg, db)
+    print("Stages"); print("  %(stages_changed)d projects moved to a later stage" % restage(db))
     print("Merge duplicates"); print("  %(copies)d repeats hidden of %(checked)d mapped projects" % dedupe.run(db))
     print("Geocode"); geocode(cfg, db)
     print("Counties"); fill_counties(cfg, db)

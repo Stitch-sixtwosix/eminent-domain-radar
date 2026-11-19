@@ -614,7 +614,7 @@ def test_state_dot_source_and_classifier(tmp_path):
     assert taking["acquisition_likelihood"] == 100 and taking["stage"] == "condemnation_filed"
     assert classify_dot(dot_arcgis.to_signal(layer, dict(attrs, PID=83, PHASE="Initial Offer"), None))["stage"] == "row_acquisition"
     assert classify_dot(dot_arcgis.to_signal(layer, dict(attrs, PID=84, PHASE="Pre-Litigation"), None))["stage"] == "row_acquisition"
-    assert classify_dot(dot_arcgis.to_signal(layer, dict(attrs, PID=85, PHASE="Construction Work Program"), None))["stage"] == "planning"
+    assert classify_dot(dot_arcgis.to_signal(layer, dict(attrs, PID=85, PHASE="Construction Work Program", LET=None), None))["stage"] == "planning"
     assert classify_dot(dot_arcgis.to_signal(layer, dict(attrs, PID=86, PHASE="PE, RW, CO"), None))["stage"] == "row_acquisition"
     row = classify_dot(dot_arcgis.to_signal(layer, dict(attrs, PID=80, TYPE="86:RIGHT OF WAY", PHASE=None), None))
     assert row["acquisition_likelihood"] >= 95 and row["stage"] == "row_acquisition"
@@ -756,3 +756,54 @@ def test_a_city_sharing_a_county_name_is_kept_apart():
     layers = [{"name": "a", "state": "MO", "counties": ["ST. LOUIS COUNTY"]}]
     assert P.pick_layer(layers, "St. Louis", "MO") is layers[0]
     assert P.pick_layer(layers, "St. Louis City", "MO") is None
+
+
+def test_stage_follows_the_agencys_own_bid_date(tmp_path):
+    """A program list says little about progress. The bid date and the agency's construction flag say much more."""
+    from datetime import date
+
+    from edradar import classify as C
+    from edradar import pipeline
+    from edradar.db import DB
+
+    today = date(2026, 11, 19)
+    assert C.stage_from_schedule("20261203", today=today) == "condemnation_filed"      # bids open in two weeks
+    assert C.stage_from_schedule("2028-09-14", today=today) == "row_acquisition"       # 22 months out
+    assert C.stage_from_schedule("2031-06-01", today=today) == "design"
+    assert C.stage_from_schedule("2035-01-01", today=today) is None                    # too far off to say
+    assert C.stage_from_schedule("2050-01-15", today=today) is None                    # the agency's "not scheduled"
+    assert C.stage_from_schedule("2023-04-27", today=today) == "construction"          # the date has passed
+    assert C.stage_from_schedule(None, let_actual=True) == "construction" and C.stage_from_schedule(None, building=True) == "construction"
+    assert C.stage_from_schedule(None) is None and C.stage_from_schedule("soon") is None
+    assert C.later_stage("row_acquisition", "design") == "row_acquisition" and C.later_stage("planning", None) == "planning"
+    assert C.later_stage("unknown", "design") == "design"
+
+    raw = {"PROJ_ID": 1, "IMPROVEMENT_CODE_DESC": "Widen", "program": "Four Year Plan", "LET_DATE": "20230427", "LET_IND": "A"}
+    assert C.classify_penndot({"title": "X", "body": "", "raw": json.dumps(raw), "geometry": None})["stage"] == "construction"
+    tl = C.timeline("construction", raw, today)
+    assert tl["let_actual"] and tl["let_date"] == "2023-04-27" and "bid or under construction" in tl["basis"]
+    assert "least certain" in C.timeline("planning", {"program": "Twelve Year Program"}, today)["basis"]
+    assert "Not confirmed against court filings" in C.timeline("row_acquisition", {"LET_DATE": "20280914"}, today)["basis"]
+
+    db = DB(str(tmp_path / "s.db"))
+    # a planning commission lists a PennDOT job as planned; PennDOT itself reports it bid
+    db.upsert_signal({"source": "gis:PA", "external_id": "dvrpc:42", "title": "Ridge Pike: Belvoir Road to Chemical Road", "body": "x",
+                      "state": "PA", "raw": {"mpms_id": 48175, "_stage": "planning"}})
+    db.upsert_signal({"source": "penndot", "external_id": "9", "title": "Far off (MPMS 9)", "body": "x", "raw": {"PROJ_ID": 9, "program": "Twelve Year Program"}})
+    for s in db.unclassified_signals():
+        db.save_project(s["id"], {"name": s["title"], "project_type": "highway", "stage": "planning", "acquisition_likelihood": 85, "score": 80}, "rules")
+    assert db.save_agency_status("penndot", [{"ext_id": "48175", "let_date": "2023-04-27", "let_actual": 1, "building": 1}]) == 1
+    assert pipeline.restage(db)["stages_changed"] == 1
+    stages = {r["name"]: (r["stage"], r["score"]) for r in db.rows("SELECT name, stage, score FROM projects")}
+    assert stages["Ridge Pike: Belvoir Road to Chemical Road"][0] == "construction" and stages["Far off (MPMS 9)"][0] == "planning"
+    assert stages["Ridge Pike: Belvoir Road to Chemical Road"][1] < stages["Far off (MPMS 9)"][1]       # the built job scores lower
+    assert pipeline.restage(db)["stages_changed"] == 0                                                  # and it stays put
+    # a record whose only change is the agency's own fields keeps its project
+    from datetime import timedelta
+
+    soon = (date.today() + timedelta(days=200)).strftime("%Y%m%d")
+    assert db.upsert_signal({"source": "penndot", "external_id": "9", "title": "Far off (MPMS 9)", "body": "x",
+                             "raw": {"PROJ_ID": 9, "program": "Twelve Year Program", "LET_DATE": soon}}) is False
+    assert db.rows("SELECT COUNT(*) n FROM projects")[0]["n"] == 2
+    assert pipeline.restage(db)["stages_changed"] == 1
+    assert db.rows("SELECT stage FROM projects WHERE name LIKE 'Far off%'")[0]["stage"] == "condemnation_filed"

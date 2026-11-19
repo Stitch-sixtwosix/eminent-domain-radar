@@ -92,6 +92,12 @@ CREATE INDEX IF NOT EXISTS idx_outreach_lead ON outreach(lead_id);
 CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY, value TEXT NOT NULL);
 
 -- One skip-trace answer per owner and mailing address (kept even when nothing was found).
+-- What an agency itself reports about work it has bid, is building or has finished, keyed by its own project number.
+CREATE TABLE IF NOT EXISTS agency_status (
+    source TEXT NOT NULL, ext_id TEXT NOT NULL, let_date TEXT, let_actual INTEGER DEFAULT 0,
+    building INTEGER DEFAULT 0, completed INTEGER DEFAULT 0, updated_at TEXT DEFAULT (datetime('now')),
+    PRIMARY KEY (source, ext_id)
+);
 CREATE TABLE IF NOT EXISTS skiptraces (
     owner TEXT NOT NULL, mailing_address TEXT, matched INTEGER NOT NULL, result TEXT NOT NULL,
     fetched_at TEXT DEFAULT (datetime('now')),
@@ -202,6 +208,19 @@ class DB:
         self.conn.commit()
         return len(rows)
 
+    def save_agency_status(self, source: str, rows: Any) -> int:
+        n = 0
+        for r in rows:
+            self.conn.execute(
+                """INSERT INTO agency_status (source, ext_id, let_date, let_actual, building, completed) VALUES (?,?,?,?,?,?)
+                   ON CONFLICT(source, ext_id) DO UPDATE SET let_date=COALESCE(excluded.let_date, let_date),
+                     let_actual=MAX(let_actual, excluded.let_actual), building=MAX(building, excluded.building),
+                     completed=MAX(completed, excluded.completed), updated_at=datetime('now')""",
+                (source, r["ext_id"], r.get("let_date"), r.get("let_actual") or 0, r.get("building") or 0, r.get("completed") or 0))
+            n += 1
+        self.conn.commit()
+        return n
+
     # ---- signals ----
     def upsert_signal(self, s: Dict[str, Any]) -> bool:
         """Insert or refresh a signal; returns True if it was new.
@@ -214,7 +233,7 @@ class DB:
         params["geometry"] = _json(s.get("geometry"))
         params["raw"] = _json(s.get("raw"))
         existing = self.conn.execute(
-            "SELECT id, title, body FROM signals WHERE source=? AND external_id=?",
+            "SELECT id, title, body, raw FROM signals WHERE source=? AND external_id=?",
             (params["source"], params["external_id"]),
         ).fetchone()
         if existing is None:
@@ -227,6 +246,13 @@ class DB:
             )
             self.conn.commit()
             return True
+        if (existing["title"], existing["body"]) == (params["title"], params["body"]) and existing["raw"] != params["raw"]:
+            # Only the agency's own fields moved (a new bid date, a status). Keep them current for the stage check, but
+            # leave the project and its matched parcels alone.
+            self.conn.execute("UPDATE signals SET raw=:raw, geometry=:geometry, updated_at=datetime('now') "
+                              "WHERE source=:source AND external_id=:external_id", params)
+            self.conn.commit()
+            return False
         if (existing["title"], existing["body"]) != (params["title"], params["body"]):
             self.conn.execute(
                 """UPDATE signals SET title=:title, body=:body, url=:url, agency=:agency, county=:county,

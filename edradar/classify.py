@@ -102,7 +102,7 @@ def lead_points(project_score: int, reason: str) -> int:
 
 STAGE_LABEL = {"planning": "Planning: the earliest stage", "environmental_review": "Environmental review: still early",
                "design": "In design", "row_acquisition": "Right-of-way acquisition already under way",
-               "condemnation_filed": "Condemnation already authorized", "construction": "Under construction: too late",
+               "condemnation_filed": "Final acquisition: condemnations filed or due", "construction": "Bid or under construction: the land is already taken",
                "unknown": "Stage not published"}
 
 
@@ -114,6 +114,45 @@ STAGE_ORDER = [
     ("condemnation_filed", "Condemnation", "A declaration of taking is filed for parcels not settled."),
     ("construction", "Construction", "The contract is let and work begins."),
 ]
+STAGE_RANK = {k: i for i, (k, _, _) in enumerate(STAGE_ORDER)}
+
+
+def _months_until(day: Optional[str], today: Optional[Any] = None) -> Optional[int]:
+    from datetime import date, datetime
+
+    for fmt in ("%Y-%m-%d", "%Y%m%d", "%m-%d-%y", "%m/%d/%Y"):
+        try:
+            d = datetime.strptime(str(day or "")[:10], fmt).date()
+        except ValueError:
+            continue
+        if d.year >= 2045:           # agencies use far-off dates to mean "not scheduled"
+            return None
+        today = today or date.today()
+        return (d.year - today.year) * 12 + d.month - today.month
+    return None
+
+
+def stage_from_schedule(let_date: Optional[str], let_actual: bool = False, building: bool = False,
+                        today: Optional[Any] = None) -> Optional[str]:
+    """The stage an agency's own bid date implies, or None when it publishes no usable date.
+
+    A highway agency cannot open construction bids until it holds the right-of-way, so the bid ("let") date dates the
+    land work: once bid, the land is taken; in the last year and a half before, offers are out and declarations of
+    taking are being filed; from about three and a half years out, right-of-way plans are done and appraisals start.
+    The program a project is listed under (a four-year plan, a long-range plan) says none of this, and was wrong often.
+    """
+    if building or let_actual:
+        return "construction"
+    months = _months_until(let_date, today)
+    if months is None:
+        return None
+    return ("construction" if months <= 0 else "condemnation_filed" if months <= 18
+            else "row_acquisition" if months <= 42 else "design" if months <= 72 else None)
+
+
+def later_stage(a: Optional[str], b: Optional[str]) -> str:
+    """Whichever of two stages is further along. Work does not move backwards."""
+    return max((a or "unknown", b or "unknown"), key=lambda s: STAGE_RANK.get(s, -1))
 
 
 def timeline(stage: Optional[str], raw: Optional[Dict[str, Any]] = None, today: Optional[Any] = None) -> Dict[str, Any]:
@@ -128,16 +167,26 @@ def timeline(stage: Optional[str], raw: Optional[Dict[str, Any]] = None, today: 
     out: Dict[str, Any] = {"steps": steps, "position": None if at is None else at + 1, "of": len(keys),
                            "program": (raw or {}).get("program"), "status": (raw or {}).get("PROJ_STATUS_DESC"),
                            "let_date": None, "months_to_letting": None}
-    let = (raw or {}).get("LET_DATE_DISPLAY")
-    if let:
-        try:
-            d = datetime.strptime(let, "%m-%d-%y").date()
-            today = today or date.today()
-            if d.year < 2045:        # PennDOT uses 2050 dates as "not scheduled"
-                out["let_date"] = d.isoformat()
-                out["months_to_letting"] = (d.year - today.year) * 12 + d.month - today.month
-        except ValueError:
-            pass
+    r = raw or {}
+    let = r.get("LET_DATE") or r.get("LET_DATE_DISPLAY") or r.get("_let")
+    months = _months_until(let, today)
+    if months is not None:
+        for fmt in ("%Y-%m-%d", "%Y%m%d", "%m-%d-%y", "%m/%d/%Y"):
+            try:
+                out["let_date"] = datetime.strptime(str(let)[:10], fmt).date().isoformat()
+                break
+            except ValueError:
+                continue
+        out["months_to_letting"] = months
+    bid = stage == "construction" or "A" in (r.get("LET_IND"), r.get("NTP_IND")) or r.get("UNDER_CONSTRUCTION") == "Y"
+    out["let_actual"] = bid
+    # What the stage rests on, so a reader can judge it. Only a court filing proves a condemnation; none is read here.
+    out["basis"] = ("The agency reports this contract as bid or under construction." if bid
+                    else "Estimated from the agency's construction bid date. Right-of-way must be in hand before bids open, so "
+                         "offers and condemnations come in the months before it. Not confirmed against court filings."
+                    if months is not None and months <= 72
+                    else "Taken from the program the agency lists this project under. No bid date is published, so this is "
+                         "the least certain kind of stage.")
     return out
 
 
@@ -168,7 +217,9 @@ def classify_penndot(signal: Dict[str, Any]) -> Dict[str, Any]:
     # Free-text hints inside the description nudge the likelihood.
     if re.search(r"right[- ]of[- ]way|\bROW\b|acquisition|realign|relocat|new alignment|bypass|widen", text, re.I):
         likelihood = min(100, likelihood + 8)
-    stage = PROGRAM_STAGE.get(raw.get("program") or "", "unknown")
+    stage = later_stage(PROGRAM_STAGE.get(raw.get("program") or "", "unknown"), stage_from_schedule(
+        raw.get("LET_DATE") or raw.get("LET_DATE_DISPLAY"), "A" in (raw.get("LET_IND"), raw.get("NTP_IND")),
+        raw.get("UNDER_CONSTRUCTION") == "Y"))
     cost = raw.get("PHS_EST_COST_AM")
     geometry = json.loads(signal["geometry"]) if isinstance(signal.get("geometry"), str) else signal.get("geometry")
     c = geo.center(geometry)
@@ -277,6 +328,7 @@ def classify_dot(signal: Dict[str, Any]) -> Dict[str, Any]:
     stage = next((st for pat, st in DOT_STAGE if re.search(pat, status, re.I)), raw.get("_stage") or ("planning" if not status else "unknown"))
     if stage in ("planning", "unknown", "design") and re.search(r"right[- ]of[- ]way|\brow\b|r/w", str(raw.get("_work_type") or ""), re.I):
         stage = "row_acquisition"              # the job itself is the land purchase
+    stage = later_stage(stage, stage_from_schedule(raw.get("_let")))
     cost = raw.get("_cost")
     geometry = json.loads(signal["geometry"]) if isinstance(signal.get("geometry"), str) else signal.get("geometry")
     c = geo.center(geometry)

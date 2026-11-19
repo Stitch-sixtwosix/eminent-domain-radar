@@ -70,6 +70,43 @@ def fetch(cfg: Dict[str, Any], http: Http) -> Iterator[Dict[str, Any]]:
         yield _to_signal(key, m)
 
 
+# Work PennDOT has already bid or finished. These are not offered as leads, but other sources (a county's or a
+# planning commission's project list) still show the same jobs as "planned", so their real status is kept to correct them.
+STATUS_LAYERS = [(1, "underway"), (16, "underway"), (5, "building"), (20, "building"), (0, "completed"), (15, "completed")]
+
+
+def statuses(cfg: Dict[str, Any], http: Http) -> Iterator[Dict[str, Any]]:
+    """One row per PennDOT project that is bid, being built or finished: {ext_id, let_date, let_actual, building, completed}."""
+    base, seen = cfg["url"].rstrip("/"), set()
+    for layer_id, kind in STATUS_LAYERS:
+        offset = 0
+        while True:
+            data = http.get_json("%s/%s/query" % (base, layer_id), {
+                "where": "1=1", "outFields": "PROJ_ID,LET_DATE,LET_IND,NTP_IND,UNDER_CONSTRUCTION", "returnGeometry": "false",
+                "orderByFields": "OBJECTID", "resultOffset": offset, "resultRecordCount": PAGE, "f": "json"})
+            if "error" in data:
+                raise RuntimeError("PennDOT layer %s: %s" % (layer_id, data["error"]))
+            feats = data.get("features") or []
+            for f in feats:
+                a = f.get("attributes") or {}
+                pid = a.get("PROJ_ID")
+                if pid is None or (pid, kind) in seen:
+                    continue
+                seen.add((pid, kind))
+                yield {"ext_id": str(pid), "let_date": _iso(a.get("LET_DATE")),
+                       "let_actual": 1 if "A" in (a.get("LET_IND"), a.get("NTP_IND")) else 0,
+                       "building": 1 if kind == "building" or a.get("UNDER_CONSTRUCTION") == "Y" else 0,
+                       "completed": 1 if kind == "completed" else 0}
+            if len(feats) < PAGE and not data.get("exceededTransferLimit"):
+                break
+            offset += len(feats)
+
+
+def _iso(yyyymmdd: Any) -> Any:
+    s = str(yyyymmdd or "")
+    return "%s-%s-%s" % (s[:4], s[4:6], s[6:8]) if len(s) == 8 and s.isdigit() else None
+
+
 def _to_signal(key: str, m: Dict[str, Any]) -> Dict[str, Any]:
     a = m["attrs"]
     if m["paths"]:
@@ -79,7 +116,7 @@ def _to_signal(key: str, m: Dict[str, Any]) -> Dict[str, Any]:
     else:
         geometry = None
     keep = ("PROJ_ID", "IMPROVEMENT_CODE_DESC", "PROJECT_TITLE", "PROJ_STATUS_DESC", "PROJ_CLASS", "DISTRICT_NO",
-            "PLANNING_PARTNER_NAME", "LET_DATE_DISPLAY", "TYP_APPR_IND", "TIP_APPR_IND", "STIP_APPR_IND",
+            "PLANNING_PARTNER_NAME", "LET_DATE_DISPLAY", "LET_DATE", "LET_IND", "NTP_DATE", "NTP_IND", "UNDER_CONSTRUCTION", "TYP_APPR_IND", "TIP_APPR_IND", "STIP_APPR_IND",
             "ST_RT_NO", "COUNTY_NAME", "MUNICIPAL_CODE", "PRJCT_GRPHY_DC", "PRJCT_IMPRV_DC", "PHS_EST_COST_AM",
             "PRJCT_MNGR_CONTACT_NM", "PRJCT_MNGR_NO", "PRJCT_MNGR_EMAIL", "SEG_LNGTH_FEET")
     raw = {k: a.get(k) for k in keep}

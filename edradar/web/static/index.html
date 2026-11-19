@@ -595,14 +595,15 @@ function lettingText(t) {
   if (!t || !t.let_date) return "";
   const d = new Date(t.let_date + "T12:00:00"), m = t.months_to_letting;
   const when = d.toLocaleDateString(undefined, {month: "short", day: "numeric", year: "numeric"});
-  const away = m <= 0 ? "already let or due now" : m < 12 ? `in about ${m} month${m === 1 ? "" : "s"}` : `in about ${Math.floor(m / 12)} yr${m % 12 ? " " + (m % 12) + " mo" : ""}`;
+  if (t.let_actual && m <= 0) return `Construction contract bid ${when}`;
+  const away = m <= 0 ? "due now" : m < 12 ? `in about ${m} month${m === 1 ? "" : "s"}` : `in about ${Math.floor(m / 12)} yr${m % 12 ? " " + (m % 12) + " mo" : ""}`;
   return `Construction contract letting ${when}, ${away}`;
 }
 function stageHead(t) {
   if (!t) return "";
   const pos = t.position ? `<b>Stage ${t.position} of ${t.of}: ${esc(t.steps[t.position - 1].label)}</b>` : "<b>Stage not published</b>";
   const let_ = lettingText(t);
-  return `<div class="when">${pos}${let_ ? `<span>${esc(let_)}</span>` : t.position ? "<span>No construction date published yet</span>" : ""}${t.program ? `<span>PennDOT program: ${esc(t.program)}${t.status ? ", " + esc(t.status.toLowerCase()) : ""}</span>` : ""}</div>`;
+  return `<div class="when">${pos}${let_ ? `<span>${esc(let_)}</span>` : t.position ? "<span>No construction date published yet</span>" : ""}${t.program ? `<span>PennDOT program: ${esc(t.program)}${t.status ? ", " + esc(t.status.toLowerCase()) : ""}</span>` : ""}${t.basis ? `<span class="basis">${esc(t.basis)}</span>` : ""}</div>`;
 }
 const stageList = (t, col) => !t ? "" : `<ol class="stages${col ? " col" : ""}">${t.steps.map(x =>
   `<li data-state="${x.state}"${x.state === "current" ? ' aria-current="step"' : ""}${col ? "" : ` data-tip-text="${esc(x.about)}"`}>${esc(x.label)}${col && x.state === "current" ? `<span>${esc(x.about)}</span>` : ""}</li>`).join("")}</ol>`;
