@@ -167,7 +167,9 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
             """SELECT p.id, p.name, p.project_type, p.stage, p.acquisition_likelihood, p.score, p.summary,
                       p.est_cost, p.contact, p.geometry, p.lat, p.lon, p.matched_at, p.engine,
                       s.source, s.url, s.agency, s.county, s.state, s.published, s.raw,
-                      (SELECT COUNT(*) FROM leads l WHERE l.project_id = p.id) AS lead_count
+                      (SELECT COUNT(*) FROM leads l WHERE l.project_id = p.id) AS lead_count,
+                      (SELECT COALESCE(o.note, 'stage set by hand') FROM stage_overrides o
+                       WHERE o.source = s.source AND o.external_id = s.external_id) AS confirmed
                FROM projects p JOIN signals s ON s.id = p.signal_id
                WHERE %s ORDER BY p.score DESC, p.est_cost DESC LIMIT ?""" % " AND ".join(where),
             params + [min(limit, 20000)],
@@ -175,7 +177,8 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
         for r in rows:
             r["geometry"] = json.loads(r["geometry"]) if r["geometry"] else None
             raw = json.loads(r.pop("raw") or "{}")
-            r["timeline"] = timeline(r["stage"], raw if isinstance(raw, dict) else {})
+            confirmed = r.pop("confirmed", None)
+            r["timeline"] = timeline(r["stage"], dict(raw if isinstance(raw, dict) else {}, _confirmed=confirmed))
             r["score_parts"] = score_breakdown(r["acquisition_likelihood"], r["stage"], r["est_cost"], r["score"])
         return rows[:limit]
 

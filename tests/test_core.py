@@ -807,3 +807,12 @@ def test_stage_follows_the_agencys_own_bid_date(tmp_path):
     assert db.rows("SELECT COUNT(*) n FROM projects")[0]["n"] == 2
     assert pipeline.restage(db)["stages_changed"] == 1
     assert db.rows("SELECT stage FROM projects WHERE name LIKE 'Far off%'")[0]["stage"] == "condemnation_filed"
+    # someone who knows the job sets its stage; that holds whatever the sources say, and the page says where it came from
+    pid = db.rows("SELECT id FROM projects WHERE name LIKE 'Far off%'")[0]["id"]
+    assert pipeline.set_stage(db, pid, "row_acquisition", "offers are out", "Chris")["now"] == "row_acquisition"
+    pipeline.restage(db)
+    assert db.rows("SELECT stage FROM projects WHERE id=?", (pid,))[0]["stage"] == "row_acquisition"
+    assert "offers are out" in C.timeline("row_acquisition", {"_confirmed": "offers are out"})["basis"]
+    import pytest
+    with pytest.raises(ValueError):
+        pipeline.set_stage(db, pid, "finished")

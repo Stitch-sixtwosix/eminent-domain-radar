@@ -41,6 +41,21 @@ def ingest(cfg: Dict[str, Any], db: DB, only: Optional[str] = None) -> Dict[str,
     return counts
 
 
+def set_stage(db: DB, project_id: int, stage: str, note: Optional[str] = None, by: Optional[str] = None) -> Dict[str, Any]:
+    """Record what someone who knows the job says its stage is. It holds until it is changed, whatever the sources say."""
+    if stage not in C.STAGE_RANK:
+        raise ValueError("stage must be one of: " + ", ".join(C.STAGE_RANK))
+    rows = db.rows("SELECT s.source, s.external_id, p.name, p.stage FROM projects p JOIN signals s ON s.id = p.signal_id WHERE p.id=?", (project_id,))
+    if not rows:
+        raise ValueError("no project %s" % project_id)
+    r = rows[0]
+    db.conn.execute("""INSERT INTO stage_overrides (source, external_id, stage, note, set_by) VALUES (?,?,?,?,?)
+                       ON CONFLICT(source, external_id) DO UPDATE SET stage=excluded.stage, note=excluded.note,
+                         set_by=excluded.set_by, set_at=datetime('now')""", (r["source"], r["external_id"], stage, note, by))
+    db.commit()
+    return {"project": r["name"], "was": r["stage"], "now": stage}
+
+
 MPMS = re.compile(r"mpms\D{0,3}(\d{3,7})", re.I)
 
 
@@ -51,6 +66,7 @@ def restage(db: DB) -> Dict[str, int]:
     a job stays "in design" until long after it is built. A stage only ever moves forward.
     """
     status = {r["ext_id"]: r for r in db.rows("SELECT * FROM agency_status WHERE source='penndot'")}
+    fixed = {(r["source"], r["external_id"]): r["stage"] for r in db.rows("SELECT source, external_id, stage FROM stage_overrides")}
     changed = 0
     for p in db.rows("""SELECT p.id, p.stage, s.source, s.external_id, s.title, s.state, s.raw FROM projects p
                         JOIN signals s ON s.id = p.signal_id WHERE s.source = 'penndot' OR s.source LIKE 'dot:%' OR s.source LIKE 'gis:%'"""):
@@ -70,7 +86,7 @@ def restage(db: DB) -> Dict[str, int]:
         known = status.get(pid) if pid else None
         if known:
             bid, building, let = bid or bool(known["let_actual"]) or bool(known["completed"]), building or bool(known["building"]), let or known["let_date"]
-        new = C.later_stage(p["stage"], C.stage_from_schedule(let, bid, building))
+        new = fixed.get((p["source"], p["external_id"])) or C.later_stage(p["stage"], C.stage_from_schedule(let, bid, building))
         if new != (p["stage"] or "unknown"):
             db.conn.execute("UPDATE projects SET stage=? WHERE id=?", (new, p["id"]))
             changed += 1

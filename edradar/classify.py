@@ -180,6 +180,9 @@ def timeline(stage: Optional[str], raw: Optional[Dict[str, Any]] = None, today: 
         out["months_to_letting"] = months
     bid = stage == "construction" or "A" in (r.get("LET_IND"), r.get("NTP_IND")) or r.get("UNDER_CONSTRUCTION") == "Y"
     out["let_actual"] = bid
+    if r.get("_confirmed"):
+        out["basis"] = "Confirmed by an eminent domain attorney familiar with this project: " + str(r["_confirmed"])
+        return out
     # What the stage rests on, so a reader can judge it. Only a court filing proves a condemnation; none is read here.
     out["basis"] = ("The agency reports this contract as bid or under construction." if bid
                     else "Estimated from the agency's construction bid date. Right-of-way must be in hand before bids open, so "

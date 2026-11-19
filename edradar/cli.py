@@ -37,6 +37,11 @@ def main() -> None:
     p.add_argument("--min-score", type=int, default=90)
     p.add_argument("--limit", type=int, default=25, help="most owners to look up in this batch")
     p.add_argument("--run", action="store_true", help="actually look them up; without it only the count and cost are shown")
+    p = sub.add_parser("set-stage", help="record a project's true stage from someone who knows the job; it outranks the sources")
+    p.add_argument("project_id", type=int)
+    p.add_argument("stage")
+    p.add_argument("--note")
+    p.add_argument("--by")
     sub.add_parser("restage", help="move projects to the stage the agency's own bid dates imply, then rescore")
     sub.add_parser("rescore", help="recompute all scores from stored data (after the scoring rules change)")
     sub.add_parser("usage", help="billable usage: lookups and postcards, cost and client price")
@@ -110,6 +115,9 @@ def main() -> None:
                   % (res["owners"], res["max_cost"], res["max_billed"]))
         else:
             print("%d owners looked up, %d matched, %d failed" % (res["owners"], res["matched"], res["failed"]))
+    elif args.cmd == "set-stage":
+        print(pipeline.set_stage(db, args.project_id, args.stage, args.note, args.by))
+        print(pipeline.restage(db))
     elif args.cmd == "restage":
         print(pipeline.restage(db))
     elif args.cmd == "rescore":

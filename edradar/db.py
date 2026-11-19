@@ -98,6 +98,11 @@ CREATE TABLE IF NOT EXISTS agency_status (
     building INTEGER DEFAULT 0, completed INTEGER DEFAULT 0, updated_at TEXT DEFAULT (datetime('now')),
     PRIMARY KEY (source, ext_id)
 );
+-- A stage set by a person who knows the job (a filed condemnation, parcels already settled). It outranks every inference.
+CREATE TABLE IF NOT EXISTS stage_overrides (
+    source TEXT NOT NULL, external_id TEXT NOT NULL, stage TEXT NOT NULL, note TEXT, set_by TEXT,
+    set_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (source, external_id)
+);
 CREATE TABLE IF NOT EXISTS skiptraces (
     owner TEXT NOT NULL, mailing_address TEXT, matched INTEGER NOT NULL, result TEXT NOT NULL,
     fetched_at TEXT DEFAULT (datetime('now')),
