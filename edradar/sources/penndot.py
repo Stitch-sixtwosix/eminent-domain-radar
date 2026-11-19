@@ -81,20 +81,22 @@ def statuses(cfg: Dict[str, Any], http: Http) -> Iterator[Dict[str, Any]]:
     for layer_id, kind in STATUS_LAYERS:
         offset = 0
         while True:
+            # The construction layers name their fields differently (PROJECT_ID, LET_FLAG), so every field is read.
             data = http.get_json("%s/%s/query" % (base, layer_id), {
-                "where": "1=1", "outFields": "PROJ_ID,LET_DATE,LET_IND,NTP_IND,UNDER_CONSTRUCTION", "returnGeometry": "false",
-                "orderByFields": "OBJECTID", "resultOffset": offset, "resultRecordCount": PAGE, "f": "json"})
-            if "error" in data:
-                raise RuntimeError("PennDOT layer %s: %s" % (layer_id, data["error"]))
+                "where": "1=1", "outFields": "*", "returnGeometry": "false",
+                "resultOffset": offset, "resultRecordCount": PAGE, "f": "json"})
+            if "error" in data:                  # one layer that will not answer must not lose the others
+                print("  PennDOT status layer %s skipped: %s" % (layer_id, data["error"].get("message")))
+                break
             feats = data.get("features") or []
             for f in feats:
                 a = f.get("attributes") or {}
-                pid = a.get("PROJ_ID")
+                pid = a.get("PROJ_ID") if a.get("PROJ_ID") is not None else a.get("PROJECT_ID")
                 if pid is None or (pid, kind) in seen:
                     continue
                 seen.add((pid, kind))
-                yield {"ext_id": str(pid), "let_date": _iso(a.get("LET_DATE")),
-                       "let_actual": 1 if "A" in (a.get("LET_IND"), a.get("NTP_IND")) else 0,
+                flags = (a.get("LET_IND"), a.get("NTP_IND"), a.get("LET_FLAG"), a.get("NTP_FLAG"))
+                yield {"ext_id": str(pid), "let_date": _iso(a.get("LET_DATE")), "let_actual": 1 if "A" in flags else 0,
                        "building": 1 if kind == "building" or a.get("UNDER_CONSTRUCTION") == "Y" else 0,
                        "completed": 1 if kind == "completed" else 0}
             if len(feats) < PAGE and not data.get("exceededTransferLimit"):
