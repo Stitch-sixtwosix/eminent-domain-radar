@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign up · EminentTracker</title>
+<meta name="description" content="Request access to EminentTracker for your firm. Built by eminent domain attorneys, for eminent domain attorneys.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7.5' fill='%231b2333'/%3E%3Cpath d='M8 5h16v4.200H12.200v13.600H24V27H8z' fill='%23fff'/%3E%3Cpath d='M12.200 13.900H32v4.200H12.200z' fill='%23e0662e'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<script src="auth-config.js"></script>
+</head>
+<body>
+
+<header class="bar">
+  <a class="brand" href="./" aria-label="EminentTracker home"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7.5" fill="#1b2333"/><path d="M8 5h16v4.200H12.200v13.600H24V27H8z" fill="#fff"/><path d="M12.200 13.900H32v4.200H12.200z" fill="#e0662e"/></svg><b>Eminent<span>Tracker</span></b></a>
+  <nav aria-label="Site">
+    <a href="./#how">What it does</a>
+    <a href="./#pricing">Pricing</a>
+    <a class="auth-only" href="login.html">Sign in</a>
+  </nav>
+</header>
+
+<main class="signup">
+  <div class="why">
+    <h1 style="font-size: var(--s-title)"><span class="auth-only">Create your firm's account</span><span class="auth-off">Request access for your firm</span></h1>
+    <p>Built by eminent domain attorneys, for eminent domain attorneys. Tell us about your practice<span class="auth-off"> and we will set your firm up</span>.</p>
+    <ul>
+      <li><b>Leads before the notice</b>Parcels in the path of planned projects, with the owner of record.</li>
+      <li><b>Outreach in your firm's name</b>Postcards and email from one template, marked as attorney advertising.</li>
+      <li><b>One state or all of them</b>Pick the plan that matches where your firm takes cases.</li>
+    </ul>
+    <p class="auth-only" style="font-size: var(--s-small); margin-top: 28px">Already have an account? <a href="login.html">Sign in</a></p>
+  </div>
+
+  <div>
+    <form class="card" id="request" novalidate>
+      <div class="auth-only gate"><button class="btn google" type="button" id="google"><svg viewBox="0 0 18 18" aria-hidden="true"><path fill="#4285F4" d="M17.640 9.200c0-.640-.060-1.250-.160-1.840H9v3.480h4.840a4.140 4.140 0 0 1-1.800 2.720v2.260h2.920c1.700-1.570 2.680-3.880 2.680-6.620z"/><path fill="#34A853" d="M9 18c2.430 0 4.470-.800 5.960-2.180l-2.920-2.260c-.800.540-1.830.860-3.040.860-2.340 0-4.330-1.580-5.040-3.710H.960v2.330A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.960 10.710a5.400 5.400 0 0 1 0-3.420V4.960H.960a9 9 0 0 0 0 8.080l3-2.330z"/><path fill="#EA4335" d="M9 3.580c1.320 0 2.500.450 3.440 1.350l2.580-2.590A9 9 0 0 0 .960 4.960l3 2.330C4.670 5.160 6.660 3.580 9 3.580z"/></svg>Continue with Google</button><p class="or">or use your work email</p></div>
+      <div class="grid">
+        <label>Your name<input type="text" name="name" autocomplete="name" required></label>
+        <label>Law firm<input type="text" name="firm" autocomplete="organization" required></label>
+        <label>Work email<input type="email" name="email" autocomplete="email" required></label>
+        <label class="auth-only">Password <span>(8 characters or more)</span><input type="password" name="password" autocomplete="new-password" minlength="8" required></label>
+        <label>Phone <span>(optional)</span><input type="tel" name="phone" autocomplete="tel"></label>
+        <label>Firm city and state<input type="text" name="location" autocomplete="address-level2" placeholder="Fort Washington, PA"></label>
+        <label>Firm website <span>(optional)</span><input type="text" name="website" autocomplete="url" inputmode="url"></label>
+        <fieldset class="full"><legend>Plan</legend>
+          <div class="choices plans-pick">
+            <label><input type="radio" name="plan" value="Single state ($499 a month)" checked> <span><b>Single state</b> $499 a month</span></label>
+            <label><input type="radio" name="plan" value="All 50 states ($999 a month)"> <span><b>All 50 states</b> $999 a month</span></label>
+          </div></fieldset>
+        <fieldset class="full"><legend>Billing</legend>
+          <div class="choices">
+            <label><input type="radio" name="bill" value="month" checked> Monthly</label>
+            <label><input type="radio" name="bill" value="year"> Yearly, save 20%</label>
+          </div></fieldset>
+        <label class="full" id="state-row">Your state<select name="plan_state" required>
+          <option value="">Choose a state</option><option value="Alabama">Alabama</option><option value="Alaska">Alaska</option><option value="Arizona">Arizona</option><option value="Arkansas">Arkansas</option><option value="California">California</option><option value="Colorado">Colorado</option><option value="Connecticut">Connecticut</option><option value="Delaware">Delaware</option><option value="Florida">Florida</option><option value="Georgia">Georgia</option><option value="Hawaii">Hawaii</option><option value="Idaho">Idaho</option><option value="Illinois">Illinois</option><option value="Indiana">Indiana</option><option value="Iowa">Iowa</option><option value="Kansas">Kansas</option><option value="Kentucky">Kentucky</option><option value="Louisiana">Louisiana</option><option value="Maine">Maine</option><option value="Maryland">Maryland</option><option value="Massachusetts">Massachusetts</option><option value="Michigan">Michigan</option><option value="Minnesota">Minnesota</option><option value="Mississippi">Mississippi</option><option value="Missouri">Missouri</option><option value="Montana">Montana</option><option value="Nebraska">Nebraska</option><option value="Nevada">Nevada</option><option value="New Hampshire">New Hampshire</option><option value="New Jersey">New Jersey</option><option value="New Mexico">New Mexico</option><option value="New York">New York</option><option value="North Carolina">North Carolina</option><option value="North Dakota">North Dakota</option><option value="Ohio">Ohio</option><option value="Oklahoma">Oklahoma</option><option value="Oregon">Oregon</option><option value="Pennsylvania">Pennsylvania</option><option value="Rhode Island">Rhode Island</option><option value="South Carolina">South Carolina</option><option value="South Dakota">South Dakota</option><option value="Tennessee">Tennessee</option><option value="Texas">Texas</option><option value="Utah">Utah</option><option value="Vermont">Vermont</option><option value="Virginia">Virginia</option><option value="Washington">Washington</option><option value="West Virginia">West Virginia</option><option value="Wisconsin">Wisconsin</option><option value="Wyoming">Wyoming</option></select>
+          <span class="statefacts" id="state-facts" hidden></span>
+          <span class="hint"><a href="./#states">See what every state holds today.</a> Projects are live in: Alaska, Alabama, Arkansas, Arizona, California, Colorado, Connecticut, Delaware, Florida, Georgia, Hawaii, Iowa, Idaho, Illinois, Indiana, Kansas, Kentucky, Louisiana, Massachusetts, Maryland, Maine, Michigan, Minnesota, Missouri, Mississippi, Montana, North Carolina, North Dakota, Nebraska, New Hampshire, New Jersey, New Mexico, Nevada, New York, Ohio, Oklahoma, Oregon, Pennsylvania, Rhode Island, South Carolina, South Dakota, Tennessee, Texas, Utah, Virginia, Vermont, Washington, Wisconsin, West Virginia, Wyoming. Owner records are connected state by state and are not yet available everywhere. Other states are being added; choose yours and we will tell you when it is live before you are charged.</span></label>
+        <label class="full">Other states where you handle eminent domain matters <span>(optional)</span><input type="text" name="states" autocomplete="off"></label>
+        <fieldset class="full"><legend>Who do you represent?</legend>
+          <div class="choices">
+            <label><input type="radio" name="side" value="Property owners" checked> Property owners</label>
+            <label><input type="radio" name="side" value="Condemning authorities"> Condemning authorities</label>
+            <label><input type="radio" name="side" value="Both"> Both</label>
+          </div></fieldset>
+        <label class="full auth-off">Anything we should know <span>(optional)</span><textarea name="note"></textarea></label>
+        <div class="full terms-box">
+          <h2>Terms and agreement</h2>
+          <ul>
+            <li>EminentTracker is a research and marketing tool. It is not a law firm and gives no legal advice.</li>
+            <li>Records and scores come from public sources and automated analysis, and can be wrong. You verify before you act.</li>
+            <li>Every postcard, letter and email you send is your firm’s advertising. You follow your state’s rules, and you are responsible for what you send.</li>
+            <li>You do not call or text owners from this data, and you stop contacting anyone who asks.</li>
+            <li>You indemnify EminentTracker for claims arising from your communications or your breach of the terms.</li>
+            <li>The service is provided as is, and our liability is limited as the Terms of use set out.</li>
+          </ul>
+        </div>
+        <p class="full" style="font-size: 14px"><b>Payment.</b> After you create the account you go straight to our secure payment page. Your card is charged today, your account opens as soon as the payment goes through, and the plan renews automatically every month (or every year on the yearly plan) until you cancel from your account page.</p>
+        <label class="full agree"><input type="checkbox" name="agree" value="yes" required> <span>I am an attorney licensed in the United States, or I work under the supervision of one, and I agree to the <a href="terms.html" target="_blank" rel="noopener">Terms of use</a>, the <a href="privacy.html" target="_blank" rel="noopener">Privacy policy</a> and the <a href="compliance.html" target="_blank" rel="noopener">compliance rules</a>.</span></label>
+        <p class="full status" id="status" role="alert" hidden></p>
+        <div class="full send">
+          <button class="btn" type="submit" id="go"><span class="auth-only">Create account and pay</span><span class="auth-off">Request access</span></button>
+          <p class="auth-off">This opens an email to us in your mail program with these details filled in. Nothing is sent until you press send there.</p>
+          <p class="auth-only">We will email you a link to confirm your address.</p>
+        </div>
+      </div>
+    </form>
+    <div class="done" id="done" hidden tabindex="-1">
+      <h2 id="done-h">Your request is ready to send</h2>
+      <p id="done-p">Your mail program should have opened with the message below. If it did not, copy the text and send it to <a href="mailto:info@duerrlawpc.com">info@duerrlawpc.com</a>.</p>
+      <pre id="done-text"></pre>
+      <div class="send" id="done-acts"><a class="btn" id="done-mail" href="#">Open the email again</a><button class="btn plain" type="button" id="done-copy">Copy the text</button></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="in">
+    <span>© 2026 EminentTracker, a product of Duerr Imports, LLC</span>
+    <nav aria-label="Footer"><a href="blog/">Blog</a><a href="terms.html">Terms of use</a><a href="privacy.html">Privacy</a><a href="compliance.html">Compliance</a><a href="privacy.html#owners">Property owners: opt out</a><a href="signup.html">Sign up</a><a class="auth-only" href="login.html">Sign in</a><a href="mailto:info@duerrlawpc.com?subject=EminentTracker">Contact</a></nav>
+    <div class="rules">
+      <p><b>Rules this service is run under.</b> Subscribers agree to follow them; the software enforces the ones it can. <a href="compliance.html">Read the full compliance page.</a></p>
+      <ul>
+        <li>State rules of professional conduct on lawyer advertising and solicitation (ABA Model Rules 7.1 to 7.3 and each state’s version)</li>
+        <li>CAN-SPAM Act for commercial email</li>
+        <li>Telephone Consumer Protection Act, the National Do Not Call Registry and state telemarketing laws</li>
+        <li>Fair Credit Reporting Act: data may not be used for credit, employment, insurance or tenant decisions</li>
+        <li>Deceptive Mail Prevention and Enforcement Act and U.S. Postal Service mailing standards</li>
+        <li>State privacy laws and each public agency’s terms for using its records</li>
+      </ul>
+    </div>
+    <p class="legal">EminentTracker is a research and marketing tool for licensed attorneys. It is not a law firm, does not give legal advice and does not create an attorney-client relationship. Records come from public sources and can be incomplete or out of date. A project on a planning list may never take any land, and appearing here does not mean a property will be taken. Map data © OpenStreetMap contributors.</p>
+  </div>
+</footer>
+
+<script type="module">
+import {authOn, supa, google, here, firmData, say, watch, valid} from "./auth.js";
+const form = document.getElementById("request"), done = document.getElementById("done"), status = document.getElementById("status"), go = document.getElementById("go");
+const TO = "info@duerrlawpc.com";
+if (!authOn) form.querySelector("[name=password]").required = false;
+watch(form);
+const COUNTS = {"Alabama": [4498, 13512, 13508, 8978], "Alaska": [78, 763, 633, 194], "Arizona": [157, 885, 864, 681], "Arkansas": [179, 5561, 5561, 0], "California": [1892, 0, 0, 0], "Colorado": [327, 23696, 18221, 16672], "Connecticut": [383, 9091, 8874, 0], "Delaware": [250, 10995, 10987, 10589], "Florida": [1613, 69657, 69633, 22761], "Georgia": [1504, 15835, 15782, 14814], "Hawaii": [41, 172, 160, 0], "Idaho": [204, 0, 0, 0], "Illinois": [354, 2301, 2290, 2213], "Indiana": [653, 9141, 9102, 8653], "Iowa": [35, 524, 514, 416], "Kansas": [86, 0, 0, 0], "Kentucky": [492, 2026, 2022, 1925], "Louisiana": [99, 0, 0, 0], "Maine": [841, 32893, 0, 0], "Maryland": [224, 1548, 1548, 901], "Massachusetts": [383, 34439, 34021, 25565], "Michigan": [91, 312, 306, 95], "Minnesota": [176, 3792, 3236, 2273], "Mississippi": [101, 2207, 2205, 1588], "Missouri": [156, 1816, 1816, 1626], "Montana": [73, 0, 0, 0], "Nebraska": [81, 1064, 1056, 916], "Nevada": [181, 8094, 8087, 7710], "New Hampshire": [12, 0, 0, 0], "New Jersey": [103, 0, 0, 0], "New Mexico": [39, 802, 716, 0], "New York": [478, 5898, 5872, 5592], "North Carolina": [2623, 103687, 103424, 92180], "North Dakota": [46, 2624, 0, 0], "Ohio": [326, 3935, 3914, 2428], "Oklahoma": [1208, 5536, 5536, 4896], "Oregon": [442, 6933, 6933, 6540], "Pennsylvania": [341, 29578, 15169, 12077], "Rhode Island": [470, 0, 0, 0], "South Carolina": [978, 0, 0, 0], "South Dakota": [39, 69, 69, 64], "Tennessee": [763, 2729, 2729, 0], "Texas": [7154, 82325, 81561, 56878], "Utah": [1171, 36552, 28769, 17569], "Vermont": [42, 783, 772, 732], "Virginia": [2231, 6042, 5984, 5446], "Washington": [645, 0, 0, 0], "West Virginia": [191, 3641, 3575, 3218], "Wisconsin": [96, 4003, 3986, 2654], "Wyoming": [59, 1516, 1341, 1226]};        // what each live state holds today, so a firm can judge it before paying
+const facts = document.getElementById("state-facts"), n = v => v.toLocaleString();
+const showFacts = () => { const name = form.elements.plan_state.value, c = COUNTS[name];
+  facts.hidden = !name;
+  facts.textContent = !name ? "" : c ? `${name} today: ${n(c[0])} planned projects, ${n(c[1])} parcels in their path, ${n(c[3])} owners with a mailing address.` : `${name} is not live yet. We will email you when it is.`; };
+form.elements.plan_state.addEventListener("change", showFacts);
+const stateRow = document.getElementById("state-row"), stateSel = form.elements.plan_state;
+const syncPlan = () => { const single = form.elements.plan.value.startsWith("Single"); stateRow.hidden = !single; stateSel.required = single; };
+const want = new URLSearchParams(location.search);      // the pricing buttons on the home page preselect the plan
+if (want.get("plan") === "all") form.querySelectorAll("[name=plan]").forEach(r => r.checked = r.value.startsWith("All"));
+if (want.get("bill") === "year") form.querySelectorAll("[name=bill]").forEach(r => r.checked = r.value === "year");
+form.addEventListener("change", e => { if (e.target.name === "plan") syncPlan(); }); syncPlan();
+document.getElementById("google").addEventListener("click", async () => { try { await google(); } catch (e) { say(status, "Google sign-in did not start: " + e.message, true); } });
+form.addEventListener("submit", async e => {
+  e.preventDefault();
+  if (!valid(form)) return;
+  const d = Object.fromEntries(new FormData(form));
+  if (authOn) {
+    go.disabled = true; say(status, "");
+    try {
+      const s = await supa();
+      const {data, error} = await s.auth.signUp({email: d.email, password: d.password, options: {data: {...firmData(d), agreed_terms_at: new Date().toISOString(), terms_version: "2026-11-18"}, emailRedirectTo: here("account.html?pay=1")}});
+      if (error) throw error;
+      if (data.session) { location.href = "account.html?pay=1"; return; }
+      document.getElementById("done-h").textContent = "Check your email";
+      document.getElementById("done-p").textContent = "We sent a confirmation link to " + d.email + ". Open it to confirm your email. You go straight to payment, and your account opens as soon as it goes through.";
+      document.getElementById("done-text").hidden = true; document.getElementById("done-acts").hidden = true;
+      form.hidden = true; done.hidden = false; done.focus();
+    } catch (err) { say(status, /registered/i.test(err.message) ? "That email already has an account. Sign in instead." : "The account could not be created: " + err.message, true); go.disabled = false; }
+    return;
+  }
+  const lines = ["Name: " + d.name, "Firm: " + d.firm, "Email: " + d.email, d.phone && "Phone: " + d.phone, d.location && "Firm location: " + d.location,
+    d.website && "Website: " + d.website, "Plan: " + d.plan + (d.plan_state ? ", " + d.plan_state : ""), d.states && "Other states: " + d.states, "Represents: " + d.side, "Agreed to the terms, privacy policy and compliance rules: yes", d.note && "\n" + d.note].filter(Boolean);
+  const body = "Please set up EminentTracker access for my firm.\n\n" + lines.join("\n");
+  const href = "mailto:" + TO + "?subject=" + encodeURIComponent("EminentTracker access request: " + d.firm) + "&body=" + encodeURIComponent(body);
+  document.getElementById("done-text").textContent = body;
+  document.getElementById("done-mail").href = href;
+  form.hidden = true; done.hidden = false; done.focus();
+  location.href = href;
+});
+document.getElementById("done-copy").addEventListener("click", async e => {
+  try { await navigator.clipboard.writeText(document.getElementById("done-text").textContent); e.target.textContent = "Copied"; }
+  catch (err) { e.target.textContent = "Select the text above to copy"; }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /app/
+Disallow: /account.html
+Disallow: /admin.html
+Sitemap: https://eminenttracker.com/sitemap.xml
