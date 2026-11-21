@@ -1,11 +1,11 @@
 {
  "state": "New Jersey",
  "code": "NJ",
- "checked": "2026-11-17",
+ "checked": "2026-11-20",
  "projects": [
   {
    "name": "NJDOT Statewide Transportation Improvement Program (STIP) Project Locations (Tran_STIP_24_33)",
-   "url": "https://services.arcgis.com/HggmsDF7UJsNN1FK/arcgis/rest/services/Statewide_Transportation_Improvement_Program_STIP_Project_Locations/FeatureServer/0",
+   "url": "https://services.arcgis.com/HggmsDF7UJsNN1FK/arcgis/rest/services/Statewide_Transportation_Improvement_Program_STIP_Project_Locations__FY_24_33__/FeatureServer/1",
    "verified": true,
    "geometry": "polyline",
    "record_count": 264,
@@ -31,7 +31,7 @@
     "Determination Required",
     "N/A"
    ],
-   "notes": "NJDOT GIS official layer of mappable FY2024-2033 STIP projects (planned/programmed). TOTAL and FY_2022..FY_2033 are programmed dollars in MILLIONS per fiscal year; the first FY column with money indicates timing. UPC is the NJDOT project number; CIS_SUBCATEGORY gives finer work type; MUNC1-4 municipalities; MPO field. CMSSTATUS and AWARD_DATE are mostly blank, so there is no reliable phase field: treat all rows as programmed/planned.",
+   "notes": "NJDOT GIS official layer of mappable FY2024-2033 STIP projects (planned/programmed). TOTAL and FY_2022..FY_2033 are programmed dollars in MILLIONS per fiscal year; the first FY column with money indicates timing. UPC is the NJDOT project number; CIS_SUBCATEGORY gives finer work type; MUNC1-4 municipalities; MPO field. CMSSTATUS and AWARD_DATE are mostly blank, so there is no reliable phase field: treat all rows as programmed/planned. Address changed 2026-11-20: the old service (\u2026STIP_Project_Locations/FeatureServer/0) now answers 'Token Required'; NJDOT republished the same layer on 2026-11-19 as \u2026STIP_Project_Locations__FY_24_33__/FeatureServer/1 (264 rows, same field names, verified by live query).",
    "stage": "planning"
   },
   {

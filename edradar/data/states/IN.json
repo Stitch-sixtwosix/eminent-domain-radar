@@ -1,7 +1,7 @@
 {
  "state": "Indiana",
  "code": "IN",
- "checked": "2026-11-17",
+ "checked": "2026-11-19",
  "projects": [
   {
    "name": "STIP_2024 (INDOT STIP, published by INDOT's STIP consultant)",
@@ -117,8 +117,69 @@
     "acres": "DEEDACRES"
    },
    "notes": "Hamilton County's own server, exported daily (EXPORTDATE). OWNNAME repeats the owner. Value is assessed value, AVTAXYR 2026."
+  },
+  {
+   "county": "VANDERBURGH",
+   "url": "https://maps.evansvillegis.com/arcgis_server/rest/services/PROPERTY/PARCELS/MapServer/0",
+   "verified": true,
+   "record_count": 79407,
+   "fields": {
+    "apn": "StatePIN",
+    "owner": "OWNER1",
+    "mailing_address": [
+     "own_street",
+     "own_city",
+     "own_state",
+     "own_zip"
+    ],
+    "address": "prop_street",
+    "market_value": "tot_assess",
+    "acres": "acreage"
+   },
+   "restrictions": null,
+   "notes": "Evansville-Vanderburgh County GIS 'Tax Parcels' (ArcGIS item eb92dc98ed854334a2ff7e8d2a708311, account EVC_ComputerServices, item modified 2025-10-29): 'current taxable property boundaries in Vanderburgh County IN. Tax ID, Ownership, property address'. Terms read on the item on 2026-11-19: a disclaimer only ('for convenience only ... Use of any of this information is at the user's own risk ... no warranties of any kind'); it states no limit on commercial use, redistribution, solicitation or mailing lists. 78,669 of 79,407 records have OWNER1; OWNER2 is a second owner; OwnerName repeats the name. maxRecordCount 80000."
+  },
+  {
+   "county": "DELAWARE",
+   "url": "https://services.arcgis.com/VyRjdyMziYNF5Bwe/arcgis/rest/services/ParcelWebpublish/FeatureServer/0",
+   "verified": true,
+   "record_count": 59931,
+   "fields": {
+    "apn": "Num",
+    "owner": "OwnerName",
+    "mailing_address": [
+     "OwnerAddress",
+     "OwnerAddress2",
+     "OwnerCity",
+     "OwnerState",
+     "OwnerZip"
+    ],
+    "address": "StreetAddress",
+    "acres": "TotalAcreage"
+   },
+   "restrictions": null,
+   "notes": "Delaware County, Indiana GIS parcels joined to the Assessor's CAMA data (ArcGIS item d05f185c75d142fd961203304bc36de0; credits: Delaware County Office of Information & GIS Services and Assessor's Office). The description says it is updated weekly and is meant 'as an end point for external applications'; last edit 2026-11-16. Terms read on the item on 2026-11-19: a disclaimer only (convenience only, user's own risk, no warranties, no liability); no limit on commercial use, redistribution, solicitation or mailing lists is stated. 58,881 records have an owner name; the other 1,050 have no owner and a null 'Confidential' flag (every record with an owner has Confidential = 0). OwnerName2 is a second owner. No value field on this layer. maxRecordCount 2000."
+  },
+  {
+   "county": "MONROE",
+   "url": "https://services1.arcgis.com/nYfGJ9xFTKW6VPqW/arcgis/rest/services/Monroe_County_Survey_Utility/FeatureServer/6",
+   "verified": true,
+   "record_count": 64282,
+   "fields": {
+    "apn": "PIN_18",
+    "owner": "Owner",
+    "mailing_address": [
+     "Owner_Street",
+     "Owner_City_ST_ZIP"
+    ],
+    "address": "Property_Street",
+    "market_value": "TotalValue",
+    "acres": "Legal_Acreage"
+   },
+   "restrictions": "terms not found (the item licence field and the layer description are empty; no county terms page was located on 2026-11-19)",
+   "notes": "'Parcels' layer in the Office of the Monroe County Surveyor's 'Monroe_County_Survey_Utility' service (ArcGIS item c80c13c7d58846f0bbd73d5faa01806f, account MoCo_Surveyor), described as selected layers from the Monroe County GIS for land surveyors; loaded 2025-10-09, so it is a copy about a year old rather than a live file. Samples are Bloomington, IN parcels (PIN prefix 53). The City of Bloomington's own parcel service answered 403. maxRecordCount 1000."
   }
  ],
  "parcels_counties_note": "Not found or not reachable in the time allowed: Allen, St. Joseph.",
- "summary": "Projects: weak - only a consultant-hosted STIP line layer (DES number, location, work description; no cost or dates) could be verified; INDOT's own GIS server refuses requests with 403. Parcels: statewide layer has no owner names; owner layers verified for Marion, Lake and Hamilton counties."
+ "summary": "Projects: weak - only a consultant-hosted STIP line layer (DES number, location, work description; no cost or dates) could be verified; INDOT's own GIS server refuses requests with 403. Parcels: statewide layer has no owner names; owner layers verified for Marion, Lake and Hamilton counties. 2026-11-19: owner layers added for Vanderburgh and Delaware (disclaimer-only terms); Monroe recorded but held, terms not found. Allen, St. Joseph, Elkhart, Tippecanoe, Porter, Hendricks, Johnson, Madison and Clark: no county-published owner layer found in the ArcGIS catalogue."
 }

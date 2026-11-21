@@ -1,7 +1,7 @@
 {
  "state": "Kentucky",
  "code": "KY",
- "checked": "2026-11-17",
+ "checked": "2026-11-19",
  "projects": [
   {
    "name": "KYTC Current Highway Plan Projects (Active Highway Plan)",
@@ -144,7 +144,7 @@
    "checked": "2026-11-17"
   }
  ],
- "summary": "Projects: KYTC's enacted highway plan is a good planned-projects source with per-phase cost and fiscal year, including a right-of-way phase. Parcels: no statewide layer; Kenton, Campbell and Boone county layers with owner and mailing address are verified; Louisville and Lexington are not.",
+ "summary": "Projects: KYTC's enacted highway plan is a good planned-projects source with per-phase cost and fiscal year, including a right-of-way phase. Parcels: no statewide layer; Kenton, Campbell and Boone county layers with owner and mailing address are verified; Louisville and Lexington are not. 2026-11-19: no new owner layer. The state catalogue account GDITAdmin lists 20 Kentucky county parcel services; apart from Kenton and Campbell (already on file) none has an owner-name field (Jefferson, Fayette, Madison, Oldham, McCracken, Shelby, Franklin, Henderson checked), and Scott, Warren and the LOJIC (Louisville) open-data server did not answer.",
  "parcels_statewide_reason": "No free statewide Kentucky parcel layer with owner names was found (ArcGIS Online catalog search returned none; parcels are held by each county PVA).",
  "parcels_counties_not_found": "Jefferson (Louisville): LOJIC's open-data parcel layer https://gis.lojic.org/maps/rest/services/LojicSolutions/OpenDataPVA/MapServer/1 timed out and is not verified. Fayette (Lexington) and Warren: no public parcel service with owner names found in the time allowed. The three verified counties are the Northern Kentucky ones, not the most populous.",
  "parcels_second_pass": "Second pass 2026-11-17 (parcels only). Statewide: still none. Kentucky's GIS server (kygisserver.ky.gov, WGS84WM_Services) now lists a PVA parcel service for Webster County only; the Hardin County one found by search (Ky_PVA_Hardin_Parcels_WGS84WM) answers 404, and the same name pattern for Jefferson, Fayette, Warren, Daviess, Madison, Boone, Kenton and Campbell does not exist. Kenton, Campbell and Boone were already on file. Added Daviess. NOT FOUND: JEFFERSON - LOJIC's gis.lojic.org timed out again on every request (TLS handshake), so its open-data PVA parcel layer is still unverified. FAYETTE - Lexington's parcel layer (services1.arcgis.com/Mg7DLdfYcSWIaDnu/.../Parcel/FeatureServer/0, 114,511 rows) answers spatial queries but has only PVANUM, ADDRESS and PVA_ACRE, no owner. WARREN - a 'City County Planning Commission Land Parcels (2024)' service is registered at webgis.bgky.org/server/rest/services/CCPC/CCPC_Parcels/FeatureServer but timed out; fields unknown. HARDIN - Elizabethtown's parcel layer (12,471 rows, city only) has address and PIDN but no owner. MADISON - arcserver.madisoncountyky.us County_Parcels/MapServer/1 (39,129 rows) has Parcel_ID and Acres only, no owner. All Kentucky owner data comes from county PVA offices, which license GIS data to commercial users under the Department of Revenue template quoted on the Daviess entry; the three Northern Kentucky entries already on file were not re-checked against it."

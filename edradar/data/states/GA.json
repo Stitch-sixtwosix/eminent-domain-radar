@@ -1,7 +1,7 @@
 {
  "state": "Georgia",
  "code": "GA",
- "checked": "2026-11-17",
+ "checked": "2026-11-19",
  "projects": [
   {
    "name": "GDOT STIP Projects - STIP Project Type (GDOT ArcGIS Online)",
@@ -309,9 +309,71 @@
    "restrictions": "terms not found",
    "notes": "VALOR (Valdosta-Lowndes regional GIS) hosted layer 'TaxParcels_OwnerName', 'Current Tax Parcels Information for Lowndes County' (ArcGIS Online, item modified 2025-01-06, no licence text). LASTNAME holds the full owner name; that ADDRESS2/CITY/STATE/ZIP are the MAILING address is inferred (City of Valdosta parcel shows 216 E CENTRAL AVE). No value field here; the sibling TaxParcel/FeatureServer/0 (updated 6/30/2026) has CURR_VAL and street fields but only OWNKEY, no owner name; the two join on REALKEY. Spatial query at Valdosta returned 735 parcels. www.valorgis.com timed out from this network.",
    "checked": "2026-11-17"
+  },
+  {
+   "county": "BIBB",
+   "url": "https://services2.arcgis.com/zPFLSOZ5HzUzzTQb/arcgis/rest/services/Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 68958,
+   "fields": {
+    "apn": "PARCELID",
+    "owner": "OWNERNME1",
+    "mailing_address": [
+     "PSTLADDRESS",
+     "PSTLCITY",
+     "PSTLSTATE",
+     "PSTLZIP5"
+    ],
+    "address": "SITEADDRESS",
+    "market_value": "CNTASSDVAL",
+    "acres": "STATEDAREA"
+   },
+   "restrictions": "The item's terms of use say: 'the material provided shall not be redistributed to any other parties' (Macon-Bibb County Government; also an indemnity clause and a request for credit). Read on the ArcGIS item 23ef5481f8f24e6aa6e22e7367a4cf32 on 2026-11-19.",
+   "notes": "Macon-Bibb County 'Tax Parcels' (maintained by the Tax Assessors office and the Middle Georgia Regional Commission). The item is dated 2018 but the layer's last edit is 2026-08-07. OWNERNME2 is a second owner. The county's newer 'ParcelsCAMA' service carries only an owner key (OWNKEY), no names. maxRecordCount 1000."
+  },
+  {
+   "county": "CLARKE",
+   "url": "https://services2.arcgis.com/xSEULKvB31odt3XQ/arcgis/rest/services/Parcel/FeatureServer/0",
+   "verified": true,
+   "record_count": 41989,
+   "fields": {
+    "apn": "PARCEL_NO",
+    "owner": "OWNER_NAME",
+    "mailing_address": [
+     "OWNER_ADD",
+     "CITY",
+     "STATE",
+     "ZIP"
+    ],
+    "address": "PAR_ADD",
+    "acres": "ACRES"
+   },
+   "restrictions": "terms not found (the item licence field, layer description and copyright are all empty; no Athens-Clarke terms page was located on 2026-11-19)",
+   "notes": "Athens-Clarke County Unified Government parcels, the service listed for the county in the Georgia state catalogue ('Parcels - GA - Athens-Clarke County', item 4268d3d5fd3d46c5b1f717ede6938255). STALE: the layer's last edit is 2021-04-23 and sample rows were last edited in 2017, so owners may be out of date. Values are space-padded. No value field. maxRecordCount 2000."
+  },
+  {
+   "county": "FAYETTE",
+   "url": "https://services5.arcgis.com/Hg5aLg4LtSINzVWa/arcgis/rest/services/TaxParcels_public/FeatureServer/0",
+   "verified": true,
+   "record_count": 46021,
+   "fields": {
+    "apn": "PARCELID",
+    "owner": "OWNERNME1",
+    "mailing_address": [
+     "PSTLADDRESS",
+     "PSTLCITY",
+     "PSTLSTATE",
+     "PSTLZIP5"
+    ],
+    "address": "SITEADDRESS",
+    "market_value": "CNTASSDVAL",
+    "acres": "STATEDAREA"
+   },
+   "restrictions": "terms not found (the layer has no terms; the ArcGIS item 7d3d8bcef0f34ea4ab406af3cd8948cd answered 'Subscription is canceled, the item is not accessible' on 2026-11-19, so its licence could not be read)",
+   "notes": "Fayette County, GA 'TaxParcels_public', listed for the county in the Georgia state catalogue. STALE: last edit 2019-05-29, and the publishing account's subscription is cancelled, so the service may disappear. 45,634 of 46,021 records have OWNERNME1. maxRecordCount 2000."
   }
  ],
- "summary": "Projects: no complete current statewide GDOT layer could be verified (GDOT's own server blocks automated requests; the reachable GDOT STIP layer is small and dated; ARC covers the Atlanta region). Parcels: no statewide layer; Fulton, Gwinnett, Cobb and Chatham county layers with owner and mailing address are verified; DeKalb publishes no owner names.",
+ "summary": "Projects: no complete current statewide GDOT layer could be verified (GDOT's own server blocks automated requests; the reachable GDOT STIP layer is small and dated; ARC covers the Atlanta region). Parcels: no statewide layer; Fulton, Gwinnett, Cobb and Chatham county layers with owner and mailing address are verified; DeKalb publishes no owner names. 2026-11-19: Bibb (terms forbid redistribution), Clarke and Fayette (terms not found; both stale) recorded but held. The Georgia state catalogue account GDITAdmin lists 85 county parcel services ('Parcels - GA - <County>'): 61 answered with no owner-name field (several carry only an owner key), and 26 county servers, including Cherokee, Coweta, Hall, Muscogee, Columbia, Glynn and Whitfield, did not answer on this date.",
  "parcels_statewide_reason": "No free statewide Georgia parcel layer with owner names was found (ArcGIS Online catalog search returned none; Georgia parcels are published county by county).",
  "parcels_counties_not_found": "DeKalb: the county's Tax_Parcels_2025 layer (https://services2.arcgis.com/IxVN2oUE9EYLSnPE/arcgis/rest/services/Tax_Parcels_2025/FeatureServer/0, fetched) has parcel id and values but no owner fields.",
  "parcels_statewide_recheck": "Rechecked 2026-11-17: still no free statewide Georgia parcel layer with owner names; catalog search found only county layers.",

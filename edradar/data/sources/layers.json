@@ -851,7 +851,7 @@
   "source_prefix": "gis",
   "category": "local_utility",
   "coverage": "city",
-  "records": 604
+  "records": 605
  },
  {
   "state": "TX",
@@ -2252,31 +2252,6 @@
   "category": "regional",
   "coverage": "metro area",
   "records": 210
- },
- {
-  "state": "TX",
-  "name": "NCTCOG Mobility 2050 roadway recommendations (freeway/tollway segments)",
-  "key": "gc317d4e9d",
-  "url": "https://geospatial.nctcog.org/map/rest/services/Transportation/M2050_Recommendations/MapServer/2",
-  "fields": {
-   "id": "MTPID",
-   "name": "Facility",
-   "description": "Recommendation",
-   "work_type": "CorridorType",
-   "cost": "Cost",
-   "status": "Active",
-   "date": null,
-   "county": "County"
-  },
-  "where": null,
-  "unfiltered": true,
-  "agency": "North Central Texas Council of Governments (Dallas-Fort Worth MPO); implementing agencies TxDOT, NTTA, counties",
-  "stage": "planning",
-  "likelihood": null,
-  "source_prefix": "gis",
-  "category": "regional",
-  "coverage": "metro area",
-  "records": 371
  },
  {
   "state": "UT",
@@ -3958,7 +3933,7 @@
   "source_prefix": "gis",
   "category": "state_dot_gaps",
   "coverage": "statewide",
-  "records": 57287
+  "records": 57316
  },
  {
   "state": "MO",
@@ -4095,7 +4070,7 @@
   "source_prefix": "gis",
   "category": "state_dot_gaps",
   "coverage": "statewide",
-  "records": 19049
+  "records": 19075
  },
  {
   "state": "MN",
@@ -4226,7 +4201,7 @@
   "source_prefix": "gis",
   "category": "state_dot_gaps",
   "coverage": "statewide",
-  "records": 117
+  "records": 118
  },
  {
   "state": "TX",
@@ -4249,6 +4224,6 @@
   "source_prefix": "gis",
   "category": "state_dot_gaps",
   "coverage": "statewide",
-  "records": 12446
+  "records": 12452
  }
 ]

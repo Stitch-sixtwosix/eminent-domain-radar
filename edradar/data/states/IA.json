@@ -1,7 +1,7 @@
 {
  "state": "Iowa",
  "code": "IA",
- "checked": "2026-11-17",
+ "checked": "2026-11-20",
  "projects": [
   {
    "name": "Iowa DOT Five Year Program Projects (public view)",
@@ -140,8 +140,114 @@
     "acres": "acres"
    },
    "notes": "Copyright 'Black Hawk County'. Total value is the sum of landval + bldgval + dwlgval."
+  },
+  {
+   "county": "STORY",
+   "url": "https://apps.storycounty.com/arcgis/rest/services/parcels/MapServer/0",
+   "verified": true,
+   "record_count": 42111,
+   "fields": {
+    "apn": "PARCELID",
+    "owner": "OwnerName",
+    "mailing_address": [
+     "MailOwnerName",
+     "MailLine1",
+     "MailLine2",
+     "MailCity",
+     "MailState",
+     "MailPostalCode"
+    ],
+    "address": [
+     "FullSitus",
+     "SitusCityName",
+     "SitusStateName",
+     "SitusPostalCode"
+    ],
+    "market_value": "FullTotalValue",
+    "acres": "FullAcres"
+   },
+   "restrictions": "terms not found (service description is only 'Story County Parcels layer'; layer description and copyrightText empty; the service's item 66ad7f8879a54fdca7af008c168b641c is not on ArcGIS Online; no county terms page looked for)",
+   "notes": "Story County's own server (apps.storycounty.com), layer 'Parcels', TaxYear 2026. Covers Ames. AssessedTotalValue, TaxableTotalValue, FullLandValue / FullBuildingValue / FullDwellingValue; DeededAcres, NetAcres, DIGITAL_ACRES; DeededBook / DeededPage / DeededDate; ContractBook for contract sales. maxRecordCount 100000.",
+   "checked": "2026-11-20"
+  },
+  {
+   "county": "WOODBURY",
+   "url": "https://services.arcgis.com/kd1jFI4TM5bZHeP8/arcgis/rest/services/Woodbury_County_IA_Parcel_Data_Feature/FeatureServer/0",
+   "verified": true,
+   "record_count": 55596,
+   "fields": {
+    "apn": "PIN",
+    "owner": [
+     "deedhldr_name1",
+     "deedhldr_name2"
+    ],
+    "mailing_address": [
+     "deedhldr_addr1",
+     "deedhldr_addr2",
+     "deedhldr_city",
+     "deedhldr_state",
+     "deedhldr_zip"
+    ],
+    "address": [
+     "addr_num",
+     "addr_stname",
+     "addr_unit",
+     "addr_city"
+    ],
+    "acres": "land_acres"
+   },
+   "restrictions": null,
+   "notes": "Woodbury County's own ArcGIS Online organization ('WCICC-IT GIS', the Woodbury County Information and Communication Commission; credit 'WCICC-IT - GIS'), item e0c2830cf2a74fd39d3875434d756fb4, titled 'Woodbury County, Iowa - Parcel Data Feature (June 25, 2026 - 11:37 AM)'. Terms read in the item's licenseInfo, in full: 'Public use allowed. If you require this data in an alternative format, please contact us.' No limit on commercial use, redistribution, solicitation or mailing lists is stated. The item description warns it is 'a raw data product intended strictly for use in Desktop GIS (ArcGIS Pro) and external data applications'. SNAPSHOT: last edited 2026-06-25, so about five months old; not a live feed. Covers Sioux City. Deed holder address is the only mailing address; contr_buyer_name1 / contr_buyer_addr1 hold contract buyers. No assessed value field (sale_price, net_tax only). addr_township is space-padded. maxRecordCount 2000.",
+   "checked": "2026-11-20"
+  },
+  {
+   "county": "POTTAWATTAMIE",
+   "url": "https://gis.pottcounty-ia.gov/arcgis/rest/services/PublicDataEnterprise/PublicData_Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 53892,
+   "fields": {
+    "apn": "PIN",
+    "owner": "OWNER",
+    "mailing_address": "TaxAddress",
+    "address": "ADDRESS",
+    "market_value": "TOTALVALUE",
+    "acres": "NETACRES"
+   },
+   "restrictions": null,
+   "notes": "Pottawattamie County's own server, copyright 'Pottawattamie County GIS', item 05161ee013a84e4784072c8fc0dbe1d9 (modified 2026-11-19). Terms read in the item's licenseInfo: an indemnity and warranty disclaimer only: 'Users of Pottawattamie County (The County) GIS data agree that he/she will at all times indemnify and hold The County and its officers, employees, and agents harmless from any damages, claims, lawsuits, costs, or liability arising from any act, omission, or commission with respect to the release and use of information in this Agreement', 'The County makes no claim as to the accuracy of the spatial data', 'In no event shall The County be liable for any direct, indirect, incidental, consequential or special damages that may result from the use of the GIS data.' It states no limit on commercial use, redistribution, solicitation or mailing lists; note the indemnity a user is said to accept. Covers Council Bluffs. TaxAddress is one text line (street, city, state, zip) and is the tax mailing address; ADDRESS is the site address in the same form and is empty for bare land. LANDVALUE, BLDGVALUE, DWELLVALUE; PARCELAREA; DEEDDATE, BOOK, PAGE. maxRecordCount 2000.",
+   "checked": "2026-11-20"
+  },
+  {
+   "county": "CERRO GORDO",
+   "url": "https://services7.arcgis.com/qyyoWTywHfayX67L/arcgis/rest/services/Tax_Parcels_Feature_Service/FeatureServer/0",
+   "verified": true,
+   "record_count": 32851,
+   "fields": {
+    "apn": "PARCELID",
+    "owner": "Tyler_OwnerName",
+    "mailing_address": [
+     "Tyler_MailOwnerName",
+     "Tyler_MailAttentionLine",
+     "Tyler_MailLine1",
+     "Tyler_MailLine2",
+     "Tyler_MailCity",
+     "Tyler_MailState",
+     "Tyler_MailPostalCode"
+    ],
+    "address": [
+     "Tyler_FullSitus",
+     "Tyler_SitusCityName",
+     "Tyler_SitusStateName",
+     "Tyler_SitusPostalCode"
+    ],
+    "market_value": "Tyler_AssessedTotalValue",
+    "acres": "Tyler_FullAcres"
+   },
+   "restrictions": null,
+   "notes": "Cerro Gordo County's own ArcGIS Online layer (account Cerro_Gordo_GIS, credit 'Cerro Gordo County, Iowa'), item 929d7ec7dbe447339d03821589af3fe0, last edited 2026-11-16. Terms read in the item's licenseInfo, a warranty disclaimer only: 'This data does not represent a survey and are compiled from official records, including plats, surveys, recorded deeds and contracts, and only contain information required for government purposes', 'No warranties, expressed or implied, are provided for the data herein, its use or its interpretation. Cerro Gordo County and their employees assume no responsibility for the consequences of inappropriate uses or interpretations of the data.' It states no limit on commercial use, redistribution, solicitation or mailing lists. Covers Mason City. Value and acre fields are TEXT ('152670', '9.640'). Tyler_Deed_Holder to Tyler_Deed_Holder_5 and Tyler_Contract_To to _5 list deed holders and contract buyers; Tyler_MailToIsRedacted marks owners whose mailing address is withheld. The item says geometry repeats where a parcel holds several condominium units. A companion point layer with the same fields is .../Parcel_Points/FeatureServer/0 (34,867). maxRecordCount 2000.",
+   "checked": "2026-11-20"
   }
  ],
  "parcels_counties_note": "Not found or not reachable in the time allowed: Polk (gis.polkcountyiowa.gov did not resolve; only third-party extracts found), Johnson (gis.johnsoncountyiowa.gov answered 403).",
- "summary": "Projects: Iowa DOT Five Year Program 2027-2031 lines verified (work type, year, amount). Parcels: the only statewide owner layer is a 2017 snapshot with deed holder name only; current owner layers verified for Linn, Scott and Black Hawk counties, Polk and Johnson not reachable."
+ "summary": "Projects: Iowa DOT Five Year Program 2027-2031 lines verified (work type, year, amount). Parcels: the only statewide owner layer is a 2017 snapshot with deed holder name only; current owner layers verified for Linn, Scott and Black Hawk counties, Polk and Johnson not reachable. On 2026-11-20 county parcel layers with owner and mailing address were added for Woodbury, Pottawattamie and Cerro Gordo (terms read, no limit stated) and Story (held, terms not found); Polk and Johnson still not found."
 }

@@ -1,7 +1,7 @@
 {
   "state": "Texas",
   "code": "TX",
-  "checked": "2026-11-17",
+  "checked": "2026-11-20",
   "projects": [
     {
       "name": "TxDOT DCIS All Projects",
@@ -522,7 +522,2424 @@
       "restrictions": "Item licence: \"Users must comply with Montgomery County's data access policies. The data is provided for GIS and mapping purposes.\" and \"should not be used for general parcel mapping\" (https://www.arcgis.com/home/item.html?id=44060ff2f5d94a2381f4c8f52ded3c34). The county policies it refers to were not found.",
       "notes": "Published by Montgomery County GIS (GIS.Data_MOCO) from Montgomery Central Appraisal District data; pYear 2027. ownerAddress is one string (street, city, state, ZIP). No value or acreage fields. mcad-tx.org/gis-data only points to the county open data site (data-moco.opendata.arcgis.com), which shows no terms page. DISTANCE CAVEAT: the layer is stored in State Plane feet and a point query with distance=200&units=esriSRUnit_Meter reaches about 3.28 times too far (returned several hundred parcels; a 400 m bounding box returns about 100). Use geometryType=esriGeometryEnvelope, or divide the distance by 3.28.",
       "checked": "2026-11-17"
+    },
+    {
+      "county": "NUECES",
+      "name": "NuecesCADWebService - Parcels",
+      "url": "https://services6.arcgis.com/j94FvPaik4etwHFk/arcgis/rest/services/NuecesCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 157404,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; nuecescad.net home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Nueces CAD parcel layer hosted on the BIS Consultants shared ArcGIS Online organisation (bisconsulting); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 155,297 of 157,404 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "BELL",
+      "name": "BellCADWebService - Parcels",
+      "url": "https://services7.arcgis.com/EHW2HuuyZNO7DZct/arcgis/rest/services/BellCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 169406,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; bellcad.org home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Bell CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_bellcad); owner_tax_yr 2026 in sample, item modified 2026-10. file_as_name filled on 163,490 of 169,406 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "BRAZOS",
+      "name": "BrazosCADWebService - Parcels",
+      "url": "https://services5.arcgis.com/ZgRzAvgtfHgf0HWs/arcgis/rest/services/BrazosCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 78726,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; brazoscad.org home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Brazos CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_brazoscad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 77,173 of 78,726 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "COMAL",
+      "name": "ComalCADWebService - Parcels",
+      "url": "https://services7.arcgis.com/Yz6eib2o8WvEgWq8/arcgis/rest/services/ComalCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 107069,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; comalad.org home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Comal CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_comalcad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 105,478 of 107,069 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "GUADALUPE",
+      "name": "GuadalupeCADWebService - Parcels",
+      "url": "https://services9.arcgis.com/1l4hbpt78hjlsIcl/arcgis/rest/services/GuadalupeCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 101275,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; guadalupead.org home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Guadalupe CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_guadalupecad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 99,513 of 101,275 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "KAUFMAN",
+      "name": "KaufmanCADWebService - Parcels",
+      "url": "https://services9.arcgis.com/26s7bQ5Q51Gt4J2Q/arcgis/rest/services/KaufmanCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 100687,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; kaufman-cad.org home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Kaufman CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_kaufmancad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 98,496 of 100,687 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "PARKER",
+      "name": "ParkerCADWebService - Parcels",
+      "url": "https://services.arcgis.com/79g1H99xInKSRRK3/arcgis/rest/services/ParkerCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 102287,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; parkercad.org answered 403 to automated requests)",
+      "notes": "Parker CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_parkercad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 96,043 of 102,287 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "MIDLAND",
+      "name": "MidlandCADWebService - Parcels",
+      "url": "https://services5.arcgis.com/1pOc2HE5GDuzMESK/arcgis/rest/services/MidlandCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 77397,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": null,
+      "notes": "Midland CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_midlandcad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 76,094 of 77,397 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000. Some rows carry the placeholder owner 'MULTIPLE OWNERS' with no mailing address. Terms read on midcad.org home page footer: 'DISCLAIMER The Midland Central Appraisal District provides this information \"as is\" without warranty of any kind. This data could include inaccuracies or typographical errors. The Midland Central Appraisal District is not responsible for any errors or omissions.' No limit on commercial use, redistribution, solicitation or mailing lists stated (ArcGIS item licence/description empty).",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "TOM GREEN",
+      "name": "TomGreenCADWebService - Parcels",
+      "url": "https://services5.arcgis.com/3KYdtBnAMnav1mt9/arcgis/rest/services/TomGreenCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 59010,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; tomgreencad.com redirects to a vendor search page with no terms text)",
+      "notes": "Tom Green CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_tomgreencad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 58,457 of 59,010 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "BASTROP",
+      "name": "BastropCADWebService - Parcels",
+      "url": "https://services.arcgis.com/aS4XD9PgZha28y8P/arcgis/rest/services/BastropCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 65776,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": null,
+      "notes": "Bastrop CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_bastropcad); owner_tax_yr 2026 in sample, item modified 2026-11. file_as_name filled on 64,296 of 65,776 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000. Terms read on bastropcad.org home page: 'DISCLAIMER Every effort has been made to offer the most current and correct information possible on these pages ... The Central Appraisal District makes no warranties or representations whatsoever regarding the quality, content, completeness, accuracy or adequacy of such information and data ... shall not be liable for any damages whatsoever arising out of any cause relating to use of this application'. Warranty/liability only; no limit on commercial use, redistribution, solicitation or mailing lists stated (ArcGIS item licence/description empty).",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "HUNT",
+      "name": "HuntCADWebService - Parcels",
+      "url": "https://services3.arcgis.com/GIIiqmeq0npieHV9/arcgis/rest/services/HuntCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 70359,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence and credits are empty, description only 'This service is used to populate the CAD map.'; layer description and copyrightText are empty; hunt-cad.org home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Hunt CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_huntcad); owner_tax_yr 2026 in sample, item modified 2026-11. file_as_name filled on 69,717 of 70,359 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000. 'market' was 0 or empty in the samples while land_val/imprv_val exist, so add those two if market is blank.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "GREGG",
+      "name": "GreggCADWebService - Parcels",
+      "url": "https://services7.arcgis.com/GGLRLGImTaR7VQAH/arcgis/rest/services/GreggCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 76343,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": null,
+      "notes": "Gregg CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_greggcad); owner_tax_yr 2026 in sample, item modified 2026-11. file_as_name filled on 75,366 of 76,343 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000. Terms read on gcad.org home page: 'Disclaimer: All information contained herein, is distributed without warranty of any kind, implied, expressed or statutory. The Gregg Appraisal District makes no claims, promises or guarantees about the accuracy, completeness, or adequacy of this information and expressly disclaims liability for any errors and omissions.' No limit on commercial use, redistribution, solicitation or mailing lists stated (ArcGIS item licence/description empty).",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "LIBERTY",
+      "name": "LibertyCADWebService - Parcels",
+      "url": "https://services3.arcgis.com/LbQai106UcFy2LlR/arcgis/rest/services/LibertyCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 156251,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; libertycad.com home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Liberty CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_libertycad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 148,423 of 156,251 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "VICTORIA",
+      "name": "VictoriaCADWebService - Parcels",
+      "url": "https://services6.arcgis.com/TFRbpkUZXMMkfhmY/arcgis/rest/services/VictoriaCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 42679,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; victoriacad.org home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Victoria CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (BIS_VICTORIACAD); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 41,538 of 42,679 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "ANGELINA",
+      "name": "AngelinaCADWebService - Parcels",
+      "url": "https://services3.arcgis.com/Ku30AWcUhD95wd6b/arcgis/rest/services/AngelinaCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 60935,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "angelinacad.org home page, in a commented-out (not displayed) block of the HTML: \"provides this internet service for use by the public for interactive use. It is not intended to support electronic transfer of data.\" Held until confirmed with the district.",
+      "notes": "Angelina CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_angelinacad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 59,603 of 60,935 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000. The displayed disclaimer on angelinacad.org is warranty/liability only ('makes no warranties or representations whatsoever regarding the quality, content, completeness, accuracy or adequacy of such information and data'); ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "ORANGE",
+      "name": "OrangeCADWebService - Parcels",
+      "url": "https://services3.arcgis.com/HiTjmoyc4HjgiceA/arcgis/rest/services/OrangeCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 47396,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; orangecad.net home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Orange CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_orangecad); owner_tax_yr 2026 in sample, item modified 2026-11. file_as_name filled on 46,819 of 47,396 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000. Some rows carry the placeholder owner 'MULTIPLE OWNERS' with no mailing address.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "HENDERSON",
+      "name": "HendersonCADWebService - Parcels",
+      "url": "https://services7.arcgis.com/4x7oelC9W8TNucjG/arcgis/rest/services/HendersonCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 108161,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; henderson-cad.org home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Henderson CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_HendersonCAD); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 101,858 of 108,161 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "TAYLOR",
+      "name": "BIS_Search_Map - Parcels_Joined (Taylor CAD)",
+      "url": "https://services8.arcgis.com/Le0h3rXhunNWxGRi/arcgis/rest/services/BIS_Search_Map/FeatureServer/0",
+      "verified": true,
+      "record_count": 71956,
+      "fields": {
+        "apn": "PROP_ID",
+        "owner": "owner_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "addr_zip",
+          "addr_country"
+        ],
+        "address": "situs",
+        "acres": "C_ACRE"
+      },
+      "restrictions": "terms not found (ArcGIS item licence and credits empty, description only 'Auto-generated by Bis_Property_Search_map.py.'; taylor-cad.org home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Published by Taylor Central Appraisal District's own ArcGIS Online account (taylorcad), 'Parcels joined to web_map_property -- auto-published'; prop_val_yr 2027, item modified 2026-11. GEO_ID/ACCNO is the long account number. appraised_val was 'N/A' in all three samples, so no usable value field. Three sample records with real owner names (Abilene) fetched 2026-11-20.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "ECTOR",
+      "name": "Ector County Appraisal District - EctorCounty_Basemap ParcelFabric",
+      "url": "https://gis11.cama.io/arcgis/rest/services/Ector/EctorCounty_Basemap/MapServer/0",
+      "verified": true,
+      "record_count": 77042,
+      "fields": {
+        "apn": "PIN",
+        "owner": "owner_name",
+        "mailing_address": "owner_addr",
+        "market_value": "bxcm_val",
+        "acres": "land_area"
+      },
+      "restrictions": "terms not found (layer and service description/copyrightText empty; no ECAD terms page found. The only text is on a City of Odessa ArcGIS item registering this service, 650c03831a764bed9dbda1cc6b3a4285, licence: \"This data is only hosted on this site, ECAD maintains the data, call 432-332-6834 for questions or discrepancies\", which states no limit but is not ECAD's own terms)",
+      "notes": "Ector County Appraisal District parcels on its CAMA vendor's server (gis11.cama.io, folder Ector); MapServer layer, maxRecordCount 1000. owner_addr is one string (street, city, state, ZIP). No situs address field. land_area is text with units (e.g. '47,077 SF'), not numeric acres; bxcm_val is the total value, land_val the land part; tax_val the taxable value. conf_flg marks confidential owners. Three sample records with real owner names (Odessa) fetched 2026-11-20.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "ROCKWALL",
+      "name": "Rockwall County - CAD Data to Address Lookup",
+      "url": "https://services9.arcgis.com/9RjmpzvuPPeYSNdf/arcgis/rest/services/CAD_Data_to_Address_Lookup/FeatureServer/0",
+      "verified": true,
+      "record_count": 55641,
+      "fields": {
+        "apn": "pid",
+        "owner": "fileasname",
+        "mailing_address": [
+          "owneraddr",
+          "ownersuite",
+          "ownercity",
+          "ownerstate",
+          "ownerzip"
+        ],
+        "address": [
+          "streetnum",
+          "streetpre",
+          "streetnam",
+          "streetsuf",
+          "streetcity",
+          "streetstat",
+          "streetzip"
+        ],
+        "market_value": "ownermarke",
+        "acres": "legalacre"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, credits and description empty; snippet only 'Central Appraisal District properties and parcels in Rockwall County.'; no terms page checked on the county or Rockwall CAD site)",
+      "notes": "Published by Rockwall County's ArcGIS Online account (iramirez_rockwallcounty) from Rockwall CAD's export; valueyear 2026 / pyear 2027 in samples but the item was last modified 2025-09, so it may lag. secondname for a second owner; refid2 is the R-number; geoid the long account number. Three sample records with real owner names fetched 2026-11-20.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "ERATH",
+      "name": "ErathCADWebService - Parcels",
+      "url": "https://services7.arcgis.com/gIWyxqmQ0YHPVqA2/arcgis/rest/services/ErathCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 173514,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Erath CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_erathcad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 168,017 of 173,514 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000. Record count is high for the county's size (likely includes undivided-interest or mineral duplicates); not investigated.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "POLK",
+      "name": "PolkCADWebService - Parcels",
+      "url": "https://services6.arcgis.com/j94FvPaik4etwHFk/arcgis/rest/services/PolkCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 59535,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Polk CAD parcel layer hosted on the BIS Consultants shared ArcGIS Online organisation (bisconsulting); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 57,941 of 59,535 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000. Some rows carry the placeholder owner 'MULTIPLE OWNERS' with no mailing address.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "WALLER",
+      "name": "WallerCADWebService - Parcels",
+      "url": "https://services3.arcgis.com/KKhSlBnH1Rm0YK62/arcgis/rest/services/WallerCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 54251,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; waller-cad.org home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Waller CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_wallercad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 54,152 of 54,251 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "WISE",
+      "name": "WiseCADWebService - Parcels",
+      "url": "https://services1.arcgis.com/9sR6E9qY5UqEzC5T/arcgis/rest/services/WiseCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 52929,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; wise-cad.com home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Wise CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_wisecad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 50,476 of 52,929 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "HOOD",
+      "name": "HoodCADWebService - Parcels",
+      "url": "https://services.arcgis.com/n4964dyKb7h58xBo/arcgis/rest/services/HoodCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 52273,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; hoodcad.net home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Hood CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_hoodcad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 51,750 of 52,273 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "HARRISON",
+      "name": "HarrisonCADWebService - Parcels",
+      "url": "https://services5.arcgis.com/9EzFuq4pvjRgSIO3/arcgis/rest/services/HarrisonCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 51364,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence and credits are empty, description only 'Harrison CAD Web Service'; layer description and copyrightText are empty; harrisoncad.net home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Harrison CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_harrisoncad); owner_tax_yr 2026 in sample, item modified 2026-11. file_as_name filled on 50,261 of 51,364 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "BURNET",
+      "name": "BurnetCADWebService1 - Parcels",
+      "url": "https://services8.arcgis.com/WB9lDuPLSvoToaB9/arcgis/rest/services/BurnetCADWebService1/FeatureServer/0",
+      "verified": true,
+      "record_count": 50792,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; burnet-cad.org home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Burnet CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_burnetcad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 49,753 of 50,792 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "SAN PATRICIO",
+      "name": "SanPatricioCADWebService - Parcels",
+      "url": "https://services8.arcgis.com/EPyTHdGc5BhnbNty/arcgis/rest/services/SanPatricioCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 49168,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; sanpatcad.org home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "San Patricio CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_sanpatriciocad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 47,907 of 49,168 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "MEDINA",
+      "name": "MedinaCADWebService - Parcels",
+      "url": "https://services6.arcgis.com/j94FvPaik4etwHFk/arcgis/rest/services/MedinaCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 47252,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence and credits are empty, description only 'This service is used for Medina Web Service.'; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Medina CAD parcel layer hosted on the BIS Consultants shared ArcGIS Online organisation (bisconsulting); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 45,827 of 47,252 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "CHEROKEE",
+      "name": "CherokeeCADWebService - Parcels",
+      "url": "https://services5.arcgis.com/tyTfZP6fpe41IyyO/arcgis/rest/services/CherokeeCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 46938,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Cherokee CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_cherokeecad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 44,690 of 46,938 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "WOOD",
+      "name": "WoodCADWebService - Parcels",
+      "url": "https://services7.arcgis.com/5u6RvFtqihOOiyUO/arcgis/rest/services/WoodCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 44536,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Wood CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_woodcad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 43,056 of 44,536 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "VAN ZANDT",
+      "name": "VanZandtCADWebService - Parcels",
+      "url": "https://services5.arcgis.com/96Y3rGnOjGwKKDOM/arcgis/rest/services/VanZandtCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 43987,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; vzcad.org home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Van Zandt CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_vanzandtcad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 41,439 of 43,987 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "HARDIN",
+      "name": "HardinCADWebService - Parcels",
+      "url": "https://services9.arcgis.com/8oveauLo4lI1NjDp/arcgis/rest/services/HardinCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 42225,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Hardin CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_hardincad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 39,064 of 42,225 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "STARR",
+      "name": "StarrCADWebService - Parcels",
+      "url": "https://services.arcgis.com/eeOR7tCg5imWJmGV/arcgis/rest/services/StarrCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 40801,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Starr CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_starrcad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 37,132 of 40,801 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "HILL",
+      "name": "HillCADWebService - Parcels",
+      "url": "https://services6.arcgis.com/c1IEzrw0UDP7bzay/arcgis/rest/services/HillCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 39102,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Hill CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_hillcad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 38,909 of 39,102 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "MATAGORDA",
+      "name": "MatagordaCADWebService - Parcels",
+      "url": "https://services7.arcgis.com/pOoGFPnvGO2DVZ5T/arcgis/rest/services/MatagordaCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 37271,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Matagorda CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_matagordacad); owner_tax_yr 2025 in sample, item modified 2026-11. file_as_name filled on 35,828 of 37,271 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000. owner_tax_yr in the sample is old (2025), so the layer may be stale.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "WALKER",
+      "name": "WalkerCADWebService - Parcels",
+      "url": "https://services6.arcgis.com/hEVWOxh6v1J8BInI/arcgis/rest/services/WalkerCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 36911,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; walkercad.org home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Walker CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_walkercad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 34,667 of 36,911 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "LAMAR",
+      "name": "LamarCADWebService - Parcels",
+      "url": "https://services3.arcgis.com/f4WhMvUzLwYd9QH8/arcgis/rest/services/LamarCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 36801,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Lamar CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_lamarcad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 36,288 of 36,801 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "KERR",
+      "name": "KerrCADWebService - Parcels",
+      "url": "https://services6.arcgis.com/j94FvPaik4etwHFk/arcgis/rest/services/KerrCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 36654,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; kerrcad.org home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Kerr CAD parcel layer hosted on the BIS Consultants shared ArcGIS Online organisation (bisconsulting); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 35,158 of 36,654 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "SAN JACINTO",
+      "name": "SanJacintoCADWebService - Parcels",
+      "url": "https://services8.arcgis.com/Cj28SFmpkCtGCeEQ/arcgis/rest/services/SanJacintoCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 35926,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "San Jacinto CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_sanjacintocad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 35,296 of 35,926 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "CASS",
+      "name": "CassCADWebService - Parcels",
+      "url": "https://services7.arcgis.com/UQ45NO3AJLtPpLKi/arcgis/rest/services/CassCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 35081,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Cass CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_casscad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 31,762 of 35,081 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "ATASCOSA",
+      "name": "AtascosaCADWebService - Parcels",
+      "url": "https://services8.arcgis.com/q1dyPay4QViMab9g/arcgis/rest/services/AtascosaCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 34987,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Atascosa CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_atascosacad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 33,964 of 34,987 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "JASPER",
+      "name": "JasperCADWebService - Parcels",
+      "url": "https://services3.arcgis.com/8W4ZPPjIzqjTNZWj/arcgis/rest/services/JasperCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 33600,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Jasper CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_jaspercad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 30,336 of 33,600 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "BANDERA",
+      "name": "BanderaCADWebService - Parcels",
+      "url": "https://services7.arcgis.com/ZbeB5GO8asJXJb2R/arcgis/rest/services/BanderaCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 33095,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Bandera CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_banderacad1); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 31,782 of 33,095 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "GILLESPIE",
+      "name": "GillespieCADWebService - Parcels",
+      "url": "https://services.arcgis.com/Jt5Ms9iSpiRKiydw/arcgis/rest/services/GillespieCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 32732,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Gillespie CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_GillespieCAD); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 32,306 of 32,732 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "CORYELL",
+      "name": "CoryellCADWebService - Parcels",
+      "url": "https://services3.arcgis.com/qmqVEYNCt8dhXqHl/arcgis/rest/services/CoryellCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 32085,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; coryellcad.org home page fetched, no data-use terms or disclaimer text found)",
+      "notes": "Coryell CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_coryellcad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 31,740 of 32,085 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "KENDALL",
+      "name": "KendallCADWebService - Parcels",
+      "url": "https://services9.arcgis.com/AugxDVA2CqlsdRYC/arcgis/rest/services/KendallCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 31461,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Kendall CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_kendallcad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 29,812 of 31,461 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "TYLER",
+      "name": "TylerCADWebService - Parcels",
+      "url": "https://services6.arcgis.com/j94FvPaik4etwHFk/arcgis/rest/services/TylerCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 31420,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Tyler CAD parcel layer hosted on the BIS Consultants shared ArcGIS Online organisation (bisconsulting); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 31,059 of 31,420 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "BROWN",
+      "name": "BrownCADWebService - Parcels",
+      "url": "https://services3.arcgis.com/GDTvqYSV5kJg6ilh/arcgis/rest/services/BrownCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 31130,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Brown CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_browncad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 30,950 of 31,130 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "WHARTON",
+      "name": "WhartonCADWebService - Parcels",
+      "url": "https://services6.arcgis.com/j94FvPaik4etwHFk/arcgis/rest/services/WhartonCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 30564,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence and credits are empty, description only 'This service is used for Wharton Web Service.'; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Wharton CAD parcel layer hosted on the BIS Consultants shared ArcGIS Online organisation (bisconsulting); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 29,882 of 30,564 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "FANNIN",
+      "name": "FanninCADWebService1 - Parcels",
+      "url": "https://services7.arcgis.com/Ju7oGiDpMOkcpqOt/arcgis/rest/services/FanninCADWebService1/FeatureServer/0",
+      "verified": true,
+      "record_count": 29296,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Fannin CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_fannincad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 28,061 of 29,296 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "UPSHUR",
+      "name": "UpshurCADWebService - Parcels",
+      "url": "https://services5.arcgis.com/uTQe835Qm04W5Cjr/arcgis/rest/services/UpshurCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 29207,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Upshur CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_upshurcad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 28,926 of 29,207 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "WILSON",
+      "name": "WilsonCADWebService - Parcels",
+      "url": "https://services6.arcgis.com/k8X7ZqKHDjdLxW50/arcgis/rest/services/WilsonCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 29161,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Wilson CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_wilsoncad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 28,116 of 29,161 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "CALDWELL",
+      "name": "CaldwellCADWebService - Parcels",
+      "url": "https://services.arcgis.com/rVxY74DxxIDrDbc0/arcgis/rest/services/CaldwellCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 27488,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence and credits are empty, description only 'Caldwell CAD Web Service'; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Caldwell CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_caldwellcad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 27,006 of 27,488 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "GRIMES",
+      "name": "GrimesCADWebService - Parcels",
+      "url": "https://services8.arcgis.com/fpr21jaV02YtR7tv/arcgis/rest/services/GrimesCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 27316,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Grimes CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_grimescad); owner_tax_yr 2026 in sample, item modified 2026-11. file_as_name filled on 27,007 of 27,316 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000. 'market' was 0 or empty in the samples while land_val/imprv_val exist, so add those two if market is blank.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "ARANSAS",
+      "name": "AransasCADWebService - Parcels",
+      "url": "https://services8.arcgis.com/91dtIBbR8eaxrmHR/arcgis/rest/services/AransasCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 26325,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Aransas CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_aransascad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 25,208 of 26,325 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "BURLESON",
+      "name": "BurlesonCADWebService - Parcels",
+      "url": "https://services8.arcgis.com/0uWFXDEpQd9NFiad/arcgis/rest/services/BurlesonCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 26262,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Burleson CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_burlesoncad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 25,435 of 26,262 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "NEWTON",
+      "name": "NewtonCADWebService - Parcels",
+      "url": "https://services6.arcgis.com/j94FvPaik4etwHFk/arcgis/rest/services/NewtonCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 23222,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Newton CAD parcel layer hosted on the BIS Consultants shared ArcGIS Online organisation (bisconsulting); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 19,270 of 23,222 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "WASHINGTON",
+      "name": "WashingtonCADWebService - Parcels",
+      "url": "https://services3.arcgis.com/42lb4t0mpCcD1zg8/arcgis/rest/services/WashingtonCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 23217,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Washington CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_washingtoncad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 22,890 of 23,217 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "FAYETTE",
+      "name": "FayetteCADWebService - Parcels",
+      "url": "https://services7.arcgis.com/INOomfRKQGxc9OW4/arcgis/rest/services/FayetteCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 23188,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Fayette CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_fayettecad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 22,742 of 23,188 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "COLORADO",
+      "name": "ColoradoCADWebService - Parcels",
+      "url": "https://services8.arcgis.com/kLPk1FdZyvjjB3o2/arcgis/rest/services/ColoradoCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 23018,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Colorado CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_coloradocad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 21,352 of 23,018 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "AUSTIN",
+      "name": "AustinCADWebService - Parcels",
+      "url": "https://services7.arcgis.com/rNakmFefTO1XjYg4/arcgis/rest/services/AustinCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 22659,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Austin CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_austincad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 22,432 of 22,659 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "BEE",
+      "name": "BeeCADWebService - Parcels",
+      "url": "https://services3.arcgis.com/UCyyWODS30HHeveq/arcgis/rest/services/BeeCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 22601,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Bee CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_beecad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 21,428 of 22,601 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "UVALDE",
+      "name": "UvaldeCADWebService - Parcels",
+      "url": "https://services6.arcgis.com/j94FvPaik4etwHFk/arcgis/rest/services/UvaldeCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 21766,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Uvalde CAD parcel layer hosted on the BIS Consultants shared ArcGIS Online organisation (bisconsulting); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 20,731 of 21,766 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "REEVES",
+      "name": "ReevesCADWebService - Parcels",
+      "url": "https://services6.arcgis.com/j94FvPaik4etwHFk/arcgis/rest/services/ReevesCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 21346,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Reeves CAD parcel layer hosted on the BIS Consultants shared ArcGIS Online organisation (bisconsulting); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 16,083 of 21,346 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "HOWARD",
+      "name": "HowardCADWebService - Parcels",
+      "url": "https://services6.arcgis.com/T3dTslR6IXXsd0JO/arcgis/rest/services/HowardCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 20591,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Howard CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_howardcad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 19,765 of 20,591 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "TITUS",
+      "name": "TitusCADWebService - Parcels",
+      "url": "https://services5.arcgis.com/33odzvCca0xzxvGO/arcgis/rest/services/TitusCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 20565,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Titus CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_tituscad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 20,332 of 20,565 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "SHELBY",
+      "name": "ShelbyCADWebService - Parcels",
+      "url": "https://services6.arcgis.com/j94FvPaik4etwHFk/arcgis/rest/services/ShelbyCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 20387,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Shelby CAD parcel layer hosted on the BIS Consultants shared ArcGIS Online organisation (bisconsulting); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 20,325 of 20,387 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "LAVACA",
+      "name": "LavacaCADWebService - Parcels",
+      "url": "https://services.arcgis.com/NIfETzIj7kHquibp/arcgis/rest/services/LavacaCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 19964,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Lavaca CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_lavacacad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 19,757 of 19,964 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "HALE",
+      "name": "HaleCADWebService - Parcels",
+      "url": "https://services6.arcgis.com/MsKAwpqiJD1YHM2q/arcgis/rest/services/HaleCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 18788,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Hale CAD parcel layer hosted on the appraisal district's BIS Consultants ArcGIS Online account (bis_halecad); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 18,494 of 18,788 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "LAMPASAS",
+      "name": "LampasasCADWebService - Parcels",
+      "url": "https://services6.arcgis.com/j94FvPaik4etwHFk/arcgis/rest/services/LampasasCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 17584,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence and credits are empty, description only 'Lampasas CAD Matix Service'; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Lampasas CAD parcel layer hosted on the BIS Consultants shared ArcGIS Online organisation (bisconsulting); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 16,686 of 17,584 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "KLEBERG",
+      "name": "KlebergCADWebService - Parcels",
+      "url": "https://services6.arcgis.com/j94FvPaik4etwHFk/arcgis/rest/services/KlebergCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 15001,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence and credits are empty, description only 'This service is used for Kleberg Web Service.'; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Kleberg CAD parcel layer hosted on the BIS Consultants shared ArcGIS Online organisation (bisconsulting); owner_tax_yr 2027 in sample, item modified 2026-11. file_as_name filled on 14,880 of 15,001 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "SOMERVELL",
+      "name": "SomervellCADWebService - Parcels",
+      "url": "https://services6.arcgis.com/j94FvPaik4etwHFk/arcgis/rest/services/SomervellCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 6758,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Somervell CAD parcel layer hosted on the BIS Consultants shared ArcGIS Online organisation (bisconsulting); owner_tax_yr 2024 in sample, item modified 2026-11. file_as_name filled on 6,554 of 6,758 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000. owner_tax_yr in the sample is old (2024), so the layer may be stale.",
+      "checked": "2026-11-20"
+    },
+    {
+      "county": "DELTA",
+      "name": "DeltaCADWebService - Parcels",
+      "url": "https://services6.arcgis.com/j94FvPaik4etwHFk/arcgis/rest/services/DeltaCADWebService/FeatureServer/0",
+      "verified": true,
+      "record_count": 6446,
+      "fields": {
+        "apn": "prop_id",
+        "owner": "file_as_name",
+        "mailing_address": [
+          "addr_line1",
+          "addr_line2",
+          "addr_line3",
+          "addr_city",
+          "addr_state",
+          "zip"
+        ],
+        "address": [
+          "situs_num",
+          "situs_street_prefx",
+          "situs_street",
+          "situs_street_sufix",
+          "situs_city",
+          "situs_state",
+          "situs_zip"
+        ],
+        "market_value": "market",
+        "acres": "legal_acreage"
+      },
+      "restrictions": "terms not found (ArcGIS item licence, description and credits are empty; layer description and copyrightText are empty; appraisal district website not checked)",
+      "notes": "Delta CAD parcel layer hosted on the BIS Consultants shared ArcGIS Online organisation (bisconsulting); owner_tax_yr 2025 in sample, item modified 2026-02. file_as_name filled on 6,021 of 6,446 records; three sample records with real owner names fetched 2026-11-20. geo_id is the long account number; situs is split across several fields; maxRecordCount 2000. owner_tax_yr in the sample is old (2025), so the layer may be stale.",
+      "checked": "2026-11-20"
     }
   ],
-  "summary": "Projects: TxDOT DCIS All Projects works well (73k lines with phase, cost and let dates). Parcels: the statewide TxGIO layer has owner and mailing address (CC0) for every county tested but still rejects /query; only point 'identify' lookups work. Queryable owner layers verified for Harris, Dallas, Tarrant, Bexar, Travis, and (added 2026-11-17) Hidalgo, Denton, Williamson, Collin, Galveston, Brazoria, Hays, El Paso, Ellis, Fort Bend and Montgomery. Johnson has no queryable owner layer (its CAD layer has blank owner fields)."
+  "summary": "Projects: TxDOT DCIS All Projects works well (73k lines with phase, cost and let dates). Parcels: the statewide TxGIO layer has owner and mailing address (CC0) for every county tested but still rejects /query; only point 'identify' lookups work. Queryable owner layers verified for Harris, Dallas, Tarrant, Bexar, Travis, and (added 2026-11-17) Hidalgo, Denton, Williamson, Collin, Galveston, Brazoria, Hays, El Paso, Ellis, Fort Bend and Montgomery. Johnson has no queryable owner layer (its CAD layer has blank owner fields). On 2026-11-20, 74 more county owner layers were added (mostly appraisal districts' BIS Consultants 'CADWebService' layers, plus Taylor, Ector and Rockwall), led by Nueces, Bell, Brazos, Comal, Guadalupe, Kaufman, Parker and Midland: Midland, Bastrop and Gregg have terms read with no stated limit, and the other 71 are held with terms not found or a quoted limit; no owner layer was found for Cameron, Lubbock, Webb, Jefferson, McLennan, Smith, Grayson, Randall, Potter or Wichita."
 }

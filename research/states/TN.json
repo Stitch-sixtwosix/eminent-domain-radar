@@ -1,7 +1,7 @@
 {
  "state": "Tennessee",
  "code": "TN",
- "checked": "2026-11-17",
+ "checked": "2026-11-20",
  "projects": [
   {
    "name": "TDOT Projects Public Viewer (TDOT test host)",
@@ -211,9 +211,122 @@
    "restrictions": "terms not found (item licence field is empty). The Tennessee Comptroller's parcel page says Williamson is 'NOT MAINTAINED BY THE TENNESSEE OFFICE OF THE COMPTROLLER OF THE TREASURY AND CANNOT BE SHARED BY OUR OFFICE'.",
    "notes": "STALE AND PARTIAL: City of Franklin ArcGIS Online 'Parcels', last edited 2019-07-29, 32,769 rows: the Franklin area only, not all of Williamson County. OWNER2; GISLINK; LEGAL_ACRE; land_market, imp_value, total_assess. Fallback only. Williamson County's own server (arcgis2.williamson-tn.org) timed out; no county layer verified.",
    "checked": "2026-11-17"
+  },
+  {
+   "county": "BLOUNT",
+   "url": "https://services3.arcgis.com/NIOS5f3vobGvnGtD/arcgis/rest/services/BlountParcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 67332,
+   "fields": {
+    "apn": "PARCELID",
+    "owner": "OWNER",
+    "mailing_address": [
+     "MAILADDR",
+     "MAILCITY",
+     "STATE",
+     "ZIP"
+    ],
+    "address": "ADDRESS",
+    "market_value": "APPRAISAL",
+    "acres": "CALC_ACRE"
+   },
+   "restrictions": "The item licence ends: 'Mapping data has been produced for property assessment purposes only.' It is unclear whether that limits other uses; held for the owner to decide (read 2026-11-20).",
+   "notes": "Blount County's own ArcGIS Online layer 'Blount Parcels' (account blountGIS), item 10c32044f30448429f04e54c1f9c1441; item summary: 'Data is maintained by the Blount County Property Assessor's office, and is updated on a weekly basis'; last edited 2026-11-17, TAXYR 2027. Terms read in the item's licenseInfo, which is a warranty and liability disclaimer only: 'maps will be considered non-conclusive as to location or ownership and accuracy is not guaranteed', 'In no event will Blount County Government be liable for any damages, including loss of data, lost profits, business interruption, loss of business information or other pecuniary loss that may arise from the use of maps or the information they contain. Mapping data has been produced for property assessment purposes only.' It states no limit on commercial use, redistribution, solicitation or mailing lists; the last sentence describes why the data was made and is worth a second look by a person. OWNER2 second owner line; OWNJAN1 owner on 1 January; ADDRESS is street-then-number; LANDVAL, IMPVAL; CAMADEEDAC deeded acres; GISLINK state parcel key. Blount is also inside the Comptroller layer. maxRecordCount 2000.",
+   "checked": "2026-11-20"
+  },
+  {
+   "county": "WASHINGTON",
+   "url": "https://services3.arcgis.com/nLnrKGwI08veJ5uu/arcgis/rest/services/Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 61525,
+   "fields": {
+    "apn": "PARCELID",
+    "owner": "OWNER",
+    "mailing_address": [
+     "MAILADDR",
+     "MAILCITY",
+     "STATE",
+     "ZIP"
+    ],
+    "address": "ADDRESS",
+    "market_value": "APPRAISAL",
+    "acres": "CALC_ACRE"
+   },
+   "restrictions": "terms not found (item 25ef68648dd048a2b1a8ee7ad499eb37: licenseInfo and accessInformation empty, description only 'Tax Parcels for Washington County, Tennessee.'; layer description and copyrightText empty; no county terms page looked for)",
+   "notes": "Washington County, TN's own ArcGIS Online organization ('Washington County, TN', account WashCoTNZoning); item summary 'Washington County, Tennessee Parcel Data Last Updated: 11-16-26'; TAXYR 2027. OWNER2; MAILLINE1-3 hold the same mailing address as formatted lines; LANDVAL, IMPVAL; CAMA_DEEDAC. Covers Johnson City parcels inside the county. An older copy 'Washington_County_Parcels_view' (60,638 rows, TAXYR 2025) sits in the same organization: do not use it. Johnson City's own server (gis.johnsoncitytn.org) timed out. maxRecordCount 2000.",
+   "checked": "2026-11-20"
+  },
+  {
+   "county": "MONTGOMERY",
+   "url": "https://gis.mcgtn.org/arcgis/rest/services/ParcelMapForWebApplication/MapServer/0",
+   "verified": true,
+   "record_count": 93739,
+   "fields": {
+    "apn": "ParcelNo",
+    "owner": "Owner1",
+    "mailing_address": [
+     "MailingAddress",
+     "MailCity",
+     "MailState",
+     "MailZip"
+    ],
+    "address": [
+     "PropertyAddress",
+     "PropertyCity"
+    ],
+    "market_value": "MktAppraisedValue",
+    "acres": "CalcAcreage"
+   },
+   "restrictions": "terms not found (layer and service description and copyrightText are empty; the service's item 63d42722cff440cd9e3581c98ea5897e is not on ArcGIS Online and the server's portal path answered 404; no county terms page looked for)",
+   "notes": "Montgomery County Government's own server (gis.mcgtn.org), service 'ParcelMapForWebApplication', layer 'Parcels'. Montgomery is one of the nine counties outside the Comptroller layer. ROWS REPEAT: one row per building card, so a parcel with two buildings appears twice (OBJECTID_1 2 and 3 are the same parcel); deduplicate on GISLINK or ParcelNo. RecordYear 2024 in the samples; update date not published. Owner2; value fields are TEXT with a dollar sign ('$0' in the samples), including MktAppraisedValue, AppraisedValue, AssessedValue; DeedAcreage; Grantor / Grantee / SalesDate. Sibling services MontgomeryParcels (no owner fields), ParcelsFromMGC_SQL_01 and ParcelPoint returned error 500 on query. maxRecordCount 2000.",
+   "checked": "2026-11-20"
+  },
+  {
+   "county": "SUMNER",
+   "url": "https://services8.arcgis.com/8jhIZBvwlxdbJdGN/ArcGIS/rest/services/ParcelsCAMA/FeatureServer/0",
+   "verified": true,
+   "record_count": 99543,
+   "fields": {
+    "apn": "PARCELID",
+    "owner": "OWNER",
+    "mailing_address": [
+     "MAILADDR",
+     "MAILCITY",
+     "STATE",
+     "ZIP"
+    ],
+    "address": "ADDRESS",
+    "market_value": "APPRAISAL",
+    "acres": "CALC_ACRE"
+   },
+   "restrictions": "terms not found (item e9bc144524544de6a770a664584498a2: licenseInfo, accessInformation and description empty, summary only 'Parcels joined with the CAMA table'; layer description and copyrightText empty)",
+   "notes": "Published by the account cbrock_Sumner911 (Sumner County's 911 / emergency communications body, judged from the account name only; the organization record gives no name). A second catalogue item pointing at the same service, 'Sumner Parcels 2025', says 'Live Data provided by Sumner County Assessor of Property'. Last edited 2026-09-18, TAXYR 2026, UPDATED 10/14/2025 in the samples. OWNER2; LANDVAL, IMPVAL; ADDRESS is street-then-number. The fields 'Latitude' / 'Longitude' hold state-plane feet, not degrees. Sumner is also inside the Comptroller layer. maxRecordCount 2000.",
+   "checked": "2026-11-20"
+  },
+  {
+   "county": "MAURY",
+   "url": "https://services6.arcgis.com/ubRvNDgGwwJuZMcL/arcgis/rest/services/Parcels/FeatureServer/1",
+   "verified": true,
+   "record_count": 53273,
+   "fields": {
+    "apn": "PARCELID",
+    "owner": "OWNER",
+    "mailing_address": [
+     "MAILADDR",
+     "MAILCITY",
+     "STATE",
+     "ZIP"
+    ],
+    "address": "ADDRESS",
+    "market_value": "APPRAISAL",
+    "acres": "CALC_ACRE"
+   },
+   "restrictions": "terms not found (item 1b4b17d37661430d8a0e192b907a05ab: licenseInfo and accessInformation empty, summary 'Parcel data for Maury County', description '7/16/2025'; layer description and copyrightText empty)",
+   "notes": "Published by the City of Columbia, TN account (dtoney_ColumbiaTN), not by Maury County itself; whole county by its summary. Layer id is 1, not 0. TAXYR 2025, UPDATED 10/04/2024 in the samples, service last edited 2026-10-27, so the ownership rows may be about a year old. OWNER2; LANDVAL, IMPVAL. Maury is also inside the Comptroller layer. maxRecordCount 2000.",
+   "checked": "2026-11-20"
   }
  ],
- "summary": "Projects: TDOT publishes the right layers (all projects with status and current phase; STIP with cost and funding years) but only the copy on TDOT's test server answered; production timed out. Parcels: the Comptroller layer gives owner names (no mailing address) for 86 counties; of the 9 missing metro counties only Davidson is verified, with owner and mailing address.",
+ "summary": "Projects: TDOT publishes the right layers (all projects with status and current phase; STIP with cost and funding years) but only the copy on TDOT's test server answered; production timed out. Parcels: the Comptroller layer gives owner names (no mailing address) for 86 counties; of the 9 missing metro counties only Davidson is verified, with owner and mailing address. On 2026-11-20 county parcel layers with owner and mailing address were added for Blount (terms read, no limit stated) and, held with terms not found, Washington, Montgomery, Sumner and Maury; Knox and Shelby were still unreachable.",
  "parcels_counties_not_found": "The other large counties missing from the state layer could not be verified: Shelby (gis.shelbycountytn.gov answered 403; a Memphis layer requires a token), Knox (www.kgis.org timed out), Hamilton (server error 522), Rutherford (county server returned a non-JSON page; a Murfreesboro layer found covers only 15,724 special-interest points).",
  "parcels_second_pass": "Second pass 2026-11-17 (parcels only). Statewide: nothing new; the Comptroller layer on file still stands. Terms now read for it at https://comptroller.tn.gov/office-functions/pa/gisredistricting/redistricting-and-land-use-maps/parcel-data.html: 'Any company or organization can use, save, and maintain the shapefile data for any use case, including consumption in a commercial application/software or for historical purposes.' The same page says: 'We do not offer bulk or historical downloads, nor any recurring extracts or other automated downloads' and 'We do not provide statewide extracts of either assessment data or parcel shapefile data.' Those sentences are about the requested shapefile download, not expressly about the ArcGIS layer, whose own description still reads 'intended for use by state agencies with approved access'. The page also confirms the nine counties outside the state system: 'CHESTER, DAVIDSON, HAMILTON, HICKMAN, KNOX, MONTGOMERY, RUTHERFORD, SHELBY, AND WILLIAMSON COUNTIES ARE NOT MAINTAINED BY THE TENNESSEE OFFICE OF THE COMPTROLLER OF THE TREASURY AND CANNOT BE SHARED BY OUR OFFICE.' Added Rutherford (good), Hamilton (Chattanooga server, probably partial), Williamson (Franklin only, 2019). Davidson was already on file. WILSON and SUMNER: no county layer found (county host names did not resolve; nothing in the ArcGIS Online catalog); both are inside the Comptroller layer, which has owner names but no mailing address. NOT FOUND: SHELBY - gis.shelbycountytn.gov answers 403, the assessor host timed out, Memphis's ArcGIS Online organization has no parcel layer, Collierville's 'Certified Parcels' has no owner fields. KNOX - www.kgis.org timed out again and maps.knoxmpc.org presents an expired certificate (not bypassed)."
 }

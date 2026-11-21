@@ -1,7 +1,7 @@
 {
  "state": "Virginia",
  "code": "VA",
- "checked": "2026-11-17",
+ "checked": "2026-11-20",
  "projects": [
   {
    "name": "VDOT SYIP Approved Projects - lines (STE_VDOT_SYIP_APPRVD_LINE)",
@@ -342,8 +342,220 @@
    "restrictions": "This item has no licence text, but the City of Chesapeake's current open-data items (Parcels, Zoning, Easements) carry: 'Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International' (licence field of the city's 'Parcels' item, https://gis.cityofchesapeake.net/mapping/rest/services/OpenData/OpenData/MapServer/15, read through the ArcGIS Online item record). Non-commercial licence: treat as restricted.",
    "notes": "STALE: a December 2020 snapshot ('Chesapeake Property Parcel (2020)') in the city's ArcGIS Online organization, last edited 2020-12-11. PARNO second key; ASMT_LD / ASMT_BL land and building assessments. The city's current Parcels layer (gis.cityofchesapeake.net ... OpenData/MapServer/15) timed out from the research network, so its fields are not known. A newer city layer Zoning_and_Parcel_Ownership/FeatureServer/0 (91,324 rows, edited 2024-01-31) has OWNER and ASMT_TOTAL but no parcel number and no mailing address.",
    "checked": "2026-11-17"
+  },
+  {
+   "county": "ALBEMARLE",
+   "url": "https://services2.arcgis.com/khVz7mitcPJHUnlM/arcgis/rest/services/redacted_parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 51030,
+   "fields": {
+    "apn": "parcelid",
+    "owner": "owner",
+    "mailing_address": [
+     "owneraddress",
+     "ownercitystate",
+     "ownerzipcode"
+    ],
+    "address": [
+     "propstreet",
+     "city",
+     "zip"
+    ],
+    "market_value": "totalvalue",
+    "acres": "lotsize"
+   },
+   "restrictions": "The item licence allows use 'for lawful purposes, subject to applicable laws, regulations, and County policies'; those County policies could not be found or read on 2026-11-20, so held for the owner to decide.",
+   "notes": "Albemarle County's own ArcGIS Online organisation ('Albemarle County, VA', account AGOL_Data_Publisher), item 'Parcels' (aa56c3e06a344f1c8a40b109dfbb4076), service name redacted_parcels; data last edited 2026-11-16, described as updated weekly. owner filled on 51,020 of 51,030 rows; owner2 second owner; ownermailingaddress holds the three mailing fields joined; gpin, landvalue, improvementsvalue, lastsaleprice also present. Terms read in the item's licence field (https://www.arcgis.com/sharing/rest/content/items/aa56c3e06a344f1c8a40b109dfbb4076?f=json): 'This data is provided by Albemarle County for informational and general reference purposes. Users may view, download, and use the data for lawful purposes, subject to applicable laws, regulations, and County policies.' followed by a warranty disclaimer; the item description's 'USE CONSTRAINTS' says only that it is 'intended for general informational, mapping, planning, property research, and reference purposes' and is not a survey. No limit on commercial use, redistribution, solicitation or mailing lists is stated; the 'County policies' it refers to were not located. The description says 'Selected attributes or records are redacted from this dataset in accordance with applicable County requirements'. A second public service in the same organisation (Parcels/FeatureServer/0, 50,870 rows, item titled 'Parcels (redacted)', a static copy last edited June 2026 with an empty licence) was not used.",
+   "checked": "2026-11-20"
+  },
+  {
+   "county": "JAMES CITY",
+   "url": "https://property.jamescitycountyva.gov/arcgis/rest/services/JCC/GIS_Data/FeatureServer/17",
+   "verified": true,
+   "record_count": 36479,
+   "fields": {
+    "apn": "PIN",
+    "owner": "Owner1",
+    "mailing_address": [
+     "MailAddr",
+     "MailCity",
+     "MailStat",
+     "MailZip"
+    ],
+    "address": "Full_Address",
+    "market_value": "CurTot",
+    "acres": "LegalAc"
+   },
+   "restrictions": null,
+   "notes": "James City County's own server, layer 'Parcels' in JCC/GIS_Data; ArcGIS item 'James City County, VA - Parcels' (a0dfa59d3c4a442c9ebe3719762a407d, account khazelwood, modified 2026-11-19). Owner1 filled on 36,365 of 36,479 rows; Owner2 second owner; LocAddr/LocCity/LocZip are the assessor's site address; CurLand, CurImp, Sale1D, Sale1Amt, Grantor1 also present. Terms read in the item's licence field (https://www.arcgis.com/sharing/rest/content/items/a0dfa59d3c4a442c9ebe3719762a407d?f=json): 'All Data is believed to be correct, but is not guaranteed by James City County (JCC). As such, JCC is not responsible for its accuracy or how current it may be. ... Disclaimers as to such should be placed on all final products derived from the provided data.' No limit on commercial use, redistribution, solicitation or mailing lists is stated; the one condition is that an accuracy disclaimer be carried on derived products.",
+   "checked": "2026-11-20"
+  },
+  {
+   "county": "FAUQUIER",
+   "url": "https://services.arcgis.com/oAoeYJ1kqmAwcEC2/arcgis/rest/services/Tax_Parcels_DL/FeatureServer/0",
+   "verified": true,
+   "record_count": 36327,
+   "fields": {
+    "apn": "PARCELID",
+    "owner": "OWNERNME1",
+    "mailing_address": [
+     "PSTLADDRES",
+     "PSTLADDR_1",
+     "PSTLADDR_2",
+     "PSTLCITY",
+     "PSTLSTATE",
+     "PSTLZIP5"
+    ],
+    "address": "SITEADDRES",
+    "market_value": "Final_Valu",
+    "acres": "ACREAGE"
+   },
+   "restrictions": "The item licence says the data is 'provided for informational purposes only'. It is unclear whether that limits commercial use; held for the owner to decide (read 2026-11-20).",
+   "notes": "Fauquier County's own ArcGIS Online organisation (account fauquierGIS), item 'Tax_Parcels_DL' (2bffa1330bcb4593929c7d65abbbd26b), credited 'Fauquier County GIS'; data last edited 2026-11-20. OWNERNME1 filled on 36,086 of 36,327 rows; Co_Owner2 second owner. The PSTL* fields are taken to be the owner's postal address (in the three samples they matched the site address; not confirmed by documentation). Final_Valu, Land_Value, Building_V and ACREAGE are stored as text. The item description says the layer 'contains redundant geometry in cases where there are multiple condominium units on a given tax parcel'. Terms read in the item's licence field (https://www.arcgis.com/sharing/rest/content/items/2bffa1330bcb4593929c7d65abbbd26b?f=json), in full: 'This data is provided for informational purposes only. Fauquier County makes no warranties, expressed or implied, regarding the accuracy or completeness of this data.' No limit on commercial use, redistribution, solicitation or mailing lists is stated ('for informational purposes only' is the only purpose wording).",
+   "checked": "2026-11-20"
+  },
+  {
+   "county": "FRANKLIN",
+   "url": "https://services9.arcgis.com/AzdpqVmJ5GjGWCoI/arcgis/rest/services/FranklinCoVA_TaxParcels_View/FeatureServer/0",
+   "verified": true,
+   "record_count": 49475,
+   "fields": {
+    "apn": "PIN",
+    "owner": "owner_name",
+    "mailing_address": [
+     "owner_addr",
+     "owner_city",
+     "owner_stat",
+     "owner_zip"
+    ],
+    "address": [
+     "FULLADDR",
+     "ZipCode"
+    ],
+    "market_value": "total_asse",
+    "acres": "acreage"
+   },
+   "restrictions": null,
+   "notes": "Franklin COUNTY (not the City of Franklin), county ArcGIS Online account FC.GIS, item 'Franklin Co VA - Tax Parcels' (4becd764cf9f4471a2ee35e1152a8558), 'created for public distribution via the county's Open Data Hub'; data last edited 2026-06-17. owner_name filled on 48,990 of 49,475 rows; land_value, improvemen, grantor, deed_book/deed_page also present (field names truncated to ten characters). Terms read in the item's licence field (https://www.arcgis.com/sharing/rest/content/items/4becd764cf9f4471a2ee35e1152a8558?f=json): 'The data layers provided herein were compiled from various sources within a geographic information system (GIS) for the primary use of Franklin County. The data provided herein are believed to be accurate but are provided for reference purposes only. ... These data are provided \"as is\" and neither Franklin County nor its employees shall be held responsible for their inappropriate use.' No limit on commercial use, redistribution, solicitation or mailing lists is stated.",
+   "checked": "2026-11-20"
+  },
+  {
+   "county": "CHARLOTTESVILLE CITY",
+   "url": "https://gisweb.charlottesville.org/cvgisweb/rest/services/OpenData_1/MapServer/77",
+   "verified": true,
+   "record_count": 15813,
+   "fields": {
+    "apn": "ParcelNumber",
+    "owner": "OwnerName",
+    "mailing_address": [
+     "OwnerAddress",
+     "OwnerCityState",
+     "OwnerZipCode"
+    ],
+    "address": [
+     "StreetNumber",
+     "StreetName",
+     "Unit"
+    ],
+    "market_value": "Assessment",
+    "acres": "LotSquareFeet"
+   },
+   "restrictions": null,
+   "notes": "City of Charlottesville's own server, open-data layer 'Parcel Area Details 2 bu' (polygons); ArcGIS item 'Parcel Details 2' (c609cc24d9944821a0b00fd343ba824c, account CharlottesvilleAdmin). OwnerName filled on 15,794 of 15,813 rows. One row per ownership record: condominium units share one polygon, and OBJECTID repeated across the sampled rows, so key on ParcelNumber, not OBJECTID. LotSquareFeet is square feet, not acres; Assessment is the value for the year named in TaxYear ('2026 Value:' in the samples). Layer 74 of the same service ('Parcel Owner Points', 15,814 points) carries the same owner fields. Terms read in the item's licence field (https://www.arcgis.com/sharing/rest/content/items/c609cc24d9944821a0b00fd343ba824c?f=json): 'This work is licensed under a Creative Commons Attribution 4.0 International License', credit 'City of Charlottesville'. That licence allows commercial use and redistribution with attribution; no solicitation or mailing-list limit is stated.",
+   "checked": "2026-11-20"
+  },
+  {
+   "county": "YORK",
+   "url": "https://maps.yorkcounty.gov/arcgis/rest/services/AGOservices/Landrecords_Service/FeatureServer/7",
+   "verified": true,
+   "record_count": 28591,
+   "fields": {
+    "apn": "GPIN",
+    "owner": "ownerName",
+    "mailing_address": [
+     "ownerCOLine",
+     "ownerAddress1",
+     "ownerCity",
+     "ownerState",
+     "ownerZip"
+    ],
+    "address": "ADDRESS",
+    "market_value": "currTotalVal",
+    "acres": "legalAcres"
+   },
+   "restrictions": "terms not found (layer description covers only how the parcel layer was compiled; service copyright text is empty; the ArcGIS item 1b7083c747f547a8bdd3f9186a0af3a1 has an empty licence field; no terms page was found).",
+   "notes": "York County's own server, layer 'Parcels' in AGOservices/Landrecords_Service; ArcGIS item 'Parcels' (account TimKropp, York County organisation). ownerName filled on 28,508 of 28,591 rows; LastEdited on the sampled row was 2025-10-29. currLandVal, GISacres, PRIOROWNERSNAME1/2, transferDate and biennial LVAL/IVAL/MVAL value fields to 2026 also present.",
+   "checked": "2026-11-20"
+  },
+  {
+   "county": "PITTSYLVANIA",
+   "url": "https://services2.arcgis.com/mTpBDvIjv8OhMDVd/arcgis/rest/services/Tax_Parcels/FeatureServer/6",
+   "verified": true,
+   "record_count": 61104,
+   "fields": {
+    "apn": "GPIN",
+    "owner": "ACCOUNT_NAME1",
+    "mailing_address": [
+     "ACCOUNT_ADDR1",
+     "ACCOUNT_ADDR2",
+     "ACCOUNT_CSZ"
+    ],
+    "market_value": "TOTAL_MKT_VALUE",
+    "acres": "TOTAL_ACREAGE"
+   },
+   "restrictions": "terms not found (layer description and copyright text are empty; the ArcGIS item 8e6be7cc34534d8d989901ed9815fb60 has empty licence, credit and description fields; no terms page was found).",
+   "notes": "Pittsylvania County's own ArcGIS Online organisation (account barryguidry, whose profile reads 'GIS Systems Analyst for Pittsylvania County, Virginia'), item 'Tax Parcels' ('Full current Tax Parcel boundaries'), layer Tax_Parcels_full; service last edited 2026-11-16. ACCOUNT_NAME1 filled on 60,872 of 61,104 rows; ACCOUNT_NAME2 second owner; ACCOUNT_CSZ is city, state and ZIP in one field. No site-address field was seen in the samples (PC_PROPERTY_DESC is a legal description). TOTAL_LAND_VALUE, TOTAL_BLDG_VALUE, PC_ASSESSED_ACREAGE also present.",
+   "checked": "2026-11-20"
+  },
+  {
+   "county": "LYNCHBURG CITY",
+   "url": "https://mapviewer.lynchburgva.gov/ArcGIS/rest/services/OpenData/ODPDynamic/MapServer/41",
+   "verified": true,
+   "record_count": 32620,
+   "fields": {
+    "apn": "Parcel_ID",
+    "owner": "Owner1",
+    "mailing_address": [
+     "MailAddr",
+     "MailCity",
+     "MailStat",
+     "MailZip"
+    ],
+    "address": [
+     "LocAddr",
+     "LocCity",
+     "LocZip"
+    ],
+    "market_value": "Current_Total",
+    "acres": "LegalAc"
+   },
+   "restrictions": "terms not found: the ArcGIS item's licence field (56b924d2dd8a404a8830fc8b0612febe) says 'Please read our Data Sharing and Distribution Policy - http://www.lynchburgva.gov/gis-data-sharing-and-distribution-policy', and that page returned 404 on 2026-11-20, so the policy that governs sharing and distribution could not be read.",
+   "notes": "City of Lynchburg's own server, open-data layer 'Parcel' (service text: 'intended for use by the Open Data Portal', copyright 'City of Lynchburg - GIS Office'); ArcGIS item 'Parcels' (account LynchburgGIS), 'maintained by the City Assessor's Office. Information includes assessment, sales, and owner information.' Owner1 filled on 32,594 of 32,620 rows; Owner2 second owner; Current_Land, Current_Imp, Sale1dt, Sale1Amt, Grantor1 and yearly YR24-YR26 values also present. The rest of the licence field is only 'This data is neither a legally recorded map nor a survey and is not intended to be used as such.' Apps/ParcelViewer/MapServer/31 on the same server is the same 32,620 parcels with fewer fields.",
+   "checked": "2026-11-20"
+  },
+  {
+   "county": "ROANOKE CITY",
+   "url": "https://services.arcgis.com/KII0S5XRkpE66Ngk/arcgis/rest/services/Parcels_Public_View/FeatureServer/7",
+   "verified": true,
+   "record_count": 44333,
+   "fields": {
+    "apn": "TAXID",
+    "owner": "OWNER",
+    "mailing_address": [
+     "OWNERADDR1",
+     "MAILCITY",
+     "MAILSTATE",
+     "MAINZIPCOD"
+    ],
+    "address": "LOCADDR",
+    "market_value": "TOTALVAL1",
+    "acres": "ACRES"
+   },
+   "restrictions": "Item licence (https://www.arcgis.com/sharing/rest/content/items/c939d64f8c294f09b038ad78060b14d4?f=json): 'Proprietary Information. The various maps and databases on this website are maintained by the City of Roanoke, VA. The City of Roanoke, VA, hereby reserves all rights thereto. No portion of the maps or databases on this website may be reproduced in any form or by any means without the express authorization of the City or its authorized agents.'",
+   "notes": "City of Roanoke (not Roanoke County), the city's own ArcGIS Online organisation ('City of Roanoke, VA', account stormwateradmin), item 'Parcels_Public_View': 'City of Roanoke Parcels as of 1/31/23. Public View.' - a January 2023 snapshot, last edited 2023-01-31, so ownership is nearly four years old. OWNER filled on 44,327 of 44,333 rows; OWNER2 second owner; OWNERADDR1 sometimes holds a care-of line; LANDVAL1, DWELLINGVA, SALEDATE1, SALEAMT1, GRANTOR1 also present. The city's live server (gis03.roanokeva.gov Public/Parcels) timed out on every request.",
+   "checked": "2026-11-20"
   }
  ],
- "summary": "VDOT's SYIP approved-projects line and point layers verify with status, scope, cost and right-of-way/construction phase dates. The VGIN statewide parcel layer (https://vginmaps.vdem.virginia.gov/arcgis/rest/services/VA_Base_Layers/VA_Parcels/FeatureServer/0, 4,174,364 parcels, verified) has only FIPS, LOCALITY, PARCELID, no owner. Owner names verified for Prince William and Chesterfield only; Fairfax's open-data parcel layer has no owner fields, and the Loudoun, Virginia Beach and Henrico servers timed out from the research network.",
+ "summary": "VDOT's SYIP approved-projects line and point layers verify with status, scope, cost and right-of-way/construction phase dates. The VGIN statewide parcel layer (https://vginmaps.vdem.virginia.gov/arcgis/rest/services/VA_Base_Layers/VA_Parcels/FeatureServer/0, 4,174,364 parcels, verified) has only FIPS, LOCALITY, PARCELID, no owner. Owner names verified for Prince William and Chesterfield only; Fairfax's open-data parcel layer has no owner fields, and the Loudoun, Virginia Beach and Henrico servers timed out from the research network. On 2026-11-20 nine more locality owner layers were verified and recorded: Albemarle, James City, Fauquier, Franklin County and Charlottesville with no use limit in the terms read, and York, Pittsylvania and Lynchburg (terms not found) and Roanoke City (reproduction needs the city's authorization; 2023 snapshot) held.",
  "parcels_second_pass": "Second pass 2026-11-17 (parcels only). Statewide: unchanged, VGIN statewide parcels have no owner. Added Richmond city, Hanover, Loudoun, Roanoke County, Newport News, Chesapeake (2020 snapshot). NOT FOUND: FAIRFAX - no public layer with owner names: county ArcGIS Online Parcels (services1.arcgis.com/ioennV6PpG5Xodq0/.../Parcels/FeatureServer/0, 369,686 rows) has only PIN; www.fairfaxcounty.gov/mercator/.../GIS/ParcelsPlus/MapServer/0 has only PIN; the Tax Administration Real Estate tables (Legal, Parcels, Sales, Assessed Values) are keyed by PARID with site address and values but no owner field, and being tables they take no spatial query. ARLINGTON - arlgis.arlingtonva.us/arcgis/rest/services/StaffMap/Property_Map_public/MapServer/3 answers spatial queries and has the owner MAILING address (OWN_STREET, OWN_CITY, OWN_STATE, OWN_ZIP) and values but NO owner-name field; open-data REA Property Polygons has only RPCMSTR. SPOTSYLVANIA - county SpotsyParcels layer (70,181 rows) has parcel ids only, no owner; county server timed out. NORFOLK - ArcGIS Online Parcels layer has only GPIN/TAX_ACCT; gisshare.norfolk.gov timed out. VIRGINIA BEACH (geo.vbgov.com Basemaps/Property_Information/MapServer/12), HENRICO (portal.henrico.gov Layers/Tax_Parcels_and_CAMA_Data_External), AUGUSTA (gis.co.augusta.va.us): services are listed in ArcGIS Online but every request from the research network timed out or was refused, so nothing is verified; the only reachable Henrico layer with owners is a 735-row county-owned extract from 2022. Third-party re-uploads of county parcels by unrelated accounts were ignored."
 }
