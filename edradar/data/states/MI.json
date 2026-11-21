@@ -1,7 +1,7 @@
 {
  "state": "Michigan",
  "code": "MI",
- "checked": "2026-11-17",
+ "checked": "2026-11-21",
  "projects": [
   {
    "name": "MDOT Five-Year Transportation Program 2027-2031 (Lines)",
@@ -126,8 +126,172 @@
     "acres": "AcreCalcNM"
    },
    "notes": "Genesee County Land Records and GIS, 2025 parcels. Separate taxpayer fields (TaxName, TaxStreet, TaxCity, TaxState, TaxZip). SEV is about half of market value."
+  },
+  {
+   "county": "LENAWEE",
+   "url": "https://services6.arcgis.com/mjEvhc9AE3ceAXtG/arcgis/rest/services/Lenawee_Parcels_Public/FeatureServer/2",
+   "verified": true,
+   "record_count": 55206,
+   "fields": {
+    "apn": "TAXID",
+    "owner": "OWNNM1",
+    "address": [
+     "PRADDCOMB",
+     "PRADDRCITY",
+     "PRADDRZIP"
+    ],
+    "acres": "ACREREC"
+   },
+   "restrictions": "possible limit, needs a human read: the county's GIS data disclaimer says 'Maps and data are to be used for reference purposes only'. The rest is an accuracy and liability disclaimer; nothing names commercial use, resale, solicitation or mailing lists.",
+   "notes": "Whole county, run by Lenawee County Equalization Department/GIS Division (owner DereckWilt, the county GIS technician named in the terms), item 08db5d2e5bc6460b839c9857edcf62d7 'Lenawee Parcels Public', copyrightText 'Lenawee County Michigan'; lastEditDate 2026-11-20. Terms read (licenseInfo, 'LENAWEE COUNTY GIS DATA DISCLAIMER'): 'The GIS material is made available as a public service. Maps and data are to be used for reference purposes only and Lenawee County, Michigan, is not responsible for any inaccuracies herein contained. No responsibility is assumed for damages or other liabilities due to the accuracy, availability, use or misuse of the information herein provided... NOT to be construed or used as a \"legal description.\"... In no event will Lenawee County be liable for any damages...' - an accuracy/liability disclaimer; no limit on commercial use, resale, redistribution, solicitation or mailing lists stated. CAUTION for the caller: the phrase 'to be used for reference purposes only' is the only use wording; I read it as part of the accuracy disclaimer, judge for yourself. NO MAILING ADDRESS and no value field in the layer (owner names and site address only); OWNNM2 is a second owner line; ACRECALC is the GIS-computed acreage, ACREREC the recorded; STATUS field ('Active'); blanks are ' '. maxRecordCount 2000.",
+   "checked": "2026-11-21"
+  },
+  {
+   "county": "EATON",
+   "url": "https://services2.arcgis.com/c9l1e4fKpsCnqD7H/arcgis/rest/services/Parcels_AGO/FeatureServer/0",
+   "verified": true,
+   "record_count": 46450,
+   "fields": {
+    "apn": "LPARCEL",
+    "owner": "OWNERNME1",
+    "address": "SITEADDRESS",
+    "market_value": "CNTASSDVAL",
+    "acres": "Acreage"
+   },
+   "restrictions": "terms not found: item licenseInfo empty, layer description/copyrightText empty (accessInformation only '\u00a9 ECGIS, 2024'); the county website (www.eatoncounty.org) did not answer, so no site disclaimer was read",
+   "notes": "Whole county, run by Eaton County GIS (owner serviceaccount_ecgis), item 2f1ac92c01b348d8b62c426e59f6558b 'Parcels AGO'; lastEditDate 2026-09-14. OWNERNME1 populated on all 46,450 rows; OWNERNME2 second owner line. NO MAILING ADDRESS in the layer. SITEADDRESS is one string 'street, CITY, MI ZIP'. PARCELID is the 14-digit undashed id, LPARCEL the dashed form ('010-019-200-030-00'). CNTASSDVAL is assessed value (about 50% of market), CNTTXBLVAL taxable; STATEDAREA is the recorded acreage, Acreage the computed. maxRecordCount 2000.",
+   "checked": "2026-11-21"
+  },
+  {
+   "county": "INGHAM (City of Lansing only)",
+   "url": "https://services1.arcgis.com/pNPbgWy7hpfFGWoZ/arcgis/rest/services/LansingTaxParcels/FeatureServer/1",
+   "verified": true,
+   "record_count": 43017,
+   "fields": {
+    "apn": "PARCELNO",
+    "owner": "OWNERNME1",
+    "mailing_address": [
+     "PSTLADDRES",
+     "PSTLCITY",
+     "PSTLSTATE",
+     "PSTLZIP5"
+    ],
+    "address": [
+     "SITEADDRES",
+     "CITY",
+     "STATE",
+     "ZIP_CODE"
+    ]
+   },
+   "restrictions": "terms not found: item licenseInfo and accessInformation empty, no terms in the layer description",
+   "notes": "CITY OF LANSING ONLY (parcel numbers 33-01-..., Ingham County part; no free Ingham County-wide owner layer found). Run by the City of Lansing (owner andrew.skelton_Lansing), item a89634da39ad4fc3bb27b8935e980211 'LansingTaxParcels', layer name 'Parcels2025_v2'; lastEditDate 2026-01-14. The layer description ('City owned tax parcels as of June 2019...') is a leftover - the records are all tax parcels with private owners. TAXPAYNAME/TAXPAYADDR/TAXPAYCITY/TAXPAYST/TAXPAYZIP are a second (taxpayer) block. No value or acreage field. maxRecordCount 1000.",
+   "checked": "2026-11-21"
+  },
+  {
+   "county": "OAKLAND (City of Farmington Hills only)",
+   "url": "https://services1.arcgis.com/Voda7YLF8AUZO5Ro/arcgis/rest/services/FH_TaxParcel/FeatureServer/58",
+   "verified": true,
+   "record_count": 27929,
+   "fields": {
+    "apn": "PIN",
+    "owner": "NAME1",
+    "mailing_address": [
+     "POSTALADDRESS",
+     "POSTALCITY",
+     "POSTALSTATE",
+     "POSTALZIP5"
+    ],
+    "address": [
+     "SITEADDRESS",
+     "SITECITY",
+     "SITESTATE",
+     "SITEZIP5"
+    ],
+    "market_value": "ASSESSEDVALUE",
+    "acres": "ACRES"
+   },
+   "restrictions": "terms not found: item licenseInfo and accessInformation empty; the data is Oakland County's tax parcel schema, and Oakland County blanks the owner name on its own open layer and sells full parcel data, so treat as restricted until terms are read",
+   "notes": "CITY OF FARMINGTON HILLS ONLY. Owner matthewhmalone (city GIS account, org Voda7YLF8AUZO5Ro), item da7d58a30c81448cb08187a496dc8ca2 'Farmington Hills Tax Parcel Boundaries', snippet '...including property, assessment, and tax information for municipal and public use'; lastEditDate 2026-11-16. NAME2 is the second owner; PNUM is the dashed parcel number, PIN/KEYPIN the 10-digit; ASSESSEDVALUE is assessed (about 50% of market), TAXABLEVALUE, LAND_VALUE, LAST_SALE_DATE, LAST_SALE_AMOUNT also present. Layer id is 58. maxRecordCount 2000. A second Oakland city copy exists for PONTIAC: https://services2.arcgis.com/HNZrF1X1u5kCU7sL/arcgis/rest/services/Zoning/FeatureServer/2 (25,497 rows, owner pontiacgis_pontiac, item 2c1ed8146c9140d0961e0469479832b7, same schema with shapefile-truncated names NAME1/POSTALADDR/SITEADDRES/ASSESSEDVA, copyright 'Oakland County Application Services', STALE - last edited 2024-09-04; licenseInfo 'This web map is to be used as a reference for proposed zoning changes in the City of Pontiac, Michigan. Accuracy of parcels is determined by parcel layer changes from Oakland County.').",
+   "checked": "2026-11-21"
+  },
+  {
+   "county": "LIVINGSTON (north-east corner only)",
+   "url": "https://services2.arcgis.com/PrYwGqAi1wKjoFb1/arcgis/rest/services/Livingston_County_Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 12944,
+   "fields": {
+    "apn": "Long_PID",
+    "owner": "O_NAME1",
+    "mailing_address": [
+     "O_STREET",
+     "O_CITY",
+     "O_STATE",
+     "O_ZIP"
+    ],
+    "address": [
+     "P_ADDR_F",
+     "P_CITY",
+     "P_STATE",
+     "P_ZIP"
+    ],
+    "market_value": "ASSESS_VAL",
+    "acres": "GIS_Acres"
+   },
+   "restrictions": "terms not found: item licenseInfo empty; this is a partial copy held by another body (Genesee County Drain Commissioner), and Livingston County's own parcel service is locked (403)",
+   "notes": "PARTIAL: 12,944 parcels only, the north-east corner of Livingston County (property cities Brighton, Byron, Fenton, Hartland, Holly, Howell, Linden, Milford - the part served by the Genesee County Drain Commissioner). Third-party copy in the GCDCWWS org (owner MSTEPHENS@GCDCWWS.COM), item 09e568e2510646088c45df0a5dd37a18, copyrightText 'Livingston County IT/GIS', lastEditDate 2026-04-01. The county's own service (item eb4804bdc78942118a68040cbdd30c9e, utility.arcgis.com/.../AGO/Parcels/MapServer) answers 403 'You do not have permissions'. Text fields are fixed-width, padded with trailing spaces (trim them). O_NAME2, O_CAREOF present. ASSESS_VAL is assessed (about 50% of market); TAXABL_VAL, EQ_VAL, LEGAL also present. Township copies with the same schema also exist (Oceola Twp 6,036 rows 2023, Brighton Twp 8,657 rows 2020) - older, not recorded.",
+   "checked": "2026-11-21"
+  },
+  {
+   "county": "BARRY",
+   "url": "https://services.arcgis.com/i0SsdDzLI3mLGmPR/arcgis/rest/services/Parcels_PublicViewer_View/FeatureServer/14",
+   "verified": true,
+   "record_count": 34061,
+   "fields": {
+    "apn": "Tparcel",
+    "owner": "owner_name",
+    "mailing_address": [
+     "owner_street_add",
+     "owner_city",
+     "owner_state",
+     "owner_zip"
+    ],
+    "address": [
+     "prop_street_add",
+     "property_city",
+     "property_zip"
+    ],
+    "acres": "Acres"
+   },
+   "restrictions": "sold, not free: item snippet says 'export, download, and copy capabilities have been disabled to protect the integrity of the county's authoritative parcel records... Users who require full or extractable parcel datasets should contact Barry County Land Information Services (LIS) for data purchase options.'",
+   "notes": "Whole county, run by Barry County (owner eroberts_countyofbarry), item ee1733789d6c4c7c84f88e66d1867620 'Parcels_PublicViewer_View', copyrightText 'Barry County', lastEditDate 2026-11-19. The layer does answer queries with owner fields without a login, but the county's stated terms are view-only. The county's separate 'Parcels (Open Data)' view (item cfb4f1c74e524cb1b0510ca46eb9758f) is freely licensed ('open data for public use, download, and redistribution') but its terms say 'This layer does not contain ownership, assessment, tax, or other restricted parcel information' and 'Full or partial parcel attribute datasets are available for purchase from Barry County Land Information Services (LIS) on a per-record basis.' No value field.",
+   "checked": "2026-11-21"
+  },
+  {
+   "county": "CALHOUN (City of Battle Creek only)",
+   "url": "https://services6.arcgis.com/cuKwt0IKP5B84jop/arcgis/rest/services/Clerk_Information/FeatureServer/3",
+   "verified": true,
+   "record_count": 21995,
+   "fields": {
+    "apn": "PIN",
+    "owner": "ownername1",
+    "mailing_address": [
+     "taxpaystre",
+     "taxpaycity",
+     "taxpaystat",
+     "taxpayzip"
+    ],
+    "address": [
+     "propstreet",
+     "propcity",
+     "propstate",
+     "propzip"
+    ]
+   },
+   "restrictions": "terms not found: item licenseInfo and accessInformation empty; layer copyrightText is only a lineage note",
+   "notes": "CITY OF BATTLE CREEK ONLY, and STALE: loaded 2024-06-05 (lastEditDate), item modified 2024-10-07. Layer 'parcels_bcgis' inside the city clerk's voting-information service (owner drpreston, org cuKwt0IKP5B84jop), item 809b6a326d20462c9e1ae8132b231394. copyrightText: 'Woolpert created the feature class in the 1990s. The Assessor's Office udpates the feature class as public record dictates.' The owner mailing fields (ownerstree/ownercity/ownerstate/ownerzip) were blank in samples; the taxpayer block (taxpayname, taxpaystre, taxpaycity, taxpaystat, taxpayzip) was filled and is mapped as the mailing address - note taxpayname can differ from ownername1. Field names are shapefile-truncated. No value or acreage field. No free Calhoun County-wide owner layer found.",
+   "checked": "2026-11-21"
   }
  ],
  "parcels_counties_note": "Not found or not reachable in the time allowed: Wayne outside Detroit, Oakland (sold, not free), Kent (server needs a token).",
- "summary": "Projects: MDOT Five-Year Transportation Program 2027-2031 lines and points verified, with work type, budget, STIP status and scheduled let dates. Parcels: no statewide owner layer; verified Detroit (Wayne), Macomb and Genesee; Oakland, Kent and the rest of Wayne not available free."
+ "summary": "Projects: MDOT Five-Year Transportation Program 2027-2031 lines and points verified, with work type, budget, STIP status and scheduled let dates. Parcels: no statewide owner layer; verified Detroit (Wayne), Macomb and Genesee; Oakland, Kent and the rest of Wayne not available free. Added 2026-11-21, all held: Lenawee, Eaton, Barry, and city or partial layers for Lansing, Farmington Hills, Battle Creek and north-east Livingston. Oakland and Kent county layers carry no owner names; no statewide owner layer."
 }

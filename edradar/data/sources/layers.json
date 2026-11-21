@@ -45,7 +45,7 @@
   "source_prefix": "gis",
   "category": "local_utility",
   "coverage": "city",
-  "records": 353
+  "records": 352
  },
  {
   "state": "NC",
@@ -4070,7 +4070,7 @@
   "source_prefix": "gis",
   "category": "state_dot_gaps",
   "coverage": "statewide",
-  "records": 19075
+  "records": 19087
  },
  {
   "state": "MN",
@@ -4156,7 +4156,7 @@
   "source_prefix": "gis",
   "category": "state_dot_gaps",
   "coverage": "statewide",
-  "records": 91763
+  "records": 91766
  },
  {
   "state": "OK",

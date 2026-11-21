@@ -117,5 +117,40 @@
     "target": "new kinds of sources",
     "tried": "Washington SEPA Register (data.wa.gov mmcb-z6jf); Northland Reliability Project ArcGIS account; Oklahoma Turnpike Authority CIP layer; Massachusetts MEPA Environmental Monitor; Socrata catalogue search for eminent domain and condemnation",
     "result": "SEPA Register verified (192,110 records, daily, no login) and written to research/sources/ideas.md, needs a Socrata reader; NRP right-of-way layer answers but the line is under construction; OTA CIP is a 2022 snapshot; MEPA answered 403; Socrata search found nothing new"
+  },
+  {
+    "date": "2026-11-21",
+    "state": "NE",
+    "target": "county owner files",
+    "tried": "statewide hosts (gis.ne.gov, giscat.ne.gov, nebraskamap.gov); ArcGIS catalogue and county servers for Hall, Buffalo, Dodge, Madison, Scotts Bluff, Lincoln, Platte, Adams, Cass, Dawson, Gage, Saunders, Washington; 70 gWorks assessor services",
+    "result": "nothing switched on. Held: 2023 statewide copy on a University of Nebraska user's account (1,133,295, third-party, terms not found, stale), Cass (20,480, terms only on the county's separate search app), Hall (28,615, 'secondary dissemination ... not licensed'), Scotts Bluff (21,491, county site bars commercial use and data mining), Washington (15,727) and Thayer (7,203) terms not found. State hosts still do not resolve. gWorks services (Buffalo, Dodge, Madison, Lincoln, Platte, Dawson, Gage, Saunders and others) answer but carry no owner names; owners sit behind a bot check. Adams: none found."
+  },
+  {
+    "date": "2026-11-21",
+    "state": "OH",
+    "target": "county owner files",
+    "tried": "Cuyahoga, Montgomery, Lucas, Butler, Stark, Lorain, Warren, Lake, Mahoning, Delaware, Clermont, Trumbull, Medina, Licking, Greene, Portage, Fairfield, Clark, Wood, Richland",
+    "result": "added Lake (114,621) and Fairfield (75,135), disclaimer-only terms. Held: Lorain (172,340), Licking (83,923), Butler (167,767) terms not found; Clermont (101,581) site terms need a human read; Delaware (103,044) 'no data ... will be sold or distributed'. Not recorded: Mahoning, Trumbull, Portage third-party copies of a vendor's data. Timed out: Cuyahoga, Stark, Montgomery, Medina, Portage, Wood (Stark and Portage worth a retry). Greene 403. Lucas and Trumbull layers have no owner field. Warren, Clark, Richland: none found."
+  },
+  {
+    "date": "2026-11-21",
+    "state": "MI",
+    "target": "county owner files",
+    "tried": "statewide; Wayne, Oakland, Macomb, Kent, Genesee, Washtenaw, Ingham, Ottawa, Kalamazoo, Livingston, Saginaw, Muskegon, St. Clair, Jackson, Berrien, Monroe, Calhoun, Allegan, Eaton, Bay and about 45 smaller counties in the catalogue",
+    "result": "nothing switched on. Held: Lenawee (55,206, 'for reference purposes only'), Eaton (46,450), Lansing (43,017), Farmington Hills (27,929), Battle Creek (21,995), north-east Livingston (12,944) terms not found; Barry (34,061) county sells the data. Clinton Township (33,604, 'For use by staff and public') not recorded because Macomb County is already on file. Oakland and Kent county layers have no owner names. Ottawa, Washtenaw, Allegan hosts did not answer; Livingston's own service needs a login. No statewide owner layer."
+  },
+  {
+    "date": "2026-11-21",
+    "state": "IL",
+    "target": "new kinds of sources",
+    "tried": "ArcGIS catalogue title search for land-acquisition and right-of-way layers",
+    "result": "added IDOT Annual Highway Improvement Program FY 2026 - Land Acquisition (61 projects IDOT is buying land for this year) to research/states/IL.json"
+  },
+  {
+    "date": "2026-11-21",
+    "state": "US",
+    "target": "new kinds of sources",
+    "tried": "ArcGIS catalogue title searches: 'proposed right of way / ROW / right of way acquisition' (285 services) and 'proposed transmission / proposed route / route alternatives' (444); power siting board searches",
+    "result": "per-project right-of-way and route maps verified (Gopher to Badger Link, Xcel Ashland-Ironwood, Creek to Croix, Maple Leaf, CTRMA US 290, VCTC US 101, I-45) and written to research/sources/ideas.md; they carry shapes but no attributes, so they need a new 'catalogue sweep' reader. Siting-board searches found nothing usable."
   }
 ]

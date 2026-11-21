@@ -1,7 +1,7 @@
 {
  "state": "Illinois",
  "code": "IL",
- "checked": "2026-11-18",
+ "checked": "2026-11-21",
  "projects": [
   {
    "name": "IDOT Multi-Year Improvement Program - Roadway FY 2027-2031",
@@ -72,6 +72,35 @@
    "work_type_values": [],
    "status_values": [],
    "notes": "Bridge/structure projects of the same program; fewer attributes than the roadway layer (no county field). Sample Improvem_1: 'Bridge Replacement'.",
+   "stage": "planning"
+  },
+  {
+   "name": "IDOT Annual Highway Improvement Program FY 2026 - Land Acquisition",
+   "url": "https://services2.arcgis.com/aIrBD8yn1TDTEXoz/arcgis/rest/services/Annual_Highway_Improvement_Program/FeatureServer/3",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 61,
+   "fields": {
+    "id": "PPSProject",
+    "name": "Route1",
+    "description": "Location",
+    "work_type": "Improvem_1",
+    "cost": "EstimatedC",
+    "status": "ProjectTam"
+   },
+   "work_type_values": [
+    "Land Acquisition"
+   ],
+   "status_values": [
+    "Initial Construction - Pavements",
+    "Maintenance - Pavements",
+    "Miscellaneous Improvements",
+    "Reconstruction - Bridges",
+    "Reconstruction - Pavements",
+    "Rehabilitation - Pavements",
+    "Safety"
+   ],
+   "notes": "Checked 2026-11-21. IDOT's own ArcGIS Online account (IDOTAdmin), item 32034a6a70dc4dc7beeebfea9fc1c2a4, data last edited 2026-10-02. The item says it is 'a detailed account of the Fiscal Year 2026 highway program element, originally presented in the Fiscal Year 2026-2031 Proposed Highway Improvement Program'. Layer 3 holds only the 61 projects (RecordType 'LA') for which IDOT has programmed money to BUY LAND this fiscal year: every row has Improvem_1 = 'Land Acquisition', so each is a direct sign of right-of-way purchase, earlier and plainer than the construction rows. PPSProject is the same project number used in the Multi-Year Program layers, so rows join to those. ProjectTam is the asset-management category, not a phase (mapped to status for want of one). EstimatedC is text with commas ('100,000') and is the land budget, not the construction cost. Location is free text (e.g. '0.5 MI S of 2275 E RD to 1 MI S of Dameron RD ...'). No county field and no date. Other layers of the service: 0 Bridge Improvement (421), 1 Engineering (2,082, 64 of them also naming land acquisition in Improvem_1..3), 2 Construction (967). The same four layers are on IDOT's own server at https://gis1.dot.illinois.gov/arcgis/rest/services/GAI/ANN/MapServer (61 rows in layer 3 as well). Terms: the item's licenseInfo and credit are empty; no limit on use is stated. maxRecordCount 2000.",
    "stage": "planning"
   }
  ],
@@ -291,5 +320,5 @@
   }
  ],
  "parcels_counties_note": "Not found or not reachable in the time allowed: Cook (no owner or taxpayer name in any public GIS layer found; gis.cookcountyil.gov timed out; only a 2016 south-suburbs extract with taxpayer names exists on ArcGIS Online), Will (gis.willcountyillinois.com answered 403), Kane (public parcel layer has no owner field).",
- "summary": "Projects: IDOT Multi-Year Program FY 2026-2031 verified as six ArcGIS Online layers (roadway lines, structure and spot points) with improvement type and cost but no letting date. Parcels: no statewide owner layer; DuPage and Lake verified with taxpayer names; Cook, Will and Kane have no usable owner layer. Added 2026-11-18: Morgan verified with disclaimer-only terms; Madison, McHenry, Peoria, Tazewell, Whiteside and Adams verified with owner and mailing address but no readable terms. Cook, Will, Winnebago, St. Clair, Champaign, Sangamon and Kendall: no public owner layer found (Cook and Will servers refused or timed out; Kane's public layer has no owner field)."
+ "summary": "Projects: IDOT Multi-Year Program FY 2026-2031 verified as six ArcGIS Online layers (roadway lines, structure and spot points) with improvement type and cost but no letting date. Parcels: no statewide owner layer; DuPage and Lake verified with taxpayer names; Cook, Will and Kane have no usable owner layer. Added 2026-11-18: Morgan verified with disclaimer-only terms; Madison, McHenry, Peoria, Tazewell, Whiteside and Adams verified with owner and mailing address but no readable terms. Cook, Will, Winnebago, St. Clair, Champaign, Sangamon and Kendall: no public owner layer found (Cook and Will servers refused or timed out; Kane's public layer has no owner field). Added 2026-11-21: the FY 2026 Annual Program's Land Acquisition layer (61 projects IDOT is buying land for this year)."
 }

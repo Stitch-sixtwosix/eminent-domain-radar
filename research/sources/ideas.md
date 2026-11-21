@@ -80,3 +80,43 @@ Each entry: what it is, the address, how it could be read, and what was checked.
   six layers) answered but was last edited 2022-02-07 and covers 2022 to 2026 only; too old to load. No current
   ACCESS Oklahoma alignment layer was found in the catalogue.
 - Not readable: Massachusetts MEPA Environmental Monitor (eeaonline.eea.state.ma.us answered 403).
+
+## Per-project right-of-way and route maps in the ArcGIS catalogue (a "catalogue sweep") - checked 2026-11-21
+- What: DOT staff, toll authorities, utilities and their consultants publish one public ArcGIS service per project
+  for open houses and permit applications, with a sublayer that is the proposed right-of-way or the proposed route
+  itself. These appear while the route is still being decided, well before any program list names parcels.
+- How to find them (no login): search the catalogue by title and sort by date modified, e.g.
+  `https://www.arcgis.com/sharing/rest/search?f=json&num=50&sortField=modified&sortOrder=desc&q=title:("proposed right of way" OR "proposed ROW" OR "right of way acquisition") AND type:"Feature Service"`
+  (285 services today) and
+  `...&q=title:("proposed transmission" OR "transmission line route" OR "route alternatives" OR "proposed route") AND type:"Feature Service"`
+  (444 services today). Note the `title:(...)` form: the plain quoted-phrase form returned unrelated results.
+- Checked live today (layer answered, count and two records read):
+  - Gopher to Badger Link 345 kV (MN/WI) route permit application map:
+    `https://services1.arcgis.com/yfalcTIlueMdl9fz/arcgis/rest/services/Gopher_to_Badger_Link_RPA_Map_WFL1/FeatureServer`
+    layer 4 "Proposed Right-Of-Way" (3 polygons), 5 "Proposed Route", 8 "Route_Segment_Options", 29 "Notice Area";
+    edited 2026-11-13.
+  - Xcel Energy Ashland to Ironwood: `.../eM84fwjsSggLQk61/arcgis/rest/services/Ashland_Ironwood_Proposed_Route/FeatureServer/0`
+    (6 lines, `Section` gives the segment and its dates, e.g. "Hurley 08/2025-06/2027").
+  - Creek to Croix (WI): `.../3fjYPqJf7qalQMlb/arcgis/rest/services/Creek_to_Croix_Proposed_Route/FeatureServer/0`
+    (11 lines; `Status2` is Built / Unbuilt, so unbuilt segments can be selected).
+  - Maple Leaf: `https://services.arcgis.com/DN2fPfpggEPlLhP6/arcgis/rest/services/Maple_Leaf_Proposed_Route/FeatureServer/0` (1 line).
+  - CTRMA US 290 extension design map (Austin): `https://services.arcgis.com/04HiymDgLlsbhaV4/arcgis/rest/services/CTRMA_DesignUpdates_20260927/FeatureServer`
+    layer 0 "Proposed ROW" (4 lines), 66 "Proposed Easement", 65 "Property Lines".
+  - Ventura County Transportation Commission US 101 HOV: `.../T5Uio9fkgzjt3fIZ/arcgis/rest/services/US101_HOV_Lane_-_Alternative_3_(Sept._2026)/FeatureServer/7`
+    "Proposed_Right_of_Way_Aquisition" (3,624 CAD line pieces).
+  - I-45 (Houston): `https://services.arcgis.com/rD2ylXRs80UroD90/arcgis/rest/services/I45_v11/FeatureServer/1` "Proposed Right Of Way" (326 lines).
+  - Did not answer: Jefferson County WV "ProposedTransmissionLine_Oct2026" (layer id is 10, not 0; not re-tried).
+- Why no reader exists: these layers are drawings exported from CAD or KMZ. They carry geometry but no project
+  name, cost or date in the rows (fields are things like `Name: "Style150"`, `Layer: "rd-row_shape"`); the project
+  is named only by the service title. The existing layer reader needs name and description fields.
+- Reader idea: a weekly sweep that runs the two searches, keeps services modified in the last 12 months whose
+  owner or title points to a US agency, utility or known consultant, picks sublayers whose NAME matches
+  "proposed (right of way|ROW|easement|route)" or "acquisition", takes the service title as the project name and
+  the union of the sublayer's shapes as the project footprint, then matches parcels against that footprint. A
+  person should confirm each new service once (state, authority, still live) before it is switched on.
+- Cautions: every item read today has an empty licence field, and several are published by consultants (HDR,
+  HNTB, Stantec, SRF) rather than the authority, so terms could not be read; treat each as held until someone
+  looks. Many titles are not US projects or are student work. Contractor accounts (for example Emery Sapp & Sons,
+  `EHhJx7V4ByXIPvxe`) publish "Proposed ROW" layers for jobs already under construction, where the land is bought.
+- Also found by the same search and now recorded as a source: IDOT's Annual Highway Improvement Program
+  "Land Acquisition" layer (research/states/IL.json).

@@ -1,7 +1,7 @@
 {
   "state": "Ohio",
   "code": "OH",
-  "checked": "2026-11-17",
+  "checked": "2026-11-21",
   "projects": [
     {
       "name": "ODOT TIMS Projects - Next 4 Fiscal Years (Lines)",
@@ -197,7 +197,162 @@
       "notes": "Summit County (Akron) GIS tax parcels. Row count (518,514) is about double the county's parcel count, so expect duplicate geometries per PARCELID. LNDVALUE is land value only (CNTASSDVAL is current assessed value); STATEDAREA is text like '0.0761 a'.",
       "verified": true,
       "record_count": 518514
+    },
+    {
+      "county": "LAKE",
+      "url": "https://gis.lakecountyohio.gov/arcgis/rest/services/Sharing/LCGIS_SHARE_2023/FeatureServer/0",
+      "verified": true,
+      "record_count": 114621,
+      "fields": {
+        "apn": "PIN",
+        "owner": "A_OWNER_NAME",
+        "mailing_address": [
+          "G_O_FLADDRESS",
+          "G_O_FLCITY"
+        ],
+        "address": [
+          "G_FULLADDRESS",
+          "G_FULLCITY"
+        ],
+        "market_value": "A_VAL_TOTAL",
+        "acres": "A_ACRES"
+      },
+      "restrictions": null,
+      "notes": "Run by Lake County GIS Department on the county's own ArcGIS Server; ArcGIS item 845b331d124c403bb769dfc09b8ccfe3 'Lake County Parcels (Updated Nightly)' (owner BarshickLakeAGO, item modified 2024-06-06 but data is live: max A_SALE_DATE = 2026-11-20). County-wide. licenseInfo read in full: 'Public information data furnished by the Lake County GIS Department must be accepted and used by the recipient with the understanding that the Lake County GIS Department makes no warranties, expressed or implied, concerning the accuracy, completeness, reliability, or suitability of this data. This product may not be suitable for legal, engineering, or surveying purposes and its boundaries are for reference only. Furthermore, the Lake County GIS Department assumes no liability, whatsoever, associated with the use or misuse of such data.' (warranty/liability disclaimer only; no use limit). accessInformation: 'Lake County Tax Map Department, Lake County Auditor Office, Lake County GIS Department'. maxRecordCount 2000. PIN is dashed (PIN_NODASH also present). G_O_* = owner mailing address (street / 'CITY, ST ZIP'); G_T_* = taxpayer mailing address; A_TAXP_NAME = taxpayer name. A_VAL_TOTAL is a double (appraised total).",
+      "checked": "2026-11-21"
+    },
+    {
+      "county": "FAIRFIELD",
+      "url": "https://services2.arcgis.com/L7YSCDUQyC7Biss6/arcgis/rest/services/ParcelBoundaries/FeatureServer/0",
+      "verified": true,
+      "record_count": 75135,
+      "fields": {
+        "apn": "PARID",
+        "owner": "OWN1",
+        "mailing_address": [
+          "MADDR1",
+          "MADDR2",
+          "MADDR3",
+          "MCITYNAME",
+          "MSTATECODE",
+          "MZIP1"
+        ],
+        "address": "PADDR1",
+        "market_value": "APPRVAL",
+        "acres": "ACRES"
+      },
+      "restrictions": null,
+      "notes": "Run by Fairfield County GIS (ArcGIS Online hosted, item a1530640c0c9449494c87be6e79c437a 'ParcelBoundariesAGOL', owner CurtTruax, description 'Fairfield County Open Data, Parcel Boundaries for use in AGOL'); lastEditDate 2026-11-17. County-wide. licenseInfo read in full; it is a disclaimer/indemnity only: 'The information provided by Fairfield County is provided 'as is' and for reference only. The user expressly agrees that the use of Fairfield County's data is at the user's sole risk... No warranties, expressed or implied, are provided for the data provided, its use, or its interpretation... In using the data, users further agree to indemnify, defend, and hold harmless Fairfield County for any and all liability...'. No limit on commercial use, redistribution or solicitation stated. maxRecordCount 2000. OWN2 = second owner; PADDR1 is street only (no city/zip field for the site); APPRVAL = APRLAND+APRBLDG (double). PIN and PARID carry the same value.",
+      "checked": "2026-11-21"
+    },
+    {
+      "county": "LORAIN",
+      "url": "https://maps.lcauditor.com/hosting/rest/services/ParcelFabric/Ownership_Parcels_ISSG/MapServer/1",
+      "verified": true,
+      "record_count": 172340,
+      "fields": {
+        "apn": "Parcel_Number_U",
+        "owner": "Owner_Contact_Name",
+        "mailing_address": [
+          "Owner_Contact_Address",
+          "Owner_Contact_City",
+          "Owner_Contact_State",
+          "Owner_Contact_ZipCode"
+        ],
+        "address": [
+          "Location_Address",
+          "Location_City_State_Zip"
+        ],
+        "market_value": "Appraised_Total_100",
+        "acres": "ACRES"
+      },
+      "restrictions": "terms not found: ArcGIS item licenseInfo and accessInformation empty, layer description/copyrightText empty; the Lorain County Auditor site could not be read (loraincountyauditor.com returned HTTP 522; loraincountyauditor.gov and www.lcauditor.com did not answer)",
+      "notes": "Run by the Lorain County Auditor on its own ArcGIS Server (maps.lcauditor.com); ArcGIS item 942fd9565c9e47cca9b19e71ad9ae234 'Ownership Parcels ISSG' (owner LorainCoGIS, item modified 2026-07-21; snippet 'Ownership parcel layer with ISSG joined GIS data'). No editingInfo on the layer; sample records carry Tax_Year 2025. County-wide. MapServer layer (query supported), layer id is 1 (not 0), maxRecordCount 12000. Listed_Name also holds the owner name; Taxpayer_Contact_* = tax-bill mailing (Taxpayer_Contact_ZipCode is a number). Date_Conveyed is text. The acres field is declared ACRES but came back keyed 'Acres' in the sample JSON - match case-insensitively. Parcel_Number is dashed, Parcel_Number_U/PIN undashed. An older AGOL copy also exists (services1.arcgis.com/vGBb7WYV10mOJRNM/.../OwnershipParcels_2025_Public_View/FeatureServer/1, 202,027 rows, last edit 2026-01-21, licenseInfo empty) - not used.",
+      "checked": "2026-11-21"
+    },
+    {
+      "county": "LICKING",
+      "url": "https://gis.lickingcounty.gov/server/rest/services/Auditor/Parcels/FeatureServer/0",
+      "verified": true,
+      "record_count": 83923,
+      "fields": {
+        "apn": "Parcel",
+        "owner": "OwnerName",
+        "mailing_address": [
+          "OwnerAddress",
+          "OwnerCity",
+          "OwnerState",
+          "OwnerZip"
+        ],
+        "address": [
+          "SiteAddress",
+          "SitePostalCity",
+          "SitePostalZip"
+        ],
+        "market_value": "MarketTotalValue",
+        "acres": "TaxAcres"
+      },
+      "restrictions": "terms not found: layer and service description/copyrightText empty, serviceItemId 9809c596acd84f7d896797b10dca3357 is not a public ArcGIS Online item (no licenseInfo readable), and the county site (lickingcountyohio.us -> ontrac.lickingcounty.gov) answered HTTP 403 with a JavaScript/cookie challenge so no disclaimer page could be read",
+      "notes": "Run by the Licking County Auditor on the county's own ArcGIS Server (gis.lickingcounty.gov, folder Auditor; document keywords 'LickingCountyOhio,Auditor,Parcels'). County-wide. 83,923 features, 82,734 with OwnerName populated (the first rows by OBJECTID are empty shells - filter OwnerName IS NOT NULL). No editingInfo exposed, so data date not confirmed; third-party item e4da1b2767ce4838bdc449c746a2ec8d merely points at this same URL. maxRecordCount 2000. Parcel is formatted like '001-000006-00.000'. OwnerCareOf/OwnerAttention/OwnerZip4 also present; GISAcres and CAUVAcres alongside TaxAcres; T1..T3 fields hold the last three transfers.",
+      "checked": "2026-11-21"
+    },
+    {
+      "county": "CLERMONT",
+      "url": "https://maps.clermontauditor.org/arcgis/rest/services/Parcels/ParcelsWMAS/MapServer/0",
+      "verified": true,
+      "record_count": 101581,
+      "fields": {
+        "apn": "PIN",
+        "owner": "OWN1",
+        "mailing_address": [
+          "MADDR1",
+          "MADDR2",
+          "MADDR3"
+        ],
+        "address": "FULLADDR",
+        "acres": "ACRES"
+      },
+      "restrictions": "possible limit, needs a human read: the only terms found are the Clermont County Auditor website Terms of Use (clermontauditor.org/terms-of-use), generic site boilerplate that says nothing about commercial use, resale, redistribution, solicitation or mailing lists of the parcel data, but does say: 'You may not obtain or attempt to obtain any materials or information through any means not intentionally made available or provided for through the Clermont County, OH Web Sites.' No terms on the layer itself (description/copyrightText empty; serviceItemId 483bb760daf04bbd85109fa6d5ea1abc is not a public item)",
+      "notes": "Run by the Clermont County Auditor on its own ArcGIS Server (maps.clermontauditor.org); this is the layer behind the Auditor's public 'GIS Viewer' web app (item 1d44214914864f66a3d48ce5809f539f). Layer name PARINFO. Live: IMPDATE on sample rows = 2026-11-21. County-wide. MapServer layer, maxRecordCount 1000. No value field on this layer (market_value unmapped). PIN is formatted like '560617.011.'. OWN2 = second owner; MAIL1/MAIL2 = mailing name lines; MADDR3 holds 'CITY ST ZIP'; FULLADDR is street only. Terms of Use also read: 'Your use of the Clermont County, OH Web Site constitutes your agreement to all such terms'; 'COPYRIGHT AND TRADEMARK NOTICES: All contents of the Clermont County, OH Web Site are: Clermont County Auditor...'; remainder is liability disclaimer.",
+      "checked": "2026-11-21"
+    },
+    {
+      "county": "BUTLER",
+      "url": "https://gismaps.bceo.org/server/rest/services/Public/ParcelQuery/FeatureServer/0",
+      "verified": true,
+      "record_count": 167767,
+      "fields": {
+        "apn": "PIN",
+        "owner": "OWNER",
+        "address": "LOCATION",
+        "acres": "ACRES"
+      },
+      "restrictions": "terms not found: layer description/copyrightText empty, serviceItemId c83d118ab4714a4aad3fbcbf0817dc95 not a public item, the Engineer's 'BCEO TaxMap' app item 1a0204fe51364d4b82c6ceb2c66c8969 has licenseInfo null, and no terms/disclaimer link on bceo.org home page",
+      "notes": "Run by the Butler County Engineer's Office (tax map office) on its own ArcGIS Server (gismaps.bceo.org, folder Public), layer CURRENTPARCELS. County-wide. Only PIN, OWNER, LOCATION (street only), ACRES - no mailing address and no value. No editingInfo exposed; BCEO TaxMap app item says 'This is the live taxmap site. created in 2026. services are coming from portal.' maxRecordCount 1000.",
+      "checked": "2026-11-21"
+    },
+    {
+      "county": "DELAWARE",
+      "url": "https://services2.arcgis.com/ziXVKVy3BiopMCCU/arcgis/rest/services/Parcel/FeatureServer/0",
+      "verified": true,
+      "record_count": 103044,
+      "fields": {
+        "owner": "OWNER1",
+        "mailing_address": [
+          "MAILADDR1",
+          "MAILADDR2"
+        ],
+        "address": [
+          "ADDR1",
+          "ADDR2"
+        ],
+        "market_value": "MARKET_TOT",
+        "acres": "ACRES"
+      },
+      "restrictions": "licenseInfo: 'The user affirms that no data or services on this website will be sold or distributed. The user agrees to acknowledge the Delaware County, Ohio Auditor's GIS Office as the source of any data or services obtained from this website.'",
+      "notes": "Run by the Delaware County Auditor's GIS Office (ArcGIS Online, item cd8f9ac644ec4dc1979b254193b895a2 'Parcel', owner delcoa, modified 2026-11-16; lastEditDate 2026-11-20, data 2026-10-30; 'maintained on a daily basis, and is published monthly'). County-wide. Rest of licenseInfo is an 'AS IS' disclaimer and indemnity. The public layer exposes NO parcel-number field (only MAPSHEET/SUBPARCEL), so apn is unmapped. OWNER2 = '0' when empty; MAILNAME1/MAILNAME2 = mailing names; MAILADDR2 and ADDR2 hold 'CITY, ST ZIP'. maxRecordCount 2000.",
+      "checked": "2026-11-21"
     }
   ],
-  "summary": "ODOT TIMS 'Next 4 Fiscal Years' line and point layers give planned projects with cost, status, work category and award/construction dates. The statewide OGRIP parcel layer (https://services2.arcgis.com/MlJ0G8iWUyC7jAmu/arcgis/rest/services/OhioStatewidePacels_full_view/FeatureServer/0, 6.3M parcels, verified) has no owner-name field (only parcel id, situs and mailing address, land use, link to county auditor site), so county auditor layers are needed; Franklin, Hamilton, Summit and Cleveland verified, Cuyahoga County's own server and Montgomery County were not reachable/found."
+  "summary": "ODOT TIMS 'Next 4 Fiscal Years' line and point layers give planned projects with cost, status, work category and award/construction dates. The statewide OGRIP parcel layer (https://services2.arcgis.com/MlJ0G8iWUyC7jAmu/arcgis/rest/services/OhioStatewidePacels_full_view/FeatureServer/0, 6.3M parcels, verified) has no owner-name field (only parcel id, situs and mailing address, land use, link to county auditor site), so county auditor layers are needed; Franklin, Hamilton, Summit and Cleveland verified, Cuyahoga County's own server and Montgomery County were not reachable/found. Added 2026-11-21: Lake and Fairfield (disclaimer-only terms); Lorain, Licking, Clermont, Butler and Delaware recorded but held. Cuyahoga, Stark, Montgomery, Medina, Portage and Wood servers timed out; Lucas, Trumbull have no owner field."
 }
