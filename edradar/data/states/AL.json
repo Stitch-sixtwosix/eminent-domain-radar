@@ -332,6 +332,77 @@
    "terms_url": "https://isv.kcsgis.com/al.stclair_revenue/js/viewer/options.js (disclaimer text shown by https://isv.kcsgis.com/al.stclair_revenue/)",
    "notes": "St. Clair County Revenue Commissioner 'Owner Parcels'. That ADDRESS_1-3/CITY/STATE/ZIPCODE are the owner's MAILING address and STREET_ADD the property location is INFERRED from two records (one had ADDRESS_2 '1210 BLUE HOLE RD' with STREET_ADD '1915 COGSWELL AVE'); confirm on more records. PPIN; TOTAL_LAND, TOTAL_IMPR, TOTAL_ASSD; PREVIOUS_O; SALE_PRICE, SALE_DATE; DEEDED_ACR. Spatial query at Pell City returned 116 parcels. The county's own server map.stclairco.com timed out. maxRecordCount 2000. County parcel viewer disclaimer read (warranty/accuracy only: \"No warranty or representation is made as to the accuracy and availability of said information\"); it states no limit on commercial use, resale or mailing lists. Hosted by the county's GIS vendor (KCS); this is the service the county's public parcel viewer calls. The viewer page loads reCAPTCHA and some sibling KCS services answer 'Token Required', but this endpoint answered every request without a token; it could be closed later.",
    "checked": "2026-11-17"
+  },
+  {
+   "county": "AUTAUGA",
+   "url": "https://services.arcgis.com/MnKqAnOKsQTKesd4/arcgis/rest/services/ParcelData/FeatureServer/0",
+   "verified": true,
+   "record_count": 33550,
+   "fields": {
+    "apn": "ParcelNo",
+    "owner": "MigratedOwners",
+    "mailing_address": [
+     "Address1",
+     "Address2",
+     "Address3",
+     "City",
+     "State",
+     "Zip"
+    ],
+    "market_value": "FinalValue",
+    "acres": "CALC_ACRE"
+   },
+   "restrictions": "terms not found: layer and service description/copyrightText empty; ArcGIS item 4655c852a09e4a7d9ffdefc053880550 has licenseInfo and accessInformation empty (snippet only: 'Parcel Download for Experience Builder'); no terms item found among the publishing account's public items",
+   "notes": "Published by Autauga County's own ArcGIS Online organisation (account stephen.bland_AutaugaAL, service 'ParcelData', capabilities Query). County-wide (Prattville), but a SNAPSHOT: lastEditDate 2024-01-23, RecordYear 2024 on sample rows, so owners may be out of date. MigratedOwners = owner, MigratedOwners1 = second name. Address1/City/State/Zip appear to be the owner's MAILING address (sample parcel in Autauga County carries city CLANTON, which is in Chilton County) - this is an inference from samples, not a documented meaning; there is no separate property (situs) address field. PARCELID/PID = unformatted parcel number, ParcelNo formatted ('03 05 21 0 000 004.000'). TotalLandValue, TotalBldgValue, FinalValue; MB = legal description. maxRecordCount 2000. The same account has a newer 'PARCELS_4_21_25' layer (33,824 parcels, April 2025) but it has geometry and PARCELID only, no owner. The county's vendor viewer service (maps.capturecama.com/arcgis/rest/services/Autauga/...) also has no owner fields.",
+   "checked": "2026-11-22"
+  },
+  {
+   "county": "ETOWAH (City of Gadsden area only)",
+   "url": "https://coggis.cityofgadsden.com/arcgis/rest/services/Overlays/TaxParcel/MapServer/0",
+   "verified": true,
+   "record_count": 37848,
+   "fields": {
+    "apn": "PARCELID",
+    "owner": "OwnerName",
+    "mailing_address": [
+     "OwnerAddress",
+     "MailAdd2",
+     "OwnerCity",
+     "OwnerState",
+     "OwnerZip5",
+     "OwnerZip4"
+    ],
+    "address": "SiteAddress",
+    "acres": "Acres"
+   },
+   "restrictions": "terms not found: layer description empty; service copyrightText is only 'Etowah County'; ArcGIS item f21f4e8ed30a4c2287164924f8631b0e has licenseInfo empty and accessInformation 'Etowah County' (description 'Tax Parcel Overlay for City of Gadsden Mapping'); no terms or disclaimer page was found or read",
+   "notes": "Run by the City of Gadsden GIS on its own ArcGIS Server (coggis.cityofgadsden.com), registered in ArcGIS Online by the city's account; data credited to Etowah County. NOT county-wide: 37,848 parcels in ten tax-district codes (CVTTXCD; 22,836 in code 13), i.e. Gadsden and neighbouring areas; the county's own full parcel service is on the KCS vendor host and was deliberately not used. Current: LASTUPDATE on sample rows = 2026-10-19. All 37,848 rows have OwnerName. OwnerName2 second owner; PreviousOwner; PIN/RecordID = property index number; PROPLINK links to the county's property record page; OwnerZip4 is '-' when empty. SiteAddress is empty on the rural sample rows. No value field on this layer; a sibling layer .../Tyler/Gadsden_Parcels/MapServer/0 (same 37,848 rows) adds CNTASSDVAL and CNTTXBLVAL (assessed/taxable, not market). MapServer layer, maxRecordCount 1000.",
+   "checked": "2026-11-22"
+  },
+  {
+   "county": "JEFFERSON (City of Vestavia Hills only)",
+   "url": "https://services1.arcgis.com/mzsa9a8wVBjop58w/arcgis/rest/services/Vestavia_Hills_Parcels_2025/FeatureServer/0",
+   "verified": true,
+   "record_count": 24415,
+   "fields": {
+    "apn": "PARCELID",
+    "owner": "OWNERNAME",
+    "mailing_address": [
+     "PROP_MAIL",
+     "CITYMAIL",
+     "STATE_Mail",
+     "ZIP_MAIL"
+    ],
+    "address": [
+     "ADDR_APR",
+     "CITY",
+     "ZIP"
+    ],
+    "acres": "GIS_ACRES"
+   },
+   "restrictions": "terms not found: layer description/copyrightText empty; ArcGIS item 22a9851b7780425a9193984fee69650a has licenseInfo, accessInformation and description all null. (Other items of the same city account carry only an at-your-own-risk / no-warranty disclaimer, but that text is not attached to this layer.)",
+   "notes": "Published by the City of Vestavia Hills GIS (ArcGIS Online account VHGIS6), a city copy of county parcel records for parcels in and around Vestavia Hills only (24,415 parcels; the city lies mostly in Jefferson County with a part in Shelby County). It is NOT the Jefferson County layer: the county's own server (jccgis.jccal.org) still answers automated requests with a bot-protection page and was not used. Snapshot: lastEditDate 2025-06-11, RecordYear 2025, MaintDate on rows varies. OWNERNAME owner, Name2 second name; PROP_MAIL/CITYMAIL/STATE_Mail/ZIP_MAIL = owner mailing address (sample: parcel at 619 HIGHLAND CT has mail city TUSCALOOSA); ADDR_APR / ADDR_PSPR = property address; ParcelNo = formatted parcel number. Value: AssdValue is the assessed value; PrevParcel / PrevParc_1 / PrevParc_2 look like land / improvement / total (148000 + 407400 = 555400 on a sample) but the truncated names are ambiguous, so market_value is left unmapped. ACRES_APR is 0 on samples; GIS_ACRES used. maxRecordCount 2000.",
+   "checked": "2026-11-22"
   }
  ],
  "summary": "Projects: ALDOT publishes project geometry with description, work type and phase code but no dates, status or cost, so it cannot by itself identify planned work. Parcels: no statewide layer; Mobile (owner only), Montgomery and Tuscaloosa county layers are verified; Jefferson refused automated access.",

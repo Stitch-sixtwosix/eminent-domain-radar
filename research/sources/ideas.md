@@ -120,3 +120,32 @@ Each entry: what it is, the address, how it could be read, and what was checked.
   `EHhJx7V4ByXIPvxe`) publish "Proposed ROW" layers for jobs already under construction, where the land is bought.
 - Also found by the same search and now recorded as a source: IDOT's Annual Highway Improvement Program
   "Land Acquisition" layer (research/states/IL.json).
+
+## PJM transmission upgrade list (grid operator's regional plan, 13 states and DC) - checked 2026-11-22
+- Address: https://www.pjm.com/pjmfiles/media/planning/projectConstruction-data/projectCostUpgrades.xml
+  (linked from https://www.pjm.com/planning/m/project-construction; one XML file, about 25 MB, no login or key).
+- Verified live 2026-11-22: 15,759 `<Upgrade>` records; newest `LastUpdated` 11/17/2026. Each record has
+  `UpgradeId`, `Description`, `ProjectType` (Baseline 5,639 / Supplemental 6,763 / Network 3,357), `Voltage`,
+  `CostEstimate` (millions of dollars), `TransmissionOwner`, `State`, `Location` (substation names, comma
+  separated), `Equipment`, `Status`, `ProjectedInServiceDate`, `PJMBoardApprovalDate`, `PercentComplete`.
+- Status values: IS 9,330 (in service), EP 3,850 (engineering and procurement), Active 759, UC 604 (under
+  construction), PL 132 (planning), On Hold 219, Cancelled 847, UC-ISP 12, W 6. Planned work = Status in
+  (PL, EP, Active). States with most records: OH 3,339, PA 3,074, VA 2,315, NJ 1,776, WV 980, IN 920, IL 804,
+  MD 762, KY 501, DE 245, MI 183, NC 158.
+- Why it matters: 1,123 records that are not yet in service are `Equipment` = "Transmission Line" and describe new
+  or rebuilt line ("Construct 0.2 miles of greenfield single circuit 138kV line from Progress Park to ...",
+  AEP, VA, in service 2/8/2027). These appear here when the utility presents the need, usually before any state
+  siting docket or route map exists, and data-centre growth in OH and VA is driving many of them.
+- Why no reader exists: the file is XML (the readers take ArcGIS, Socrata, CKAN, JSON, CSV, GeoJSON and XLSX) and
+  has no geometry, only substation names and a state.
+- Reader idea: parse the XML, keep Status in (PL, EP, Active) with Equipment "Transmission Line" or
+  "Substation" and the words new, greenfield, construct, build or extend in the description; place each one by
+  looking up the `Location` substation names in a public substations layer (HIFLD publishes one; not checked today) and
+  drawing a line between the two named substations as an approximate corridor. Mark the stage as "plan" and
+  the location as approximate until a route map appears.
+- Terms: NOT read. The site's "Legal and Privacy" link (https://www.pjm.com/about-pjm/legal.aspx) returned a
+  "Page Not Found" shell to a scripted client, so any source built on this file should be held until the owner
+  reads PJM's terms in a browser. The records are about utilities' projects and name no individuals.
+- Same pattern likely at other grid operators (not verified today): MISO's MTEP project list, CAISO and ISO-NE
+  transmission plan pages answered 200 but no machine-readable project list was located in the time available;
+  ERCOT answered 403 and NYISO did not answer. SPP's list is already on file.

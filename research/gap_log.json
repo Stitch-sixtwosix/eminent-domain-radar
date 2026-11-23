@@ -1,156 +1,198 @@
 [
-  {
-    "date": "2026-11-18",
-    "state": "MO",
-    "target": "county owner files",
-    "tried": "ArcGIS catalogue search by county; county and city servers for Jackson, Greene, Clay, Jefferson, Boone, St. Louis City, Cass, Platte, Franklin, Christian, Cole",
-    "result": "added Platte (45,056, commercial use allowed with attribution) and Jasper (60,742, disclaimer only); Clay (98,112) and Greene (123,884) recorded but held, terms not found. Jackson, Boone, Clay county servers did not answer; St. Louis City, Jefferson: no owner layer found"
-  },
-  {
-    "date": "2026-11-18",
-    "state": "IL",
-    "target": "county owner files",
-    "tried": "ArcGIS catalogue search; county servers for Cook, Will, Kane, McHenry, McLean, Madison, Peoria, Kendall, St. Clair, Tazewell",
-    "result": "added Morgan (22,489, disclaimer only); Madison (136,799), McHenry (150,159), Peoria (90,350, licence page unreadable), Tazewell (68,098), Whiteside (36,523), Adams (38,785) recorded but held. Cook timed out, Will and McHenry servers 403, Kane public layer has no owner field; Winnebago, Champaign, Sangamon, Kendall, Rock Island: nothing found"
-  },
-  {
-    "date": "2026-11-18",
-    "state": "KS",
-    "target": "county owner files",
-    "tried": "ArcGIS catalogue search for Johnson, Sedgwick, Shawnee, Leavenworth, Riley, Butler, Saline; read K.S.A. 45-230",
-    "result": "no new layer (Johnson server 403; others did not answer; only third-party 2021 copies in the catalogue). K.S.A. 45-230 limits using public-record name lists to sell services: recorded as a restriction on Wyandotte and Douglas, which are now held"
-  },
-  {
-    "date": "2026-11-18",
-    "state": "NE",
-    "target": "statewide project source",
-    "tried": "NDOT Program Book service https://gis.ne.gov/dot/rest/services/ProgramBookDOT/FeatureServer",
-    "result": "failed: host did not answer (same as 2026-11-17)"
-  },
-  {
-    "date": "2026-11-18",
-    "state": "NV",
-    "target": "statewide project source",
-    "tried": "ArcGIS catalogue search for NDOT STIP / planned projects",
-    "result": "nothing found; only an ITS master plan layer is published"
-  },
-  {
-    "date": "2026-11-18",
-    "state": "US",
-    "target": "sources on but nothing loaded",
-    "tried": "queried Legistar clients visalia, cabq, miamifl, cityofno, lausd and the Hawaii DOT Socrata feed xy86-hspc",
-    "result": "all answer with records; the 23 Legistar clients simply have no matter titles matching the search phrases; Hawaii feed returns records, so its empty load is a reader matter, not an address change. Nothing to fix in research"
-  },
-  {
-    "date": "2026-11-18",
-    "state": "US",
-    "target": "new kinds of sources",
-    "tried": "California CEQAnet CSV export; CourtListener search API for nature-of-suit 210",
-    "result": "CEQAnet verified (dated CSV, no login) and written to research/sources/ideas.md; CourtListener needs an account token, not usable"
-  },
-  {
-    "date": "2026-11-19",
-    "state": "GA",
-    "target": "county owner files",
-    "tried": "state catalogue account GDITAdmin ('Parcels - GA - <County>', 85 services); re-queried 2026-11-20",
-    "result": "Bibb (68,958) held: terms forbid redistribution; Clarke (41,989) and Fayette (46,021) held: terms not found, both stale. 61 county services have no owner-name field; 26 did not answer"
-  },
-  {
-    "date": "2026-11-19",
-    "state": "IN",
-    "target": "county owner files",
-    "tried": "ArcGIS catalogue search for the largest uncovered counties; re-queried 2026-11-20",
-    "result": "added Vanderburgh (79,407) and Delaware (59,931), disclaimer-only terms; Monroe (64,282) held, terms not found. Allen, St. Joseph, Elkhart, Tippecanoe, Porter, Hendricks, Johnson, Madison, Clark: nothing found"
-  },
-  {
-    "date": "2026-11-19",
-    "state": "KY",
-    "target": "county owner files",
-    "tried": "GDITAdmin index (20 Kentucky services); Jefferson, Fayette, Madison, Oldham, McCracken, Shelby, Franklin, Henderson",
-    "result": "no new owner layer; none has an owner-name field. Scott, Warren and LOJIC did not answer"
-  },
-  {
-    "date": "2026-11-20",
-    "state": "TX",
-    "target": "county owner files",
-    "tried": "appraisal-district '<Name>CADWebService' services on ArcGIS Online, catalogue search, district home pages for terms",
-    "result": "74 county layers recorded. Added Midland (77,397), Bastrop (65,776), Gregg (76,343) on warranty-only disclaimers. 71 held: Angelina (hidden page text says not intended for electronic transfer of data) and 70 with terms not found, including Nueces, Bell, Brazos, Comal, Guadalupe, Kaufman, Parker, Rockwall, Ector, Taylor. Lubbock timed out; Wichita and Smith have no owner field; Cooke and Milam need a token; Cameron, Webb, McLennan, Jefferson, Grayson, Randall, Potter: nothing found"
-  },
-  {
-    "date": "2026-11-20",
-    "state": "VA",
-    "target": "county owner files",
-    "tried": "ArcGIS catalogue and locality servers for the 25 most populous uncovered localities",
-    "result": "added James City (36,479), Franklin County (49,475), Charlottesville (15,813, CC BY 4.0). Held: Albemarle (51,030, County policies unread), Fauquier (36,327, 'informational purposes only'), Roanoke City (44,333, no reproduction without authorization), York (28,591), Pittsylvania (61,104), Lynchburg (32,620) terms not found. Virginia Beach, Henrico, Norfolk, Spotsylvania, Hampton, Suffolk, Bedford, Augusta, Harrisonburg, Rockingham, Frederick did not answer; Stafford, Alexandria, Montgomery have no owner field"
-  },
-  {
-    "date": "2026-11-20",
-    "state": "TN",
-    "target": "county owner files",
-    "tried": "ArcGIS catalogue and county servers for counties outside the Comptroller system and the largest others",
-    "result": "held: Blount (67,332, 'for property assessment purposes only'), Washington (61,525), Montgomery (93,739), Sumner (99,543), Maury (53,273) terms not found. Knox timed out again; Shelby blocked; Sullivan, Bradley, Madison, Anderson, Wilson, Putnam, Sevier: nothing usable"
-  },
-  {
-    "date": "2026-11-20",
-    "state": "IA",
-    "target": "county owner files",
-    "tried": "ArcGIS catalogue and county servers for Polk, Johnson, Story, Woodbury, Dubuque, Dallas, Pottawattamie, Warren, Cerro Gordo, Muscatine and others",
-    "result": "added Woodbury (55,596, 'Public use allowed'), Pottawattamie (53,892, indemnity and disclaimer only), Cerro Gordo (32,851, disclaimer only); Story (42,111) held, terms not found. Polk, Johnson, Dubuque, Jasper, Warren: no county-published layer; Muscatine's server (magic-gis.com) not fully walked"
-  },
-  {
-    "date": "2026-11-20",
-    "state": "NJ",
-    "target": "source that failed today",
-    "tried": "NJDOT STIP Project Locations: old service answers 'Token Required'",
-    "result": "fixed: NJDOT republished the layer on 2026-11-19 at ...STIP_Project_Locations__FY_24_33__/FeatureServer/1 (264 rows, same fields); address updated in research/states/NJ.json"
-  },
-  {
-    "date": "2026-11-20",
-    "state": "HI",
-    "target": "source that failed today",
-    "tried": "Hawaii DOT Socrata feed xy86-hspc",
-    "result": "the address answers 200; the reader appends an ArcGIS '/query' to a Socrata address and gets 404. A reader matter, nothing to fix in research"
-  },
-  {
-    "date": "2026-11-20",
-    "state": "US",
-    "target": "new kinds of sources",
-    "tried": "Washington SEPA Register (data.wa.gov mmcb-z6jf); Northland Reliability Project ArcGIS account; Oklahoma Turnpike Authority CIP layer; Massachusetts MEPA Environmental Monitor; Socrata catalogue search for eminent domain and condemnation",
-    "result": "SEPA Register verified (192,110 records, daily, no login) and written to research/sources/ideas.md, needs a Socrata reader; NRP right-of-way layer answers but the line is under construction; OTA CIP is a 2022 snapshot; MEPA answered 403; Socrata search found nothing new"
-  },
-  {
-    "date": "2026-11-21",
-    "state": "NE",
-    "target": "county owner files",
-    "tried": "statewide hosts (gis.ne.gov, giscat.ne.gov, nebraskamap.gov); ArcGIS catalogue and county servers for Hall, Buffalo, Dodge, Madison, Scotts Bluff, Lincoln, Platte, Adams, Cass, Dawson, Gage, Saunders, Washington; 70 gWorks assessor services",
-    "result": "nothing switched on. Held: 2023 statewide copy on a University of Nebraska user's account (1,133,295, third-party, terms not found, stale), Cass (20,480, terms only on the county's separate search app), Hall (28,615, 'secondary dissemination ... not licensed'), Scotts Bluff (21,491, county site bars commercial use and data mining), Washington (15,727) and Thayer (7,203) terms not found. State hosts still do not resolve. gWorks services (Buffalo, Dodge, Madison, Lincoln, Platte, Dawson, Gage, Saunders and others) answer but carry no owner names; owners sit behind a bot check. Adams: none found."
-  },
-  {
-    "date": "2026-11-21",
-    "state": "OH",
-    "target": "county owner files",
-    "tried": "Cuyahoga, Montgomery, Lucas, Butler, Stark, Lorain, Warren, Lake, Mahoning, Delaware, Clermont, Trumbull, Medina, Licking, Greene, Portage, Fairfield, Clark, Wood, Richland",
-    "result": "added Lake (114,621) and Fairfield (75,135), disclaimer-only terms. Held: Lorain (172,340), Licking (83,923), Butler (167,767) terms not found; Clermont (101,581) site terms need a human read; Delaware (103,044) 'no data ... will be sold or distributed'. Not recorded: Mahoning, Trumbull, Portage third-party copies of a vendor's data. Timed out: Cuyahoga, Stark, Montgomery, Medina, Portage, Wood (Stark and Portage worth a retry). Greene 403. Lucas and Trumbull layers have no owner field. Warren, Clark, Richland: none found."
-  },
-  {
-    "date": "2026-11-21",
-    "state": "MI",
-    "target": "county owner files",
-    "tried": "statewide; Wayne, Oakland, Macomb, Kent, Genesee, Washtenaw, Ingham, Ottawa, Kalamazoo, Livingston, Saginaw, Muskegon, St. Clair, Jackson, Berrien, Monroe, Calhoun, Allegan, Eaton, Bay and about 45 smaller counties in the catalogue",
-    "result": "nothing switched on. Held: Lenawee (55,206, 'for reference purposes only'), Eaton (46,450), Lansing (43,017), Farmington Hills (27,929), Battle Creek (21,995), north-east Livingston (12,944) terms not found; Barry (34,061) county sells the data. Clinton Township (33,604, 'For use by staff and public') not recorded because Macomb County is already on file. Oakland and Kent county layers have no owner names. Ottawa, Washtenaw, Allegan hosts did not answer; Livingston's own service needs a login. No statewide owner layer."
-  },
-  {
-    "date": "2026-11-21",
-    "state": "IL",
-    "target": "new kinds of sources",
-    "tried": "ArcGIS catalogue title search for land-acquisition and right-of-way layers",
-    "result": "added IDOT Annual Highway Improvement Program FY 2026 - Land Acquisition (61 projects IDOT is buying land for this year) to research/states/IL.json"
-  },
-  {
-    "date": "2026-11-21",
-    "state": "US",
-    "target": "new kinds of sources",
-    "tried": "ArcGIS catalogue title searches: 'proposed right of way / ROW / right of way acquisition' (285 services) and 'proposed transmission / proposed route / route alternatives' (444); power siting board searches",
-    "result": "per-project right-of-way and route maps verified (Gopher to Badger Link, Xcel Ashland-Ironwood, Creek to Croix, Maple Leaf, CTRMA US 290, VCTC US 101, I-45) and written to research/sources/ideas.md; they carry shapes but no attributes, so they need a new 'catalogue sweep' reader. Siting-board searches found nothing usable."
-  }
+ {
+  "date": "2026-11-18",
+  "state": "MO",
+  "target": "county owner files",
+  "tried": "ArcGIS catalogue search by county; county and city servers for Jackson, Greene, Clay, Jefferson, Boone, St. Louis City, Cass, Platte, Franklin, Christian, Cole",
+  "result": "added Platte (45,056, commercial use allowed with attribution) and Jasper (60,742, disclaimer only); Clay (98,112) and Greene (123,884) recorded but held, terms not found. Jackson, Boone, Clay county servers did not answer; St. Louis City, Jefferson: no owner layer found"
+ },
+ {
+  "date": "2026-11-18",
+  "state": "IL",
+  "target": "county owner files",
+  "tried": "ArcGIS catalogue search; county servers for Cook, Will, Kane, McHenry, McLean, Madison, Peoria, Kendall, St. Clair, Tazewell",
+  "result": "added Morgan (22,489, disclaimer only); Madison (136,799), McHenry (150,159), Peoria (90,350, licence page unreadable), Tazewell (68,098), Whiteside (36,523), Adams (38,785) recorded but held. Cook timed out, Will and McHenry servers 403, Kane public layer has no owner field; Winnebago, Champaign, Sangamon, Kendall, Rock Island: nothing found"
+ },
+ {
+  "date": "2026-11-18",
+  "state": "KS",
+  "target": "county owner files",
+  "tried": "ArcGIS catalogue search for Johnson, Sedgwick, Shawnee, Leavenworth, Riley, Butler, Saline; read K.S.A. 45-230",
+  "result": "no new layer (Johnson server 403; others did not answer; only third-party 2021 copies in the catalogue). K.S.A. 45-230 limits using public-record name lists to sell services: recorded as a restriction on Wyandotte and Douglas, which are now held"
+ },
+ {
+  "date": "2026-11-18",
+  "state": "NE",
+  "target": "statewide project source",
+  "tried": "NDOT Program Book service https://gis.ne.gov/dot/rest/services/ProgramBookDOT/FeatureServer",
+  "result": "failed: host did not answer (same as 2026-11-17)"
+ },
+ {
+  "date": "2026-11-18",
+  "state": "NV",
+  "target": "statewide project source",
+  "tried": "ArcGIS catalogue search for NDOT STIP / planned projects",
+  "result": "nothing found; only an ITS master plan layer is published"
+ },
+ {
+  "date": "2026-11-18",
+  "state": "US",
+  "target": "sources on but nothing loaded",
+  "tried": "queried Legistar clients visalia, cabq, miamifl, cityofno, lausd and the Hawaii DOT Socrata feed xy86-hspc",
+  "result": "all answer with records; the 23 Legistar clients simply have no matter titles matching the search phrases; Hawaii feed returns records, so its empty load is a reader matter, not an address change. Nothing to fix in research"
+ },
+ {
+  "date": "2026-11-18",
+  "state": "US",
+  "target": "new kinds of sources",
+  "tried": "California CEQAnet CSV export; CourtListener search API for nature-of-suit 210",
+  "result": "CEQAnet verified (dated CSV, no login) and written to research/sources/ideas.md; CourtListener needs an account token, not usable"
+ },
+ {
+  "date": "2026-11-19",
+  "state": "GA",
+  "target": "county owner files",
+  "tried": "state catalogue account GDITAdmin ('Parcels - GA - <County>', 85 services); re-queried 2026-11-20",
+  "result": "Bibb (68,958) held: terms forbid redistribution; Clarke (41,989) and Fayette (46,021) held: terms not found, both stale. 61 county services have no owner-name field; 26 did not answer"
+ },
+ {
+  "date": "2026-11-19",
+  "state": "IN",
+  "target": "county owner files",
+  "tried": "ArcGIS catalogue search for the largest uncovered counties; re-queried 2026-11-20",
+  "result": "added Vanderburgh (79,407) and Delaware (59,931), disclaimer-only terms; Monroe (64,282) held, terms not found. Allen, St. Joseph, Elkhart, Tippecanoe, Porter, Hendricks, Johnson, Madison, Clark: nothing found"
+ },
+ {
+  "date": "2026-11-19",
+  "state": "KY",
+  "target": "county owner files",
+  "tried": "GDITAdmin index (20 Kentucky services); Jefferson, Fayette, Madison, Oldham, McCracken, Shelby, Franklin, Henderson",
+  "result": "no new owner layer; none has an owner-name field. Scott, Warren and LOJIC did not answer"
+ },
+ {
+  "date": "2026-11-20",
+  "state": "TX",
+  "target": "county owner files",
+  "tried": "appraisal-district '<Name>CADWebService' services on ArcGIS Online, catalogue search, district home pages for terms",
+  "result": "74 county layers recorded. Added Midland (77,397), Bastrop (65,776), Gregg (76,343) on warranty-only disclaimers. 71 held: Angelina (hidden page text says not intended for electronic transfer of data) and 70 with terms not found, including Nueces, Bell, Brazos, Comal, Guadalupe, Kaufman, Parker, Rockwall, Ector, Taylor. Lubbock timed out; Wichita and Smith have no owner field; Cooke and Milam need a token; Cameron, Webb, McLennan, Jefferson, Grayson, Randall, Potter: nothing found"
+ },
+ {
+  "date": "2026-11-20",
+  "state": "VA",
+  "target": "county owner files",
+  "tried": "ArcGIS catalogue and locality servers for the 25 most populous uncovered localities",
+  "result": "added James City (36,479), Franklin County (49,475), Charlottesville (15,813, CC BY 4.0). Held: Albemarle (51,030, County policies unread), Fauquier (36,327, 'informational purposes only'), Roanoke City (44,333, no reproduction without authorization), York (28,591), Pittsylvania (61,104), Lynchburg (32,620) terms not found. Virginia Beach, Henrico, Norfolk, Spotsylvania, Hampton, Suffolk, Bedford, Augusta, Harrisonburg, Rockingham, Frederick did not answer; Stafford, Alexandria, Montgomery have no owner field"
+ },
+ {
+  "date": "2026-11-20",
+  "state": "TN",
+  "target": "county owner files",
+  "tried": "ArcGIS catalogue and county servers for counties outside the Comptroller system and the largest others",
+  "result": "held: Blount (67,332, 'for property assessment purposes only'), Washington (61,525), Montgomery (93,739), Sumner (99,543), Maury (53,273) terms not found. Knox timed out again; Shelby blocked; Sullivan, Bradley, Madison, Anderson, Wilson, Putnam, Sevier: nothing usable"
+ },
+ {
+  "date": "2026-11-20",
+  "state": "IA",
+  "target": "county owner files",
+  "tried": "ArcGIS catalogue and county servers for Polk, Johnson, Story, Woodbury, Dubuque, Dallas, Pottawattamie, Warren, Cerro Gordo, Muscatine and others",
+  "result": "added Woodbury (55,596, 'Public use allowed'), Pottawattamie (53,892, indemnity and disclaimer only), Cerro Gordo (32,851, disclaimer only); Story (42,111) held, terms not found. Polk, Johnson, Dubuque, Jasper, Warren: no county-published layer; Muscatine's server (magic-gis.com) not fully walked"
+ },
+ {
+  "date": "2026-11-20",
+  "state": "NJ",
+  "target": "source that failed today",
+  "tried": "NJDOT STIP Project Locations: old service answers 'Token Required'",
+  "result": "fixed: NJDOT republished the layer on 2026-11-19 at ...STIP_Project_Locations__FY_24_33__/FeatureServer/1 (264 rows, same fields); address updated in research/states/NJ.json"
+ },
+ {
+  "date": "2026-11-20",
+  "state": "HI",
+  "target": "source that failed today",
+  "tried": "Hawaii DOT Socrata feed xy86-hspc",
+  "result": "the address answers 200; the reader appends an ArcGIS '/query' to a Socrata address and gets 404. A reader matter, nothing to fix in research"
+ },
+ {
+  "date": "2026-11-20",
+  "state": "US",
+  "target": "new kinds of sources",
+  "tried": "Washington SEPA Register (data.wa.gov mmcb-z6jf); Northland Reliability Project ArcGIS account; Oklahoma Turnpike Authority CIP layer; Massachusetts MEPA Environmental Monitor; Socrata catalogue search for eminent domain and condemnation",
+  "result": "SEPA Register verified (192,110 records, daily, no login) and written to research/sources/ideas.md, needs a Socrata reader; NRP right-of-way layer answers but the line is under construction; OTA CIP is a 2022 snapshot; MEPA answered 403; Socrata search found nothing new"
+ },
+ {
+  "date": "2026-11-21",
+  "state": "NE",
+  "target": "county owner files",
+  "tried": "statewide hosts (gis.ne.gov, giscat.ne.gov, nebraskamap.gov); ArcGIS catalogue and county servers for Hall, Buffalo, Dodge, Madison, Scotts Bluff, Lincoln, Platte, Adams, Cass, Dawson, Gage, Saunders, Washington; 70 gWorks assessor services",
+  "result": "nothing switched on. Held: 2023 statewide copy on a University of Nebraska user's account (1,133,295, third-party, terms not found, stale), Cass (20,480, terms only on the county's separate search app), Hall (28,615, 'secondary dissemination ... not licensed'), Scotts Bluff (21,491, county site bars commercial use and data mining), Washington (15,727) and Thayer (7,203) terms not found. State hosts still do not resolve. gWorks services (Buffalo, Dodge, Madison, Lincoln, Platte, Dawson, Gage, Saunders and others) answer but carry no owner names; owners sit behind a bot check. Adams: none found."
+ },
+ {
+  "date": "2026-11-21",
+  "state": "OH",
+  "target": "county owner files",
+  "tried": "Cuyahoga, Montgomery, Lucas, Butler, Stark, Lorain, Warren, Lake, Mahoning, Delaware, Clermont, Trumbull, Medina, Licking, Greene, Portage, Fairfield, Clark, Wood, Richland",
+  "result": "added Lake (114,621) and Fairfield (75,135), disclaimer-only terms. Held: Lorain (172,340), Licking (83,923), Butler (167,767) terms not found; Clermont (101,581) site terms need a human read; Delaware (103,044) 'no data ... will be sold or distributed'. Not recorded: Mahoning, Trumbull, Portage third-party copies of a vendor's data. Timed out: Cuyahoga, Stark, Montgomery, Medina, Portage, Wood (Stark and Portage worth a retry). Greene 403. Lucas and Trumbull layers have no owner field. Warren, Clark, Richland: none found."
+ },
+ {
+  "date": "2026-11-21",
+  "state": "MI",
+  "target": "county owner files",
+  "tried": "statewide; Wayne, Oakland, Macomb, Kent, Genesee, Washtenaw, Ingham, Ottawa, Kalamazoo, Livingston, Saginaw, Muskegon, St. Clair, Jackson, Berrien, Monroe, Calhoun, Allegan, Eaton, Bay and about 45 smaller counties in the catalogue",
+  "result": "nothing switched on. Held: Lenawee (55,206, 'for reference purposes only'), Eaton (46,450), Lansing (43,017), Farmington Hills (27,929), Battle Creek (21,995), north-east Livingston (12,944) terms not found; Barry (34,061) county sells the data. Clinton Township (33,604, 'For use by staff and public') not recorded because Macomb County is already on file. Oakland and Kent county layers have no owner names. Ottawa, Washtenaw, Allegan hosts did not answer; Livingston's own service needs a login. No statewide owner layer."
+ },
+ {
+  "date": "2026-11-21",
+  "state": "IL",
+  "target": "new kinds of sources",
+  "tried": "ArcGIS catalogue title search for land-acquisition and right-of-way layers",
+  "result": "added IDOT Annual Highway Improvement Program FY 2026 - Land Acquisition (61 projects IDOT is buying land for this year) to research/states/IL.json"
+ },
+ {
+  "date": "2026-11-21",
+  "state": "US",
+  "target": "new kinds of sources",
+  "tried": "ArcGIS catalogue title searches: 'proposed right of way / ROW / right of way acquisition' (285 services) and 'proposed transmission / proposed route / route alternatives' (444); power siting board searches",
+  "result": "per-project right-of-way and route maps verified (Gopher to Badger Link, Xcel Ashland-Ironwood, Creek to Croix, Maple Leaf, CTRMA US 290, VCTC US 101, I-45) and written to research/sources/ideas.md; they carry shapes but no attributes, so they need a new 'catalogue sweep' reader. Siting-board searches found nothing usable."
+ },
+ {
+  "date": "2026-11-22",
+  "state": "OK",
+  "target": "county owner files",
+  "tried": "statewide search (OWRB Parcels service, OKMaps/OU county services, Tax Commission) and 20 most populous uncovered counties via the ArcGIS catalogue and INCOG",
+  "result": "nothing switched on. Held, terms not found: Osage (42,084, INCOG), Garfield (35,735, City of Enid), McClain (28,158, City of Newcastle), Muskogee (49,123, consultant's 2024 copy), Washington (22,508, Bartlesville area, 2016-18). OWRB statewide service timed out. No open service for Pottawatomie, Grady, Logan, Le Flore, Cherokee, Carter, Bryan, Stephens, Pittsburg, Delaware, Mayes, Pontotoc, Custer, Okmulgee (vendor viewers only)"
+ },
+ {
+  "date": "2026-11-22",
+  "state": "SD",
+  "target": "county owner files",
+  "tried": "re-test of Minnehaha, Lincoln and Sioux Falls; First District and Planning District III servers; ArcGIS catalogue for Brown, Brookings, Meade, Lawrence, Union, Clay, Custer, Lake",
+  "result": "nothing switched on. Held: Codington (18,479), Beadle (16,909), Roberts (14,609) - First District, disclaimer-only terms but the publisher sells a logged-in tier of the same viewer; Davison (11,893), Hughes (12,765), Butte (12,532), Yankton (15,980) - District III terms forbid any for-profit use without written permission; Brookings city (9,173) terms not found. Minnehaha and Sioux Falls timed out, Lincoln behind a bot check (403), Lawrence 504, Meade 404. First District also serves Clark, Deuel, Edmunds, Grant, Hamlin, Hand, Kingsbury, Miner, Moody; District III about 30 more counties (same terms)"
+ },
+ {
+  "date": "2026-11-22",
+  "state": "AL",
+  "target": "county owner files",
+  "tried": "statewide search and 19 most populous uncovered counties via the ArcGIS catalogue and direct server checks (kcsgis.com excluded, already held)",
+  "result": "nothing switched on. Held, terms not found: Autauga (33,550, Jan 2024 snapshot), Etowah - Gadsden area only (37,848), Jefferson - Vestavia Hills only (24,415, city copy). Jefferson County server still behind a bot check; Shelby and Limestone timed out; Morgan, Cullman, Colbert only on kcsgis.com; Russell and other capturecama.com counties have no owner field; Opelika (Lee) 2019 data left out"
+ },
+ {
+  "date": "2026-11-22",
+  "state": "LA",
+  "target": "statewide project source",
+  "tried": "https://gis.dotd.la.gov/road/rest/services/Roads_and_Highways_OpenData/FeatureServer/127 ('LA DOTD Roadway Projects', listed in the ArcGIS catalogue)",
+  "result": "failed: 403 Cloudflare block to a scripted client, not worked around. Other catalogue hits are consultants' copies of 2022-23 letting lists"
+ },
+ {
+  "date": "2026-11-22",
+  "state": "US",
+  "target": "new kinds of sources",
+  "tried": "grid operators' transmission plans: PJM, MISO, CAISO, ISO-NE, ERCOT, NYISO",
+  "result": "PJM upgrade list verified (XML, 15,759 upgrades, 1,123 open new-line records, 13 states) and written to research/sources/ideas.md; needs an XML reader and substation lookup; PJM terms page not readable. ERCOT 403, NYISO no answer, no machine-readable list located at MISO, CAISO, ISO-NE"
+ },
+ {
+  "date": "2026-11-22",
+  "state": "US",
+  "target": "sources that failed today",
+  "tried": "MS statewide parcels (gis.mississippi.edu), FL statewide parcels, UT Salt Lake County, HDOT Socrata",
+  "result": "no record change: gis.mississippi.edu resolves publicly (the local resolver refused it), FL returned 400/504 on some queries, Salt Lake timed out; HDOT is the known reader mismatch logged 2026-11-20"
+ }
 ]

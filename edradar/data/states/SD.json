@@ -193,16 +193,194 @@
    "url": "https://gis.minnehahacounty.gov/minnemap/rest/services/Parcels/MapServer/0",
    "verified": false,
    "fields": {},
-   "notes": "NOT VERIFIED: listed on ArcGIS Online as the county's 'MCParcels' layer, but the server did not answer (connection timed out on two attempts, 2026-11-17). Fields unknown. The City of Sioux Falls server (https://gis.siouxfalls.gov/arcgis/rest/services/Data/Property/MapServer/1) also timed out; the city's hosted 'Parcels with Property Taxes 2026' layer did answer but has no owner field."
+   "restrictions": "terms not found (server unreachable, nothing could be read)",
+   "notes": "NOT VERIFIED: re-tested 2026-11-22 - gis.minnehahacounty.gov still does not answer (connection timed out after 40 s, three attempts, both the services directory and the layer); the older host gis.minnehahacounty.org also timed out. Listed on ArcGIS Online as the county's 'MCParcels' / 'Parcels' layer (owner hjerke). Fields unknown. City of Sioux Falls server (https://gis.siouxfalls.gov/arcgis/rest/services/Data/Property/MapServer/1, and the old gis.siouxfalls.org) also timed out again; the city's hosted 'Parcels with Property Taxes 2026' layer has no owner field. These servers may only answer from some networks.",
+   "checked": "2026-11-22"
   },
   {
    "county": "LINCOLN",
    "url": "https://gis.lincolncountysd.gov/arcgis/rest/services/Pro29/Parcels/FeatureServer",
    "verified": false,
    "fields": {},
-   "notes": "NOT VERIFIED: the server answered HTTP 403 Forbidden to a plain request. Fields unknown."
+   "restrictions": "terms not found (server refuses automated requests, nothing could be read)",
+   "notes": "NOT VERIFIED: re-tested 2026-11-22 - gis.lincolncountysd.gov answers a plain request with HTTP 403 and a Cloudflare 'Just a moment...' browser challenge (bot detection), which was not bypassed. The older host maps.lincolncountysd.org timed out. Listed on ArcGIS Online as 'Parcels' by Lincoln_County_SD_GIS. Fields unknown.",
+   "checked": "2026-11-22"
+  },
+  {
+   "county": "CODINGTON",
+   "url": "https://www.1stdistrict.org/arcgis/rest/services/Codington/codingtonmapnetpro/MapServer/9",
+   "verified": true,
+   "record_count": 18479,
+   "fields": {
+    "apn": "RECORD",
+    "owner": "OWNER1",
+    "mailing_address": [
+     "OWNER_STRE",
+     "OWNER_CITY",
+     "OWNER_ST",
+     "OWNER_ZIP"
+    ],
+    "address": "PROP_STREE",
+    "market_value": "ASSESSED_T",
+    "acres": "acres"
+   },
+   "restrictions": "held for the owner's decision: the only terms shown are a warranty disclaimer, but the publisher (First District) sells subscriptions to a logged-in tier of the same county MapNet viewer, and it could not be established today whether owner names are meant to be public or part of the paid tier; the REST layer answers without a login",
+   "notes": "Published by First District Association of Local Governments (First District GIS, Watertown) on its own ArcGIS Server (www.1stdistrict.org), layer 'Codington Parcels' of the service behind 'Codington County MapNet' ('Official GIS Application for Codington County & Watertown, SD'); copyrightText 'Website & Data Maintained by First District GIS - Watertown, SD'. County-wide (Watertown included). 16,842 of 18,479 have OWNER1. RECORD is the county's assessor record number (number; RECORD_Q is the same as text) - there is no other parcel id. ADD_L_OWNE = additional owner. ASSESSED_L is text, ASSESSED_B/ASSESSED_T numbers; acres is the mapped area, LEGAL_ACRE the deeded acres as text ('047.00'). OWNER_ZIP has a trailing '-'. Also deed fields (FILED_DATE, BOOK, PAGE, DEED_TYPE), SALE_PR, OWNER_OCCU. No edit date exposed; UP_DATE is per-parcel map edit date. MapServer layer, maxRecordCount 2000. Terms read: the MapNet app's splash 'Disclaimer' (text in the app's Bundle.js) is a warranty disclaimer only - 'This GIS Data is provided \"as is\" without warranty of any representation of accuracy, timeliness, or completeness... This is not a legal document and should not be substituted for a title search, appraisal, survey, or for zoning verification... By entering this website, you agree to the terms of this disclaimer.' It states no limit on commercial use, redistribution, solicitation or mailing lists. Layer/service description empty; no ArcGIS item (serviceItemId none). 1stdistrictmapnet.com says 'Subscriptions are available for County MapNet sites... please contact the respective County Department of Equalization' (paid tier of the viewer, behind a login; this public layer needs none).",
+   "checked": "2026-11-22"
+  },
+  {
+   "county": "BEADLE",
+   "url": "https://www.1stdistrict.org/arcgis/rest/services/Beadle/beadlemapnetpro/MapServer/1",
+   "verified": true,
+   "record_count": 16909,
+   "fields": {
+    "apn": "RECORD",
+    "owner": "OWNER_NAME",
+    "mailing_address": [
+     "OWNER_STRE",
+     "OWNER_CITY",
+     "OWNER_ST",
+     "OWNER_ZIP"
+    ],
+    "address": "PROPERTY_A",
+    "market_value": "TOTAL_AV",
+    "acres": "LEGAL_ACRE"
+   },
+   "restrictions": "held for the owner's decision: the only terms shown are a warranty disclaimer, but the publisher (First District) sells subscriptions to a logged-in tier of the same county MapNet viewer, and it could not be established today whether owner names are meant to be public or part of the paid tier; the REST layer answers without a login",
+   "notes": "Published by First District Association of Local Governments (First District GIS, Watertown) on its own ArcGIS Server, layer 'Beadle Parcels' of the service behind 'Beadle County MapNet' ('Official GIS Parcel Application for Beadle County, SD'); copyrightText 'Website Developed & Maintained by First District GIS - Watertown, SD'. County-wide (Huron included). 15,244 of 16,909 have OWNER_NAME. RECORD is the assessor record number as text (e.g. '2392'). ADDL_OWNER = additional owner. PROPERTY_A is the site address, or 'STR 4-110-63' (section-township-range) for rural land. TOTAL_AV = LAND_TV + BUILD_TV + M_H_TV (assessed values); LEGAL_ACRE is text. Sample rows carry YEAR_DUE '2026' and TOTAL_BILL, so the table is current. MapServer layer, maxRecordCount 2000. Terms read: the MapNet app's splash 'Disclaimer' (text in the app's Bundle.js) is a warranty disclaimer only - 'This GIS Data is provided \"as is\" without warranty of any representation of accuracy, timeliness, or completeness... This is not a legal document and should not be substituted for a title search, appraisal, survey, or for zoning verification... By entering this website, you agree to the terms of this disclaimer.' It states no limit on commercial use, redistribution, solicitation or mailing lists. Layer/service description empty; no ArcGIS item (serviceItemId none). 1stdistrictmapnet.com says 'Subscriptions are available for County MapNet sites... please contact the respective County Department of Equalization' (paid tier of the viewer, behind a login; this public layer needs none).",
+   "checked": "2026-11-22"
+  },
+  {
+   "county": "ROBERTS",
+   "url": "https://www.1stdistrict.org/arcgis/rest/services/Roberts/robertsmapnetpro/MapServer/2",
+   "verified": true,
+   "record_count": 14609,
+   "fields": {
+    "apn": "PARCEL_ID",
+    "owner": "OWNER",
+    "mailing_address": [
+     "OWNER_STRE",
+     "OWNER_CITY",
+     "OWNER_ST",
+     "OWNER_ZIP"
+    ],
+    "address": "PROPERTY_A",
+    "market_value": "ASSESSED_T",
+    "acres": "acres"
+   },
+   "restrictions": "held for the owner's decision: the only terms shown are a warranty disclaimer, but the publisher (First District) sells subscriptions to a logged-in tier of the same county MapNet viewer, and it could not be established today whether owner names are meant to be public or part of the paid tier; the REST layer answers without a login",
+   "notes": "Published by First District Association of Local Governments (First District GIS, Watertown) on its own ArcGIS Server, layer 'Roberts Parcels' of the service behind 'Roberts County MapNet' ('Official GIS Web Application for Roberts County, SD'; service copyrightText 'First District GIS'). County-wide (Sisseton included). 12,874 of 14,609 have OWNER. PARCEL_ID equals RECORD (assessor record number). ADD_L_OWNE = additional owner. PROPERTY_A is the site address or 'STR 6-128-48' for rural land. ASSESSED_T = ASSESSED_L + ASSESSED_B + ASSESSED_M; ASSESS_TEQ = equalized total. acres = mapped area, LEGAL_ACRE = deeded (text). MapServer layer, maxRecordCount 2000. Terms read: the MapNet app's splash 'Disclaimer' (text in the app's Bundle.js) is a warranty disclaimer only - 'This GIS Data is provided \"as is\" without warranty of any representation of accuracy, timeliness, or completeness... This is not a legal document and should not be substituted for a title search, appraisal, survey, or for zoning verification... By entering this website, you agree to the terms of this disclaimer.' It states no limit on commercial use, redistribution, solicitation or mailing lists. Layer/service description empty; no ArcGIS item (serviceItemId none). 1stdistrictmapnet.com says 'Subscriptions are available for County MapNet sites... please contact the respective County Department of Equalization' (paid tier of the viewer, behind a login; this public layer needs none).",
+   "checked": "2026-11-22"
+  },
+  {
+   "county": "DAVISON",
+   "url": "https://gis.districtiii.org/server/rest/services/DAVISON_COUNTY_WEB_LAYERS1/MapServer/4",
+   "verified": true,
+   "record_count": 11893,
+   "fields": {
+    "apn": "PARCEL_ID",
+    "owner": "OWNERNAME",
+    "mailing_address": [
+     "MAILING_ADDRESS",
+     "MAILING_CITY",
+     "MAILING_STATE",
+     "MAILING_ZIP"
+    ],
+    "address": "SITE_ADDRESS",
+    "market_value": "TOTAL_VALUE",
+    "acres": "DEEDED_ACRE"
+   },
+   "restrictions": "Planning and Development District III 'Terms of Use and Disclaimer' (https://gis.districtiii.org/DOCS/Disclaimer.pdf, linked from the county web viewer's splash screen): 'provided by Planning and Development District III and its member entities as a public service, free of charge, for general reference and non-commercial use. This data may not be used, in whole or in part, for any for-profit purpose, including but not limited to resale, commercial redistribution, or integration into commercial software, websites, applications, or services, without prior written permission from Planning and Development District III.' ... 'Use of this data constitutes acceptance of these terms.'",
+   "notes": "Published by Planning and Development District III (Yankton) on its own ArcGIS Server; layer PARCEL of the service behind the 'DAVISON COUNTY WEB VIEWER' (gis.districtiii.org/davison). County-wide (Mitchell included). 11,776 of 11,893 have OWNERNAME. Also BUYER/SELLER/SALE_AMOUNT/SALE_DATE (last sale), LEGAL, ASSESSOR_PAGE (link to the county's Vanguard CAMA report). MapServer layer, maxRecordCount 2000. Terms: layer description/copyrightText empty; District III portal item ac57ef5507624719b664996e40679c89 (owner siteadmin, modified 2026-11-18) has licenseInfo/accessInformation null; the limit is in the District's Terms of Use PDF quoted under restrictions (rest of it is an 'as is' warranty disclaimer). NOTE the old gis.districtiii.org/arcgis/rest/... URLs listed on ArcGIS Online now return 404; the server moved to /server/rest/services.",
+   "checked": "2026-11-22"
+  },
+  {
+   "county": "HUGHES",
+   "url": "https://gis.districtiii.org/server/rest/services/HUGHES_COUNTY_WEB_LAYERS/MapServer/2",
+   "verified": true,
+   "record_count": 12765,
+   "fields": {
+    "apn": "PARCEL_ID",
+    "owner": "CAMA_OWNERNAME",
+    "mailing_address": [
+     "CAMA_MAILING_ADDRESS",
+     "CAMA_MAILING_CITY",
+     "CAMA_MAILING_STATE",
+     "CAMA_MAILING_ZIP"
+    ],
+    "address": "CAMA_SITE_ADDRESS",
+    "market_value": "VAL_TOTAL_VALUE_1",
+    "acres": "CAMA_ACRES"
+   },
+   "restrictions": "Planning and Development District III 'Terms of Use and Disclaimer' (https://gis.districtiii.org/DOCS/Disclaimer.pdf, linked from the county web viewer's splash screen): 'provided by Planning and Development District III and its member entities as a public service, free of charge, for general reference and non-commercial use. This data may not be used, in whole or in part, for any for-profit purpose, including but not limited to resale, commercial redistribution, or integration into commercial software, websites, applications, or services, without prior written permission from Planning and Development District III.' ... 'Use of this data constitutes acceptance of these terms.'",
+   "notes": "Published by Planning and Development District III on its own ArcGIS Server; layer PARCELS of the service behind the 'HUGHES COUNTY WEB VIEWER' (gis.districtiii.org/hughes). County-wide (Pierre included). 10,847 of 12,765 have CAMA_OWNERNAME. CAMA_ADD_OWNER = additional owner; CAMA_SORTNAME = short name. VAL_TOTAL_VALUE_1 is TEXT with $ and commas ('$310,259') for VAL_YEAR_1 (2025 on samples); VAL_*_2..9 are earlier years. CAMA_SITE_ADDRESS is 'STR 7-112-74' for rural land. CAMA_CFD_* = contract-for-deed holder. MapServer layer, maxRecordCount 2000. Terms: layer description/copyrightText empty; District III portal item 7bfe1daf19dd44a7b3191eea00783abd (owner siteadmin, modified 2026-11-02) has licenseInfo/accessInformation null; the limit is in the District's Terms of Use PDF quoted under restrictions (rest of it is an 'as is' warranty disclaimer). NOTE the old gis.districtiii.org/arcgis/rest/... URLs listed on ArcGIS Online now return 404; the server moved to /server/rest/services.",
+   "checked": "2026-11-22"
+  },
+  {
+   "county": "BUTTE",
+   "url": "https://gis.districtiii.org/server/rest/services/BUTTE_COUNTY_WEB_LAYERS2/MapServer/3",
+   "verified": true,
+   "record_count": 12532,
+   "fields": {
+    "apn": "PARCEL_ID",
+    "owner": "TC_OWNER",
+    "mailing_address": [
+     "TC_ADDRESS",
+     "TC_CITY_ST",
+     "TC_ZIP"
+    ],
+    "address": "TC_SITE_ADDRESS",
+    "market_value": "TC_VALUE",
+    "acres": "TC_ACRES"
+   },
+   "restrictions": "Planning and Development District III 'Terms of Use and Disclaimer' (https://gis.districtiii.org/DOCS/Disclaimer.pdf, linked from the county web viewer's splash screen): 'provided by Planning and Development District III and its member entities as a public service, free of charge, for general reference and non-commercial use. This data may not be used, in whole or in part, for any for-profit purpose, including but not limited to resale, commercial redistribution, or integration into commercial software, websites, applications, or services, without prior written permission from Planning and Development District III.' ... 'Use of this data constitutes acceptance of these terms.'",
+   "notes": "Published by Planning and Development District III on its own ArcGIS Server; layer PARCELS of the service behind the 'BUTTE COUNTY WEB VIEWER' (gis.districtiii.org/butte). County-wide (Belle Fourche included). 10,856 of 12,532 have TC_OWNER. TC_* fields come from the tax roll (TC_YEAR 2026 on samples) and are space-padded - trim them; in some rows the mailing street is run into TC_OWNER (e.g. 'FOX, RANDY & LAURA   15754 OLD HWY 79') with TC_ADDRESS blank. TC_OWNER2 = second owner; TC_SITE_ADDRESS was blank on the sampled rural rows. The layer's field list shows 'parcel_id' in lower case but query results return it as PARCEL_ID (PARCEL holds the same value). A1_TOTAL_num = current assessed total; BUYER1/SELLER1.. = sales history; T1.. = tax payments. MapServer layer, maxRecordCount 2000. Terms: layer description/copyrightText empty; District III portal item 68bb52cd611c4e21be22216d59cc53e1 (owner siteadmin, modified 2026-09-01) has licenseInfo/accessInformation null; the limit is in the District's Terms of Use PDF quoted under restrictions (rest of it is an 'as is' warranty disclaimer). NOTE the old gis.districtiii.org/arcgis/rest/... URLs listed on ArcGIS Online now return 404; the server moved to /server/rest/services.",
+   "checked": "2026-11-22"
+  },
+  {
+   "county": "YANKTON",
+   "url": "https://gis.districtiii.org/server/rest/services/YANKTON_PROVAL_LAYERS/MapServer/104",
+   "verified": true,
+   "record_count": 15980,
+   "fields": {
+    "apn": "PARCEL.PARCEL_ID",
+    "owner": "DATA3.OWNERNAME1",
+    "mailing_address": [
+     "DATA3.ADDRESS1",
+     "DATA3.ADDRESS2",
+     "DATA3.ADDRESS3",
+     "DATA3.ZIP"
+    ],
+    "address": "DATA3.SITE_ADDRESS",
+    "acres": "DATA3.DEEDED_ACRES"
+   },
+   "restrictions": "Planning and Development District III 'Terms of Use and Disclaimer' (https://gis.districtiii.org/DOCS/Disclaimer.pdf, linked from the county web viewer's splash screen): 'provided by Planning and Development District III and its member entities as a public service, free of charge, for general reference and non-commercial use. This data may not be used, in whole or in part, for any for-profit purpose, including but not limited to resale, commercial redistribution, or integration into commercial software, websites, applications, or services, without prior written permission from Planning and Development District III.' ... 'Use of this data constitutes acceptance of these terms.'",
+   "notes": "Published by Planning and Development District III (which is based in Yankton) on its own ArcGIS Server; layer PARCEL of service YANKTON_PROVAL_LAYERS (parcel polygons joined to the county's assessment table, hence the 'PARCEL.' / 'DATA3.' prefixes in field names). County-wide. 14,450 of 15,980 have DATA3.OWNERNAME1. There is no public Yankton County viewer on the District's list, so the District's general terms are applied here. This layer does NOT support paging (resultRecordCount/resultOffset give 'Pagination is not supported') - page by PARCEL.OBJECTID ranges instead. DATA3.OWNERNAME2/3 = further owners; DATA3.ADDRESS3 = 'CITY  ST'; text fields are space-padded. No value field (market_value unmapped). A second, partial copy exists: City of Yankton's hosted layer https://services3.arcgis.com/aVepqWph7Jkj1aWl/arcgis/rest/services/YanktonCountyParcels_new/FeatureServer/0 (9,458 parcels, '2024 Data - clipped to City of Yankton Jurisdiction for SmartGov use', owner field Name, values PropVal11.., licenseInfo just 'City of Yankton') - not used because it is older and partial. Terms: layer description/copyrightText empty; District III portal item b5138657e9974b8abf9a7fa74f9773f5 (owner siteadmin, modified 2026-10-13) has licenseInfo/accessInformation null; the limit is in the District's Terms of Use PDF quoted under restrictions (rest of it is an 'as is' warranty disclaimer). NOTE the old gis.districtiii.org/arcgis/rest/... URLs listed on ArcGIS Online now return 404; the server moved to /server/rest/services.",
+   "checked": "2026-11-22"
+  },
+  {
+   "county": "BROOKINGS",
+   "url": "https://services5.arcgis.com/ghMlwLxET54qDmAf/ArcGIS/rest/services/Parcels/FeatureServer/121",
+   "verified": true,
+   "record_count": 9173,
+   "fields": {
+    "apn": "parcelid",
+    "owner": "Deedhold",
+    "mailing_address": [
+     "address",
+     "Deedholder",
+     "Deedhold_1",
+     "Deedhold_2"
+    ],
+    "address": "location",
+    "market_value": "cumulative",
+    "acres": "Gross_Acre"
+   },
+   "restrictions": "terms not found: layer description/copyrightText empty; ArcGIS item 0a5c705174f6446aa5d3a2116d0023e1 has licenseInfo and accessInformation empty (description only 'Parcel Data within Brookings,SD,57006'); no city terms page was looked up",
+   "notes": "CITY OF BROOKINGS ONLY, not the whole county (9,173 parcels). Published by the City of Brookings (ArcGIS Online, item 'Parcels' by akarl_City, 'City of Brookings Parcel Data'; lastEditDate 2026-11-19). No county-wide Brookings County layer with owners was found. Field names are misleading - checked on sample rows: Deedhold = owner name; 'address' = owner MAILING street; Deedholder = mailing city; Deedhold_1 = mailing state; Deedhold_2 = mailing zip; 'location' = site address (LocationCity/LocationState/LocationZip go with it). cumulative = Landvalue + buildingva (all three are text); Totalassesedvalue is a number but was 0 on one sample. Gross_Acre is text ('.3515'). Hosted feature layer, maxRecordCount 2000.",
+   "checked": "2026-11-22"
   }
  ],
- "summary": "Projects work well: SDDOT's approved STIP map service gives planned projects as lines per category with cost, year and county. No statewide owner parcels; of the big counties only Pennington (Rapid City) was verified with owner and mailing address - Minnehaha and Sioux Falls servers timed out and Lincoln refused the request. Brown and Brookings were not checked.",
+ "summary": "Projects work well: SDDOT's approved STIP map service gives planned projects as lines per category with cost, year and county. No statewide owner parcels. Pennington (Rapid City) is verified and in use. Checked 2026-11-22: Codington, Beadle and Roberts (First District) and Davison, Hughes, Butte and Yankton (Planning and Development District III) and the City of Brookings answer with owner names but are held on terms; Minnehaha, Sioux Falls and Lawrence servers timed out and Lincoln sits behind a bot check.",
  "parcels_statewide_reason": "No free statewide parcel layer with owner names was found on the state servers checked (sdgis.sd.gov hosted services, the State of South Dakota ArcGIS Online organisation); parcels are published county by county."
 }
