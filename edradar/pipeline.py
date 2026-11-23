@@ -88,7 +88,8 @@ def restage(db: DB) -> Dict[str, int]:
         known = status.get(pid) if pid else None
         if known:
             bid, building, let = bid or bool(known["let_actual"]) or bool(known["completed"]), building or bool(known["building"]), let or known["let_date"]
-        new = fixed.get((p["source"], p["external_id"])) or C.later_stage(p["stage"], C.stage_from_schedule(let, bid, building))
+        mined = None if p["source"] == "penndot" else C.mined_stage(raw)[0]
+        new = fixed.get((p["source"], p["external_id"])) or C.later_stage(C.later_stage(p["stage"], C.stage_from_schedule(let, bid, building)), mined)
         if new != (current or "unknown"):
             db.conn.execute("UPDATE projects SET stage=? WHERE id=?", (new, p["id"]))
             changed += 1

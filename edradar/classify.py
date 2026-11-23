@@ -150,6 +150,117 @@ def stage_from_schedule(let_date: Optional[str], let_actual: bool = False, build
             else "row_acquisition" if months <= 42 else "design" if months <= 72 else None)
 
 
+# ---- reading an agency's own schedule fields -------------------------------------------------------------------
+# Agencies name these fields a hundred ways, so they are found by what the name says, and every stage that comes from
+# one carries the field and value it came from, so a reader can check it.
+_ROW_KEY = re.compile(r"right.?of.?way.?(year|yr|date|fy)|^(row|rw)_?(year|yr|date|fy|start)\w*$", re.I)
+_CON_KEY = re.compile(r"construction.?(year|yr|date|start)|^const?_?(year|yr|date)|let.{0,12}(date|year|_d)$|^let_?(date|year|dt)|bid.?(date|year)|advertis\w*.?date", re.I)
+_PROG_KEY = re.compile(r"^fiscal_?yea\w*$|^federal_fiscal_year$|^prog\w*_?fed_?yr$|^projectyr$|^program_?(year|yr)$|^stip_?(year|fy)$|^fy$", re.I)
+_DONE_KEY = re.compile(r"completion.?(year|date)|complete.?(year|date)|open_?to_?traffic|^opening.?(year|date)", re.I)
+_HORIZON_KEY = re.compile(r"horizon.?year|^horizon$|plan_?year", re.I)
+_TEXT_KEY = re.compile(r"^(project_?|proj_?|work_?|current_?|phase_?)?(status|phase|stage)(_?desc\w*|_?code|_?name|1)?$|^current_budgeted_phase$|^comments?$|^remarks?$|^(scpe|scope|phase)_?(id|cd)$", re.I)
+_TEXT_RULES = [
+    (r"under construction|in construction|constcomp|\bcomplete|accomplished|open to traffic|\bawarded|contract let|\bbuilt\b", "construction"),
+    (r"condemn|eminent domain|declaration of taking", "condemnation_filed"),
+    (r"right[- ]of[- ]way|\brow\b|\brw\d*\b|r/w|land acquisition|appraisal", "row_acquisition"),
+    (r"final design|\bdesign\b|preliminary engineering|\bpe\b|\ben\d+\b|engineering", "design"),
+    (r"environmental|nepa|\blocation\b|feasibility|\bstudy\b|scoping", "environmental_review"),
+    (r"not committed|unfunded|illustrative|vision|long[- ]range|proposed|unconstrained|needs\b", "planning"),
+]
+
+
+def _year(v: Any) -> Optional[int]:
+    """A calendar year from a year, a date or an ArcGIS millisecond stamp; None for anything else."""
+    if isinstance(v, bool) or v is None:
+        return None
+    if isinstance(v, (int, float)) and abs(v) > 1e11:
+        from datetime import datetime, timezone
+        try:
+            y = datetime.fromtimestamp(v / 1000, tz=timezone.utc).year
+        except (OverflowError, OSError, ValueError):
+            return None
+        return y if 1990 <= y <= 2100 else None
+    m = re.match(r"^\s*(?:FY\s*)?((?:19|20)\d\d)(?:\.0)?\s*$|^\s*((?:19|20)\d\d)-\d\d-\d\d|^\s*\d{1,2}/\d{1,2}/((?:19|20)\d\d)\s*$", str(v), re.I)
+    return int(next(g for g in m.groups() if g)) if m else None
+
+
+def mined_stage(raw: Dict[str, Any], today: Optional[Any] = None) -> Tuple[Optional[str], Optional[str]]:
+    """(stage, what it rests on) from the schedule and status fields in an agency's record, or (None, None).
+
+    Used for the many lists the tracker has no hand-written mapping for. It only reads fields whose name says what
+    they are (a right-of-way year, a construction year, an opening year, a phase, a status), and it returns the field
+    and value it used so the claim can be checked against the source.
+    """
+    from datetime import date
+
+    now = (today or date.today()).year
+    found = []                      # (stage, basis)
+    row_y = con_y = prog_y = done_y = horizon = None
+    texts = []
+    for key, v in (raw or {}).items():
+        if v in (None, "", " ") or (key.startswith("_") and key != "_status"):
+            continue
+        k = "status" if key == "_status" else key.split(".")[-1]
+        if _ROW_KEY.search(k) and _year(v):
+            row_y = (key, _year(v))
+        elif _DONE_KEY.search(k) and _year(v):
+            done_y = (key, _year(v))
+        elif _CON_KEY.search(k) and _year(v):
+            con_y = (key, _year(v))
+        elif _PROG_KEY.search(k) and _year(v):
+            prog_y = (key, _year(v))
+        elif _HORIZON_KEY.search(k):
+            m = re.search(r"(20\d\d)", str(v))
+            if m:
+                horizon = (key, int(m.group(1)))
+        elif _TEXT_KEY.search(k) and isinstance(v, str) and len(v) <= 80 and not re.search(r"geometr|capacity|nbi|version|part_|parcel|link", k, re.I):
+            texts.append((key, v))
+        elif re.search(r"^proj\w*_?complete\w*$", k, re.I) and str(v).strip().lower() in ("1", "y", "yes", "true"):
+            found.append(("construction", "%s = %s" % (key, v)))
+        elif k.upper() == "ROWTYPE":                             # the agency has drawn the property it needs, parcel by parcel
+            found.append(("design", "the agency has mapped the property it needs (%s = %s)" % (key, str(v)[:30])))
+        elif k.upper() in ("PARCEL_STAGE", "ROW_PROJ_ID"):       # a record in a right-of-way division's parcel system
+            found.append(("row_acquisition", "listed in the agency's right-of-way parcel system (%s = %s)" % (key, str(v)[:30])))
+    phase = None
+    for key, v in texts:
+        hit = next((st for pat, st in _TEXT_RULES if re.search(pat, v, re.I)), None)
+        code = re.match(r"^\s*(CN|CON|CONST|RW|ROW|EN|PE|LOCATION)\d*\s*$", v, re.I)
+        if code:                    # a bare phase code names the phase that is funded, which may still lie ahead
+            phase = (key, v, {"CN": "construction", "CO": "construction", "RW": "row_acquisition", "RO": "row_acquisition"}.get(code.group(1)[:2].upper(), "design"))
+        elif hit:
+            found.append((hit, '%s = "%s"' % (key, v.strip()[:60])))
+    if phase:
+        key, v, st = phase
+        when = prog_y[1] if prog_y else None
+        if when and when > now:     # that phase is scheduled, not under way: the project is one step before it
+            found.append(({"construction": "condemnation_filed" if when - now <= 1 else "row_acquisition", "row_acquisition": "design"}.get(st, "planning"),
+                          "%s = %s scheduled for %s %d" % (key, v, prog_y[0], when)))
+        else:
+            found.append(({"construction": "condemnation_filed"}.get(st, st) if not when else st, "%s = %s%s" % (key, v, " (%s %d)" % (prog_y[0], when) if when else "")))
+        prog_y = None
+    mid = lambda y: "%d-07-01" % y
+    if done_y:                      # an opening year: construction takes about three years before it
+        st = "construction" if done_y[1] <= now + 2 else stage_from_schedule(mid(done_y[1] - 3), today=today)
+        if st:
+            found.append((st, "%s = %d (construction assumed to start about three years earlier)" % done_y))
+    for item in (con_y, prog_y):
+        if item:
+            st = stage_from_schedule(mid(item[1]), today=today)
+            if st:
+                found.append((st, "%s = %d" % item))
+            elif item[1] - now > 6:
+                found.append(("planning", "%s = %d, more than six years away" % item))
+    if row_y:
+        st = "row_acquisition" if row_y[1] <= now else "design" if row_y[1] - now <= 2 else "planning" if row_y[1] - now > 4 else "design"
+        found.append((st, "%s = %d" % row_y))
+    if horizon and not found and horizon[1] - now >= 6:
+        found.append(("planning", "%s = %d: a long-range plan project" % horizon))
+    if not found:
+        return None, None
+    stage, basis = max(found, key=lambda x: STAGE_RANK.get(x[0], -1))
+    return stage, basis
+
+
 def later_stage(a: Optional[str], b: Optional[str]) -> str:
     """Whichever of two stages is further along. Work does not move backwards."""
     return max((a or "unknown", b or "unknown"), key=lambda s: STAGE_RANK.get(s, -1))
@@ -178,7 +289,8 @@ def timeline(stage: Optional[str], raw: Optional[Dict[str, Any]] = None, today: 
             except ValueError:
                 continue
         out["months_to_letting"] = months
-    bid = stage == "construction" or "A" in (r.get("LET_IND"), r.get("NTP_IND")) or r.get("UNDER_CONSTRUCTION") == "Y"
+    mined = mined_stage(r, today) if not r.get("PROJ_ID") else (None, None)
+    bid = (stage == "construction" and not mined[0]) or "A" in (r.get("LET_IND"), r.get("NTP_IND")) or r.get("UNDER_CONSTRUCTION") == "Y"
     out["let_actual"] = bid
     if r.get("_confirmed"):
         out["basis"] = "Confirmed by an eminent domain attorney familiar with this project: " + str(r["_confirmed"])
@@ -188,6 +300,8 @@ def timeline(stage: Optional[str], raw: Optional[Dict[str, Any]] = None, today: 
                     else "Estimated from the agency's construction bid date. Right-of-way must be in hand before bids open, so "
                          "offers and condemnations come in the months before it. Not confirmed against court filings."
                     if months is not None and months <= 72
+                    else "From the agency's own record: %s. Not confirmed against court filings." % mined[1]
+                    if mined[0] and mined[0] == stage and not r.get("LET_DATE")
                     else "The agency lists this project but publishes no status and no dates for it, so no stage is claimed. "
                          "It may be anywhere from early planning to finished." if stage in (None, "unknown")
                     else "From the agency's own status for this project." if r.get("_status")
@@ -351,7 +465,7 @@ def classify_dot(signal: Dict[str, Any]) -> Dict[str, Any]:
     if raw.get("_likelihood"):                  # a list of parcels the agency is acquiring needs no inference
         likelihood, ptype = int(raw["_likelihood"]), ("highway" if ptype == "other" else ptype)
     stage = dot_base_stage(raw)
-    stage = later_stage(stage, stage_from_schedule(raw.get("_let")))
+    stage = later_stage(later_stage(stage, stage_from_schedule(raw.get("_let"))), mined_stage(raw)[0])
     cost = raw.get("_cost")
     geometry = json.loads(signal["geometry"]) if isinstance(signal.get("geometry"), str) else signal.get("geometry")
     c = geo.center(geometry)

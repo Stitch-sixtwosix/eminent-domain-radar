@@ -852,3 +852,31 @@ def test_a_list_alone_is_not_a_stage():
     assert C.dot_base_stage({"_work_type": "Right of Way"}) == "row_acquisition"
     assert "no stage is claimed" in C.timeline("unknown", {"_stage": "planning"})["basis"]
     assert outreach.STAGE_PHRASE.get("unknown", "the agency's published plans") == "the agency's published plans"
+
+
+def test_stage_is_read_from_the_agencys_schedule_fields():
+    """Right-of-way years, construction years, opening years, phases and status notes, each returned with its source."""
+    from datetime import date
+
+    from edradar import classify as C
+
+    T = date(2026, 11, 23)
+    m = lambda raw: C.mined_stage(raw, T)
+    assert m({"RightOfWayYear": "2022", "ConstructionYear": "2025"})[0] == "construction"
+    assert m({"RightOfWayYear": "2025", "ConstructionYear": "2029"}) == ("row_acquisition", "ConstructionYear = 2029")
+    assert m({"RightOfWayYear": "2028"})[0] == "design" and m({"RightOfWayYear": "2033"})[0] == "planning"
+    assert m({"RightOfWayYear": "FUNDED FOR PRELIMINARY ENGINEERING ONLY"}) == (None, None)            # words in a year field are not a year
+    assert m({"COMMENT": "UNDER CONSTRUCTION."}) == ("construction", 'COMMENT = "UNDER CONSTRUCTION."')
+    assert m({"WORK_STATUS": "Accomplished"})[0] == "construction" and m({"Status": "2018 Not Committed"})[0] == "planning"
+    assert m({"Estimated_Completion_Year": 2027})[0] == "construction" and m({"OPEN_TO_TRAFFIC": 2035})[0] == "design"
+    assert m({"PROGRAM_FED_YR": 2035})[0] == "planning" and m({"Fiscal_Yea": "2028"})[0] == "row_acquisition"
+    assert m({"PROJ_ESTMTD_LET_D": 2051222400000})[0] == "planning"                                      # a bid date in 2035
+    assert m({"Phase_Code": "RW0001", "Federal_Fiscal_Year": 2029})[0] == "design"                       # right-of-way is still ahead
+    assert m({"Phase_Code": "CN0001", "Federal_Fiscal_Year": 2027})[0] == "condemnation_filed"
+    assert m({"CURRENT_BUDGETED_PHASE": "ROW"})[0] == "row_acquisition" and m({"_status": "RW"})[0] == "row_acquisition"
+    assert m({"ROW_PROJ_ID": "R00000855", "PARCEL_STAGE": "New"})[0] == "row_acquisition"
+    assert m({"Horizon_Year_Filter": "2045, 2055, 2075"})[0] == "planning" and m({"Proj_Complete": 1})[0] == "construction"
+    assert m({"OBJECTID": 5, "END_MP": 0.35, "GEOMETRY_STATUS": "Geometry Exists", "YEAR_BUILT": 1953, "Notes": "Widen to 5 lanes"}) == (None, None)
+    assert "RightOfWayYear = 2025" in C.timeline("row_acquisition", {"RightOfWayYear": "2025"}, T)["basis"]
+    out = C.classify_dot({"title": "X", "body": "", "geometry": None, "raw": json.dumps({"_work_type": "Widen", "_stage": "planning", "COMMENT": "UNDER CONSTRUCTION"})})
+    assert out["stage"] == "construction"
