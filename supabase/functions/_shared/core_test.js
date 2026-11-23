@@ -72,6 +72,24 @@ eq("match", [hit.matched, hit.name, hit.mailing_address, hit.phones[0].number, h
 eq("skip-traced address can be mailed", C.parseAddress(hit.mailing_address).zip, "22180");
 eq("restricted states", C.RESTRICTED_STATES, ["ID", "MT", "SC", "WA"]);
 
+// site visits
+const IPHONE = "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1";
+const WIN = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36 Edg/130.0.0.0";
+eq("iphone", C.uaInfo(IPHONE), { device: "Phone", browser: "Safari", os: "iOS" });
+eq("edge on windows", C.uaInfo(WIN), { device: "Computer", browser: "Edge", os: "Windows" });
+eq("android tablet", C.uaInfo("Mozilla/5.0 (Linux; Android 13; SM-X700) AppleWebKit/537.36 Chrome/120 Safari/537.36").device, "Tablet");
+eq("bots are not visitors", [C.isBot("Googlebot/2.1"), C.isBot(""), C.isBot("curl/8.1"), C.isBot(WIN)], [true, true, true, false]);
+eq("came from another site", C.refHost("https://www.google.com/search?q=x", "eminenttracker.com"), "google.com");
+eq("came from our own site", C.refHost("https://eminenttracker.com/blog/", "eminenttracker.com"), "");
+eq("no referrer", [C.refHost("", "eminenttracker.com"), C.refHost("not a url", "eminenttracker.com")], ["", ""]);
+const seen = C.visitRow({ k: "view", vid: "abc12345def", sid: "s1", path: "/signup.html", ref: "https://www.linkedin.com/feed/", us: "apollo", uc: "launch", sw: 390, sh: 844, lang: "en-US", tz: "America/New_York", fresh: true, title: "Sign up" }, IPHONE, "eminenttracker.com", "v1");
+eq("a visit", [seen.kind, seen.path, seen.ref_host, seen.utm_source, seen.utm_campaign, seen.device, seen.screen, seen.is_new, seen.event], ["view", "/signup.html", "linkedin.com", "apollo", "launch", "Phone", "390 x 844", true, null]);
+eq("an event", C.visitRow({ k: "event", vid: "abc12345dee", path: "/", event: "Clicked sign up" }, WIN, "eminenttracker.com", "v1").event, "Clicked sign up");
+eq("a bot is dropped", C.visitRow({ k: "view", vid: "abc12345def", path: "/" }, "Googlebot/2.1", "eminenttracker.com", "v1"), null);
+eq("a bad path is dropped", C.visitRow({ k: "view", vid: "abc12345def", path: "javascript:alert(1)" }, WIN, "eminenttracker.com", "v1"), null);
+eq("an event with no name is dropped", C.visitRow({ k: "event", vid: "abc12345def", path: "/" }, WIN, "eminenttracker.com", "v1"), null);
+eq("long text is cut and control characters removed", C.clip("a\u0007b" + "x".repeat(50), 5), "a bxx");
+
 // Stripe signature (needs Web Crypto)
 if (typeof crypto !== "undefined" && crypto.subtle) {
   const body = '{"id":"evt_1"}', secret = "whsec_test", t = 1700000000;

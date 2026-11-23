@@ -109,6 +109,7 @@ td.acts { white-space: nowrap; } td.acts .btn + .btn { margin-left: 6px; }
   <p class="scope">Admin console</p>
   <nav aria-label="Admin sections" id="nav">
     <a href="#overview">Overview</a>
+    <a href="#visitors">Site visits <i id="n-vis"></i></a>
     <a href="#payments">Payments <i id="n-pay"></i></a>
     <a href="#signups">Sign-ups <i id="n-sign"></i></a>
     <a href="#accounts">Accounts <i id="n-acct"></i></a>
@@ -136,6 +137,40 @@ td.acts { white-space: nowrap; } td.acts .btn + .btn { margin-left: 6px; }
       <section><header><h2>Open support cases</h2><a href="#support">All cases</a></header><div class="wrap"><table id="open-cases"><tbody></tbody></table></div></section>
       <section><header><h2>Latest payments</h2><a href="#payments">All payments</a></header><div class="wrap"><table id="last-pay"><tbody></tbody></table></div></section>
     </div>
+  </div>
+
+  <div data-view="visitors" hidden>
+    <div class="top"><h1>Site visits</h1><p><label>Period <select id="vis-days"><option value="1">Today and yesterday</option><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="90">Last 90 days</option><option value="365">Last 12 months</option></select></label></p></div>
+    <p class="note quiet" id="vis-off" hidden>Visit counting is not installed yet, or no visit has been recorded since it was switched on.</p>
+    <p class="lede">Counted by the site itself on every public page and in the subscriber app. Search-engine robots and your own visits as administrator are left out. A visitor is one browser; the same person on a phone and a laptop counts twice.</p>
+    <dl class="figs" id="f-vis"></dl>
+    <div class="cols">
+      <section><header><h2>Visits by day</h2><p>Eastern time</p></header><div class="wrap"><table id="v-days"><thead><tr><th>Day</th><th class="n">Page views</th><th class="n">Visitors</th><th aria-hidden="true"></th></tr></thead><tbody></tbody></table></div></section>
+      <section><header><h2>Where visitors came from</h2><p>The site that linked here</p></header><div class="wrap"><table id="v-src"><thead><tr><th>Source</th><th class="n">Visits</th><th class="n">Visitors</th><th class="n">Pages a visit</th></tr></thead><tbody></tbody></table></div></section>
+    </div>
+    <section><header><h2>Pages</h2><p>Most viewed first</p></header><div class="wrap"><table id="v-pages"><thead><tr><th>Page</th><th class="n">Views</th><th class="n">Visitors</th><th class="n">Average time</th><th class="n">Read to</th></tr></thead><tbody></tbody></table></div></section>
+    <div class="cols">
+      <section><header><h2>What visitors did</h2><p>Clicks that show intent</p></header><div class="wrap"><table id="v-events"><thead><tr><th>Action</th><th class="n">Times</th><th class="n">Visitors</th></tr></thead><tbody></tbody></table></div></section>
+      <section><header><h2>Campaign links</h2><p>Links tagged with utm_source</p></header><div class="wrap"><table id="v-camp"><thead><tr><th>Source</th><th>Medium</th><th>Campaign</th><th class="n">Views</th><th class="n">Visitors</th></tr></thead><tbody></tbody></table></div></section>
+    </div>
+    <div class="cols">
+      <section><header><h2>First page of a visit</h2><p>And how many left without a second page</p></header><div class="wrap"><table id="v-entry"><thead><tr><th>Page</th><th class="n">Visits</th><th class="n">Left at once</th></tr></thead><tbody></tbody></table></div></section>
+      <section><header><h2>Last page of a visit</h2></header><div class="wrap"><table id="v-exit"><thead><tr><th>Page</th><th class="n">Visits</th></tr></thead><tbody></tbody></table></div></section>
+    </div>
+    <div class="cols">
+      <section><header><h2>Where they are</h2><p>From the browser's time zone</p></header><div class="wrap"><table id="v-tz"><thead><tr><th>Time zone</th><th class="n">Visitors</th><th class="n">Views</th></tr></thead><tbody></tbody></table></div></section>
+      <section><header><h2>Time of day</h2><p>Eastern time</p></header><div class="wrap"><table id="v-hours"><thead><tr><th>Hour</th><th class="n">Views</th><th aria-hidden="true"></th></tr></thead><tbody></tbody></table></div></section>
+    </div>
+    <div class="cols">
+      <section><header><h2>Devices</h2></header><div class="wrap"><table id="v-dev"><thead><tr><th>Device</th><th class="n">Visitors</th><th class="n">Views</th></tr></thead><tbody></tbody></table></div></section>
+      <section><header><h2>Browsers</h2></header><div class="wrap"><table id="v-br"><thead><tr><th>Browser</th><th class="n">Visitors</th><th class="n">Views</th></tr></thead><tbody></tbody></table></div></section>
+    </div>
+    <div class="cols">
+      <section><header><h2>Operating systems</h2></header><div class="wrap"><table id="v-os"><thead><tr><th>System</th><th class="n">Visitors</th><th class="n">Views</th></tr></thead><tbody></tbody></table></div></section>
+      <section><header><h2>Screen sizes and languages</h2></header><div class="wrap"><table id="v-scr"><thead><tr><th>Screen or language</th><th class="n">Visitors</th><th class="n">Views</th></tr></thead><tbody></tbody></table></div></section>
+    </div>
+    <section><header><h2>Latest activity</h2><p>Most recent 250 page views and actions</p></header>
+      <div class="wrap"><table id="v-recent"><thead><tr><th>When</th><th>Visitor</th><th>Page or action</th><th>Came from</th><th>Device</th><th>Time zone</th><th class="n">Stayed</th></tr></thead><tbody></tbody></table></div></section>
   </div>
 
   <div data-view="payments" hidden>
@@ -238,7 +273,8 @@ const s = await supa(), {data} = await s.auth.getSession();
 $("out").addEventListener("click", async () => { await s.auth.signOut(); location.replace("login.html"); });
 if (!data.session) location.replace("login.html");
 else if ((data.session.user.app_metadata || {}).role !== "admin") { $("who").textContent = data.session.user.email; $("err").textContent = "This account is not an administrator."; $("err").hidden = false; }
-else { $("who").textContent = data.session.user.email; route(); load(); }
+else { $("who").textContent = data.session.user.email; try { localStorage.setItem("et_staff", "1"); } catch (e) {}      // an administrator's own browsing is not counted as a visit
+  route(); load(); loadVisits(); }
 
 // One account action on the server: hold, release or delete.
 async function act(body) {
@@ -307,6 +343,7 @@ function draw() {
     ["Paying subscribers", T ? T.live : 0, T ? "live subscriptions in Stripe" : "Stripe not connected"],
     ["Monthly plan revenue", T ? usd(T.mrr) : "$0.00", T ? "from Stripe, yearly plans as a twelfth" : "nothing confirmed"],
     ["Collected, last 30 days", T ? usd(T.collected_30d) : "$0.00", T ? "paid invoices" : ""],
+    ["Site visits today", VIS ? num(VIS.totals.today_views) : "–", VIS ? num(VIS.totals.today_visitors) + " visitors" : "not installed"],
     ["Accounts", P.length, within(7) + " new in 7 days"],
     ["Access opened by hand", free.length, "no plan charge"],
     ["Open support cases", CASES ? open.length : "–", CASES ? "" : "not installed", open.length ? "bad" : ""]]);
@@ -439,6 +476,48 @@ document.querySelector("#cases").addEventListener("click", async e => {
   if (error) { $("err").textContent = "The case was not saved: " + error.message; $("err").hidden = false; b.disabled = false; return; }
   Object.assign(CASES.find(c => String(c.id) === tr.dataset.case), change); draw();
 });
+
+// ---------- site visits ----------
+const dur = s => !s ? "–" : s < 60 ? s + " s" : Math.floor(s / 60) + " min " + (s % 60 ? (s % 60) + " s" : "");
+const pageName = p => ({"/": "Home page", "/signup.html": "Sign up", "/login.html": "Sign in", "/account.html": "Account", "/app/": "Subscriber app", "/terms.html": "Terms", "/privacy.html": "Privacy", "/compliance.html": "Compliance", "/blog/": "Blog index"}[p] || p);
+const place = tz => !tz || tz === "Unknown" ? "Unknown" : ({"America/New_York": "US Eastern", "America/Detroit": "US Eastern", "America/Chicago": "US Central", "America/Denver": "US Mountain", "America/Phoenix": "Arizona", "America/Los_Angeles": "US Pacific", "America/Anchorage": "Alaska", "Pacific/Honolulu": "Hawaii"}[tz] || tz.replace(/_/g, " "));
+let VIS = null;
+async function loadVisits() {
+  const {data: t, error} = await s.rpc("admin_traffic", {days: +$("vis-days").value});
+  VIS = error ? null : t; drawVisits(); if (ROWS.length) draw();
+}
+$("vis-days").addEventListener("change", loadVisits);
+function drawVisits() {
+  const t = VIS, T = t ? t.totals : {}, S = t ? t.sessions : {}, all = t ? t.all_time : {};
+  $("vis-off").hidden = !!(t && all.views);
+  $("n-vis").textContent = t && T.today_views ? T.today_views + " today" : "";
+  const share = (n, of) => of ? Math.round(100 * n / of) + "%" : "0%";
+  figs("f-vis", [["Page views", num(T.views), "in this period"], ["Visitors", num(T.visitors), num(T.new_visitors) + " here for the first time"],
+    ["Visits", num(S.count), (S.pages_per || 0) + " pages a visit"], ["Left after one page", share(S.bounces || 0, S.count), num(S.bounces) + " visits"],
+    ["Average time on a page", dur(T.avg_seconds), "read to " + (T.avg_scroll || 0) + "% of the page"], ["Came back", num(S.returning), "visitors with more than one visit"],
+    ["Today", num(T.today_views), num(T.today_visitors) + " visitors"], ["On the site now", num(T.live), "in the last 5 minutes"],
+    ["Since counting began", num(all.views), all.since ? num(all.visitors) + " visitors since " + day(all.since) : "no visits yet"]]);
+  if (!t) { for (const id of ["v-days", "v-src", "v-pages", "v-events", "v-camp", "v-entry", "v-exit", "v-tz", "v-hours", "v-dev", "v-br", "v-os", "v-scr", "v-recent"]) body(id, "", 7, "Nothing recorded."); return; }
+  const top = Math.max(1, ...t.by_day.map(d => d.views));
+  body("v-days", t.by_day.slice().reverse().map(d => `<tr><td>${day(d.day + "T12:00:00")}</td><td class="n">${num(d.views)}</td><td class="n">${num(d.visitors)}</td><td class="bar"><i style="width:${Math.round(100 * d.views / top)}%"></i></td></tr>`).join(""), 4, "No visits in this period.");
+  body("v-src", t.sources.map(r => `<tr><td>${esc(r.name)}</td><td class="n">${num(r.sessions)}</td><td class="n">${num(r.visitors)}</td><td class="n">${r.pages_per}</td></tr>`).join(""), 4, "No visits in this period.");
+  body("v-pages", t.pages.map(r => `<tr><td><b>${esc(pageName(r.name))}</b>${pageName(r.name) === r.name ? "" : `<span>${esc(r.name)}</span>`}</td><td class="n">${num(r.views)}</td><td class="n">${num(r.visitors)}</td><td class="n">${dur(r.seconds)}</td><td class="n">${r.scroll ? r.scroll + "%" : "–"}</td></tr>`).join(""), 5, "No visits in this period.");
+  body("v-events", t.events.map(r => `<tr><td>${esc(r.name)}</td><td class="n">${num(r.times)}</td><td class="n">${num(r.visitors)}</td></tr>`).join(""), 3, "No sign-up, sign-in or email clicks yet.");
+  body("v-camp", t.campaigns.map(r => `<tr><td>${esc(r.source)}</td><td>${esc(r.medium)}</td><td>${esc(r.campaign)}</td><td class="n">${num(r.views)}</td><td class="n">${num(r.visitors)}</td></tr>`).join(""), 5, "No tagged links have been used. Add ?utm_source=apollo&utm_campaign=launch to links in your emails to see them here.");
+  body("v-entry", t.entries.map(r => `<tr><td>${esc(pageName(r.name))}</td><td class="n">${num(r.sessions)}</td><td class="n">${share(r.bounces, r.sessions)}</td></tr>`).join(""), 3, "No visits in this period.");
+  body("v-exit", t.exits.map(r => `<tr><td>${esc(pageName(r.name))}</td><td class="n">${num(r.sessions)}</td></tr>`).join(""), 2, "No visits in this period.");
+  const three = (id, rows, name) => body(id, rows.map(r => `<tr><td>${esc(name ? name(r.name) : r.name)}</td><td class="n">${num(r.visitors)}</td><td class="n">${num(r.views)}</td></tr>`).join(""), 3, "No visits in this period.");
+  three("v-tz", (t.countries.length ? t.countries.map(c => ({...c, name: "Country: " + c.name})) : []).concat(t.timezones), place);
+  three("v-dev", t.devices); three("v-br", t.browsers); three("v-os", t.systems);
+  three("v-scr", t.screens.concat(t.languages.map(l => ({...l, name: "Language: " + l.name}))));
+  const hours = [...Array(24)].map((_, h) => (t.by_hour.find(x => x.hour === h) || {views: 0}).views), peak = Math.max(1, ...hours);
+  body("v-hours", hours.map((n, h) => `<tr><td>${(h % 12) || 12} ${h < 12 ? "am" : "pm"}</td><td class="n">${num(n)}</td><td class="bar">${n ? `<i style="width:${Math.round(100 * n / peak)}%"></i>` : ""}</td></tr>`).join(""), 3, "");
+  const when = x => new Date(x).toLocaleString(undefined, {month: "short", day: "numeric", hour: "numeric", minute: "2-digit"});
+  body("v-recent", t.recent.map(r => `<tr><td>${when(r.at)}</td><td>${esc(r.visitor)}${r.is_new ? "<span>first visit</span>" : ""}</td>
+    <td>${r.kind === "event" ? `<b>${esc(r.event)}</b><span>on ${esc(pageName(r.path))}</span>` : esc(pageName(r.path))}</td>
+    <td>${esc(r.utm_source ? "Campaign: " + r.utm_source : r.ref_host || "")}</td><td>${esc(r.device || "")}<span>${esc([r.browser, r.os].filter(Boolean).join(", "))}</span></td>
+    <td>${esc(place(r.tz))}${r.country ? `<span>${esc(r.country)}</span>` : ""}</td><td class="n">${r.kind === "event" ? "" : dur(r.seconds)}</td></tr>`).join(""), 7, "No visits in this period.");
+}
 
 // ---------- data sources (public files written at publish time) ----------
 fetch("coverage.json").then(r => r.json()).then(rows => {

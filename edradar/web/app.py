@@ -653,6 +653,7 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
     _build_blog(landing, site, fill, (cfg.get("site") or {}).get("domain") or "")
     shutil.copyfile(landing / "site.css", site / "site.css")
     shutil.copyfile(landing / "auth.js", site / "auth.js")
+    shutil.copyfile(landing / "track.js", site / "track.js")
     # Accounts switch on when a Supabase project is configured. Its URL and "anon" key are public by design;
     # the service key must never be put here.
     web = cfg.get("site") or {}
@@ -676,7 +677,7 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
         # This keeps visitors out of the screen; the data file itself is still a public file on the host.
         gate = ('<meta name="robots" content="noindex">\n<style>html.gate body { visibility: hidden; }</style>\n'
                 '<script>document.documentElement.classList.add("gate"); window.ET_TOKEN = new Promise(r => window.__etToken = r);</script>\n'
-                '<script src="../auth-config.js"></script>\n'
+                '<script src="../auth-config.js"></script>\n<script src="../track.js" defer></script>\n'
                 '<script type="module">import {supa} from "../auth.js";\n'
                 'const s = await supa(), got = await s.auth.getSession().catch(() => ({data: {}}));\n'
                 'const session = got.data && got.data.session;\n'

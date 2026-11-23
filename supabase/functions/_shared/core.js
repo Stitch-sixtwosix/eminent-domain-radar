@@ -216,3 +216,45 @@ export function skipResult(body) {
   const matched = !!(name || mailing || phones.length || emails.length);
   return { matched, name, mailing_address: mailing, phones, emails, litigator: !!person.litigator };
 }
+
+// ---------- site visits ----------
+export const isBot = (ua) => !ua || /bot|crawl|spider|slurp|preview|monitor|uptime|headless|lighthouse|pingdom|curl|wget|python|httpclient|scrapy|facebookexternalhit|whatsapp|go-http|java\/|axios|node-fetch|phantom|semrush|ahrefs|gptbot|claude|bytespider/i.test(ua);
+
+/** Device, browser and system from a user-agent string. Coarse on purpose: enough to see who is visiting, no more. */
+export function uaInfo(ua) {
+  ua = String(ua || "");
+  const device = /ipad|tablet|kindle|silk|playbook/i.test(ua) || (/android/i.test(ua) && !/mobile/i.test(ua)) ? "Tablet"
+    : /mobi|iphone|ipod|android|windows phone/i.test(ua) ? "Phone" : "Computer";
+  const browser = /edg(e|a|ios)?\//i.test(ua) ? "Edge" : /opr\/|opera/i.test(ua) ? "Opera" : /samsungbrowser/i.test(ua) ? "Samsung Internet"
+    : /firefox|fxios/i.test(ua) ? "Firefox" : /crios|chrome|chromium/i.test(ua) ? "Chrome" : /safari/i.test(ua) ? "Safari"
+    : /msie|trident/i.test(ua) ? "Internet Explorer" : "Other";
+  const os = /windows nt/i.test(ua) ? "Windows" : /iphone|ipad|ipod/i.test(ua) ? "iOS" : /android/i.test(ua) ? "Android"
+    : /mac os x|macintosh/i.test(ua) ? "macOS" : /cros/i.test(ua) ? "ChromeOS" : /linux/i.test(ua) ? "Linux" : "Other";
+  return { device, browser, os };
+}
+
+/** The site a visitor came from, or "" when they came from this site or from nowhere we are told about. */
+export function refHost(referrer, ownHost) {
+  const m = /^https?:\/\/([^\/:?#]+)/i.exec(String(referrer || ""));
+  const h = m ? m[1].replace(/^www\./, "").toLowerCase() : "";
+  return !h || h === String(ownHost || "").replace(/^www\./, "").toLowerCase() ? "" : h;
+}
+
+export const clip = (v, n) => (v === undefined || v === null || v === "" ? null : String(v).replace(/[\u0000-\u001f]/g, " ").slice(0, n));
+
+/** A visit as it is stored, from what the page sent. Null when it is not a visit we keep. */
+export function visitRow(body, ua, ownHost, visitor) {
+  if (!body || typeof body !== "object" || isBot(ua)) return null;
+  const path = clip(body.path, 200);
+  if (!path || !path.startsWith("/") || !/^[a-z0-9]{8,40}$/i.test(String(body.vid || ""))) return null;
+  const info = uaInfo(ua), w = Number(body.sw) || 0, h = Number(body.sh) || 0;
+  const row = {
+    vid: String(body.vid), kind: body.k === "event" ? "event" : "view", visitor, is_new: body.fresh === true,
+    session: clip(body.sid, 40), path, title: clip(body.title, 160), event: body.k === "event" ? clip(body.event, 80) : null,
+    ref_host: refHost(body.ref, ownHost) || null, referrer: refHost(body.ref, ownHost) ? clip(body.ref, 300) : null,
+    utm_source: clip(body.us, 80), utm_medium: clip(body.um, 80), utm_campaign: clip(body.uc, 120), utm_term: clip(body.ut, 80), utm_content: clip(body.ux, 80),
+    device: info.device, browser: info.browser, os: info.os, lang: clip(body.lang, 20), tz: clip(body.tz, 60),
+    screen: w && h ? `${w} x ${h}` : null,
+  };
+  return row.kind === "event" && !row.event ? null : row;
+}
