@@ -47,6 +47,9 @@ Deno.serve((req) => serve(req, async () => {
       product_data: { name: plan.name + (choice.state ? " (" + choice.state.replace(/\b\w/g, (c: string) => c.toUpperCase()) + ")" : "") } } }],
     subscription_data: { metadata: tag, description: "Renews automatically until cancelled. Postcards and owner lookups you order are added to the next invoice." },
     metadata: tag,
+    // A promotion code box on the payment page, for monthly plans only: a "50% off for three months" code applied to a
+    // yearly plan would take half off the whole year in one go.
+    ...(yearly ? {} : { allow_promotion_codes: true }),
     success_url: SITE + "/account.html?paid=1", cancel_url: SITE + "/account.html?subscribe=1",
   });
   return { url: s.url };
