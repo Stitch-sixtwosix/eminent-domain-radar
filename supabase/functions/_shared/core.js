@@ -123,6 +123,9 @@ export const titleCase = (text) =>
   (text || "").split(/\s+/).filter(Boolean).map((w) =>
     /[a-z]/.test(w) || KEEP_UPPER.has(w.replace(/[.,]/g, "")) ? w : w.length > 1 && /[A-Z]/.test(w) ? w[0] + w.slice(1).toLowerCase() : w
   ).join(" ");
+export const STAGE_PHRASE = { planning: "planning", environmental_review: "environmental review", design: "design",
+  row_acquisition: "right-of-way acquisition", condemnation_filed: "the condemnation stage", construction: "construction" };
+
 export function mergeValues(firm, lead) {
   const addr = lead.address && /^\s*\d/.test(lead.address) ? titleCase(lead.address) : "";
   return {
@@ -131,7 +134,7 @@ export function mergeValues(firm, lead) {
     property_address: addr || `parcel ${lead.apn || ""}`,
     parcel_id: String(lead.apn || ""), county: titleCase(lead.parcel_county),
     project_name: (lead.project || "").replace(/\s*\(MPMS \d+\)/, "").replace(/\s*\([^)]*$/, "").trim() || "a planned public project",
-    project_stage: (lead.stage || "planning").replace(/_/g, " "),
+    project_stage: STAGE_PHRASE[lead.stage] || "the agency's published plans",      // an unknown stage is never stated as one
     agency: lead.agency || "the sponsoring agency",
     firm_name: firm.name || "[Your firm name]", attorney_name: firm.attorney || firm.name || "[Attorney name]",
     firm_phone: firm.phone || "[phone]", firm_email: firm.email || "[email]", firm_website: firm.website || "",

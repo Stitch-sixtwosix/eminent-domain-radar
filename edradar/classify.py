@@ -103,7 +103,7 @@ def lead_points(project_score: int, reason: str) -> int:
 STAGE_LABEL = {"planning": "Planning: the earliest stage", "environmental_review": "Environmental review: still early",
                "design": "In design", "row_acquisition": "Right-of-way acquisition already under way",
                "condemnation_filed": "Final acquisition: condemnations filed or due", "construction": "Bid or under construction: the land is already taken",
-               "unknown": "Stage not published"}
+               "unknown": "Stage not published: on the agency's list, progress not stated"}
 
 
 STAGE_ORDER = [
@@ -188,6 +188,9 @@ def timeline(stage: Optional[str], raw: Optional[Dict[str, Any]] = None, today: 
                     else "Estimated from the agency's construction bid date. Right-of-way must be in hand before bids open, so "
                          "offers and condemnations come in the months before it. Not confirmed against court filings."
                     if months is not None and months <= 72
+                    else "The agency lists this project but publishes no status and no dates for it, so no stage is claimed. "
+                         "It may be anywhere from early planning to finished." if stage in (None, "unknown")
+                    else "From the agency's own status for this project." if r.get("_status")
                     else "Taken from the program the agency lists this project under. No bid date is published, so this is "
                          "the least certain kind of stage.")
     return out
@@ -304,8 +307,29 @@ DOT_STAGE = [
     (r"right[- ]of[- ]way|\brow\b|r/w|acquisition|utilit", "row_acquisition"),
     (r"design|engineer|\bpe\b|plans?\b|ps&e|final", "design"),
     (r"environment|nepa|scoping|study|concept|alternativ", "environmental_review"),
-    (r"plan|program|proposed|candidate|future|stip|\btip\b|long[- ]range|unfunded|funded|scheduled|develop|pending|not started", "planning"),
+    # Only words that say the work has not begun. "Programmed", "funded" or "scheduled" say a job is on a list, not how far
+    # along it is: jobs carrying those words turned out to be anywhere from study to finished.
+    (r"\bplanning\b|\bplanned\b|proposed|candidate|future|long[- ]range|unfunded|not started|not yet|vision|illustrative", "planning"),
 ]
+SPECIFIC = ("environmental_review", "design", "row_acquisition", "condemnation_filed", "construction")
+
+
+def dot_base_stage(raw: Dict[str, Any]) -> str:
+    """The stage an agency's own record supports, before any dates: its status wording, or what the list itself is.
+
+    A list that is by its nature one stage (parcels being acquired, contracts under way) carries that stage. A general
+    program of projects does not: being on a transportation plan says nothing about progress, and calling every such
+    job "planning" labelled finished rail lines and condemned parcels as early leads. Those are "unknown" until a date,
+    a status or a person says otherwise.
+    """
+    status = str(raw.get("_status") or "")
+    stage = next((st for pat, st in DOT_STAGE if re.search(pat, status, re.I)), None)
+    if stage is None:
+        stage = raw.get("_stage") if raw.get("_stage") in SPECIFIC else "unknown"
+    if stage in ("planning", "unknown", "design") and re.search(r"right[- ]of[- ]way|\brow\b|r/w", str(raw.get("_work_type") or ""), re.I):
+        stage = "row_acquisition"              # the job itself is the land purchase
+    return stage
+
 
 
 def classify_dot(signal: Dict[str, Any]) -> Dict[str, Any]:
@@ -326,11 +350,7 @@ def classify_dot(signal: Dict[str, Any]) -> Dict[str, Any]:
         likelihood = min(100, likelihood + 8)
     if raw.get("_likelihood"):                  # a list of parcels the agency is acquiring needs no inference
         likelihood, ptype = int(raw["_likelihood"]), ("highway" if ptype == "other" else ptype)
-    status = str(raw.get("_status") or "")
-    # A program of future work (a STIP, a five-year plan) is "planning" unless its status says something more specific.
-    stage = next((st for pat, st in DOT_STAGE if re.search(pat, status, re.I)), raw.get("_stage") or ("planning" if not status else "unknown"))
-    if stage in ("planning", "unknown", "design") and re.search(r"right[- ]of[- ]way|\brow\b|r/w", str(raw.get("_work_type") or ""), re.I):
-        stage = "row_acquisition"              # the job itself is the land purchase
+    stage = dot_base_stage(raw)
     stage = later_stage(stage, stage_from_schedule(raw.get("_let")))
     cost = raw.get("_cost")
     geometry = json.loads(signal["geometry"]) if isinstance(signal.get("geometry"), str) else signal.get("geometry")

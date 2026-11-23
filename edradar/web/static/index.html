@@ -956,7 +956,7 @@ async function loadProjects() {
       <span class="score ${scoreClass(p.score)}" data-tip-project="${p.id}">${p.score}</span>
       <div><h3>${esc(pname(p.name))}</h3>
         <div class="meta">${[p.county ? esc(p.county[0] + p.county.slice(1).toLowerCase()) + " County" : "", esc(p.agency || p.source), p.est_cost ? money(p.est_cost) : ""].filter(Boolean).join(" · ")}</div>
-        <div class="meta">${[esc(p.project_type), esc((p.stage || "").replace(/_/g, " ")), p.matched_at ? p.lead_count.toLocaleString() + " parcels" : "not matched yet"].filter(Boolean).join(" · ")}</div></div>
+        <div class="meta">${[esc(p.project_type), esc(p.stage && p.stage !== "unknown" ? p.stage.replace(/_/g, " ") : "stage not published"), p.matched_at ? p.lead_count.toLocaleString() + " parcels" : "not matched yet"].filter(Boolean).join(" · ")}</div></div>
     </div>`).join("");
   projects.forEach(drawProject);
   if (selected && !projects.some(p => p.id === selected.id)) selected = null;
@@ -1061,7 +1061,7 @@ function mergeValues(r, tpl = TPL) {
     property: addr ? "your property at " + addr : "your property (parcel " + r.apn + ")",
     property_address: addr || "parcel " + r.apn, parcel_id: String(r.apn || ""), county: titleCase(r.parcel_county),
     project_name: (r.project || "").replace(/\s*\(MPMS \d+\)/, "").replace(/\s*\([^)]*$/, "").trim() || "a planned public project",
-    project_stage: (r.stage || "planning").replace(/_/g, " "), agency: r.agency || "the sponsoring agency",
+    project_stage: ({planning: "planning", environmental_review: "environmental review", design: "design", row_acquisition: "right-of-way acquisition", condemnation_filed: "the condemnation stage", construction: "construction"})[r.stage] || "the agency's published plans", agency: r.agency || "the sponsoring agency",
     firm_name: f.name || "[Your firm name]", attorney_name: f.attorney || f.name || "[Attorney name]",
     firm_phone: f.phone || "[phone]", firm_email: f.email || "[email]", firm_website: f.website || "",
   };

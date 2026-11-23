@@ -31,6 +31,11 @@ ADDRESS_TAIL = re.compile(r"^(?P<head>.*?)[,\s]+(?P<state>[A-Z]{2})[,\s]+(?P<zip
 STREET_START = re.compile(r"^(\d|P\.? ?O\.? ?BOX|PO BOX|RR |HC |ONE |TWO )", re.I)
 
 
+STAGE_PHRASE = {"planning": "planning", "environmental_review": "environmental review", "design": "design",
+                "row_acquisition": "right-of-way acquisition", "condemnation_filed": "the condemnation stage",
+                "construction": "construction"}       # anything else: we do not know the stage, so we do not state one
+
+
 def owner_kind(owner: Optional[str]) -> str:
     """government | company | individual | unknown. Public bodies are never solicited."""
     if not owner:
@@ -168,7 +173,7 @@ def merge_values(cfg: Dict[str, Any], lead: Dict[str, Any]) -> Dict[str, str]:
         # drop the "(MPMS 123)" tag, then any bracket PennDOT's 25-character titles leave unclosed: "Extension (Study"
         "project_name": re.sub(r"\s*\([^)]*$", "", re.sub(r"\s*\(MPMS \d+\)", "", lead.get("project") or "")).strip()
                         or "a planned public project",
-        "project_stage": (lead.get("stage") or "planning").replace("_", " "),
+        "project_stage": STAGE_PHRASE.get(lead.get("stage") or "", "the agency's published plans"),
         "agency": lead.get("agency") or "the sponsoring agency",
         "firm_name": firm.get("name") or "[Your firm name]", "attorney_name": firm.get("attorney") or firm.get("name") or "[Attorney name]",
         "firm_phone": firm.get("phone") or "[phone]", "firm_email": firm.get("email") or "[email]",

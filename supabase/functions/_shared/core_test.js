@@ -46,10 +46,10 @@ eq("empty", C.parseAddress(null), null);
 
 // postcard
 const firm = { name: "Duerr Law, P.C.", phone: "555-0100", address_line1: "1 Main St", city: "Pittsburgh", state: "PA", zip: "15222" };
-const lead = { id: 7, owner: "SMITH <b>JOHN</b>", mailing_address: "123 Main St, Austin, TX 78701", address: "123 MAIN ST", apn: "0042", parcel_county: "TRAVIS", project: "I-35 Widening (MPMS 123)", stage: "final_design" };
+const lead = { id: 7, owner: "SMITH <b>JOHN</b>", mailing_address: "123 Main St, Austin, TX 78701", address: "123 MAIN ST", apn: "0042", parcel_county: "TRAVIS", project: "I-35 Widening (MPMS 123)", stage: "row_acquisition" };
 const ok = C.postcardCheck(firm, {}, lead);
 eq("ready to mail", [ok.blocker, ok.owner_kind, ok.to.city], [null, "individual", "AUSTIN"]);
-eq("merge fields filled", [ok.front.includes("your property at 123 Main St"), ok.front.includes("I-35 Widening is in final design"), ok.front.includes("(MPMS")], [true, true, false]);
+eq("merge fields filled", [ok.front.includes("your property at 123 Main St"), ok.front.includes("I-35 Widening is in right-of-way acquisition"), ok.front.includes("(MPMS")], [true, true, false]);
 eq("always labelled as advertising", ok.back.includes("ADVERTISEMENT. Duerr Law, P.C., 1 Main St, Pittsburgh, PA, 15222"), true);
 eq("owner text cannot inject markup", C.postcardHtml(firm, { postcard_headline: "{{owner_name}} <script>" }, lead).front.includes("<script>"), false);
 eq("unknown template keys are ignored", C.postcardHtml(firm, { fine: "x", postcard_back: "Call {{firm_phone}}" }, lead).back.includes("Call 555-0100"), true);
@@ -57,6 +57,9 @@ eq("public body is never mailed", C.postcardCheck(firm, {}, { ...lead, owner: "C
 eq("no owner", C.postcardCheck(firm, {}, { ...lead, owner: "" }).blocker, "No owner of record for this parcel.");
 eq("unreadable address", C.postcardCheck(firm, {}, { ...lead, mailing_address: "somewhere" }).blocker.startsWith("The mailing address"), true);
 eq("firm must have a return address", C.postcardCheck({ name: "X" }, {}, lead).blocker.startsWith("Add your firm"), true);
+
+eq("an unknown stage is never printed as a stage", C.mergeValues(firm, { ...lead, stage: "unknown" }).project_stage, "the agency's published plans");
+eq("nor is a missing one", C.mergeValues(firm, { ...lead, stage: undefined }).project_stage, "the agency's published plans");
 
 // skip tracing
 eq("same parcel, same key", C.parcelKey({ state: "ca", county: " Los  Angeles ", apn: "12-3" }), "CA|LOS ANGELES|12-3");

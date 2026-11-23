@@ -63,13 +63,14 @@ def restage(db: DB) -> Dict[str, int]:
     """Move every agency project to the stage its own schedule implies, and rescore. Runs on every update.
 
     A project already matched to parcels keeps its record, so its stage is never recomputed by classify; without this
-    a job stays "in design" until long after it is built. A stage only ever moves forward.
+    a job stays "in design" until long after it is built. PennDOT's own stages only move forward; other lists are read afresh.
     """
     status = {r["ext_id"]: r for r in db.rows("SELECT * FROM agency_status WHERE source='penndot'")}
     fixed = {(r["source"], r["external_id"]): r["stage"] for r in db.rows("SELECT source, external_id, stage FROM stage_overrides")}
     changed = 0
     for p in db.rows("""SELECT p.id, p.stage, s.source, s.external_id, s.title, s.state, s.raw FROM projects p
                         JOIN signals s ON s.id = p.signal_id WHERE s.source = 'penndot' OR s.source LIKE 'dot:%' OR s.source LIKE 'gis:%'"""):
+        current = p["stage"]
         try:
             raw = json.loads(p["raw"] or "{}")
         except ValueError:
@@ -79,6 +80,7 @@ def restage(db: DB) -> Dict[str, int]:
                                        raw.get("UNDER_CONSTRUCTION") == "Y", str(raw.get("PROJ_ID") or p["external_id"]))
         else:
             let, bid, building, pid = raw.get("_let"), False, False, None
+            p = dict(p, stage=C.dot_base_stage(raw))     # worked out afresh from the record: these have no history worth keeping
             if (p["state"] or "") == "PA":       # another body's list of a PennDOT job: find PennDOT's own number
                 pid = next((str(int(v)) for k, v in raw.items() if "mpms" in k.lower() and str(v).replace(".0", "").isdigit()), None)
                 m = pid or MPMS.search(p["title"] or "")
@@ -87,7 +89,7 @@ def restage(db: DB) -> Dict[str, int]:
         if known:
             bid, building, let = bid or bool(known["let_actual"]) or bool(known["completed"]), building or bool(known["building"]), let or known["let_date"]
         new = fixed.get((p["source"], p["external_id"])) or C.later_stage(p["stage"], C.stage_from_schedule(let, bid, building))
-        if new != (p["stage"] or "unknown"):
+        if new != (current or "unknown"):
             db.conn.execute("UPDATE projects SET stage=? WHERE id=?", (new, p["id"]))
             changed += 1
     db.commit()

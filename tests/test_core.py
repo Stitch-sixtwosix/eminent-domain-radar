@@ -836,3 +836,19 @@ def test_enrichment_fills_blanks_and_survives_refresh(tmp_path):
     attrs = json.loads(row["attributes"])
     assert row["owner"] == "SMITH JOHN" and attrs["year_built"] == 1978 and attrs["ZONING"] == "R1"
     assert not db.save_enrichment({"layer": "L", "apn": "missing"})
+
+
+def test_a_list_alone_is_not_a_stage():
+    """Being on a transportation plan says nothing about progress, so no stage is claimed from it."""
+    from edradar import classify as C
+    from edradar import outreach
+
+    assert C.dot_base_stage({"_stage": "planning"}) == "unknown"                       # a program list's default
+    assert C.dot_base_stage({"_status": "Programmed", "_stage": "planning"}) == "unknown"
+    assert C.dot_base_stage({"_status": "Funded", "_stage": "planning"}) == "unknown"
+    assert C.dot_base_stage({"_status": "Proposed"}) == "planning"                     # the agency says it has not begun
+    assert C.dot_base_stage({"_stage": "row_acquisition"}) == "row_acquisition"        # a list of parcels being acquired
+    assert C.dot_base_stage({"_status": "Under Construction", "_stage": "planning"}) == "construction"
+    assert C.dot_base_stage({"_work_type": "Right of Way"}) == "row_acquisition"
+    assert "no stage is claimed" in C.timeline("unknown", {"_stage": "planning"})["basis"]
+    assert outreach.STAGE_PHRASE.get("unknown", "the agency's published plans") == "the agency's published plans"
