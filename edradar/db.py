@@ -115,6 +115,13 @@ CREATE TABLE IF NOT EXISTS usage (
     created_at TEXT DEFAULT (datetime('now'))
 );
 
+-- Facts an agent found in public records for a parcel (assessor page, recorder, state business registry).
+-- Kept apart from the county layer's own record so the daily parcel refresh never wipes them.
+CREATE TABLE IF NOT EXISTS parcel_enrichment (
+    layer TEXT NOT NULL, apn TEXT NOT NULL, data TEXT NOT NULL, sources TEXT,
+    checked_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (layer, apn)
+);
+
 -- What is known about a company that owns parcels (website, Apollo organization).
 CREATE TABLE IF NOT EXISTS companies (
     owner TEXT PRIMARY KEY, name TEXT, website TEXT, phone TEXT, apollo_org_id TEXT,
@@ -335,8 +342,12 @@ class DB:
             """INSERT INTO parcels (layer, apn, county, address, owner, mailing_address, market_value, acres, attributes, state)
                VALUES (:layer, :apn, :county, :address, :owner, :mailing_address, :market_value, :acres, :attributes, :state)
                ON CONFLICT(layer, apn) DO UPDATE SET state=excluded.state, county=excluded.county, address=excluded.address,
-                 owner=excluded.owner, mailing_address=excluded.mailing_address,
-                 market_value=excluded.market_value, acres=excluded.acres, attributes=excluded.attributes,
+                 owner=COALESCE(excluded.owner, parcels.owner),
+                 mailing_address=COALESCE(excluded.mailing_address, parcels.mailing_address),
+                 market_value=COALESCE(excluded.market_value, parcels.market_value),
+                 acres=COALESCE(excluded.acres, parcels.acres),
+                 attributes=COALESCE(json_patch(excluded.attributes, (SELECT json_extract(e.data, '$.attributes')
+                     FROM parcel_enrichment e WHERE e.layer = excluded.layer AND e.apn = excluded.apn)), excluded.attributes),
                  owner_kind=CASE WHEN excluded.owner IS parcels.owner AND excluded.mailing_address IS parcels.mailing_address
                                  THEN parcels.owner_kind END""",
             row,
@@ -424,6 +435,59 @@ class DB:
                  phone=COALESCE(excluded.phone, companies.phone), apollo_org_id=excluded.apollo_org_id,
                  fetched_at=datetime('now')""", (owner, name, website, phone, apollo_org_id))
         self.conn.commit()
+
+    # ---- enrichment: facts found in public records, kept across parcel refreshes ----
+    ENRICH_FIELDS = ("owner", "mailing_address", "market_value", "acres")
+
+    def save_enrichment(self, rec: Dict[str, Any]) -> bool:
+        """Store what was found for one parcel. Fills only blanks in the county's own columns; extra facts go into
+        the parcel's attributes (and stay there when the county layer is re-read). Returns False if the parcel is unknown."""
+        layer, apn = rec["layer"], str(rec["apn"])
+        row = self.conn.execute("SELECT id, owner FROM parcels WHERE layer=? AND apn=?", (layer, apn)).fetchone()
+        if not row:
+            return False
+        fields = {k: v for k, v in (rec.get("fields") or {}).items() if k in self.ENRICH_FIELDS and v not in (None, "")}
+        attrs = {k: v for k, v in (rec.get("attributes") or {}).items() if v not in (None, "")}
+        data = json.dumps({"fields": fields, "attributes": attrs})
+        sources = json.dumps([s for s in rec.get("sources") or [] if isinstance(s, str) and s.startswith("http")])
+        self.conn.execute(
+            """INSERT INTO parcel_enrichment (layer, apn, data, sources) VALUES (?,?,?,?)
+               ON CONFLICT(layer, apn) DO UPDATE SET data=json_patch(parcel_enrichment.data, excluded.data),
+                 sources=excluded.sources, checked_at=datetime('now')""", (layer, apn, data, sources))
+        self.conn.execute(
+            """UPDATE parcels SET owner=COALESCE(owner, ?), mailing_address=COALESCE(mailing_address, ?),
+                 market_value=COALESCE(market_value, ?), acres=COALESCE(acres, ?),
+                 attributes=json_patch(COALESCE(attributes, '{}'), ?),
+                 owner_kind=CASE WHEN owner IS NULL OR mailing_address IS NULL THEN NULL ELSE owner_kind END
+               WHERE id=?""",
+            (fields.get("owner"), fields.get("mailing_address"), fields.get("market_value"), fields.get("acres"),
+             json.dumps(attrs), row["id"]))
+        company = rec.get("company") or {}
+        owner = fields.get("owner") or row["owner"]
+        if owner and (company.get("name") or company.get("website") or company.get("phone")):
+            self.save_company(owner, company.get("name"), company.get("website"), company.get("phone"))
+        self.conn.commit()
+        self.refresh_outreach_flags()
+        return True
+
+    def enrichment_queue(self, state: Optional[str] = None, min_score: int = 70, limit: int = 50,
+                         recheck_days: int = 30) -> List[Dict[str, Any]]:
+        """Parcels on live leads that are missing the most, best leads first, not checked in the last recheck_days."""
+        where, args = ["l.score >= ?", "p.duplicate_of IS NULL", "COALESCE(p.stage, '') != 'construction'"], [min_score]
+        if state:
+            where.append("pa.state = ?")
+            args.append(state.upper())
+        args += ["-%d day" % recheck_days, limit]
+        return self.rows(
+            """SELECT pa.id, pa.layer, pa.apn, pa.state, pa.county, pa.address, pa.owner, pa.mailing_address,
+                      pa.market_value, pa.acres, pa.owner_kind, pa.attributes, MAX(l.score) AS lead_score,
+                      MIN(p.name) AS project, MIN(p.stage) AS stage,
+                      (pa.owner IS NULL) + (pa.mailing_address IS NULL) + (pa.market_value IS NULL)
+                        + (pa.acres IS NULL) AS missing
+               FROM parcels pa JOIN leads l ON l.parcel_id = pa.id JOIN projects p ON p.id = l.project_id
+               WHERE %s AND NOT EXISTS (SELECT 1 FROM parcel_enrichment e WHERE e.layer = pa.layer AND e.apn = pa.apn
+                                         AND e.checked_at >= datetime('now', ?))
+               GROUP BY pa.id ORDER BY missing DESC, lead_score DESC LIMIT ?""" % " AND ".join(where), tuple(args))
 
     def company_for(self, owner: Optional[str]) -> Optional[Dict[str, Any]]:
         rows = self.rows("SELECT name, website, phone FROM companies WHERE owner=?", (owner,)) if owner else []

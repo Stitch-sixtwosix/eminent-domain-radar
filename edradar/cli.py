@@ -45,6 +45,13 @@ def main() -> None:
     sub.add_parser("restage", help="move projects to the stage the agency's own bid dates imply, then rescore")
     sub.add_parser("rescore", help="recompute all scores from stored data (after the scoring rules change)")
     sub.add_parser("usage", help="billable usage: lookups and postcards, cost and client price")
+    p = sub.add_parser("enrich-queue", help="parcels on live leads that are missing the most, as JSON (read-only)")
+    p.add_argument("--state")
+    p.add_argument("--min-score", type=int, default=70)
+    p.add_argument("--limit", type=int, default=50)
+    p.add_argument("--recheck-days", type=int, default=30)
+    p = sub.add_parser("enrich-save", help="save facts found in public records for parcels (JSON list file)")
+    p.add_argument("file")
     p = sub.add_parser("export", help="write a read-only static copy of the dashboard")
     p.add_argument("--out", default="site")
     args = ap.parse_args()
@@ -122,6 +129,21 @@ def main() -> None:
         print(pipeline.restage(db))
     elif args.cmd == "rescore":
         print(pipeline.rescore(db))
+    elif args.cmd == "enrich-queue":
+        import json as _json
+
+        rows = db.enrichment_queue(args.state, args.min_score, args.limit, args.recheck_days)
+        for r in rows:
+            attrs = _json.loads(r.pop("attributes") or "{}")
+            r["record"] = {k: str(v)[:160] for k, v in list(attrs.items())[:60]
+                           if v not in (None, "") and not k.lower().startswith(("shape", "objectid", "globalid", "centroid"))}
+        print(_json.dumps(rows, indent=1, default=str))
+    elif args.cmd == "enrich-save":
+        import json as _json
+
+        recs = _json.load(open(args.file))
+        ok = sum(1 for rec in (recs if isinstance(recs, list) else [recs]) if db.save_enrichment(rec))
+        print("saved %d of %d" % (ok, len(recs) if isinstance(recs, list) else 1))
     elif args.cmd == "usage":
         from . import skiptrace
 

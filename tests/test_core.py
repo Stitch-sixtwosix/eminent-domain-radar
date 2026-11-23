@@ -816,3 +816,23 @@ def test_stage_follows_the_agencys_own_bid_date(tmp_path):
     import pytest
     with pytest.raises(ValueError):
         pipeline.set_stage(db, pid, "finished")
+
+
+def test_enrichment_fills_blanks_and_survives_refresh(tmp_path):
+    db = DB(str(tmp_path / "e.db"))
+    base = {"layer": "L", "apn": "1", "county": "X", "address": "1 Main St", "owner": None, "mailing_address": None,
+            "market_value": 50000, "acres": None, "attributes": {"PARCELID": "1"}, "state": "TX"}
+    pid = db.upsert_parcel(base)
+    db.commit()
+    assert db.save_enrichment({"layer": "L", "apn": "1", "fields": {"owner": "SMITH JOHN", "market_value": 1, "acres": 2.5},
+                               "attributes": {"year_built": 1978, "sale_date": "2019-04-02"},
+                               "sources": ["https://county.example/parcel/1", "not a url"]})
+    row = db.rows("SELECT * FROM parcels WHERE id=?", (pid,))[0]
+    assert row["owner"] == "SMITH JOHN" and row["acres"] == 2.5 and row["market_value"] == 50000   # county value kept
+    assert json.loads(row["attributes"])["year_built"] == 1978
+    db.upsert_parcel(dict(base, attributes={"PARCELID": "1", "ZONING": "R1"}))     # the daily refresh re-reads the layer
+    db.commit()
+    row = db.rows("SELECT * FROM parcels WHERE id=?", (pid,))[0]
+    attrs = json.loads(row["attributes"])
+    assert row["owner"] == "SMITH JOHN" and attrs["year_built"] == 1978 and attrs["ZONING"] == "R1"
+    assert not db.save_enrichment({"layer": "L", "apn": "missing"})
