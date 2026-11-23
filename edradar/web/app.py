@@ -666,7 +666,7 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
     out = site / "app"
     out.mkdir(exist_ok=True)
     html = (STATIC / "index.html").read_text()
-    from datetime import datetime
+    from datetime import datetime, timedelta
 
     build = datetime.now().strftime("%Y%m%d%H%M%S")
     html = html.replace("<script>\nconst $", "<script>window.EDRADAR_STATIC = true; window.EDRADAR_BUILD = \"%s\";</script>"
@@ -722,6 +722,27 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
     reg = _registry(cfg, db)
     reg["generated"] = datetime.now().strftime("%Y-%m-%d %H:%M")
     (site / "sources.json").write_text(json.dumps(reg, separators=(",", ":")))
+    # What the daily run last did, for the admin console's system status screen. Counts and times only.
+    one = lambda sql: (db.rows(sql) or [{"v": None}])[0]["v"]
+    on = [x for x in reg["sources"] if x["status"] == "on"]
+    cutoff = (datetime.now() - timedelta(days=4)).strftime("%Y-%m-%d %H:%M:%S")
+    quiet = [x for x in on if x["kind"] == "projects" and (x.get("updated") or "") < cutoff]
+    (site / "status.json").write_text(json.dumps({
+        "published": datetime.now().astimezone().isoformat(timespec="seconds"),
+        "last_collection": one("SELECT MAX(updated_at) v FROM signals"), "last_new_record": one("SELECT MAX(fetched_at) v FROM signals"),
+        "last_match": one("SELECT MAX(matched_at) v FROM projects"),
+        "new_records_24h": one("SELECT COUNT(*) v FROM signals WHERE fetched_at >= datetime('now', '-1 day')"),
+        "matched_24h": one("SELECT COUNT(*) v FROM projects WHERE matched_at >= datetime('now', '-1 day')"),
+        "waiting_to_match": one("SELECT COUNT(*) v FROM projects WHERE score >= 60 AND duplicate_of IS NULL AND matched_at IS NULL AND geometry IS NOT NULL"),
+        "projects": one("SELECT COUNT(*) v FROM projects WHERE score >= 60 AND duplicate_of IS NULL"), "leads": one("SELECT COUNT(*) v FROM leads"),
+        "stages": {r["stage"] or "unknown": r["n"] for r in db.rows(
+            "SELECT stage, COUNT(*) n FROM projects WHERE score >= 60 AND duplicate_of IS NULL GROUP BY stage")},
+        "stages_confirmed": one("SELECT COUNT(*) v FROM stage_overrides"),
+        "sources_on": len(on), "project_sources_on": sum(1 for x in on if x["kind"] == "projects"),
+        "owner_files_on": sum(1 for x in on if x["kind"] == "owners"),
+        "owner_files_held": sum(1 for x in reg["sources"] if x["status"] == "held"),
+        "quiet_sources": [{"state": x["state"], "name": x["name"], "updated": x.get("updated")} for x in quiet[:60]], "quiet_count": len(quiet),
+    }))
     (site / ".nojekyll").write_text("")
     domain = (cfg.get("site") or {}).get("domain")
     (site / "robots.txt").write_text("User-agent: *\nDisallow: /app/\nDisallow: /account.html\nDisallow: /admin.html\n"

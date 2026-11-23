@@ -109,6 +109,7 @@ td.acts { white-space: nowrap; } td.acts .btn + .btn { margin-left: 6px; }
   <p class="scope">Admin console</p>
   <nav aria-label="Admin sections" id="nav">
     <a href="#overview">Overview</a>
+    <a href="#status">System status <i id="n-sys"></i></a>
     <a href="#visitors">Site visits <i id="n-vis"></i></a>
     <a href="#payments">Payments <i id="n-pay"></i></a>
     <a href="#signups">Sign-ups <i id="n-sign"></i></a>
@@ -137,6 +138,18 @@ td.acts { white-space: nowrap; } td.acts .btn + .btn { margin-left: 6px; }
       <section><header><h2>Open support cases</h2><a href="#support">All cases</a></header><div class="wrap"><table id="open-cases"><tbody></tbody></table></div></section>
       <section><header><h2>Latest payments</h2><a href="#payments">All payments</a></header><div class="wrap"><table id="last-pay"><tbody></tbody></table></div></section>
     </div>
+  </div>
+
+  <div data-view="status" hidden>
+    <div class="top"><h1>System status</h1><p><button class="btn" type="button" id="sys-again">Check again</button> <span id="sys-when"></span></p></div>
+    <p class="lede">Every part the service depends on, checked when this screen opens. "Needs attention" is something to fix; "Off" is a part that has not been switched on yet.</p>
+    <dl class="figs" id="f-sys"></dl>
+    <section><header><h2>Website and data</h2></header><div class="wrap"><table id="sys-data"><thead><tr><th>Part</th><th>State</th><th>Detail</th></tr></thead><tbody></tbody></table></div></section>
+    <section><header><h2>Accounts, database and server functions</h2></header><div class="wrap"><table id="sys-server"><thead><tr><th>Part</th><th>State</th><th>Detail</th></tr></thead><tbody></tbody></table></div></section>
+    <section><header><h2>Payments, postcards and lookups</h2></header><div class="wrap"><table id="sys-money"><thead><tr><th>Part</th><th>State</th><th>Detail</th></tr></thead><tbody></tbody></table></div></section>
+    <section><header><h2>Project sources that have gone quiet</h2><p id="sys-quiet-n"></p></header>
+      <p class="lede">Sources that are switched on but have not answered in four days. One quiet source is usually the agency's server; many at once means the daily run is failing.</p>
+      <div class="wrap"><table id="sys-quiet"><thead><tr><th>State</th><th>Source</th><th>Last read</th></tr></thead><tbody></tbody></table></div></section>
   </div>
 
   <div data-view="visitors" hidden>
@@ -221,12 +234,13 @@ td.acts { white-space: nowrap; } td.acts .btn + .btn { margin-left: 6px; }
 
   <div data-view="data" hidden>
     <div class="top"><h1>Data sources</h1><p id="src-asof"></p></div>
+    <div class="tools"><label>State <select id="data-state"><option value="">All states</option></select></label><span id="data-state-note"></span></div>
     <p class="lede" id="cov-note">What each state has today. "Live" means subscribers can open it.</p>
     <section><header><h2>State coverage</h2></header>
       <div class="wrap"><table id="cov"><thead><tr><th>State</th><th>Live</th><th class="n">Projects scoring 60+</th><th>Project source covers</th><th>Owner records</th><th>Held back</th></tr></thead><tbody></tbody></table></div></section>
     <section><header><h2>Every source</h2><p id="src-n"></p></header>
       <p class="lede" id="src-note">Loading the list of sources…</p>
-      <div class="tools"><label>State <select id="src-state"><option value="">All states</option></select></label>
+      <div class="tools"><select id="src-state" hidden><option value="">All states</option></select>
         <label>Kind <select id="src-kind"><option value="">Projects and owners</option><option value="projects">Project sources</option><option value="owners">Owner files</option></select></label>
         <label>Status <select id="src-status"><option value="">Any</option><option value="on">On</option><option value="held">Held</option><option value="off">Off</option></select></label></div>
       <div class="wrap" style="margin-top: 10px"><table id="src"><thead><tr><th>State</th><th>Source</th><th>How it reports</th><th>Publishes</th><th>Status</th><th class="n">Loaded</th><th>Last read</th></tr></thead><tbody></tbody></table></div></section>
@@ -274,7 +288,7 @@ $("out").addEventListener("click", async () => { await s.auth.signOut(); locatio
 if (!data.session) location.replace("login.html");
 else if ((data.session.user.app_metadata || {}).role !== "admin") { $("who").textContent = data.session.user.email; $("err").textContent = "This account is not an administrator."; $("err").hidden = false; }
 else { $("who").textContent = data.session.user.email; try { localStorage.setItem("et_staff", "1"); } catch (e) {}      // an administrator's own browsing is not counted as a visit
-  route(); load(); loadVisits(); }
+  route(); load(); loadVisits(); loadStatus(); }
 
 // One account action on the server: hold, release or delete.
 async function act(body) {
@@ -477,6 +491,71 @@ document.querySelector("#cases").addEventListener("click", async e => {
   Object.assign(CASES.find(c => String(c.id) === tr.dataset.case), change); draw();
 });
 
+// ---------- system status ----------
+const OKAY = '<span class="tag ok">Working</span>', BAD = '<span class="tag bad">Needs attention</span>', OFF = '<span class="tag off">Off</span>', QUERY = '<span class="tag off">Not checked</span>';
+const hoursAgo = t => t ? (Date.now() - new Date(/[zZ]|[+-]\d\d:?\d\d$/.test(t) ? t : t.replace(" ", "T") + "Z")) / 36e5 : Infinity;
+const since = t => { const h = hoursAgo(t); return !isFinite(h) ? "never" : h < 1 ? "under an hour ago" : h < 48 ? Math.round(h) + " hours ago" : Math.round(h / 24) + " days ago"; };
+async function loadStatus() {
+  $("sys-when").textContent = "Checking…";
+  const call = async (name, body, auth) => {
+    try {
+      const {data: fresh} = await s.auth.getSession();
+      const r = await fetch(CFG.url + "/functions/v1/" + name, {method: "POST", body: JSON.stringify(body || {}),
+        headers: Object.assign({"Content-Type": name === "track" ? "text/plain" : "application/json"}, auth ? {apikey: CFG.key, Authorization: "Bearer " + fresh.session.access_token} : {})});
+      return {status: r.status, json: auth && r.ok ? await r.json().catch(() => null) : null};
+    } catch (e) { return {status: 0, json: null}; }
+  };
+  const [site, health, fBilling, fOutreach, fHook, fTrack, db] = await Promise.all([
+    fetch("status.json?" + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null), call("admin", {action: "health"}, true),
+    call("billing"), call("outreach"), call("stripe-webhook"), call("track"), s.rpc("admin_accounts")]);
+  const H = health.json, rows = {data: [], server: [], money: []}, tally = {ok: 0, bad: 0, off: 0};
+  const add = (group, part, state, detail) => { tally[state === OKAY ? "ok" : state === BAD ? "bad" : "off"]++; rows[group].push(`<tr><td><b>${part}</b></td><td>${state}</td><td>${detail}</td></tr>`); };
+
+  // website and data
+  if (!site) add("data", "Published website", BAD, "The status file written at each publish could not be read. It appears after the next publish.");
+  else {
+    add("data", "Published website", hoursAgo(site.published) < 30 ? OKAY : BAD, `Last published ${since(site.published)}. ${num(site.projects)} projects and ${num(site.leads)} parcel leads.`);
+    add("data", "Daily data collection", hoursAgo(site.last_collection) < 30 ? OKAY : BAD, `Agencies were last read ${since(site.last_collection)}. ${num(site.new_records_24h)} new project records in the day before publishing.`);
+    add("data", "Parcel matching", hoursAgo(site.last_match) < 30 ? OKAY : BAD, `Last ran ${since(site.last_match)}; ${num(site.matched_24h)} projects matched that day, ${num(site.waiting_to_match)} still waiting.`);
+    add("data", "Project sources", site.quiet_count > site.project_sources_on * 0.25 ? BAD : OKAY, `${num(site.project_sources_on)} switched on, ${num(site.quiet_count)} not answering in the last four days.`);
+    add("data", "Owner files", OKAY, `${num(site.owner_files_on)} in use, ${num(site.owner_files_held)} held for a terms review.`);
+    const st = site.stages || {}, known = Object.entries(st).filter(([k]) => k !== "unknown").reduce((a, [, v]) => a + v, 0);
+    add("data", "Project stages", OKAY, `${num(known)} projects carry a stage backed by a date or the agency's status; ${num(st.unknown || 0)} show "stage not published"; ${num(site.stages_confirmed)} confirmed by an attorney.`);
+  }
+  // accounts, database, functions
+  add("server", "Sign-in", OKAY, "You are signed in, so Supabase sign-in is answering.");
+  add("server", "Database", db.error ? BAD : OKAY, db.error ? "The account list could not be read: " + esc(db.error.message) : num((db.data || []).length) + " accounts on file.");
+  const fn = (label, r, fine, what) => add("server", label, fine.includes(r.status) ? OKAY : BAD, fine.includes(r.status) ? what : r.status === 404 ? "Not deployed." : r.status === 0 ? "Did not answer." : "Answered " + r.status + ", which is not expected.");
+  fn("Payments function", fBilling, [401], "Deployed, and refusing callers who are not signed in.");
+  fn("Postcards and lookups function", fOutreach, [401], "Deployed, and refusing callers who are not signed in.");
+  fn("Stripe notifications function", fHook, [400], "Deployed, and refusing calls without Stripe's signature.");
+  fn("Visit counting function", fTrack, [204], "Deployed and accepting page views.");
+  add("server", "Admin function", health.status === 200 ? OKAY : BAD, health.status === 200 ? "Deployed and answering." : health.status === 404 ? "Not deployed." : "Answered " + health.status + ".");
+  if (H) {
+    const T = H.tables || {}, missing = Object.entries(T).filter(([, v]) => v === null).map(([k]) => k);
+    add("server", "Database tables", missing.length ? BAD : OKAY, missing.length ? "The server cannot read: " + esc(missing.join(", ")) + "." : `Usage ledger ${num(T.usage)} rows, support cases ${num(T.support_cases)}, visits ${num(T.visits)}, saved firm details ${num(T.firm_outreach)}.`);
+    add("server", "Visit counting", H.last_visit ? (hoursAgo(H.last_visit) < 72 ? OKAY : BAD) : OFF, H.last_visit ? "Last visit recorded " + since(H.last_visit) + "." : "No visit has been recorded yet.");
+    // payments, postcards, lookups
+    const S = H.stripe;
+    add("money", "Stripe key", H.stripe_key === "off" ? OFF : S && S.ok ? OKAY : BAD, H.stripe_key === "off" ? "No Stripe key is saved on the server." : S && S.ok ? (H.stripe_key === "live" ? "A live key is saved and Stripe answers." : "A TEST key is saved and Stripe answers. Real cards cannot be charged until the live key replaces it.") : "Stripe refused the key: " + esc((S || {}).why || ""));
+    if (S && S.ok && "charges" in S) add("money", "Stripe account", S.charges && S.payouts ? OKAY : BAD, S.charges && S.payouts ? "Verified: Stripe can charge cards and pay out to the bank." : "Stripe has not finished verifying the business. " + (S.charges ? "" : "It cannot charge cards yet. ") + (S.payouts ? "" : "It cannot pay out to a bank yet."));
+    add("money", "Stripe notifications", !H.webhook_secret ? (H.stripe_key === "off" ? OFF : BAD) : S && S.webhook_endpoints === 0 ? BAD : OKAY,
+      !H.webhook_secret ? "No signing secret is saved, so a payment cannot open an account by itself." : S && S.webhook_endpoints === 0 ? "A signing secret is saved, but Stripe has no enabled webhook pointing at this site." : "Signing secret saved" + (S && S.webhook_endpoints ? " and Stripe has a webhook pointing at this site." : "."));
+    add("money", "Postcards (Lob)", H.lob_key === "off" ? OFF : H.lob && H.lob.ok ? OKAY : BAD, H.lob_key === "off" ? "No Lob key is saved, so postcards cannot be ordered." : H.lob && H.lob.ok ? (H.lob_key === "live" ? "A live key is saved and Lob answers. Orders are mailed." : "A test key is saved and Lob answers. Orders make proofs only; nothing is mailed.") : esc((H.lob || {}).why || "Lob did not answer."));
+    add("money", "Owner lookups (BatchData)", H.batchdata_key ? OKAY : OFF, H.batchdata_key ? "A key is saved. It is used the first time a subscriber buys a lookup." : "No BatchData key is saved, so lookups cannot be bought.");
+  } else add("money", "Payments, postcards and lookups", BAD, "The admin function did not answer, so these could not be checked.");
+  add("money", "Sign-up and reset emails", QUERY, "Sent by Supabase. This screen cannot test delivery; send yourself a password reset to check.");
+
+  for (const g of ["data", "server", "money"]) body("sys-" + g, rows[g].join(""), 3, "");
+  figs("f-sys", [["Working", tally.ok], ["Needs attention", tally.bad, "", tally.bad ? "bad" : ""], ["Off or not checked", tally.off]]);
+  $("n-sys").textContent = tally.bad || ""; $("n-sys").className = tally.bad ? "due" : "";
+  $("sys-when").textContent = "Checked " + new Date().toLocaleTimeString(undefined, {hour: "numeric", minute: "2-digit"});
+  const Q = site ? site.quiet_sources : [];
+  $("sys-quiet-n").textContent = site && site.quiet_count ? site.quiet_count + " sources" + (site.quiet_count > Q.length ? ", first " + Q.length + " shown" : "") : "";
+  body("sys-quiet", Q.map(x => `<tr><td>${esc(x.state)}</td><td>${esc(x.name)}</td><td>${x.updated ? since(x.updated) : "never"}</td></tr>`).join(""), 3, site ? "Every project source has answered in the last four days." : "Not known until the next publish.");
+}
+$("sys-again").addEventListener("click", loadStatus);
+
 // ---------- site visits ----------
 const dur = s => !s ? "–" : s < 60 ? s + " s" : Math.floor(s / 60) + " min " + (s % 60 ? (s % 60) + " s" : "");
 const pageName = p => ({"/": "Home page", "/signup.html": "Sign up", "/login.html": "Sign in", "/account.html": "Account", "/app/": "Subscriber app", "/terms.html": "Terms", "/privacy.html": "Privacy", "/compliance.html": "Compliance", "/blog/": "Blog index"}[p] || p);
@@ -523,9 +602,16 @@ function drawVisits() {
 fetch("coverage.json").then(r => r.json()).then(rows => {
   const sum = k => rows.reduce((a, r) => a + (r[k] || 0), 0), all = sum("counties"), pct = n => Math.round(100 * n / all) + "%";
   $("cov-note").textContent = `${rows.filter(r => r.live).length} of 50 states are live. Of ${num(all)} counties in the country, ${num(sum("counties_projects"))} (${pct(sum("counties_projects"))}) are covered by a state project source and ${num(sum("counties_owners"))} (${pct(sum("counties_owners"))}) by an owner file.`;
-  body("cov", rows.map(r => `<tr><td><b>${esc(r.state)}</b><span>${esc(r.note || "")}</span></td><td>${r.live ? "Yes" : '<span class="tag off">No</span>'}</td>
+  const pick = $("data-state");
+  rows.forEach(r => pick.add(new Option(r.state, r.code)));
+  const drawCov = () => body("cov", rows.filter(r => !pick.value || r.code === pick.value).map(r => `<tr><td><b>${esc(r.state)}</b><span>${esc(r.note || "")}</span></td><td>${r.live ? "Yes" : '<span class="tag off">No</span>'}</td>
     <td class="n">${num(r.scored_projects)}</td><td>${r.projects ? "All " + r.counties + " counties" : '<span class="tag off">Not connected</span>'}</td>
-    <td>${r.counties_owners} of ${r.counties} counties<span>${esc(r.owners)}</span></td><td>${esc(r.held || "")}</td></tr>`).join(""), 6, "");
+    <td>${r.counties_owners} of ${r.counties} counties<span>${esc(r.owners)}</span></td><td>${esc(r.held || "")}</td></tr>`).join(""), 6, "No state matches.");
+  pick.addEventListener("change", () => {       // the one state filter drives all three tables on this screen
+    drawCov(); const sel = $("src-state"); sel.value = pick.value; sel.dispatchEvent(new Event("change")); document.dispatchEvent(new Event("data-state"));
+    $("data-state-note").textContent = pick.value ? "Showing " + pick.options[pick.selectedIndex].text + " only" : "";
+  });
+  drawCov();
 }).catch(() => { $("cov-note").textContent = "The coverage table could not be loaded."; });
 
 fetch("sources.json").then(r => r.json()).then(reg => {
@@ -546,9 +632,10 @@ fetch("sources.json").then(r => r.json()).then(reg => {
   [sel, $("src-kind"), $("src-status")].forEach(e => e.addEventListener("change", drawSrc)); drawSrc();
   const G = reg.gaps, open = G.reduce((a, g) => a + (g.missing_count || 0), 0), all = G.reduce((a, g) => a + g.counties, 0), noState = G.filter(g => !g.statewide_projects);
   $("gap-note").textContent = `${num(open)} of ${num(all)} counties have no owner file yet. ${noState.map(g => g.state).join(", ") || "No state"} ${noState.length === 1 ? "has" : "have"} no statewide project source.`;
-  body("gaps", G.filter(g => g.missing_count || !g.statewide_projects).map(g => `<tr><td><b>${esc(g.state)}</b></td>
+  const drawGaps = () => body("gaps", G.filter(g => (g.missing_count || !g.statewide_projects) && (!$("data-state").value || g.code === $("data-state").value)).map(g => `<tr><td><b>${esc(g.state)}</b></td>
     <td class="n">${g.projects_on}${g.statewide_projects ? "" : "<span>No statewide source</span>"}</td>
-    <td>${g.missing_count} of ${g.counties}<span>${g.missing.length ? esc(g.missing.join(", ")) : (g.partial_statewide ? "The state file covers " + esc(g.partial_statewide) + "; the rest are not named" : "")}</span></td></tr>`).join(""), 3, "No gaps.");
+    <td>${g.missing_count} of ${g.counties}<span>${g.missing.length ? esc(g.missing.join(", ")) : (g.partial_statewide ? "The state file covers " + esc(g.partial_statewide) + "; the rest are not named" : "")}</span></td></tr>`).join(""), 3, "No gaps for this selection.");
+  document.addEventListener("data-state", drawGaps); drawGaps();
 }).catch(() => { $("src-note").textContent = "The list of sources could not be loaded."; });
 </script>
 </body>

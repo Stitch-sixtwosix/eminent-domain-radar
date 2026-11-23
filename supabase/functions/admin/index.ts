@@ -44,6 +44,38 @@ Deno.serve((req) => serve(req, async () => {
     return { ok: true, cancelled_subscription: !!live };
   }
 
+  if (body.action === "health") {
+    // What the system status screen cannot see from the browser: which keys are saved, and whether each service answers.
+    const key = Deno.env.get("STRIPE_SECRET_KEY") || "", lob = Deno.env.get("LOB_API_KEY") || "";
+    const out: Any = {
+      stripe_key: key.startsWith("sk_live_") || key.startsWith("rk_live_") ? "live" : key ? "test" : "off",
+      webhook_secret: !!Deno.env.get("STRIPE_WEBHOOK_SECRET"),
+      lob_key: lob.startsWith("live_") ? "live" : lob ? "test" : "off",
+      batchdata_key: !!Deno.env.get("BATCHDATA_API_KEY"),
+    };
+    if (key) {
+      try {
+        const b = await stripe("GET", "balance");
+        out.stripe = { ok: true, live: !!b.livemode };
+        const acct = await stripe("GET", "account").catch(() => null);
+        if (acct) Object.assign(out.stripe, { charges: !!acct.charges_enabled, payouts: !!acct.payouts_enabled, verified: !!acct.details_submitted });
+        const hooks = await stripe("GET", "webhook_endpoints", { limit: 50 }).catch(() => null);
+        if (hooks) out.stripe.webhook_endpoints = (hooks.data || []).filter((h: Any) => String(h.url).includes("/functions/v1/stripe-webhook") && h.status === "enabled").length;
+      } catch (e) { out.stripe = { ok: false, why: e instanceof Error ? e.message : String(e) }; }
+    }
+    if (lob) {
+      try {
+        const r = await fetch("https://api.lob.com/v1/postcards?limit=1", { headers: { Authorization: "Basic " + btoa(lob + ":") } });
+        out.lob = { ok: r.ok, why: r.ok ? null : "Lob answered " + r.status };
+      } catch (_e) { out.lob = { ok: false, why: "Lob could not be reached" }; }
+    }
+    const db = admin(), count = async (table: string) => { const r = await db.from(table).select("*", { count: "exact", head: true }); return r.error ? null : r.count; };
+    const last = await db.from("visits").select("at").order("at", { ascending: false }).limit(1);
+    out.tables = { usage: await count("usage"), support_cases: await count("support_cases"), visits: await count("visits"), firm_outreach: await count("firm_outreach"), skip_results: await count("skip_results") };
+    out.last_visit = last.error || !last.data.length ? null : last.data[0].at;
+    return out;
+  }
+
   const [subs, invoices, balance, users] = await Promise.all([
     stripe("GET", "subscriptions", { status: "all", limit: 100, expand: ["data.customer"] }),
     stripe("GET", "invoices", { limit: 100, expand: ["data.customer"] }),
