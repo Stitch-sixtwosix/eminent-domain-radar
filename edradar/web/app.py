@@ -432,18 +432,26 @@ def _upload_private(cfg: Dict[str, Any], payload: bytes, client: Any = None, sta
     url, key = (cfg.get("site") or {}).get("supabase_url"), os.environ.get("SUPABASE_SECRET_KEY")
     if not url or not key:
         return False
-    try:
-        r = (client or httpx.Client(timeout=180)).post(
-            "%s/storage/v1/object/%s/states/%s.json.gz" % (url.rstrip("/"), PRIVATE_BUCKET, state), content=gzip.compress(payload, 6),
-            headers={"Authorization": "Bearer " + key, "apikey": key, "x-upsert": "true",
-                     "Content-Type": "application/gzip", "Cache-Control": "max-age=300"})
-        if r.status_code >= 400:
-            raise RuntimeError("%s %s" % (r.status_code, r.text[:200]))
-        return True
-    except Exception as e:               # never publish a page that points at data which is not there
-        print("WARNING: the private data upload failed (%s); the data file was published openly instead." % e,
-              file=sys.stderr)
-        return False
+    # Once private publishing is set up, a failed upload stops the publish. It used to fall back to writing every lead to
+    # the open site, which only GitHub's file-size limit prevented on the one day the network dropped.
+    import time
+
+    last: Any = None
+    for attempt in range(4):
+        try:
+            r = (client or httpx.Client(timeout=180)).post(
+                "%s/storage/v1/object/%s/states/%s.json.gz" % (url.rstrip("/"), PRIVATE_BUCKET, state), content=gzip.compress(payload, 6),
+                headers={"Authorization": "Bearer " + key, "apikey": key, "x-upsert": "true",
+                         "Content-Type": "application/gzip", "Cache-Control": "max-age=300"})
+            if r.status_code >= 400:
+                raise RuntimeError("%s %s" % (r.status_code, r.text[:200]))
+            return True
+        except Exception as e:
+            last = e
+            print("  upload of %s failed (%s), try %d of 4" % (state, str(e)[:120], attempt + 1), file=sys.stderr)
+            if client is None:
+                time.sleep(20 * (attempt + 1))
+    raise RuntimeError("The private data upload for %s failed four times (%s). Nothing was published; the live site is unchanged." % (state, last))
 
 
 def _md(text: str) -> str:
@@ -693,8 +701,8 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
     common = {"template": outreach.template(cfg), "hub": hub, "contacts": {}}
     payload = None if many else json.dumps(dict(whole, **common), separators=(",", ":")).encode()
     # With a Supabase secret key each state's data goes to a private bucket that only subscribers to that state
-    # can read, and no copy is published on the open site. Without one (or if an upload fails) the data file is
-    # published openly as before.
+    # can read, and no copy is published on the open site. Only a setup with no secret key at all (a local trial) writes
+    # the data file to the site; a failed upload stops the publish instead.
     codes = [x["code"] for x in stats.get("states") or []] or ["PA"]
     live_slugs, private = [], True
     for code in codes:

@@ -583,11 +583,13 @@ def test_private_data_upload(tmp_path, monkeypatch):
     assert not (tmp_path / "site" / "app" / "data.json").exists() and "EDRADAR_PRIVATE = true" in page
     assert "sb_secret_test_zz9" not in page and "login.html?next=app" in page
     assert 'meta.access !== "active"' in page and 'EDRADAR_STATES = ["pennsylvania"]' in page
-    # a failed upload falls back to the open file, so the page never points at data that is not there
+    # a failed upload stops the publish: leads are never written to the open site as a fallback
+    import pytest
+
     bad = httpx.Client(transport=httpx.MockTransport(lambda req: httpx.Response(403, json={"error": "no"})))
-    export_static(cfg, str(tmp_path / "site2"), upload_client=bad)
-    assert (tmp_path / "site2" / "app" / "data.json").exists()
-    assert "EDRADAR_PRIVATE = true" not in (tmp_path / "site2" / "app" / "index.html").read_text()
+    with pytest.raises(RuntimeError, match="Nothing was published"):
+        export_static(cfg, str(tmp_path / "site2"), upload_client=bad)
+    assert not (tmp_path / "site2" / "app" / "data.json").exists()
 
 
 def test_state_dot_source_and_classifier(tmp_path):
