@@ -1,12 +1,14 @@
 // Postcards (Lob) and paid owner lookups (BatchData) for subscribers, with a usage ledger.
-// What a firm orders is added to its next Stripe invoice; once the unbilled amount reaches BILL_AT_CENTS it is invoiced
-// and charged straight away. Nothing is mailed or looked up for an account with an unpaid invoice.
+// Postcards are prepaid: a firm buys credits first and each card mailed takes one, so the money to pay the mail service is
+// in hand before anything is sent. Credits are not refunded and do not expire.
+// Owner lookups are added to the firm's next Stripe invoice; once the unbilled amount reaches BILL_AT_CENTS it is
+// invoiced and charged straight away. No lookup is run for an account with an unpaid invoice.
 //
 // A test Lob key (test_...) renders proofs and never mails or bills. Mailing starts when LOB_API_KEY is a live key.
 import {
-  DEFAULT_TEMPLATE, FIRM_FIELDS, firmReady, ownerKind, parcelKey, postcardCheck, RATES, RESTRICTED_STATES, sha1Hex, skipRequest, skipResult,
+  CREDIT_PACKS, creditPack, DEFAULT_TEMPLATE, FIRM_FIELDS, firmReady, ownerKind, parcelKey, postcardCheck, RATES, RESTRICTED_STATES, sha1Hex, skipRequest, skipResult,
 } from "../_shared/core.js";
-import { admin, caller, mustBeActive, Refused, serve, stripe } from "../_shared/svc.ts";
+import { admin, caller, mustBeActive, Refused, serve, SITE, stripe } from "../_shared/svc.ts";
 
 const cents = (name: string, fallback: number) => Number(Deno.env.get(name) || fallback);
 const PRICE = { postcard: cents("RATE_POSTCARD_PRICE", RATES.postcard.price), skip_trace: cents("RATE_SKIP_TRACE_PRICE", RATES.skip_trace.price) };
@@ -19,6 +21,28 @@ const lobMode = () => (lobKey().startsWith("live_") ? "live" : lobKey() ? "test"
 
 type User = Awaited<ReturnType<typeof caller>>;
 const isAdmin = (u: User) => (u.app_metadata || {}).role === "admin";     // our own account: nothing to bill
+
+async function credits(userId: string): Promise<number> {
+  const { data, error } = await admin().rpc("credit_balance", { p_user: userId });
+  return error ? 0 : Number(data || 0);
+}
+
+/** Sends the firm to Stripe to buy a pack of postcard credits. The credits are added when Stripe confirms the payment. */
+async function buyCredits(user: User, body: any) {
+  const pack = creditPack(body.pack);
+  if (!pack) throw new Refused("Choose one of the credit packs.");
+  const customer = (user.app_metadata || {}).stripe_customer as string | undefined;
+  const s = await stripe("POST", "checkout/sessions", {
+    mode: "payment", client_reference_id: user.id, ...(customer ? { customer } : { customer_email: user.email }),
+    line_items: [{ quantity: 1, price_data: { currency: "usd", unit_amount: pack.cents,
+      product_data: { name: pack.credits + " postcard credits", description: "One credit mails one 4x6 postcard, first class, in your firm's name. Prepaid; not refundable; credits do not expire." } } }],
+    metadata: { user_id: user.id, kind: "postcard_credits", credits: pack.credits },
+    payment_intent_data: { description: pack.credits + " EminentTracker postcard credits", metadata: { user_id: user.id, kind: "postcard_credits", credits: pack.credits } },
+    custom_text: { submit: { message: "Postcard credits are prepaid and are not refundable. They do not expire." } },
+    success_url: SITE + "/app/?credits=bought", cancel_url: SITE + "/app/?credits=cancelled",
+  });
+  return { url: s.url };
+}
 
 async function saved(userId: string) {
   const { data } = await admin().from("firm_outreach").select("firm, template").eq("user_id", userId).maybeSingle();
@@ -70,6 +94,8 @@ async function status(user: User) {
     lookups: Object.fromEntries((bought || []).map((b: any) => [b.parcel_key, { ...b.result, fetched_at: b.created_at }])),
     firm: s.firm, template: s.template, firm_ready: firmReady(s.firm),
     postcard: { enabled: mode !== "off", mode, price: PRICE.postcard / 100, why: mode === "off" ? "Postcard mailing is being switched on." : null },
+    credits: { balance: isAdmin(user) ? null : await credits(user.id),
+      packs: Object.entries(CREDIT_PACKS).map(([key, p]: [string, any]) => ({ key, credits: p.credits, price: p.cents / 100, each: Math.round(p.cents / p.credits) / 100 })) },
     skiptrace: { enabled: !!Deno.env.get("BATCHDATA_API_KEY"), price: PRICE.skip_trace / 100, restricted: RESTRICTED_STATES,
       why: Deno.env.get("BATCHDATA_API_KEY") ? null : "Owner lookups are being switched on." },
     usage: { postcards: sum("postcard").length, lookups: sum("skip_trace").length, billed: rows.reduce((a: number, r: any) => a + r.price_cents, 0) / 100,
@@ -93,13 +119,13 @@ async function postcard(user: User, body: any, send: boolean) {
   const { data: before } = await admin().from("usage").select("created_at").eq("user_id", user.id).eq("kind", "postcard").eq("mode", "live").eq("ref", ref)
     .order("created_at", { ascending: false }).limit(1);
   const mailed = before && before[0] ? before[0].created_at : null;
-  const view = { ...check, mode, price: PRICE.postcard / 100, already_mailed: mailed };
+  const view = { ...check, mode, price: PRICE.postcard / 100, already_mailed: mailed, credits: isAdmin(user) ? null : await credits(user.id) };
   if (!send) return view;
 
   if (check.blocker) throw new Refused(check.blocker);
   if (mode === "off") throw new Refused("Postcard mailing is being switched on.", 503);
   if (mailed && !body.again) throw new Refused("Your firm already mailed this owner a postcard on " + String(mailed).slice(0, 10) + ".");
-  const live = mode === "live", customer = live ? await billable(user) : null;
+  const live = mode === "live", prepaid = live && !isAdmin(user), db = admin();
   if (live) {
     const day = new Date(Date.now() - 864e5).toISOString();
     const { count } = await admin().from("usage").select("id", { count: "exact", head: true }).eq("user_id", user.id).eq("kind", "postcard").gte("created_at", day);
@@ -115,14 +141,34 @@ async function postcard(user: User, body: any, send: boolean) {
   const form = new URLSearchParams(Object.entries(fields).filter(([, v]) => v));
   // The same card to the same owner from the same firm is one order, however many times the button is pressed.
   const idem = "et-" + mode + "-" + (await sha1Hex(user.id + ref + check.front + check.back + (body.again ? String(mailed) : "")));
-  const r = await fetch("https://api.lob.com/v1/postcards", { method: "POST", body: form,
-    headers: { Authorization: "Basic " + btoa(lobKey() + ":"), "Idempotency-Key": idem } });
-  const out = await r.json().catch(() => ({}));
-  if (!r.ok) throw new Refused("The mail service declined the postcard: " + ((out.error && out.error.message) || r.status) + ". Nothing was charged.", 502);
-  await bill(user, customer, { kind: "postcard", ref, owner: String(lead.owner || "").slice(0, 120), mode, external_id: out.id,
-    cost_cents: live ? COST.postcard : 0, price_cents: live && customer ? PRICE.postcard : 0, detail: { lead_id: lead.id, to, proof_url: out.url, expected_delivery: out.expected_delivery_date } },
-    "Postcard to " + check.to_name);
-  return { mode, proof_url: out.url, expected_delivery: out.expected_delivery_date, charged: live && customer ? PRICE.postcard / 100 : 0 };
+  // One credit is taken before the card is ordered and given back if the mail service refuses it, so a card is never
+  // mailed that was not paid for and a credit is never kept for a card that was not mailed.
+  if (prepaid) {
+    const left = await db.rpc("spend_credit", { p_user: user.id, p_ref: ref });
+    if (left.error) throw new Refused("Your credits could not be checked. Nothing was mailed. Try again in a minute.", 500);
+    if (Number(left.data) < 0) throw new Refused("You have no postcard credits left. Buy credits on the Outreach tab, then send this card.", 402);
+  }
+  const giveBack = (why: string) => prepaid ? db.from("credit_ledger").insert({ user_id: user.id, delta: 1, reason: "returned", ref: (why + ": " + ref).slice(0, 300) }) : Promise.resolve();
+  let r: Response, out: any;
+  try {
+    r = await fetch("https://api.lob.com/v1/postcards", { method: "POST", body: form,
+      headers: { Authorization: "Basic " + btoa(lobKey() + ":"), "Idempotency-Key": idem } });
+    out = await r.json().catch(() => ({}));
+  } catch (_e) {
+    await giveBack("mail service unreachable");
+    throw new Refused("The mail service could not be reached. Nothing was mailed and your credit was returned.", 502);
+  }
+  if (!r.ok) {
+    await giveBack("mail service declined");
+    throw new Refused("The mail service declined the postcard: " + ((out.error && out.error.message) || r.status) + ". Nothing was mailed and your credit was returned.", 502);
+  }
+  // Two presses at the same instant reach the mail service as one order. The second must not cost a second credit.
+  const twin = await db.from("usage").select("id").eq("user_id", user.id).eq("external_id", out.id).limit(1);
+  if (twin.data && twin.data.length) { await giveBack("same card ordered twice"); return { mode, proof_url: out.url, expected_delivery: out.expected_delivery_date, charged: 0, credits: prepaid ? await credits(user.id) : null }; }
+  await db.from("usage").insert({ user_id: user.id, kind: "postcard", ref, owner: String(lead.owner || "").slice(0, 120), mode, external_id: out.id,
+    cost_cents: live ? COST.postcard : 0, price_cents: prepaid ? PRICE.postcard : 0, invoiced: true,       // paid for already, with a credit
+    detail: { lead_id: lead.id, to, proof_url: out.url, expected_delivery: out.expected_delivery_date, paid_with: prepaid ? "credit" : null } });
+  return { mode, proof_url: out.url, expected_delivery: out.expected_delivery_date, charged: 0, credit_used: prepaid ? 1 : 0, credits: prepaid ? await credits(user.id) : null };
 }
 
 async function skipTrace(user: User, body: any, buy: boolean) {
@@ -175,6 +221,7 @@ Deno.serve((req) => serve(req, async () => {
     case "skiptrace_lookup": return skipTrace(user, body, false);
     case "skiptrace_buy": return skipTrace(user, body, true);
     case "usage": return usage(user);
+    case "credits_checkout": return buyCredits(user, body);
     default: throw new Refused("Unknown action.");
   }
 }));

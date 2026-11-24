@@ -145,7 +145,7 @@ form.addEventListener("submit", async e => {
     go.disabled = true; say(status, "");
     try {
       const s = await supa();
-      const {data, error} = await s.auth.signUp({email: d.email, password: d.password, options: {data: {...firmData(d), agreed_terms_at: new Date().toISOString(), terms_version: "2026-11-18"}, emailRedirectTo: here("account.html?pay=1")}});
+      const {data, error} = await s.auth.signUp({email: d.email, password: d.password, options: {data: {...firmData(d), agreed_terms_at: new Date().toISOString(), terms_version: "2026-11-24"}, emailRedirectTo: here("account.html?pay=1")}});
       if (error) throw error;
       if (data.session) { location.href = "account.html?pay=1"; return; }
       document.getElementById("done-h").textContent = "Check your email";

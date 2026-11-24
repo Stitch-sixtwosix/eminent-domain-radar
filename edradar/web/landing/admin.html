@@ -235,6 +235,9 @@ td.acts { white-space: nowrap; } td.acts .btn + .btn { margin-left: 6px; }
     <div class="top"><h1>Postcards and lookups</h1><p>Orders placed by subscribers, this month against last</p></div>
     <p class="note quiet" id="use-off" hidden>The usage ledger is not installed yet. Orders appear here once postcards and owner lookups are switched on.</p>
     <dl class="figs" id="f-use"></dl>
+    <section><header><h2>Postcard credits</h2><p>Paid for in advance; one credit mails one card</p></header>
+      <dl class="figs" id="f-credits" style="margin-top:0;border-top:0"></dl>
+      <div class="wrap"><table id="credits"><thead><tr><th>Firm</th><th class="n">Bought</th><th class="n">Used</th><th class="n">Returned</th><th class="n">Left</th><th class="n">Paid</th></tr></thead><tbody></tbody></table></div></section>
     <section><header><h2>By firm, this month</h2></header>
       <div class="wrap"><table id="use"><thead><tr><th>Firm</th><th class="n">Postcards</th><th class="n">Owner lookups</th><th class="n">Charged</th><th class="n">Our cost</th><th class="n">Not yet invoiced</th></tr></thead><tbody></tbody></table></div></section>
   </div>
@@ -459,7 +462,26 @@ document.querySelector("#accounts").addEventListener("click", async e => {
   b.textContent = "Saved"; setTimeout(load, 700);
 });
 
+async function drawCredits() {
+  const {data: rows, error} = await s.from("credit_ledger").select("user_id, delta, reason, paid_cents, created_at").limit(50000);
+  if (error) { $("f-credits").innerHTML = ""; body("credits", "", 6, "Postcard credits are not installed yet."); return; }
+  const by = {}, tot = {bought: 0, used: 0, back: 0, paid: 0};
+  for (const r of rows) {
+    const f = by[r.user_id] = by[r.user_id] || {bought: 0, used: 0, back: 0, paid: 0};
+    if (r.reason === "purchase" || r.reason === "granted") { f.bought += r.delta; tot.bought += r.delta; f.paid += r.paid_cents || 0; tot.paid += r.paid_cents || 0; }
+    else if (r.reason === "postcard") { f.used -= r.delta; tot.used -= r.delta; }
+    else if (r.reason === "returned") { f.back += r.delta; tot.back += r.delta; }
+  }
+  const left = x => x.bought - x.used + x.back;
+  figs("f-credits", [["Credits sold", num(tot.bought), usd(tot.paid) + " collected"], ["Used on postcards", num(tot.used - tot.back)],
+    ["Still unspent", num(left(tot)), "cards you owe if every credit is used"], ["Mail cost of unspent credits", usd(left(tot) * 91), "at $0.91 a card"]]);
+  const name = Object.fromEntries(ROWS.map(r => [r.id, r]));
+  body("credits", Object.entries(by).sort((a, b) => left(b[1]) - left(a[1])).map(([id, f]) => `<tr><td>${name[id] ? who(name[id]) : "Account removed"}</td>
+    <td class="n">${num(f.bought)}</td><td class="n">${num(f.used)}</td><td class="n">${num(f.back)}</td><td class="n">${num(left(f))}</td><td class="n">${usd(f.paid)}</td></tr>`).join(""), 6, "No credits have been bought yet.");
+}
+
 function drawUse() {
+  drawCredits();
   $("use-off").hidden = !!USE;
   const now = USE ? USE.now : [], last = USE ? USE.last : [];
   figs("f-use", [["Postcards mailed", count(now, "postcard"), count(last, "postcard") + " last month"], ["Owner lookups", count(now, "skip_trace"), count(last, "skip_trace") + " last month"],

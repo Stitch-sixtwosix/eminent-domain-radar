@@ -700,7 +700,7 @@ async function liveStatus(force) {
   catch (e) {        // the server is not answering: the app stays usable, with ordering switched off
     const why = "Ordering is not available right now.";
     LIVE = {off: true, lookups: {}, firm: {}, template: {}, firm_ready: false, postcard: {enabled: false, mode: "off", why, price: 1.95},
-            skiptrace: {enabled: false, why, price: 0.75, restricted: []}, usage: {postcards: 0, lookups: 0, billed: 0, pending: 0}};
+            skiptrace: {enabled: false, why, price: 0.75, restricted: []}, usage: {postcards: 0, lookups: 0, billed: 0, pending: 0}, credits: {balance: 0, packs: []}};
   }
   return LIVE;
 }
@@ -727,6 +727,7 @@ async function subApi(route, opts) {
   }
   if (route === "/api/outreach/hub") return {...SNAP.hub, status: state(), template: liveTpl(), live: LIVE};
   if (route === "/api/usage") return fn({action: "usage"});
+  if (route === "/api/credits/checkout") return fn({action: "credits_checkout", pack: JSON.parse(opts.body).pack});
   const m = route.match(/^\/api\/leads\/(\d+)\/(postcard|skip-trace)$/);
   if (!m) return undefined;
   const lead = fullLead(+m[1]);
@@ -1194,8 +1195,30 @@ async function loadHub() {
   try { renderHub(await api("/api/outreach/hub")); }
   catch (e) { box.innerHTML = `<div class="hub"><div class="alert bad">Outreach could not be shown: ${esc(e.message)}.</div></div>`; }
 }
+// Back from buying credits: Stripe tells our server within a few seconds, so the balance is read again until it moves.
+let CREDIT_NOTE = "";
+if (SUB && /[?&]credits=/.test(location.search)) {
+  const bought = /credits=bought/.test(location.search);
+  CREDIT_NOTE = bought ? "Payment received. Your credits are being added." : "No credits were bought.";
+  history.replaceState(null, "", location.pathname + location.hash);
+  if (bought) (async () => {
+    const before = ((await liveStatus()).credits || {}).balance || 0;
+    for (let i = 0; i < 12; i++) {
+      await new Promise(r => setTimeout(r, 2500));
+      const now = ((await liveStatus(true)).credits || {}).balance || 0;
+      if (now > before || i === 11) { CREDIT_NOTE = now > before ? `${(now - before).toLocaleString()} credits added. You have ${now.toLocaleString()}.` : "Your payment went through but the credits have not appeared yet. Reload in a minute; if they are still missing, email us."; break; }
+    }
+    if (document.getElementById("hub") && document.querySelector(".hub")) loadHub && loadHub();
+  })();
+}
+document.addEventListener("click", async e => {
+  const b = e.target.closest && e.target.closest("[data-buy]"); if (!b) return;
+  const note = document.getElementById("buy-status"); b.disabled = true; if (note) note.textContent = "Opening the secure payment page…";
+  try { location.href = (await api("/api/credits/checkout", {method: "POST", body: JSON.stringify({pack: b.dataset.buy})})).url; }
+  catch (x) { b.disabled = false; if (note) note.textContent = x.message || "The payment page could not be opened."; }
+});
 function renderSubHub(h) {
-  const live = h.live, pc = h.status.postcard, sk = h.status.skiptrace, t = h.template, f = t.firm, r = h.ready, u = live.usage;
+  const live = h.live, pc = h.status.postcard, sk = h.status.skiptrace, t = h.template, f = t.firm, r = h.ready, u = live.usage, cr = live.credits || {balance: 0, packs: []};
   OUT = {...h.status, rates: h.rates}; TPL = t; HUB_LISTS = [];
   const fig = (label, v) => `<div><span>${label}</span><b>${v}</b></div>`;
   const sample = {owner: "SAMPLE OWNER", address: "12 MAIN ST", apn: "00-000-000", parcel_county: "MONTGOMERY", project: "US 22 Widening", stage: "planning", agency: "State DOT"};
@@ -1203,13 +1226,18 @@ function renderSubHub(h) {
   const pcState = pc.mode === "live" ? '<span class="state on">Postcards on</span>' : pc.mode === "test" ? '<span class="state warn">Postcards in test mode: proofs only</span>' : '<span class="state">Postcards off</span>';
   $("hub").innerHTML = `<div class="hub">
     <div class="hub-head"><h1>Outreach</h1>${pcState}<span class="state ${sk.enabled ? "on" : ""}">Owner lookups ${sk.enabled ? "on" : "off"}</span></div>
-    <div class="figs" style="--n:4">${fig("Postcards mailed this month", u.postcards.toLocaleString())}${fig("Owner lookups this month", u.lookups.toLocaleString())}${fig("Charges this month", usd(u.billed))}${fig("On your next invoice", usd(u.pending))}</div>
+    <div class="figs" style="--n:4">${fig("Postcards mailed this month", u.postcards.toLocaleString())}${fig("Owner lookups this month", u.lookups.toLocaleString())}${fig("Postcard credits left", cr.balance == null ? "Not needed" : cr.balance.toLocaleString())}${fig("Lookups on your next invoice", usd(u.pending))}</div>
+    ${CREDIT_NOTE ? `<div class="alert" style="margin-bottom:24px">${esc(CREDIT_NOTE)}</div>` : ""}
     ${live.firm_ready ? "" : `<div class="alert" style="margin-bottom:24px">Add your firm's name and return address before mailing. <button class="sm" data-hub="template">Enter firm details</button></div>`}
     <div class="hub-row two">
       <div class="panel"><h3>Postcards</h3>
         <p><b>${r.postcard_owners.toLocaleString()}</b> owners scoring ${r.min_score} or higher have a usable mailing address. Open a lead and choose Postcard to see the proof before anything is sent.</p>
-        <p>${pc.mode === "live" ? `Each card is printed and mailed first class in your firm's name, marked as attorney advertising. ${usd(pc.price)} a card, added to your next invoice.` : pc.mode === "test" ? "Test mode: each card is made as a proof. Nothing is mailed or charged." : esc(pc.why || "")}</p>
-        <div class="row-acts"><button class="primary" data-hub="leads-postcard">Show these leads</button></div></div>
+        <p>${pc.mode === "live" ? `Each card is printed and mailed first class in your firm's name, marked as attorney advertising. One card uses one credit.` : pc.mode === "test" ? "Test mode: each card is made as a proof. Nothing is mailed and no credit is used." : esc(pc.why || "")}</p>
+        <div class="row-acts"><button class="primary" data-hub="leads-postcard">Show these leads</button></div>
+        ${cr.balance == null ? "" : `<h4 style="margin-top:20px">Postcard credits: ${cr.balance.toLocaleString()} left</h4>
+        <p>Credits are bought before you mail. They are not refundable and do not expire.</p>
+        <div class="row-acts">${cr.packs.map(p => `<button data-buy="${esc(p.key)}">${p.credits.toLocaleString()} credits, ${usd(p.price)}<span class="meta" style="display:block;font-weight:400">${usd(p.each)} a card</span></button>`).join("")}</div>
+        <p class="meta" id="buy-status" role="status"></p>`}</div>
       <div class="panel"><h3>Owner lookups</h3>
         <p>Where a county does not publish owner names, a lookup finds the owner's name and mailing address from a commercial records service, with any phone number and email. For owners already on file it adds phone and email.</p>
         <p>${sk.enabled ? `${usd(sk.price)} for each match, added to your next invoice. Nothing is charged when no match is found, and an answer you paid for is kept.` : esc(sk.why || "")}</p>
@@ -1221,19 +1249,19 @@ function renderSubHub(h) {
         <figure><div class="letter"><b>${esc(L_.subject)}</b>\n\n${esc(L_.body)}</div><figcaption>Email and printed letter</figcaption></figure></div>
       <p style="margin-top:12px">Shown with sample details. Each owner's name, property, project and stage are filled in when it is sent.</p></div>
     <div class="panel"><h3>Usage and billing</h3>
-      <p>Postcards and owner lookups are added to your next subscription invoice. If they reach $50 before then, they are charged to your card at that point.</p>
+      <p>Postcards are paid for with credits you buy in advance. Owner lookups are added to your next subscription invoice; if they reach $50 before then, they are charged to your card at that point.</p>
       <div class="row-acts"><button data-hub="usage">All usage</button><a class="btn" href="../account.html">Billing and card</a></div></div>
   </div>`;
 }
 async function openSubUsage() {
   dlg.innerHTML = `<div class="dlg-head"><h2 id="dlg-title">Usage and billing</h2><p>Every postcard and owner lookup your firm has ordered.</p></div><div class="dlg-body"><p class="meta">Loading…</p></div>
-    <div class="dlg-foot"><span class="note">Charges appear on your next invoice.</span><button data-close>Close</button></div>`;
+    <div class="dlg-foot"><span class="note">A postcard uses one prepaid credit. Lookups appear on your next invoice.</span><button data-close>Close</button></div>`;
   dlg.showModal();
   let u;
   try { u = await api("/api/usage"); } catch (e) { dlg.querySelector(".dlg-body").innerHTML = `<div class="alert bad">${esc(e.message)}</div>`; return; }
   dlg.querySelector(".dlg-body").innerHTML = u.rows.length ? `<table class="usage"><thead><tr><th>Date</th><th>Item</th><th>Owner</th><th class="num">Charge</th><th>Status</th></tr></thead><tbody>${u.rows.map(x => `<tr>
       <td style="white-space:nowrap">${esc(day(x.created_at))}</td><td>${x.kind === "skip_trace" ? "Owner lookup" : x.mode === "live" ? "Postcard" : "Postcard test proof"}</td><td>${esc(titleCase(x.owner || ""))}</td>
-      <td class="num">${usd(x.price)}</td><td>${x.price ? (x.invoiced ? "Invoiced" : "On next invoice") : "No charge"}</td></tr>`).join("")}</tbody></table>`
+      <td class="num">${x.kind === "postcard" && x.mode === "live" && x.price ? "1 credit" : usd(x.price)}</td><td>${x.kind === "postcard" ? (x.mode === "live" && x.price ? "Paid with a credit" : "No charge") : x.price ? (x.invoiced ? "Invoiced" : "On next invoice") : "No charge"}</td></tr>`).join("")}</tbody></table>`
     : `<p class="meta">Nothing ordered yet. A postcard is recorded when it is mailed, an owner lookup when a match is found.</p>`;
 }
 function renderHub(h) {
@@ -1495,7 +1523,7 @@ async function openPostcard(leadId) {
         <div><div class="card-frame"><iframe title="Postcard back" sandbox="allow-same-origin" srcdoc="${esc(pv.back)}"></iframe></div><div class="cap">Back. The address and postage print on the right half.</div></div>
       </div>
     </div>
-    <div class="dlg-foot"><span class="note">${pc.mode === "live" ? (SUB ? `This mails a real postcard. ${usd(pc.price)} is added to your next invoice.` : "Live mode: this mails a real postcard and bills your Lob account.")
+    <div class="dlg-foot"><span class="note">${pc.mode === "live" ? (SUB ? (pv.credits == null ? "This mails a real postcard." : pv.credits > 0 ? `This mails a real postcard and uses 1 of your ${pv.credits.toLocaleString()} credits. Credits are not refundable.` : "You have no postcard credits. Buy credits on the Outreach tab before sending.") : "Live mode: this mails a real postcard and bills your Lob account.")
         : pc.mode === "test" ? "Test mode: a proof is made. Nothing is mailed or charged." : esc(pc.why || "")}</span>
       <button data-close>Cancel</button>
       <button class="primary" id="dlg-go" ${blocker ? "disabled" : ""}>${pc.mode === "live" ? "Mail postcard" : "Create test proof"}</button></div>`;

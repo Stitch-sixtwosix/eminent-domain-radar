@@ -20,6 +20,15 @@ Deno.serve(async (req) => {
         // The card that paid becomes the customer's default, so postcards and lookups can go on later invoices.
         if (sub.default_payment_method) await stripe("POST", "customers/" + obj.customer, { invoice_settings: { default_payment_method: sub.default_payment_method } });
       }
+    } else if (event.type === "checkout.session.completed" && obj.mode === "payment" && obj.payment_status === "paid" && (obj.metadata || {}).kind === "postcard_credits") {
+      // A pack of postcard credits was paid for. The session id makes this safe to receive twice.
+      const uid = obj.client_reference_id || obj.metadata.user_id, n = Math.floor(Number(obj.metadata.credits));
+      if (uid && n > 0 && n <= 100000) {
+        const { error } = await admin().from("credit_ledger").upsert(
+          { user_id: uid, delta: n, reason: "purchase", ref: n + " postcard credits", stripe_session: obj.id, paid_cents: obj.amount_total || 0 },
+          { onConflict: "stripe_session", ignoreDuplicates: true });
+        if (error) throw new Error("credits not added: " + error.message);
+      }
     } else if (event.type === "checkout.session.completed" && obj.mode === "setup" && obj.setup_intent && obj.customer) {
       // A card saved with no charge, for an account that is open without a subscription.
       const uid = obj.client_reference_id || (obj.metadata || {}).user_id;

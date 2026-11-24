@@ -61,6 +61,11 @@ eq("firm must have a return address", C.postcardCheck({ name: "X" }, {}, lead).b
 eq("an unknown stage is never printed as a stage", C.mergeValues(firm, { ...lead, stage: "unknown" }).project_stage, "the agency's published plans");
 eq("nor is a missing one", C.mergeValues(firm, { ...lead, stage: undefined }).project_stage, "the agency's published plans");
 
+// postcard credits
+eq("packs", [C.creditPack("small").credits, C.creditPack("medium").cents, C.creditPack("large").credits], [25, 18500, 500]);
+eq("no pack is cheaper per card than the mail service costs", Object.values(C.CREDIT_PACKS).every((p) => p.cents / p.credits >= 150), true);
+eq("an unknown pack is refused", [C.creditPack("free"), C.creditPack("constructor"), C.creditPack(undefined)], [null, null, null]);
+
 // skip tracing
 eq("same parcel, same key", C.parcelKey({ state: "ca", county: " Los  Angeles ", apn: "12-3" }), "CA|LOS ANGELES|12-3");
 eq("by parcel id", C.skipRequest({ state: "CA", county: "LOS ANGELES", apn: "12-3" }),

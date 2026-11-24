@@ -170,7 +170,7 @@ else {
     const b = document.getElementById("pay"); b.disabled = true; say(payStatus, "Opening the secure payment page…");
     try {
       const c = chosen(), change = {data: firmData(Object.fromEntries(new FormData(form)))};       // the plan paid for is the plan on file
-      if (!agreed) Object.assign(change.data, {agreed_terms_at: new Date().toISOString(), terms_version: "2026-11-18"});
+      if (!agreed) Object.assign(change.data, {agreed_terms_at: new Date().toISOString(), terms_version: "2026-11-24"});
       await s.auth.updateUser(change);
       location.href = (await fn({action: "checkout", plan: c.plan, state: c.state, bill: c.bill})).url;
     } catch (e) {
@@ -254,7 +254,7 @@ form.elements.plan_state.addEventListener("change", showFacts);
     e.preventDefault();
     if (!valid(form)) return;
     const d = Object.fromEntries(new FormData(form)), change = {data: firmData(d)};
-    if (!agreed) Object.assign(change.data, {agreed_terms_at: new Date().toISOString(), terms_version: "2026-11-18"});
+    if (!agreed) Object.assign(change.data, {agreed_terms_at: new Date().toISOString(), terms_version: "2026-11-24"});
     if (d.password) change.password = d.password;
     const {error} = await s.auth.updateUser(change);
     say(status, error ? "Not saved: " + error.message : "Saved.", !!error);

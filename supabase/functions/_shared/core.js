@@ -123,6 +123,14 @@ export const titleCase = (text) =>
   (text || "").split(/\s+/).filter(Boolean).map((w) =>
     /[a-z]/.test(w) || KEEP_UPPER.has(w.replace(/[.,]/g, "")) ? w : w.length > 1 && /[A-Z]/.test(w) ? w[0] + w.slice(1).toLowerCase() : w
   ).join(" ");
+// Postcard credits are bought in packs before anything is mailed. One credit is one postcard.
+export const CREDIT_PACKS = {
+  small: { credits: 25, cents: 4875, label: "25 postcards" },
+  medium: { credits: 100, cents: 18500, label: "100 postcards" },
+  large: { credits: 500, cents: 87500, label: "500 postcards" },
+};
+export const creditPack = (key) => (Object.prototype.hasOwnProperty.call(CREDIT_PACKS, String(key)) ? CREDIT_PACKS[key] : null);
+
 export const STAGE_PHRASE = { planning: "planning", environmental_review: "environmental review", design: "design",
   row_acquisition: "right-of-way acquisition", condemnation_filed: "the condemnation stage", construction: "construction" };
 
