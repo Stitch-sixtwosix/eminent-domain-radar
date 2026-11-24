@@ -4,7 +4,7 @@
 //   hold     closes the app for the account until it is released. Stripe keeps billing; holding is not cancelling.
 //   release  reopens it, if it has a live subscription or had access that was opened by hand.
 //   delete   cancels any live Stripe subscription at once, then removes the account and everything stored for it.
-import { admin, caller, Refused, serve, setAccess, stripe } from "../_shared/svc.ts";
+import { admin, caller, Refused, serve, setAccess, SITE, stripe, webhookSecrets } from "../_shared/svc.ts";
 
 const LIVE = ["active", "trialing", "past_due"];        // a subscription Stripe is still collecting on
 
@@ -44,12 +44,51 @@ Deno.serve((req) => serve(req, async () => {
     return { ok: true, cancelled_subscription: !!live };
   }
 
+  if (body.action === "stripe_setup") {
+    // Does for Stripe what would otherwise be copied by hand: registers this site's webhook and keeps the signing secret
+    // Stripe returns, and switches on the page where a subscriber changes their card or cancels. Safe to run again.
+    const key = Deno.env.get("STRIPE_SECRET_KEY") || "";
+    if (!key) throw new Refused("Save the Stripe key on the server first.", 503);
+    const mode = key.includes("_live_") ? "live" : "test", name = "stripe_webhook_" + mode;
+    const url = (Deno.env.get("SUPABASE_URL") || "").replace(/\/$/, "") + "/functions/v1/stripe-webhook";
+    const events = ["checkout.session.completed", "customer.subscription.updated", "customer.subscription.deleted", "invoice.paid"];
+    const db = admin(), done: string[] = [];
+    const have = await db.from("server_secrets").select("name").eq("name", name).maybeSingle();
+    const hooks = await stripe("GET", "webhook_endpoints", { limit: 100 });
+    const ours = (hooks.data || []).filter((h: Any) => h.url === url);
+    const good = ours.find((h: Any) => h.status === "enabled" && events.every((e) => (h.enabled_events || []).includes(e) || (h.enabled_events || []).includes("*")));
+    if (good && (have.data || Deno.env.get("STRIPE_WEBHOOK_SECRET"))) done.push("Stripe notifications were already set up.");
+    else {
+      // Stripe shows a signing secret only when a webhook is created, so one whose secret we do not hold is replaced.
+      for (const h of ours) await stripe("DELETE", "webhook_endpoints/" + h.id);
+      const made = await stripe("POST", "webhook_endpoints", { url, enabled_events: events, description: "EminentTracker: opens and closes accounts" });
+      if (!made.secret) throw new Refused("Stripe created the webhook but returned no signing secret.", 502);
+      const saved = await db.from("server_secrets").upsert({ name, value: made.secret, updated_at: new Date().toISOString() });
+      if (saved.error) { await stripe("DELETE", "webhook_endpoints/" + made.id); throw new Refused("The signing secret could not be stored: " + saved.error.message, 500); }
+      done.push("Stripe notifications are set up (" + mode + " mode).");
+    }
+    try {
+      const cfg = await stripe("GET", "billing_portal/configurations", { is_default: true, limit: 1 });
+      if ((cfg.data || []).length) done.push("The change-card-or-cancel page was already on.");
+      else {
+        await stripe("POST", "billing_portal/configurations", {
+          business_profile: { headline: "EminentTracker subscription", privacy_policy_url: SITE + "/privacy.html", terms_of_service_url: SITE + "/terms.html" },
+          features: { payment_method_update: { enabled: true }, invoice_history: { enabled: true },
+            customer_update: { enabled: true, allowed_updates: ["email", "address", "name"] },
+            subscription_cancel: { enabled: true, mode: "at_period_end" } },
+          default_return_url: SITE + "/account.html" });
+        done.push("The change-card-or-cancel page is switched on.");
+      }
+    } catch (e) { done.push("The change-card-or-cancel page could not be switched on: " + (e instanceof Error ? e.message : String(e))); }
+    return { ok: true, mode, done };
+  }
+
   if (body.action === "health") {
     // What the system status screen cannot see from the browser: which keys are saved, and whether each service answers.
     const key = Deno.env.get("STRIPE_SECRET_KEY") || "", lob = Deno.env.get("LOB_API_KEY") || "";
     const out: Any = {
       stripe_key: key.startsWith("sk_live_") || key.startsWith("rk_live_") ? "live" : key ? "test" : "off",
-      webhook_secret: !!Deno.env.get("STRIPE_WEBHOOK_SECRET"),
+      webhook_secret: (await webhookSecrets()).length > 0,
       lob_key: lob.startsWith("live_") ? "live" : lob ? "test" : "off",
       batchdata_key: !!Deno.env.get("BATCHDATA_API_KEY"),
     };

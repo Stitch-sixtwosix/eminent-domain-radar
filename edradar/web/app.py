@@ -734,7 +734,10 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
     one = lambda sql: (db.rows(sql) or [{"v": None}])[0]["v"]
     on = [x for x in reg["sources"] if x["status"] == "on"]
     cutoff = (datetime.now() - timedelta(days=4)).strftime("%Y-%m-%d %H:%M:%S")
-    quiet = [x for x in on if x["kind"] == "projects" and (x.get("updated") or "") < cutoff]
+    # A source is in trouble when its last attempt failed, or it has not answered in four days. Only sources whose
+    # reads have been recorded are judged: the newest record's date says nothing about whether a source still answers.
+    judged = [x for x in on if x["kind"] == "projects" and x.get("measured")]
+    quiet = [x for x in judged if x.get("error") or (x.get("updated") or "") < cutoff]
     (site / "status.json").write_text(json.dumps({
         "published": datetime.now().astimezone().isoformat(timespec="seconds"),
         "last_collection": one("SELECT MAX(updated_at) v FROM signals"), "last_new_record": one("SELECT MAX(fetched_at) v FROM signals"),
@@ -749,7 +752,8 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
         "sources_on": len(on), "project_sources_on": sum(1 for x in on if x["kind"] == "projects"),
         "owner_files_on": sum(1 for x in on if x["kind"] == "owners"),
         "owner_files_held": sum(1 for x in reg["sources"] if x["status"] == "held"),
-        "quiet_sources": [{"state": x["state"], "name": x["name"], "updated": x.get("updated")} for x in quiet[:60]], "quiet_count": len(quiet),
+        "quiet_sources": [{"state": x["state"], "name": x["name"], "updated": x.get("updated"), "error": x.get("error")} for x in quiet[:80]],
+        "quiet_count": len(quiet), "sources_judged": len(judged),
     }))
     (site / ".nojekyll").write_text("")
     domain = (cfg.get("site") or {}).get("domain")

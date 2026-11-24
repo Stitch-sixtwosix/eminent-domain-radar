@@ -882,3 +882,21 @@ def test_stage_is_read_from_the_agencys_schedule_fields():
     assert "RightOfWayYear = 2025" in C.timeline("row_acquisition", {"RightOfWayYear": "2025"}, T)["basis"]
     out = C.classify_dot({"title": "X", "body": "", "geometry": None, "raw": json.dumps({"_work_type": "Widen", "_stage": "planning", "COMMENT": "UNDER CONSTRUCTION"})})
     assert out["stage"] == "construction"
+
+
+def test_a_source_is_judged_on_whether_it_answers(tmp_path):
+    """A list with no new projects is healthy if it still answers; one whose last attempt failed is not."""
+    from edradar.config import registry
+    from edradar.db import DB
+
+    db = DB(str(tmp_path / "r.db"))
+    cfg = {"sources": {"dot_arcgis": {"layers": [
+        {"state": "oh", "name": "ODOT projects", "key": "odot", "url": "https://x/0", "fields": {"id": "PID"}},
+        {"state": "ky", "name": "KYTC projects", "key": "kytc", "url": "https://y/0", "fields": {"id": "PID"}}]}}}
+    assert not any(x.get("measured") for x in registry(cfg, db)["sources"])           # nothing recorded yet: not judged
+    db.save_reads([{"source": "dot:OH", "key": "odot", "records": 12, "error": None}, {"source": "dot:KY", "key": "kytc", "records": 0, "error": "HTTP 503"}])
+    by = {x["name"]: x for x in registry(cfg, db)["sources"]}
+    assert by["ODOT projects"]["measured"] and by["ODOT projects"]["updated"] and not by["ODOT projects"]["error"]
+    assert by["KYTC projects"]["error"] == "HTTP 503" and by["KYTC projects"]["updated"] is None
+    db.save_reads([{"source": "dot:KY", "key": "kytc", "records": 5, "error": None}])    # it recovers
+    assert registry(cfg, db)["sources"][1]["error"] is None and registry(cfg, db)["sources"][1]["updated"]

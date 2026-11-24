@@ -85,12 +85,22 @@ def fetch_layer(layer: Dict[str, Any], http: Http) -> Iterator[Dict[str, Any]]:
         offset += len(feats)
 
 
+READS: List[Dict[str, Any]] = []        # what each list answered on the latest run: the pipeline stores it for the status screen
+
+
 def fetch(cfg: Dict[str, Any], http: Http) -> Iterator[Dict[str, Any]]:
     only: List[str] = [s.upper() for s in cfg.get("states") or []]
+    del READS[:]
     for layer in cfg.get("layers") or []:
         if only and layer["state"].upper() not in only:
             continue
+        read = {"source": "%s:%s" % (layer.get("source_prefix") or "dot", layer["state"].upper()), "key": layer.get("key") or layer["name"][:24],
+                "records": 0, "error": None}
         try:
-            yield from fetch_layer(layer, http)
+            for s in fetch_layer(layer, http):
+                read["records"] += 1
+                yield s
         except Exception as e:                      # one state's server being down must not stop the others
+            read["error"] = str(e)[:300]
             print("  %s (%s) failed: %s" % (layer["name"], layer["state"], str(e)[:140]))
+        READS.append(read)

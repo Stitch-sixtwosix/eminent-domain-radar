@@ -183,6 +183,7 @@ def registry(cfg: Dict[str, Any], db: Any = None) -> Dict[str, Any]:
     import json
 
     loaded: Dict[Any, Any] = {}
+    reads: Dict[Any, Any] = {}
     parcels: Dict[str, int] = {}
     if db is not None:
         for r in db.rows("SELECT source, CASE WHEN instr(external_id, ':') > 0 THEN substr(external_id, 1, instr(external_id, ':') - 1) "
@@ -191,11 +192,20 @@ def registry(cfg: Dict[str, Any], db: Any = None) -> Dict[str, Any]:
             n0, at0 = loaded.get(r["source"], (0, ""))
             loaded[r["source"]] = (n0 + r["n"], max(at0 or "", r["at"] or ""))
         parcels = {r["layer"]: r["n"] for r in db.rows("SELECT layer, COUNT(*) AS n FROM parcels GROUP BY 1")}
+        try:
+            for r in db.rows("SELECT source, key, tried_at, ok_at, records, error FROM source_reads"):
+                reads[(r["source"], r["key"]) if r["key"] else r["source"]] = r
+        except Exception:                # a database from before reads were recorded
+            pass
     out = []
 
-    def add(kind, state, name, url, how, reports, status, why=None, records=None, at=None, covers=None, flt=None):
-        out.append({"kind": kind, "state": state, "name": name, "url": url, "how": how, "reports": reports, "status": status,
-                    "why": why, "loaded": records or 0, "updated": at, "covers": covers, "filter": flt})
+    def add(kind, state, name, url, how, reports, status, why=None, records=None, at=None, covers=None, flt=None, read=None):
+        # "updated" is when the source last answered, once that is recorded; before that, when its newest record arrived
+        row = {"kind": kind, "state": state, "name": name, "url": url, "how": how, "reports": reports, "status": status,
+               "why": why, "loaded": records or 0, "updated": (read or {}).get("ok_at") or at, "covers": covers, "filter": flt}
+        if kind == "projects":
+            row.update(newest=at, tried=(read or {}).get("tried_at"), error=(read or {}).get("error"), measured=bool(read))
+        out.append(row)
 
     src = cfg.get("sources") or {}
     active = {l.get("key") for l in (src.get("dot_arcgis") or {}).get("layers") or []}
@@ -205,12 +215,13 @@ def registry(cfg: Dict[str, Any], db: Any = None) -> Dict[str, Any]:
         add("projects", l["state"].upper(), l.get("name"), l.get("url"), "Map service, queried record by record",
             _reports(l.get("fields"), PROJECT_FIELDS), "on", None, n, at,
             l.get("coverage") or ("statewide" if prefix == "dot" else None),
-            l.get("where") or "none: every record is loaded")
+            l.get("where") or "none: every record is loaded",
+            read=reads.get(("%s:%s" % (prefix, l["state"].upper()), l.get("key") or l["name"][:24])))
     n, at = loaded.get("penndot", (0, None))
     for l in (src.get("penndot") or {}).get("layers") or []:
         add("projects", "PA", "PennDOT: %s" % (l.get("name") if isinstance(l, dict) else l), (l.get("url") if isinstance(l, dict) else None),
             "Map service, queried record by record", ["name", "description", "type of work", "status", "cost", "letting date", "county"],
-            "on", None, n, at, "statewide")
+            "on", None, n, at, "statewide", read=reads.get("penndot"))
     n, at = loaded.get("federal_register", (0, None))
     add("projects", "US", "Federal Register notices", "https://www.federalregister.gov/api/v1/documents.json", "Search API, notice text read for the project",
         ["name", "description", "agency", "date"], "on" if (src.get("federal_register") or {}).get("enabled") else "off", None, n, at, "nationwide")

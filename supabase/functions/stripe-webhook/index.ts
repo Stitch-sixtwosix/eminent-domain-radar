@@ -1,12 +1,14 @@
 // Stripe calls this when a payment or a subscription changes. It is the only thing that opens or closes an account
 // for payment reasons. Every call must carry Stripe's signature; anything else is turned away.
 import { accessFor, stripeSigned } from "../_shared/core.js";
-import { admin, setAccess, stripe } from "../_shared/svc.ts";
+import { admin, setAccess, stripe, webhookSecrets } from "../_shared/svc.ts";
 
 Deno.serve(async (req) => {
   const raw = await req.text();
-  if (!(await stripeSigned(raw, req.headers.get("stripe-signature"), Deno.env.get("STRIPE_WEBHOOK_SECRET") || "")))
-    return new Response("bad signature", { status: 400 });
+  const header = req.headers.get("stripe-signature");
+  let signed = false;
+  if (header) for (const secret of await webhookSecrets()) if (await stripeSigned(raw, header, secret)) { signed = true; break; }
+  if (!signed) return new Response("bad signature", { status: 400 });
   const event = JSON.parse(raw), obj = event.data.object;
   try {
     if (event.type === "checkout.session.completed" && obj.mode === "subscription" && obj.payment_status === "paid") {

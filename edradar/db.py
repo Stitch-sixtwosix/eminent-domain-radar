@@ -103,6 +103,12 @@ CREATE TABLE IF NOT EXISTS stage_overrides (
     source TEXT NOT NULL, external_id TEXT NOT NULL, stage TEXT NOT NULL, note TEXT, set_by TEXT,
     set_at TEXT DEFAULT (datetime('now')), PRIMARY KEY (source, external_id)
 );
+-- When each source was last asked and what it answered. "Last new record" says nothing about whether a source still
+-- works: a list with no new projects for a week looked dead when it was being read every night.
+CREATE TABLE IF NOT EXISTS source_reads (
+    source TEXT NOT NULL, key TEXT NOT NULL DEFAULT '', tried_at TEXT, ok_at TEXT, records INTEGER, error TEXT,
+    PRIMARY KEY (source, key)
+);
 CREATE TABLE IF NOT EXISTS skiptraces (
     owner TEXT NOT NULL, mailing_address TEXT, matched INTEGER NOT NULL, result TEXT NOT NULL,
     fetched_at TEXT DEFAULT (datetime('now')),
@@ -219,6 +225,18 @@ class DB:
                                for r in rows])
         self.conn.commit()
         return len(rows)
+
+    def save_reads(self, reads: Any) -> None:
+        for r in reads:
+            ok = not r.get("error")
+            self.conn.execute(
+                """INSERT INTO source_reads (source, key, tried_at, ok_at, records, error)
+                   VALUES (?, ?, datetime('now'), CASE WHEN ? THEN datetime('now') END, ?, ?)
+                   ON CONFLICT(source, key) DO UPDATE SET tried_at=datetime('now'), error=excluded.error,
+                     ok_at=CASE WHEN excluded.error IS NULL THEN datetime('now') ELSE ok_at END,
+                     records=CASE WHEN excluded.error IS NULL THEN excluded.records ELSE records END""",
+                (r["source"], r.get("key") or "", ok, r.get("records") or 0, r.get("error")))
+        self.conn.commit()
 
     def save_agency_status(self, source: str, rows: Any) -> int:
         n = 0

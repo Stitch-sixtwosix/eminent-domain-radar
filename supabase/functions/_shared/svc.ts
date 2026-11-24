@@ -51,6 +51,15 @@ export async function stripe(method: "GET" | "POST" | "DELETE", path: string, pa
   return out;
 }
 
+/** Every signing secret Stripe may be using for our webhook: one typed into the project's secrets, and the ones the
+ *  server obtained itself when it registered the webhook (test mode and live mode have one each). */
+export async function webhookSecrets(): Promise<string[]> {
+  const out = [Deno.env.get("STRIPE_WEBHOOK_SECRET") || ""];
+  const { data } = await admin().from("server_secrets").select("value").like("name", "stripe_webhook_%");
+  for (const r of data || []) out.push(r.value);
+  return out.filter(Boolean);
+}
+
 /** Merge into the fields only we can write. Supabase replaces app_metadata key by key, so the rest is carried over. */
 export async function setAccess(userId: string, change: Record<string, unknown>) {
   const a = admin();

@@ -25,12 +25,16 @@ def ingest(cfg: Dict[str, Any], db: DB, only: Optional[str] = None) -> Dict[str,
         if not scfg.get("enabled") or (only and only != name):
             continue
         new = total = 0
+        failed = None
         try:
             for signal in module.fetch(scfg, http):
                 total += 1
                 new += db.upsert_signal(signal)
         except Exception as e:
+            failed = str(e)[:300]
             print("  %s failed after %d records: %s" % (name, total, e))
+        # what was asked and what answered, list by list where the source has many
+        db.save_reads(getattr(module, "READS", None) or [{"source": name, "key": "", "records": total, "error": failed}])
         counts[name] = new
         print("  %-17s %5d fetched, %5d new" % (name, total, new))
         if name == "penndot" and hasattr(module, "statuses"):

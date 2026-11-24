@@ -148,8 +148,8 @@ td.acts { white-space: nowrap; } td.acts .btn + .btn { margin-left: 6px; }
     <section><header><h2>Accounts, database and server functions</h2></header><div class="wrap"><table id="sys-server"><thead><tr><th>Part</th><th>State</th><th>Detail</th></tr></thead><tbody></tbody></table></div></section>
     <section><header><h2>Payments, postcards and lookups</h2></header><div class="wrap"><table id="sys-money"><thead><tr><th>Part</th><th>State</th><th>Detail</th></tr></thead><tbody></tbody></table></div></section>
     <section><header><h2>Project sources that have gone quiet</h2><p id="sys-quiet-n"></p></header>
-      <p class="lede">Sources that are switched on but have not answered in four days. One quiet source is usually the agency's server; many at once means the daily run is failing.</p>
-      <div class="wrap"><table id="sys-quiet"><thead><tr><th>State</th><th>Source</th><th>Last read</th></tr></thead><tbody></tbody></table></div></section>
+      <p class="lede">Sources that failed on the last run or have not answered in four days. One is usually the agency's server; many at once means the daily run is failing. A source that answers but has no new projects is not a problem and is not listed.</p>
+      <div class="wrap"><table id="sys-quiet"><thead><tr><th>State</th><th>Source</th><th>Last answered</th><th>What went wrong</th></tr></thead><tbody></tbody></table></div></section>
   </div>
 
   <div data-view="visitors" hidden>
@@ -250,7 +250,7 @@ td.acts { white-space: nowrap; } td.acts .btn + .btn { margin-left: 6px; }
       <div class="tools"><select id="src-state" hidden><option value="">All states</option></select>
         <label>Kind <select id="src-kind"><option value="">Projects and owners</option><option value="projects">Project sources</option><option value="owners">Owner files</option></select></label>
         <label>Status <select id="src-status"><option value="">Any</option><option value="on">On</option><option value="held">Held</option><option value="off">Off</option></select></label></div>
-      <div class="wrap" style="margin-top: 10px"><table id="src"><thead><tr><th>State</th><th>Source</th><th>How it reports</th><th>Publishes</th><th>Status</th><th class="n">Loaded</th><th>Last read</th></tr></thead><tbody></tbody></table></div></section>
+      <div class="wrap" style="margin-top: 10px"><table id="src"><thead><tr><th>State</th><th>Source</th><th>How it reports</th><th>Publishes</th><th>Status</th><th class="n">Loaded</th><th>Last answered</th></tr></thead><tbody></tbody></table></div></section>
     <section><header><h2>Gaps still open</h2></header>
       <p class="lede" id="gap-note"></p>
       <div class="wrap"><table id="gaps"><thead><tr><th>State</th><th class="n">Project sources on</th><th>Counties with no owner file</th></tr></thead><tbody></tbody></table></div></section>
@@ -524,7 +524,8 @@ async function loadStatus() {
     add("data", "Published website", hoursAgo(site.published) < 30 ? OKAY : BAD, `Last published ${since(site.published)}. ${num(site.projects)} projects and ${num(site.leads)} parcel leads.`);
     add("data", "Daily data collection", hoursAgo(site.last_collection) < 30 ? OKAY : BAD, `Agencies were last read ${since(site.last_collection)}. ${num(site.new_records_24h)} new project records in the day before publishing.`);
     add("data", "Parcel matching", hoursAgo(site.last_match) < 30 ? OKAY : BAD, `Last ran ${since(site.last_match)}; ${num(site.matched_24h)} projects matched that day, ${num(site.waiting_to_match)} still waiting.`);
-    add("data", "Project sources", site.quiet_count > site.project_sources_on * 0.25 ? BAD : OKAY, `${num(site.project_sources_on)} switched on, ${num(site.quiet_count)} not answering in the last four days.`);
+    if (!site.sources_judged) add("data", "Project sources", QUERY, `${num(site.project_sources_on)} switched on. Whether each one answered is recorded from the next daily run; until then this cannot be judged.`);
+    else add("data", "Project sources", site.quiet_count > site.sources_judged * 0.1 ? BAD : OKAY, `${num(site.project_sources_on)} switched on. Of the ${num(site.sources_judged)} read on the last run, ${num(site.quiet_count)} failed or have not answered in four days.`);
     add("data", "Owner files", OKAY, `${num(site.owner_files_on)} in use, ${num(site.owner_files_held)} held for a terms review.`);
     const st = site.stages || {}, known = Object.entries(st).filter(([k]) => k !== "unknown").reduce((a, [, v]) => a + v, 0);
     add("data", "Project stages", OKAY, `${num(known)} projects carry a stage backed by a date or the agency's status; ${num(st.unknown || 0)} show "stage not published"; ${num(site.stages_confirmed)} confirmed by an attorney.`);
@@ -547,7 +548,8 @@ async function loadStatus() {
     add("money", "Stripe key", H.stripe_key === "off" ? OFF : S && S.ok ? OKAY : BAD, H.stripe_key === "off" ? "No Stripe key is saved on the server." : S && S.ok ? (H.stripe_key === "live" ? "A live key is saved and Stripe answers." : "A TEST key is saved and Stripe answers. Real cards cannot be charged until the live key replaces it.") : "Stripe refused the key: " + esc((S || {}).why || ""));
     if (S && S.ok && "charges" in S) add("money", "Stripe account", S.charges && S.payouts ? OKAY : BAD, S.charges && S.payouts ? "Verified: Stripe can charge cards and pay out to the bank." : "Stripe has not finished verifying the business. " + (S.charges ? "" : "It cannot charge cards yet. ") + (S.payouts ? "" : "It cannot pay out to a bank yet."));
     add("money", "Stripe notifications", !H.webhook_secret ? (H.stripe_key === "off" ? OFF : BAD) : S && S.webhook_endpoints === 0 ? BAD : OKAY,
-      !H.webhook_secret ? "No signing secret is saved, so a payment cannot open an account by itself." : S && S.webhook_endpoints === 0 ? "A signing secret is saved, but Stripe has no enabled webhook pointing at this site." : "Signing secret saved" + (S && S.webhook_endpoints ? " and Stripe has a webhook pointing at this site." : "."));
+      !H.webhook_secret ? "Not set up, so a payment cannot open an account by itself." + (H.stripe_key === "off" ? "" : ' <button class="btn go" type="button" data-stripe-setup>Set up now</button>')
+      : S && S.webhook_endpoints === 0 ? 'A signing secret is held, but Stripe has no enabled webhook pointing at this site. <button class="btn go" type="button" data-stripe-setup>Set up again</button>' : "Signing secret saved" + (S && S.webhook_endpoints ? " and Stripe has a webhook pointing at this site." : "."));
     add("money", "Postcards (Lob)", H.lob_key === "off" ? OFF : H.lob && H.lob.ok ? OKAY : BAD, H.lob_key === "off" ? "No Lob key is saved, so postcards cannot be ordered." : H.lob && H.lob.ok ? (H.lob_key === "live" ? "A live key is saved and Lob answers. Orders are mailed." : "A test key is saved and Lob answers. Orders make proofs only; nothing is mailed.") : esc((H.lob || {}).why || "Lob did not answer."));
     add("money", "Owner lookups (BatchData)", H.batchdata_key ? OKAY : OFF, H.batchdata_key ? "A key is saved. It is used the first time a subscriber buys a lookup." : "No BatchData key is saved, so lookups cannot be bought.");
   } else add("money", "Payments, postcards and lookups", BAD, "The admin function did not answer, so these could not be checked.");
@@ -559,9 +561,18 @@ async function loadStatus() {
   $("sys-when").textContent = "Checked " + new Date().toLocaleTimeString(undefined, {hour: "numeric", minute: "2-digit"});
   const Q = site ? site.quiet_sources : [];
   $("sys-quiet-n").textContent = site && site.quiet_count ? site.quiet_count + " sources" + (site.quiet_count > Q.length ? ", first " + Q.length + " shown" : "") : "";
-  body("sys-quiet", Q.map(x => `<tr><td>${esc(x.state)}</td><td>${esc(x.name)}</td><td>${x.updated ? since(x.updated) : "never"}</td></tr>`).join(""), 3, site ? "Every project source has answered in the last four days." : "Not known until the next publish.");
+  body("sys-quiet", Q.map(x => `<tr><td>${esc(x.state)}</td><td>${esc(x.name)}</td><td>${x.updated ? since(x.updated) : "never"}</td><td>${esc(x.error || "No answer in four days")}</td></tr>`).join(""), 4,
+    !site ? "Not known until the next publish." : !site.sources_judged ? "Recorded from the next daily run." : "Every project source answered on the last run.");
 }
 $("sys-again").addEventListener("click", loadStatus);
+// One click registers this site's webhook with Stripe and switches on the cancel page. The server keeps the signing
+// secret Stripe returns; it never passes through this page.
+document.querySelector("#sys-money").addEventListener("click", async e => {
+  const b = e.target.closest("[data-stripe-setup]"); if (!b) return;
+  b.disabled = true; b.textContent = "Setting up…";
+  try { const out = await act({action: "stripe_setup"}); $("err").hidden = true; b.closest("td").textContent = out.done.join(" "); setTimeout(() => { loadStatus(); load(); }, 1200); }
+  catch (x) { $("err").textContent = "Stripe was not set up: " + x.message; $("err").hidden = false; b.disabled = false; b.textContent = "Try again"; scrollTo(0, 0); }
+});
 
 // ---------- site visits ----------
 const dur = s => !s ? "–" : s < 60 ? s + " s" : Math.floor(s / 60) + " min " + (s % 60 ? (s % 60) + " s" : "");
