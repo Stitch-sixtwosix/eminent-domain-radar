@@ -114,7 +114,162 @@
    "notes": "State-hosted snapshot of Utah County parcels that, unlike other UGRC county layers, carries an OWNERNAME field, BUT it is filled on only about 86,700 of 285,970 parcels (197,495 are empty strings), so it is a partial source. No mailing address, value or acres. The UGRC layers for Davis, Weber and Washington counties (Parcels_Davis, Parcels_Weber, Parcels_Washington) were checked and have no owner name.",
    "approved": true,
    "approved_note": "Approved by the account owner on 2026-11-17: no restriction on commercial use stated."
+  },
+  {
+   "county": "WEBER",
+   "name": "Weber County - Parcel Master (gis/parcels_geogizmo2)",
+   "url": "https://maps.webercountyutah.gov/arcgis/rest/services/gis/parcels_geogizmo2/MapServer/0",
+   "verified": true,
+   "record_count": 115765,
+   "owner_filled_count": 114590,
+   "fields": {
+    "apn": "PARCEL_ID",
+    "owner": "NAME_ONE",
+    "mailing_address": [
+     "STREET",
+     "CITY_STATE",
+     "ZIPCODE"
+    ],
+    "address": [
+     "PROP_STREET",
+     "PROP_CITY",
+     "PROP_ZIP"
+    ],
+    "market_value": "TOT_MARKET",
+    "acres": "landgrossacrecount"
+   },
+   "restrictions": "No terms on the layer or service (description and copyrightText empty). Weber County's site-wide Online Terms of Use (https://www.webercountyutah.gov/disclaimer.php, 'COPYRIGHT LIMITATIONS') allow copying and distribution only 'for personal or informational use': 'Anyone may view, copy or distribute information found within these web pages ... for personal or informational use without owing an obligation to the County if the documents are not modified in any respect, and unless otherwise stated on the particular materials'. Commercial use, solicitation and mailing lists are not addressed; no Utah statute is cited.",
+   "notes": "Weber County's own ArcGIS server (Ogden). Tax year 2026 (TaxYear, ASSESSED_YR = 2026). NAME_ONE filled on 114,590 of 115,765 parcels; PRIVATE_FLAG is 0 on every record. One owner name field only. ZIPCODE is 9 digits without a hyphen ('844019815'); CITY_STATE is one text field ('TAYLOR UT'). Also TOT_TAXABLE, PROP_DESC, ACCOUNT_TYPE, SUBDIVISIO. The same schema is served at gis/OpenGov_Layers/MapServer/9 and assessor/Assessed_Values_Map_2026/MapServer/0. The terms page also says the County 'may determine to charge a fee for accessing or using information'. maxRecordCount 2000.",
+   "checked": "2026-11-23"
+  },
+  {
+   "county": "CACHE",
+   "name": "Cache County - Cache Parcels (BaseMap/Parcels_Current)",
+   "url": "https://gis.cachecounty.gov/arcgis/rest/services/BaseMap/Parcels_Current/MapServer/0",
+   "verified": true,
+   "record_count": 60645,
+   "owner_filled_count": 59812,
+   "fields": {
+    "apn": "tax_id",
+    "owner": "owner_name",
+    "mailing_address": [
+     "owner_address1",
+     "owner_address2",
+     "owner_city_state_zip"
+    ],
+    "address": [
+     "property_address",
+     "property_city"
+    ],
+    "market_value": [
+     "land_market_value",
+     "building_market_value"
+    ],
+    "acres": "acreage"
+   },
+   "restrictions": "Stated in the service's copyrightText: 'Use Limitations: Cache County GIS parcel data is derived from the County's internal taxroll system and is subject to the restrictions outlined in Cache County CORE Terms and Conditions. Resale, redistribution, or republication of County data is prohibited without authorization. Owner names and other identifying information may constitute Personally Identifiable Information (PII) and are subject to applicable privacy laws. Access to this service does not grant additional rights to use, disclose, or distribute PII.' Questions on permitted use are directed to the Cache County Clerk. The CORE Terms and Conditions themselves could not be read (core.cachecounty.gov returned no readable text).",
+   "notes": "Cache County's own ArcGIS server (Logan). Live data: newest last_edited_date is 2026-11-23. owner_name filled on 59,812 of 60,645 parcels. A field named 'restricted' is non-null on 357 parcels. owner_address_complete did not match owner_address1 + owner_city_state_zip on one sample record, so use the separate fields. There is no single total value field: land_market_value and building_market_value are separate and null on some parcels. Also legal, year_built, district_code_definition, core_url. maxRecordCount 8000.",
+   "checked": "2026-11-23"
+  },
+  {
+   "county": "BOX ELDER",
+   "name": "Box Elder County - Tax Parcels (Cadastral/Cadastral)",
+   "url": "https://gis.boxeldercountyut.gov/arcgis/rest/services/Cadastral/Cadastral/MapServer/2",
+   "verified": true,
+   "record_count": 53577,
+   "owner_filled_count": 53231,
+   "fields": {
+    "apn": "Parcel_Number",
+    "owner": "OWNERNAME",
+    "mailing_address": "OWNERADDRESS",
+    "address": "Situs_Address",
+    "acres": "GIS_Acres"
+   },
+   "restrictions": "terms not found: the layer and service description and copyrightText are empty, and no county terms page was read.",
+   "notes": "Box Elder County's own ArcGIS server (Brigham City). Rows rewritten on 2026-11-23 (created_date). OWNERNAME filled on 53,231 of 53,577 parcels. OWNERADDRESS is one text field with a line break between street and city ('984 W 700 N \\nWEST BOUNTIFUL, UT 84087'). SCHNO is the parcel number with hyphens ('01-001-0003'); Account_Number and Hyperlink point to the county's Eagle tax record. A CONFIDENTIAL field exists and is null on every record. No value field. The same layer is at Webmap/Cadastral_Layers/MapServer/9. maxRecordCount 2000.",
+   "checked": "2026-11-23"
+  },
+  {
+   "county": "IRON",
+   "name": "Iron County - TaxParcels_ZoningSearch",
+   "url": "https://services.arcgis.com/xGNWaeXY0POVazgT/arcgis/rest/services/TaxParcels_ZoningSearch/FeatureServer/0",
+   "verified": true,
+   "record_count": 57904,
+   "owner_filled_count": 57067,
+   "fields": {
+    "apn": "Parcel",
+    "owner": "Name_1",
+    "mailing_address": [
+     "Mailing_Address",
+     "PO",
+     "City",
+     "State",
+     "Zip"
+    ],
+    "address": "Situs",
+    "market_value": [
+     "MV_Land",
+     "MV_Improvements"
+    ],
+    "acres": "Acres"
+   },
+   "restrictions": "terms not found: item 46af779d97454f2797db3b6ef77eed96 has an empty licenseInfo and description, and the layer has no copyrightText; no county terms page was read.",
+   "notes": "Iron County's own ArcGIS Online organisation (Cedar City), published by county GIS account kallan_IronGIS; item snippet: 'A layer that will help the zoning map search parcel numbers'. NOT current: last edited 2025-03-26, tax Year 2025. Name_1 filled on 57,067 of 57,904 parcels. InCareOf, Taxable, Total_Taxes, Book_Page also present; no single total market value (MV_Land + MV_Improvements). The county's older public layer Parcels_Public/FeatureServer/0 (56,108 parcels, OWNER, MAIL_ADD1, MAIL_CITY, MAIL_ST, SITUS; item snippet 'County parcels for public use', licenseInfo empty) holds data from about 2021. maxRecordCount 2000.",
+   "checked": "2026-11-23"
+  },
+  {
+   "county": "SUMMIT",
+   "name": "Summit County - TaxParcels",
+   "url": "https://services2.arcgis.com/gyfpgFh2Wj2gglYD/arcgis/rest/services/TaxParcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 43966,
+   "owner_filled_count": 43966,
+   "fields": {
+    "apn": "PARCELID",
+    "owner": "OWNERNME1",
+    "mailing_address": [
+     "PSTLADDRESS",
+     "ADDRESS2",
+     "PSTLCITY",
+     "PSTLSTATE",
+     "ZIP"
+    ],
+    "address": "SITEADDRESS",
+    "market_value": "CNTTXBLVAL",
+    "acres": "STATEDAREA"
+   },
+   "restrictions": "terms not found: item 50846a1c1b0b4186abd13e30ff8a926a has an empty licenseInfo, and the layer has no copyrightText; no county terms page was read.",
+   "notes": "Summit County's own ArcGIS Online organisation (Park City), published by county account jmward; item snippet: 'Tax Parcels used in the Public Notification application. Updated on 7/1/2026.' Last edited 2026-07-01. OWNERNME1 filled on all 43,966 records; INCAREOF holds care-of names. The item says geometry repeats where a tax parcel holds several condominium units. CNTTXBLVAL is the current TAXABLE value, not market value; LNDVALUE is land value. PSTLZIP5 and PSTLZIP4 are empty: the mailing zip is in ZIP. STATEDAREA is acres as TEXT ('0.42'). LOWPARCELID is the account number. maxRecordCount 2000.",
+   "checked": "2026-11-23"
+  },
+  {
+   "county": "MORGAN",
+   "name": "Morgan County - ParcelPublish (GIS.PublishFC)",
+   "url": "https://services5.arcgis.com/9zdKz4c9IFXMrlCe/arcgis/rest/services/ParcelPublish/FeatureServer/11",
+   "verified": true,
+   "record_count": 8708,
+   "owner_filled_count": 8708,
+   "fields": {
+    "apn": "Parcel",
+    "owner": "Name1",
+    "mailing_address": [
+     "Add1",
+     "Add2",
+     "City",
+     "State",
+     "Zip"
+    ],
+    "address": [
+     "Property_Address",
+     "Property_City"
+    ],
+    "market_value": "Market",
+    "acres": "Acres"
+   },
+   "restrictions": "terms not found: item cc7f7ce5dda2400dad321372f39f5b0a has an empty licenseInfo and description, and the layer has no copyrightText; no county terms page was read.",
+   "notes": "Morgan County Recorder's own ArcGIS Online account (MorganRecorder); item snippet: 'Tax Parcels for Morgan County UPDATED 8/3/2026'; layer last edited 2026-11-23. Name1 filled on all 8,708 parcels; Name2 is a second owner. Serial is the serial number ('12-004-007-01'), Parcel the parcel number ('00-0090-3200'). Status 'EX' marks exempt parcels. Also Taxable, Land, Buildings, Year_Built, Mortgage_Company. Older layers in the same account: ParcelService/FeatureServer/0 (8,319, OWNERNME1, updated 2025-06-19) and Taxroll_Public_Layer/FeatureServer/0 (8,470, June 2026). maxRecordCount 2000.",
+   "checked": "2026-11-23"
   }
  ],
- "summary": "UDOT ePM STIP line layer verified (3,219 projects with status, concept, value, advertise date). Parcels: statewide layer has no owner names; Salt Lake County verified with owner + mailing address; Utah County has owner name on only ~30% of parcels; Davis, Weber, Washington county owner layers not found."
+ "summary": "UDOT ePM STIP line layer verified (3,219 projects with status, concept, value, advertise date). Parcels: statewide layer has no owner names; Salt Lake County verified with owner + mailing address; Utah County has owner name on only ~30% of parcels; Davis, Weber, Washington county owner layers not found. Third pass 2026-11-23: Weber, Cache, Box Elder, Iron, Summit and Morgan county owner layers verified but all held (stated limits for Weber and Cache, terms not found for the rest); Davis not found, Washington's server timed out."
 }

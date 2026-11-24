@@ -2167,6 +2167,56 @@
    "sample": "{\"ProjNO\": \"43-26-06\", \"Decription\": \"PORTLAND ROAD (C.R. 32) ML Bridge Deck Replacement\", \"Status\": \"Active\", \"Schedule\": \"04-26/10-26\"}",
    "restrictions": null,
    "notes": "Current-season construction (28 points; mostly bridge and pavement work inside existing right-of-way), not a forward capital plan. 'Decription' is the field's real spelling. Low value for early land-taking signals. Data last edited 2026-07-22."
+  },
+  {
+   "name": "Knoxville Regional TPO Mobility Plan 2050 projects (Knox County)",
+   "authority": "Knoxville Regional Transportation Planning Organization / Knoxville-Knox County Planning; sponsors are TDOT, Knox County, City of Knoxville, Farragut",
+   "states": [
+    "TN"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/QWaOgwdmpqI9HUzf/arcgis/rest/services/MobilityPlan2050Knox/FeatureServer/409",
+   "verified": true,
+   "record_count": 96,
+   "geometry": "polyline",
+   "fields": {
+    "id": "MP_ID",
+    "name": "PROJ_NAME",
+    "description": "PROJ_DESC",
+    "work_type": "PROJ_TYPE",
+    "cost": "YOE_COST",
+    "status": "HORIZON_YR",
+    "date": "TIP_CON_YR",
+    "county": "COUNTY"
+   },
+   "planned_filter": "All 96 records are plan projects not yet built. HORIZON_YR is the plan horizon (2026, 2030, 2035, 2040, 2045, 2050 or 'Illustrative' = unfunded); TIP_ID / TIP_CON_YR are filled when the project is already in the TIP. For land-taking work use PROJ_TYPE = 'Roadway'.",
+   "sample": "{\"MP_ID\": \"09-643\", \"PROJ_NAME\": \"Emory Rd (SR-131)\", \"PROJ_DESC\": \"Widen from 2 to 4 lanes with median and/or center turn lane, including bicycle and pedestrian facilities\", \"TERMINI\": \"Maynardville Hwy (SR-33) to Tazewell Pk (SR-331)\", \"APPLICANT\": \"TDOT\", \"PROJ_TYPE\": \"Roadway\", \"COUNTY\": \"Knox\", \"YOE_COST\": 0, \"HORIZON_YR\": \"Illustrative\"}",
+   "restrictions": null,
+   "notes": "Checked 2026-11-23. ArcGIS Online item 056e76db562948cdb10fd6dee26307e2 (modified 2026-10-16), credit 'Knoxville-Knox County Planning and Knoxville Regional TPO'. Licence read in the item's licenseInfo: 'This data is made available under the Public Domain Dedication and License v1.0 ... You are free: To Share: To copy, distribute and use the database ... The PDDL imposes no restrictions on your use of the PDDL licensed database'; attribution is requested but 'not required'. The site terms at https://knoxplanning.org/data were also read: the same PDDL licence, a warranty disclaimer with a hold-harmless clause, and 'You may not use any trademark, official mark, official emblem or logo of Knoxville-Knox County Planning ... to represent or imply an association or affiliation with Planning'. No limit on commercial use or redistribution. Knox County only (the TPO also plans for parts of Anderson, Blount, Loudon, Sevier, Roane; no layer for those found). PROJ_TYPE values: Roadway, Bike/Ped, ITS, ITS/Transit, Transit, Study, NA. STATUS2050 says whether the project is New or rolled over from the previous plan. YOE_COST is year-of-expenditure dollars (0 for illustrative projects). APPLICANT is the sponsoring agency. TERMINI gives from/to."
+  },
+  {
+   "name": "OahuMPO TIP FFYs 2025-2028 projects (Honolulu)",
+   "authority": "Oahu Metropolitan Planning Organization; lead agencies are HDOT and the City and County of Honolulu",
+   "states": [
+    "HI"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/HQ0xoN0EzDPBOEci/arcgis/rest/services/TIP_FFYs_25_28_Projects/FeatureServer/0",
+   "verified": true,
+   "record_count": 90,
+   "geometry": "polyline",
+   "fields": {
+    "id": "PRJ_NUM",
+    "name": "Project_Na",
+    "work_type": "Fund_Use",
+    "cost": "Est_Cost"
+   },
+   "planned_filter": "All records are projects programmed in the FFY 2025-2028 TIP; there is no status or date field, so built and unbuilt cannot be told apart from the layer alone.",
+   "sample": "{\"Project_Na\": \"Moanalua Freeway, (Interstate Route H-201) Seismic Retrofit, Puuloa Interchange (Five Structures)\", \"Lead_Agenc\": \"HDOT\", \"PRJ_NUM\": \"OS-21-51\", \"Est_Cost\": 15000000, \"Fund_Use\": \"Bridges\"}",
+   "restrictions": "terms not found: the ArcGIS Online item (505298ce3e4d424ea626a7e72ac6c03f, owner bbutoaj, on the Hawaii DOT organisation's account) has no licence text, credit or description",
+   "notes": "Checked 2026-11-23. Item modified 2025-08-12; two more items with the same title exist under owner dot_dige. Thin attributes: project name, lead agency (Lead_Agenc), TIP project number, estimated cost and funding use (e.g. 'Bridges', 'Highways/Roadways'). No description, phase or year. Oahu only."
   }
  ],
  "unverified": [

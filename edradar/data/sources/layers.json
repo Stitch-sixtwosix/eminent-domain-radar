@@ -3629,6 +3629,31 @@
   "records": 28
  },
  {
+  "state": "TN",
+  "name": "Knoxville Regional TPO Mobility Plan 2050 projects (Knox County)",
+  "key": "g9c9ae4737",
+  "url": "https://services1.arcgis.com/QWaOgwdmpqI9HUzf/arcgis/rest/services/MobilityPlan2050Knox/FeatureServer/409",
+  "fields": {
+   "id": "MP_ID",
+   "name": "PROJ_NAME",
+   "description": "PROJ_DESC",
+   "work_type": "PROJ_TYPE",
+   "cost": "YOE_COST",
+   "status": "HORIZON_YR",
+   "date": "TIP_CON_YR",
+   "county": "COUNTY"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "Knoxville Regional Transportation Planning Organization / Knoxville-Knox County Planning; sponsors are TDOT, Knox County, City of Knoxville, Farragut",
+  "stage": "planning",
+  "likelihood": null,
+  "source_prefix": "gis",
+  "category": "regional",
+  "coverage": "metro area",
+  "records": 96
+ },
+ {
   "state": "NH",
   "name": "NHDOT 10 Year Plan - Planning Projects (copy in The Nature Conservancy's NH_Transportation_Source_Data)",
   "key": "g1ff5cc8e1",

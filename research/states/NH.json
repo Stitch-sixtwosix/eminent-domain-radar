@@ -1,80 +1,92 @@
 {
-  "state": "New Hampshire",
-  "code": "NH",
-  "checked": "2026-11-17",
-  "projects": [
-    {
-      "name": "NHDOT Projects Proposals - Projects In Design",
-      "url": "https://maps.dot.nh.gov/arcgis_server/rest/services/Projects/NHDOT_PROJECTS_PROPOSALS/MapServer/1",
-      "verified": false,
-      "geometry": "polyline",
-      "record_count": null,
-      "fields": {
-        "id": "PROJ_NUMBER",
-        "name": "PROJ_NAME",
-        "description": "PROJ_DESCRIPTION",
-        "work_type": "PRIMARY_TIER",
-        "cost": "PROJECT_DOLLARS",
-        "status": "PROJECT_TYPE",
-        "let_date": "AD_DATE"
-      },
-      "work_type_values": [],
-      "status_values": [],
-      "notes": "Layer description: PROJECTS_ALL staging table queried by PROJECT_TYPE = 'Design' And HAS_ROW_PLANS = 'NO'. NOT VERIFIED WITH DATA. The layer definition (name, geometry type, field list) answered on 2026-11-16/17, but every query on every layer of this server's Projects services returned HTTP 200 with {\"error\":{\"code\":500,\"message\":\"Error performing query operation\"}} - on MapServer and FeatureServer, with count-only, ids-only and single-field queries. It looks like a database outage on NHDOT's side, so retry later. Field names are copied from the layer definition, but which field means what is a GUESS from the names because no sample record could be read (in particular PRIMARY_TIER as work type and PROJECT_DOLLARS vs TYP_INFLATED_COST vs BID_TOTAL as cost are unconfirmed; there is no town/county field in the list). Record count unknown."
-    },
-    {
-      "name": "NHDOT Projects Proposals - Projects In Planning",
-      "url": "https://maps.dot.nh.gov/arcgis_server/rest/services/Projects/NHDOT_PROJECTS_PROPOSALS/MapServer/2",
-      "verified": false,
-      "geometry": "polyline",
-      "record_count": null,
-      "fields": {
-        "id": "PROJ_NUMBER",
-        "name": "PROJ_NAME",
-        "description": "PROJ_DESCRIPTION",
-        "work_type": "PRIMARY_TIER",
-        "cost": "PROJECT_DOLLARS",
-        "status": "PROJECT_TYPE",
-        "let_date": "AD_DATE"
-      },
-      "work_type_values": [],
-      "status_values": [],
-      "notes": "Planning-stage projects. NOT VERIFIED WITH DATA. The layer definition (name, geometry type, field list) answered on 2026-11-16/17, but every query on every layer of this server's Projects services returned HTTP 200 with {\"error\":{\"code\":500,\"message\":\"Error performing query operation\"}} - on MapServer and FeatureServer, with count-only, ids-only and single-field queries. It looks like a database outage on NHDOT's side, so retry later. Field names are copied from the layer definition, but which field means what is a GUESS from the names because no sample record could be read (in particular PRIMARY_TIER as work type and PROJECT_DOLLARS vs TYP_INFLATED_COST vs BID_TOTAL as cost are unconfirmed; there is no town/county field in the list). Record count unknown."
-    },
-    {
-      "name": "NHDOT Projects Proposals - Ten Year Plan Projects",
-      "url": "https://maps.dot.nh.gov/arcgis_server/rest/services/Projects/NHDOT_PROJECTS_PROPOSALS/MapServer/5",
-      "verified": false,
-      "geometry": "polyline",
-      "record_count": null,
-      "fields": {
-        "id": "PROJ_NUMBER",
-        "name": "PROJ_NAME",
-        "description": "PROJ_DESCRIPTION",
-        "work_type": "PRIMARY_TIER",
-        "cost": "PROJECT_DOLLARS",
-        "status": "PROJECT_TYPE",
-        "let_date": "AD_DATE"
-      },
-      "work_type_values": [],
-      "status_values": [],
-      "notes": "Projects in the adopted Ten Year Plan (flag field IS_TEN_YEAR, cost TYP_INFLATED_COST). Layer 6 is the Draft Ten Year Plan (IS_DRAFT_TEN_YEAR, TYP_DRAFT_INFLATED_COST). Layer 0 is Under Construction and layer 3 Completed (skip both). A sibling service Projects/NHDOT_PROJECTS_PROPOSALS_ROW/MapServer has the same stages for projects that have right-of-way plans (HAS_ROW_PLANS) - directly relevant to land acquisition - and Projects/NHDOT_PROJECTS_ALL/MapServer/0 is everything unfiltered. NOT VERIFIED WITH DATA. The layer definition (name, geometry type, field list) answered on 2026-11-16/17, but every query on every layer of this server's Projects services returned HTTP 200 with {\"error\":{\"code\":500,\"message\":\"Error performing query operation\"}} - on MapServer and FeatureServer, with count-only, ids-only and single-field queries. It looks like a database outage on NHDOT's side, so retry later. Field names are copied from the layer definition, but which field means what is a GUESS from the names because no sample record could be read (in particular PRIMARY_TIER as work type and PROJECT_DOLLARS vs TYP_INFLATED_COST vs BID_TOTAL as cost are unconfirmed; there is no town/county field in the list). Record count unknown."
-    }
-  ],
-  "parcels_statewide": null,
-  "parcels_counties": [],
-  "summary": "Weak state. NHDOT's project services exist with the right layers (in planning, in design, Ten Year Plan, right-of-way projects) but could not be verified: every data query failed with a server error on 2026-11-16 and again on 2026-11-17. Statewide parcels exist but without owner names, and no county or regional owner layer was found.",
-  "parcels_statewide_no_owner": {
-    "name": "NH Parcel Mosaic (NH GRANIT) - Parcels + Cama table",
-    "url": "https://nhgeodata.unh.edu/nhgeodata/rest/services/CAD/ParcelMosaic/MapServer/1",
-    "verified": true,
-    "record_count": 617124,
-    "fields": {
-      "apn": "NH_GIS_ID",
-      "address": "StreetAddress",
-      "county": "CountyId"
-    },
-    "notes": "Statewide parcel polygons exist and answer, but there is NO owner name anywhere: neither the polygon layer nor the related Cama table (https://nhgeodata.unh.edu/nhgeodata/rest/services/CAD/ParcelMosaic/MapServer/3, 709,366 rows, has TownName, CountyName, land-use class SLUC_desc, street address, map/lot) carries owner or mailing address."
+ "state": "New Hampshire",
+ "code": "NH",
+ "checked": "2026-11-23",
+ "projects": [
+  {
+   "name": "NHDOT Projects Proposals - Projects In Design",
+   "url": "https://maps.dot.nh.gov/arcgis_server/rest/services/Projects/NHDOT_PROJECTS_PROPOSALS/MapServer/1",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 337,
+   "fields": {
+    "id": "PROJ_NUMBER",
+    "name": "PROJ_NAME",
+    "description": "PROJ_DESCRIPTION",
+    "cost": "PROJECT_DOLLARS",
+    "status": "PROJECT_TYPE",
+    "let_date": "AD_DATE"
+   },
+   "work_type_values": [],
+   "status_values": [
+    "Design"
+   ],
+   "notes": "Projects in design (PROJECT_TYPE = 'Design'), 337 records of which 309 have IS_CURRENT = 'YES'; the rest are old shelved jobs (one sample dates from 1989), hence the filter. 180 have a future AD_DATE, 135 none. Verified with data 2026-11-23 (the server-side query error of 2026-11-16/17 has cleared; the host name intermittently failed to resolve from this machine, so allow retries). Polyline geometry, maxRecordCount 2000, copyright 'NHDOT - GIS Planning'; no terms or licence text on the service. Fields confirmed from sample records: PROJ_NUMBER (state project number, e.g. '13742'), PROJ_NAME is the TOWN name(s) (e.g. 'BOW-CONCORD'), MAIN_ROUTE, PROJ_DESCRIPTION, PROJECT_TYPE (Planning / Design / Construction / Completed), AD_DATE (advertising date, epoch ms; future dates present), PROJECT_DOLLARS / PROGRAM_DOLLARS / TYP_INFLATED_COST / BID_TOTAL are TEXT with a dollar sign and padding (e.g. '    $58,038,049') and are often empty, HAS_ROW_PLANS (YES/NO), IS_TEN_YEAR, IS_CURRENT, FUNDING_AUTHORIZED, PROJECT_INFO / PROJECT_PLANS / TYP_PROJECT_SHEETS (links). PRIMARY_TIER is a road tier 0-5, not a work type, so no work_type is mapped; there is no county field. CONTACT_NAME is the NHDOT project manager (staff, not needed).",
+   "checked": "2026-11-23",
+   "where": "IS_CURRENT = 'YES'"
   },
-  "parcels_counties_reason": "None found. In New Hampshire parcels and assessing records are kept by each city/town, not by counties. The one regional layer checked (Nashua Regional Planning Commission open data parcels, https://services6.arcgis.com/2ZriDy2NFXltCIFR/arcgis/rest/services/NRPCOpenData/FeatureServer/2, 65,641 parcels, answered) also has no owner field. Individual city services (Manchester, Nashua, Concord) were not checked."
+  {
+   "name": "NHDOT Projects Proposals - Projects In Planning",
+   "url": "https://maps.dot.nh.gov/arcgis_server/rest/services/Projects/NHDOT_PROJECTS_PROPOSALS/MapServer/2",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 578,
+   "fields": {
+    "id": "PROJ_NUMBER",
+    "name": "PROJ_NAME",
+    "description": "PROJ_DESCRIPTION",
+    "cost": "PROJECT_DOLLARS",
+    "status": "PROJECT_TYPE",
+    "let_date": "AD_DATE"
+   },
+   "work_type_values": [],
+   "status_values": [
+    "Planning"
+   ],
+   "notes": "Planning-stage projects (PROJECT_TYPE = 'Planning'), 578 records, 393 without an AD_DATE. Filter on IS_CURRENT = 'YES' to drop shelved jobs. Verified with data 2026-11-23 (the server-side query error of 2026-11-16/17 has cleared; the host name intermittently failed to resolve from this machine, so allow retries). Polyline geometry, maxRecordCount 2000, copyright 'NHDOT - GIS Planning'; no terms or licence text on the service. Fields confirmed from sample records: PROJ_NUMBER (state project number, e.g. '13742'), PROJ_NAME is the TOWN name(s) (e.g. 'BOW-CONCORD'), MAIN_ROUTE, PROJ_DESCRIPTION, PROJECT_TYPE (Planning / Design / Construction / Completed), AD_DATE (advertising date, epoch ms; future dates present), PROJECT_DOLLARS / PROGRAM_DOLLARS / TYP_INFLATED_COST / BID_TOTAL are TEXT with a dollar sign and padding (e.g. '    $58,038,049') and are often empty, HAS_ROW_PLANS (YES/NO), IS_TEN_YEAR, IS_CURRENT, FUNDING_AUTHORIZED, PROJECT_INFO / PROJECT_PLANS / TYP_PROJECT_SHEETS (links). PRIMARY_TIER is a road tier 0-5, not a work type, so no work_type is mapped; there is no county field. CONTACT_NAME is the NHDOT project manager (staff, not needed).",
+   "checked": "2026-11-23",
+   "where": "IS_CURRENT = 'YES'"
+  },
+  {
+   "name": "NHDOT Projects Proposals - Ten Year Plan Projects",
+   "url": "https://maps.dot.nh.gov/arcgis_server/rest/services/Projects/NHDOT_PROJECTS_PROPOSALS/MapServer/5",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 345,
+   "fields": {
+    "id": "PROJ_NUMBER",
+    "name": "PROJ_NAME",
+    "description": "PROJ_DESCRIPTION",
+    "cost": "TYP_INFLATED_COST",
+    "status": "PROJECT_TYPE",
+    "let_date": "AD_DATE"
+   },
+   "work_type_values": [],
+   "status_values": [
+    "Completed",
+    "Construction",
+    "Design",
+    "Planning"
+   ],
+   "notes": "Projects in the adopted Ten Year Plan (IS_TEN_YEAR = 'YES'), 345 records of all stages; 175 are Design or Planning (the filter). Cost for these is TYP_INFLATED_COST (text). Overlaps layers 1 and 2 by PROJ_NUMBER. Layer 6 (Draft Ten Year Plan) is empty today. Layer 0 is Under Construction and 3 Completed (skip). Sibling service Projects/NHDOT_PROJECTS_PROPOSALS_ROW/MapServer (layers 1 'ROW Projects In Design', 6 records, and 2 'ROW Projects In Planning', 2 records) holds the same records where right-of-way plans exist; HAS_ROW_PLANS = 'YES' in this service marks the same thing. Verified with data 2026-11-23 (the server-side query error of 2026-11-16/17 has cleared; the host name intermittently failed to resolve from this machine, so allow retries). Polyline geometry, maxRecordCount 2000, copyright 'NHDOT - GIS Planning'; no terms or licence text on the service. Fields confirmed from sample records: PROJ_NUMBER (state project number, e.g. '13742'), PROJ_NAME is the TOWN name(s) (e.g. 'BOW-CONCORD'), MAIN_ROUTE, PROJ_DESCRIPTION, PROJECT_TYPE (Planning / Design / Construction / Completed), AD_DATE (advertising date, epoch ms; future dates present), PROJECT_DOLLARS / PROGRAM_DOLLARS / TYP_INFLATED_COST / BID_TOTAL are TEXT with a dollar sign and padding (e.g. '    $58,038,049') and are often empty, HAS_ROW_PLANS (YES/NO), IS_TEN_YEAR, IS_CURRENT, FUNDING_AUTHORIZED, PROJECT_INFO / PROJECT_PLANS / TYP_PROJECT_SHEETS (links). PRIMARY_TIER is a road tier 0-5, not a work type, so no work_type is mapped; there is no county field. CONTACT_NAME is the NHDOT project manager (staff, not needed).",
+   "checked": "2026-11-23",
+   "where": "PROJECT_TYPE IN ('Design','Planning')"
+  }
+ ],
+ "parcels_statewide": null,
+ "parcels_counties": [],
+ "summary": "NHDOT's project service now verifies (2026-11-23): Projects In Design (337), In Planning (578) and Ten Year Plan (345) as lines with project number, town, route, description, stage, advertising date and text cost. No county field and no work-type field. Statewide parcels exist but without owner names, and no county or regional owner layer was found.",
+ "parcels_statewide_no_owner": {
+  "name": "NH Parcel Mosaic (NH GRANIT) - Parcels + Cama table",
+  "url": "https://nhgeodata.unh.edu/nhgeodata/rest/services/CAD/ParcelMosaic/MapServer/1",
+  "verified": true,
+  "record_count": 617124,
+  "fields": {
+   "apn": "NH_GIS_ID",
+   "address": "StreetAddress",
+   "county": "CountyId"
+  },
+  "notes": "Statewide parcel polygons exist and answer, but there is NO owner name anywhere: neither the polygon layer nor the related Cama table (https://nhgeodata.unh.edu/nhgeodata/rest/services/CAD/ParcelMosaic/MapServer/3, 709,366 rows, has TownName, CountyName, land-use class SLUC_desc, street address, map/lot) carries owner or mailing address."
+ },
+ "parcels_counties_reason": "None found. In New Hampshire parcels and assessing records are kept by each city/town, not by counties. The one regional layer checked (Nashua Regional Planning Commission open data parcels, https://services6.arcgis.com/2ZriDy2NFXltCIFR/arcgis/rest/services/NRPCOpenData/FeatureServer/2, 65,641 parcels, answered) also has no owner field. Individual city services (Manchester, Nashua, Concord) were not checked."
 }

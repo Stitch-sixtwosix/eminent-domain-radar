@@ -109,8 +109,226 @@
    "notes": "Owner name only: no mailing address, situs address or value. Account_No is the assessor account; Acrage is text such as '160.949 ac'.",
    "approved": true,
    "approved_note": "Approved by the account owner on 2026-11-17: no restriction on commercial use stated."
+  },
+  {
+   "county": "SANTA FE",
+   "url": "https://sfcomaps.santafecountynm.gov/restsvc/rest/services/TaxParcelsDB/MapServer/0",
+   "verified": true,
+   "record_count": 90754,
+   "fields": {
+    "apn": "lowparcelid",
+    "owner": "ownernme1",
+    "mailing_address": [
+     "pstladdress",
+     "pstlcity",
+     "pstlstate",
+     "pstlzip5"
+    ],
+    "address": "siteaddress",
+    "acres": "waterserv"
+   },
+   "restrictions": "terms not found: the layer has no description or copyright text and no ArcGIS item of the county's own; the county GIS page (santafecountynm.gov/growth-management/gis) showed no terms or disclaimer text in the page fetched. NMSA 1978 14-3-15.1 / 14-2 are not cited anywhere on the source; the statute text could not be read during this check (the page fetched returned 403), so whether it limits commercial or solicitation use of this county data was not confirmed.",
+   "notes": "Santa Fe County's own server (layer TaxParcels, GISEDIT.ASSESSOR.TaxParcels). The record queries that timed out on 2026-11-17 now answer in a few seconds with resultRecordCount=3. ownernme1 is filled on 90,638 of 90,754; ownernme2 is a second owner. CAUTION: several columns hold values that do not match their names/aliases in the three sample records: 'waterserv' (alias Water Service Provider) holds the acreage as text ('1.1890' where the legal description says 1.189 AC, same for 1.11 and 4.85), 'building' and 'unit' hold a city and state ('EDGEWOOD','NM'), 'pstlzip4' repeats the 5-digit zip, and the value columns (lndvalue, prvassdval, cntassdval, txblvalyrchg ...) look shifted too, so no market-value field is mapped. lowparcelid is the 19-digit UPC; parcelid is a shorter account-style number. Owner names carry trailing spaces. maxRecordCount 2000.",
+   "checked": "2026-11-23"
+  },
+  {
+   "county": "SAN JUAN",
+   "url": "https://webmaps.sjcounty.net/arcgis/rest/services/Parcel_Data_with_Child/MapServer/0",
+   "verified": true,
+   "record_count": 44735,
+   "fields": {
+    "apn": "PARCELNO",
+    "owner": "NAME1",
+    "mailing_address": [
+     "ADDRESS",
+     "CITYSTATEZIP"
+    ],
+    "address": [
+     "LocationAddress",
+     "LocationCity",
+     "LocationZip"
+    ],
+    "acres": "GrossAcres"
+   },
+   "restrictions": "terms not found: licenseInfo is empty on the county portal item (0d897042d9254f0c8c92005c3d6855a8) and the layer has no copyright text; the county GIS web page could not be fetched. NMSA 1978 14-3-15.1 / 14-2 are not cited anywhere on the source; the statute text could not be read during this check (the page fetched returned 403), so whether it limits commercial or solicitation use of this county data was not confirmed.",
+   "notes": "San Juan County's own ArcGIS server (layer 'Smart Gov Parcel Data11052026'; portal item 'Parcel Data-SmartGov', whose summary says 'The parcel dataset was updated in November 2026'). NAME1 filled on 44,677 of 44,735 (NAME2 on 2,133); mailing ADDRESS filled on 44,230. OWNERADDRESS_CITY / _STATE / _ZIP split the mailing city line. ACCOUNTNO, PARCELNB, AssessorsLink (link to the Tyler assessor page), CHILDPARCEL / PARENTPARCEL, LEGAL1. No value field. The first rows by OBJECTID are empty shells, so sample with where=NAME1 IS NOT NULL. An older copy with truncated lower-case field names is Hosted/ParceldataV3/FeatureServer/0 (43,746). The address listed in the state's 'Parcels - NM - San Juan County' catalogue item (Maps/CounterMap/MapServer/5) no longer exists. maxRecordCount 2000.",
+   "checked": "2026-11-23"
+  },
+  {
+   "county": "VALENCIA",
+   "url": "https://arcgisce2.co.valencia.nm.us/arcgis/rest/services/OnlineMap/MapServer/0",
+   "verified": true,
+   "record_count": 199709,
+   "fields": {
+    "apn": "UPC",
+    "owner": "Owner",
+    "mailing_address": "OwnerAddre",
+    "address": "Situs",
+    "market_value": "ActualValu"
+   },
+   "restrictions": "terms not found: the layer has no description, copyright text or ArcGIS item of the county's own, and the county GIS web page could not be fetched. NMSA 1978 14-3-15.1 / 14-2 are not cited anywhere on the source; the statute text could not be read during this check (the page fetched returned 403), so whether it limits commercial or solicitation use of this county data was not confirmed.",
+   "notes": "Valencia County's own server (layer 'ValenciaCo'); it is the address the state's 'Parcels - NM - Valencia County' catalogue item points to. Owner filled on 198,558 of 199,709; OwnerAddre (one text line: street, city, state, zip) on 198,505. CAREOF, BusinessNa, AccountNum, LegalSumma; LANDACT / IMPACT (actual land and improvement value), TOTASD, NETASD. No acreage field (acreage appears only inside LegalSumma / Metes_Boun text). No edit date is published, so currency is unknown. maxRecordCount 10000.",
+   "checked": "2026-11-23"
+  },
+  {
+   "county": "LEA",
+   "url": "https://services3.arcgis.com/haQkIWW9RWRd8Arf/arcgis/rest/services/Owner_Parcels/FeatureServer/22",
+   "verified": true,
+   "record_count": 44016,
+   "fields": {
+    "apn": "UPC_XY",
+    "owner": "GONAM",
+    "mailing_address": [
+     "GOAD1",
+     "GOAD2",
+     "GOCIT",
+     "GOST",
+     "GOZP5"
+    ],
+    "address": "Location",
+    "market_value": "GTFULL",
+    "acres": "CALC_ACRE"
+   },
+   "restrictions": "terms not found: the item's licenseInfo and description are empty and the layer has no copyright text. NMSA 1978 14-3-15.1 / 14-2 are not cited anywhere on the source; the statute text could not be read during this check (the page fetched returned 403), so whether it limits commercial or solicitation use of this county data was not confirmed.",
+   "notes": "Lea County's own ArcGIS Online layer (organisation 'Lea County', account leacounty), item 81d63e72b31a4d099b7c71b6ae4d9cbd, last edited 2026-11-22. GONAM filled on 42,398 of 44,016. Text fields are space-padded and need trimming. GOCON is a second name/contact line; PARCELCODE is a second parcel code; GTTXBL taxable value, GTVALL / GTVALI land and improvement value; GSTNAM + GANUM are the street name and number behind Location; GPBK / GPPG / GPRDAT deed book, page and date. maxRecordCount 2000.",
+   "checked": "2026-11-23"
+  },
+  {
+   "county": "OTERO",
+   "url": "https://services1.arcgis.com/tZhkGVr1gXGPSz0S/arcgis/rest/services/Parcels_View_All_Fields/FeatureServer/275",
+   "verified": true,
+   "record_count": 21960,
+   "fields": {
+    "apn": "PARCEL_NUM",
+    "owner": "OWNERNAME",
+    "mailing_address": "OWNER_ADDR",
+    "address": "SITUS",
+    "market_value": "TOTAL_VALU",
+    "acres": "CAL_ACRES"
+   },
+   "restrictions": "The county assessor's own terms were not found. The publisher's (City of Alamogordo) item licenseInfo is a warranty disclaimer only and states no limit on commercial use, redistribution, solicitation or mailing lists. NMSA 1978 14-3-15.1 / 14-2 are not cited anywhere on the source; the statute text could not be read during this check (the page fetched returned 403), so whether it limits commercial or solicitation use of this county data was not confirmed.",
+   "notes": "NOT the county's own service: published by the City of Alamogordo's ArcGIS Online organisation (account BitsGuru), item 9cb0d70d46cc4a59bf9683264d81e12d, layer copyright 'Otero County Assessor's Office'. No Otero County service was found (the address in the state's 'Parcels - NM - Otero County' catalogue item answers 'Invalid URL'). With 21,960 records it is probably not the whole county. Item summary: 'tax parcels as presented to the New Mexico Taxation and Revenue Department for the 2025 tax year. Ownership is as of approximately February 27, 2025'. licenseInfo read: 'City of Alamogordo makes no warranty, representation or guarantee of the content, sequence, accuracy, timeliness or completeness of the data provided herein ... shall assume no liability for any errors, omissions, or inaccuracies'. OWNERNAME filled on 21,291. OWNER_ADDR is two lines joined by a newline; SITUS is 'street,city,zip' and holds one address only. IN_CARE_OF, ACCOUNT_NU, LAND_VALUE, IMPROV_VAL, PLATTED_AC. maxRecordCount 2000.",
+   "checked": "2026-11-23"
+  },
+  {
+   "county": "CHAVES",
+   "url": "https://services3.arcgis.com/2P9mvTRBkjNHMsaa/arcgis/rest/services/Parcels/FeatureServer/90",
+   "verified": true,
+   "record_count": 36032,
+   "fields": {
+    "apn": "Name",
+    "owner": "OWNER_NAME",
+    "address": "PROP_ADD",
+    "acres": "Area_Acres"
+   },
+   "restrictions": "terms not found: the item's licenseInfo is empty. Its summary says only: 'This layer is for references only and MUST NOT be used for any legal purposes.' NMSA 1978 14-3-15.1 / 14-2 are not cited anywhere on the source; the statute text could not be read during this check (the page fetched returned 403), so whether it limits commercial or solicitation use of this county data was not confirmed.",
+   "notes": "Chaves County's ArcGIS Online layer (account mbrinkchaves, item e9c0b00b491e477bafc9124843e87656, summary 'This is an official Chaves County parcel layer'), layer 'Nov022026Parcels', last edited 2026-11-16. THE LAYER NUMBER CHANGES when the county republishes (the state catalogue lists /28, now gone; today it is /90), so read the service root to find the current layer. OWNER_NAME filled on 36,009 of 36,032. Owner name only: no mailing address or value. Name is the 19-digit UPC; AccountNo the assessor account; Assessor_Property_Info / Treasurer_Property_Info link to the county's Tyler pages; BK_PG deed reference. maxRecordCount 2000.",
+   "checked": "2026-11-23"
+  },
+  {
+   "county": "EDDY",
+   "url": "https://services1.arcgis.com/4ii5mmz1d3LIlzwY/arcgis/rest/services/Parcel/FeatureServer/0",
+   "verified": true,
+   "record_count": 53282,
+   "fields": {
+    "apn": "UPC",
+    "owner": "OWNERNAME"
+   },
+   "restrictions": "Item licenseInfo (City of Carlsbad): 'Users are not authorized to distribute, alter or display data without to written consent of the City of Carlsbad' and 'Data is not allowed to be downloaded or exported to any other format.' Also 'For Reference Use Only'.",
+   "notes": "NOT the county's own service: published by the City of Carlsbad (account cocarlsbad), item feed694e98b54c898472aec3dbb4b37a 'Parcel - Public', description 'This data has been provided by the Eddy County Assessors office'. No Eddy County service was found. Last edited 2024-04-29, so about two and a half years old. OWNERNAME filled on 45,429 of 53,282. Owner name, UPC and LEGALSUMMARY only: no mailing address, site address, value or acres. Recorded for completeness; the stated terms forbid download and redistribution.",
+   "checked": "2026-11-23"
+  },
+  {
+   "county": "RIO ARRIBA",
+   "url": "https://services6.arcgis.com/6gDz3aQl2Pya7uIo/arcgis/rest/services/RAC_Parcels_2026/FeatureServer/0",
+   "verified": true,
+   "record_count": 35031,
+   "fields": {
+    "apn": "UPC",
+    "owner": "NAME",
+    "mailing_address": [
+     "CAREOF",
+     "ADDRESS1",
+     "ADDRESS2",
+     "CITY",
+     "STATE",
+     "ZIPCODE"
+    ],
+    "address": [
+     "STREETNO",
+     "STREETNAME",
+     "LOCCITY"
+    ],
+    "acres": "CALC_ACRES"
+   },
+   "restrictions": "terms not found: the item's licenseInfo, description and summary are empty and the layer has no copyright text. NMSA 1978 14-3-15.1 / 14-2 are not cited anywhere on the source; the statute text could not be read during this check (the page fetched returned 403), so whether it limits commercial or solicitation use of this county data was not confirmed.",
+   "notes": "Rio Arriba County Assessor's ArcGIS Online organisation (account EGutierrez13, the same organisation the state's 'Parcels - NM - Rio Arriba County' catalogue item points to; that item's 2021 layer is no longer accessible), item a892fadf6cbd4a919940f5c37eba1cff, layer 'RAC_Parcel_ Map_2026', TAXYEAR 2026, data last edited 2026-10-23. NAME filled on 34,195 of 35,031. UPC is dashed ('1-008-164-384-296'); CODE and PARCELNB hold it without dashes. ACCOUNTNO; Account_Link to the county assessor page; ACREAGE_ is deeded acreage as text ('0.74 AC.'). No value field. The service name carries the year, so expect RAC_Parcels_2027 next year. maxRecordCount 2000.",
+   "checked": "2026-11-23"
+  },
+  {
+   "county": "TAOS",
+   "url": "https://services1.arcgis.com/XSUObhM9CdLiddkA/arcgis/rest/services/Taos_County_Online_Assessor_Data/FeatureServer/1",
+   "verified": true,
+   "record_count": 63021,
+   "fields": {
+    "apn": "UPC_Amende",
+    "owner": "NAME",
+    "mailing_address": [
+     "CAREOFNAME",
+     "ADDRESS1",
+     "ADDRESS2",
+     "CITY",
+     "STATE",
+     "ZIP"
+    ],
+    "address": [
+     "STREETNUMB",
+     "STREETNAME"
+    ],
+    "market_value": "FULLVALUE",
+    "acres": "acres"
+   },
+   "restrictions": "terms not found: the item's licenseInfo and description are empty (summary: 'Assessor data to help with land identification'). NMSA 1978 14-3-15.1 / 14-2 are not cited anywhere on the source; the statute text could not be read during this check (the page fetched returned 403), so whether it limits commercial or solicitation use of this county data was not confirmed.",
+   "notes": "Taos County's ArcGIS Online layer (account TC_GIS_Coordinator, item 0aa3717c42ce47209a209281f343f1af; the state's 'Parcels - NM - Taos County' catalogue item points to this service), layer 1 'Land Ownership \u2013 Private (Mapped)' (layer 0 is commission districts). STALE: last edited 2023-10-25, assessment YEAR 2024 in the sample. NAME filled on all 63,021. The UPC column is unreliable (one sample row holds the literal text 'UPC'); UPC_Amende has the 13-digit code. Street fields are filled on only about 7,300 rows. LANDVALUE, IMPRVALUE, TXBLVALUE, NETVALUE; OwnerNum; AssessLook links to the county lookup page; DeedID. maxRecordCount 2000.",
+   "checked": "2026-11-23"
+  },
+  {
+   "county": "LUNA",
+   "url": "https://services2.arcgis.com/K9P1N7Y1EilGjehZ/arcgis/rest/services/LandParcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 115370,
+   "fields": {
+    "apn": "upc",
+    "owner": "GONAM",
+    "mailing_address": [
+     "GOAD1",
+     "GOAD2",
+     "GOCIT",
+     "GOST",
+     "GOZP5"
+    ],
+    "address": "Address",
+    "market_value": "GTFULL"
+   },
+   "restrictions": null,
+   "notes": "Luna County's own ArcGIS Online layer (organisation 'Luna County, New Mexico', account gis@lunacountynm.us), item f56ed981ed71418fbccbb67214cd020f, summary '9/25/2026 parcels', last edited 2026-11-19. Terms read in the organisation's own description (arcgis.com/sharing/rest/portals/K9P1N7Y1EilGjehZ; the item's licenseInfo is empty): 'The GIS material is made available as a public service. Maps and data are to be used for reference purposes only', 'GIS information is in the public domain and may be copied without permission; citation of the source is appreciated', plus an AS IS warranty disclaimer. It states no limit on commercial use, redistribution, solicitation or mailing lists. (The same text says the maps 'have not been updated since September 2018', which this layer's dates contradict.) NMSA 14-3-15.1 / 14-2 are not cited on the source; the statute text itself could not be read during this check. GONAM filled on 115,306 of 115,370; a mailing street line on 115,187 (usually in GOAD2, GOAD1 blank). GOCON is a second owner/contact name. Empty text fields hold a single space. Address is blank for bare land (most rows; GSTNAM filled on about 10,800). GTTXBL taxable value, GTVALL / GTVALI land and improvement value. No acreage field. maxRecordCount 1000.",
+   "checked": "2026-11-23"
+  },
+  {
+   "county": "GRANT",
+   "url": "https://services.arcgis.com/33TOOklri9xpic7U/arcgis/rest/services/Grant_County_Interactive_Parcel_Map/FeatureServer/0",
+   "verified": true,
+   "record_count": 44621,
+   "fields": {
+    "apn": "Name",
+    "owner": "OWNER"
+   },
+   "restrictions": "terms not found: the item's licenseInfo is empty. Its summary says: 'This map (or data product) is for assessment and planning purposes only. It is not intended to be used for description, conveyance, authoritative definition of legal boundary, or property title.' NMSA 1978 14-3-15.1 / 14-2 are not cited anywhere on the source; the statute text could not be read during this check (the page fetched returned 403), so whether it limits commercial or solicitation use of this county data was not confirmed.",
+   "notes": "Grant County's own ArcGIS Online layer (account jpaul@grantcountynm.gov), item edb687f7edcb4ee6a57bd94c0c3a9b9a 'Grant County Interactive Parcel Map for Public Use', summary 'Updated 20261028', last edited 2026-11-20. OWNER filled on all 44,621. Owner name only: no mailing address, site address, value or acres (acreage appears inside LEGAL text). Name is the 13-digit UPC; GISAccount the assessor account; eagle_view links to the county assessor page. maxRecordCount 2000.",
+   "checked": "2026-11-23"
   }
  ],
  "parcels_counties_note": "Santa Fe County's TaxParcels layer (https://sfcomaps.santafecountynm.gov/restsvc/rest/services/TaxParcelsDB/MapServer/0, 90,742 records, fields ownernme1/ownernme2/pstladdress/siteaddress) answered for metadata and count but every record query timed out (60-90 s, three attempts), so it is NOT verified and not listed.",
- "summary": "Projects: only an out-of-date NMDOT eSTIP line layer (FFY 2023-2025) verified, nothing current. Parcels: no statewide owner layer; Bernalillo, Dona Ana and Sandoval county layers with owner names verified (Santa Fe has owner fields but its server timed out on queries)."
+ "summary": "Projects: only an out-of-date NMDOT eSTIP line layer (FFY 2023-2025) verified, nothing current. Parcels: no statewide owner layer; Bernalillo, Dona Ana and Sandoval county layers with owner names verified (Santa Fe has owner fields but its server timed out on queries).",
+ "parcels_counties_note_2026_11_23": "Added 2026-11-23: Santa Fe (now answering), San Juan, Valencia, Lea, Otero (City of Alamogordo copy), Chaves, Eddy (City of Carlsbad copy with terms forbidding download), Rio Arriba, Taos, Luna, Grant. Not found or not usable: McKinley (the only listing is the State Engineer's County_Parcels_2021 service on gis.ose.state.nm.us, whose host name did not resolve), Curry (maps.currycounty.org/arcgis returns 404), Los Alamos (county server gis.losalamosnm.us timed out twice; the ArcGIS Online copy Parcels_Complete has OWNER = 'PVT' class codes, not names, and dates from 2019). Statewide: none; the state DoIT account GDITAdmin only catalogues pointers to each county's own service ('Parcels - NM - <County>'), several of them dead, and the State Engineer's 2021 compilation host did not resolve."
 }

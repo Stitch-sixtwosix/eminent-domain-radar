@@ -194,5 +194,61 @@
   "target": "sources that failed today",
   "tried": "MS statewide parcels (gis.mississippi.edu), FL statewide parcels, UT Salt Lake County, HDOT Socrata",
   "result": "no record change: gis.mississippi.edu resolves publicly (the local resolver refused it), FL returned 400/504 on some queries, Salt Lake timed out; HDOT is the known reader mismatch logged 2026-11-20"
+ },
+ {
+  "date": "2026-11-23",
+  "state": "US",
+  "target": "Vega's morning review",
+  "tried": "research/review/missed.json and research/review/flags.json",
+  "result": "neither file exists (no research/review folder in the checkout), so there was nothing to handle"
+ },
+ {
+  "date": "2026-11-23",
+  "state": "NH",
+  "target": "statewide project source",
+  "tried": "NHDOT Projects/NHDOT_PROJECTS_PROPOSALS MapServer layers 1, 2, 5 and the _ROW sibling (failed with a server error on 2026-11-16/17)",
+  "result": "fixed: queries answer now. Verified Projects In Design (337), In Planning (578) and Ten Year Plan (345, 175 of them in design or planning) with field mapping and filters; right-of-way layers hold 6 and 2 records. The host name intermittently failed to resolve from this machine"
+ },
+ {
+  "date": "2026-11-23",
+  "state": "AZ",
+  "target": "statewide project source",
+  "tried": "ArcGIS catalogue searches for an ADOT five-year program / STIP layer; ADOT's account mpdgisazgeo_azgeo (273 items); gis.azdot.gov",
+  "result": "nothing found: the ADOT account publishes road inventory, traffic and pavement layers only; gis.azdot.gov sits behind a bot check (not worked around). Tucson's PAG / RTA Next layers are already on file"
+ },
+ {
+  "date": "2026-11-23",
+  "state": "MN",
+  "target": "county owner files",
+  "tried": "grouped the MnGeo statewide layer by county; county servers, ArcGIS catalogue and the Schneider (Beacon) server for the 27 absent counties and the 6 with empty names",
+  "result": "added Hubbard (29,241), Mahnomen (6,222), Faribault (15,215) on disclaimer-only terms. Held, terms not found: Stearns (73,260, unlisted 'Vendor' folder), Goodhue (29,289), Freeborn (22,267, 2021 data), Meeker (18,405), Swift (10,061), Wadena (11,821), and six on the vendor's server: Le Sueur (19,593), Brown (18,489), Martin (15,576), Nobles (15,001), Kanabec (12,130), Cottonwood (10,998). Blue Earth: consultant copy only, county server silent. Rice, Beltrami, Kandiyohi, Todd, Norman, Waseca timed out; Nicollet needs a token; Sibley removed; Fillmore and Houston have no owner field; Pine, Redwood, Rock, Roseau, Kittson, Lincoln, Watonwan: nothing found. Also found: 18 counties in the statewide layer (Scott, Carver, Itasca, Clay and others) have owner_name empty but tax_name filled"
+ },
+ {
+  "date": "2026-11-23",
+  "state": "NM",
+  "target": "county owner files",
+  "tried": "statewide search; county servers and ArcGIS catalogue for Santa Fe, San Juan, Valencia, McKinley, Lea, Otero, Chaves, Eddy, Curry, Rio Arriba, Taos, Los Alamos, Luna, Grant",
+  "result": "added Luna (115,370, county states the data is public domain). Held, terms not found: Santa Fe (90,754, now answers), San Juan (44,735), Valencia (199,709), Lea (44,016), Otero (21,960, city copy), Chaves (36,032, 'reference only'), Rio Arriba (35,031), Taos (63,021, 2023), Grant (44,621, 'assessment and planning purposes only'). Held on stated terms: Eddy (53,282, City of Carlsbad copy, no distribution or download). McKinley host did not resolve, Curry 404, Los Alamos timed out, Catron forbids downloading. No statewide owner layer. NMSA 14-3-15.1 text could not be read (403)"
+ },
+ {
+  "date": "2026-11-23",
+  "state": "UT",
+  "target": "county owner files",
+  "tried": "all 62 UGRC parcel services by field list; county servers and ArcGIS catalogue for Davis, Weber, Washington, Cache, Tooele, Box Elder, Iron, Summit, Uintah, Wasatch, Sanpete, Sevier, Carbon, Duchesne, Morgan",
+  "result": "nothing switched on. Held: Weber (115,765, site terms allow 'personal or informational use' only), Cache (60,645, 'Resale, redistribution, or republication ... prohibited without authorization'), and terms not found for Box Elder (53,577), Iron (57,904, 2025 data), Summit (43,966), Morgan (8,708). UGRC layers carry no owner names. Davis: nothing found; Washington server timed out; Tooele, Uintah, Wasatch, Carbon hosts did not answer"
+ },
+ {
+  "date": "2026-11-23",
+  "state": "US",
+  "target": "metro areas with no regional map",
+  "tried": "ArcGIS catalogue searches for 22 MPOs (KIPDA, COMPASS, North Florida TPO, SEWRPC, CRCOG, INCOG, ACOG, Metroplan, Des Moines, CMAP, SCAG, SANDAG, MARC, Memphis, OahuMPO, Miami-Dade, Hillsborough, SACOG, Baton Rouge, Knoxville, GVMC, El Paso)",
+  "result": "added Knoxville Regional TPO Mobility Plan 2050 (TN, 96 projects, public-domain licence). OahuMPO TIP FFY 2025-2028 (HI, 90 projects) recorded but held, terms not found. SACOG server timed out again. Louisville Public Works CIP_V3 (31 lines, last edited 2023, no terms) not recorded. Nothing found for the other 18"
+ },
+ {
+  "date": "2026-11-23",
+  "state": "US",
+  "target": "new kinds of sources",
+  "tried": "Socrata catalogue search for condemnation / right-of-way acquisition datasets",
+  "result": "nothing new: the Texas Comptroller Eminent Domain dataset is already on file; api.us.socrata.com mostly failed to resolve from this machine today"
  }
 ]
