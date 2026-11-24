@@ -1,7 +1,7 @@
 // Records a page view, a click worth knowing about, or how long a page was read. Called by track.js on every public page.
 // Anyone can call it, so it trusts nothing: only requests from our own site are kept, bots are dropped, every field is
 // cut to length, and it always answers the same way. The visitor's IP address is never stored.
-import { clip, sha1Hex, visitRow } from "../_shared/core.js";
+import { clip, isDatacenter, sha1Hex, visitRow } from "../_shared/core.js";
 import { admin, SITE } from "../_shared/svc.ts";
 
 const OWN = SITE.replace(/^https?:\/\//, "").replace(/^www\./, "");
@@ -55,7 +55,9 @@ Deno.serve(async (req) => {
     }
     const row = visitRow(body, ua, OWN, visitor);
     if (!row) return done();
-    await db.from("visits").upsert({ ...row, ...(await place(db, row.session, ip)) }, { onConflict: "vid", ignoreDuplicates: true });
+    const where = await place(db, row.session, ip);
+    if (isDatacenter(where.org)) return done();          // a crawler or link checker on a server network, not a visitor
+    await db.from("visits").upsert({ ...row, ...where }, { onConflict: "vid", ignoreDuplicates: true });
   } catch (e) {
     console.error("track", e);
   }

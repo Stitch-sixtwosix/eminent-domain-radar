@@ -88,6 +88,8 @@ eq("iphone", C.uaInfo(IPHONE), { device: "Phone", browser: "Safari", os: "iOS" }
 eq("edge on windows", C.uaInfo(WIN), { device: "Computer", browser: "Edge", os: "Windows" });
 eq("android tablet", C.uaInfo("Mozilla/5.0 (Linux; Android 13; SM-X700) AppleWebKit/537.36 Chrome/120 Safari/537.36").device, "Tablet");
 eq("bots are not visitors", [C.isBot("Googlebot/2.1"), C.isBot(""), C.isBot("curl/8.1"), C.isBot(WIN)], [true, true, true, false]);
+eq("server networks are not people", [C.isDatacenter("Amazon.com, Inc."), C.isDatacenter("Facebook, Inc."), C.isDatacenter("GTT Communications Inc."), C.isDatacenter("DigitalOcean, LLC")], [true, true, true, true]);
+eq("internet providers are people", [C.isDatacenter("Comcast Cable Communications, LLC"), C.isDatacenter("Telmex Colombia S.A."), C.isDatacenter("Verizon Business"), C.isDatacenter(""), C.isDatacenter(null)], [false, false, false, false, false]);
 eq("came from another site", C.refHost("https://www.google.com/search?q=x", "eminenttracker.com"), "google.com");
 eq("came from our own site", C.refHost("https://eminenttracker.com/blog/", "eminenttracker.com"), "");
 eq("no referrer", [C.refHost("", "eminenttracker.com"), C.refHost("not a url", "eminenttracker.com")], ["", ""]);

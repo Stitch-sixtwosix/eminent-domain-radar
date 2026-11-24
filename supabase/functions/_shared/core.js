@@ -233,6 +233,10 @@ export function skipResult(body) {
 // ---------- site visits ----------
 export const isBot = (ua) => !ua || /bot|crawl|spider|slurp|preview|monitor|uptime|headless|lighthouse|pingdom|curl|wget|python|httpclient|scrapy|facebookexternalhit|whatsapp|go-http|java\/|axios|node-fetch|phantom|semrush|ahrefs|gptbot|claude|bytespider/i.test(ua);
 
+// Networks that host servers, not people. A "visit" from one is a link checker or a crawler dressed as a browser:
+// Facebook and Instagram fetch a page whenever its link is shared, and scanners run from rented cloud machines.
+export const isDatacenter = (org) => /amazon|\baws\b|facebook|\bmeta\b|google|microsoft|azure|digitalocean|\bovh\b|hetzner|linode|akamai|cloudflare|oracle|alibaba|tencent|leaseweb|vultr|choopa|datacamp|\bm247\b|gtt communications|contabo|scaleway|hosting|datacenter|data center|colocation|\bcdn\b|server/i.test(String(org || ""));
+
 /** Device, browser and system from a user-agent string. Coarse on purpose: enough to see who is visiting, no more. */
 export function uaInfo(ua) {
   ua = String(ua || "");
