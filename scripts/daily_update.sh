@@ -3,6 +3,15 @@
 # Run from anywhere: scripts/daily_update.sh   (expects a virtualenv at .venv and data/edradar.db in the repo folder)
 set -euo pipefail
 cd "$(dirname "$0")/.."
+
+# One update at a time. Two at once (the nightly run and a hand-started republish) fight over the database, take hours,
+# and whichever finishes last overwrites the other's snapshot. A lock left by a run that died is cleared after 12 hours.
+LOCK=data/.update.lock
+if ! mkdir "$LOCK" 2>/dev/null; then
+  if [ -n "$(find "$LOCK" -maxdepth 0 -mmin +720 2>/dev/null)" ]; then rmdir "$LOCK" 2>/dev/null; mkdir "$LOCK"
+  else echo "Another update is already running (lock at $LOCK). Not starting a second one." >&2; exit 75; fi
+fi
+trap 'rmdir "$LOCK" 2>/dev/null' EXIT
 EDRADAR=.venv/bin/edradar
 DB=data/edradar.db
 count() { [ -f "$DB" ] && sqlite3 "$DB" "select count(*) from $1" || echo 0; }
