@@ -137,7 +137,10 @@
    },
    "restrictions": "terms not found",
    "notes": "STALE: layer 'TriCountyParcels4Q2021', a fourth-quarter-2021 parcel snapshot published by a City of Oklahoma City staff account (Holly.Jacobson_OKC) in the map 'Parcels & Townships'; rows created 2023-02-08. Holds Oklahoma County Assessor accounts (PARCEL_HYPERLINK points to docs.oklahomacounty.org/AssessorWP5); the name says three counties, coverage outside Oklahoma County not checked. Pin / ParcelNB alternative ids; Owner_Name2; Taxable_Value, Assessed_Value, Land_Value, Improvement_Value. No current Oklahoma County Assessor service was found: no assessor layer in the ArcGIS Online catalog, www.oklahomacounty.org answers 403.",
-   "checked": "2026-11-17"
+   "checked": "2026-11-17",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "CANADIAN",
@@ -197,7 +200,10 @@
    },
    "restrictions": "terms not found",
    "notes": "STALE: 'Cleveland County Ownership Parcels Current as of October 2023', published by the City of Norman GIS account (GIS_normanok), not by the county assessor; last edited 2023-11-04. OWNER2, OWNER3; GEONUMBER second key; OWNER_CHANGE_DATE, LAST_SALE_DATE as text. No value field. Norman's current parcel layer (.../Parcels/FeatureServer/1, 46,482 rows) has no owner fields. No Cleveland County Assessor service found.",
-   "checked": "2026-11-17"
+   "checked": "2026-11-17",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "COMANCHE",
@@ -212,7 +218,10 @@
    },
    "restrictions": "terms not found",
    "notes": "City of Lawton GIS (account gis.admin_colgis) service for its permitting system, layer 'PARCELS'; item text says 'UPDATED: 09/14/2026 parcel and owner information'. Owner name only: NO mailing address on the polygons, and the address fields were empty in the rows sampled. CAMAKey links to the assessor. The same service has table 15 'owner_info.csv' (48,609 rows: Account, ParcelID, Asmnt_Parcel_OwnersName, MailingInfo, Address1, Address2, City, State, ZipCode, TotalAcres) which carries the mailing address and can be joined on ParcelID, but a table takes no spatial query and its date is unknown (a sibling table is named Assessor_data_20221102). Layer 8 'Parcels (Lawton)' (35,284 rows, CAMADate Sept 2022) adds AssesValue / TotalValue. Coverage of the whole county not confirmed.",
-   "checked": "2026-11-17"
+   "checked": "2026-11-17",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "ROGERS",
@@ -228,7 +237,10 @@
    },
    "restrictions": "terms not found",
    "notes": "Rogers County Assessor data served by INCOG; description says 'It was last updated July 2023'. Owner name only: NO mailing address and no value fields. CADASTRAL is the map parcel number; LOTSIZE is text.",
-   "checked": "2026-11-17"
+   "checked": "2026-11-17",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "WAGONER",
@@ -256,7 +268,10 @@
    },
    "restrictions": "terms not found",
    "notes": "Wagoner County Assessor data served by INCOG; description says 'It was last updated July 2023'. ACCOUNT is the assessor account; MAILINFO is a care-of line; LOTSIZE is in the unit named by LOTSIZET; LANDV, IMPRV, TAXABLEV also present.",
-   "checked": "2026-11-17"
+   "checked": "2026-11-17",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "CREEK",
@@ -279,7 +294,10 @@
    },
    "restrictions": "terms not found",
    "notes": "Creek County Assessor data served by INCOG; description says 'It was last updated July 2023' (a sale dated 10/10/2023 was seen). account is the assessor account; landvalue, imprvalue, taxable, saledate, saleprice also present.",
-   "checked": "2026-11-17"
+   "checked": "2026-11-17",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "PAYNE",
@@ -305,7 +323,10 @@
    },
    "restrictions": "terms not found",
    "notes": "VERY STALE: layer 'Payne Country Parcel' in the City of Stillwater's ArcGIS Online organization (account WWW_stw); item description says 'Payne County Parcels 2/23/2016'. Addr3 holds city and state. MapNum is the map parcel number. Usable only as a fallback; no current Payne County Assessor service found.",
-   "checked": "2026-11-17"
+   "checked": "2026-11-17",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "OSAGE",
@@ -327,7 +348,10 @@
    },
    "restrictions": "terms not found: layer description is only 'Parcels in Osage County. Last updated July 2023.', copyrightText 'Osage County Assessor', no serviceItemId, service iteminfo has no licence text, and no INCOG data-terms page was found",
    "notes": "Osage County Assessor data served by INCOG (Tulsa regional council of governments) on its own ArcGIS Server. The description says 'Last updated July 2023' but the rows carry CAMADate 2026-11-12 and PubDate 2026-11-16, so it is current. 41,933 of the rows have an OwnerName; the rest are blank polygons. MailingAdd holds the whole mailing address on one line. No acreage field. county_id = county number + ParcelId; CAMAKey is the assessor account key; AssesValue, ImpValue, LandValue also present; DataProv 'DataScout OneMap'. maxRecordCount 2000.",
-   "checked": "2026-11-22"
+   "checked": "2026-11-22",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "GARFIELD",
@@ -352,7 +376,10 @@
    },
    "restrictions": "terms not found: layer description/copyrightText empty; ArcGIS item cc0724c04bd84eca8b507417512204c6 licenseInfo null, accessInformation empty",
    "notes": "Published by the City of Enid (ArcGIS Online account jnickel_Enid), not by the Garfield County Assessor: layer 'parcel' in a multi-layer city service titled 'Polymorphic_Layers' (snippet 'AI Chatbot'), rows loaded 2026-10-15. Extent covers the whole county, and each row links to the assessor's site (Hyperlink -> property.spatialest.com/ok/garfield). A city working service: the name or layer number may change. account is the assessor account number; lotsize is in the unit named by sizetype; city/state repeat the mailing city; landvalue, imprvalue, taxable, grantor, saledate, bookpage also present. The county's own item 'Parcel_Import' (account Garfieldok) dates from 2015-10-01 and was not used. maxRecordCount 2000.",
-   "checked": "2026-11-22"
+   "checked": "2026-11-22",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "MCCLAIN",
@@ -377,7 +404,10 @@
    },
    "restrictions": "terms not found: layer description/copyrightText empty (service copyrightText 'McClain County, Oklahoma'); ArcGIS item 1158300946b0408f8f249bdaf8a6e377 licenseInfo null, accessInformation 'McClain County, Oklahoma'",
    "notes": "Published by the City of Newcastle planning account (nicktonias_newcastleplan), not by the McClain County Assessor; item text: 'McClain County Parcels based upon data from the County dated May 13 2026'. A dated snapshot (layer name 'McClain County Parcels 2026-05-13'), county-wide extent. account is the assessor account number; lotsize is in the unit named by sizetype; landvalue, imprvalue, taxable, grantor, saledate, bookpage also present. maxRecordCount 1000.",
-   "checked": "2026-11-22"
+   "checked": "2026-11-22",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "MUSKOGEE",
@@ -393,7 +423,10 @@
    },
    "restrictions": "terms not found: layer description/copyrightText empty; ArcGIS item 0092845d62dc41c682b67901fd4b8a08 has no description, licenseInfo null, accessInformation null",
    "notes": "THIRD-PARTY COPY, STALE: uploaded by an engineering-firm account (jEvans@halff.com), not by Muskogee County; no county or council-of-governments service was found (the assessor's public map is on actDataScout, not an open REST service). Rows are the county's 'DataScout OneMap' export with CAMADate 2024-02-08 / PubDate 2024-02-12; layer last edited 2024-07-31. County-wide extent. MailingAdd is the whole mailing address on one line; no acreage field. CAMAKey is the assessor account key; AssesValue, ImpValue, LandValue also present. Use only as a fallback; it may be removed without notice. maxRecordCount 2000.",
-   "checked": "2026-11-22"
+   "checked": "2026-11-22",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "WASHINGTON",
@@ -419,7 +452,10 @@
    },
    "restrictions": "terms not found: layer description/copyrightText empty (service copyrightText 'City of Bartlesville GIS'); ArcGIS item 849ec94a559446c1b1eebd3aa4228475 licenseInfo null, accessInformation 'City of Bartlesville GIS'",
    "notes": "VERY STALE AND PARTIAL: 'City of Bartlesville Parcel Data', layer 'Parcel2016', published by account LatitudeServices with credit to City of Bartlesville GIS; last edited 2018-08-15. Covers the Bartlesville area only (extent about -96.06..-95.89, 36.57..36.83), not all of Washington County. OWNER2 second owner line; ACCOUNT is the assessor account number; LOTSIZE is in the unit named by LTSFLAG; LANDVAL, IMPRVAL, SALEDATE, SALEAMT, GRANTOR also present. Fallback only; no current Washington County Assessor service found. maxRecordCount 1000.",
-   "checked": "2026-11-22"
+   "checked": "2026-11-22",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   }
  ],
  "parcels_counties_note": "Not found or not reachable in the time allowed: Oklahoma, Cleveland, Canadian, Comanche counties (ArcGIS Online search turned up only small or third-party extracts; Rogers, Wagoner and Caddo county layers with owners exist but are not among the most populous).",

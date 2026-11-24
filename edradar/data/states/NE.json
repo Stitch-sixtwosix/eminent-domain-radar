@@ -25,7 +25,10 @@
   "restrictions": "terms not found: item licenseInfo and accessInformation empty, layer copyrightText/description empty; this is a third-party (University of Nebraska user) republication of the State's 2023 statewide parcel compilation, not the official service. A sibling item from the same org (0a51200a253b4054904e38f2bb1df847) describes the source data as 'compiled from data provided by each County for official, internal use by the State of Nebraska' and 'for general use and analysis within the state, but the authority of this information lies with the counties'.",
   "notes": "Layer 'Nebraska Tax Parcels' inside hosted service Layers_Data_WFL1 (ArcGIS Online org 'University of Nebraska', owner jlee142_universityofne, item e587065fe19b40818f9b3512036c4b85, item modified 2024-10-24, layer lastEditDate 2024-07-22). STALE: CAMAUpdate values per county are Jan-Apr 2023 (ShapeUpdate 2023-02-17); it is a 2023 snapshot of the NebraskaMAP StatewideParcelsExternal dataset. Official host gis.ne.gov / giscat.ne.gov / www.nebraskamap.gov did not resolve today (official service would be https://gis.ne.gov/Enterprise/rest/services/StatewideParcelsExternal/FeatureServer, referenced by AGOL item b8c2f381f0c34463abb4094b10fa29ef). All 93 counties present; filter by County_ID = 3-digit county FIPS as TEXT (e.g. '079' Hall, '019' Buffalo, '053' Dodge, '119' Madison, '157' Scotts Bluff, '111' Lincoln, '141' Platte, '001' Adams, '025' Cass, '047' Dawson, '067' Gage, '155' Saunders, '177' Washington). Owner populated on 1,127,706 of 1,133,295 (first rows by OBJECTID are empty road/ROW polygons). State_PID = FIPS+Parcel_ID. Alternate fields: OW1_Address (full mailing string), Second_Owner_Name, Situs_Address, GIS_Acres, Land_Value, Improvements_Value, Sales_Date (epoch ms), Sales_Value. maxRecordCount 2000, capabilities Query. Sample (Hall): Parcel_ID 400000024, Current_Owner_Name 'STERKEL/SHIRLEY M, REVOCABLE TRUST', OW1_Address 'PO BOX 94, WOLBACH, NE 68882', Total_Assessed_Value 86722.",
   "checked": "2026-11-21",
-  "name": "Nebraska Tax Parcels, 2023 state compilation (third-party copy on a University of Nebraska user's ArcGIS account)"
+  "name": "Nebraska Tax Parcels, 2023 state compilation (third-party copy on a University of Nebraska user's ArcGIS account)",
+  "approved": true,
+  "approved_on": "2026-11-24",
+  "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
  },
  "parcels_statewide_note": "Not verified. Nebraska publishes statewide parcels at https://giscat.ne.gov/enterprise/rest/services/StatewideParcelsExternal/MapServer/0 (and TaxParcels2023), but no *.ne.gov GIS host resolved from the research machine, so neither the URL nor whether it carries owner names could be checked.",
  "parcels_counties": [
@@ -119,7 +122,10 @@
    },
    "restrictions": "terms not found on the layer itself: the layer item's licence and credit are empty. The only terms read are on the county's separate property-search app item (a warranty and liability disclaimer, no use limit); the county website could not be reached. Held until someone confirms those terms cover the layer.",
    "notes": "Run by Cass County GIS itself (ArcGIS Online org 'Cass County', owner CassNEGIS, item 172534669cfd4ca397cee7cbf3195058 'ParcelDetails', layer lastEditDate 2026-11-20 - current). CALLER SHOULD NOTE the basis for null: the layer item's own licenseInfo/accessInformation are empty (None) and the layer copyrightText/description are empty; the only terms found are on the county's own 'CivQuest Property Search' app item (af5c37666abd41b586afdadf3439ebba, https://cass.civ.quest/), read in full: 'The map is created from a subset of data from the Cass County Geographic Information System (GIS) database and furnished as a public service by Cass County. Cass County makes no claims, no representations, and no warranties, expressed or implied, concerning the the accuracy, completeness, reliability, or suitability of the information for any other particular use. Furthermore, Cass County assume no liability associated with the use or misuse of said information. Please consult the appropriate office to confirm any questions you have.' - a warranty/liability disclaimer only, no limit on commercial use, redistribution or mailing lists. County website (cassne.gov did not resolve, casscountyne.gov timed out) not read; hub site gis-cass.hub.arcgis.com is JS-rendered and was not read. Owner populated on 20,404 of 20,480. OwnerName2 holds second owner; GISAcres also available; LandValue/BuildingValue/ImprovementValue/AgLandValue, SaleDate/SaleAmount, per-year value fields (PropertyValue2022..2026). FullOwnerAddress was null in samples, use the component fields. maxRecordCount 2000, capabilities Query,Extract. A slimmer sibling with the same 20,480 parcels: .../Tax_Parcels_(Cass_County)/FeatureServer/0 (item a1ddbaeeaa7548fc8a1b5df222fc922e, licenseInfo empty).",
-   "checked": "2026-11-21"
+   "checked": "2026-11-21",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "HALL",
@@ -177,7 +183,10 @@
    },
    "restrictions": "terms not found: item licenseInfo and accessInformation empty (None), layer copyrightText/description empty; City of Blair website (blairnebraska.org) timed out, no terms page read",
    "notes": "Run by the City of Blair GIS (ArcGIS Online owner cpoulsenblair, item 28bea8773cbc4d04804e77f7c90e5886 'Parcel and Address (public)', snippet 'Blair Nebraska Parcel and Address.', layer 3 'Ownership Parcels', lastEditDate 2026-11-16 - current). Not the county assessor's own service, but the extent covers the whole of Washington County (lon -96.46..-95.91, lat 41.38..41.69), not just Blair; county's gWorks layer has 14,113 parcels with no owner fields. Owner populated on 14,829 of 15,727. Mail1 = street line; Mail2/Mail3 were empty in the samples, so city/state are probably in Mail2/Mail3 where present - check before use; Zipcode is ZIP+4 text. Situs holds 'VACANT'/'EXEMPT' for some parcels. PID is the same number as integer. CalcArea appears to be acres (31.29 for a quarter-quarter-size tract) - verify. Other fields: Legal, BookPage, PropClass, PropType. maxRecordCount 2000, capabilities Query.",
-   "checked": "2026-11-21"
+   "checked": "2026-11-21",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "THAYER",
@@ -200,7 +209,10 @@
    },
    "restrictions": "terms not found: item licenseInfo/accessInformation/description empty (None), layer copyrightText empty; no county terms page found (thayercountyne.gov did not resolve)",
    "notes": "Came across, not on the target list. Published by the county assessor's account (ArcGIS Online owner ThayerAssessor32, item cd1ea11e89b144b68a2e77691169502f 'Parcels_ThayerNE', layer lastEditDate 2026-07-31). Parcels joined to the treasurer's tax roll, so the name is the TAXPAYER (Taxpayer_Name_1 / Taxpayer_Name_2, format 'SURNAME/FIRST'), populated on 6,671 of 7,203. Total_Acres and several money fields are TEXT ('167.25882', '0.00'). Also Legal, Land_Value, Impr_Value, Taxable_Value, Total_Taxes, Address_Contact. maxRecordCount 2000, capabilities Query,Extract.",
-   "checked": "2026-11-21"
+   "checked": "2026-11-21",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   }
  ],
  "summary": "Projects: none verified - NDOT's Program Book service sits on gis.ne.gov, which did not resolve from the research machine. Parcels: statewide layer on giscat.ne.gov could not be checked for the same reason; owner layers verified for Douglas, Sarpy (2023 copy) and Lancaster (NRD compilation). Added 2026-11-21: a 2023 copy of the state's parcel compilation (1,133,295 rows, owners and mailing addresses, held: third-party copy, terms not found, stale); county owner layers recorded for Cass, Hall, Scotts Bluff, Washington and Thayer, all held. The 70 gWorks assessor services answer without owner names."

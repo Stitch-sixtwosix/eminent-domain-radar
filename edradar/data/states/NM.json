@@ -62,7 +62,10 @@
     "acres": "ACREAGE"
    },
    "restrictions": "None seen on the layer; not checked beyond the service metadata.",
-   "notes": "TAXYR 2026 in the sample. CompleteOwnerAddress / CompleteSiteAddress are concatenated versions. No value field."
+   "notes": "TAXYR 2026 in the sample. CompleteOwnerAddress / CompleteSiteAddress are concatenated versions. No value field.",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "DONA ANA",

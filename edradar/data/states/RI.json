@@ -231,7 +231,10 @@
    },
    "restrictions": "terms not found",
    "notes": "Municipality, not a county: Rhode Island parcel data is kept by city/town, so the 'county' field holds the municipality name. Published by the City of Providence GIS office on ArcGIS Online (item owner PVDGIS_Admin, item last modified Sept 2024); parcels in RIGIS standard format joined to the assessor CAMA extract, TaxRollYear 2023 in the samples, so the ownership is about three years old. PROPID is the plat-lot-unit id (e.g. 019-0102-0407); condominium units are separate records on one lot. Numeric values are stored as text (AssessedValueTotal '226900', AreaAC '0.073830'). SalePrice, SaleDate, MuniUseCodeDesc, YearBuilt also present. Spatial point+distance query works as-is (native wkid 102730/3438): 1,166 records at -71.4128,41.8240 (.../query?geometry=-71.4128,41.8240&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=200&units=esriSRUnit_Meter&outFields=*&returnGeometry=false&f=json). A sibling service Parcels_with_CAMA (44,161 records, same fields) exists in the same organization. The ArcGIS Online item has no licence or description text and no city terms page was found.",
-   "checked": "2026-11-17"
+   "checked": "2026-11-17",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   }
  ],
  "summary": "Projects: only an outdated STIP map service (FFY2018-2027, 2020 amendment) and a small LRTP proposed-projects layer were found; no current RIDOT planned-projects GIS service was verified. Parcels: no statewide owner layer (RIGIS publishes none; parcels are municipal, many on vendor viewers without open services); only Cranston's city layer with owner and mailing address was verified, Providence was not found. Second pass 2026-11-17: Providence city parcels with owner and mailing address verified (2023 tax roll) and answering spatial queries; Warwick has linework only, Pawtucket only 63 city-owned parcels, and there is still no statewide owner layer.",

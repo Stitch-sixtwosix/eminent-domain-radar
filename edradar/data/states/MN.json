@@ -226,7 +226,10 @@
    },
    "restrictions": "terms not found: the service has no description or copyrightText and no item of the county's own; it sits in a folder named 'Vendor' that the server's root listing does not show (root lists only Basemap and Raster), so it may be meant for the county's contractors rather than the public. No limit on commercial use was seen on the two county GIS pages fetched (stearnscountymn.gov/266 and /1293), but no terms text was found there either",
    "notes": "Stearns County's own ArcGIS server (St. Cloud; about 160,000 people). Stearns is in the MnGeo statewide layer but with owner_name and tax_name both empty, so this fills it. 70,608 of 73,260 records have OWNER. OWNER is 'FIRST LAST' order, OWNERDISPLAY is 'LAST FIRST'; CURLPR='OWN' marks the owner row. TAXPARCEL is the PIN without dots. EMV_LAND, EMV_BLDG, tmvtotal, TOTAL_TAX, PROPCLASSLONG, LEGAL_DESCR; TAX_YEAR 2027 / ASSESSMENT_YEAR 2026 in samples (current). The only ArcGIS Online item pointing at it (1fa761900d354373a1992f8b40976120) belongs to a consultant (Bolton & Menk for the City of Rockville) and has empty licenseInfo. maxRecordCount 80000.",
-   "checked": "2026-11-23"
+   "checked": "2026-11-23",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "GOODHUE",
@@ -247,7 +250,10 @@
    },
    "restrictions": "terms not found: the layer's copyrightText is an attribution only and the county portal item's licenseInfo is null",
    "notes": "Goodhue County's own server (Red Wing); not in the MnGeo statewide layer. 29,049 of 29,289 records have C0NAME1P. Layer copyrightText read: 'This data was created and is maintained by Goodhue County, Minnesota and uses the Goodhue County HARN coordinate system (Feet). For more information, including staff contacts, please visit the Goodhue County website'; description says parcels 'are updated weekly'. County portal item 70a89916e4f64b49b7e9d018676c6705 (maps.co.goodhue.mn.us/portal, public, owner PortalAdminGIS) has licenseInfo null. C0NAME2P is a second name or care-of line; C0ADRLN3P is 'CITY ST ZIP'. C0ACRES is TEXT. No value field; C0SALEDT / C0SALPRC give last sale; TAX_URL and TaxLink link to the county's record pages. FULLSTREET reads '          MN 0' for bare land. The same server also hosts Dodge County parcels (CountyDataDC/Dodge_Parcels). maxRecordCount 2000.",
-   "checked": "2026-11-23"
+   "checked": "2026-11-23",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "HUBBARD",
@@ -297,7 +303,10 @@
    },
    "restrictions": "terms not found: the layer has no copyrightText or description terms and no ArcGIS item licenseInfo; no county terms page was read",
    "notes": "ArcGIS Online layer in the account of the county's GIS coordinator (item 82a7764190bd4c72b3c7471cbab2e549, owner profile reads 'GIS Coordinator for Freeborn County, MN'); item licenseInfo, description and credits are all empty. Freeborn (Albert Lea) is not in the MnGeo statewide layer. STALE: the layer's data was last edited 2021-04-28 (editingInfo), so owners may be five years out of date. All 22,267 records have DEEDHOLDER; DEEDHOLD_1 and DEEDHOLD_2 continue the name ('JONATHAN C BERRY &' / 'JESSICA L BERRY'). No mailing address and no value: HOUSENUM/ADDRESS/CITY/ZIP are the site address (HOUSENUM is padded text). maxRecordCount 2000.",
-   "checked": "2026-11-23"
+   "checked": "2026-11-23",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "MEEKER",
@@ -321,7 +330,10 @@
    },
    "restrictions": "terms not found: the layer has no copyrightText or description terms and no ArcGIS item licenseInfo; no county terms page was read",
    "notes": "ArcGIS Online layer 'Meeker Parcels' in account MeekerGIS (item 475abea85548405090745f2ceaaca120, snippet 'Parcels for Hub Site', modified 2026-10); licenseInfo and credits empty, and the account profile is blank, so county ownership rests on the account name and the hub purpose only. Meeker (Litchfield) is not in the MnGeo statewide layer. 17,607 of 18,405 records have NAME (owner as 'LAST/FIRST & SPOUSE' or a company). The mailing address has no ZIP field: ZIP (a number such as 553550000) belongs to the site address. DEED_AC is empty in every record; no value field. Edit_Date in samples is 2018, so individual records may be old. maxRecordCount 2000.",
-   "checked": "2026-11-23"
+   "checked": "2026-11-23",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "SWIFT",
@@ -349,7 +361,10 @@
    },
    "restrictions": "terms not found: the layer has no copyrightText or description terms and no ArcGIS item licenseInfo; no county terms page was read",
    "notes": "Swift County's own ArcGIS Online organisation ('Swift County GIS', item d2cbcd51e955466a85c0307d714c65e3 owned by the county GIS coordinator, modified 2026-09); licenseInfo and credits are empty. Swift (Benson) is not in the MnGeo statewide layer. 9,955 of 10,061 records have OWNAME ('LAST/FIRST & SPOUSE'). All text fields are space-padded to fixed width and need trimming. OWADR1 is sometimes a second name or life-estate line ('LE: THOMAS & CATHLEEN DAHL') rather than a street; OWNNAM (526 records) is a second owner. OWZIPF and ADPZIP are numbers. DEED_ACRE is deeded acres (0 for platted lots); no value field; LINK goes to the county tax portal. maxRecordCount 2000.",
-   "checked": "2026-11-23"
+   "checked": "2026-11-23",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "WADENA",
@@ -372,7 +387,10 @@
    },
    "restrictions": "terms not found: no copyrightText or description on the layer, and the county portal item's licenseInfo is null",
    "notes": "Wadena County's own server; not in the MnGeo statewide layer. The name is the TAXPAYER (11,382 of 11,821 records), not the fee owner: OWNER_NAME is filled in only 537 records, where it differs from the taxpayer (OWNER_ADDRESS1-3, OWNER_CITY, OWNER_STATE, OWNER_ZIP5 go with it). County portal item 048b790c3e04479fb9ea9fcddefa7074 (gis.co.wadena.mn.us/portal, public, owner WadenaCountyMN, 'Map Service for Public LINK WAB solution') has licenseInfo null. The street is usually in TAXPAYER_ADDRESS2. PARCEL_NUM has an 'R' prefix ('R023400060'); PARCEL_NUMBER is the bare number. No value field. The service's folder listing asks for a token but the MapServer itself answers without one. maxRecordCount 2000.",
-   "checked": "2026-11-23"
+   "checked": "2026-11-23",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "MAHNOMEN",
@@ -446,7 +464,10 @@
    },
    "restrictions": "terms not found: vendor-hosted service (Schneider Geospatial / Beacon) with no description, copyrightText or item; the county Beacon site's terms were not read",
    "notes": "Served from wfs.schneidercorp.com, the ArcGIS server of Schneider Geospatial, the vendor that runs the county's Beacon parcel site; it is not on a county domain and there is no county-owned ArcGIS copy found. The service and layer JSON carry no description, copyrightText or serviceItemId, so no terms could be read. Le Sueur is not in the MnGeo statewide layer. 18,795 of 19,593 records have OwnerName; OwnerName2 continues it. CHECK VALUES: in all three samples EMVTotal equals EMVLand while EMVBuilding is non-zero, so EMVTotal may not be the true total (EMVLand + EMVBuilding is safer). Classification1-3, LegalDescription. maxRecordCount 2000.",
-   "checked": "2026-11-23"
+   "checked": "2026-11-23",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "BROWN",
@@ -461,7 +482,10 @@
    },
    "restrictions": "terms not found: vendor-hosted service (Schneider Geospatial / Beacon) with no description, copyrightText or item; the county Beacon site's terms were not read",
    "notes": "Served from wfs.schneidercorp.com, the ArcGIS server of Schneider Geospatial, the vendor that runs the county's Beacon parcel site; it is not on a county domain and there is no county-owned ArcGIS copy found. The service and layer JSON carry no description, copyrightText or serviceItemId, so no terms could be read. Brown (New Ulm) is not in the MnGeo statewide layer. 18,470 of 18,489 records have OwnerName. OwnerAddress is the street line only: there is no mailing city, state or ZIP field, so it cannot address a letter by itself; FullAddress is the site street with TwpDesc as the city/township. PIN is PARCEL_NUM without dots. No value or acres; SaleDate (text) and SalePrice. The county's own server (gis.co.brown.mn.us/server/.../BrownCountyMaster/Parcel_Tax_Vendor) timed out on 2026-11-23 and could not be checked. maxRecordCount 2000.",
-   "checked": "2026-11-23"
+   "checked": "2026-11-23",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "MARTIN",
@@ -487,7 +511,10 @@
    },
    "restrictions": "terms not found: vendor-hosted service (Schneider Geospatial / Beacon) with no description, copyrightText or item; the county Beacon site's terms were not read",
    "notes": "Served from wfs.schneidercorp.com, the ArcGIS server of Schneider Geospatial, the vendor that runs the county's Beacon parcel site; it is not on a county domain and there is no county-owned ArcGIS copy found. The service and layer JSON carry no description, copyrightText or serviceItemId, so no terms could be read. Martin (Fairmont) is not in the MnGeo statewide layer. 15,559 of 15,576 records have DeedHold (deed holder); ContrHold is a contract-for-deed buyer. All text fields are space-padded and need trimming. Total_LV is LAND value only (with farmland rating fields TillRating, Avg_CER, LV_Per_Ac); there is no total market value. Legal1-4, SaleDate, AdjSaleAmt. maxRecordCount 2000.",
-   "checked": "2026-11-23"
+   "checked": "2026-11-23",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "NOBLES",
@@ -511,7 +538,10 @@
    },
    "restrictions": "terms not found: vendor-hosted service (Schneider Geospatial / Beacon) with no description, copyrightText or item; the county Beacon site's terms were not read",
    "notes": "Served from wfs.schneidercorp.com, the ArcGIS server of Schneider Geospatial, the vendor that runs the county's Beacon parcel site; it is not on a county domain and there is no county-owned ArcGIS copy found. The service and layer JSON carry no description, copyrightText or serviceItemId, so no terms could be read. Nobles (Worthington) is not in the MnGeo statewide layer; the county's own ArcGIS Online layer (NoblesCountyParcelsOnline) answers 'Token Required'. The name is the TAXPAYER in TaxName (14,923 of 15,001 records); OwnerName is filled in only 510 records where it differs, and AlternateN / ALTERNATENAME is another party (1,717). TaxAddr1 is often a second name line and the last filled line is 'CITY   ST ZIP'. DEEDED_ACRES and Deeded_Acr are TEXT. No value field. maxRecordCount 2000.",
-   "checked": "2026-11-23"
+   "checked": "2026-11-23",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "KANABEC",
@@ -536,7 +566,10 @@
    },
    "restrictions": "terms not found: vendor-hosted service (Schneider Geospatial / Beacon) with no description, copyrightText or item; the county Beacon site's terms were not read",
    "notes": "Served from wfs.schneidercorp.com, the ArcGIS server of Schneider Geospatial, the vendor that runs the county's Beacon parcel site; it is not on a county domain and there is no county-owned ArcGIS copy found. The service and layer JSON carry no description, copyrightText or serviceItemId, so no terms could be read. Kanabec (Mora) is not in the MnGeo statewide layer. 12,119 of 12,130 records have OwnerName1. PIN is '00022.05610.00', PIN_DASHES '22-05610-00'. DEEDADDR1-3 / DEEDZIP repeat the mailing address. CHECK VALUES: ESTIMATEDTOTAL in samples is twice ESTIMATEDLAND + ESTIMATEDBUILDING because ESTIMATEDMACHINERY repeats their sum, so use land + building. ACRES_DEED is often 0 and ACRES_CALC -1; SALEDATE is a number (yyyymmdd). maxRecordCount 2000.",
-   "checked": "2026-11-23"
+   "checked": "2026-11-23",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "COTTONWOOD",
@@ -559,7 +592,10 @@
    },
    "restrictions": "terms not found: vendor-hosted service (Schneider Geospatial / Beacon) with no description, copyrightText or item; the county Beacon site's terms were not read",
    "notes": "Served from wfs.schneidercorp.com, the ArcGIS server of Schneider Geospatial, the vendor that runs the county's Beacon parcel site; it is not on a county domain and there is no county-owned ArcGIS copy found. The service and layer JSON carry no description, copyrightText or serviceItemId, so no terms could be read. Cottonwood (Windom) is not in the MnGeo statewide layer. 10,950 of 10,998 records have deedhold ('LAST/FIRST & SPOUSE'); contrhold is a contract-for-deed buyer. The last filled deedaddr line is 'CITY   ST ZIP'. No value or acres field (acreage appears only inside LEGALDESCR); propclass, City_Twp. maxRecordCount 2000.",
-   "checked": "2026-11-23"
+   "checked": "2026-11-23",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   }
  ],
  "summary": "MnDOT's 10-year plan gives planned projects as lines (roads) and points (bridges) but cost is a text range and there is no letting date, only fiscal year. Parcels with owner names exist for 60 of 87 counties in one MnGeo layer (all the big metro counties except Scott have owners); the other 27 counties are missing."

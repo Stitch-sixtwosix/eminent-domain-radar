@@ -205,7 +205,10 @@
     "acres": "ACRES"
    },
    "restrictions": "terms not found (the item licence field and the layer description are empty; the county's own terms page was not located on 2026-11-18)",
-   "notes": "Madison County GIS account (MadCoGISAdmin), item 1bd63878b0194f85862cf55d69759db6, modified November 2026. Owner name is also split into OWN_FIRST/OWN_MID_IN/OWN_LAST/OWN_SUFF. No value field. maxRecordCount 2000."
+   "notes": "Madison County GIS account (MadCoGISAdmin), item 1bd63878b0194f85862cf55d69759db6, modified November 2026. Owner name is also split into OWN_FIRST/OWN_MID_IN/OWN_LAST/OWN_SUFF. No value field. maxRecordCount 2000.",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "MCHENRY",
@@ -229,7 +232,10 @@
     ]
    },
    "restrictions": "terms not found (the item licence field and the layer description are empty; the county's own terms page was not located on 2026-11-18)",
-   "notes": "McHenry County account (McHenryCounty), item 723960c3086940dd9784f69d897c1c7b, modified November 2026. The county's own server (www.mchenrycountygis.org) refuses automated requests (403); this ArcGIS Online copy answers. ParcelArea is square feet. No value field. maxRecordCount 2000."
+   "notes": "McHenry County account (McHenryCounty), item 723960c3086940dd9784f69d897c1c7b, modified November 2026. The county's own server (www.mchenrycountygis.org) refuses automated requests (403); this ArcGIS Online copy answers. ParcelArea is square feet. No value field. maxRecordCount 2000.",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "PEORIA",
@@ -254,7 +260,10 @@
     "acres": "Acres"
    },
    "restrictions": "The item's licence field is a link titled 'License Agreement' (https://peoriacountygis.hub.arcgis.com/pages/a979f2ceac8d4fffb7ea1e5712f45bd6). That page is script-only and its text could not be read on 2026-11-18, so the agreement's terms are unknown. Treat as restricted until it is read.",
-   "notes": "Peoria County GIS (item 00b0e55fe72d414395418dd76691daf4, credits 'Peoria County, The Sidwell Company, Esri'). total_assessed_value is assessed value, not market. maxRecordCount 2000."
+   "notes": "Peoria County GIS (item 00b0e55fe72d414395418dd76691daf4, credits 'Peoria County, The Sidwell Company, Esri'). total_assessed_value is assessed value, not market. maxRecordCount 2000.",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "TAZEWELL",
@@ -276,7 +285,10 @@
     "acres": "gross_acres"
    },
    "restrictions": "terms not found (Tazewell County's own server; the layer has no description, copyright or terms; no terms page was located on 2026-11-18)",
-   "notes": "Tazewell County server, view dbo.vw_webgis_parcels. Has owner1/owner2/owner3 names, a separate mail-to name and address, tax-bill name, last sale date and price. maxRecordCount 2000."
+   "notes": "Tazewell County server, view dbo.vw_webgis_parcels. Has owner1/owner2/owner3 names, a separate mail-to name and address, tax-bill name, last sale date and price. maxRecordCount 2000.",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "WHITESIDE",
@@ -297,7 +309,10 @@
     ]
    },
    "restrictions": "terms not found (the item licence field and the layer description are empty; the county's own terms page was not located on 2026-11-18)",
-   "notes": "Item 0cc6f8d25a1e4ae585e5123dd84fdf4f 'Tax Parcels - Whiteside County', credit 'Whiteside County IL GIS', modified November 2026. PSTLCITY holds city, state and ZIP in one string. CNTASSDVAL is assessed value. maxRecordCount 2000."
+   "notes": "Item 0cc6f8d25a1e4ae585e5123dd84fdf4f 'Tax Parcels - Whiteside County', credit 'Whiteside County IL GIS', modified November 2026. PSTLCITY holds city, state and ZIP in one string. CNTASSDVAL is assessed value. maxRecordCount 2000.",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "ADAMS",
@@ -316,7 +331,10 @@
     "acres": "Acres"
    },
    "restrictions": "terms not found (item licence field is empty; the item is published by an account that appears to be the county health department, not the assessor; checked 2026-11-18)",
-   "notes": "Item d2ad725fdbdc4536a2921bfb80ae9bfa 'Adams County, IL Parcels' (account KevinD_ACHD), modified mid-2026. TotalValue looks like assessed value. maxRecordCount 2000."
+   "notes": "Item d2ad725fdbdc4536a2921bfb80ae9bfa 'Adams County, IL Parcels' (account KevinD_ACHD), modified mid-2026. TotalValue looks like assessed value. maxRecordCount 2000.",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   }
  ],
  "parcels_counties_note": "Not found or not reachable in the time allowed: Cook (no owner or taxpayer name in any public GIS layer found; gis.cookcountyil.gov timed out; only a 2016 south-suburbs extract with taxpayer names exists on ArcGIS Online), Will (gis.willcountyillinois.com answered 403), Kane (public parcel layer has no owner field).",

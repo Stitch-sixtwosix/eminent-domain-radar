@@ -378,7 +378,10 @@
    },
    "restrictions": "terms not found: layer description/copyrightText empty; ArcGIS item 0a5c705174f6446aa5d3a2116d0023e1 has licenseInfo and accessInformation empty (description only 'Parcel Data within Brookings,SD,57006'); no city terms page was looked up",
    "notes": "CITY OF BROOKINGS ONLY, not the whole county (9,173 parcels). Published by the City of Brookings (ArcGIS Online, item 'Parcels' by akarl_City, 'City of Brookings Parcel Data'; lastEditDate 2026-11-19). No county-wide Brookings County layer with owners was found. Field names are misleading - checked on sample rows: Deedhold = owner name; 'address' = owner MAILING street; Deedholder = mailing city; Deedhold_1 = mailing state; Deedhold_2 = mailing zip; 'location' = site address (LocationCity/LocationState/LocationZip go with it). cumulative = Landvalue + buildingva (all three are text); Totalassesedvalue is a number but was 0 on one sample. Gross_Acre is text ('.3515'). Hosted feature layer, maxRecordCount 2000.",
-   "checked": "2026-11-22"
+   "checked": "2026-11-22",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   }
  ],
  "summary": "Projects work well: SDDOT's approved STIP map service gives planned projects as lines per category with cost, year and county. No statewide owner parcels. Pennington (Rapid City) is verified and in use. Checked 2026-11-22: Codington, Beadle and Roberts (First District) and Davison, Hughes, Butte and Yankton (Planning and Development District III) and the City of Brookings answer with owner names but are held on terms; Minnehaha, Sioux Falls and Lawrence servers timed out and Lincoln sits behind a bot check.",

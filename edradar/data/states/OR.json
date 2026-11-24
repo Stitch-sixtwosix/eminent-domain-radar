@@ -116,7 +116,10 @@
     "acres": "MAPACRES"
    },
    "restrictions": "None seen on the layer; ORS 192.355 / county terms not reviewed.",
-   "notes": "County's own server (Eugene/Springfield). Owner fields were blank on the first sample record, see owner_filled_count. No situs address field in this layer (addresses are layer 0 of the same service, not inspected). ASSDTOTVAL = assessed total; LANDVAL, IMPVAL also present."
+   "notes": "County's own server (Eugene/Springfield). Owner fields were blank on the first sample record, see owner_filled_count. No situs address field in this layer (addresses are layer 0 of the same service, not inspected). ASSDTOTVAL = assessed total; LANDVAL, IMPVAL also present.",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "MARION",
@@ -205,7 +208,10 @@
    },
    "restrictions": "terms not found",
    "notes": "County's own server (Medford/Ashland), maxRecordCount 1000, native spatial reference wkid 2270. ACCOUNT is the assessor account; INCAREOF and CONTRACT (contract purchaser) also present; ASSESSLAND / ASSESSIMP are assessed values. Spatial point+distance query works as-is: 112 parcels at -122.8756,42.3265. No terms-of-use page could be opened (jacksoncountyor.gov GIS page returned 403); the layer's copyright text only says 'Please extend credit to Jackson County GIS in any subsequent works derived from its data', and the county's ArcGIS Online items carry a warranty disclaimer with no use limits. A City of Medford layer (maps.medfordmaps.org/.../Public/Taxlots_with_SiteAddresses_Service/MapServer/1, 34,444 records, same field names) covers the Medford area only.",
-   "checked": "2026-11-17"
+   "checked": "2026-11-17",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "DESCHUTES",

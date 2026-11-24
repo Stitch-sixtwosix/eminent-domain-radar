@@ -61,7 +61,10 @@
     "acres": "LAND_SIZE"
    },
    "restrictions": "Not checked beyond the layer metadata; review the Maricopa County Assessor's data terms before commercial or mailing use.",
-   "notes": "Assessor's own server, 1.76M parcels, tax year 2027 values in the sample. FCV_CUR (full cash value) is TEXT with commas and padding; LAND_SIZE is in square feet, not acres; MAIL_ADDRESS is a concatenated mailing address; INCAREOF, SALE_DATE, SALE_PRICE, DEED_DATE, JURISDICTION also present."
+   "notes": "Assessor's own server, 1.76M parcels, tax year 2027 values in the sample. FCV_CUR (full cash value) is TEXT with commas and padding; LAND_SIZE is in square feet, not acres; MAIL_ADDRESS is a concatenated mailing address; INCAREOF, SALE_DATE, SALE_PRICE, DEED_DATE, JURISDICTION also present.",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "PINAL",

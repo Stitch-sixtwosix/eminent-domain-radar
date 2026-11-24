@@ -168,7 +168,10 @@
    },
    "restrictions": "terms not found (service description is only 'Story County Parcels layer'; layer description and copyrightText empty; the service's item 66ad7f8879a54fdca7af008c168b641c is not on ArcGIS Online; no county terms page looked for)",
    "notes": "Story County's own server (apps.storycounty.com), layer 'Parcels', TaxYear 2026. Covers Ames. AssessedTotalValue, TaxableTotalValue, FullLandValue / FullBuildingValue / FullDwellingValue; DeededAcres, NetAcres, DIGITAL_ACRES; DeededBook / DeededPage / DeededDate; ContractBook for contract sales. maxRecordCount 100000.",
-   "checked": "2026-11-20"
+   "checked": "2026-11-20",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "WOODBURY",

@@ -118,7 +118,10 @@
     "acres": "acres_calc"
    },
    "restrictions": "terms not found (the item licence field and the layer description are empty; the county's own terms page was not located on 2026-11-18)",
-   "notes": "Clay County, MO GIS account (clayco_gisadmin), item 37dd84175f9b4568b3daf1892a586d3c: 'Clay County, MO GIS Parcels Data with Parcel ID, Owner names, Situs, Mailing Address, and Taxing Districts'. Item modified in 2026. co_owner holds a second name or 'ETAL'/'TRUST'. No value field. maxRecordCount 2000."
+   "notes": "Clay County, MO GIS account (clayco_gisadmin), item 37dd84175f9b4568b3daf1892a586d3c: 'Clay County, MO GIS Parcels Data with Parcel ID, Owner names, Situs, Mailing Address, and Taxing Districts'. Item modified in 2026. co_owner holds a second name or 'ETAL'/'TRUST'. No value field. maxRecordCount 2000.",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "GREENE",
@@ -139,7 +142,10 @@
     "acres": "ACRES"
    },
    "restrictions": "terms not found (served by the City of Springfield GIS server; the service carries only the credit 'City of Springfield GIS' and no terms; no terms page was located on 2026-11-18)",
-   "notes": "'Parcels Greene' layer on the City of Springfield server: county assessor attributes for all 123,884 Greene County parcels. OWN2 is a second owner, CAREOF a care-of line; ADRNO/ADRSTR/CITYNAME/STATECODE/ZIP1 are the owner's mailing address and the L_ fields the property location. maxRecordCount 1000. The same server has 'Parcels Christian' (layer 20, 36,132 parcels) with a name field but no mailing address."
+   "notes": "'Parcels Greene' layer on the City of Springfield server: county assessor attributes for all 123,884 Greene County parcels. OWN2 is a second owner, CAREOF a care-of line; ADRNO/ADRSTR/CITYNAME/STATECODE/ZIP1 are the owner's mailing address and the L_ fields the property location. maxRecordCount 1000. The same server has 'Parcels Christian' (layer 20, 36,132 parcels) with a name field but no mailing address.",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   }
  ],
  "parcels_counties_note": "Not found or not reachable in the time allowed: Jackson (jcgis.jacksongov.org timed out), St. Louis City, Greene.",

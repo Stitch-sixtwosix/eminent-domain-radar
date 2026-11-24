@@ -187,7 +187,10 @@
    },
    "restrictions": "terms not found: the layer and service description and copyrightText are empty, and no county terms page was read.",
    "notes": "Box Elder County's own ArcGIS server (Brigham City). Rows rewritten on 2026-11-23 (created_date). OWNERNAME filled on 53,231 of 53,577 parcels. OWNERADDRESS is one text field with a line break between street and city ('984 W 700 N \\nWEST BOUNTIFUL, UT 84087'). SCHNO is the parcel number with hyphens ('01-001-0003'); Account_Number and Hyperlink point to the county's Eagle tax record. A CONFIDENTIAL field exists and is null on every record. No value field. The same layer is at Webmap/Cadastral_Layers/MapServer/9. maxRecordCount 2000.",
-   "checked": "2026-11-23"
+   "checked": "2026-11-23",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "IRON",
@@ -215,7 +218,10 @@
    },
    "restrictions": "terms not found: item 46af779d97454f2797db3b6ef77eed96 has an empty licenseInfo and description, and the layer has no copyrightText; no county terms page was read.",
    "notes": "Iron County's own ArcGIS Online organisation (Cedar City), published by county GIS account kallan_IronGIS; item snippet: 'A layer that will help the zoning map search parcel numbers'. NOT current: last edited 2025-03-26, tax Year 2025. Name_1 filled on 57,067 of 57,904 parcels. InCareOf, Taxable, Total_Taxes, Book_Page also present; no single total market value (MV_Land + MV_Improvements). The county's older public layer Parcels_Public/FeatureServer/0 (56,108 parcels, OWNER, MAIL_ADD1, MAIL_CITY, MAIL_ST, SITUS; item snippet 'County parcels for public use', licenseInfo empty) holds data from about 2021. maxRecordCount 2000.",
-   "checked": "2026-11-23"
+   "checked": "2026-11-23",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "SUMMIT",
@@ -240,7 +246,10 @@
    },
    "restrictions": "terms not found: item 50846a1c1b0b4186abd13e30ff8a926a has an empty licenseInfo, and the layer has no copyrightText; no county terms page was read.",
    "notes": "Summit County's own ArcGIS Online organisation (Park City), published by county account jmward; item snippet: 'Tax Parcels used in the Public Notification application. Updated on 7/1/2026.' Last edited 2026-07-01. OWNERNME1 filled on all 43,966 records; INCAREOF holds care-of names. The item says geometry repeats where a tax parcel holds several condominium units. CNTTXBLVAL is the current TAXABLE value, not market value; LNDVALUE is land value. PSTLZIP5 and PSTLZIP4 are empty: the mailing zip is in ZIP. STATEDAREA is acres as TEXT ('0.42'). LOWPARCELID is the account number. maxRecordCount 2000.",
-   "checked": "2026-11-23"
+   "checked": "2026-11-23",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "MORGAN",
@@ -268,7 +277,10 @@
    },
    "restrictions": "terms not found: item cc7f7ce5dda2400dad321372f39f5b0a has an empty licenseInfo and description, and the layer has no copyrightText; no county terms page was read.",
    "notes": "Morgan County Recorder's own ArcGIS Online account (MorganRecorder); item snippet: 'Tax Parcels for Morgan County UPDATED 8/3/2026'; layer last edited 2026-11-23. Name1 filled on all 8,708 parcels; Name2 is a second owner. Serial is the serial number ('12-004-007-01'), Parcel the parcel number ('00-0090-3200'). Status 'EX' marks exempt parcels. Also Taxable, Land, Buildings, Year_Built, Mortgage_Company. Older layers in the same account: ParcelService/FeatureServer/0 (8,319, OWNERNME1, updated 2025-06-19) and Taxroll_Public_Layer/FeatureServer/0 (8,470, June 2026). maxRecordCount 2000.",
-   "checked": "2026-11-23"
+   "checked": "2026-11-23",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   }
  ],
  "summary": "UDOT ePM STIP line layer verified (3,219 projects with status, concept, value, advertise date). Parcels: statewide layer has no owner names; Salt Lake County verified with owner + mailing address; Utah County has owner name on only ~30% of parcels; Davis, Weber, Washington county owner layers not found. Third pass 2026-11-23: Weber, Cache, Box Elder, Iron, Summit and Morgan county owner layers verified but all held (stated limits for Weber and Cache, terms not found for the rest); Davis not found, Washington's server timed out."

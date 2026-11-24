@@ -263,7 +263,10 @@
    },
    "restrictions": "terms not found (item licence field says only 'Loudoun County, VA'; the county disclaimer page https://logis.loudoun.gov/loudoun/disclaimer.html refused the connection).",
    "notes": "Loudoun County (ArcGIS Online account LoudounCounty) 'Stacked_Parcels_Owner', overwritten by a county script; edited 2026-11-16. HIDENAME flag is 'Y' on 1,804 rows and 'N' on 150,959, yet OWNER is still filled on the 'Y' rows sampled: the county appears to mark owners whose names it hides in its own viewer, so treat HIDENAME='Y' rows as not to be used. PA_GIS_ACRE also present; no value field. The county's own server logis.loudoun.gov timed out.",
-   "checked": "2026-11-17"
+   "checked": "2026-11-17",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "ROANOKE",
@@ -286,7 +289,10 @@
    },
    "restrictions": "terms not found",
    "notes": "Roanoke COUNTY (not the City of Roanoke) 'Parcels Open Data', ArcGIS Online account wrayda, copyright 'Roanoke County', edited 2026-11-07; 342 fields. 47,355 rows have Owner1_LastAndFirst. Owner2_LastAndFirst and Owner1_2LastFirst (both owners) also present; MailingAddressLine2 holds city and state. OwnerInfoIsProtected is YES/NO: skip YES rows. GPIN is a second parcel key. Redundant geometry where a parcel has several condominium units. City of Roanoke was not searched.",
-   "checked": "2026-11-17"
+   "checked": "2026-11-17",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "NEWPORT NEWS",
@@ -314,7 +320,10 @@
    },
    "restrictions": "terms not found",
    "notes": "City of Newport News staff account (scottbr_nngov) 'Parcel Polygon View Layer'. FRESHNESS UNCERTAIN: the service reports a data edit on 2025-11-13 but the newest LASTUPDATE value on any row is May 2020, so ownership may be years old. OWNERNME2 second owner line; STATEDAREA is acres as text; CNT* = current land / improvement value, PRV* = previous. The city's own server maps.nnva.gov timed out.",
-   "checked": "2026-11-17"
+   "checked": "2026-11-17",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "CHESAPEAKE",
@@ -485,7 +494,10 @@
    },
    "restrictions": "terms not found (layer description covers only how the parcel layer was compiled; service copyright text is empty; the ArcGIS item 1b7083c747f547a8bdd3f9186a0af3a1 has an empty licence field; no terms page was found).",
    "notes": "York County's own server, layer 'Parcels' in AGOservices/Landrecords_Service; ArcGIS item 'Parcels' (account TimKropp, York County organisation). ownerName filled on 28,508 of 28,591 rows; LastEdited on the sampled row was 2025-10-29. currLandVal, GISacres, PRIOROWNERSNAME1/2, transferDate and biennial LVAL/IVAL/MVAL value fields to 2026 also present.",
-   "checked": "2026-11-20"
+   "checked": "2026-11-20",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "PITTSYLVANIA",
@@ -505,7 +517,10 @@
    },
    "restrictions": "terms not found (layer description and copyright text are empty; the ArcGIS item 8e6be7cc34534d8d989901ed9815fb60 has empty licence, credit and description fields; no terms page was found).",
    "notes": "Pittsylvania County's own ArcGIS Online organisation (account barryguidry, whose profile reads 'GIS Systems Analyst for Pittsylvania County, Virginia'), item 'Tax Parcels' ('Full current Tax Parcel boundaries'), layer Tax_Parcels_full; service last edited 2026-11-16. ACCOUNT_NAME1 filled on 60,872 of 61,104 rows; ACCOUNT_NAME2 second owner; ACCOUNT_CSZ is city, state and ZIP in one field. No site-address field was seen in the samples (PC_PROPERTY_DESC is a legal description). TOTAL_LAND_VALUE, TOTAL_BLDG_VALUE, PC_ASSESSED_ACREAGE also present.",
-   "checked": "2026-11-20"
+   "checked": "2026-11-20",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "LYNCHBURG CITY",
@@ -531,7 +546,10 @@
    },
    "restrictions": "terms not found: the ArcGIS item's licence field (56b924d2dd8a404a8830fc8b0612febe) says 'Please read our Data Sharing and Distribution Policy - http://www.lynchburgva.gov/gis-data-sharing-and-distribution-policy', and that page returned 404 on 2026-11-20, so the policy that governs sharing and distribution could not be read.",
    "notes": "City of Lynchburg's own server, open-data layer 'Parcel' (service text: 'intended for use by the Open Data Portal', copyright 'City of Lynchburg - GIS Office'); ArcGIS item 'Parcels' (account LynchburgGIS), 'maintained by the City Assessor's Office. Information includes assessment, sales, and owner information.' Owner1 filled on 32,594 of 32,620 rows; Owner2 second owner; Current_Land, Current_Imp, Sale1dt, Sale1Amt, Grantor1 and yearly YR24-YR26 values also present. The rest of the licence field is only 'This data is neither a legally recorded map nor a survey and is not intended to be used as such.' Apps/ParcelViewer/MapServer/31 on the same server is the same 32,620 parcels with fewer fields.",
-   "checked": "2026-11-20"
+   "checked": "2026-11-20",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   },
   {
    "county": "ROANOKE CITY",

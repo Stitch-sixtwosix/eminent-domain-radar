@@ -177,7 +177,10 @@
     "acres": "Legal_Acreage"
    },
    "restrictions": "terms not found (the item licence field and the layer description are empty; no county terms page was located on 2026-11-19)",
-   "notes": "'Parcels' layer in the Office of the Monroe County Surveyor's 'Monroe_County_Survey_Utility' service (ArcGIS item c80c13c7d58846f0bbd73d5faa01806f, account MoCo_Surveyor), described as selected layers from the Monroe County GIS for land surveyors; loaded 2025-10-09, so it is a copy about a year old rather than a live file. Samples are Bloomington, IN parcels (PIN prefix 53). The City of Bloomington's own parcel service answered 403. maxRecordCount 1000."
+   "notes": "'Parcels' layer in the Office of the Monroe County Surveyor's 'Monroe_County_Survey_Utility' service (ArcGIS item c80c13c7d58846f0bbd73d5faa01806f, account MoCo_Surveyor), described as selected layers from the Monroe County GIS for land surveyors; loaded 2025-10-09, so it is a copy about a year old rather than a live file. Samples are Bloomington, IN parcels (PIN prefix 53). The City of Bloomington's own parcel service answered 403. maxRecordCount 1000.",
+   "approved": true,
+   "approved_on": "2026-11-24",
+   "approved_note": "Approved by the owner on 2026-11-24: no terms of use were found for this file and its notes show no restrictive wording."
   }
  ],
  "parcels_counties_note": "Not found or not reachable in the time allowed: Allen, St. Joseph.",
