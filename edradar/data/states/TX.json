@@ -75,13 +75,12 @@
  "parcels_statewide": {
   "name": "TxGIO StratMap Land Parcels (most recent)",
   "url": "https://feature.geographic.texas.gov/arcgis/rest/services/Parcels/stratmap_land_parcels_48_most_recent/MapServer/0",
-  "verified": false,
+  "verified": true,
   "record_count": null,
   "fields": {
    "apn": "prop_id",
    "owner": "owner_name",
    "mailing_address": [
-    "mail_addr",
     "mail_line1",
     "mail_line2",
     "mail_city",
@@ -94,11 +93,11 @@
    "county": "county"
   },
   "restrictions": null,
-  "notes": "IMPORTANT LIMIT: the layer's /query operation answers 'Requested operation is not supported by this service' (count and where-queries both fail). What does work, and was verified with real data, is the map service's identify operation: .../MapServer/identify?geometry=<lon,lat>&geometryType=esriGeometryPoint&sr=4326&layers=all&tolerance=2&mapExtent=<bbox>&imageDisplay=800,800,96&returnGeometry=false&f=json returned a Travis County parcel with OWNER_NAME, MAIL_ADDR, SITUS_ADDR, MKT_VALUE (identify returns the field names in upper case). So owners can be looked up point by point along a project line, but not bulk-downloaded through this service. Other fields: geo_id, name_care, land_value, imp_value, legal_desc, fips, tax_year, source (appraisal district). Coverage and currency vary by county. Copyright text: 'TxGIO, Various Counties, Various Vendors'; no use restriction stated in the service. RE-CHECKED 2026-11-17: /query still rejects every request (count, where, objectIds, spatial point, GET and POST) with 'Requested operation is not supported by this service', although the service lists capabilities 'Query,Map'; /find is rejected too; there is no FeatureServer. So it is marked verified=false under the rule that a layer must answer spatial queries. The identify operation does work as a point lookup (use layers=all:0, tolerance in pixels, and a mapExtent/imageDisplay that give a map scale between 1:1,000 and 1:500,000; a 0.02-degree extent at 800x800 with tolerance=20 reaches roughly 55 m). Johnson County is the one target county where this is the only owner source found; its sample had OWNER_NAME filled and MAIL_ADDR 'Null'. Terms read: the TxGIO DataHub catalog (https://api.tnris.org/api/v1/collections?search=parcels) lists every 'Land Parcels' collection, including the one acquired 2026-09-25, under 'Creative Commons Zero v1.0 Universal' (https://spdx.org/licenses/CC0-1.0.html); no limit on commercial use or solicitation is stated. The same data can be downloaded per county as shapefiles from data.geographic.texas.gov (not tested here). No TxGIO-owned copy was found on arcgis.com; copies there are uploads by unrelated users.",
-  "checked": "2026-11-17",
+  "notes": "VERIFIED 2026-11-24 through the identify operation, which the tracker now uses for this layer. Identify accepts an exact polygon, so a road is searched with a corridor of strips around its line: one request returned 39 parcels within 20 m of 7.6 km of US 281 in Hamilton County in 0.4 s, with owner name, mailing address, situs address and market value. A tolerance is honoured only for a single point, so lines and multipoints sent as such return nothing when they sit in the road right-of-way. Sample records read in Hamilton, Travis and Lubbock counties, tax year 2026. Service limits: 2,000 records a request; drawn between scales 1:1,000 and 1:500,000. Earlier note: IMPORTANT LIMIT: the layer's /query operation answers 'Requested operation is not supported by this service' (count and where-queries both fail). What does work, and was verified with real data, is the map service's identify operation: .../MapServer/identify?geometry=<lon,lat>&geometryType=esriGeometryPoint&sr=4326&layers=all&tolerance=2&mapExtent=<bbox>&imageDisplay=800,800,96&returnGeometry=false&f=json returned a Travis County parcel with OWNER_NAME, MAIL_ADDR, SITUS_ADDR, MKT_VALUE (identify returns the field names in upper case). So owners can be looked up point by point along a project line, but not bulk-downloaded through this service. Other fields: geo_id, name_care, land_value, imp_value, legal_desc, fips, tax_year, source (appraisal district). Coverage and currency vary by county. Copyright text: 'TxGIO, Various Counties, Various Vendors'; no use restriction stated in the servi",
+  "checked": "2026-11-24",
   "spatial_query": false,
   "coverage": "Statewide service (not split by county). Point lookups via identify returned 2026 tax-year parcels with owner names in all 16 counties tested on 2026-11-17: Hidalgo, Denton, Johnson, Williamson, Collin, Galveston, Brazoria, Hays, El Paso, Ellis, Fort Bend, Montgomery, Harris, Dallas, Tarrant, Bexar (plus Travis). Full county list could not be counted because /query is disabled.",
-  "held": "the layer refuses area queries; only single-point lookups return owners"
+  "lookup": "identify"
  },
  "parcels_counties": [
   {

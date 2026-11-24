@@ -9,6 +9,7 @@ distance_m, abuts, attributes}.
 from __future__ import annotations
 
 import json
+import math
 from typing import Any, Dict, List, Optional
 
 from . import geo
@@ -228,9 +229,97 @@ def phl_by_apn(layer, http, apns: List[str]) -> List[Dict[str, Any]]:
     return [dict(_phl_row(r, 0), abuts=True) for r in data.get("rows") or []]
 
 
+# ---- map services that answer "what is here?" but not "what is within N metres?" ---------------------------------
+# Texas's statewide parcel file (owner and mailing address for every county, public domain) refuses ordinary queries.
+# Its identify operation does answer, for a point with a tolerance or for an exact polygon. So a road is searched by
+# drawing the corridor around it, one four-sided strip per segment, and asking what those strips touch.
+IDENTIFY_SEGMENTS = 40          # strips per request
+IDENTIFY_MAX_SPAN = 0.6         # degrees: keeps each request inside the scales at which the layer is drawn
+
+
+def _corridor(path: List[List[float]], off_m: float) -> List[List[List[float]]]:
+    """A strip off_m either side of each segment of the path, as polygon rings in longitude and latitude."""
+    rings = []
+    for a, b in zip(path, path[1:]):
+        kx, ky = 111320 * math.cos(math.radians(a[1])), 110540
+        dx, dy = (b[0] - a[0]) * kx, (b[1] - a[1]) * ky
+        length = math.hypot(dx, dy)
+        if length < 0.5:
+            continue
+        ux, uy = dx / length, dy / length
+        nx, ny = -uy, ux
+
+        def at(pt, along, side):
+            return [round(pt[0] + (ux * along + nx * side) / kx, 7), round(pt[1] + (uy * along + ny * side) / ky, 7)]
+        rings.append([at(a, -off_m, off_m), at(b, off_m, off_m), at(b, off_m, -off_m), at(a, -off_m, -off_m), at(a, -off_m, off_m)])
+    return rings
+
+
+def _identify(layer, http, geometry: Any, gtype: str, around: List[List[float]], tolerance_m: float = 0.0) -> List[Dict[str, Any]]:
+    xs, ys = [p[0] for p in around], [p[1] for p in around]
+    cx, cy = (min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2
+    half = max(max(xs) - min(xs), max(ys) - min(ys)) / 2 + 0.002           # a square view, so a pixel is the same size both ways
+    px = 1000
+    m_per_px = 2 * half * 111320 * math.cos(math.radians(cy)) / px
+    url = layer["url"].rstrip("/")
+    url, lid = (url.rsplit("/", 1) if url.rsplit("/", 1)[-1].isdigit() else (url, "0"))
+    data = http.post_json(url + "/identify", {
+        "geometry": geometry if isinstance(geometry, str) else json.dumps(geometry), "geometryType": gtype, "sr": 4326, "layers": "all:" + lid,
+        "tolerance": max(1, round(tolerance_m / m_per_px)) if tolerance_m else 0,
+        "mapExtent": "%f,%f,%f,%f" % (cx - half, cy - half, cx + half, cy + half), "imageDisplay": "%d,%d,96" % (px, px),
+        "returnGeometry": "false", "f": "json"})
+    if "error" in data:
+        raise RuntimeError("%s: %s" % (layer["name"], data["error"]))
+    # identify returns field names in capitals and the word "Null" for an empty value
+    return [{k.lower(): (None if v in ("Null", "null", "") else v) for k, v in (r.get("attributes") or {}).items()} for r in data.get("results") or []]
+
+
+def identify_near(layer, http, geometry, m_cfg) -> List[Dict[str, Any]]:
+    limit = int(m_cfg["max_parcels_per_project"])
+    out: Dict[str, Dict[str, Any]] = {}
+
+    def keep(attrs_list, abuts):
+        for attrs in attrs_list:
+            row = _arcgis_row(layer, attrs, abuts)
+            if row and row["apn"] not in out and len(out) < limit:
+                if not row["mailing_address"] and attrs.get("mail_addr"):
+                    row["mailing_address"] = str(attrs["mail_addr"])
+                out[row["apn"]] = row
+
+    g = geo.thin(geometry)
+    if geo.is_linear(g):
+        for dist, abuts in [(float(m_cfg["abut_m"]), True), (float(m_cfg["buffer_m"]), False)]:
+            for path in g["paths"]:
+                strips = _corridor(path, dist)
+                # Strips that touch are sent in different requests: where two rings of one polygon overlap, the
+                # overlap counts as outside, and parcels at every bend would be missed.
+                for start in (0, 1):
+                    mine = strips[start::2]
+                    batch: List[Any] = []
+                    for ring in mine + [None]:
+                        pts = [pt for r in batch for pt in r] + (ring or [])
+                        wide = pts and max(max(p[0] for p in pts) - min(p[0] for p in pts), max(p[1] for p in pts) - min(p[1] for p in pts)) > IDENTIFY_MAX_SPAN
+                        if batch and (ring is None or len(batch) >= IDENTIFY_SEGMENTS or wide):
+                            keep(_identify(layer, http, {"rings": batch, "spatialReference": {"wkid": 4326}}, "esriGeometryPolygon",
+                                           [pt for r in batch for pt in r]), abuts)
+                            batch = []
+                        if ring is not None:
+                            batch.append(ring)
+                    if len(out) >= limit:
+                        return list(out.values())
+    else:
+        for x, y in geo.coords(g)[:25]:
+            keep(_identify(layer, http, "%f,%f" % (x, y), "esriGeometryPoint", [[x - 0.004, y - 0.004], [x + 0.004, y + 0.004]],
+                           float(m_cfg["point_buffer_m"])), False)
+    return list(out.values())
+
+
 def near(layer, http, geometry, m_cfg) -> List[Dict[str, Any]]:
-    return (phl_near if layer.get("provider") == "carto_phl" else arcgis_near)(layer, http, geometry, m_cfg)
+    provider = layer.get("provider")
+    return (phl_near if provider == "carto_phl" else identify_near if provider == "arcgis_identify" else arcgis_near)(layer, http, geometry, m_cfg)
 
 
 def by_apn(layer, http, apns: List[str]) -> List[Dict[str, Any]]:
+    if layer.get("provider") == "arcgis_identify":       # no lookup by parcel number on a service that only answers "what is here?"
+        return []
     return (phl_by_apn if layer.get("provider") == "carto_phl" else arcgis_by_apn)(layer, http, apns)

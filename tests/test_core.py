@@ -713,8 +713,9 @@ def test_registry_lists_every_source_and_gap(tmp_path):
     held = next(s for s in reg["sources"] if s["status"] == "held")
     assert held["why"]                                    # a held file always says why
     gaps = {g["code"]: g for g in reg["gaps"]}
-    assert len(gaps) == 50 and gaps["NC"]["missing_count"] == 0 and gaps["TX"]["missing_count"] > 200
-    assert len(gaps["TX"]["missing"]) == gaps["TX"]["missing_count"]
+    assert len(gaps) == 50 and gaps["NC"]["missing_count"] == 0 and gaps["VA"]["missing_count"] > 100
+    assert gaps["TX"]["missing_count"] == 0                 # the statewide file, read by corridor lookup, covers every Texas county
+    assert len(gaps["VA"]["missing"]) == gaps["VA"]["missing_count"]
 
 
 def test_county_is_found_from_a_map_position():
@@ -900,3 +901,39 @@ def test_a_source_is_judged_on_whether_it_answers(tmp_path):
     assert by["KYTC projects"]["error"] == "HTTP 503" and by["KYTC projects"]["updated"] is None
     db.save_reads([{"source": "dot:KY", "key": "kytc", "records": 5, "error": None}])    # it recovers
     assert registry(cfg, db)["sources"][1]["error"] is None and registry(cfg, db)["sources"][1]["updated"]
+
+
+def test_corridor_lookup_for_services_that_only_answer_what_is_here():
+    """Texas's statewide owner file refuses area queries, so a road is searched with strips drawn around it."""
+    from edradar import parcels as P
+
+    path = [[-98.15, 31.60], [-98.15, 31.61], [-98.14, 31.62]]
+    strips = P._corridor(path, 20)
+    assert len(strips) == 2 and all(len(r) == 5 and r[0] == r[-1] for r in strips)
+    width_m = abs(strips[0][0][0] - strips[0][3][0]) * 111320 * 0.8517            # east-west across a north-south road
+    assert 39 < width_m < 41                                                        # 20 m either side
+
+    calls = []
+
+    class Fake:
+        def post_json(self, url, data):
+            calls.append((url, data))
+            if data["geometryType"] == "esriGeometryPolygon":
+                near = [{"attributes": {"PROP_ID": "1", "OWNER_NAME": "DOE JANE", "MAIL_LINE1": "Null", "MAIL_LINE2": "PO BOX 1", "MAIL_CITY": "HICO",
+                                        "MAIL_STAT": "TX", "MAIL_ZIP": "76457", "COUNTY": "HAMILTON", "SITUS_ADDR": "1 US 281", "MKT_VALUE": "1000"}}]
+                far = [{"attributes": {"PROP_ID": "2", "OWNER_NAME": "Null", "MAIL_ADDR": "9 OAK ST, HICO, TX 76457", "COUNTY": "HAMILTON"}}]
+                return {"results": near + (far if len(calls) > 2 else [])}
+            return {"results": [{"attributes": {"PROP_ID": "7", "OWNER_NAME": "ROE RICHARD", "COUNTY": "TRAVIS"}}]}
+
+    layer = {"name": "TX statewide parcels", "provider": "arcgis_identify", "url": "https://x/MapServer/0",
+             "fields": {"apn": "prop_id", "owner": "owner_name", "county": "county", "address": "situs_addr", "market_value": "mkt_value",
+                        "mailing_address": ["mail_line1", "mail_line2", "mail_city", "mail_stat", "mail_zip"]}}
+    m = {"max_parcels_per_project": 500, "abut_m": 20, "buffer_m": 75, "point_buffer_m": 50}
+    rows = {r["apn"]: r for r in P.near(layer, Fake(), {"paths": [path]}, m)}
+    assert calls[0][0] == "https://x/MapServer/identify" and calls[0][1]["layers"] == "all:0" and calls[0][1]["tolerance"] == 0
+    assert len(calls) == 4                                   # touching strips go in separate requests, for each of the two distances
+    assert rows["1"]["owner"] == "DOE JANE" and rows["1"]["abuts"] and rows["1"]["mailing_address"] == "PO BOX 1, HICO, TX, 76457"
+    assert rows["2"]["owner"] is None and not rows["2"]["abuts"] and rows["2"]["mailing_address"] == "9 OAK ST, HICO, TX 76457"      # the word Null is no owner
+    point = P.near(layer, Fake(), {"x": -97.74, "y": 30.27}, m)
+    assert point[0]["apn"] == "7" and calls[-1][1]["geometryType"] == "esriGeometryPoint" and calls[-1][1]["tolerance"] >= 1
+    assert P.by_apn(layer, Fake(), ["1"]) == []

@@ -83,7 +83,8 @@ def add_states(cfg: Dict[str, Any]) -> None:
             parcel_layers.append({"state": code, "name": "%s %s County" % (code, str(c.get("county", "")).title()),
                                   "provider": "arcgis", "counties": [str(c["county"]).upper()], "url": c["url"], "fields": c["fields"]})
         if _usable(sw) and (sw.get("fields") or {}).get("apn"):
-            parcel_layers.append({"state": code, "name": "%s statewide parcels" % code, "provider": "arcgis",
+            parcel_layers.append({"state": code, "name": "%s statewide parcels" % code,
+                                  "provider": "arcgis_identify" if sw.get("lookup") == "identify" else "arcgis",
                                   "url": sw["url"], "fields": sw["fields"]})
     extra = Path(__file__).parent / "data" / "sources" / "layers.json"      # regional, city and utility project maps
     if extra.exists():
