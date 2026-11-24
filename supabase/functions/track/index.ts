@@ -10,6 +10,28 @@ const HEADERS = (origin: string) => ({
   "Access-Control-Allow-Headers": "content-type", "Vary": "Origin", "Cache-Control": "no-store",
 });
 
+// City, state and network for a visit. Looked up once per visit from the visitor's address by GeoJS, a free lookup
+// service; later pages of the same visit reuse the answer. The address goes to that service for the lookup and is
+// not kept by us. A lookup that fails or is slow simply leaves the place blank.
+// deno-lint-ignore no-explicit-any
+async function place(db: any, session: string | null, ip: string) {
+  const none = { country: null, region: null, city: null, org: null };
+  try {
+    if (session) {
+      const seen = await db.from("visits").select("country, region, city, org").eq("session", session).not("country", "is", null).limit(1);
+      if (!seen.error && seen.data.length) return seen.data[0];
+    }
+    if (!/^[0-9a-f:.]{3,45}$/i.test(ip) || /^(10\.|127\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.|::1$|f[cd])/i.test(ip)) return none;
+    const stop = new AbortController(), timer = setTimeout(() => stop.abort(), 2500);
+    const r = await fetch("https://get.geojs.io/v1/ip/geo/" + encodeURIComponent(ip) + ".json", { signal: stop.signal });
+    clearTimeout(timer);
+    if (!r.ok) return none;
+    const g = await r.json();
+    return { country: /^[A-Z]{2}$/.test(String(g.country_code || "")) ? g.country_code : null, region: clip(g.region, 80), city: clip(g.city, 80),
+             org: clip(String(g.organization_name || "").replace(/^AS\d+\s*/, ""), 120) };
+  } catch (_e) { return none; }
+}
+
 Deno.serve(async (req) => {
   const origin = req.headers.get("origin") || "";
   const ours = origin.replace(/^https?:\/\//, "").replace(/^www\./, "") === OWN;
@@ -33,8 +55,7 @@ Deno.serve(async (req) => {
     }
     const row = visitRow(body, ua, OWN, visitor);
     if (!row) return done();
-    const country = clip(req.headers.get("cf-ipcountry") || req.headers.get("x-vercel-ip-country") || req.headers.get("x-country-code"), 2);
-    await db.from("visits").upsert({ ...row, country: country && /^[A-Z]{2}$/.test(country) ? country : null }, { onConflict: "vid", ignoreDuplicates: true });
+    await db.from("visits").upsert({ ...row, ...(await place(db, row.session, ip)) }, { onConflict: "vid", ignoreDuplicates: true });
   } catch (e) {
     console.error("track", e);
   }

@@ -155,7 +155,7 @@ td.acts { white-space: nowrap; } td.acts .btn + .btn { margin-left: 6px; }
   <div data-view="visitors" hidden>
     <div class="top"><h1>Site visits</h1><p><label>Period <select id="vis-days"><option value="1">Today and yesterday</option><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="90">Last 90 days</option><option value="365">Last 12 months</option></select></label></p></div>
     <p class="note quiet" id="vis-off" hidden>Visit counting is not installed yet, or no visit has been recorded since it was switched on.</p>
-    <p class="lede">Counted by the site itself on every public page and in the subscriber app. Search-engine robots and your own visits as administrator are left out. A visitor is one browser; the same person on a phone and a laptop counts twice.</p>
+    <p class="lede">Counted by the site itself on every public page and in the subscriber app. Search-engine robots and your own visits as administrator are left out. A visitor is one browser; the same person on a phone and a laptop counts twice. City and state come from the visitor's internet address and are approximate: they show where the internet provider places the connection, which can be a neighbouring town, and are wrong for anyone on a VPN.</p>
     <dl class="figs" id="f-vis"></dl>
     <div class="cols">
       <section><header><h2>Visits by day</h2><p>Eastern time</p></header><div class="wrap"><table id="v-days"><thead><tr><th>Day</th><th class="n">Page views</th><th class="n">Visitors</th><th aria-hidden="true"></th></tr></thead><tbody></tbody></table></div></section>
@@ -171,7 +171,14 @@ td.acts { white-space: nowrap; } td.acts .btn + .btn { margin-left: 6px; }
       <section><header><h2>Last page of a visit</h2></header><div class="wrap"><table id="v-exit"><thead><tr><th>Page</th><th class="n">Visits</th></tr></thead><tbody></tbody></table></div></section>
     </div>
     <div class="cols">
-      <section><header><h2>Where they are</h2><p>From the browser's time zone</p></header><div class="wrap"><table id="v-tz"><thead><tr><th>Time zone</th><th class="n">Visitors</th><th class="n">Views</th></tr></thead><tbody></tbody></table></div></section>
+      <section><header><h2>States</h2><p>From each visitor's internet address</p></header><div class="wrap"><table id="v-states"><thead><tr><th>State or region</th><th class="n">Visitors</th><th class="n">Views</th></tr></thead><tbody></tbody></table></div></section>
+      <section><header><h2>Cities</h2><p>Approximate: the city of the visitor's internet provider</p></header><div class="wrap"><table id="v-cities"><thead><tr><th>City</th><th class="n">Visitors</th><th class="n">Views</th></tr></thead><tbody></tbody></table></div></section>
+    </div>
+    <div class="cols">
+      <section><header><h2>Networks</h2><p>A firm's own network shows its name; most show an internet provider</p></header><div class="wrap"><table id="v-net"><thead><tr><th>Network</th><th class="n">Visitors</th><th class="n">Views</th></tr></thead><tbody></tbody></table></div></section>
+      <section><header><h2>Time zones</h2><p>From the browser's own setting</p></header><div class="wrap"><table id="v-tz"><thead><tr><th>Time zone</th><th class="n">Visitors</th><th class="n">Views</th></tr></thead><tbody></tbody></table></div></section>
+    </div>
+    <div class="cols">
       <section><header><h2>Time of day</h2><p>Eastern time</p></header><div class="wrap"><table id="v-hours"><thead><tr><th>Hour</th><th class="n">Views</th><th aria-hidden="true"></th></tr></thead><tbody></tbody></table></div></section>
     </div>
     <div class="cols">
@@ -183,7 +190,7 @@ td.acts { white-space: nowrap; } td.acts .btn + .btn { margin-left: 6px; }
       <section><header><h2>Screen sizes and languages</h2></header><div class="wrap"><table id="v-scr"><thead><tr><th>Screen or language</th><th class="n">Visitors</th><th class="n">Views</th></tr></thead><tbody></tbody></table></div></section>
     </div>
     <section><header><h2>Latest activity</h2><p>Most recent 250 page views and actions</p></header>
-      <div class="wrap"><table id="v-recent"><thead><tr><th>When</th><th>Visitor</th><th>Page or action</th><th>Came from</th><th>Device</th><th>Time zone</th><th class="n">Stayed</th></tr></thead><tbody></tbody></table></div></section>
+      <div class="wrap"><table id="v-recent"><thead><tr><th>When</th><th>Visitor</th><th>Page or action</th><th>Came from</th><th>Device</th><th>Location</th><th class="n">Stayed</th></tr></thead><tbody></tbody></table></div></section>
   </div>
 
   <div data-view="payments" hidden>
@@ -576,7 +583,7 @@ function drawVisits() {
     ["Average time on a page", dur(T.avg_seconds), "read to " + (T.avg_scroll || 0) + "% of the page"], ["Came back", num(S.returning), "visitors with more than one visit"],
     ["Today", num(T.today_views), num(T.today_visitors) + " visitors"], ["On the site now", num(T.live), "in the last 5 minutes"],
     ["Since counting began", num(all.views), all.since ? num(all.visitors) + " visitors since " + day(all.since) : "no visits yet"]]);
-  if (!t) { for (const id of ["v-days", "v-src", "v-pages", "v-events", "v-camp", "v-entry", "v-exit", "v-tz", "v-hours", "v-dev", "v-br", "v-os", "v-scr", "v-recent"]) body(id, "", 7, "Nothing recorded."); return; }
+  if (!t) { for (const id of ["v-days", "v-src", "v-pages", "v-events", "v-camp", "v-entry", "v-exit", "v-states", "v-cities", "v-net", "v-tz", "v-hours", "v-dev", "v-br", "v-os", "v-scr", "v-recent"]) body(id, "", 7, "Nothing recorded."); return; }
   const top = Math.max(1, ...t.by_day.map(d => d.views));
   body("v-days", t.by_day.slice().reverse().map(d => `<tr><td>${day(d.day + "T12:00:00")}</td><td class="n">${num(d.views)}</td><td class="n">${num(d.visitors)}</td><td class="bar"><i style="width:${Math.round(100 * d.views / top)}%"></i></td></tr>`).join(""), 4, "No visits in this period.");
   body("v-src", t.sources.map(r => `<tr><td>${esc(r.name)}</td><td class="n">${num(r.sessions)}</td><td class="n">${num(r.visitors)}</td><td class="n">${r.pages_per}</td></tr>`).join(""), 4, "No visits in this period.");
@@ -586,7 +593,11 @@ function drawVisits() {
   body("v-entry", t.entries.map(r => `<tr><td>${esc(pageName(r.name))}</td><td class="n">${num(r.sessions)}</td><td class="n">${share(r.bounces, r.sessions)}</td></tr>`).join(""), 3, "No visits in this period.");
   body("v-exit", t.exits.map(r => `<tr><td>${esc(pageName(r.name))}</td><td class="n">${num(r.sessions)}</td></tr>`).join(""), 2, "No visits in this period.");
   const three = (id, rows, name) => body(id, rows.map(r => `<tr><td>${esc(name ? name(r.name) : r.name)}</td><td class="n">${num(r.visitors)}</td><td class="n">${num(r.views)}</td></tr>`).join(""), 3, "No visits in this period.");
-  three("v-tz", (t.countries.length ? t.countries.map(c => ({...c, name: "Country: " + c.name})) : []).concat(t.timezones), place);
+  const US = c => !c || c === "US";
+  three("v-states", (t.states || []).map(r => ({...r, name: US(r.country) ? r.name : r.name + ", " + r.country})).concat((t.countries || []).filter(c => !US(c.name)).map(c => ({...c, name: "Country: " + c.name}))));
+  three("v-cities", (t.cities || []).map(r => ({...r, name: [r.name, r.region, US(r.country) ? "" : r.country].filter(Boolean).join(", ")})));
+  three("v-net", t.networks || []);
+  three("v-tz", t.timezones, place);
   three("v-dev", t.devices); three("v-br", t.browsers); three("v-os", t.systems);
   three("v-scr", t.screens.concat(t.languages.map(l => ({...l, name: "Language: " + l.name}))));
   const hours = [...Array(24)].map((_, h) => (t.by_hour.find(x => x.hour === h) || {views: 0}).views), peak = Math.max(1, ...hours);
@@ -595,7 +606,7 @@ function drawVisits() {
   body("v-recent", t.recent.map(r => `<tr><td>${when(r.at)}</td><td>${esc(r.visitor)}${r.is_new ? "<span>first visit</span>" : ""}</td>
     <td>${r.kind === "event" ? `<b>${esc(r.event)}</b><span>on ${esc(pageName(r.path))}</span>` : esc(pageName(r.path))}</td>
     <td>${esc(r.utm_source ? "Campaign: " + r.utm_source : r.ref_host || "")}</td><td>${esc(r.device || "")}<span>${esc([r.browser, r.os].filter(Boolean).join(", "))}</span></td>
-    <td>${esc(place(r.tz))}${r.country ? `<span>${esc(r.country)}</span>` : ""}</td><td class="n">${r.kind === "event" ? "" : dur(r.seconds)}</td></tr>`).join(""), 7, "No visits in this period.");
+    <td>${r.city || r.region ? esc([r.city, r.region].filter(Boolean).join(", ")) + (r.country && r.country !== "US" ? ", " + esc(r.country) : "") : esc(place(r.tz))}${r.org ? `<span>${esc(r.org)}</span>` : ""}</td><td class="n">${r.kind === "event" ? "" : dur(r.seconds)}</td></tr>`).join(""), 7, "No visits in this period.");
 }
 
 // ---------- data sources (public files written at publish time) ----------
