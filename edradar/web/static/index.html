@@ -699,7 +699,7 @@ async function liveStatus(force) {
   try { LIVE = await fn({action: "status"}); }
   catch (e) {        // the server is not answering: the app stays usable, with ordering switched off
     const why = "Ordering is not available right now.";
-    LIVE = {off: true, lookups: {}, firm: {}, template: {}, firm_ready: false, postcard: {enabled: false, mode: "off", why, price: 1.95},
+    LIVE = {off: true, lookups: {}, firm: {}, template: {}, firm_ready: false, postcard: {enabled: false, mode: "off", why, price: 1.45},
             skiptrace: {enabled: false, why, price: 0.75, restricted: []}, usage: {postcards: 0, lookups: 0, billed: 0, pending: 0}, credits: {balance: 0, packs: []}};
   }
   return LIVE;

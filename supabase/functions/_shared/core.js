@@ -6,7 +6,7 @@ export const PLANS = {
   all: { name: "EminentTracker, all 50 states", cents: 99900, year_cents: 959040 },
 };
 // What a subscriber pays per action, in cents, and what it costs us. Override with RATE_* secrets.
-export const RATES = { postcard: { price: 195, cost: 91 }, skip_trace: { price: 75, cost: 20 } };
+export const RATES = { postcard: { price: 145, cost: 91 }, skip_trace: { price: 75, cost: 20 } };
 
 // States whose public-records laws bar using owner data for commercial solicitation. Owner lookups are not sold there.
 export const RESTRICTED_STATES = ["ID", "MT", "SC", "WA"];
@@ -125,9 +125,11 @@ export const titleCase = (text) =>
   ).join(" ");
 // Postcard credits are bought in packs before anything is mailed. One credit is one postcard.
 export const CREDIT_PACKS = {
-  small: { credits: 25, cents: 4875, label: "25 postcards" },
-  medium: { credits: 100, cents: 18500, label: "100 postcards" },
-  large: { credits: 500, cents: 87500, label: "500 postcards" },
+  // $1.45, $1.40 and $1.35 a card. The mail service costs about $0.91 and the card processor 2.9% plus 30 cents of
+  // each purchase, which leaves roughly 49, 45 and 41 cents a card.
+  small: { credits: 25, cents: 3625, label: "25 postcards" },
+  medium: { credits: 100, cents: 14000, label: "100 postcards" },
+  large: { credits: 500, cents: 67500, label: "500 postcards" },
 };
 export const creditPack = (key) => (Object.prototype.hasOwnProperty.call(CREDIT_PACKS, String(key)) ? CREDIT_PACKS[key] : null);
 

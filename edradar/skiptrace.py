@@ -19,7 +19,7 @@ import httpx
 from .outreach import parse_address
 
 URL = "https://api.batchdata.com/api/v1/property/skip-trace"
-DEFAULT_RATES = {"skip_trace": {"cost": 0.20, "price": 0.75}, "postcard": {"cost": 0.91, "price": 1.95}}
+DEFAULT_RATES = {"skip_trace": {"cost": 0.20, "price": 0.75}, "postcard": {"cost": 0.91, "price": 1.45}}
 
 
 def rates(cfg: Dict[str, Any]) -> Dict[str, Dict[str, float]]:

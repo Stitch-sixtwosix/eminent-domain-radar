@@ -62,8 +62,9 @@ eq("an unknown stage is never printed as a stage", C.mergeValues(firm, { ...lead
 eq("nor is a missing one", C.mergeValues(firm, { ...lead, stage: undefined }).project_stage, "the agency's published plans");
 
 // postcard credits
-eq("packs", [C.creditPack("small").credits, C.creditPack("medium").cents, C.creditPack("large").credits], [25, 18500, 500]);
-eq("no pack is cheaper per card than the mail service costs", Object.values(C.CREDIT_PACKS).every((p) => p.cents / p.credits >= 150), true);
+eq("packs", [C.creditPack("small").credits, C.creditPack("medium").cents, C.creditPack("large").credits], [25, 14000, 500]);
+// every pack must clear the mail service's cost and the card processor's fee with at least 30 cents a card to spare
+eq("no pack sells a card at a loss", Object.values(C.CREDIT_PACKS).every((p) => (p.cents - (p.cents * 0.029 + 30)) / p.credits - C.RATES.postcard.cost >= 30), true);
 eq("an unknown pack is refused", [C.creditPack("free"), C.creditPack("constructor"), C.creditPack(undefined)], [null, null, null]);
 
 // skip tracing
