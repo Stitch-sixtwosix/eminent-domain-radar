@@ -258,4 +258,8 @@ form.narrow { max-width: 480px; }
 .cov tbody th { font-weight: 500; }
 .cov tfoot th, .cov tfoot td { position: sticky; bottom: 0; background: #fff; font-weight: 700; border-top: 1px solid var(--line-strong); border-bottom: 0; }
 .covnote { margin-top: 14px; font-size: 14px; color: var(--muted); max-width: 760px; }
-.statefacts { font-size: 14px; color: var(--muted); margin-top: 6px; display: block; }
+.statefacts { font-size: 14px; color: var(--ink); margin-top: 10px; padding: 12px 14px; background: var(--tone); border-radius: 6px; display: block; line-height: 1.5; }
+.statefacts b { display: block; font-weight: 600; margin-bottom: 4px; }
+.statefacts span { display: block; font-weight: 400; color: var(--ink); }
+.statefacts span.warn { color: #8a3a12; font-weight: 500; }
+.statefacts a { color: var(--accent); }

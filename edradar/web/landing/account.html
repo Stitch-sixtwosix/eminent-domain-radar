@@ -234,10 +234,27 @@ else {
   for (const [k, v] of Object.entries(f)) { const el = form.elements[k]; if (!el) continue; if (k === "side" || k === "plan" || k === "bill") { if (v) form.querySelectorAll("[name=" + k + "]").forEach(r => r.checked = r.value === v); } else el.value = v; }
   document.getElementById("nudge").hidden = !!(f.firm && f.plan);
 const COUNTS = {{state_counts}};        // what each live state holds today, so a firm can judge it before paying
+const LIMITS = {{state_limits}};        // counties with owner records, and what the law keeps out of reach, by state
 const facts = document.getElementById("state-facts"), n = v => v.toLocaleString();
-const showFacts = () => { const name = form.elements.plan_state.value, c = COUNTS[name];
-  facts.hidden = !name;
-  facts.textContent = !name ? "" : c ? `${name} today: ${n(c[0])} planned projects, ${n(c[1])} parcels in their path, ${n(c[3])} owners with a mailing address.` : `${name} is not live yet. We will email you when it is.`; };
+// Built as elements, not markup: everything here is our own text, but nothing typed into the form can end up in it.
+const showFacts = () => {
+  const name = form.elements.plan_state.value, c = COUNTS[name], L = LIMITS[name] || {};
+  facts.hidden = !name; facts.replaceChildren();
+  const seen = document.getElementById("seen-row");
+  if (seen) { seen.hidden = !name; form.elements.seen.required = !!name && !seen.closest("[hidden]"); form.elements.seen.checked = false;
+    document.getElementById("seen-state").textContent = name || "this state"; }
+  if (!name) return;
+  const line = (text, strong) => { const p = document.createElement("span"); p.textContent = text; if (strong) p.className = "warn"; facts.append(p); };
+  const head = document.createElement("b"); head.textContent = "What " + name + " has today"; facts.append(head);
+  if (!c) { line("Nothing yet: " + name + " is not live. Do not subscribe for this state until it is.", true); }
+  else {
+    line(`${n(c[0])} planned projects.`);
+    line(c[1] ? `${n(c[1])} parcels in their path, ${n(c[2])} of them with a named owner.` : "No parcels yet: only the list of projects is available.", !c[1]);
+    line(c[3] ? `${n(c[3])} owners with a mailing address a postcard can reach.` : "No owners with a mailing address, so postcards cannot be sent here.", !c[3]);
+    if (L.counties) line(`Owner records cover ${n(L.with_owners || 0)} of ${n(L.counties)} counties.`, (L.with_owners || 0) * 2 < L.counties);
+  }
+  if (L.law) line(L.law, true);
+};
 form.elements.plan_state.addEventListener("change", showFacts);
   const stateRow = document.getElementById("state-row");
   const syncPlan = () => { stateRow.hidden = !form.elements.plan.value.startsWith("Single"); };

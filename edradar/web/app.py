@@ -17,6 +17,22 @@ from ..classify import STAGE_ORDER, score_breakdown, timeline
 from ..db import DB
 
 STATIC = Path(__file__).parent / "static"
+# Laws that limit what can be offered in a state. Shown to a firm before it subscribes. Each line is something read from
+# the statute or from the state's own data during research; a state not listed has no such limit that we have found.
+STATE_LAW = {
+    "California": "California removes owner names from public parcel records (Government Code 7928.205). Projects are listed, but no parcels or owners can be shown from public sources.",
+    "New Jersey": "New Jersey's public parcel file has owner names removed (Daniel's Law). Projects are listed, but no owners can be shown from public sources.",
+    "Idaho": "Idaho Code 74-120 bars using public records as a mailing list. Owner records are not offered here, and paid owner lookups are not sold.",
+    "South Carolina": "S.C. Code 30-2-50 bars using public records for commercial solicitation. Owner records are not offered here, and paid owner lookups are not sold.",
+    "Washington": "RCW 42.56.070(8) restricts commercial use of public-record lists of individuals, and the statewide parcel map carries no owner names. Owner records are not offered here, and paid owner lookups are not sold.",
+    "Montana": "Montana law restricts using public records as mailing lists. Owner records are not offered here, and paid owner lookups are not sold.",
+    "Kansas": "K.S.A. 45-230 bars using names and addresses from public records to sell a service to the people listed. Owner records are not offered here.",
+    "Virginia": "Virginia's statewide parcel map has no owner names, so owners are available only in the counties and cities that publish their own.",
+    "New Hampshire": "New Hampshire's statewide parcel map has no owner names, and no county source has been found.",
+    "Maine": "Maine publishes parcels without owner names. Parcels in a project's path are shown, but not who owns them.",
+    "North Dakota": "North Dakota publishes parcels without owner names. Parcels in a project's path are shown, but not who owns them.",
+}
+
 STATUSES = ["new", "reviewing", "contacted", "retained", "rejected", "do not contact"]
 
 LEAD_SQL = """
@@ -652,6 +668,13 @@ def export_static(cfg: Dict[str, Any], out_dir: str, min_score: int = 40, upload
     fill["coverage_total"] = '<tr><th scope="row">All %d states</th><td>%s</td><td>%s</td><td>%s</td><td>%s</td></tr>' % (
         len(by_state), *(num(sum(r[k] for r in by_state)) for k in ("projects", "parcels", "owners", "mailable")))
     fill["state_counts"] = json.dumps({r["state"]: [r["projects"], r["parcels"], r["owners"], r["mailable"]] for r in by_state})
+    # What a firm is shown about its state before it pays: how many counties have owner records, and what the law there
+    # keeps out of reach. Said plainly, so nobody subscribes expecting data that does not exist.
+    from ..config import coverage as _cov
+
+    reach = {r["state"]: r for r in _cov(cfg)}
+    fill["state_limits"] = json.dumps({name: {"counties": (reach.get(name) or {}).get("counties"), "with_owners": (reach.get(name) or {}).get("counties_owners"),
+                                              "law": STATE_LAW.get(name)} for name in US_STATES})
     (site / "states.json").write_text(json.dumps(by_state))
     for name in ("index.html", "signup.html", "login.html", "account.html", "terms.html", "privacy.html", "compliance.html", "admin.html"):
         page = (landing / name).read_text()

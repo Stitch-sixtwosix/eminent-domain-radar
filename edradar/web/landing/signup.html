@@ -61,6 +61,7 @@
           <option value="">Choose a state</option>{{state_options}}</select>
           <span class="statefacts" id="state-facts" hidden></span>
           <span class="hint"><a href="./#states">See what every state holds today.</a> Projects are live in: {{live_states}}. Owner records are connected state by state and are not yet available everywhere. Other states are being added; choose yours and we will tell you when it is live before you are charged.</span></label>
+        <p class="full statefacts" id="all-note" hidden><b>What the all-states plan has today</b><span>Coverage is uneven. Some states have owners for every county, some have projects but no owners, and in a few the law keeps owner names out of public records. <a href="./#states" target="_blank" rel="noopener">Check the state-by-state table</a> for the states you practise in before you pay.</span></p>
         <label class="full">Other states where you handle eminent domain matters <span>(optional)</span><input type="text" name="states" autocomplete="off"></label>
         <fieldset class="full"><legend>Who do you represent?</legend>
           <div class="choices">
@@ -81,6 +82,7 @@
           </ul>
         </div>
         <p class="full" style="font-size: 14px"><b>Payment.</b> After you create the account you go straight to our secure payment page. Your card is charged today, your account opens as soon as the payment goes through, and the plan renews automatically every month (or every year on the yearly plan) until you cancel from your account page.</p>
+        <label class="full agree" id="seen-row" hidden><input type="checkbox" name="seen" value="yes"> <span>I have read what is available in <b id="seen-state">this state</b> today, shown above, including what is not available there.</span></label>
         <label class="full agree"><input type="checkbox" name="agree" value="yes" required> <span>I am an attorney licensed in the United States, or I work under the supervision of one, and I agree to the <a href="terms.html" target="_blank" rel="noopener">Terms of use</a>, the <a href="privacy.html" target="_blank" rel="noopener">Privacy policy</a> and the <a href="compliance.html" target="_blank" rel="noopener">compliance rules</a>.</span></label>
         <p class="full status" id="status" role="alert" hidden></p>
         <div class="full send">
@@ -125,13 +127,32 @@ const TO = "{{contact_email}}";
 if (!authOn) form.querySelector("[name=password]").required = false;
 watch(form);
 const COUNTS = {{state_counts}};        // what each live state holds today, so a firm can judge it before paying
+const LIMITS = {{state_limits}};        // counties with owner records, and what the law keeps out of reach, by state
 const facts = document.getElementById("state-facts"), n = v => v.toLocaleString();
-const showFacts = () => { const name = form.elements.plan_state.value, c = COUNTS[name];
-  facts.hidden = !name;
-  facts.textContent = !name ? "" : c ? `${name} today: ${n(c[0])} planned projects, ${n(c[1])} parcels in their path, ${n(c[3])} owners with a mailing address.` : `${name} is not live yet. We will email you when it is.`; };
+// Built as elements, not markup: everything here is our own text, but nothing typed into the form can end up in it.
+const showFacts = () => {
+  const name = form.elements.plan_state.value, c = COUNTS[name], L = LIMITS[name] || {};
+  facts.hidden = !name; facts.replaceChildren();
+  const seen = document.getElementById("seen-row");
+  if (seen) { seen.hidden = !name; form.elements.seen.required = !!name && !seen.closest("[hidden]"); form.elements.seen.checked = false;
+    document.getElementById("seen-state").textContent = name || "this state"; }
+  if (!name) return;
+  const line = (text, strong) => { const p = document.createElement("span"); p.textContent = text; if (strong) p.className = "warn"; facts.append(p); };
+  const head = document.createElement("b"); head.textContent = "What " + name + " has today"; facts.append(head);
+  if (!c) { line("Nothing yet: " + name + " is not live. Do not subscribe for this state until it is.", true); }
+  else {
+    line(`${n(c[0])} planned projects.`);
+    line(c[1] ? `${n(c[1])} parcels in their path, ${n(c[2])} of them with a named owner.` : "No parcels yet: only the list of projects is available.", !c[1]);
+    line(c[3] ? `${n(c[3])} owners with a mailing address a postcard can reach.` : "No owners with a mailing address, so postcards cannot be sent here.", !c[3]);
+    if (L.counties) line(`Owner records cover ${n(L.with_owners || 0)} of ${n(L.counties)} counties.`, (L.with_owners || 0) * 2 < L.counties);
+  }
+  if (L.law) line(L.law, true);
+};
 form.elements.plan_state.addEventListener("change", showFacts);
 const stateRow = document.getElementById("state-row"), stateSel = form.elements.plan_state;
-const syncPlan = () => { const single = form.elements.plan.value.startsWith("Single"); stateRow.hidden = !single; stateSel.required = single; };
+const syncPlan = () => { const single = form.elements.plan.value.startsWith("Single"); stateRow.hidden = !single; stateSel.required = single;
+  const seen = document.getElementById("seen-row"); seen.hidden = !single || !stateSel.value; form.elements.seen.required = single && !!stateSel.value;
+  document.getElementById("all-note").hidden = single; };
 const want = new URLSearchParams(location.search);      // the pricing buttons on the home page preselect the plan
 if (want.get("plan") === "all") form.querySelectorAll("[name=plan]").forEach(r => r.checked = r.value.startsWith("All"));
 if (want.get("bill") === "year") form.querySelectorAll("[name=bill]").forEach(r => r.checked = r.value === "year");
