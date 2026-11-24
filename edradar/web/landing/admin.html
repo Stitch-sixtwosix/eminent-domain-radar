@@ -559,8 +559,8 @@ async function loadStatus() {
   figs("f-sys", [["Working", tally.ok], ["Needs attention", tally.bad, "", tally.bad ? "bad" : ""], ["Off or not checked", tally.off]]);
   $("n-sys").textContent = tally.bad || ""; $("n-sys").className = tally.bad ? "due" : "";
   $("sys-when").textContent = "Checked " + new Date().toLocaleTimeString(undefined, {hour: "numeric", minute: "2-digit"});
-  const Q = site ? site.quiet_sources : [];
-  $("sys-quiet-n").textContent = site && site.quiet_count ? site.quiet_count + " sources" + (site.quiet_count > Q.length ? ", first " + Q.length + " shown" : "") : "";
+  const Q = site && site.sources_judged ? site.quiet_sources : [];
+  $("sys-quiet-n").textContent = site && site.sources_judged && site.quiet_count ? site.quiet_count + " sources" + (site.quiet_count > Q.length ? ", first " + Q.length + " shown" : "") : "";
   body("sys-quiet", Q.map(x => `<tr><td>${esc(x.state)}</td><td>${esc(x.name)}</td><td>${x.updated ? since(x.updated) : "never"}</td><td>${esc(x.error || "No answer in four days")}</td></tr>`).join(""), 4,
     !site ? "Not known until the next publish." : !site.sources_judged ? "Recorded from the next daily run." : "Every project source answered on the last run.");
 }

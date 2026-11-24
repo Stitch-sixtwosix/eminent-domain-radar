@@ -8,7 +8,7 @@ Deno.serve(async (req) => {
   const header = req.headers.get("stripe-signature");
   let signed = false;
   if (header) for (const secret of await webhookSecrets()) if (await stripeSigned(raw, header, secret)) { signed = true; break; }
-  if (!signed) return new Response("bad signature", { status: 400 });
+  if (!signed) return new Response("bad signature", { status: 400, headers: { "Access-Control-Allow-Origin": "*" } });      // readable by the status screen's check
   const event = JSON.parse(raw), obj = event.data.object;
   try {
     if (event.type === "checkout.session.completed" && obj.mode === "subscription" && obj.payment_status === "paid") {
