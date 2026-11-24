@@ -4,6 +4,10 @@ import { accessFor, stripeSigned } from "../_shared/core.js";
 import { admin, setAccess, stripe, webhookSecrets } from "../_shared/svc.ts";
 
 Deno.serve(async (req) => {
+  // The admin console's status screen asks this function whether it is up. A browser first sends a permission check;
+  // without an answer to that, the screen reported "did not answer" for a function that was working.
+  if (req.method === "OPTIONS") return new Response(null, { status: 204, headers: { "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST, OPTIONS", "Access-Control-Allow-Headers": "content-type, stripe-signature" } });
   const raw = await req.text();
   const header = req.headers.get("stripe-signature");
   let signed = false;
