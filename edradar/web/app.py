@@ -92,6 +92,18 @@ OUTREACH_FILTERS = {
 }
 
 
+def _stage_filter(stage: str, where: List[str], params: List[Any]) -> None:
+    """One stage, or a timing group: "@mail" is every stage in which owners can be written to, "@now" one group."""
+    from ..classify import MAIL_WINDOWS, WINDOW_OF
+
+    if stage.startswith("@"):
+        keys = MAIL_WINDOWS if stage == "@mail" else (stage[1:],)
+        stages = [s for s, w in WINDOW_OF.items() if w in keys] or ["none"]
+        where.append("COALESCE(p.stage, 'unknown') IN (%s)" % ",".join("?" * len(stages))); params.extend(stages)
+    else:
+        where.append("p.stage = ?"); params.append(stage)
+
+
 def _lead_filters(project_id, status, county, min_score, owner_only, q, outreach_filter=None, stage=None, list_id=None,
                   state=None):
     where, params = ["l.score >= ?"], [min_score]
@@ -112,7 +124,7 @@ def _lead_filters(project_id, status, county, min_score, owner_only, q, outreach
     if outreach_filter in OUTREACH_FILTERS:
         where.append(OUTREACH_FILTERS[outreach_filter])
     if stage:
-        where.append("p.stage = ?"); params.append(stage)
+        _stage_filter(stage, where, params)
     return " WHERE " + " AND ".join(where), params
 
 
@@ -176,7 +188,7 @@ def create_app(cfg: Dict[str, Any]) -> FastAPI:
         if source:
             where.append("s.source LIKE ?"); params.append(source + "%")
         if stage:
-            where.append("p.stage = ?"); params.append(stage)
+            _stage_filter(stage, where, params)
         if q:
             where.append("(p.name LIKE ? OR p.summary LIKE ?)"); params += ["%%%s%%" % q] * 2
         rows = db.rows(

@@ -387,6 +387,11 @@
   }
   .demo .mode, .demo .done { display: none; }
   #f-state { height: 32px; max-width: 170px; }
+  .timing { display: block; margin-bottom: 8px; padding: 8px 10px; border-left: 3px solid var(--line-strong); background: var(--surface-2, #f3f6f4); font-size: 13px; line-height: 1.45; }
+  .timing b { display: block; font-weight: 600; }
+  .timing.t-now, .timing.t-closing { border-left-color: #1f6b45; } .timing.t-soon { border-left-color: #17607a; }
+  .timing.t-early, .timing.t-late { border-left-color: #b9471a; } .timing.t-unknown { border-left-color: #8a949d; }
+  .tchip { font-weight: 600; } .tchip.t-now, .tchip.t-closing { color: #1f6b45; } .tchip.t-soon { color: #17607a; } .tchip.t-early, .tchip.t-late { color: #b9471a; } .tchip.t-unknown { color: #6b7780; }
   .acct { flex: none; display: inline-flex; align-items: center; min-height: 32px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 6px;
           font-size: 13px; font-weight: 500; color: var(--ink); text-decoration: none; white-space: nowrap; }
   .acct:hover { background: var(--line); }
@@ -552,7 +557,7 @@ const safeUrl = u => /^https?:\/\//i.test(u || "") ? u : "#";
 const day = s => s ? new Date(/[zZ]|[+-]\d\d:?\d\d$/.test(s) ? s : s.replace(" ", "T") + "Z").toLocaleDateString(undefined, {month: "short", day: "numeric"}) : "";
 const signed = n => (n > 0 ? "+" : n < 0 ? "−" : "") + Math.abs(n).toLocaleString(undefined, {maximumFractionDigits: 1});
 const TIPS = {
-  score: "Lead score out of 100, in whole points from four parts. Need for private land: up to 60. How early the project is: up to 15. Size of the project: up to 10. Where the parcel sits: 15 on the alignment or named in the document, 5 if only nearby. Hover any score, or open the lead, to see its points.",
+  score: "Lead score out of 100, in whole points from four parts. Need for private land: up to 60. Timing: up to 15, highest when right-of-way acquisition is under way and owners need counsel, lowest when it is too early or too late. Size of the project: up to 10. Where the parcel sits: 15 on the alignment or named in the document, 5 if only nearby. Hover any score, or open the lead, to see its points.",
   owner: "Owner of record and mailing address from the county's public parcel file. Some county files are dated snapshots, so confirm ownership with the county before outreach.",
   property: "Street address of the parcel where the county publishes one, with the county's parcel ID and county beneath.",
   value: "The value the county publishes for the parcel. In most counties this is an assessed value, which is usually lower than market value.",
@@ -599,11 +604,18 @@ function lettingText(t) {
   const away = m <= 0 ? "due now" : m < 12 ? `in about ${m} month${m === 1 ? "" : "s"}` : `in about ${Math.floor(m / 12)} yr${m % 12 ? " " + (m % 12) + " mo" : ""}`;
   return `Construction contract letting ${when}, ${away}`;
 }
+// When to reach an owner, from the project's stage and bid date. The server sends its verdict with each project.
+const WIN_OF = {row_acquisition: "now", condemnation_filed: "closing", design: "soon", environmental_review: "early", planning: "early", construction: "late", unknown: "unknown"};
+const WIN_LABEL = {now: "Right time", closing: "Act now", soon: "Approaching", early: "Too early", late: "Too late", unknown: "Timing not known"};
+const winOf = p => (p && p.timeline && p.timeline.window && p.timeline.window.key) || WIN_OF[(p && p.stage) || "unknown"] || "unknown";
+// the stage filter also takes a timing group: "@mail" is every project whose owners can be written to now
+const stageOk = (p, v) => !v || (v[0] === "@" ? (v === "@mail" ? ["now", "closing", "soon"].includes(winOf(p)) : winOf(p) === v.slice(1)) : (p || {}).stage === v);
 function stageHead(t) {
   if (!t) return "";
   const pos = t.position ? `<b>Stage ${t.position} of ${t.of}: ${esc(t.steps[t.position - 1].label)}</b>` : "<b>Stage not published</b>";
   const let_ = lettingText(t);
-  return `<div class="when">${pos}${let_ ? `<span>${esc(let_)}</span>` : t.position ? "<span>No construction date published yet</span>" : ""}${t.program ? `<span>PennDOT program: ${esc(t.program)}${t.status ? ", " + esc(t.status.toLowerCase()) : ""}</span>` : ""}${t.basis ? `<span class="basis">${esc(t.basis)}</span>` : ""}</div>`;
+  const w = t.window, wHtml = w ? `<span class="timing t-${esc(w.key)}"><b>${esc(w.label)} to contact owners</b> ${esc(w.why)}</span>` : "";
+  return `<div class="when">${wHtml}${pos}${let_ ? `<span>${esc(let_)}</span>` : t.position ? "<span>No construction date published yet</span>" : ""}${t.program ? `<span>PennDOT program: ${esc(t.program)}${t.status ? ", " + esc(t.status.toLowerCase()) : ""}</span>` : ""}${t.basis ? `<span class="basis">${esc(t.basis)}</span>` : ""}</div>`;
 }
 const stageList = (t, col) => !t ? "" : `<ol class="stages${col ? " col" : ""}">${t.steps.map(x =>
   `<li data-state="${x.state}"${x.state === "current" ? ' aria-current="step"' : ""}${col ? "" : ` data-tip-text="${esc(x.about)}"`}>${esc(x.label)}${col && x.state === "current" ? `<span>${esc(x.about)}</span>` : ""}</li>`).join("")}</ol>`;
@@ -712,7 +724,7 @@ function withBought(l) {
 }
 function fullLead(id) {
   const l = SNAP.leads.find(x => x.id === id), p = SNAP.projects.find(x => x.id === l.project_id) || {};
-  return {...withBought(l), project: p.name, stage: p.stage, agency: p.agency, state: SNAP.state};
+  return {...withBought(l), project: p.name, stage: p.stage, window: winOf(p), agency: p.agency, state: SNAP.state};
 }
 // The firm's own wording and return address. The operator's details in the data file are never used for a subscriber.
 const liveTpl = () => ({...SNAP.template, ...Object.fromEntries(Object.entries(LIVE.template || {}).filter(([, v]) => v)),
@@ -832,7 +844,7 @@ function staticCases(id) {
 function staticLeads(q) {
   const pid = q.get("project_id"), min = +(q.get("min_score") || 0), county = q.get("county"), own = q.get("owner_only"), stage = q.get("stage");
   const byId = Object.fromEntries(SNAP.projects.map(p => [p.id, p]));
-  return SNAP.leads.filter(l => (!pid || l.project_id === +pid) && l.score >= min && (!stage || (byId[l.project_id] || {}).stage === stage) &&
+  return SNAP.leads.filter(l => (!pid || l.project_id === +pid) && l.score >= min && stageOk(byId[l.project_id], stage) &&
       (!county || (l.parcel_county || "").toUpperCase() === county) && (!own || l.owner) && staticOutreach(l, q.get("outreach")))
     .map(l => { const p = byId[l.project_id] || {}; l = withBought(l); return {...l, project: p.name, project_type: p.project_type, stage: p.stage, agency: p.agency, source: p.source, url: p.url}; });
 }
@@ -880,7 +892,7 @@ async function staticApi(path, opts) {
     const min = +(q.get("min_score") || 0), text = (q.get("q") || "").toLowerCase();
     return SNAP.projects.filter(p => p.score >= min && (!q.get("county") || p.county === q.get("county")) &&
       (!q.get("project_type") || p.project_type === q.get("project_type")) &&
-      (!q.get("source") || (p.source || "").startsWith(q.get("source"))) && (!q.get("stage") || p.stage === q.get("stage")) &&
+      (!q.get("source") || (p.source || "").startsWith(q.get("source"))) && stageOk(p, q.get("stage")) &&
       (!text || ((p.name || "") + " " + (p.summary || "")).toLowerCase().includes(text))).slice(0, 500);
   }
   if (route === "/api/leads") return staticLeads(q).slice(0, 300);
@@ -957,7 +969,7 @@ async function loadProjects() {
       <span class="score ${scoreClass(p.score)}" data-tip-project="${p.id}">${p.score}</span>
       <div><h3>${esc(pname(p.name))}</h3>
         <div class="meta">${[p.county ? esc(p.county[0] + p.county.slice(1).toLowerCase()) + " County" : "", esc(p.agency || p.source), p.est_cost ? money(p.est_cost) : ""].filter(Boolean).join(" · ")}</div>
-        <div class="meta">${[esc(p.project_type), esc(p.stage && p.stage !== "unknown" ? p.stage.replace(/_/g, " ") : "stage not published"), p.matched_at ? p.lead_count.toLocaleString() + " parcels" : "not matched yet"].filter(Boolean).join(" · ")}</div></div>
+        <div class="meta">${[esc(p.project_type), `<span class="tchip t-${esc(winOf(p))}">${esc(WIN_LABEL[winOf(p)])}</span>`, esc(p.stage && p.stage !== "unknown" ? p.stage.replace(/_/g, " ") : "stage not published"), p.matched_at ? p.lead_count.toLocaleString() + " parcels" : "not matched yet"].filter(Boolean).join(" · ")}</div></div>
     </div>`).join("");
   projects.forEach(drawProject);
   if (selected && !projects.some(p => p.id === selected.id)) selected = null;
@@ -1516,6 +1528,7 @@ async function openPostcard(leadId) {
     <div class="dlg-head"><h2 id="dlg-title">Postcard to ${esc(lead.owner)}</h2><p>${esc(pv.project || "")}</p></div>
     <div class="dlg-body">
       ${blocker ? `<div class="alert bad">${esc(blocker)}</div>` : ""}
+      ${!blocker && pv.warning ? `<div class="alert">${esc(pv.warning)}</div>` : ""}
       <dl class="to"><dt>Recipient</dt><dd>${esc(pv.to_name)}</dd>
         <dt>Mail to</dt><dd>${to ? esc([to.line2, to.line1].filter(Boolean).join(", ")) + "<br>" + esc(`${to.city}, ${to.state} ${to.zip}`) : esc(lead.mailing_address || "No mailing address on file")}</dd></dl>
       <div class="cards">
@@ -1829,7 +1842,7 @@ for (const id of ["f-county", "f-type", "f-source", "f-stage", "f-score", "f-q"]
   const title = c => c[0] + c.slice(1).toLowerCase();
   $("f-county").insertAdjacentHTML("beforeend", s.counties.map(c => `<option value="${esc(c)}">${esc(title(c))}</option>`).join(""));
   $("f-type").insertAdjacentHTML("beforeend", s.types.map(c => `<option>${esc(c)}</option>`).join(""));
-  $("f-stage").insertAdjacentHTML("beforeend", (s.stages || []).map((x, i) => `<option value="${esc(x.key)}">${i + 1}. ${esc(x.label)} (${x.projects})</option>`).join(""));
+  $("f-stage").insertAdjacentHTML("beforeend", `<optgroup label="When to contact owners"><option value="@mail">Right time or approaching</option><option value="@now">Right time: acquisition under way</option><option value="@closing">Act now: final acquisition</option><option value="@soon">Approaching: in design</option><option value="@early">Too early</option><option value="@late">Too late</option><option value="@unknown">Timing not known</option></optgroup><optgroup label="By stage">` + (s.stages || []).map((x, i) => `<option value="${esc(x.key)}">${i + 1}. ${esc(x.label)} (${x.projects})</option>`).join("") + "</optgroup>");
   await loadProjects();
   await loadLeads();
   const want = new URLSearchParams(location.search);       // links can open the hub, a project or a parcel directly

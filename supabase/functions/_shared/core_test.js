@@ -67,6 +67,14 @@ eq("packs", [C.creditPack("small").credits, C.creditPack("medium").cents, C.cred
 eq("no pack sells a card at a loss", Object.values(C.CREDIT_PACKS).every((p) => (p.cents - (p.cents * 0.029 + 30)) / p.credits - C.RATES.postcard.cost >= 30), true);
 eq("an unknown pack is refused", [C.creditPack("free"), C.creditPack("constructor"), C.creditPack(undefined)], [null, null, null]);
 
+// timing: a card goes out only when the owner has something to act on
+eq("right-of-way acquisition can be mailed", [C.postcardCheck(firm, {}, lead).blocker, C.postcardCheck(firm, {}, lead).timing], [null, "now"]);
+eq("design can be mailed", C.postcardCheck(firm, {}, { ...lead, stage: "design" }).blocker, null);
+eq("planning is too early", C.postcardCheck(firm, {}, { ...lead, stage: "planning" }).blocker.startsWith("This project is still in planning"), true);
+eq("construction is too late", C.postcardCheck(firm, {}, { ...lead, stage: "construction" }).blocker.includes("too late"), true);
+eq("unknown timing warns but does not block", [C.postcardCheck(firm, {}, { ...lead, stage: "unknown" }).blocker, !!C.postcardCheck(firm, {}, { ...lead, stage: "unknown" }).warning], [null, true]);
+eq("design more than five years out is too early", C.postcardCheck(firm, {}, { ...lead, stage: "design", window: "early" }).blocker.startsWith("This project is still"), true);
+
 // skip tracing
 eq("same parcel, same key", C.parcelKey({ state: "ca", county: " Los  Angeles ", apn: "12-3" }), "CA|LOS ANGELES|12-3");
 eq("by parcel id", C.skipRequest({ state: "CA", county: "LOS ANGELES", apn: "12-3" }),

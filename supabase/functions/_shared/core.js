@@ -133,6 +133,17 @@ export const CREDIT_PACKS = {
 };
 export const creditPack = (key) => (Object.prototype.hasOwnProperty.call(CREDIT_PACKS, String(key)) ? CREDIT_PACKS[key] : null);
 
+// When to reach an owner. A postcard goes out only when the owner has something to act on: not while the project is
+// still a line on a plan, and not after the land has been acquired.
+export const WINDOW_OF = { row_acquisition: "now", condemnation_filed: "closing", design: "soon", environmental_review: "early",
+  planning: "early", construction: "late", unknown: "unknown" };
+export const TIMING_BLOCK = {
+  early: "This project is still in planning. It is too early to write to owners: there are no right-of-way plans yet and the route can still change.",
+  late: "This project has been bid or is being built. The land for it has already been acquired, so a postcard would arrive too late.",
+};
+export const TIMING_WARNING = "The agency publishes no status or dates for this project. Confirm where it stands before writing to its owners.";
+export const timingOf = (lead) => (lead && lead.window) || WINDOW_OF[(lead && lead.stage) || "unknown"] || "unknown";
+
 export const STAGE_PHRASE = { planning: "planning", environmental_review: "environmental review", design: "design",
   row_acquisition: "right-of-way acquisition", condemnation_filed: "the condemnation stage", construction: "construction" };
 
@@ -198,7 +209,10 @@ export function postcardCheck(firm, template, lead) {
   else if (kind === "unknown") blocker = "No owner of record for this parcel.";
   else if (!to) blocker = "The mailing address could not be read reliably. Confirm it with the county first.";
   else if (!firmReady(firm)) blocker = "Add your firm's name and return address under Outreach, then Edit postcard wording.";
-  return { owner_kind: kind, to_name: (lead.owner || "").slice(0, 40), to, blocker, ...postcardHtml(firm, template, lead) };
+  const timing = timingOf(lead);
+  if (!blocker && TIMING_BLOCK[timing]) blocker = TIMING_BLOCK[timing];
+  return { owner_kind: kind, to_name: (lead.owner || "").slice(0, 40), to, blocker, timing, warning: timing === "unknown" ? TIMING_WARNING : null,
+    ...postcardHtml(firm, template, lead) };
 }
 
 // ---------------------------------------------------------------- skip tracing (BatchData property skip trace)

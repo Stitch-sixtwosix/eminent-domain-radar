@@ -1,0 +1,566 @@
+diff --git a/research/sources/ideas.md b/research/sources/ideas.md
+index 71ee49b..f040a41 100644
+--- a/research/sources/ideas.md
++++ b/research/sources/ideas.md
+@@ -149,3 +149,22 @@ Each entry: what it is, the address, how it could be read, and what was checked.
+ - Same pattern likely at other grid operators (not verified today): MISO's MTEP project list, CAISO and ISO-NE
+   transmission plan pages answered 200 but no machine-readable project list was located in the time available;
+   ERCOT answered 403 and NYISO did not answer. SPP's list is already on file.
++
++## State-agency copies of county parcels in one schema (Arizona Department of Water Resources) - checked 2026-11-25
++
++- Address: https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/Parcels/FeatureServer (layers 0-6 and 9-13:
++  Apache, Cochise, Coconino, Gila, Graham, Greenlee, La Paz, Navajo, Pima, Pinal, Santa Cruz, Yuma). No login.
++- What it is: ADWR collects each county assessor's parcels about twice a year and rewrites them to one schema
++  (APN, OWNER_NAME, SITE_ADDRESS, SITE_CITY, SITE_ZIP, ACRES_US, URL to the county's parcel page). Owner name only, no
++  mailing address. 1,297,907 parcels in all; Pima alone is 445,971.
++- Why it matters: it is the only free source found for Pima, Yuma, Apache, Santa Cruz, La Paz, Graham and Greenlee.
++- Limit: the licence asks that the data not be passed on to others for re-use, so all seven are recorded as held in
++  research/states/AZ.json. The owner would need to ask ADWR (GIS Analyst, IT Division) or each county.
++- How it could be read: the ordinary ArcGIS parcel reader works (point+distance queries answer). A mailing address would
++  have to come from the county page in URL or from skip tracing, which this run does not do.
++- The same pattern is worth searching in other states with no statewide owner layer: water-resources, forestry and
++  emergency-management agencies often hold county parcels for their own maps (Oregon Department of Forestry hosts
++  Coos County taxlots with OWNER1-3 this way; not recorded because it is a forest-classification extract).
++- Not found today: Mohave County (its own server mcgis.mohave.gov timed out) and Yavapai County (only a 113-parcel
++  extract is public, and its licence grants access 'for non-commercial purpose', pointing to A.R.S. 39-121.03 for
++  commercial use).
+diff --git a/research/sources/local_utility.json b/research/sources/local_utility.json
+index 870126f..705f94b 100644
+--- a/research/sources/local_utility.json
++++ b/research/sources/local_utility.json
+@@ -5785,6 +5785,41 @@
+    "sample": "{\"PROJECT\": \"17-4\", \"LOCATION\": \"ESMT\", \"STATUS_CON\": \"In Service\", \"dist_date\": \"2010\", \"Comments\": \"Built\", \"Type\": \"Distribution\"}",
+    "restrictions": null,
+    "notes": "Large-diameter water transmission lines; the authority condemns pipeline easements. Item modified 2025-09."
++  },
++  {
++   "name": "Tucson Department of Transportation and Mobility capital projects (TDOT_CIPs)",
++   "authority": "City of Tucson Department of Transportation and Mobility",
++   "states": [
++    "AZ"
++   ],
++   "coverage": "city",
++   "kind": "arcgis",
++   "url": "https://utility.arcgis.com/usrsvcs/servers/3b987d23e8bd4f4ba2aed250d02e2f2a/rest/services/PublicMaps/Transportation/MapServer/76",
++   "verified": true,
++   "record_count": 640,
++   "geometry": "polyline",
++   "fields": {
++    "id": "ProjectID",
++    "name": "ProjectName",
++    "description": "Description",
++    "work_type": "Type",
++    "status": "Status",
++    "date": "FY_Planned"
++   },
++   "planned_filter": "Status IN ('Planned','Design','Pre-Construction') AND Type <> 'Surface Maintenance'",
++   "sample": "{\"ProjectName\": \"18th St Bicycle Blvd\", \"Type\": \"Bike/Pedestrian\", \"ProjectID\": \"D101\", \"Status\": \"Design\", \"FY_Planned\": \"2027\", \"ConstructionBegin\": \"Summer 2026\"}",
++   "restrictions": null,
++   "notes": "City of Tucson public map service 'PublicMaps/Transportation', layer 76 (lines), reached through the city's ArcGIS proxy address without a token. Checked 2026-11-25. 164 of 640 records match the planned filter. Status: Planned 118, Design 100, Pre-Construction 11, Construction 94, Complete 295, On Hold 8, Dropped 14. Type: Surface Maintenance 338 (repaving, left out by the filter), Bike/Pedestrian 141, Roadway 89, Intersection/Signal 56. No cost field; funding flags RTA_Fund, Fed_Fund, County_Fund; ProjectID is often 'TBD'; FY_Planned is text ('2027', 'TBD'). Terms read on the sibling item 'DTM CIP Polygons' (layer 77 of the same service, 'Dataset Classification Level 0 - Open'): an 'as is' accuracy disclaimer only, no limit on commercial use or redistribution. Layer 77 (514 polygons) is the Prop 411 street-repaving areas, not useful for land acquisition.",
++   "status_values": {
++    "Planned": 118,
++    "Design": 100,
++    "Pre-Construction": 11,
++    "Construction": 94,
++    "Complete": 295,
++    "On Hold": 8,
++    "Dropped": 14
++   },
++   "group": "tucson_dtm_cip"
+   }
+  ],
+  "unverified": [
+diff --git a/research/states/AZ.json b/research/states/AZ.json
+index 351d5c6..bdef3e6 100644
+--- a/research/states/AZ.json
++++ b/research/states/AZ.json
+@@ -84,7 +84,237 @@
+    },
+    "restrictions": "None seen on the layer.",
+    "notes": "Third-party (city) copy of county tax parcels, dated by its name (8/26); the first sample record had blank attributes, see owner_filled_count. Pinal County's own server was not located."
++  },
++  {
++   "county": "COCONINO",
++   "url": "https://services1.arcgis.com/Rlvx5g8pKeK13apH/arcgis/rest/services/Coconino_County_Parcels_Public_View/FeatureServer/0",
++   "record_count": 78595,
++   "fields": {
++    "apn": "APN",
++    "owner": "OWNERNAME",
++    "mailing_address": [
++     "OWNERADDRESS_ADDRESS1",
++     "OWNERADDRESS_ADDRESS2",
++     "OWNERADDRESS_CITY",
++     "OWNERADDRESS_STATE",
++     "OWNERADDRESS_ZIP"
++    ],
++    "address": [
++     "SITUS",
++     "SITUS_CITY",
++     "SITUS_ZIP"
++    ]
++   },
++   "spatial_query": true,
++   "restrictions": null,
++   "notes": "Coconino County GIS's own 'Coconino County Parcels Public View' (account CoconinoCountyGIS), edited 2026-11-25. Item licence read in full: a warranty and accuracy disclaimer citing A.R.S. 37-178 (a public agency sharing geospatial data is not liable) and asking users to 'use the data appropriately and consistent with the intent stated in the metadata'; it states no limit on commercial use, redistribution, solicitation or mailing lists. 78,481 of 78,595 records have OWNERNAME. OWNERADDRESS is the whole mailing address in one field with line breaks; the _ADDRESS1/_CITY/_STATE/_ZIP parts are separate. No value or acreage field (TYLERACCOUNTNUM is the assessor account). Point+distance queries answer. maxRecordCount 2000.",
++   "verified": true,
++   "checked": "2026-11-25"
++  },
++  {
++   "county": "NAVAJO",
++   "url": "https://services.arcgis.com/cghC2lEIpJ2TRrs5/arcgis/rest/services/Parcels/FeatureServer/0",
++   "record_count": 86947,
++   "fields": {
++    "apn": "APN",
++    "owner": "Owner",
++    "mailing_address": "MailingAddress",
++    "address": "SitusAddress",
++    "acres": "Acreage"
++   },
++   "spatial_query": true,
++   "restrictions": null,
++   "notes": "Navajo County's own public 'Parcels' view (account NavajoCounty, organisation 'Navajo County'), edited 2026-11-25. Item licence read: 'Creative Commons Attribution 4.0 International License (CC BY 4.0)', general reference only, not for legal or survey use; the description names 'administrative and commercial applications' among intended uses. CC BY 4.0 allows commercial use and redistribution WITH ATTRIBUTION: credit 'Navajo County IT GIS' wherever the data is shown. All 86,947 records have Owner. Owner can hold several owners separated by line breaks with fractional shares; MailingAddress is one field with line breaks (MailingAddressLine1/2 hold the first lines only, no separate city/state/zip). No value field. Point+distance queries answer. maxRecordCount 2000.",
++   "verified": true,
++   "checked": "2026-11-25"
++  },
++  {
++   "county": "COCHISE",
++   "url": "https://services6.arcgis.com/Yxem0VOcqSy8T6TE/arcgis/rest/services/Cad_Parcel_TaxInfo/FeatureServer/0",
++   "record_count": 122965,
++   "fields": {
++    "apn": "apn",
++    "owner": "owner_name1",
++    "mailing_address": [
++     "owner_name2",
++     "address1",
++     "address2",
++     "city",
++     "state",
++     "zip_code"
++    ],
++    "address": "situs_address",
++    "market_value": "fcv",
++    "acres": "acres"
++   },
++   "spatial_query": false,
++   "restrictions": "terms not found: the item on the Cochise County GIS organisation has no licence text and the layer has no description or copyright text; the county's GIS site terms were not read",
++   "notes": "Cochise County GIS's own 'Parcel (Cochise County - Tax Information)' (organisation 'Cochise County GIS'), updated weekly, edited 2026-11-23. All 122,965 records have owner_name1. fcv is full cash value; tax_year 2027; geo_x/geo_y are the parcel's longitude/latitude as text. A point+distance query returned error 400 ('Invalid query parameters') today, so the reader would need an envelope query or the geo_x/geo_y fields. The ADWR copy (FeatureServer/1 of the ADWR Parcels service, 122,935 records, owner name only) is an alternative with the re-use limit noted on the other ADWR entries. maxRecordCount 2000.",
++   "verified": true,
++   "checked": "2026-11-25"
++  },
++  {
++   "county": "GILA",
++   "url": "https://services1.arcgis.com/PEZ16KoOWXoETFQ5/arcgis/rest/services/Parcels_View3/FeatureServer/0",
++   "record_count": 35739,
++   "fields": {
++    "apn": "APN",
++    "owner": "Owner_Name",
++    "acres": "Acres"
++   },
++   "spatial_query": true,
++   "restrictions": "terms not found: the item ('Gila County, Arizona Assessor Parcels', organisation 'Gila County, Arizona') has no licence text or description and the layer has none; the county's site terms were not read",
++   "notes": "Gila County's own assessor parcel view, data edited 2026-11-17. 35,517 of 35,739 records have Owner_Name. Owner NAME only: no mailing address, situs address or value (Account_Num is the assessor account, LAPN the dashed parcel number). Point+distance queries answer. maxRecordCount 2000.",
++   "verified": true,
++   "checked": "2026-11-25"
++  },
++  {
++   "county": "PIMA",
++   "url": "https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/Parcels/FeatureServer/10",
++   "record_count": 445971,
++   "fields": {
++    "apn": "APN",
++    "owner": "OWNER_NAME",
++    "address": [
++     "SITE_ADDRESS",
++     "SITE_CITY",
++     "SITE_ZIP"
++    ],
++    "acres": "ACRES_US",
++    "county": "COUNTY"
++   },
++   "spatial_query": true,
++   "restrictions": "redistribution limited: the ADWR item licence says the Department 'requests that persons receiving and using this information not make it available to others for their re-use' and retains its intellectual property; the county's own terms for the underlying assessor data were not read",
++   "notes": "Arizona Department of Water Resources (ADWR) copy of the county assessor's parcels, normalised to one schema; layer 10 of the ADWR 'Parcels' service (12 county layers: Apache, Cochise, Coconino, Gila, Graham, Greenlee, La Paz, Navajo, Pima, Pinal, Santa Cruz, Yuma; no Maricopa, Mohave or Yavapai). 445,288 of 445,971 records have OWNER_NAME. Owner NAME only: no mailing address and no value; URL links to the county's parcel page. ADWR refreshes about twice a year; layer text says last update 15 April 2026. Licence is a long warranty disclaimer plus the re-use request quoted in restrictions. maxRecordCount 2000.",
++   "verified": true,
++   "checked": "2026-11-25"
++  },
++  {
++   "county": "YUMA",
++   "url": "https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/Parcels/FeatureServer/13",
++   "record_count": 96848,
++   "fields": {
++    "apn": "APN",
++    "owner": "OWNER_NAME",
++    "address": [
++     "SITE_ADDRESS",
++     "SITE_CITY",
++     "SITE_ZIP"
++    ],
++    "acres": "ACRES_US",
++    "county": "COUNTY"
++   },
++   "spatial_query": true,
++   "restrictions": "redistribution limited: the ADWR item licence says the Department 'requests that persons receiving and using this information not make it available to others for their re-use' and retains its intellectual property; the county's own terms for the underlying assessor data were not read",
++   "notes": "Arizona Department of Water Resources (ADWR) copy of the county assessor's parcels, normalised to one schema; layer 13 of the ADWR 'Parcels' service (12 county layers: Apache, Cochise, Coconino, Gila, Graham, Greenlee, La Paz, Navajo, Pima, Pinal, Santa Cruz, Yuma; no Maricopa, Mohave or Yavapai). 96,703 of 96,848 records have OWNER_NAME. Owner NAME only: no mailing address and no value; URL links to the county's parcel page. ADWR refreshes about twice a year; layer text says last update 16 April 2026. Licence is a long warranty disclaimer plus the re-use request quoted in restrictions. maxRecordCount 2000.",
++   "verified": true,
++   "checked": "2026-11-25"
++  },
++  {
++   "county": "APACHE",
++   "url": "https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/Parcels/FeatureServer/0",
++   "record_count": 57679,
++   "fields": {
++    "apn": "APN",
++    "owner": "OWNER_NAME",
++    "address": [
++     "SITE_ADDRESS",
++     "SITE_CITY",
++     "SITE_ZIP"
++    ],
++    "acres": "ACRES_US",
++    "county": "COUNTY"
++   },
++   "spatial_query": true,
++   "restrictions": "redistribution limited: the ADWR item licence says the Department 'requests that persons receiving and using this information not make it available to others for their re-use' and retains its intellectual property; the county's own terms for the underlying assessor data were not read",
++   "notes": "Arizona Department of Water Resources (ADWR) copy of the county assessor's parcels, normalised to one schema; layer 0 of the ADWR 'Parcels' service (12 county layers: Apache, Cochise, Coconino, Gila, Graham, Greenlee, La Paz, Navajo, Pima, Pinal, Santa Cruz, Yuma; no Maricopa, Mohave or Yavapai). 57,155 of 57,679 records have OWNER_NAME. Owner NAME only: no mailing address and no value; URL links to the county's parcel page. ADWR refreshes about twice a year; layer text says last update 13 April 2026. Licence is a long warranty disclaimer plus the re-use request quoted in restrictions. maxRecordCount 2000.",
++   "verified": true,
++   "checked": "2026-11-25"
++  },
++  {
++   "county": "SANTA CRUZ",
++   "url": "https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/Parcels/FeatureServer/12",
++   "record_count": 43189,
++   "fields": {
++    "apn": "APN",
++    "owner": "OWNER_NAME",
++    "address": [
++     "SITE_ADDRESS",
++     "SITE_CITY",
++     "SITE_ZIP"
++    ],
++    "acres": "ACRES_US",
++    "county": "COUNTY"
++   },
++   "spatial_query": true,
++   "restrictions": "redistribution limited: the ADWR item licence says the Department 'requests that persons receiving and using this information not make it available to others for their re-use' and retains its intellectual property; the county's own terms for the underlying assessor data were not read",
++   "notes": "Arizona Department of Water Resources (ADWR) copy of the county assessor's parcels, normalised to one schema; layer 12 of the ADWR 'Parcels' service (12 county layers: Apache, Cochise, Coconino, Gila, Graham, Greenlee, La Paz, Navajo, Pima, Pinal, Santa Cruz, Yuma; no Maricopa, Mohave or Yavapai). 43,068 of 43,189 records have OWNER_NAME. Owner NAME only: no mailing address and no value; URL links to the county's parcel page. ADWR refreshes about twice a year; layer text says last update 16 April 2026. Licence is a long warranty disclaimer plus the re-use request quoted in restrictions. maxRecordCount 2000.",
++   "verified": true,
++   "checked": "2026-11-25"
++  },
++  {
++   "county": "LA PAZ",
++   "url": "https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/Parcels/FeatureServer/6",
++   "record_count": 19336,
++   "fields": {
++    "apn": "APN",
++    "owner": "OWNER_NAME",
++    "address": [
++     "SITE_ADDRESS",
++     "SITE_CITY",
++     "SITE_ZIP"
++    ],
++    "acres": "ACRES_US",
++    "county": "COUNTY"
++   },
++   "spatial_query": true,
++   "restrictions": "redistribution limited: the ADWR item licence says the Department 'requests that persons receiving and using this information not make it available to others for their re-use' and retains its intellectual property; the county's own terms for the underlying assessor data were not read",
++   "notes": "Arizona Department of Water Resources (ADWR) copy of the county assessor's parcels, normalised to one schema; layer 6 of the ADWR 'Parcels' service (12 county layers: Apache, Cochise, Coconino, Gila, Graham, Greenlee, La Paz, Navajo, Pima, Pinal, Santa Cruz, Yuma; no Maricopa, Mohave or Yavapai). 19,079 of 19,336 records have OWNER_NAME. Owner NAME only: no mailing address and no value; URL links to the county's parcel page. ADWR refreshes about twice a year; layer text says last update 17 July 2025. Licence is a long warranty disclaimer plus the re-use request quoted in restrictions. maxRecordCount 2000.",
++   "verified": true,
++   "checked": "2026-11-25"
++  },
++  {
++   "county": "GRAHAM",
++   "url": "https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/Parcels/FeatureServer/4",
++   "record_count": 18821,
++   "fields": {
++    "apn": "APN",
++    "owner": "OWNER_NAME",
++    "address": [
++     "SITE_ADDRESS",
++     "SITE_CITY",
++     "SITE_ZIP"
++    ],
++    "acres": "ACRES_US",
++    "county": "COUNTY"
++   },
++   "spatial_query": true,
++   "restrictions": "redistribution limited: the ADWR item licence says the Department 'requests that persons receiving and using this information not make it available to others for their re-use' and retains its intellectual property; the county's own terms for the underlying assessor data were not read",
++   "notes": "Arizona Department of Water Resources (ADWR) copy of the county assessor's parcels, normalised to one schema; layer 4 of the ADWR 'Parcels' service (12 county layers: Apache, Cochise, Coconino, Gila, Graham, Greenlee, La Paz, Navajo, Pima, Pinal, Santa Cruz, Yuma; no Maricopa, Mohave or Yavapai). 18,821 of 18,821 records have OWNER_NAME. Owner NAME only: no mailing address and no value; URL links to the county's parcel page. ADWR refreshes about twice a year; layer text says last update 30 December 2024. Licence is a long warranty disclaimer plus the re-use request quoted in restrictions. maxRecordCount 2000.",
++   "verified": true,
++   "checked": "2026-11-25"
++  },
++  {
++   "county": "GREENLEE",
++   "url": "https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/Parcels/FeatureServer/5",
++   "record_count": 4706,
++   "fields": {
++    "apn": "APN",
++    "owner": "OWNER_NAME",
++    "address": [
++     "SITE_ADDRESS",
++     "SITE_CITY",
++     "SITE_ZIP"
++    ],
++    "acres": "ACRES_US",
++    "county": "COUNTY"
++   },
++   "spatial_query": true,
++   "restrictions": "redistribution limited: the ADWR item licence says the Department 'requests that persons receiving and using this information not make it available to others for their re-use' and retains its intellectual property; the county's own terms for the underlying assessor data were not read",
++   "notes": "Arizona Department of Water Resources (ADWR) copy of the county assessor's parcels, normalised to one schema; layer 5 of the ADWR 'Parcels' service (12 county layers: Apache, Cochise, Coconino, Gila, Graham, Greenlee, La Paz, Navajo, Pima, Pinal, Santa Cruz, Yuma; no Maricopa, Mohave or Yavapai). 4,445 of 4,706 records have OWNER_NAME. Owner NAME only: no mailing address and no value; URL links to the county's parcel page. ADWR refreshes about twice a year; layer text says last update 21 January 2025. Licence is a long warranty disclaimer plus the re-use request quoted in restrictions. maxRecordCount 2000.",
++   "verified": true,
++   "checked": "2026-11-25"
+   }
+  ],
+- "summary": "Projects: no statewide ADOT planned-projects service verified, only the MAG (Phoenix region) TIP layers. Parcels: no statewide owner layer; Maricopa County Assessor parcels with owner and mailing address verified, plus a city-hosted copy of Pinal County. Pima (server returned 403), Yavapai (403) and Mohave not verified."
++ "summary": "Projects: no statewide ADOT planned-projects service verified, only the MAG (Phoenix region) TIP layers. Parcels: no statewide owner layer; Maricopa County Assessor parcels with owner and mailing address verified, plus a city-hosted copy of Pinal County. Pima (server returned 403), Yavapai (403) and Mohave not verified. Third pass 2026-11-25: Coconino and Navajo county layers with owner and mailing address verified on terms that state no commercial limit (Navajo is CC BY 4.0, attribution required). Held: Cochise and Gila (county layers, terms not found) and the Arizona Department of Water Resources copies for Pima, Yuma, Apache, Santa Cruz, La Paz, Graham and Greenlee (owner name only; ADWR asks that the data not be passed on for re-use). Mohave and Yavapai still have no layer found."
+ }
+\ No newline at end of file
+diff --git a/research/states/MD.json b/research/states/MD.json
+index 10abc81..8b8a423 100644
+--- a/research/states/MD.json
++++ b/research/states/MD.json
+@@ -167,7 +167,117 @@
+       "notes": "Baltimore City real property (independent city). Owner names are space-padded; MAILTOADD is often null. CURRLAND + CURRIMPR are current land and improvement values (BFCVLAND/BFCVIMPR base full cash values); BLOCKLOT is the city block/lot id.",
+       "verified": true,
+       "record_count": 237456
++    },
++    {
++      "county": "WICOMICO",
++      "url": "https://services6.arcgis.com/Hx8jJ6McXQ0jnqLk/arcgis/rest/services/Parcels1/FeatureServer/12",
++      "record_count": 48656,
++      "fields": {
++        "apn": "acctid",
++        "owner": "ownname1",
++        "mailing_address": [
++          "ownname2",
++          "ownadd1",
++          "ownadd2",
++          "owncity",
++          "ownstate",
++          "ownerzip"
++        ],
++        "address": [
++          "address",
++          "city",
++          "zipcode"
++        ],
++        "market_value": "nfmttlvl",
++        "acres": "acres"
++      },
++      "spatial_query": true,
++      "restrictions": null,
++      "notes": "City of Salisbury GIS Division's 'Wicomico County, MD: Parcels' (account CitySalisburyGIS): the whole county's parcels from Maryland iMap joined to SDAT property data, last edited 2026-06-26. NOT the county's or the state's own service: it is a city-hosted copy, and it carries ownname1/ownname2, which the state's public iMap parcel layer leaves out. Item licence read in full: an 'as is' warranty and liability disclaimer, then 'The Data can be freely distributed as long as the metadata entry is not modified or deleted. Any data derived from the Data must acknowledge the City of Salisbury in the metadata.' No limit on commercial use, solicitation or mailing lists is stated; ATTRIBUTION to the City of Salisbury is required. 47,149 of 48,656 records have ownname1. nfmttlvl is the full market total value, nfmlndvl/nfmimpvl land and improvements; tradate/considr1 the last transfer. Point+distance queries answer. maxRecordCount 1000.",
++      "verified": true,
++      "checked": "2026-11-25"
++    },
++    {
++      "county": "CARROLL",
++      "url": "https://services.arcgis.com/Uf0DiYpD9NOFO5YH/arcgis/rest/services/PermitsProAccela/FeatureServer/2",
++      "record_count": 76262,
++      "fields": {
++        "apn": "ACCTID",
++        "owner": "OWNNAME1",
++        "mailing_address": [
++          "OWNNAME2",
++          "OWNADD1",
++          "OWNADD2",
++          "OWNCITY",
++          "OWNSTATE",
++          "OWNNERZIP"
++        ],
++        "address": [
++          "PREMSNUM",
++          "PREMNAM",
++          "PREMSTYPE",
++          "PREMCITY",
++          "PREMZIP"
++        ],
++        "market_value": "NFMTTLVL",
++        "acres": "CalcAcre"
++      },
++      "spatial_query": false,
++      "restrictions": "terms not found: the item ('AccelaGIS Carroll County, Maryland', organisation 'Carroll County, Maryland') has no licence text, and it is a layer published for the county's permitting system rather than as open data; the county's site terms were not read",
++      "notes": "Carroll County's own 'PropertyData' layer inside its permitting (Accela) map service, edited 2026-11-20. 68,843 of 76,262 records have OWNNAME1. Field names are the county's spellings (OWNNERZIP, PREMNAM, PREMSTYPE). NFMTTLVL is text. A point+distance query in longitude/latitude returned error 400 (invalid SRID) today; the layer would need queries in its own coordinate system. maxRecordCount 1000.",
++      "verified": true,
++      "checked": "2026-11-25"
++    },
++    {
++      "county": "CHARLES",
++      "url": "https://services7.arcgis.com/3BMWkdyrt45RNCrq/arcgis/rest/services/Tax_Parcels/FeatureServer/0",
++      "record_count": 74627,
++      "fields": {
++        "apn": "ACCTID",
++        "owner": "OWNNAME1",
++        "address": [
++          "ADDRESS",
++          "CITY",
++          "ZIPCODE"
++        ],
++        "acres": "LANDAREA"
++      },
++      "spatial_query": true,
++      "restrictions": "use limited: the item licence says 'This data is for illustration purposes and should only be used as such'; whether that excludes commercial or mailing use is not stated",
++      "notes": "'Tax Parcels' credited to SDAT, the Maryland Department of Planning and Charles County Planning and Growth Management, published from an individual staff account (gormanglenn), edited 2026-11-24. 73,294 of 74,627 records have OWNNAME1. Owner NAME only: no mailing-address fields (ADDRESS/CITY/ZIPCODE are the premises). LANDAREA is in the unit given by LUOM (A = acres). SDATWEBADR links to the state assessment record. Point+distance queries answer. maxRecordCount 2000.",
++      "verified": true,
++      "checked": "2026-11-25"
++    },
++    {
++      "county": "WASHINGTON",
++      "url": "https://services2.arcgis.com/uxxyl33jRTSmjre5/arcgis/rest/services/Property_view/FeatureServer/42",
++      "record_count": 63370,
++      "fields": {
++        "apn": "TaxAccNo",
++        "owner": "OwnName1",
++        "mailing_address": [
++          "OwnName2",
++          "OwnAdd1",
++          "OwnAdd2",
++          "OwnCity",
++          "OwnState",
++          "OwnZip"
++        ],
++        "address": [
++          "PremNum",
++          "PremName",
++          "PremType",
++          "PremCity",
++          "PremZip"
++        ],
++        "acres": "CalcAcre"
++      },
++      "spatial_query": true,
++      "restrictions": "licence limits use: 'By downloading this data, you hereby agree to the Washington County Digital Spatial Data License Agreement', under which the data 'is solely for the internal use of the Licensee and not for the use by any other person, unless authorized specifically in writing by the Department'",
++      "notes": "Washington County, Maryland GIS Office's own 'Washington County MD Parcels' (Hagerstown area), edited 2026-11-20. 61,168 of 63,370 records have OwnName1. Carries SDAT sale history (SS1TransDate, SS1Consid) and values (SS1MarketLV, SS1MarketIMPV). The licence agreement is a full contract text; using this for a product shown to customers would need the county's written permission. Point+distance queries answer. maxRecordCount 2000.",
++      "verified": true,
++      "checked": "2026-11-25"
+     }
+   ],
+-  "summary": "MDOT SHA project portal points (status, work type, estimated start) and the FY2026-2031 CTP points verify; both are point-only and lack cost. The statewide MD iMAP parcel layer (https://mdgeodata.md.gov/imap/rest/services/PlanningCadastre/MD_ParcelBoundaries/MapServer/0, 2,293,824 parcels, verified) has owner MAILING address (OWNADD1, OWNADD2, OWNCITY, OWNSTATE, OWNERZIP), ACCTID, ADDRESS, NFMTTLVL, ACRES and an SDAT link (SDATWEBADR) but NO owner-name field. Owner names verified for Prince George's, Anne Arundel and Baltimore City; Montgomery County's layer (gis3.montgomerycountymd.gov .../property/property_query/MapServer/0) also has owner address but no name, and Baltimore County's server was unreachable."
++  "summary": "MDOT SHA project portal points (status, work type, estimated start) and the FY2026-2031 CTP points verify; both are point-only and lack cost. The statewide MD iMAP parcel layer (https://mdgeodata.md.gov/imap/rest/services/PlanningCadastre/MD_ParcelBoundaries/MapServer/0, 2,293,824 parcels, verified) has owner MAILING address (OWNADD1, OWNADD2, OWNCITY, OWNSTATE, OWNERZIP), ACCTID, ADDRESS, NFMTTLVL, ACRES and an SDAT link (SDATWEBADR) but NO owner-name field. Owner names verified for Prince George's, Anne Arundel and Baltimore City; Montgomery County's layer (gis3.montgomerycountymd.gov .../property/property_query/MapServer/0) also has owner address but no name, and Baltimore County's server was unreachable. Second pass 2026-11-25: Wicomico County verified with owner and mailing address through the City of Salisbury's copy (free distribution with attribution). Held: Carroll (terms not found), Charles ('for illustration purposes' only, owner name without mailing address) and Washington County (licence limits the data to the licensee's internal use). St. Mary's exists only as a 2018 copy on a utility's account, not recorded. The state's iMap layer still has no owner-name field."
+ }
+\ No newline at end of file
+diff --git a/research/states/OR.json b/research/states/OR.json
+index 3cc7e26..6f3f1be 100644
+--- a/research/states/OR.json
++++ b/research/states/OR.json
+@@ -226,9 +226,119 @@
+       "restrictions": null,
+       "notes": "County's own server (Bend/Redmond), the layer behind the county DIAL property viewer. Field names carry the joined-table prefix exactly as shown (use them in outFields and where clauses, e.g. where=dbo_GIS_MAILING.OWNER IS NOT NULL). dbo_GIS_MAILING.ACCOUNT_ID, AGENT, IN_CARE_OF and M_CITYSTZIP also present; a taxlot with several accounts appears once per account (112,485 rows for 109,596 taxlots). No value or acreage fields. maxRecordCount 1000. Spatial point+distance query works as-is: 204 records at -121.3153,44.0582. Operational_Layers/MapServer/0 on the same server has owner name only. The county's ArcGIS Online taxlot layers (services1.arcgis.com/znO8Hz1SuVVohYhZ/.../Taxlots, Taxlot_Assessor_Account_view, Taxlots_and_Account_Mailing_view_layer) have NO owner fields. Terms read: the county's ArcGIS Online taxlot items state 'Free to download and use' / 'Full source data is available on our data portal site and is free to download and use' (item 901cdd4a5ca24cc3b72cc8e3e0f11f02); no terms are attached to this map service itself and deschutes.org disclaimer pages timed out.",
+       "checked": "2026-11-17"
++    },
++    {
++      "county": "YAMHILL",
++      "url": "https://services6.arcgis.com/toubSXwoan3LMhOW/arcgis/rest/services/AT_Taxlots/FeatureServer/1",
++      "record_count": 51338,
++      "fields": {
++        "apn": "maptaxlot",
++        "owner": "owner1",
++        "mailing_address": [
++          "owner2",
++          "owner3",
++          "mailadd1",
++          "mailadd2",
++          "mailcity",
++          "mailstate",
++          "mailzip"
++        ],
++        "address": [
++          "situs1",
++          "situscity",
++          "situszip"
++        ],
++        "acres": "account_acres"
++      },
++      "spatial_query": true,
++      "restrictions": "terms not found: the item ('Yamhill County A&T Taxlots (with ownership)', organisation 'Yamhill County') has no licence text or description; no data terms were found on the county's website pages tried",
++      "notes": "Yamhill County's own Assessment & Taxation taxlot layer, edited 2026-11-20. 49,346 of 51,338 records have owner1. acctnbr is the tax account; propsumlink opens the county's property summary; saledate/saleprice are text. No value field. A second county layer, Taxlots_and_Taxing_Districts/FeatureServer/1 (43,153, edited 2026-11-02), has the same fields plus grantor/grantee. Point+distance queries answer. maxRecordCount 2000.",
++      "verified": true,
++      "checked": "2026-11-25"
++    },
++    {
++      "county": "KLAMATH",
++      "url": "https://services.arcgis.com/H6Mh1bySxR4oHx6x/arcgis/rest/services/KC_Taxlots/FeatureServer/1",
++      "record_count": 61229,
++      "fields": {
++        "apn": "MTL",
++        "owner": "OWNER_NAME",
++        "mailing_address": [
++          "OWNER_ADDR1",
++          "OWNER_ADDR2",
++          "OWNER_ADDR3",
++          "OWNER_CSZ"
++        ],
++        "address": [
++          "SITUS_ADDRESS",
++          "SITUS_CSZ"
++        ],
++        "market_value": "Tot_Appr",
++        "acres": "ACREAGE"
++      },
++      "spatial_query": true,
++      "restrictions": "use limited: the item licence reads, in full, 'This layer is for reference only.'; whether that excludes commercial or mailing use is not stated, and the county's site terms were not read",
++      "notes": "Klamath County GIS Department's own taxlot layer ('Information is derived from Klamath County Assessor data joined with GIS polygons'), edited 2026-11-21. 61,212 of 61,229 records have OWNER_NAME. PROP_ID is the assessor account; LND_APPR + IMP_APPR are appraised land and improvements, M50_VALUE the Measure 50 assessed value; MAIL1/MAIL2/MAILCITY/MAILST/ZIP repeat the mailing address padded with spaces. Point+distance queries answer. maxRecordCount 1000.",
++      "verified": true,
++      "checked": "2026-11-25"
++    },
++    {
++      "county": "LAKE",
++      "url": "https://services.arcgis.com/H6Mh1bySxR4oHx6x/arcgis/rest/services/LakeCoTaxlots/FeatureServer/0",
++      "record_count": 18038,
++      "fields": {
++        "apn": "MapTaxlot",
++        "owner": "OwnerLine1",
++        "mailing_address": [
++          "OwnerLine2",
++          "OwnerLine3",
++          "MailAdd1",
++          "MailAdd2",
++          "MailCity",
++          "MailState",
++          "MailZip"
++        ],
++        "address": [
++          "SiteAddNam",
++          "SiteAddCty",
++          "SiteZip"
++        ],
++        "acres": "TaxlotAcre"
++      },
++      "spatial_query": true,
++      "restrictions": "terms not found, and not the county's own copy: hosted by Klamath County GIS Department with no licence text; Lake County's terms were not found",
++      "notes": "Lake County, Oregon taxlots in the ORMAP schema, hosted on the Klamath County GIS organisation (credit 'Klamath County GIS'). OLD: last edited 2021-07-13, so owners are five years stale. 17,135 of 18,038 records have OwnerLine1. PrimAccNum is the tax account. No value field. Point+distance queries answer. maxRecordCount 1000.",
++      "verified": true,
++      "checked": "2026-11-25"
++    },
++    {
++      "county": "CLATSOP",
++      "url": "https://services8.arcgis.com/l89P2qlKPxgrFDLw/arcgis/rest/services/taxlot_accounts/FeatureServer/0",
++      "record_count": 35435,
++      "fields": {
++        "apn": "TAXLOTKEY",
++        "owner": "OWNER_LINE",
++        "mailing_address": [
++          "IN_CARE_OF",
++          "STREET_ADD",
++          "PO_BOX",
++          "CITY",
++          "STATE",
++          "ZIP_CODE"
++        ],
++        "address": [
++          "SITUS_ADDR",
++          "SITUS_CITY"
++        ]
++      },
++      "spatial_query": true,
++      "restrictions": "terms not found: the item on the Clatsop County Oregon GIS organisation has no licence text; the county's site terms were not read",
++      "notes": "Clatsop County GIS Division's own 'Taxlots March 2022' (description: 'Data current as of March 30, 2022'; service last edited 2024-02-05). OLD snapshot, no newer public county layer with owners was found. 35,313 of 35,435 records have OWNER_LINE; OWNER_LL_1/OWNER_LL_2 are further owner lines; ACCOUNT_ID is the tax account. No value or acreage field. Point+distance queries answer. maxRecordCount 2000.",
++      "verified": true,
++      "checked": "2026-11-25"
+     }
+   ],
+-  "summary": "ODOT STIP 2027-2030 and 2024-2027 line/point layers verified with cost, bid-let date and design/construction code (no structured work-type field). Parcels: no statewide owner layer; Lane County and a city-hosted copy of Marion County verified. Multnomah/Washington/Clackamas (Metro RLIS) have no owner names in public layers; portlandmaps.com timed out. Second pass 2026-11-17: Multnomah, Jackson and Deschutes county layers with owner name and mailing address verified, each answering point+distance spatial queries; Washington and Clackamas publish no owner names.",
++  "summary": "ODOT STIP 2027-2030 and 2024-2027 line/point layers verified with cost, bid-let date and design/construction code (no structured work-type field). Parcels: no statewide owner layer; Lane County and a city-hosted copy of Marion County verified. Multnomah/Washington/Clackamas (Metro RLIS) have no owner names in public layers; portlandmaps.com timed out. Second pass 2026-11-17: Multnomah, Jackson and Deschutes county layers with owner name and mailing address verified, each answering point+distance spatial queries; Washington and Clackamas publish no owner names. Third pass 2026-11-25: county-run layers with owner and mailing address verified for Yamhill, Klamath, Lake (2021 copy hosted by Klamath County) and Clatsop (2022 snapshot); all four held because their terms are missing or say 'for reference only'. Linn, Polk, Coos and Lincoln appear only as third parties' copies (a student, a watershed council, the Oregon Department of Forestry, a tribe), not recorded.",
+   "parcels_counties_checked": [
+     {
+       "county": "WASHINGTON",

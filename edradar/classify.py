@@ -18,17 +18,44 @@ PROJECT_TYPES = ["highway", "bridge", "interchange", "transit", "rail", "pipelin
 STAGES = ["planning", "environmental_review", "design", "row_acquisition", "condemnation_filed",
           "construction", "unknown"]
 
-# How early a stage is. Earlier stages are worth more as leads: owners have not been approached yet.
+# Timing. A lead is worth most when the owner needs counsel now: right-of-way plans exist and offers are going out or
+# about to. Too early and there is nothing to tell the owner, and the route may still change; too late and the land
+# is already taken. "Earliest is best" was the first rule here and it ranked leads nobody should be contacted about.
 # ---------------------------------------------------------------- the 100-point score
 # Every score is whole points from four components that add up to at most 100:
 #   1. Need for private land   0-60   how likely this kind of project is to take land (likelihood x 0.6)
-#   2. How early it is         0-15   earlier stages score higher: owners have not been approached yet
+#   2. Timing                  0-15   highest when the owner needs counsel now; low when too early, zero when too late
 #   3. Size of the project     0-10   from the published budget
 #   4. Where the parcel sits   0-15   on the alignment or named in the document 15, nearby 5
 # A project's own score assumes a parcel on the alignment (the full 15), so it equals the score of its best leads.
 MAX_POINTS = {"need": 60, "stage": 15, "size": 10, "position": 15}
-STAGE_POINTS = {"planning": 15, "environmental_review": 15, "design": 12, "row_acquisition": 8,
-                "condemnation_filed": 4, "unknown": 6, "construction": 0}
+STAGE_POINTS = {"row_acquisition": 15, "design": 12, "condemnation_filed": 10, "environmental_review": 6,
+                "planning": 5, "unknown": 4, "construction": 0}
+
+# When to reach an owner. Each project is placed in one of these, and postcards are held outside "now" and "soon".
+WINDOWS = {
+    "now": ("Right time", "Right-of-way acquisition is under way: appraisals and offers are going to owners. This is when an owner needs counsel."),
+    "closing": ("Act now", "Final acquisition: offers are out and condemnations are being filed. Owners who have not settled need counsel immediately."),
+    "soon": ("Approaching", "In design, with right-of-way plans to follow. An owner can be told what is coming; offers have not started."),
+    "early": ("Too early", "Still in planning or environmental review. There are no right-of-way plans, and the route can still change."),
+    "late": ("Too late", "The contract has been bid or is being built. The land for it has already been acquired."),
+    "unknown": ("Timing not known", "The agency publishes no status or dates for this project. Check where it stands before contacting anyone."),
+}
+WINDOW_OF = {"row_acquisition": "now", "condemnation_filed": "closing", "design": "soon", "environmental_review": "early",
+             "planning": "early", "construction": "late", "unknown": "unknown"}
+MAIL_WINDOWS = ("now", "closing", "soon")       # a postcard goes out only when the owner has something to act on
+
+
+def outreach_window(stage: Optional[str], months_to_letting: Optional[int] = None) -> Dict[str, Any]:
+    """Whether this is the time to contact an owner on this project, and why."""
+    key = WINDOW_OF.get(stage or "unknown", "unknown")
+    if key == "soon" and months_to_letting is not None and months_to_letting > 60:
+        key = "early"                 # in design, but bids are more than five years off: nothing for an owner to act on yet
+    label, why = WINDOWS[key]
+    if months_to_letting is not None and key in ("now", "closing", "soon"):
+        why += " Construction bids are due in about %s." % (
+            "%d months" % months_to_letting if months_to_letting < 24 else "%d years" % round(months_to_letting / 12))
+    return {"key": key, "label": label, "why": why, "mail": key in MAIL_WINDOWS}
 POSITION_POINTS = {"named_in_document": 15, "abuts_alignment": 15, "within_buffer": 5}
 POSITION_LABEL = {"named_in_document": "Parcel is named in the source document",
                   "abuts_alignment": "Parcel abuts the mapped alignment (within 20 m)",
@@ -100,8 +127,8 @@ def lead_points(project_score: int, reason: str) -> int:
     return max(0, project_score - MAX_POINTS["position"] + POSITION_POINTS.get(reason, 5))
 
 
-STAGE_LABEL = {"planning": "Planning: the earliest stage", "environmental_review": "Environmental review: still early",
-               "design": "In design", "row_acquisition": "Right-of-way acquisition already under way",
+STAGE_LABEL = {"planning": "Planning: too early to contact owners", "environmental_review": "Environmental review: too early to contact owners",
+               "design": "In design: right-of-way plans come next", "row_acquisition": "Right-of-way acquisition: when owners need counsel",
                "condemnation_filed": "Final acquisition: condemnations filed or due", "construction": "Bid or under construction: the land is already taken",
                "unknown": "Stage not published: on the agency's list, progress not stated"}
 
@@ -292,6 +319,7 @@ def timeline(stage: Optional[str], raw: Optional[Dict[str, Any]] = None, today: 
     mined = mined_stage(r, today) if not r.get("PROJ_ID") else (None, None)
     bid = (stage == "construction" and not mined[0]) or "A" in (r.get("LET_IND"), r.get("NTP_IND")) or r.get("UNDER_CONSTRUCTION") == "Y"
     out["let_actual"] = bid
+    out["window"] = outreach_window(stage, months)
     if r.get("_confirmed"):
         out["basis"] = "Confirmed by an eminent domain attorney familiar with this project: " + str(r["_confirmed"])
         return out
@@ -320,7 +348,7 @@ def score_breakdown(likelihood: Optional[int], stage: Optional[str], est_cost: O
     return [
         {"key": "need", "label": "Need for private land", "detail": "This kind of project is rated %d of 100 for taking "
          "private land; 60%% of that rating counts" % (likelihood or 0), "points": need_points(likelihood), "max": 60},
-        {"key": "stage", "label": "How early it is", "detail": STAGE_LABEL.get(stage, "Stage unknown"),
+        {"key": "stage", "label": "Timing", "detail": STAGE_LABEL.get(stage, "Stage unknown"),
          "points": STAGE_POINTS[stage], "max": 15},
         {"key": "size", "label": "Size of the project", "detail": size_label(est_cost), "points": size_points(est_cost), "max": 10},
         {"key": "position", "label": "Where the parcel sits", "detail": "A parcel on the alignment",

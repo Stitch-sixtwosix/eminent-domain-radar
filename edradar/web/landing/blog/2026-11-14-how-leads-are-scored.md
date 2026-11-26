@@ -9,9 +9,9 @@ Every parcel in EminentTracker has a score out of 100. It answers one question: 
 
 The type of work matters most. A new road or a realignment has to be built on land the agency does not own. A widening takes strips of frontage. A bridge replaced on its existing footprint often needs little or nothing. Each kind of project is rated for how often it requires acquisition, and that rating supplies up to 60 of the 100 points.
 
-## How early it is: up to 15 points
+## Timing: up to 15 points
 
-Earlier is better for counsel, so a project still in planning or environmental review scores the full 15. One already in right-of-way acquisition scores less, because the agency has usually begun contacting owners. A project under construction scores nothing.
+The best moment to reach an owner is when right-of-way acquisition is under way: the plans show which parcels are affected, and appraisals and offers are going out. A project at that point scores the full 15. One in design scores 12, because the plans are coming. One still in planning or environmental review scores little, because there is nothing yet for an owner to act on and the route can change. A project already bid or under construction scores nothing: the land has been acquired. Where an agency publishes no status or dates, the stage is shown as not published and scores low.
 
 ## Size of the project: up to 10 points
 

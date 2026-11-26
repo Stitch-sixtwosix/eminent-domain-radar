@@ -280,7 +280,14 @@ def postcard_check(cfg: Dict[str, Any], lead: Dict[str, Any]) -> Dict[str, Any]:
         blocker = "No owner of record for this parcel."
     elif not to:
         blocker = "The mailing address could not be read reliably. Confirm it with the county first."
-    return {"owner_kind": kind, "to_name": (lead.get("owner") or "")[:40], "to": to, "blocker": blocker,
+    from .classify import WINDOW_OF
+
+    timing = WINDOW_OF.get(lead.get("stage") or "unknown", "unknown")
+    if not blocker and timing == "early":
+        blocker = "This project is still in planning. It is too early to write to owners: there are no right-of-way plans yet and the route can still change."
+    elif not blocker and timing == "late":
+        blocker = "This project has been bid or is being built. The land for it has already been acquired, so a postcard would arrive too late."
+    return {"owner_kind": kind, "to_name": (lead.get("owner") or "")[:40], "to": to, "blocker": blocker, "timing": timing,
             **postcard_html(cfg, lead)}
 
 
@@ -382,6 +389,7 @@ NOT_BLOCKED = ("pa.owner NOT IN (SELECT p9.owner FROM leads l9 INDEXED BY idx_le
                "WHERE l9.status = 'do not contact' AND p9.owner IS NOT NULL)")
 POSTCARD_ELIGIBLE = """
     pa.mailable = 1 AND pa.owner_kind IN ('individual', 'company') AND l.status NOT IN ('rejected', 'retained')
+    AND l.project_id IN (SELECT id FROM projects WHERE stage IN ('row_acquisition', 'condemnation_filed', 'design', 'unknown'))
     AND """ + NOT_BLOCKED + """
     AND NOT EXISTS (SELECT 1 FROM outreach o JOIN leads l2 ON l2.id = o.lead_id JOIN parcels p2 ON p2.id = l2.parcel_id
                     WHERE o.channel = 'postcard' AND o.status = 'sent'

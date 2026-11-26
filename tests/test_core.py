@@ -59,7 +59,7 @@ def test_layer_selection_and_lead_scores():
     assert pipeline.lead_score(0, "abuts_alignment") == 0
     db = DB(":memory:")
     db.upsert_signal({"source": "penndot", "external_id": "9", "title": "T", "raw": {}})
-    pid = db.save_project(db.unclassified_signals()[0]["id"], {"name": "T", "stage": "planning", "acquisition_likelihood": 95,
+    pid = db.save_project(db.unclassified_signals()[0]["id"], {"name": "T", "stage": "row_acquisition", "acquisition_likelihood": 95,
                                                                 "score": 96, "est_cost": 60e6}, "rules")
     db.upsert_lead(pid, db.upsert_parcel({"layer": "t", "apn": "Z"}), None, "within_buffer", 72)
     db.commit()
@@ -73,7 +73,7 @@ def seeded_db(path):
                              "geometry": LINE, "raw": {}})
     assert not db.upsert_signal({"source": "penndot", "external_id": "1", "title": "Widen X", "county": "BERKS"})
     sid = db.unclassified_signals()[0]["id"]
-    pid = db.save_project(sid, {"name": "Widen X", "project_type": "highway", "stage": "planning",
+    pid = db.save_project(sid, {"name": "Widen X", "project_type": "highway", "stage": "row_acquisition",
                                 "acquisition_likelihood": 85, "score": 82, "geometry": LINE,
                                 "lat": 39.9, "lon": -75.1}, "rules")
     parcel = db.upsert_parcel({"layer": "t", "apn": "A-1", "owner": "Jane Roe", "address": "1 Main St"})
@@ -92,10 +92,10 @@ def test_db_and_api(tmp_path):
 
     client = TestClient(create_app({"database": path}))
     assert client.get("/").status_code == 200
-    assert [x["projects"] for x in client.get("/api/stats").json()["stages"]] == [1, 0, 0, 0, 0, 0]
-    assert len(client.get("/api/projects", params={"stage": "planning"}).json()) == 1
+    assert [x["projects"] for x in client.get("/api/stats").json()["stages"]] == [0, 0, 0, 1, 0, 0]
+    assert len(client.get("/api/projects", params={"stage": "row_acquisition"}).json()) == 1
     assert client.get("/api/projects", params={"stage": "design"}).json() == []
-    assert len(client.get("/api/leads", params={"stage": "planning"}).json()) == 1
+    assert len(client.get("/api/leads", params={"stage": "row_acquisition"}).json()) == 1
     assert client.get("/api/leads", params={"stage": "construction"}).json() == []
     assert client.get("/api/stats").json()["leads_with_owner"] == 1
     projects = client.get("/api/projects").json()
@@ -171,13 +171,16 @@ def test_postcard_and_email_flows(tmp_path, monkeypatch):
                         "postcard": {"advertising_label": True},
                         "apollo": {"sequence_id": "seq1", "email_account_id": "box1", "from_email": "a@b.test"}}}
     lead = {"id": 7, "owner": "ROE HOLDINGS LLC", "mailing_address": "9 OAK ST, ERIE, PA, 16501",
-            "address": "12 MAIN ST", "apn": "A-1", "project": "Widen X (MPMS 1)", "stage": "planning"}
+            "address": "12 MAIN ST", "apn": "A-1", "project": "Widen X (MPMS 1)", "stage": "row_acquisition"}
 
     monkeypatch.delenv("LOB_API_KEY", raising=False)
     monkeypatch.delenv("APOLLO_API_KEY", raising=False)
     assert outreach.status(cfg)["postcard"]["mode"] == "off" and not outreach.status(cfg)["email"]["enabled"]
     check = outreach.postcard_check(cfg, lead)
-    assert check["blocker"] is None and "ADVERTISEMENT" in check["back"] and "Widen X is in planning" in check["front"]
+    assert check["blocker"] is None and "ADVERTISEMENT" in check["back"] and "Widen X is in right-of-way acquisition" in check["front"] and check["timing"] == "now"
+    assert "too early" in outreach.postcard_check(cfg, dict(lead, stage="planning"))["blocker"]          # nothing for the owner to act on yet
+    assert "too late" in outreach.postcard_check(cfg, dict(lead, stage="construction"))["blocker"]      # the land is already taken
+    assert outreach.postcard_check(cfg, dict(lead, stage="design"))["blocker"] is None
     assert outreach.postcard_check(cfg, dict(lead, owner="CITY OF ERIE"))["blocker"]
     assert outreach.postcard_check(cfg, dict(lead, mailing_address="ERIE PA"))["blocker"]
 
@@ -243,10 +246,10 @@ def test_postcard_and_email_flows(tmp_path, monkeypatch):
 
 def test_score_is_a_100_point_rubric():
     # new roadway (95), planning, $60M: 57 + 15 + 10 + 15
-    assert C.overall_score(95, "planning", 60e6) == 97
+    assert C.overall_score(95, "row_acquisition", 60e6) == 97
     # bridge replacement (40), design, no budget: 24 + 12 + 0 + 15
     assert C.overall_score(40, "design", None) == 51
-    assert C.overall_score(100, "planning", 1e9) == 100 and C.overall_score(0, "construction", None) == 15
+    assert C.overall_score(100, "row_acquisition", 1e9) == 100 and C.overall_score(0, "construction", None) == 15
     for likelihood, stage, cost in ((95, "planning", 60e6), (40, "design", None), (100, "planning", 700e6),
                                     (30, "construction", 2e6), (85, "row_acquisition", 12e6), (60, "unknown", 0)):
         score = C.overall_score(likelihood, stage, cost)
@@ -937,3 +940,22 @@ def test_corridor_lookup_for_services_that_only_answer_what_is_here():
     point = P.near(layer, Fake(), {"x": -97.74, "y": 30.27}, m)
     assert point[0]["apn"] == "7" and calls[-1][1]["geometryType"] == "esriGeometryPoint" and calls[-1][1]["tolerance"] >= 1
     assert P.by_apn(layer, Fake(), ["1"]) == []
+
+
+def test_timing_says_when_to_reach_an_owner():
+    """Not before the owner needs counsel and not after: each project is placed in a window, and the score follows it."""
+    from datetime import date
+
+    from edradar import classify as C
+
+    w = C.outreach_window
+    assert (w("row_acquisition")["key"], w("row_acquisition")["mail"]) == ("now", True)
+    assert (w("condemnation_filed")["key"], w("design")["key"], w("planning")["key"], w("environmental_review")["key"]) == ("closing", "soon", "early", "early")
+    assert (w("construction")["key"], w("construction")["mail"]) == ("late", False) and (w("unknown")["key"], w(None)["key"]) == ("unknown", "unknown")
+    assert w("design", 70)["key"] == "early" and w("design", 40)["key"] == "soon"            # in design, but bids five years off
+    assert "about 14 months" in w("row_acquisition", 14)["why"] and "3 years" in w("design", 40)["why"]
+    tl = C.timeline("row_acquisition", {"LET_DATE": "20280914"}, date(2026, 11, 25))
+    assert tl["window"]["key"] == "now" and tl["window"]["mail"]
+    # the score rewards the right moment, not the earliest one
+    s = lambda stage: C.overall_score(85, stage, 20e6)
+    assert s("row_acquisition") > s("design") > s("condemnation_filed") > s("environmental_review") > s("planning") > s("unknown") > s("construction")
