@@ -1,260 +1,491 @@
 {
-  "state": "Oregon",
-  "code": "OR",
-  "checked": "2026-11-17",
-  "projects": [
-    {
-      "name": "ODOT TransGIS - STIP 2027-2030 Lines - Current",
-      "url": "https://gis.odot.state.or.us/arcgis1006/rest/services/transgis/catalog/MapServer/417",
-      "verified": true,
-      "geometry": "polyline",
-      "record_count": 207,
-      "fields": {
-        "id": "PROJ_KEY_NO",
-        "name": "PROJ_NM",
-        "description": "PROJ_DESC",
-        "cost": "PHASE_STIP_ESTIMATE_AMOUNT",
-        "status": "MNTR_CD",
-        "let_date": "BID_LET_DT",
-        "county": "COUNTYNAME"
-      },
-      "status_values": [
-        "CONST",
-        "PSEDOC"
-      ],
-      "notes": "ODOT 2027-2030 STIP projects mapped as lines, refreshed daily (GIS_PRC_DT was 11/16/2026). No work-type field: the type of work is only in PROJ_DESC free text. MNTR_CD is the monitor code: PSEDOC = still in design (plans/specs/estimate), CONST = construction phase. BID_LET_DT (epoch ms) is the bid letting date; future date = not yet let. STIP_FIRST_YR_NO / PROJ_PHASE_CURRENT_STIP_YR_NO give the STIP year. ADMINISTRATOR_ID tells ODOT vs LOCAL delivery. Layer ids in this large catalog service are not guaranteed stable; re-find by layer name if 417 changes."
-    },
-    {
-      "name": "ODOT TransGIS - STIP 2027-2030 Points - Current",
-      "url": "https://gis.odot.state.or.us/arcgis1006/rest/services/transgis/catalog/MapServer/416",
-      "verified": true,
-      "geometry": "point",
-      "record_count": 373,
-      "fields": {
-        "id": "PROJ_KEY_NO",
-        "name": "PROJ_NM",
-        "description": "PROJ_DESC",
-        "cost": "PHASE_STIP_ESTIMATE_AMOUNT",
-        "status": "MNTR_CD",
-        "let_date": "BID_LET_DT",
-        "county": "COUNTYNAME"
-      },
-      "status_values": [
-        "CONST",
-        "PSEDOC"
-      ],
-      "notes": "Point version (spot locations) of the 2027-2030 STIP; same schema."
-    },
-    {
-      "name": "ODOT TransGIS - STIP 2024-2027 Lines",
-      "url": "https://gis.odot.state.or.us/arcgis1006/rest/services/transgis/catalog/MapServer/362",
-      "verified": true,
-      "geometry": "polyline",
-      "record_count": 681,
-      "fields": {
-        "id": "PROJ_KEY_NO",
-        "name": "PROJ_NM",
-        "description": "PROJ_DESC",
-        "cost": "PHASE_STIP_ESTIMATE_AMOUNT",
-        "status": "MNTR_CD",
-        "let_date": "BID_LET_DT",
-        "county": "COUNTYNAME"
-      },
-      "status_values": [
-        "CONST",
-        "PSEDOC"
-      ],
-      "notes": "Current-cycle 2024-2027 STIP lines, same schema; many already let or under construction, so filter on BID_LET_DT in the future and MNTR_CD. Points are layer 361."
-    },
-    {
-      "name": "ODOT STIP 2027-2030 Draft Lines (public comment map)",
-      "url": "https://gis.odot.state.or.us/arcgis1006/rest/services/agol/STIP_27_30_Draft/MapServer/1",
-      "verified": true,
-      "geometry": "polyline",
-      "record_count": 174,
-      "fields": {
-        "id": "PROJ_KEY_NO",
-        "name": "PROJ_NM",
-        "description": "PROJ_DESC",
-        "status": "STATUS"
-      },
-      "status_values": [
-        "Construction",
-        "Design",
-        "Other",
-        "Planning"
-      ],
-      "notes": "Draft 27-30 STIP layer with a plain phase field STATUS (Planning / Design / Construction / Other) and PROGRAMMED Yes/No; no cost or dates. Join to the TransGIS layers on PROJ_KEY_NO. Points are layer 0."
-    }
-  ],
-  "parcels_statewide": null,
-  "parcels_statewide_note": "null: no free statewide Oregon taxlot layer with owner names found. Portland Metro's regional RLIS 'Taxlots (Public)' covers Multnomah, Washington and Clackamas counties but has no owner name (only PUBLIC_OWN / OWNERTYPE).",
-  "parcels_counties": [
-    {
-      "county": "LANE",
-      "name": "Lane County - PlanMaps/AddressParcel - Parcels",
-      "url": "https://lcmaps.lanecounty.org/arcgis/rest/services/PlanMaps/AddressParcel/MapServer/1",
-      "verified": true,
-      "record_count": 159183,
-      "owner_filled_count": 155531,
-      "fields": {
-        "apn": "MAPTAXLOT",
-        "owner": "OWNNAME",
-        "mailing_address": [
-          "ADDR1",
-          "ADDR2",
-          "ADDR3",
-          "OWNERCITY",
-          "OWNERPRVST",
-          "OWNERZIP"
-        ],
-        "market_value": "ASSDTOTVAL",
-        "acres": "MAPACRES"
-      },
-      "restrictions": "None seen on the layer; ORS 192.355 / county terms not reviewed.",
-      "notes": "County's own server (Eugene/Springfield). Owner fields were blank on the first sample record, see owner_filled_count. No situs address field in this layer (addresses are layer 0 of the same service, not inspected). ASSDTOTVAL = assessed total; LANDVAL, IMPVAL also present."
-    },
-    {
-      "county": "MARION",
-      "name": "Marion County parcels (copy published by City of Stayton: Parcels)",
-      "url": "https://services3.arcgis.com/SXXjryU22GsO8OEC/arcgis/rest/services/Parcels/FeatureServer/0",
-      "verified": true,
-      "record_count": 115385,
-      "owner_filled_count": 115385,
-      "fields": {
-        "apn": "TAXLOT",
-        "owner": "OWNERNAME",
-        "mailing_address": [
-          "OWNERADDR",
-          "OWNERCSZ"
-        ],
-        "address": [
-          "SITUS",
-          "SITUSCSZ"
-        ],
-        "market_value": "RMVTOTAL",
-        "acres": "ACRES"
-      },
-      "restrictions": "None seen on the layer.",
-      "notes": "Third-party city copy of Marion County (Salem) assessor parcels, 115k records, LASTUPDATE Feb 2025 in the sample, so not live. RMVTOTAL = real market value; SALEPRICE, INSTDATE also present."
-    },
-    {
-      "county": "MULTNOMAH",
-      "name": "Multnomah County Taxlot Parcels (Multnomah County Tax Parcels)",
-      "url": "https://services5.arcgis.com/x7DNZL1YqNQVNykA/arcgis/rest/services/Multnomah_County_Taxlot_Parcels/FeatureServer/0",
-      "verified": true,
-      "record_count": 284349,
-      "owner_filled_count": 284341,
-      "fields": {
-        "apn": "MAPTAXLOT",
-        "owner": [
-          "NAME",
-          "NAME2"
-        ],
-        "mailing_address": [
-          "ADDR1",
-          "ADDR2",
-          "CITY",
-          "STATE",
-          "ZIP"
-        ],
-        "address": [
-          "SITUSADDR",
-          "SITUSCITY",
-          "SITUSZIP"
-        ],
-        "market_value": [
-          "ROLLLAND",
-          "ROLLIMP"
-        ],
-        "acres": "SIZEACRES"
-      },
-      "restrictions": null,
-      "notes": "ArcGIS Online hosted layer (item owner harperb_AGO, item modified Dec 2025) described as tax lots from the Multnomah County Division of Assessment, Recording and Taxation; ROLLYEAR 2025 in the sample. PROPID (e.g. R186993) is the county account id; ROLLM50 is the Measure 50 assessed value; DEED_DATE, SALE_PRICE, PROPCLASS, ZONING also present. ADDR1 can be a care-of line ('%LINCOLN PROPERTY CO') with the street in ADDR2. Spatial point+distance query works as-is: 51 parcels at -122.6765,45.5152 (.../query?geometry=-122.6765,45.5152&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=200&units=esriSRUnit_Meter&outFields=*&returnGeometry=false&f=json). Terms read: the item's terms of use say only 'This map data is for reference use only ... Multnomah County GIS disclaims all responsibility for the accuracy or completeness' (https://www.arcgis.com/home/item.html?id=13a535596a1f4fe0887b03d14d943229); no limit on commercial use or solicitation is stated there. The county's own servers (www3.multco.us, portlandmaps.com) timed out.",
-      "checked": "2026-11-17"
-    },
-    {
-      "county": "JACKSON",
-      "name": "Jackson County GIS - OpenData/ReferenceData - Tax Lots",
-      "url": "https://spatial.jacksoncountyor.gov/arcgis/rest/services/OpenData/ReferenceData/MapServer/3",
-      "verified": true,
-      "record_count": 104815,
-      "owner_filled_count": 104735,
-      "fields": {
-        "apn": "MAPLOT",
-        "owner": "FEEOWNER",
-        "mailing_address": [
-          "ADDRESS1",
-          "ADDRESS2",
-          "CITY",
-          "STATE",
-          "ZIPCODE"
-        ],
-        "address": "SITEADD",
-        "market_value": [
-          "LANDVALUE",
-          "IMPVALUE"
-        ],
-        "acres": "ACREAGE"
-      },
-      "restrictions": "terms not found",
-      "notes": "County's own server (Medford/Ashland), maxRecordCount 1000, native spatial reference wkid 2270. ACCOUNT is the assessor account; INCAREOF and CONTRACT (contract purchaser) also present; ASSESSLAND / ASSESSIMP are assessed values. Spatial point+distance query works as-is: 112 parcels at -122.8756,42.3265. No terms-of-use page could be opened (jacksoncountyor.gov GIS page returned 403); the layer's copyright text only says 'Please extend credit to Jackson County GIS in any subsequent works derived from its data', and the county's ArcGIS Online items carry a warranty disclaimer with no use limits. A City of Medford layer (maps.medfordmaps.org/.../Public/Taxlots_with_SiteAddresses_Service/MapServer/1, 34,444 records, same field names) covers the Medford area only.",
-      "checked": "2026-11-17"
-    },
-    {
-      "county": "DESCHUTES",
-      "name": "Deschutes County - Dial2_Taxlots - Taxlot (joined to assessor account and mailing table)",
-      "url": "https://maps.deschutes.org/arcgis/rest/services/Dial2_Taxlots/MapServer/0",
-      "verified": true,
-      "record_count": 112485,
-      "owner_filled_count": 112373,
-      "fields": {
-        "apn": "Taxlot_Assessor_Account.TAXLOT",
-        "owner": "dbo_GIS_MAILING.OWNER",
-        "mailing_address": [
-          "dbo_GIS_MAILING.M_ADDRESS",
-          "dbo_GIS_MAILING.M_CITY",
-          "dbo_GIS_MAILING.M_STATE",
-          "dbo_GIS_MAILING.M_ZIP"
-        ],
-        "address": [
-          "Taxlot_Assessor_Account.Address",
-          "Taxlot_Assessor_Account.City",
-          "Taxlot_Assessor_Account.Zip"
-        ]
-      },
-      "restrictions": null,
-      "notes": "County's own server (Bend/Redmond), the layer behind the county DIAL property viewer. Field names carry the joined-table prefix exactly as shown (use them in outFields and where clauses, e.g. where=dbo_GIS_MAILING.OWNER IS NOT NULL). dbo_GIS_MAILING.ACCOUNT_ID, AGENT, IN_CARE_OF and M_CITYSTZIP also present; a taxlot with several accounts appears once per account (112,485 rows for 109,596 taxlots). No value or acreage fields. maxRecordCount 1000. Spatial point+distance query works as-is: 204 records at -121.3153,44.0582. Operational_Layers/MapServer/0 on the same server has owner name only. The county's ArcGIS Online taxlot layers (services1.arcgis.com/znO8Hz1SuVVohYhZ/.../Taxlots, Taxlot_Assessor_Account_view, Taxlots_and_Account_Mailing_view_layer) have NO owner fields. Terms read: the county's ArcGIS Online taxlot items state 'Free to download and use' / 'Full source data is available on our data portal site and is free to download and use' (item 901cdd4a5ca24cc3b72cc8e3e0f11f02); no terms are attached to this map service itself and deschutes.org disclaimer pages timed out.",
-      "checked": "2026-11-17"
-    }
-  ],
-  "summary": "ODOT STIP 2027-2030 and 2024-2027 line/point layers verified with cost, bid-let date and design/construction code (no structured work-type field). Parcels: no statewide owner layer; Lane County and a city-hosted copy of Marion County verified. Multnomah/Washington/Clackamas (Metro RLIS) have no owner names in public layers; portlandmaps.com timed out. Second pass 2026-11-17: Multnomah, Jackson and Deschutes county layers with owner name and mailing address verified, each answering point+distance spatial queries; Washington and Clackamas publish no owner names.",
-  "parcels_counties_checked": [
-    {
-      "county": "WASHINGTON",
-      "name": "Washington_County_Taxlots (Washington County, Oregon)",
-      "url": "https://gispub.co.washington.or.us/server/rest/services/Washington_County_Taxlots/FeatureServer/0",
-      "verified": false,
-      "record_count": 200990,
-      "has_owner_name": false,
-      "has_mailing_address": false,
-      "spatial_query_works": true,
-      "restrictions": "not reviewed: layer not usable (no owner name)",
-      "notes": "No owner name published: TLNO, MAPNO, TLNO5 only. Metro RLIS copies (Taxlots (Public); Clean Water Services Taxlots layer 2 with TLID only) also have no owner.",
-      "checked": "2026-11-17"
-    },
-    {
-      "county": "CLACKAMAS",
-      "name": "Taxlots CMap / tax_taxlot_cmap (Clackamas County GIS)",
-      "url": "https://services3.arcgis.com/I2eWXOndpF9m8oKC/arcgis/rest/services/Taxlots_CMap/FeatureServer/0",
-      "verified": false,
-      "record_count": 164086,
-      "has_owner_name": false,
-      "has_mailing_address": false,
-      "spatial_query_works": true,
-      "restrictions": "not reviewed: layer not usable (no owner name)",
-      "notes": "No owner name or mailing address published. Has PARCEL_NUMBER, TLNO, SITUS_FULL, LANDVAL, BLDGVAL, TOTALVAL, ASSESSEDVAL, SALE_PRICE, DOC_DATE, MAPACRES. Point+distance returned 113 parcels at -122.6068,45.3573.",
-      "checked": "2026-11-17"
-    }
-  ]
+ "state": "Oregon",
+ "code": "OR",
+ "checked": "2026-11-26",
+ "projects": [
+  {
+   "name": "ODOT TransGIS - STIP 2027-2030 Lines - Current",
+   "url": "https://gis.odot.state.or.us/arcgis1006/rest/services/transgis/catalog/MapServer/417",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 207,
+   "fields": {
+    "id": "PROJ_KEY_NO",
+    "name": "PROJ_NM",
+    "description": "PROJ_DESC",
+    "cost": "PHASE_STIP_ESTIMATE_AMOUNT",
+    "status": "MNTR_CD",
+    "let_date": "BID_LET_DT",
+    "county": "COUNTYNAME"
+   },
+   "status_values": [
+    "CONST",
+    "PSEDOC"
+   ],
+   "notes": "ODOT 2027-2030 STIP projects mapped as lines, refreshed daily (GIS_PRC_DT was 11/16/2026). No work-type field: the type of work is only in PROJ_DESC free text. MNTR_CD is the monitor code: PSEDOC = still in design (plans/specs/estimate), CONST = construction phase. BID_LET_DT (epoch ms) is the bid letting date; future date = not yet let. STIP_FIRST_YR_NO / PROJ_PHASE_CURRENT_STIP_YR_NO give the STIP year. ADMINISTRATOR_ID tells ODOT vs LOCAL delivery. Layer ids in this large catalog service are not guaranteed stable; re-find by layer name if 417 changes."
+  },
+  {
+   "name": "ODOT TransGIS - STIP 2027-2030 Points - Current",
+   "url": "https://gis.odot.state.or.us/arcgis1006/rest/services/transgis/catalog/MapServer/416",
+   "verified": true,
+   "geometry": "point",
+   "record_count": 373,
+   "fields": {
+    "id": "PROJ_KEY_NO",
+    "name": "PROJ_NM",
+    "description": "PROJ_DESC",
+    "cost": "PHASE_STIP_ESTIMATE_AMOUNT",
+    "status": "MNTR_CD",
+    "let_date": "BID_LET_DT",
+    "county": "COUNTYNAME"
+   },
+   "status_values": [
+    "CONST",
+    "PSEDOC"
+   ],
+   "notes": "Point version (spot locations) of the 2027-2030 STIP; same schema."
+  },
+  {
+   "name": "ODOT TransGIS - STIP 2024-2027 Lines",
+   "url": "https://gis.odot.state.or.us/arcgis1006/rest/services/transgis/catalog/MapServer/362",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 681,
+   "fields": {
+    "id": "PROJ_KEY_NO",
+    "name": "PROJ_NM",
+    "description": "PROJ_DESC",
+    "cost": "PHASE_STIP_ESTIMATE_AMOUNT",
+    "status": "MNTR_CD",
+    "let_date": "BID_LET_DT",
+    "county": "COUNTYNAME"
+   },
+   "status_values": [
+    "CONST",
+    "PSEDOC"
+   ],
+   "notes": "Current-cycle 2024-2027 STIP lines, same schema; many already let or under construction, so filter on BID_LET_DT in the future and MNTR_CD. Points are layer 361."
+  },
+  {
+   "name": "ODOT STIP 2027-2030 Draft Lines (public comment map)",
+   "url": "https://gis.odot.state.or.us/arcgis1006/rest/services/agol/STIP_27_30_Draft/MapServer/1",
+   "verified": true,
+   "geometry": "polyline",
+   "record_count": 174,
+   "fields": {
+    "id": "PROJ_KEY_NO",
+    "name": "PROJ_NM",
+    "description": "PROJ_DESC",
+    "status": "STATUS"
+   },
+   "status_values": [
+    "Construction",
+    "Design",
+    "Other",
+    "Planning"
+   ],
+   "notes": "Draft 27-30 STIP layer with a plain phase field STATUS (Planning / Design / Construction / Other) and PROGRAMMED Yes/No; no cost or dates. Join to the TransGIS layers on PROJ_KEY_NO. Points are layer 0."
+  }
+ ],
+ "parcels_statewide": null,
+ "parcels_statewide_note": "null: no free statewide Oregon taxlot layer with owner names found. Portland Metro's regional RLIS 'Taxlots (Public)' covers Multnomah, Washington and Clackamas counties but has no owner name (only PUBLIC_OWN / OWNERTYPE). Checked 2026-11-26: Oregon Water Resources Dept layer gis.wrd.state.or.us/server/rest/services/tax/Tax_Lots_Public_Query_WGS84/MapServer/2 (536,727 taxlots from 13 participating counties: Baker, Benton, Clackamas, Curry, Grant, Harney, Jackson, Jefferson, Klamath, Lake, Lincoln, Tillamook, Wheeler) has owner_address / owner_citystatezip and site_address but NO owner name field. ODF StatewideTaxLots MapServer needs a token; the DAS 'or_cadastral_wm' Oregon Parcel Database service returned 'Invalid URL'.",
+ "parcels_counties": [
+  {
+   "county": "LANE",
+   "name": "Lane County - PlanMaps/AddressParcel - Parcels",
+   "url": "https://lcmaps.lanecounty.org/arcgis/rest/services/PlanMaps/AddressParcel/MapServer/1",
+   "verified": true,
+   "record_count": 159183,
+   "owner_filled_count": 155531,
+   "fields": {
+    "apn": "MAPTAXLOT",
+    "owner": "OWNNAME",
+    "mailing_address": [
+     "ADDR1",
+     "ADDR2",
+     "ADDR3",
+     "OWNERCITY",
+     "OWNERPRVST",
+     "OWNERZIP"
+    ],
+    "market_value": "ASSDTOTVAL",
+    "acres": "MAPACRES"
+   },
+   "restrictions": "None seen on the layer; ORS 192.355 / county terms not reviewed.",
+   "notes": "County's own server (Eugene/Springfield). Owner fields were blank on the first sample record, see owner_filled_count. No situs address field in this layer (addresses are layer 0 of the same service, not inspected). ASSDTOTVAL = assessed total; LANDVAL, IMPVAL also present."
+  },
+  {
+   "county": "MARION",
+   "name": "Marion County parcels (copy published by City of Stayton: Parcels)",
+   "url": "https://services3.arcgis.com/SXXjryU22GsO8OEC/arcgis/rest/services/Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 115385,
+   "owner_filled_count": 115385,
+   "fields": {
+    "apn": "TAXLOT",
+    "owner": "OWNERNAME",
+    "mailing_address": [
+     "OWNERADDR",
+     "OWNERCSZ"
+    ],
+    "address": [
+     "SITUS",
+     "SITUSCSZ"
+    ],
+    "market_value": "RMVTOTAL",
+    "acres": "ACRES"
+   },
+   "restrictions": "None seen on the layer.",
+   "notes": "Third-party city copy of Marion County (Salem) assessor parcels, 115k records, LASTUPDATE Feb 2025 in the sample, so not live. RMVTOTAL = real market value; SALEPRICE, INSTDATE also present."
+  },
+  {
+   "county": "MULTNOMAH",
+   "name": "Multnomah County Taxlot Parcels (Multnomah County Tax Parcels)",
+   "url": "https://services5.arcgis.com/x7DNZL1YqNQVNykA/arcgis/rest/services/Multnomah_County_Taxlot_Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 284349,
+   "owner_filled_count": 284341,
+   "fields": {
+    "apn": "MAPTAXLOT",
+    "owner": [
+     "NAME",
+     "NAME2"
+    ],
+    "mailing_address": [
+     "ADDR1",
+     "ADDR2",
+     "CITY",
+     "STATE",
+     "ZIP"
+    ],
+    "address": [
+     "SITUSADDR",
+     "SITUSCITY",
+     "SITUSZIP"
+    ],
+    "market_value": [
+     "ROLLLAND",
+     "ROLLIMP"
+    ],
+    "acres": "SIZEACRES"
+   },
+   "restrictions": null,
+   "notes": "ArcGIS Online hosted layer (item owner harperb_AGO, item modified Dec 2025) described as tax lots from the Multnomah County Division of Assessment, Recording and Taxation; ROLLYEAR 2025 in the sample. PROPID (e.g. R186993) is the county account id; ROLLM50 is the Measure 50 assessed value; DEED_DATE, SALE_PRICE, PROPCLASS, ZONING also present. ADDR1 can be a care-of line ('%LINCOLN PROPERTY CO') with the street in ADDR2. Spatial point+distance query works as-is: 51 parcels at -122.6765,45.5152 (.../query?geometry=-122.6765,45.5152&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=200&units=esriSRUnit_Meter&outFields=*&returnGeometry=false&f=json). Terms read: the item's terms of use say only 'This map data is for reference use only ... Multnomah County GIS disclaims all responsibility for the accuracy or completeness' (https://www.arcgis.com/home/item.html?id=13a535596a1f4fe0887b03d14d943229); no limit on commercial use or solicitation is stated there. The county's own servers (www3.multco.us, portlandmaps.com) timed out.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "JACKSON",
+   "name": "Jackson County GIS - OpenData/ReferenceData - Tax Lots",
+   "url": "https://spatial.jacksoncountyor.gov/arcgis/rest/services/OpenData/ReferenceData/MapServer/3",
+   "verified": true,
+   "record_count": 104815,
+   "owner_filled_count": 104735,
+   "fields": {
+    "apn": "MAPLOT",
+    "owner": "FEEOWNER",
+    "mailing_address": [
+     "ADDRESS1",
+     "ADDRESS2",
+     "CITY",
+     "STATE",
+     "ZIPCODE"
+    ],
+    "address": "SITEADD",
+    "market_value": [
+     "LANDVALUE",
+     "IMPVALUE"
+    ],
+    "acres": "ACREAGE"
+   },
+   "restrictions": "terms not found",
+   "notes": "County's own server (Medford/Ashland), maxRecordCount 1000, native spatial reference wkid 2270. ACCOUNT is the assessor account; INCAREOF and CONTRACT (contract purchaser) also present; ASSESSLAND / ASSESSIMP are assessed values. Spatial point+distance query works as-is: 112 parcels at -122.8756,42.3265. No terms-of-use page could be opened (jacksoncountyor.gov GIS page returned 403); the layer's copyright text only says 'Please extend credit to Jackson County GIS in any subsequent works derived from its data', and the county's ArcGIS Online items carry a warranty disclaimer with no use limits. A City of Medford layer (maps.medfordmaps.org/.../Public/Taxlots_with_SiteAddresses_Service/MapServer/1, 34,444 records, same field names) covers the Medford area only.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "DESCHUTES",
+   "name": "Deschutes County - Dial2_Taxlots - Taxlot (joined to assessor account and mailing table)",
+   "url": "https://maps.deschutes.org/arcgis/rest/services/Dial2_Taxlots/MapServer/0",
+   "verified": true,
+   "record_count": 112485,
+   "owner_filled_count": 112373,
+   "fields": {
+    "apn": "Taxlot_Assessor_Account.TAXLOT",
+    "owner": "dbo_GIS_MAILING.OWNER",
+    "mailing_address": [
+     "dbo_GIS_MAILING.M_ADDRESS",
+     "dbo_GIS_MAILING.M_CITY",
+     "dbo_GIS_MAILING.M_STATE",
+     "dbo_GIS_MAILING.M_ZIP"
+    ],
+    "address": [
+     "Taxlot_Assessor_Account.Address",
+     "Taxlot_Assessor_Account.City",
+     "Taxlot_Assessor_Account.Zip"
+    ]
+   },
+   "restrictions": null,
+   "notes": "County's own server (Bend/Redmond), the layer behind the county DIAL property viewer. Field names carry the joined-table prefix exactly as shown (use them in outFields and where clauses, e.g. where=dbo_GIS_MAILING.OWNER IS NOT NULL). dbo_GIS_MAILING.ACCOUNT_ID, AGENT, IN_CARE_OF and M_CITYSTZIP also present; a taxlot with several accounts appears once per account (112,485 rows for 109,596 taxlots). No value or acreage fields. maxRecordCount 1000. Spatial point+distance query works as-is: 204 records at -121.3153,44.0582. Operational_Layers/MapServer/0 on the same server has owner name only. The county's ArcGIS Online taxlot layers (services1.arcgis.com/znO8Hz1SuVVohYhZ/.../Taxlots, Taxlot_Assessor_Account_view, Taxlots_and_Account_Mailing_view_layer) have NO owner fields. Terms read: the county's ArcGIS Online taxlot items state 'Free to download and use' / 'Full source data is available on our data portal site and is free to download and use' (item 901cdd4a5ca24cc3b72cc8e3e0f11f02); no terms are attached to this map service itself and deschutes.org disclaimer pages timed out.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "JOSEPHINE",
+   "name": "Josephine County GIS - Assessor/Assessor_Taxlots - Assessor Taxlots",
+   "url": "https://gis.co.josephine.or.us/arcgis/rest/services/Assessor/Assessor_Taxlots/MapServer/0",
+   "verified": true,
+   "record_count": 42006,
+   "owner_filled_count": 41955,
+   "fields": {
+    "apn": "MapNum",
+    "owner": "NAME",
+    "mailing_address": [
+     "ADDR1",
+     "ADDR2",
+     "ADDR3",
+     "City",
+     "State",
+     "ZIP"
+    ],
+    "address": [
+     "SITUS",
+     "SITUS_CITY",
+     "SITUS_ST",
+     "SITUS_ZIP"
+    ],
+    "market_value": "RMV",
+    "acres": "ACREAGE"
+   },
+   "restrictions": "terms not found: the layer and service have no description or copyrightText (service description is an unfilled template line), the serviceItemId is not a public ArcGIS Online item, and no county GIS terms/disclaimer page was read",
+   "notes": "Josephine County's own ArcGIS server (Grants Pass), public Assessor folder, no login. ACCOUNT (e.g. R300001) is the assessor account; MapNum is the 14-digit map+taxlot, TAXLOT the lot part. ADDRESS duplicates ADDR1. CSZ holds the SITUS city/state/zip, not the mailing one. APPR_VALUE, ASSD_VALUE, LAND_MKT, IMP_VALUE, SALE_DATE, SALE_PRICE, PROP_CLASS, Zone, Latitude/Longitude also present. Native spatial reference wkid 2270; maxRecordCount 2000. A FeatureServer of the same service also exists.",
+   "checked": "2026-11-26"
+  },
+  {
+   "county": "KLAMATH",
+   "name": "Klamath County GIS - KC_Taxlots - KC_Taxlot_Publish",
+   "url": "https://services.arcgis.com/H6Mh1bySxR4oHx6x/arcgis/rest/services/KC_Taxlots/FeatureServer/1",
+   "verified": true,
+   "record_count": 61229,
+   "owner_filled_count": 61212,
+   "fields": {
+    "apn": "MTL",
+    "owner": "OWNER_NAME",
+    "mailing_address": [
+     "MAIL1",
+     "MAIL2",
+     "MAILCITY",
+     "MAILST",
+     "ZIP"
+    ],
+    "address": [
+     "SITUS_ADDRESS",
+     "SITUS_CSZ"
+    ],
+    "market_value": "Tot_Appr",
+    "acres": "ACREAGE"
+   },
+   "restrictions": "item terms of use read in full: 'This layer is for reference only.' No explicit limit on commercial use, redistribution or solicitation is stated, but 'reference only' may be meant as a use limit; no separate county GIS terms page was read. Held for the owner's decision.",
+   "notes": "Klamath County GIS's own ArcGIS Online organisation ('KCGIS', item e3ea8ceb692f405caad95e28eed50688, owner ewilde, public, credit 'Klamath County GIS'), described as 'Klamath County Taxlots. Information is derived from Klamath County Assessor data joined with GIS polygons'. Fresh: RDATE 20261120 in the samples. PROP_ID is the assessor account, MTL the map-taxlot with dashes (MAP_TAXLOT is empty on every record). Mailing street is MAIL1 (filled on 60,082 records, space-padded); OWNER_ADDR1-3 are mostly empty or hold care-of / second-owner lines, OWNER_CSZ is the mailing city/state/zip in one string (60,057 filled). LND_APPR, IMP_APPR, M50_VALUE (assessed), SALE_PRICE, SALE_DATE, PROP_CLASS, Zone_ also present. First sample records are federal land with no mailing address. Native spatial reference wkid 2914; maxRecordCount 1000. KC_ParcelSales / ParcelSalesNew in the same organisation carry OWNER_NAME for sold parcels only.",
+   "checked": "2026-11-26"
+  },
+  {
+   "county": "YAMHILL",
+   "name": "Yamhill County - AT Taxlots - A&T Taxlots (with ownership)",
+   "url": "https://services6.arcgis.com/toubSXwoan3LMhOW/arcgis/rest/services/AT_Taxlots/FeatureServer/1",
+   "verified": true,
+   "record_count": 51338,
+   "owner_filled_count": 49346,
+   "fields": {
+    "apn": "maptaxlot",
+    "owner": [
+     "owner1",
+     "owner2",
+     "owner3"
+    ],
+    "mailing_address": [
+     "mailadd1",
+     "mailadd2",
+     "mailcity",
+     "mailstate",
+     "mailzip"
+    ],
+    "address": [
+     "situs1",
+     "situscity",
+     "situszip"
+    ],
+    "acres": "parcel_acres"
+   },
+   "restrictions": "terms not fully read: the county GIS page disclaimer is warranty/liability only, but the GIS Hub sits behind an 'I agree to ACCEPT' link that was not clicked, so any further terms inside the Hub were not seen; the item has no licence text",
+   "notes": "Yamhill County's own ArcGIS Online organisation ('Yamhill County', urlKey yamco; item 2d7b3aa4cc654b89b92821a9c10d03aa, owner hansberryb, public, snippet 'Yamhill County A&T Taxlots (with ownership)', modified Nov 2026). acctnbr / account_num is the assessor account; propsumlink links to the county's property summary page. No value field; saledate, saleprice (text), instyr/instnbr, pl_zone, yearbuilt also present. Empty text fields hold a single space, so owner_filled_count (49,346) may include blanks. Native wkid 2913; maxRecordCount 2000. Sibling layers in the same organisation: Taxlots_and_Taxing_Districts/FeatureServer/1 (43,153, same owner fields); AT_Taxlot_Parcels has mailing address but no owner. Terms read: the item's licenseInfo and description are empty. The county GIS page (yamhillcounty.gov/1253/GIS-Maps) shows a disclaimer in front of its GIS Hub with an 'I agree to ACCEPT terms of use' link (NOT clicked); the disclaimer text was read in full on that page and is a warranty/liability disclaimer only ('not guaranteed to be accurate', 'NO WARRANTY', 'used at the sole risk of the user', 'not suitable for legal, engineering or surveying purposes'); it states no limit on commercial use, redistribution, solicitation or mailing lists. Any further terms inside the Hub were not seen.",
+   "checked": "2026-11-26"
+  },
+  {
+   "county": "BENTON",
+   "name": "Benton County GIS - Public/TaxlotOwners - TaxlotOwners",
+   "url": "https://gis.co.benton.or.us/arcgis/rest/services/Public/TaxlotOwners/MapServer/0",
+   "verified": true,
+   "record_count": 107938,
+   "owner_filled_count": 107918,
+   "fields": {
+    "apn": "MapTaxlot",
+    "owner": "Party_Name",
+    "mailing_address": [
+     "In_Care_Of",
+     "Mail_Line1",
+     "Mail_Line2",
+     "Mail_City",
+     "Mail_State",
+     "Mail_Zip"
+    ],
+    "address": [
+     "Situs_Addr1",
+     "Situs_City",
+     "Situs_State",
+     "Situs_Zip"
+    ]
+   },
+   "restrictions": "terms not found: the layer and service have no description or copyrightText and no ArcGIS item; the county website links a 'Website Disclaimer' that was not read",
+   "notes": "Benton County's own ArcGIS server (Corvallis), Public folder, no login; the server answered slowly and intermittently today (some requests returned empty and worked on retry). One row per owner party, so a taxlot with several owners repeats (107,938 rows; the first two samples are the same taxlot 103290000100 with two Party_Name values) - de-duplicate on MapTaxlot / Account_Num. ORTaxlot is the ORMAP id. No value or acreage fields. A FeatureServer of the same service exists; Public/TaxlotService is the cartographic taxlot map. Native wkid 2913; maxRecordCount 1000.",
+   "checked": "2026-11-26"
+  },
+  {
+   "county": "UMATILLA",
+   "name": "Umatilla County GIS - Tax Lots",
+   "url": "https://services3.arcgis.com/tNPgIZWOB0Efvm0g/arcgis/rest/services/Tax_Lots/FeatureServer/0",
+   "verified": true,
+   "record_count": 45654,
+   "owner_filled_count": 45654,
+   "fields": {
+    "apn": "map_tax",
+    "owner": "MAILING_NA",
+    "mailing_address": [
+     "IN_CARE_OF",
+     "M_ADDRESS",
+     "M_CITY",
+     "M_STATE",
+     "zip"
+    ],
+    "address": [
+     "SITUS_HOUS",
+     "SITUS_PRE_",
+     "SITUS_STRE",
+     "SITUS_ST_1",
+     "SITUS_CITY",
+     "SITUS_ZIP"
+    ],
+    "acres": "SUM_OF_ACR"
+   },
+   "restrictions": "The layer and item description say: 'For non governmental agencies, the cost to purchase the taxlot data is $500-530. Contact GIS@umatillacounty.gov' - i.e. the county sells this data to non-government users, so bulk reading of the free viewer layer may not be intended. Item terms of use also require: 'Umatilla County should be cited as the data source in any products derived from this data. Any Users wishing to modify the data should describe the types of modifications they have performed.' No explicit ban on commercial use or solicitation is stated. Held for the owner's decision.",
+   "notes": "Umatilla County GIS's ArcGIS Online layer (item 37cf486b6fb742fd86dc45cbda131a0b, owner ian.freel, public, credit 'Umatilla County GIS'), 'depicting land partition and ownership within Umatilla County ... updated nightly'; YEAR 2027 in the samples. MAILING_NA is the mailing (owner) name; account_id is the assessor account; TLID equals map_tax. RMV_PROPER and PROPERTY_C are property class codes, not values; no value field. Rest of the item terms is a warranty disclaimer ('as is', not legal documents or surveys). Native wkid 32126; maxRecordCount 2000. City of Pendleton copies (services3.arcgis.com/pi8Rll0S1Iwgkq8o, e.g. Tax_Lot_Map_WFL1 with MAILING_NAME, 44,595 records dated 04/21/2026) also exist.",
+   "checked": "2026-11-26"
+  },
+  {
+   "county": "COOS",
+   "name": "Coos County Forestland Classification Taxlots (copy hosted by Oregon Department of Forestry)",
+   "url": "https://services.arcgis.com/uUvqNMGPm7axC2dD/arcgis/rest/services/Coos_County_Forestland_Classification_Taxlots_2/FeatureServer/0",
+   "verified": true,
+   "record_count": 42200,
+   "owner_filled_count": 42197,
+   "fields": {
+    "apn": "TLID",
+    "owner": [
+     "OWNER1",
+     "OWNER2",
+     "OWNER3"
+    ],
+    "mailing_address": [
+     "MAIL1",
+     "MAIL2",
+     "MAILCITY",
+     "MAILST",
+     "ZIP"
+    ],
+    "address": [
+     "SITUSSTR",
+     "SITUSCITY",
+     "SITUSZIP"
+    ],
+    "market_value": [
+     "RMVLAND",
+     "RMVIMPR"
+    ],
+    "acres": "ACRES"
+   },
+   "restrictions": "terms not found: the item's licenseInfo, credit and description are empty; it is a state-agency working layer, not a county publication, and no Coos County terms were read",
+   "notes": "NOT the county's own service: a third-party copy of Coos County assessor taxlots in the Oregon Department of Forestry ArcGIS Online organisation, built for a forestland classification project (item 83c45800c1cb49c9a812469d5536ef9f 'Coos County Forestland Classification Taxlots View', owner Robert.FRANSON_ODF, public). STALE: item last modified January 2021 and the layer description is 'CoosCountyForestlandClassificationTAXLOTS1119' (probably November 2019 data), so owners may be out of date. OWNER3 sometimes holds an attention line; NAME is a second owner-name field; AGENT, PROP_ID, PCLSD/PCLCD (property class), PLAN_ZONE plus many forest classification columns. Empty text fields hold a single space. Spatial reference Web Mercator; maxRecordCount 2000. No Coos County server was found (gis.co.coos.or.us did not answer). A Coquille-area layer (services7.arcgis.com/0OQJMFbkxT37MKmw/.../TaxLots, 12,848 records, OWNER1 and MAIL1) is a partial copy only.",
+   "checked": "2026-11-26"
+  },
+  {
+   "county": "LINN",
+   "name": "Linn_County_Tax_Lots_Main (student demonstration copy of Linn County tax lots)",
+   "url": "https://services9.arcgis.com/6EuFgO4fLTqfNOhu/arcgis/rest/services/Linn_County_Tax_Lots_Main/FeatureServer/0",
+   "verified": true,
+   "record_count": 54603,
+   "owner_filled_count": 54078,
+   "fields": {
+    "apn": "Tax_Lot_Pin",
+    "owner": "Owner",
+    "address": "REV_LongLabel",
+    "acres": "Tax_Lot_Acre"
+   },
+   "restrictions": "Item terms of use read in full: 'Demonstration Only'; the item summary says '(For Demonstration Purposes Only)'. Third-party copy, not published by Linn County; no Linn County terms were read. Held for the owner's decision.",
+   "notes": "NOT the county's own service: a university student's ArcGIS Online copy (item a8fdd997ac4b40c0a4efc6ecec7d3d02, owner dbl5743_pennstate, public, credit 'Linn County GIS'), described as 'Linn County tax lots. Last updated 09/10/2026. Sales data is simulated from 2025 historical property sales' with added wildlife-habitat scores. Owner name only: NO mailing address. REV_LongLabel is a reverse-geocoded address, not the assessor situs; Sale / Sale_Price_Number are simulated and must not be used. Zoning_Code, Property_Classification, Land_Management_Class also present. Native wkid 2992; maxRecordCount 2000. No Linn County server was found (gis.co.linn.or.us did not answer); another public layer (services9.arcgis.com/PqtMqei1mqyJiBzd/.../taxlots, 54,596 records) has no owner fields.",
+   "checked": "2026-11-26"
+  },
+  {
+   "county": "POLK",
+   "name": "Benton_Polk_Taxlots_Combined (copy hosted by the Luckiamute Watershed Council; Polk County rows)",
+   "url": "https://services6.arcgis.com/5P1A4d8638S82qKd/arcgis/rest/services/LWC_Taxlots_WFL1/FeatureServer/1",
+   "verified": true,
+   "record_count": 35315,
+   "owner_filled_count": 35315,
+   "fields": {
+    "apn": "MapTaxlot",
+    "owner": "Party_Name",
+    "mailing_address": [
+     "In_Care_Of",
+     "Mail_Addr",
+     "Mail_City",
+     "Mail_State",
+     "Mail_Zip"
+    ],
+    "address": [
+     "Situs_Addr",
+     "Situs_City",
+     "Situs_Zip"
+    ]
+   },
+   "restrictions": "terms not found: the item's licenseInfo, credit and description are empty; third-party copy, not published by Polk County, and no Polk County terms were read",
+   "notes": "NOT the county's own service: a watershed council's ArcGIS Online copy (item b304da3f0eda40daa6b9553bfc1c2a0b 'LWC Taxlots_WFL1', owner LuckiamuteMonitoring, public), summary: 'Updated version of the LWC service area tax lots (Sep 2026) ... compiled by downloading and merging vector taxlot geometry and assessor property records directly from the official GIS REST service endpoints of Benton County and Polk County'. The layer holds 143,253 rows for both counties and has no county field: the first 107,938 rows (FID 1-107938) match Benton County's TaxlotOwners layer row for row, and the remaining 35,315 (where=FID>107938, all with Party_Name) are taken to be Polk County (samples are Dallas, OR addresses with Polk-style map numbers such as '7.5.34A'); record_count is that Polk subset. Check this split before relying on it. A snapshot from September 2026, not live. No value or acreage fields. Layer 2 of the same service (PolkCountyTaxlots_Merge) has the wider Polk assessor columns (AcctTable_OwnerLine1, AcctTable_MailAdd1 ...), not inspected. Polk County's own REST endpoint was not found (maps.co.polk.or.us and gis.co.polk.or.us did not answer). Spatial reference Web Mercator; maxRecordCount 2000.",
+   "checked": "2026-11-26"
+  }
+ ],
+ "summary": "ODOT STIP 2027-2030 and 2024-2027 line/point layers verified with cost, bid-let date and design/construction code (no structured work-type field). Parcels: no statewide owner layer; Lane County and a city-hosted copy of Marion County verified. Multnomah/Washington/Clackamas (Metro RLIS) have no owner names in public layers; portlandmaps.com timed out. Second pass 2026-11-17: Multnomah, Jackson and Deschutes county layers with owner name and mailing address verified, each answering point+distance spatial queries; Washington and Clackamas publish no owner names. Third pass 2026-11-26: added Josephine, Klamath, Yamhill, Benton and Umatilla county layers with owner name and mailing address, plus third-party copies for Coos (ODF, stale, about 2019-2021), Linn (student demonstration copy, owner name only) and Polk (watershed council snapshot, Sep 2026); only Yamhill has restrictions null, the rest are held (terms not found or a limiting statement). The OWRD statewide 'Tax Lots' query layer (13 counties) has owner mailing address but no owner name; no county-published owner layer found for Douglas (bot challenge), Columbia or Lincoln.",
+ "parcels_counties_checked": [
+  {
+   "county": "WASHINGTON",
+   "name": "Washington_County_Taxlots (Washington County, Oregon)",
+   "url": "https://gispub.co.washington.or.us/server/rest/services/Washington_County_Taxlots/FeatureServer/0",
+   "verified": false,
+   "record_count": 200990,
+   "has_owner_name": false,
+   "has_mailing_address": false,
+   "spatial_query_works": true,
+   "restrictions": "not reviewed: layer not usable (no owner name)",
+   "notes": "No owner name published: TLNO, MAPNO, TLNO5 only. Metro RLIS copies (Taxlots (Public); Clean Water Services Taxlots layer 2 with TLID only) also have no owner.",
+   "checked": "2026-11-17"
+  },
+  {
+   "county": "CLACKAMAS",
+   "name": "Taxlots CMap / tax_taxlot_cmap (Clackamas County GIS)",
+   "url": "https://services3.arcgis.com/I2eWXOndpF9m8oKC/arcgis/rest/services/Taxlots_CMap/FeatureServer/0",
+   "verified": false,
+   "record_count": 164086,
+   "has_owner_name": false,
+   "has_mailing_address": false,
+   "spatial_query_works": true,
+   "restrictions": "not reviewed: layer not usable (no owner name)",
+   "notes": "No owner name or mailing address published. Has PARCEL_NUMBER, TLNO, SITUS_FULL, LANDVAL, BLDGVAL, TOTALVAL, ASSESSEDVAL, SALE_PRICE, DOC_DATE, MAPACRES. Point+distance returned 113 parcels at -122.6068,45.3573.",
+   "checked": "2026-11-17"
+  }
+ ]
 }

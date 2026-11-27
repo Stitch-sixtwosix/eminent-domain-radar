@@ -149,3 +149,36 @@ Each entry: what it is, the address, how it could be read, and what was checked.
 - Same pattern likely at other grid operators (not verified today): MISO's MTEP project list, CAISO and ISO-NE
   transmission plan pages answered 200 but no machine-readable project list was located in the time available;
   ERCOT answered 403 and NYISO did not answer. SPP's list is already on file.
+
+## Wisconsin Public Service Commission case maps (utility-commission siting dockets) - checked 2026-11-26
+
+The PSC of Wisconsin publishes one ArcGIS service per construction docket on its own account, with no login:
+`https://services3.arcgis.com/MD5qUVyAWtAyL43E/arcgis/rest/services?f=json` (66 services; the case maps are the ones
+named `<Project>_<docket>`, for example `Emerson_137CE225`). Each is the "Environmental Review Map" for a utility's
+application for a certificate to build a power line, substation or gas main, which is the approval that gives the
+utility condemnation power in Wisconsin. Verified live today:
+
+- `Emerson_137CE225/FeatureServer` (American Transmission Co., Emerson Road substation and 345 kV line, item
+  modified 2026-04-22): layer 21 `S_1103_Segment_Routes` (3 lines; fields `Route`, `Seg_ID`), layer 26
+  `A_Proposed_Easements` (2 polygons), layer 30 `S_Project_Area`, layer 1 `Mailer_Parcels` (87 parcels notified).
+- `ElmRoadtoRacine_137CE215_WFL1/FeatureServer` (ATC Elm Road to Racine line, item modified 2026-04-15): layer 37
+  `Proposed Routes` (7 lines; `Route` = Preferred, `Seg_ID`, `PSC_Len_Mi`), layer 28 `Alternative Routes` (7),
+  layer 26 `Under Consideration`, layer 27 `Removed from Consideration`, layer 36 `Easement` (3 polygons with
+  `Acreage`, `Route`), layer 33 `Right of Way (ROW)`, layer 5 `Parcels - Received Mailer` (435 parcels with
+  `PARCEL_N_1`, `OWNER_NAME`, `MAIL_ADDR`, `MAIL_CITY`, `MAIL_ZIP`, `COUNTY`, `Route`): the owners of record the
+  utility notified, already matched to the route.
+- Older cases in the same shape: `DarienParis_0173CE193`, `Highland_173CE191`, `WECLNG_0005CG106` (proposed gas
+  pipeline), `PlymouthChilton_6690CG174_20200629` (Proposed Routes, Proposed Easements), `CardinalHickoryCreek_0005CE146_APPROVED`.
+  `Arcadian_0137CE192` did not answer today. The `98xxCE100` services are private solar farms (no condemnation).
+
+Terms: the items carry no licence text; description is only the case title ("project data submitted by ..."), so
+terms were not found and anything read from here should be held for the owner. The notified-parcel layers are
+owner-of-record lists compiled by the utility for the PSC mailing; Wisconsin has no statute on file here limiting
+mailing-list use, but that should be confirmed before those names are used.
+
+How it could be read: a "docket sweep" reader that lists the account's services each day, keeps names ending in a
+docket number with CE (electric construction) or CG (gas construction), and in each one takes line layers whose name
+contains Route (skipping "Removed from Consideration" and "Approved" services older than two years) as the project
+geometry, with the service description as the project title. New services appearing on the account are new cases.
+Layer numbers and names differ per case, so they must be matched by name, not by a fixed address. Other commissions
+worth the same check: Minnesota (Commerce EERA), Iowa Utilities Commission, Illinois Commerce Commission, North Dakota PSC.

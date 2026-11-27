@@ -1,7 +1,7 @@
 {
  "state": "California",
  "code": "CA",
- "checked": "2026-11-17",
+ "checked": "2026-11-26",
  "projects": [
   {
    "name": "Caltrans Infrastructure Project Point Prod (Rebuilding California SB1/IIJA project map)",
@@ -111,9 +111,180 @@
  "projects_note": "No single statewide Caltrans line layer of programmed (SHOPP/STIP) projects was found on the Caltrans GIS server (caltrans-gis.dot.ca.gov, whole directory listed) or its ArcGIS Online org. District-level layers also exist (e.g. District 5 SHOPP_PID_Map, last updated 2024) but were not recorded as they are partial and older.",
  "parcels_statewide": null,
  "parcels_statewide_note": "null: California has no free statewide parcel layer with owner names. Owner names are withheld from public GIS layers under California Government Code 7928.205 (cited in San Bernardino County's own layer).",
- "parcels_counties": [],
+ "parcels_counties": [
+  {
+   "county": "SAN DIEGO",
+   "url": "https://services1.arcgis.com/gFqWrLF7jCTW9q6S/arcgis/rest/services/Final_Honors_Thesis_Maps_WFL1/FeatureServer/97",
+   "verified": true,
+   "record_count": 1084724,
+   "fields": {
+    "apn": "APN",
+    "owner": "OWN_NAME1",
+    "mailing_address": [
+     "OWN_ADDR1",
+     "OWN_ADDR2",
+     "OWN_ADDR3",
+     "OWN_ADDR4",
+     "OWN_ZIP"
+    ],
+    "address": [
+     "SITUS_ADDR",
+     "SITUS_PRE_",
+     "SITUS_STRE",
+     "SITUS_SUFF",
+     "SITUS_SUIT",
+     "SITUS_COMM",
+     "SITUS_ZIP"
+    ],
+    "market_value": "ASR_TOTAL",
+    "acres": "ACREAGE"
+   },
+   "restrictions": "terms not found, and this is NOT the county's own publication: it is a copy of the SanGIS PARCELS layer uploaded to ArcGIS Online by a university student account (item 'Final_Honors_Thesis_Maps_WFL1', owner evanbroer@sandiego.edu_usandiego, licenseInfo empty). The County of San Diego's own public layer (parcels_all_for_public_use) deliberately leaves owner names out. The SanGIS legal notice page (sangis.org/legal-notice) is drawn by script and could not be read with a plain request, so SanGIS's terms on commercial use, redistribution and solicitation were not read",
+   "notes": "Full county SanGIS parcel copy, last edited 2024-05 (a snapshot: it will not be updated). 1,083,254 of 1,084,724 records have OWN_NAME1; OWN_NAME2/OWN_NAME3 are co-owners. Mailing address is spread over OWN_ADDR1-4 (street, optional care-of line, 'CITY ST') plus OWN_ZIP. Situs is in parts (SITUS_ADDR is the house number as a number). ASR_LAND, ASR_IMPR, ASR_TOTAL are assessed values, not market. Layer copyrightText read: 'SanGIS using legal recorded data provided by the County Recorders and Assessor's Office...' (attribution only). A second, near-identical student copy exists (services1.arcgis.com/SIYkiqjmENweC50g/.../Lot_Consolidation_Map_for_the_County_of_San_Diego_WFL1/FeatureServer/12, 1,082,664 records, edited 2024-04, licenseInfo empty). 'Stacked' parcels: condominiums share one polygon. maxRecordCount 2000.",
+   "checked": "2026-11-26"
+  },
+  {
+   "county": "SAN BERNARDINO",
+   "url": "https://services.arcgis.com/ZZ0KZXZVmgB1v555/arcgis/rest/services/Parcels/FeatureServer/70",
+   "verified": true,
+   "record_count": 808226,
+   "fields": {
+    "apn": "APN",
+    "owner": "OWNER_NAME",
+    "mailing_address": [
+     "OWNER_ADDRESS",
+     "OWNER_CTYSTZIP"
+    ],
+    "address": [
+     "SITUS_NBR",
+     "SITUS_PREDIR",
+     "SITUS_NAME",
+     "SITUS_TYPE",
+     "SITUS_CITY",
+     "SITUS_ZIP"
+    ],
+    "market_value": [
+     "LAND_VALUE",
+     "IMPR_VALUE"
+    ],
+    "acres": "ACREAGE"
+   },
+   "restrictions": "ArcGIS item licenseInfo reads: 'For San Bernardino County use only'. The county's current official public layer masks every owner name as 'Protected Per CA Gov Code 7928.205', so this older layer exposes what the county now withholds",
+   "notes": "Published by a San Bernardino County department account (SBCO-NPDES, stormwater programme), item 6de922f68cbe4ef5bb96649d42d847bb, public. OLD DATA: the description says 'County of San Bernardino TPIMS (Tax Property Information Management System) parcels... Updated September 01, 2012'; the service was last edited 2022-04. The three sample records all had OWNER_NAME and mailing address filled; the populated-owner count timed out, so the fill rate is not measured. Text fields are padded with trailing spaces; LAND_VALUE and IMPR_VALUE are zero-padded text ('000060893'), assessed not market. OWNER_ADDRESS is the street line and OWNER_CTYSTZIP 'CITY ST  ZIP'. The same account has a near-copy inside WAP_MAP_FB_v13_WFL1/FeatureServer/70 (807,826 records). maxRecordCount 2000.",
+   "checked": "2026-11-26"
+  },
+  {
+   "county": "SONOMA",
+   "url": "https://services3.arcgis.com/HWBSgnJp58geleBu/arcgis/rest/services/Sonoma_County_Parcels_Mailing/FeatureServer/0",
+   "verified": true,
+   "record_count": 188252,
+   "fields": {
+    "apn": "APN",
+    "owner": "CurOwnNm",
+    "mailing_address": [
+     "MailAdr1",
+     "MailAdr2",
+     "MailAdr3",
+     "MailAdr4"
+    ],
+    "address": [
+     "SitusFmt1",
+     "SitusFmt2"
+    ]
+   },
+   "restrictions": "ArcGIS item text reads: 'This version of the parcels is distributed for internal use ONLY & those who have paid for additional attributes through the County of Sonoma, Clerk Recorder Assessor (CRA).' and licenseInfo: 'Permission Required - The user may only copy and redistribute the data in any medium or format with the permission of the author of the data.' Attribution 'County of Sonoma' required. Posted publicly by a third party (Fire Safe Sonoma), not by the county",
+   "notes": "Sonoma County's paid 'Parcels Mailing List' layer (owner name and mailing address from the Megabyte tax system), re-posted on ArcGIS Online by Fire Safe Sonoma (item 65efcf0ea64543cdad1171866926f179, owner firesafe.sonoma.org@gmail.com). Snapshot of about February 2024 (MBUpdateD 2024-02-26; service last edited 2024-03). 187,564 of 188,252 records have CurOwnNm. MailAdr1-4 are ready-made mailing lines (a DBA or care-of line may come first); MailStrAdr, MailCtySt, MailZip5 also exist. No value or acreage field. The county's own 'Parcels Public' layer leaves these attributes out; the item text says the full version is sold by the Clerk-Recorder-Assessor (707 565 1888). maxRecordCount 2000.",
+   "checked": "2026-11-26"
+  },
+  {
+   "county": "MONTEREY",
+   "url": "https://services3.arcgis.com/TD7dqBD94J0UyJbG/arcgis/rest/services/Monterey_County_Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 125448,
+   "fields": {
+    "apn": "APN",
+    "owner": "Assessee",
+    "mailing_address": [
+     "InCareOf",
+     "A_Street",
+     "A_City",
+     "A_State",
+     "A_Zip"
+    ],
+    "address": [
+     "SitusNum",
+     "Situs_Dirx",
+     "Situs_St",
+     "SitusApt",
+     "City"
+    ],
+    "market_value": [
+     "Land_Value",
+     "Improved_Value"
+    ],
+    "acres": "GIS_ACRES"
+   },
+   "restrictions": "terms not found: the layer has no description or copyrightText and the ArcGIS item's licenseInfo is empty. It is a copy posted by the Monterey Peninsula Regional Park District (account mprpd), not by the county; Monterey County's own public server (maps.co.monterey.ca.us, Land_Records/Parcels_GIS) publishes APN and acreage only and keeps its other parcel folders behind a login",
+   "notes": "Item dbdd9acfeb05481ca7fe70a7b7df8b29, snippet read: 'Assessors parcel data from September 19, 2022.' A 2022 snapshot, not updated since. 124,723 of 125,448 records have Assessee. Also DBA, Address3/Address4, Legal_Description, Land_Use, Zoning, Current_Document_Date/Number (last deed) and many planning overlay fields. Land_Value/Improved_Value are assessed values. APN_FORMAT is the dashed APN. maxRecordCount 2000.",
+   "checked": "2026-11-26"
+  },
+  {
+   "county": "SANTA BARBARA",
+   "url": "https://services6.arcgis.com/XT7Yf85QXvCKP61G/arcgis/rest/services/JENSEN_Research___Development_WFL1/FeatureServer/41",
+   "verified": true,
+   "record_count": 130202,
+   "fields": {
+    "apn": "APN",
+    "owner": "Owner",
+    "mailing_address": [
+     "MailX1",
+     "MailX2",
+     "M_Address1",
+     "M_Address2"
+    ],
+    "address": [
+     "Situs1",
+     "Situs2"
+    ],
+    "market_value": "Net_AV",
+    "acres": "Acreage"
+   },
+   "restrictions": "terms not found, and not the county's own publication: copy of the Santa Barbara County Assessor parcel layer inside a private firm's web map (item 'JENSEN Research & Development Proprietary Mapping Tool', owner Jensengis01, licenseInfo empty). Layer copyrightText is an attribution only ('The County Clerk-Recorder-Assessor's Mapping Division.'). The county's own terms were not found",
+   "notes": "Whole county, layer name 'Parcels_Santa_Barbara_2016' (old snapshot; service last edited 2022-04). 129,471 of 130,202 records have Owner. Owner is 'LAST, FIRST'; Pct is the ownership share and ConOwner a co-owner flag. MailX1/MailX2 are care-of lines; M_Address1 street or PO box, M_Address2 'CITY ST ZIP'. Net_AV is net assessed value (LandValue, StrImpr also present). A fresher partial copy sits on the City of Santa Barbara's own ArcGIS Online account: services3.arcgis.com/hMpg7vsYb74pEKjX/arcgis/rest/services/Creek_Buffer_Draft_Map_2023_11_06_WFL1/FeatureServer/2 (53,512 parcels in and around the city, same fields, 53,062 with Owner, edited 2023-11, licenseInfo empty, credits the County Clerk-Recorder-Assessor's Mapping Division). maxRecordCount 2000.",
+   "checked": "2026-11-26"
+  },
+  {
+   "county": "MENDOCINO",
+   "url": "https://services8.arcgis.com/vVsGmpWOxUEQGPFl/arcgis/rest/services/Assessors_Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 61957,
+   "fields": {
+    "apn": "APN",
+    "owner": "OWNER",
+    "mailing_address": [
+     "ADDRESS",
+     "CITY",
+     "STATE",
+     "ZIP"
+    ],
+    "address": [
+     "SITUS_ADD",
+     "SITUS_CTY",
+     "SITUS_ZIP"
+    ],
+    "market_value": [
+     "LANDV",
+     "IMPV"
+    ],
+    "acres": "ACRES"
+   },
+   "restrictions": null,
+   "notes": "Mendocino County's own layer (ArcGIS Online account MendoPBS.GIS, Planning and Building Services; item 75f516bfb7774481adfdfa4526c9a251, public; credits 'Mendocino County, General Services Agency, Information Services Division, GIS Program'). Terms read in full on the item (licenseInfo): the parcel file 'is not a survey product and cannot be used to determine legal boundaries', the County makes 'no representations or warranties regarding the accuracy or completeness of the data', and 'The user will not seek to hold the County or the General Services Agency liable under any circumstances for any damages...'. That is a warranty disclaimer and hold-harmless only; it states no limit on commercial use, redistribution, solicitation or mailing lists. The layer itself has no description or copyrightText. The county website's general terms page was not looked for, so only the item's own terms were read. Current data: service last edited 2026-09; a sample deed dated 2024-11. 61,557 of 61,957 records have OWNER (a few read 'VACANT' in an older copy; a fractional share such as '1/2' can follow the name). ADDRESS/CITY/STATE/ZIP are the owner's mailing address. LANDV and IMPV are assessed values, not market. APNFULL is the 10-digit APN; TRANS_DATE (text M/D/YYYY) and DEED_REC give the last transfer. maxRecordCount 2000.",
+   "checked": "2026-11-26"
+  }
+ ],
  "parcels_counties_note": "None usable. Checked: Los Angeles County parcel service (cache.gis.lacounty.gov/.../LACounty_Parcel/MapServer/0, 2.43M records) has no owner field; San Bernardino County (services.arcgis.com/aA3snZwJfFkVyDuP/.../Parcels_for_San_Bernardino_County/FeatureServer/0, 840k records) has an OwnerName field but every record reads 'Protected Per CA Gov Code 7928.205' (0 records otherwise). No owner-bearing county layer found for San Diego, Orange or Riverside. Second pass 2026-11-17 (see parcels_counties_checked): ten counties checked by live request and none publishes owner names. Riverside (PARCELS_CREST) and Alameda publish the owner's MAILING ADDRESS without a name; Los Angeles, Fresno, Santa Cruz, Sacramento, San Diego, Orange and Kern publish neither; San Bernardino masks the name. All ten layers answer point+distance spatial queries.",
- "summary": "Projects: statewide coverage only as points (Caltrans SB1/IIJA project map, 32k records with status and cost); a line layer with phases exists for Districts 1-3 only. Parcels: no owner names available statewide or in the five largest counties (redacted under CA Gov Code 7928.205).",
+ "summary": "Projects: statewide coverage only as points (Caltrans SB1/IIJA project map, 32k records with status and cost); a line layer with phases exists for Districts 1-3 only. Parcels: no statewide owner layer, and none of the large counties itself publishes owner names openly (withheld under CA Gov Code 7928.205). On 2026-11-26 six county layers with owner name and mailing address were recorded: Mendocino (the county's own current layer, no use limit in its terms) and San Diego, San Bernardino, Sonoma, Monterey and Santa Barbara, which are older snapshots or third-party copies that carry a restriction or have no readable terms and are held.",
  "parcels_counties_checked": [
   {
    "county": "LOS ANGELES",

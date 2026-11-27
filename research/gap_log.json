@@ -250,5 +250,54 @@
   "target": "new kinds of sources",
   "tried": "Socrata catalogue search for condemnation / right-of-way acquisition datasets",
   "result": "nothing new: the Texas Comptroller Eminent Domain dataset is already on file; api.us.socrata.com mostly failed to resolve from this machine today"
+ },
+ {
+  "date": "2026-11-26",
+  "state": "US",
+  "target": "Vega's morning review",
+  "tried": "looked for research/review/missed.json and flags.json in the checkout",
+  "result": "neither file exists (no research/review folder), so there was nothing to handle"
+ },
+ {
+  "date": "2026-11-26",
+  "state": "CA",
+  "target": "county owner files",
+  "tried": "ArcGIS catalogue by county; county servers for San Mateo, Monterey, Sonoma, Placer, Solano, Shasta, Santa Barbara, Contra Costa, Stanislaus, Tulare, Humboldt, Ventura; statewide layers",
+  "result": "added Mendocino (61,957, county's own layer, warranty-only licence). Held: San Diego (1,084,724, student copy of SanGIS, terms not found), San Bernardino (808,226, 'For San Bernardino County use only', 2012 data), Sonoma (188,252, 'internal use ONLY & those who have paid'), Monterey (125,448, park-district copy, terms not found), Santa Barbara (130,202, 2016 copy in a private firm's map, terms not found). No statewide owner layer (CAL FIRE's needs a token). Big counties' own layers omit owner names. Unverified leads for next time: Butte, San Luis Obispo, Napa, Tuolumne, Amador, Yolo, Yuba, Kings. Ventura 403; several guessed county servers did not answer"
+ },
+ {
+  "date": "2026-11-26",
+  "state": "OR",
+  "target": "county owner files",
+  "tried": "ArcGIS catalogue by county; county servers; ORMAP / state taxlot layers",
+  "result": "nothing switched on. Held: Yamhill (51,338, disclaimer only but the GIS Hub's 'I agree' gate was not clicked so terms not fully read), Josephine (42,006, terms not found), Klamath (61,229, 'for reference only'), Benton (107,938 rows, terms not found), Umatilla (45,654, county sells the data to non-government users), Coos (42,200, stale Dept of Forestry copy), Linn (54,603, student copy marked 'Demonstration Only'), Polk (35,315, watershed-council copy, county split inferred). No statewide owner-name layer. Columbia, Lincoln: no owner fields. Douglas behind a bot check, not worked around"
+ },
+ {
+  "date": "2026-11-26",
+  "state": "LA",
+  "target": "parish owner files",
+  "tried": "ArcGIS catalogue by parish; parish, city and assessor servers",
+  "result": "nothing switched on. Held: Orleans (161,891), Livingston (83,119), Bossier (78,905) terms not found; Tangipahoa (76,254, sister item says data 'may not be marketed or sold to third parties'); Caddo (139,597), Lafayette (116,693), Vermilion (44,509) third-party copies in a commercial vendor's schema, terms not found. Jefferson, Ouachita, St. Tammany, Terrebonne, Lafourche, St. Landry: no owner names. St. Tammany, Lafayette assessor, Terrebonne, St. Bernard servers timed out; Iberia certificate mismatch, skipped; Caddo/Bossier assessor service needs a token. Lead not recorded: Acadia assessor layer (46,637)"
+ },
+ {
+  "date": "2026-11-26",
+  "state": "US",
+  "target": "metro areas with no regional map",
+  "tried": "catalogue searches for CMAP, SCAG, SANDAG, MARC, OKI, KIPDA, ACOG, Memphis, SEWRPC, SACOG, Hillsborough, North Florida TPO",
+  "result": "nothing added: SACOG MTP/SCS 2025 server did not answer; the only CMAP hit is a consultant's demo layer with placeholder records marked 'Do not delete or distribute'; KIPDA hits are 2020-2026 TIPs; nothing for the others"
+ },
+ {
+  "date": "2026-11-26",
+  "state": "WI",
+  "target": "new kinds of sources",
+  "tried": "Public Service Commission of Wisconsin ArcGIS account (per-docket case maps)",
+  "result": "verified and written to research/sources/ideas.md: Emerson 137-CE-225 and Elm Road to Racine 137-CE-215 maps have proposed routes, proposed easements and notified-parcel layers (435 parcels with owner and mailing address); no licence text, needs a docket-sweep reader"
+ },
+ {
+  "date": "2026-11-26",
+  "state": "US",
+  "target": "adoption step",
+  "tried": "scripts/adopt_states.py and adopt_sources.py",
+  "result": "adoption output would have removed the 71 approvals the owner recorded on 2026-11-24 (commit cf90148) and seven project layers from layers.json; those data files were restored and only the CA and LA data files (additions only) were kept. Needs a code fix before adoption is run again"
  }
 ]

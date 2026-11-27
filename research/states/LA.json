@@ -1,7 +1,7 @@
 {
   "state": "Louisiana",
   "code": "LA",
-  "checked": "2026-11-17",
+  "checked": "2026-11-26",
   "projects": [
     {
       "name": "New Orleans Regional Planning Commission TIP 2023-26 Project Locations (New Orleans region only)",
@@ -100,9 +100,168 @@
         "market_value": "ASSESSMENT"
       },
       "notes": "Calcasieu Parish Police Jury (Lake Charles) hub layer; parcels joined to zoning. ADDRESS2 holds city, state and ZIP in one string. ASSESSMENT's meaning (assessed value vs assessment number) was not confirmed: it was empty in the sample. No acres field."
+    },
+    {
+      "county": "ORLEANS",
+      "url": "https://gis.nola.gov/arcgis/rest/services/LGIM/TaxParcelQuery/MapServer/0",
+      "verified": true,
+      "record_count": 161891,
+      "fields": {
+        "apn": "TAXBILLID",
+        "owner": "OWNERNME1",
+        "mailing_address": [
+          "PSTLADDRESS",
+          "PSTLCITY",
+          "PSTLSTATE",
+          "PSTLZIP5"
+        ],
+        "address": "SITEADDRESS",
+        "market_value": "CNTASSDVAL"
+      },
+      "restrictions": "terms not found: the layer has an empty copyrightText, the service's copyrightText is a template leftover ('Bloomfield Township MI, Esri., Inc.'), the service has no serviceItemId, and no terms or disclaimer page of the City of New Orleans GIS server was read",
+      "notes": "City of New Orleans server, layer 'TaxParcelPublishing' (the query layer behind the assessor-value dashboard). All 161,891 records have OWNERNME1; count and three sample records answered today (the different ParcelSearch service recorded on 2026-11-17 as timing out was not retried). OWNERNME2 is a second owner. Other ids: PARCELID (numeric), PARID (address-based key such as '622-STONTIST'). LNDVALUE is land value; CNTASSDVAL is labelled current assessed value but held full-value-sized numbers in samples (e.g. 1319700, 258400, and 0 in one record), so its meaning should be confirmed before use. PRPRTYDSCRP is the legal description; ASS_SQFT lot square feet as text; no acres field. LASTUPDATE in samples was June 2026. Layer description read: published representation of tax parcel geometry 'used in the public access and value analysis dashboard for query and map interaction'. maxRecordCount 1000, paging supported.",
+      "checked": "2026-11-26"
+    },
+    {
+      "county": "LIVINGSTON",
+      "url": "https://services6.arcgis.com/mSEzdNclc2tW7uJE/arcgis/rest/services/Livingston_Parish_Parcels/FeatureServer/0",
+      "verified": true,
+      "record_count": 83119,
+      "fields": {
+        "apn": "ParcelNumb",
+        "owner": "Owner_Name",
+        "mailing_address": [
+          "Owner_Addr",
+          "Owner_City"
+        ],
+        "address": [
+          "Address_Nu",
+          "Street_Nam"
+        ],
+        "market_value": "Assessed_V"
+      },
+      "restrictions": "terms not found: ArcGIS item a579c81e17314605b69abfee454152fb (owner LivParishGov, public) has empty licenseInfo, accessInformation and description; the layer has no description or copyrightText; no parish GIS terms page was read",
+      "notes": "Hosted layer published by the Livingston Parish government account (LivParishGov). 78,645 of 83,119 records have Owner_Name. Owner_City holds 'CITY, ST ZIP' in one string; Owner_Addr has a leading space. Assessed_V is the ASSESSED value (Louisiana assesses at a fraction of market value), not market value; HomesteadV is the homestead exemption amount. Legal_Desc, SaleDate (text), SalesPrice, DeedNumber, Book, Page, Ward, Section/Township/Range also present. No acres field (Shape_Area is in feet). Item last modified in November 2026. maxRecordCount 2000.",
+      "checked": "2026-11-26"
+    },
+    {
+      "county": "TANGIPAHOA",
+      "url": "https://tangis.tangipahoa.org/server/rest/services/Cadastral/TaxParcelAssessment_A/MapServer/0",
+      "verified": true,
+      "record_count": 76254,
+      "fields": {
+        "apn": "ASSESSMENT_NO",
+        "owner": "taxpayer_name",
+        "mailing_address": [
+          "taxpayer_addr1",
+          "taxpayer_addr2",
+          "taxpayer_addr3"
+        ],
+        "address": [
+          "par_address",
+          "PHYSICAL_PSTLCITY",
+          "PHYSICAL_PSTLZIP5"
+        ]
+      },
+      "restrictions": "This service's own item (7cd728558b864ce0a9b52115ca9e3b40) has empty licenseInfo, but the sister 'Tax Parcels' item from the same publisher (0e4c88e039514b188399799c27f15f3d) states: 'There are no limitations on how the end user may use these data except that they may not be marketed or sold to third parties, and the end user should attribute Tangipahoa Parish as the source in any maps, applications, or publications in which the data appear.' Resale/marketing of the data is limited and attribution is asked for.",
+      "notes": "Tangipahoa Parish GIS (TanGIS) server, 'Tax Parcels and Assessments': parcels joined to the assessor roll. 75,310 of 76,254 records have taxpayer_name; the first records by OBJECTID are empty, so filter on taxpayer_name IS NOT NULL. primary_owner and contact_name are further name fields; mailing address is three free lines (last one 'CITY, ST ZIP'). parcel_no, tax_year, transfer_date, purchase_price, conv_book/conv_folio, subd_name, town_range also present. No value or acres field (Shape.STArea() only). The sister layer https://tangis.tangipahoa.org/server/rest/services/Cadastral/TaxParcel_A/MapServer/0 (76,253 records, 75,981 with OWNER; fields ASSESSMENT_NO, OWNER, PHYSICAL_STREET_ADDR, LINK to the assessor's page) has no mailing address; its description says it uses Tangipahoa Parish Assessor information and is 'updated once every three weeks'; copyrightText 'TanGIS, Tangipahoa Parish Assessor'. The licence sentence quoted in restrictions also carries an as-is / no-survey-quality disclaimer. maxRecordCount 2000.",
+      "checked": "2026-11-26"
+    },
+    {
+      "county": "BOSSIER",
+      "url": "https://bpagis.bossierparish.org/server/rest/services/Parcels/BossierParcels_Public_Es2/MapServer/0",
+      "verified": true,
+      "record_count": 78905,
+      "fields": {
+        "apn": "AssessmentNumber",
+        "owner": [
+          "AssessmentName",
+          "AssessmentName2",
+          "AssessmentName3"
+        ],
+        "mailing_address": [
+          "Address1",
+          "Address2",
+          "Address3",
+          "Address4"
+        ],
+        "address": "PhysicalAddress",
+        "acres": "Acreage"
+      },
+      "restrictions": "terms not found: the layer and service have empty copyrightText, ArcGIS item 56c503a034044cda9548e5f06ceef312 (owner es2_bpa, public) has null licenseInfo, and no assessor terms or disclaimer page was read",
+      "notes": "Bossier Parish Assessor's own server; the service behind its public parcel application (item snippet: 'BPA Parcels for Es2 Public Application'; description 'BPA Parcels Geometry joined with Assessment View, Parcel Assessments, and Parcel View'). All 78,905 records have AssessmentName. QUIRKS: a long owner name runs on into AssessmentName3, and the continuation is repeated as Address1 (sample: AssessmentName 'LOUISIANA WILDLIFE &', AssessmentName3 and Address1 both 'FISHERIES COMMISSION', Address2 '400 ROYAL ST', Address3 'NEW ORLEANS LA 70130'), so the street line is not always Address1. StreetNumber/StreetName/Suffix/City/State/ZipCode held the MAILING address in the samples, not the site address; PhysicalAddress was empty in all three samples. One assessment can cover several parcels (MAPPING_NO is the map parcel number). No value field. Section/Township/Range, SubdivisionName, Lot, Block, BookPageOwner (conveyance references) present. maxRecordCount 1000.",
+      "checked": "2026-11-26"
+    },
+    {
+      "county": "CADDO",
+      "url": "https://services7.arcgis.com/eR5n9maFLflJFdXU/arcgis/rest/services/Caddo_Parcels__2025/FeatureServer/7",
+      "verified": true,
+      "record_count": 139597,
+      "fields": {
+        "apn": "parcelnumb",
+        "owner": "owner",
+        "mailing_address": [
+          "mailadd",
+          "mail_city",
+          "mail_state2",
+          "mail_zip"
+        ],
+        "address": "address",
+        "market_value": "parval",
+        "acres": "ll_gisacre"
+      },
+      "restrictions": "NOT AN OFFICIAL SOURCE and terms not found: a private ArcGIS Online user's copy (item 49312b2f98fe4959a9818022bea7478b, owner Michaeljuser58, empty licenseInfo/description). The schema (ll_uuid, ll_gisacre, ll_updated_at, path '/us/la/caddo/...', lbcs_* fields) is that of the commercial parcel vendor Regrid, whose data is normally licensed and not free to redistribute; treat as restricted unless the owner decides otherwise.",
+      "notes": "Third-party hosted copy of Caddo Parish parcels, 123 fields. 139,046 of 139,597 records have owner; count and samples answered today. ll_updated_at in samples was August 2025, so it is a one-time snapshot and will go stale. The Caddo assessor's own layer (gissrv1.romlc.net .../WebMaps/LA_Assessors/MapServer/3) still answers 'Token Required'. maxRecordCount 2000.",
+      "checked": "2026-11-26"
+    },
+    {
+      "county": "LAFAYETTE",
+      "url": "https://services1.arcgis.com/Brg1qbmzmFn7JtpX/arcgis/rest/services/Parish_Parcels__All_/FeatureServer/0",
+      "verified": true,
+      "record_count": 116693,
+      "fields": {
+        "apn": "parcelnumb",
+        "owner": "owner",
+        "mailing_address": [
+          "mailadd",
+          "mail_city",
+          "mail_state2",
+          "mail_zip"
+        ],
+        "address": "address",
+        "market_value": "parval",
+        "acres": "ll_gisacre",
+        "county": "county"
+      },
+      "restrictions": "NOT AN OFFICIAL SOURCE and terms not found: ArcGIS item 600928c62cd84d47af4f3f29705b8b45 (owner es2.warren.kron, public, snippet 'Tax parcels for Lafayette and Vermilion parishes.') has empty licenseInfo. The 218-field schema (ll_uuid, ll_gisacre, ll_address_count, path '/us/la/lafayette/...') is that of the commercial parcel vendor Regrid, whose data is normally licensed and not free to redistribute; treat as restricted unless the owner decides otherwise.",
+      "notes": "One layer holding two parishes: filter county = 'lafayette' (116,693 records) or county = 'vermilion' (44,509); 161,202 in all, 142,962 with owner. ll_updated_at in samples was September 2025; item modified October 2026. The Lafayette assessor's own server (webgis.lafayetteassessor.com .../Sidwell/TaxParcelPublic/MapServer/0) did not answer today. maxRecordCount not noted.",
+      "checked": "2026-11-26"
+    },
+    {
+      "county": "VERMILION",
+      "url": "https://services1.arcgis.com/Brg1qbmzmFn7JtpX/arcgis/rest/services/Parish_Parcels__All_/FeatureServer/0",
+      "verified": true,
+      "record_count": 44509,
+      "fields": {
+        "apn": "parcelnumb",
+        "owner": "owner",
+        "mailing_address": [
+          "mailadd",
+          "mail_city",
+          "mail_state2",
+          "mail_zip"
+        ],
+        "address": "address",
+        "market_value": "parval",
+        "acres": "ll_gisacre",
+        "county": "county"
+      },
+      "restrictions": "NOT AN OFFICIAL SOURCE and terms not found: same third-party item as the LAFAYETTE entry (600928c62cd84d47af4f3f29705b8b45, empty licenseInfo); Regrid-style schema, so the data is probably vendor-licensed; treat as restricted unless the owner decides otherwise.",
+      "notes": "Same layer as the LAFAYETTE entry; filter county = 'vermilion' (44,509 records, counted today by a group-by on county). The three sample records read today were all Lafayette rows; no Vermilion row was looked at individually, so owner fill for Vermilion alone is not confirmed.",
+      "checked": "2026-11-26"
     }
   ],
-  "summary": "Projects: statewide DOTD layers exist but the server refused automated requests (403); only the New Orleans region's TIP and long-range plan are verified. Parcels: no statewide layer; East Baton Rouge and Calcasieu parish layers with owner and mailing address are verified; Orleans and Jefferson are not usable.",
+  "summary": "Projects: statewide DOTD layers exist but the server refused automated requests (403); only the New Orleans region's TIP and long-range plan are verified. Parcels: no statewide layer; East Baton Rouge and Calcasieu were verified on 2026-11-17, and on 2026-11-26 Orleans, Livingston, Tangipahoa and Bossier (official parish/assessor layers with owner and mailing address) plus third-party copies for Caddo, Lafayette and Vermilion were added, all with a restriction or 'terms not found' note to be decided by the owner; Jefferson, St. Tammany, Ouachita, Terrebonne and Lafourche publish no owner names in the layers found.",
   "parcels_statewide_reason": "No free statewide Louisiana parcel layer was found (ArcGIS Online catalog search returned none; parcels are held by each parish assessor).",
-  "parcels_counties_not_found": "Orleans: https://gis.nola.gov/arcgis/rest/services/ParcelSearch/MapServer/0 has owner fields (OWNERNME1, OWNERNME2, SITEADDRESS) in its schema but returned no records or timed out (504) on every query, so it is not verified. Jefferson Parish: https://eweb.jeffparish.net/arcgis/rest/services/Cadastre/Cadastre/MapServer/1 (fetched, 155,077 parcels) has lot and zoning data but no owner. St. Tammany: the published certified-parcel layer has only an id. Lafayette assessor's server timed out; Caddo's requires a token."
+  "parcels_counties_not_found": "Orleans: https://gis.nola.gov/arcgis/rest/services/ParcelSearch/MapServer/0 has owner fields (OWNERNME1, OWNERNME2, SITEADDRESS) in its schema but returned no records or timed out (504) on every query, so it is not verified. Jefferson Parish: https://eweb.jeffparish.net/arcgis/rest/services/Cadastre/Cadastre/MapServer/1 (fetched, 155,077 parcels) has lot and zoning data but no owner. St. Tammany: the published certified-parcel layer has only an id. Lafayette assessor's server timed out; Caddo's requires a token. Update 2026-11-26: Orleans now has a working layer (LGIM/TaxParcelQuery, see parcels_counties). No owner field: Jefferson (jpgis.jeffparish.net/server/rest/services/Parcels/MapServer/0 and eweb .../SCP/MPN/MapServer/3, 155,080 parcels), Ouachita (City of Monroe 'Public_Parcels', 92,073 records), St. Tammany (third-party copies stpao_parcel_data and STP_Parcels_2025), Terrebonne and Lafourche (third-party copies only), New Orleans maps.nola.gov Assessor/Landbase_Layers. St. Landry's hosted layer (services1.arcgis.com/fe3XWHMASK948q2c/.../StLandryParcels/FeatureServer/0, 62,213 parcels) has parcel number and acres but no owner. Did not answer: gisportal.stpgov.org (St. Tammany), webgis.lafayetteassessor.com, gis.tpcg.org (Terrebonne) and lucity.sbpg.net (St. Bernard) timed out; geo.apgov.us (Ascension) returned an HTML page instead of the layer; gis.iberiagov.net (Iberia) failed its TLS certificate check and was skipped; services.geoportalmaps.com (Iberia) did not resolve. Token required: gissrv1.romlc.net (Caddo and Bossier assessors' shared service), and the consultant copies of Jefferson and Ascension tax parcels. Nothing found for Rapides, St. Charles."
 }
