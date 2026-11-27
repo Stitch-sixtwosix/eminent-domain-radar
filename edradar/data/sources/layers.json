@@ -1979,6 +1979,27 @@
   "records": 608
  },
  {
+  "state": "UT",
+  "name": "Utah energy and mineral projects - upcoming transmission lines and rail (Office of Energy Development, July 2026)",
+  "key": "g9d86d2cb6",
+  "url": "https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/Lines_EnergyMineralProjects_07282026/FeatureServer/92",
+  "fields": {
+   "id": "OBJECTID",
+   "name": "Name",
+   "description": "OtherInfo",
+   "work_type": "ProjectType"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "Utah Office of Energy Development; published by the Governor's Office of Planning and Budget (BUILD Statewide Vision Map) with UGRC",
+  "stage": "planning",
+  "likelihood": null,
+  "source_prefix": "gis",
+  "category": "local_utility",
+  "coverage": "statewide",
+  "records": 9
+ },
+ {
   "state": "MS",
   "name": "Mississippi Office of State Aid Road Construction (OSARC) - Active Projects",
   "key": "g342ef708f",
@@ -3654,6 +3675,56 @@
   "records": 96
  },
  {
+  "state": "FL",
+  "name": "Palm Beach TPA Transportation Improvement Program FY 2027-2031 projects",
+  "key": "g355313a00",
+  "url": "https://services5.arcgis.com/79IoFXBn9ZeqmVlC/arcgis/rest/services/FY_27_31_TIP_Projects/FeatureServer/0",
+  "fields": {
+   "id": "prj_id",
+   "name": "prj_title",
+   "description": "prj_desc",
+   "work_type": "prj_work_type",
+   "cost": "prj_total_cost",
+   "status": "prj_status",
+   "date": "cst_year",
+   "county": "municipalities"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "Palm Beach Transportation Planning Agency (Palm Beach MPO); lead agencies are FDOT District 4, Palm Beach County and municipalities",
+  "stage": "planning",
+  "likelihood": null,
+  "source_prefix": "gis",
+  "category": "regional",
+  "coverage": "metro area",
+  "records": 189
+ },
+ {
+  "state": "FL",
+  "name": "Palm Beach TPA Vision 2050 long-range plan projects (adopted list)",
+  "key": "gc33de9f42",
+  "url": "https://services5.arcgis.com/79IoFXBn9ZeqmVlC/arcgis/rest/services/Vision2050_CallForProjectsList/FeatureServer/0",
+  "fields": {
+   "id": "MPOProjectID",
+   "name": "ProjectName",
+   "description": "ProjectDesc",
+   "work_type": "MPOProjectType",
+   "cost": "YOECost",
+   "status": "FYTimeBands",
+   "date": "FYTimeBands",
+   "county": "CountyName"
+  },
+  "where": null,
+  "unfiltered": true,
+  "agency": "Palm Beach Transportation Planning Agency (Palm Beach MPO); sponsors are FDOT, Palm Beach County, municipalities, transit agencies",
+  "stage": "planning",
+  "likelihood": null,
+  "source_prefix": "gis",
+  "category": "regional",
+  "coverage": "metro area",
+  "records": 639
+ },
+ {
   "state": "NH",
   "name": "NHDOT 10 Year Plan - Planning Projects (copy in The Nature Conservancy's NH_Transportation_Source_Data)",
   "key": "g1ff5cc8e1",
@@ -3890,28 +3961,6 @@
   "records": 133
  },
  {
-  "state": "NE",
-  "name": "Lincoln MPO 2050 LRTP roadway project prioritization - linear projects (consultant web map)",
-  "key": "gea8e795ef",
-  "url": "https://services1.arcgis.com/bH0ZyWM4JffCJ4P5/arcgis/rest/services/Lincoln_LRTP_Roadway_Project_Prioritization_WebMap/FeatureServer/10",
-  "fields": {
-   "id": "ProjectID",
-   "name": "ProjectStr",
-   "description": "ProjectDes",
-   "status": "ProjStatus",
-   "county": "ProjectLea"
-  },
-  "where": null,
-  "unfiltered": true,
-  "agency": "Lincoln MPO / City of Lincoln, Lancaster County, NDOT (hosted by the plan's consultant)",
-  "stage": "planning",
-  "likelihood": null,
-  "source_prefix": "gis",
-  "category": "state_dot_gaps",
-  "coverage": "metro area",
-  "records": 133
- },
- {
   "state": "SC",
   "name": "SCDOT statewide Long Range Transportation Plan projects - corridors (LRTPCorridorProjects)",
   "key": "gdeb245d10",
@@ -3983,7 +4032,7 @@
   "source_prefix": "gis",
   "category": "state_dot_gaps",
   "coverage": "statewide",
-  "records": 57316
+  "records": 57358
  },
  {
   "state": "MO",
@@ -4120,7 +4169,7 @@
   "source_prefix": "gis",
   "category": "state_dot_gaps",
   "coverage": "statewide",
-  "records": 19087
+  "records": 19142
  },
  {
   "state": "MN",
@@ -4206,7 +4255,7 @@
   "source_prefix": "gis",
   "category": "state_dot_gaps",
   "coverage": "statewide",
-  "records": 91766
+  "records": 91774
  },
  {
   "state": "OK",
@@ -4251,7 +4300,7 @@
   "source_prefix": "gis",
   "category": "state_dot_gaps",
   "coverage": "statewide",
-  "records": 118
+  "records": 119
  },
  {
   "state": "TX",
@@ -4274,6 +4323,6 @@
   "source_prefix": "gis",
   "category": "state_dot_gaps",
   "coverage": "statewide",
-  "records": 12452
+  "records": 12458
  }
 ]

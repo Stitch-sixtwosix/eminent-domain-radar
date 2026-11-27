@@ -182,3 +182,33 @@ contains Route (skipping "Removed from Consideration" and "Approved" services ol
 geometry, with the service description as the project title. New services appearing on the account are new cases.
 Layer numbers and names differ per case, so they must be matched by name, not by a fixed address. Other commissions
 worth the same check: Minnesota (Commerce EERA), Iowa Utilities Commission, Illinois Commerce Commission, North Dakota PSC.
+
+## TVA transmission-line open-house maps (federal utility with condemnation power; AL, TN, NC so far) - checked 2026-11-27
+
+The Tennessee Valley Authority publishes one ArcGIS service per new transmission-line project for its "virtual open house",
+on its own ArcGIS Online account (owner `TVA-GIS`, org `w8auYAijfGK1Mydj`, 565 public items). Each has the candidate routes,
+the right-of-way strips and, most usefully, the tax parcels TVA itself marks as affected, with owner and mailing address.
+TVA acquires easements by federal condemnation, so these are the earliest public list of who is in the path.
+
+Verified today (no login, no token; `https://services.arcgis.com/w8auYAijfGK1Mydj/arcgis/rest/services/<service>/FeatureServer/<n>`):
+
+| Service | Routes layer | ROW layer | Affected Tax Parcels layer |
+|---|---|---|---|
+| `Roane_County_TN_Interactive_Map` (item 0980965309624b258b4f248ae789b3ac, 2026-09) | 0, 38 segments (`Segment`, `Length_ft`) | 1 | 5, 222 parcels (`PARNO`, `OWNNAME`, `MAILADD`, `MCITY`, `MSTATE`, `MZIP`, `SITEADD`, `GISACRE`, `CNTYNAME`, `SOURCEAGEN`, `SOURCEDATE`) |
+| `Crossville_AL_Interactive_Webmap` (item ebc6f0598df6464a815eaaee26923117, 2026-09) | 2, 46 segments (`Segment_ID`) | 3 | 7, 202 parcels (`PARCELNUMB`, `Owner`, `MailAdd1`-`MailAdd3`, `MailCity`, `MailState`, `MailZip1`, `SitusAddNu`, `SitusAddNa`, `TTV`, `CalcAcres`) |
+| `Shooting_Creek_NC_Interactive_Map` (item 7902c5ff989046a7b0fe213d8b2faa4a, 2025-11) | 1, 22 segments (`Segment_No`) | 2 "Proposed ROW" | 6, 218 parcels (same fields as Roane) |
+
+Each also has "Tap Points" and "Proposed Substation" point layers and the existing TVA lines. A newer web map,
+`TVA.com_HickoryGrove` (2026-11), suggests a fourth project is coming.
+
+- Planned vs built: every route is an alternative under study at the time of the open house; there is no status field.
+  The route layers carry only a segment number, so the project name has to come from the service title.
+- Terms: the items' licence and credit fields are empty; the parcel layers' description says the tax parcel data "has been
+  compiled from various sources" (county and state files, named per record in `SOURCEAGEN`) and credits "TVA GIS & Mapping".
+  No terms of use were found, so anything read from here would be held until the owner decides. The owner names come from
+  county files whose own terms may differ (Tennessee's state parcel file is already held on file).
+- Reader needed: list the account's Feature Services (`https://www.arcgis.com/sharing/rest/search?f=json&q=owner:TVA-GIS type:"Feature Service"`),
+  keep those with an "Alternative Routes" layer, make one project per service (title, county and state from the parcel
+  layer), and take the "Affected Tax Parcels" layer as that project's parcels directly instead of matching by distance.
+  This is the same shape as the per-docket case maps noted for Wisconsin on 2026-11-26 and the catalogue sweep of 2026-11-21.
+- Skipped on purpose: the account's "Comments or Feedback" survey layers (people who commented on a plan).

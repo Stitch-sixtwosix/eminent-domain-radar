@@ -2217,6 +2217,264 @@
    "sample": "{\"Project_Na\": \"Moanalua Freeway, (Interstate Route H-201) Seismic Retrofit, Puuloa Interchange (Five Structures)\", \"Lead_Agenc\": \"HDOT\", \"PRJ_NUM\": \"OS-21-51\", \"Est_Cost\": 15000000, \"Fund_Use\": \"Bridges\"}",
    "restrictions": "terms not found: the ArcGIS Online item (505298ce3e4d424ea626a7e72ac6c03f, owner bbutoaj, on the Hawaii DOT organisation's account) has no licence text, credit or description",
    "notes": "Checked 2026-11-23. Item modified 2025-08-12; two more items with the same title exist under owner dot_dige. Thin attributes: project name, lead agency (Lead_Agenc), TIP project number, estimated cost and funding use (e.g. 'Bridges', 'Highways/Roadways'). No description, phase or year. Oahu only."
+  },
+  {
+   "name": "Des Moines Area MPO Transportation Capital Improvement Program FY 2027-2030 (streets)",
+   "authority": "Des Moines Area Metropolitan Planning Organization; projects belong to member cities and counties (Altoona, Ankeny, Des Moines, West Des Moines, Polk County and others)",
+   "states": [
+    "IA"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/6oz1ALkDiRZ7VlIc/arcgis/rest/services/TCIP_FY_2027_2030_WFL1/FeatureServer/5",
+   "verified": true,
+   "record_count": 199,
+   "geometry": "polyline",
+   "fields": {
+    "name": "Street",
+    "description": "Descrip",
+    "work_type": "Investment_Category",
+    "cost": "Total",
+    "date": "FY2027, FY2028, FY2029, FY2030",
+    "county": "Jurisd"
+   },
+   "planned_filter": "All records are members' capital projects programmed for FY 2027-2030; the year columns FY2027..FY2030 hold the dollars per year, so the first non-empty one is the start year. No status field. For land-taking work use Investment_Category = 'System Capacity' or Descrip containing 'widen', 'extension', 'new'.",
+   "sample": "{\"Type\": \"Street\", \"Jurisd\": \"Altoona\", \"Street\": \"Adventureland Dr NE\", \"Termini\": \"17th Ave NW to 9th Ave NW\", \"Descrip\": \"Reconstruction and widening to a divided 4-lane section\", \"FY2027\": 7875525, \"FY2028\": 5419500, \"Total\": 13295025, \"Funding_Source\": \"Bond, STBG, SWAP-HSIP (SWAP)\", \"Investment_Category\": \"System Capacity\"}",
+   "restrictions": "terms not found: the ArcGIS Online item (fdba1cb1952b49a7b6a1286e14831b2d, owner info_dmampo, on the MPO's own organisation) has no licence text, credit or description, and the layer has no copyrightText",
+   "notes": "Checked 2026-11-27. Item created 2026-07-28, layer last edited 2026-08-18. This is the MPO's compilation of its member governments' own capital programmes (locally funded work included), which is broader than the federal TIP. Sibling layers in the same service with the same fields: /2 Bridge (36, multipoint), /3 Intersection (58, multipoint), /4 Parking Lot (8), /6 Traffic Studies (10), /7 Active Transportation (39), /20 Trails (364). Termini gives from/to. No project id field. The MPO's federal TIP layer on the same account (Transportation_Improvement_Projects__TIP__WFL1, FFY2025-2028, 59 lines) is the previous edition and was not recorded."
+  },
+  {
+   "name": "Des Moines Area MPO long-range plan candidate projects (2024)",
+   "authority": "Des Moines Area Metropolitan Planning Organization; sponsors are member cities, counties and Iowa DOT",
+   "states": [
+    "IA"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/6oz1ALkDiRZ7VlIc/arcgis/rest/services/LRTP_Projects_(2024)/FeatureServer/0",
+   "verified": true,
+   "record_count": 205,
+   "geometry": "polyline",
+   "fields": {
+    "id": "Project__",
+    "name": "Project_Ti",
+    "description": "Project_De",
+    "cost": "Estimated_",
+    "county": "Primary_Sp"
+   },
+   "planned_filter": "All 205 records are projects submitted for the long-range transportation plan in 2024; no status, year or horizon field, so funded and unfunded cannot be told apart from the layer.",
+   "sample": "{\"Project__\": 104, \"Primary_Sp\": \"Altoona\", \"Project_Ti\": \"8th St. SW Reconstruction Phase 4 - Westbound Lanes\", \"Project_De\": \"Reconstruction of the westbound lanes of 8th St. SW\", \"Termini_A\": \"US 65 bypass\", \"Termini_B\": \"28th Ave. SW / Prairie Meadows Drive\", \"Estimated_\": 8250000}",
+   "restrictions": "terms not found: the ArcGIS Online item (58f2d78cc3914b9b9b918e02659ead58, owner mcoenen, on the MPO's own organisation) has no licence text, credit or description",
+   "notes": "Checked 2026-11-27. Item created 2024-06-05, modified 2025-10-03; layer last edited 2024-07-01. Each record carries a public-comment form link (Public_Com), so this is the list as put out for comment in 2024, not necessarily the adopted list; check against the adopted plan before relying on a single project. Primary_Sp is the sponsoring jurisdiction (Secondary_ a second sponsor); Termini_A / Termini_B give from/to; TPMS__ is the Iowa DOT TPMS number where one exists (0 otherwise). A separate 7-record layer on the same account (Illustrative_Projects, last edited 2020) holds older illustrative projects and was not recorded."
+  },
+  {
+   "name": "Palm Beach TPA Transportation Improvement Program FY 2027-2031 projects",
+   "authority": "Palm Beach Transportation Planning Agency (Palm Beach MPO); lead agencies are FDOT District 4, Palm Beach County and municipalities",
+   "states": [
+    "FL"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services5.arcgis.com/79IoFXBn9ZeqmVlC/arcgis/rest/services/FY_27_31_TIP_Projects/FeatureServer/0",
+   "verified": true,
+   "record_count": 189,
+   "geometry": "polyline",
+   "fields": {
+    "id": "prj_id",
+    "name": "prj_title",
+    "description": "prj_desc",
+    "work_type": "prj_work_type",
+    "cost": "prj_total_cost",
+    "status": "prj_status",
+    "date": "cst_year",
+    "county": "municipalities"
+   },
+   "planned_filter": "All records are projects in the FY 27-31 TIP (plan_rev 'Snapshot - 04/08/2026'). ROW > 0 marks projects with right-of-way money programmed; prj_status gives the phase where filled (e.g. 'Design'); cst_year is the construction year. For land-taking work use prj_work_type such as 'New Road Construction' or 'Add Lanes & Reconstruct'.",
+   "sample": "{\"prj_id\": 2296646, \"Agency\": \"FDOT\", \"prj_title\": \"SR-7 FROM 60TH ST TO NORTHLAKE BLVD\", \"prj_desc\": \"Construct new 4-lane roadway.\", \"prj_work_type\": \"New Road Construction\", \"prj_status\": \"Design\", \"prj_lrtp\": \"2045-TPA014, TPA014\", \"municipalities\": \"West Palm Beach\", \"cst_year\": \"2029\", \"prj_cat\": \"Major Projects\", \"prj_total_cost\": 108265962, \"PE\": 10958835, \"ROW\": 0, \"CST\": 94126023}",
+   "restrictions": null,
+   "notes": "Checked 2026-11-27. ArcGIS Online item fcfa73eb667a4a65bb0fe5c3c7fb315f (owner PalmBeachMPO, created 2026-05-15, modified 2026-05-18; layer last edited 2026-06-03), snippet 'This layer shows the active TIP projects listed in the FY 27-31 TIP.' Licence read in the item's licenseInfo: 'NO WARRANTIES: This site and its content is made available by the Palm Beach Metropolitan Planning Organization on an \"as is\", \"as available\" basis without warranties of any kind ... DISCLAIMER OF LIABILITY: The user of this application and data assumes all responsibility and risk for the use of both' - a warranty and liability disclaimer only; it states no limit on commercial use or redistribution. Credit line: 'If you have further inquiries regarding this application or data please reach out to the Palm Beach MPO.' Palm Beach County only. prj_id is the FDOT financial-management number; link_eco links to the project page in the agency's TIP tool; per-year dollars are in Prior, F2027_1..F2031_1, Future; per-phase dollars in PLN, PDE, PE, ENV, ROW, RRU, DSB, CST, CAP; Federal/State/Local/Turnpike give the funding split; prj_lrtp gives the long-range plan id. Empty values are written as '-'. Older drafts on the same account (Draft_FY_25_29_TIP_Projects, Draft_FY_26_30_TIP_Projects) are superseded."
+  },
+  {
+   "name": "Palm Beach TPA Vision 2050 long-range plan projects (adopted list)",
+   "authority": "Palm Beach Transportation Planning Agency (Palm Beach MPO); sponsors are FDOT, Palm Beach County, municipalities, transit agencies",
+   "states": [
+    "FL"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services5.arcgis.com/79IoFXBn9ZeqmVlC/arcgis/rest/services/Vision2050_CallForProjectsList/FeatureServer/0",
+   "verified": true,
+   "record_count": 639,
+   "geometry": "polyline",
+   "fields": {
+    "id": "MPOProjectID",
+    "name": "ProjectName",
+    "description": "ProjectDesc",
+    "work_type": "MPOProjectType",
+    "cost": "YOECost",
+    "status": "FYTimeBands",
+    "date": "FYTimeBands",
+    "county": "CountyName"
+   },
+   "planned_filter": "All records are projects in the Vision 2050 plan (PlanRevision 'Adopted - December 2024'). FYTimeBands <> 'Unfunded' selects the cost-feasible ones (bands run from 'FY 2026/27 to FY 2030/31' to 'FY 2040/41 to FY 2049/50'); 'Unfunded' is the needs list. MPO2630ROW, MPO3135ROW, MPO3640ROW, MPO4150ROW hold right-of-way dollars by period.",
+   "sample": "{\"PlanYear\": 2050, \"PlanRevision\": \"Adopted - December 2024\", \"MPOProjectID\": \"FDOT0001\", \"ProjectDesc\": \"Reinforced Concrete Deck/Tee Beam Bridge Possible Replacement\", \"ProjectName\": \"Coral Drive over Subdivision Canal Bridge Replacement\", \"StreetName\": \"Coral Dr\", \"DescFrom\": \"Coral Ct\", \"DescTo\": \"Old Boynton Rd\", \"CountyName\": \"Palm Beach County\", \"FYTimeBands\": \"Unfunded\", \"YOECost\": 800000, \"MPOSponsor\": \"FDOT\", \"MPOProjectType\": \"Bridge Reconstruction\"}",
+   "restrictions": null,
+   "notes": "Checked 2026-11-27. ArcGIS Online item d4edef0e950a48c3a754ea0b04ff2c98, titled 'Adopted Vision 2050 Projects' (owner PalmBeachMPO, modified 2026-07-20; layer adopted_lrtp_2050_list_2026 last edited 2026-09-15). Licence read in the item's licenseInfo: 'NO WARRANTIES: This site and its content is made available by the Palm Beach Metropolitan Planning Organization on an \"as is\", \"as available\" basis without warranties of any kind ... DISCLAIMER OF LIABILITY: The user of this application and data assumes all responsibility and risk for the use of both' - a warranty and liability disclaimer only; it states no limit on commercial use or redistribution. Credit line: 'If you have further inquiries regarding this application or data please reach out to the Palm Beach MPO.' The item description is a field legend (FDOT attributes and MPO attributes). Palm Beach County only. MPOStatus is free-text staff commentary, not a clean status. MPOSponsor / MPOSponserType give the sponsor; StreetName, DescFrom, DescTo give the location; MPOFMID is the FDOT work-program number where one exists; the MPO26xx..MPO41xx columns give dollars by phase (PDE, PE, ROW, CST) and period. Many records are signals, bike/ped and transit items; filter on MPOProjectType."
+  },
+  {
+   "name": "MOVEBR proposed road projects (Baton Rouge)",
+   "authority": "City of Baton Rouge / Parish of East Baton Rouge, Department of Transportation and Drainage (MOVEBR sales-tax programme)",
+   "states": [
+    "LA"
+   ],
+   "coverage": "city",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/KYvXadMcgf0K1EzK/arcgis/rest/services/BTR_Proposed_Projects/FeatureServer/0",
+   "verified": true,
+   "record_count": 60,
+   "geometry": "polyline",
+   "fields": {
+    "id": "ID1",
+    "name": "PROJ_DESC",
+    "description": "SCOPE_WORK",
+    "work_type": "CATEGORY",
+    "cost": "EST_COST",
+    "county": "DISTRICT"
+   },
+   "planned_filter": "All 60 records are projects in the voter-approved MOVEBR programme; there is no status or date field, so built and unbuilt cannot be told apart from the layer (PROJECT_LI links to each project's page on movebr.brla.gov, which gives the status). CATEGORY = 'New Capacity Improvements' selects new roads and widenings.",
+   "sample": "{\"ID1\": 13, \"CATEGORY\": \"New Capacity Improvements\", \"DISTRICT\": \"6\", \"PROJ_DESC\": \"Ardenwood-Lobdell Connector\", \"EST_COST\": 3, \"LOCAL_FUND\": 3, \"SCOPE_WORK\": \"New Roadway\", \"PROJECT_LI\": \"https://movebr.brla.gov/form/ardenwood-lobdell-connector-project-page\"}",
+   "restrictions": "no commercial limit stated, but the item licence says: 'For public use. The City of Baton Rouge - Parish of East Baton Rouge provides the information herein for general reference purposes only. The City-Parish does not assume liability for the misuse or misinterpretation of the information.'",
+   "notes": "Checked 2026-11-27. ArcGIS Online item a08a6dc476014bca8b2b6efd60640506 (owner jpriola_ebrgis on the EBRGIS organisation, created 2017-07-27, item modified 2023-09-06, layer last edited 2026-01-08), credit 'EBRGIS; Department of Transportation and Drainage; Department of Information Services'. A city-parish capital programme, not the Capital Region Planning Commission's TIP or MTP: no CRPC project layer was found in the ArcGIS catalogue. The list is the programme as proposed for the 2018 vote, so some projects are finished or under construction by now. EST_COST and LOCAL_FUND are in millions of dollars. DISTRICT is the Metro Council district. A companion point layer of signal/traffic-management projects is at .../BTR_Proposed_Projects_Points/FeatureServer (not land-taking). East Baton Rouge Parish only."
+  },
+  {
+   "name": "GPATS 2045 long-range plan corridor projects (Greenville, SC)",
+   "authority": "Greenville-Pickens Area Transportation Study (GPATS), the Greenville MPO, staffed by Greenville County; projects are built by SCDOT and local governments",
+   "states": [
+    "SC"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services3.arcgis.com/bjOyhhlaaCIcmO3H/arcgis/rest/services/GPATS_Transportation_Projects_as_of_March_25th_2026_-_Public_View/FeatureServer/1",
+   "verified": true,
+   "record_count": 390,
+   "geometry": "polyline",
+   "fields": {
+    "id": "ProjectID",
+    "name": "ProjectNam",
+    "description": "Project_Termini",
+    "work_type": "Category",
+    "status": "Classification"
+   },
+   "planned_filter": "Classification IN ('Short Term/In Planning','Long Term/Unfunded','Vision/Unfunded') selects work not yet started; other values are 'Under Construction' and 'Completed - Recently'. For land-taking work use Category LIKE 'Wid%' OR Category = 'New Roadway' (the field has misspellings: 'Widneing', 'Corrifor Improvements').",
+   "sample": "{\"ProjectNam\": \"Butler Road\", \"Project_Termini\": \"From Murray Drive to Corn Road/Bridges Road\", \"Category\": \"Widening\", \"AADT\": 12900, \"LengthMi\": 1.436, \"AdjustedScoreOutof100\": \"78 / 100\", \"Rank\": 13, \"Classification\": \"Vision/Unfunded\"}",
+   "restrictions": "terms not found: the ArcGIS Online item (0d64b95350f746c6bfb5336832a8cc13, owner AIkein_GPATS) has no licence text or credit; snippet only: '2045 LRTP Corridor and Intersection Projects.'",
+   "notes": "Checked 2026-11-27. Item titled 'GPATS Transportation Projects as of March 25th 2026', created and last edited 2026-03-25; published from GPATS staff's own account (contact fields in the data read 'GPATS Staff'), not the consultant copies that HDR also hosts. No cost field: the layer carries the plan's scoring inputs (crashes, AADT, level of service, Rank) instead. Most records are 'Vision/Unfunded', i.e. the needs list. Sibling layer /2 IntersectionProjects2045 (281 points; fields Name, Scope, Category, Classification). Covers the GPATS area in Greenville, Pickens and parts of Anderson, Laurens and Spartanburg counties."
+  },
+  {
+   "name": "SMTC Transportation Improvement Program line projects (Syracuse)",
+   "authority": "Syracuse Metropolitan Transportation Council; sponsors are NYSDOT, Onondaga County DOT, City of Syracuse and towns",
+   "states": [
+    "NY"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services.arcgis.com/VKsXnNFZWqZPADvR/arcgis/rest/services/LineProjects/FeatureServer/0",
+   "verified": true,
+   "record_count": 39,
+   "geometry": "polyline",
+   "fields": {
+    "id": "PIN",
+    "name": "ProjectDescription",
+    "description": "ProjectDetails",
+    "work_type": "ProjectTypeName",
+    "cost": "TotalCost",
+    "status": "In_2026_2030_TIP",
+    "date": "Current_Construction_FFY_Auto_Generated",
+    "county": "Municipality"
+   },
+   "planned_filter": "In_2026_2030_TIP = 1 (true for all 39 records today). Current_Construction_FFY_Auto_Generated gives the construction federal fiscal year (e.g. 'FFY 27/28'); no finished/unfinished flag, so treat years already past as probably under way.",
+   "sample": "{\"PIN\": 375709, \"SponsorName\": \"SYRACUSE\", \"ProjectDescription\": \"IMPROVEMENTS, ERIE BLVD W, FRANKLIN ST TO W GENESEE ST, SYRACUSE, ONON CO\", \"Municipality\": \"Syracuse\", \"ProjectTypeName\": \"Pavement\", \"FCN_1_Location\": \"Erie Blvd\", \"FCN_1_From\": \"Franklin\", \"FCN_1_To\": \"Genesee\", \"Current_Construction_FFY_Auto_Generated\": \"FFY 27/28\", \"Funding_Source\": \"Highway\", \"TotalCost\": 9133000}",
+   "restrictions": "no commercial limit stated, but the item licence says: 'This file is for planning use only. The TIP is subject to change. The SMTC does not guarantee the accuracy or completeness of this information.'",
+   "notes": "Checked 2026-11-27. ArcGIS Online item 58ba268cec914a039c61662f780a7212 (owner SMTC_MPO, modified 2025-12-08), snippet 'Line projects on the SMTC's current Transportation Improvement Program (TIP).', credit 'SMTC, 100 Clinton Square, 126 North Salina Street, Syracuse'. PIN is the NYSDOT project number. Companion point layer with the same fields: .../PointProjects/FeatureServer/0 (29 multipoint records, mostly bridges; item 814d7e59516a43d2b1d03740df87f116, last edited 2026-06-10). Mostly pavement, bridge and trail work; few capacity projects. Onondaga County and small parts of Madison and Oswego counties. The older SMTC_2020_to_2024_TIP_Map_WFL1 service on the same account is expired."
+  },
+  {
+   "name": "Greater Madison MPO Transportation Improvement Program roadway projects (Madison / Dane County)",
+   "authority": "Greater Madison MPO (Madison Area Transportation Planning Board); sponsors are WisDOT, Dane County, City of Madison and other municipalities",
+   "states": [
+    "WI"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://maps.cityofmadison.com/arcgis/rest/services/Public/OPEN_DATA_TRANS/MapServer/12",
+   "verified": true,
+   "record_count": 119,
+   "geometry": "polyline",
+   "fields": {
+    "id": "ID",
+    "name": "Title",
+    "description": "Descriptio",
+    "work_type": "Type",
+    "cost": "Total_Cost",
+    "status": "Plan_Revis",
+    "date": "F2027, F2028, F2029, F2030, F2031",
+    "county": "County"
+   },
+   "planned_filter": "All records are projects in the TIP edition named in Plan_Revis ('2027-2031 Draft TIP' today). ROW > 0 marks projects with right-of-way money programmed; the first non-zero of F2027..F2031 is the start year. No completed flag.",
+   "sample": "{\"ID\": \"Temp-104\", \"Agency\": \"City of Sun Prairie\", \"Plan_Revis\": \"2027-2031 Draft TIP\", \"Title\": \"OAKLAND, MICHIGAN, CONCORD, PEACOCK, AND GREENBRIAR\", \"Descriptio\": \"Streets Included: Greenbriar Drive, Wisconsin to Oakland, Oakland Avenue- Pennsylvania to Woodward ... The typical total reconstruction project involves construction\", \"Type\": \"Roadway\", \"County\": \"Dane\", \"Total_Cost\": 2624940.0, \"F2027\": 2624940.0, \"Const_\": 2398490.0, \"UTL\": 226450.0, \"ROW\": 0.0}",
+   "restrictions": "no commercial limit stated, but the City of Madison Data Policy reserves rights: 'The City reserves the right to claim or seek to protect any patent, copyright, trademark, or other intellectual property rights in any of the information ... These Terms of Use do not grant anyone any title or right to any patent, copyright, trademark or other intellectual property rights that the City may have'",
+   "notes": "Checked 2026-11-27. Hosted on the City of Madison's own ArcGIS server for the MPO; layer copyrightText 'Madison Area Transportation Planning Board'; ArcGIS Online item 74115cadbf1f4b9d8d4749346771c15f (owner CityOfMadison, credit 'Greater Madison MPO'), whose licence is a link to the City of Madison Data Policy (https://www.cityofmadison.com/policy/data), read today: data are 'provided for informational purposes', a warranty disclaimer, a right to discontinue, and the intellectual-property reservation quoted under restrictions; it says a claim of rights would be indicated on the page concerned, and none is on this layer. The records are the draft 2027-2031 TIP, so ids are still temporary ('Temp-42'); expect them to change on adoption. Dollars per year in Prior, F2027..F2031, Future; per phase in PE, Const_, UTL, ROW, Planning; Local/State/Federal give the split. Sibling layers in the same MapServer: /1 TIP Roadway Intersections (30), /13 TIP Bike Paths, /0 TIP Bike Intersections. Dane County."
+  },
+  {
+   "name": "GVMC FY 2026-2029 Transportation Improvement Program line projects (Grand Rapids)",
+   "authority": "Grand Valley Metropolitan Council (Grand Rapids MPO); sponsors are MDOT, Kent and Ottawa county road commissions and cities",
+   "states": [
+    "MI"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services5.arcgis.com/X42k956XlfnIoN3d/arcgis/rest/services/26_29_TIP/FeatureServer/11",
+   "verified": true,
+   "record_count": 98,
+   "geometry": "polyline",
+   "fields": {
+    "id": "JOB_NUM",
+    "name": "PROJ_LOC",
+    "description": "PROJ_DESC",
+    "work_type": "Job_Label",
+    "cost": "TOTAL",
+    "date": "YEAR",
+    "county": "JURIS"
+   },
+   "planned_filter": "All records are projects in the FY 2026-2029 TIP; YEAR is the fiscal year of the work, so YEAR >= '2027' leaves work not yet started. No status field.",
+   "sample": "{\"GIS_ID\": \"1001\", \"FND_SRCE\": \"STP\", \"YEAR\": \"2027\", \"JOB_NUM\": \"223736\", \"PROJ_LOC\": \"Kinsey Street\", \"LIMITS\": \"100th Street to Maple Street\", \"PROJ_DESC\": \"Reconstruct Kinsey Street with ditching improvements, shoulder widening and potentially realignment of the 100th Street intersection.\", \"JURIS\": \"Caledonia\", \"LENGTH\": 0.3, \"TOTAL\": 1050000, \"PURPOSE\": \"Maintain State of Good Repair\", \"Job_Label\": \"Reconstruct\"}",
+   "restrictions": "terms not found: the ArcGIS Online item (2ed86c691cd04605ac0323eb1ce3a2a7, owner gerickem, on the REGIS/GVMC organisation) has no licence text, credit or description",
+   "notes": "Checked 2026-11-27. Item '26_29 TIP' created and last edited 2025-04-14 on GVMC's own ArcGIS organisation (regis-gvmc). JOB_NUM is the MDOT job number; JURIS the responsible jurisdiction; LIMITS from/to; FED_STATE / NON_FED / TOTAL the dollars. Sibling layers: /12 26_29Points (25 points); /8 and /7 are apparent duplicates of the line and point layers with the same counts. Mostly reconstruction and resurfacing. Kent County and eastern Ottawa County."
+  },
+  {
+   "name": "GVMC 2050 Metropolitan Transportation Plan projects (Grand Rapids)",
+   "authority": "Grand Valley Metropolitan Council (Grand Rapids MPO); responsible agencies are MDOT, county road commissions and cities",
+   "states": [
+    "MI"
+   ],
+   "coverage": "metro area",
+   "kind": "arcgis",
+   "url": "https://services5.arcgis.com/X42k956XlfnIoN3d/arcgis/rest/services/2050_MTP_Project_Map_WFL1/FeatureServer/2",
+   "verified": true,
+   "record_count": 151,
+   "geometry": "polyline",
+   "fields": {
+    "id": "JN",
+    "name": "Name",
+    "description": "Descri",
+    "work_type": "WorkType",
+    "cost": "TotalAmt",
+    "date": "FY",
+    "county": "County"
+   },
+   "planned_filter": "FY IN ('2031-2040','2041-2050') OR FY >= '2027' for work not yet started. FY counts today: 2023 39, 2024 40, 2025 37, 2026 31, '2031-2040' 3, '2041-2050' 1, so most of the list is the 2023-2026 TIP years and is now built or under way. Project_Ty = 'Widening' or WorkType containing 'Widening'/'New' for land-taking work.",
+   "sample": "{\"Project_Ty\": \"Widening\", \"WorkType\": \"Minor Widening\", \"FY\": \"2024\", \"JN\": \"200652\", \"County\": \"Kent\", \"RespAgency\": \"MDOT\", \"Name\": \"M-37 SB\", \"Limits\": \"60th Street to Patterson Avenue (N Junction)\", \"Length\": \"0.666\", \"Descri\": \"Extend 3rd lane from 60th St north to Patterson Ave (N Jct)\", \"TotalAmt\": \"2022744\"}",
+   "restrictions": "terms not found: the ArcGIS Online item (23669b868a7342c381ec8b04b8266dab, owner gerickem, on the REGIS/GVMC organisation) has no licence text, credit or description",
+   "notes": "Checked 2026-11-27. Item created and last edited 2023-12-14 (the 2050 MTP is the current plan), on GVMC's own ArcGIS organisation. Low yield: only 4 line records are beyond 2026; the FY 2026-2029 TIP layer (separate entry) is the better current list. Amounts (FedAmt, StateAmt, LocalAmt, TotalAmt) and Length are stored as text. JN is the MDOT job number. Sibling layer /1 MTP Projects (Points), 19 records, with ProjectTyp instead of Project_Ty."
   }
  ],
  "unverified": [

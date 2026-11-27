@@ -169,6 +169,144 @@
    "notes": "Baltimore City real property (independent city). Owner names are space-padded; MAILTOADD is often null. CURRLAND + CURRIMPR are current land and improvement values (BFCVLAND/BFCVIMPR base full cash values); BLOCKLOT is the city block/lot id.",
    "verified": true,
    "record_count": 237456
+  },
+  {
+   "county": "WICOMICO",
+   "url": "https://services6.arcgis.com/Hx8jJ6McXQ0jnqLk/arcgis/rest/services/Parcels1/FeatureServer/12",
+   "verified": true,
+   "record_count": 48656,
+   "fields": {
+    "apn": "acctid",
+    "owner": [
+     "ownname1",
+     "ownname2"
+    ],
+    "mailing_address": [
+     "ownadd1",
+     "ownadd2",
+     "owncity",
+     "ownstate",
+     "ownerzip"
+    ],
+    "address": [
+     "address",
+     "city",
+     "zipcode"
+    ],
+    "market_value": "nfmttlvl",
+    "acres": "acres"
+   },
+   "restrictions": null,
+   "notes": "Published by the City of Salisbury GIS Division (not the county itself), ArcGIS item 9be847a1f30e4f8d93a66bbb52c86a4e, 'Wicomico County, MD: Parcels'; countywide polygons 'pulled regularly' from the MD iMAP parcel service with SDAT attributes, and unlike the public iMAP layer it carries owner names. Licence read on the item: an as-is warranty disclaimer, then \"The Data can be freely distributed as long as the metadata entry is not modified or deleted. Any data derived from the Data must acknowledge the City of Salisbury in the metadata.\" No limit on commercial use or mailing stated; acknowledgement of the City is required. Field names are lower case. ownname1 filled on 47,149 of 48,656; sample sdatdate 2025NOV; nfmttlvl is the SDAT total full market value. maxRecordCount 1000.",
+   "checked": "2026-11-27"
+  },
+  {
+   "county": "WASHINGTON",
+   "url": "https://services2.arcgis.com/uxxyl33jRTSmjre5/arcgis/rest/services/Property_view/FeatureServer/42",
+   "verified": true,
+   "record_count": 63370,
+   "fields": {
+    "apn": "TaxAccNo",
+    "owner": [
+     "OwnName1",
+     "OwnName2"
+    ],
+    "mailing_address": [
+     "OwnAdd1",
+     "OwnAdd2",
+     "OwnCity",
+     "OwnState",
+     "OwnZip"
+    ],
+    "address": [
+     "PremNum",
+     "PremDir",
+     "PremName",
+     "PremType",
+     "PremCity",
+     "PremZip"
+    ],
+    "acres": "CalcAcre"
+   },
+   "restrictions": "Washington County Digital Spatial Data License Agreement (item licence): data is \"solely for the internal use of the Licensee\"; \"Any sale, distribution, trade, loan, or offer for use of DSD, in whole or in part, is strictly prohibited\"; the agreement also refers to licence fees. Needs the county's written permission before commercial or redistributed use.",
+   "notes": "Washington County GIS Office's own hosted layer, ArcGIS item 184ef28d49b24a38b110bc22da4d61dd 'Washington County MD Parcels' (modified 2026-11-18). The item says \"By downloading this data, you hereby agree to the Washington County Digital Spatial Data License Agreement.\" OwnName1 filled on 61,168 of 63,370 (the first records by id are unattributed polygons). Value fields exist (CurLandVal, CurImpVal, CYAssess) but were not sampled; Deeded_AC is the deeded acreage as text. maxRecordCount 2000.",
+   "checked": "2026-11-27"
+  },
+  {
+   "county": "CHARLES",
+   "url": "https://services7.arcgis.com/3BMWkdyrt45RNCrq/arcgis/rest/services/Tax_Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 74627,
+   "fields": {
+    "apn": "ACCTID",
+    "owner": [
+     "OWNNAME1",
+     "OWNNAME2"
+    ],
+    "address": [
+     "ADDRESS",
+     "CITY",
+     "ZIPCODE"
+    ]
+   },
+   "restrictions": "Item licence says \"This data is for illustration purposes and should only be used as such\" (alongside a liability disclaimer); no explicit grant for commercial or mailing use. Ask Charles County Planning and Growth Management before relying on it.",
+   "notes": "Charles County Government's own hosted layer, ArcGIS item 3af581dd2f5e4a4a9122ff7452ebbae0 'Tax Parcels' (modified 2026-11-24); credits SDAT, Maryland Department of Planning and the county Planning Division. OWNNAME1 filled on 73,294 of 74,627. No owner mailing address and no value field; ADDRESS is the premise address. LANDAREA is in acres or square feet according to LUOM (A or S). maxRecordCount 2000.",
+   "checked": "2026-11-27"
+  },
+  {
+   "county": "ST. MARY'S",
+   "url": "https://services3.arcgis.com/oMyOi7kozGXYXHPr/arcgis/rest/services/Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 51892,
+   "fields": {
+    "apn": "ACCTID",
+    "owner": "Owners_Nam",
+    "mailing_address": [
+     "Address1",
+     "Address2",
+     "city",
+     "state",
+     "zip"
+    ],
+    "address": [
+     "Address",
+     "PACity",
+     "PAZipCode"
+    ]
+   },
+   "restrictions": "terms not found: third-party upload with an empty licence field and no credits; St. Mary's County's own terms were not located.",
+   "notes": "Not the county's own service: ArcGIS item 3bc4489acf594c6d895e8e706cb58620 'Property Boundary', uploaded by an individual user account in a utility organisation; its description says the layer was \"downloaded from the county's GIS webpage\" and re-uploaded. Stale: item modified 2022-12, record edit dates around 2017-2018. Owners_Nam filled on 51,027 of 51,892; some polygons have no attributes. LandArea unit is not stated; no value field. St. Mary's County's own server was not located. maxRecordCount 2000.",
+   "checked": "2026-11-27"
+  },
+  {
+   "county": "CECIL",
+   "url": "https://services2.arcgis.com/utBig56dGaw25bwu/arcgis/rest/services/Cecil_Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 48148,
+   "fields": {
+    "apn": "ACCTID",
+    "owner": [
+     "OWNNAME1",
+     "OWNNAME2"
+    ],
+    "mailing_address": [
+     "OWNADD1",
+     "OWNADD2",
+     "OWNCITY",
+     "OWNSTATE",
+     "OWNERZIP"
+    ],
+    "address": [
+     "ADDRESS",
+     "CITY",
+     "ZIPCODE"
+    ],
+    "market_value": "NFMTTLVL",
+    "acres": "ACRES"
+   },
+   "restrictions": "terms not found: third-party (college account) copy with empty licence and credits fields; the Maryland Department of Planning's terms for the downloadable parcel files it came from were not read.",
+   "notes": "Not the county's own service: ArcGIS item 1ab6f150bf274a89a09977c7d7fb614d 'Cecil Parcels', a Washington College user's upload described as \"Cecil County Parcel polygons from MERLIN Online. Downloaded by Maryland Department of Planning: Downloadable GIS Files\". Statewide MdProperty View schema including owner names. Dated: sample SDATDATE 2023MAY, MDPVDATE 2020SEP, POLYDATE 2019OCT; item modified 2024-10. OWNNAME1 filled on 47,329 of 48,148. Cecil County's own server was not located. maxRecordCount 2000.",
+   "checked": "2026-11-27"
   }
  ],
  "summary": "MDOT SHA project portal points (status, work type, estimated start) and the FY2026-2031 CTP points verify; both are point-only and lack cost. The statewide MD iMAP parcel layer (https://mdgeodata.md.gov/imap/rest/services/PlanningCadastre/MD_ParcelBoundaries/MapServer/0, 2,293,824 parcels, verified) has owner MAILING address (OWNADD1, OWNADD2, OWNCITY, OWNSTATE, OWNERZIP), ACCTID, ADDRESS, NFMTTLVL, ACRES and an SDAT link (SDATWEBADR) but NO owner-name field. Owner names verified for Prince George's, Anne Arundel and Baltimore City; Montgomery County's layer (gis3.montgomerycountymd.gov .../property/property_query/MapServer/0) also has owner address but no name, and Baltimore County's server was unreachable."

@@ -90,6 +90,203 @@
    "notes": "Third-party (city) copy of county tax parcels, dated by its name (8/26); the first sample record had blank attributes, see owner_filled_count. Pinal County's own server was not located.",
    "approved": true,
    "approved_note": "Approved by the account owner on 2026-11-17: no restriction on commercial use stated."
+  },
+  {
+   "county": "NAVAJO",
+   "url": "https://services.arcgis.com/cghC2lEIpJ2TRrs5/arcgis/rest/services/Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 86947,
+   "fields": {
+    "apn": "APN",
+    "owner": "Owner",
+    "mailing_address": "MailingAddress",
+    "address": "SitusAddress",
+    "acres": "Acreage"
+   },
+   "restrictions": null,
+   "notes": "Navajo County IT GIS's own hosted layer, ArcGIS item eea9c80f2ca24d67a1280f9a9e48ffea 'Parcels' (modified 2026-04-14), \"designed for public use\". Licence read on the item: \"Creative Commons Attribution 4.0 International License (CC BY 4.0). It is for general reference only and not suitable for legal, engineering, or surveying purposes.\" CC BY allows commercial use and redistribution with attribution to Navajo County; no mention of A.R.S. 39-121.03 or mailing limits. Owner filled on all 86,947; Owner and MailingAddress contain line breaks (\\r\\n) to strip; MailingAddressLine1/MailingAddressLine2 hold the street lines, and the sibling service .../MailingAddresses/FeatureServer/0 has MailingCityStateZip. No value field. Large reservation and federal tracts are included. maxRecordCount 2000.",
+   "checked": "2026-11-27"
+  },
+  {
+   "county": "APACHE",
+   "url": "https://services8.arcgis.com/KyZIQDOsXnGaTxj2/arcgis/rest/services/Apache_County_Parcels/FeatureServer/0",
+   "verified": true,
+   "record_count": 57674,
+   "fields": {
+    "apn": "PARCEL_NUM",
+    "owner": "OWNERNAME",
+    "mailing_address": "OWNERADDRESS",
+    "address": "SITUS"
+   },
+   "restrictions": "terms not found: the item has an empty licence and no credits, and the publishing account is not identified as the county; Apache County's own terms (and any A.R.S. 39-121.03 commercial-use request) were not read.",
+   "notes": "ArcGIS item 5033c95f90f64b7eb76348ca75c26a46 'Apache County Parcels' from an individual user account (item modified 2020-12; its summary says the data is 'specifically for the southern portion (district 3)' although the count matches the whole county). OWNERNAME filled on 57,423 of 57,674. OWNERADDRESS is the street line only (no city, state or zip); no value or acreage field. The same parcels with owner names are also in the Arizona Department of Water Resources copy, .../C34zQ7veRS0V1t04/arcgis/rest/services/Parcels/FeatureServer/0 (57,679 records), whose licence asks users not to pass the data on. maxRecordCount 2000.",
+   "checked": "2026-11-27"
+  },
+  {
+   "county": "GILA",
+   "url": "https://services1.arcgis.com/PEZ16KoOWXoETFQ5/arcgis/rest/services/Parcels_View3/FeatureServer/0",
+   "verified": true,
+   "record_count": 35739,
+   "fields": {
+    "apn": "APN",
+    "owner": "Owner_Name",
+    "acres": "Acres"
+   },
+   "restrictions": "terms not found: the item has an empty licence and no credits, and the publishing account is not identified as the county; Gila County's own terms (and any A.R.S. 39-121.03 commercial-use request) were not read.",
+   "notes": "ArcGIS item 0656770d55f041a0987d471c6a44b207 'Parcels_View', summary 'Gila County, Arizona Assessor Parcels', from an individual user account (item modified 2022-06, record edits into 2024). Owner_Name filled on 35,517 of 35,739. No mailing address, site address or value; LAPN is the dashed parcel number and Account_Num the assessor account. The Arizona Department of Water Resources copy, .../C34zQ7veRS0V1t04/arcgis/rest/services/Parcels/FeatureServer/3 (39,656 records), adds a site address but its licence asks users not to pass the data on. maxRecordCount 2000.",
+   "checked": "2026-11-27"
+  },
+  {
+   "county": "PIMA",
+   "url": "https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/Parcels/FeatureServer/10",
+   "verified": true,
+   "record_count": 445971,
+   "fields": {
+    "apn": "APN",
+    "owner": "OWNER_NAME",
+    "address": [
+     "SITE_ADDRESS",
+     "SITE_CITY",
+     "SITE_ZIP"
+    ],
+    "acres": "ACRES_US"
+   },
+   "restrictions": "Arizona Department of Water Resources item licence: the State and the Department \"retain any intellectual property interest, including copyright\" and \"The Department requests that persons receiving and using this information not make it available to others for their re-use\"; third parties are told to request copies from the Department. The county assessor's own terms (and any A.R.S. 39-121.03 commercial-use request) were not read.",
+   "notes": "State-agency copy, not the county's own service: Arizona Department of Water Resources 'Parcels' (ArcGIS item c33b63281f80430f89db6f3401154674, modified 2026-08-20), one layer per county, described as obtained from the county and normalised by ADWR. OWNER_NAME filled on 445,288 of 445,971. No owner mailing address and no value field. URL links to the county parcel page. Pima County's own server (gisdata.pima.gov) answered with a bot check (HTTP 403) and was not used. maxRecordCount 2000.",
+   "checked": "2026-11-27"
+  },
+  {
+   "county": "YUMA",
+   "url": "https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/Parcels/FeatureServer/13",
+   "verified": true,
+   "record_count": 96848,
+   "fields": {
+    "apn": "APN",
+    "owner": "OWNER_NAME",
+    "address": [
+     "SITE_ADDRESS",
+     "SITE_CITY",
+     "SITE_ZIP"
+    ],
+    "acres": "ACRES_US"
+   },
+   "restrictions": "Arizona Department of Water Resources item licence: the State and the Department \"retain any intellectual property interest, including copyright\" and \"The Department requests that persons receiving and using this information not make it available to others for their re-use\"; third parties are told to request copies from the Department. The county assessor's own terms (and any A.R.S. 39-121.03 commercial-use request) were not read.",
+   "notes": "State-agency copy, not the county's own service: Arizona Department of Water Resources 'Parcels' (ArcGIS item c33b63281f80430f89db6f3401154674, modified 2026-08-20), one layer per county, described as obtained from the county and normalised by ADWR. OWNER_NAME filled on 96,703 of 96,848. No owner mailing address and no value field. maxRecordCount 2000.",
+   "checked": "2026-11-27"
+  },
+  {
+   "county": "COCHISE",
+   "url": "https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/Parcels/FeatureServer/1",
+   "verified": true,
+   "record_count": 122935,
+   "fields": {
+    "apn": "APN",
+    "owner": "OWNER_NAME",
+    "address": [
+     "SITE_ADDRESS",
+     "SITE_CITY",
+     "SITE_ZIP"
+    ],
+    "acres": "ACRES_US"
+   },
+   "restrictions": "Arizona Department of Water Resources item licence: the State and the Department \"retain any intellectual property interest, including copyright\" and \"The Department requests that persons receiving and using this information not make it available to others for their re-use\"; third parties are told to request copies from the Department. The county assessor's own terms (and any A.R.S. 39-121.03 commercial-use request) were not read.",
+   "notes": "State-agency copy, not the county's own service: Arizona Department of Water Resources 'Parcels' (ArcGIS item c33b63281f80430f89db6f3401154674, modified 2026-08-20), one layer per county, described as obtained from the county and normalised by ADWR. OWNER_NAME filled on 115,142 of 122,935. No owner mailing address and no value field. Cochise County's own hosted parcel layers carry no owner name. maxRecordCount 2000.",
+   "checked": "2026-11-27"
+  },
+  {
+   "county": "COCONINO",
+   "url": "https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/Parcels/FeatureServer/2",
+   "verified": true,
+   "record_count": 78368,
+   "fields": {
+    "apn": "APN",
+    "owner": "OWNER_NAME",
+    "address": [
+     "SITE_ADDRESS",
+     "SITE_CITY",
+     "SITE_ZIP"
+    ],
+    "acres": "ACRES_US"
+   },
+   "restrictions": "Arizona Department of Water Resources item licence: the State and the Department \"retain any intellectual property interest, including copyright\" and \"The Department requests that persons receiving and using this information not make it available to others for their re-use\"; third parties are told to request copies from the Department. The county assessor's own terms (and any A.R.S. 39-121.03 commercial-use request) were not read.",
+   "notes": "State-agency copy, not the county's own service: Arizona Department of Water Resources 'Parcels' (ArcGIS item c33b63281f80430f89db6f3401154674, modified 2026-08-20), one layer per county, described as obtained from the county and normalised by ADWR. OWNER_NAME filled on 78,280 of 78,368. No owner mailing address and no value field. maxRecordCount 2000.",
+   "checked": "2026-11-27"
+  },
+  {
+   "county": "SANTA CRUZ",
+   "url": "https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/Parcels/FeatureServer/12",
+   "verified": true,
+   "record_count": 43189,
+   "fields": {
+    "apn": "APN",
+    "owner": "OWNER_NAME",
+    "address": [
+     "SITE_ADDRESS",
+     "SITE_CITY",
+     "SITE_ZIP"
+    ],
+    "acres": "ACRES_US"
+   },
+   "restrictions": "Arizona Department of Water Resources item licence: the State and the Department \"retain any intellectual property interest, including copyright\" and \"The Department requests that persons receiving and using this information not make it available to others for their re-use\"; third parties are told to request copies from the Department. The county assessor's own terms (and any A.R.S. 39-121.03 commercial-use request) were not read.",
+   "notes": "State-agency copy, not the county's own service: Arizona Department of Water Resources 'Parcels' (ArcGIS item c33b63281f80430f89db6f3401154674, modified 2026-08-20), one layer per county, described as obtained from the county and normalised by ADWR. OWNER_NAME filled on 43,068 of 43,189. No owner mailing address and no value field. Santa Cruz County's own server (gis.santacruzcountyaz.gov) did not return data. maxRecordCount 2000.",
+   "checked": "2026-11-27"
+  },
+  {
+   "county": "LA PAZ",
+   "url": "https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/Parcels/FeatureServer/6",
+   "verified": true,
+   "record_count": 19336,
+   "fields": {
+    "apn": "APN",
+    "owner": "OWNER_NAME",
+    "address": [
+     "SITE_ADDRESS",
+     "SITE_CITY",
+     "SITE_ZIP"
+    ],
+    "acres": "ACRES_US"
+   },
+   "restrictions": "Arizona Department of Water Resources item licence: the State and the Department \"retain any intellectual property interest, including copyright\" and \"The Department requests that persons receiving and using this information not make it available to others for their re-use\"; third parties are told to request copies from the Department. The county assessor's own terms (and any A.R.S. 39-121.03 commercial-use request) were not read.",
+   "notes": "State-agency copy, not the county's own service: Arizona Department of Water Resources 'Parcels' (ArcGIS item c33b63281f80430f89db6f3401154674, modified 2026-08-20), one layer per county, described as obtained from the county and normalised by ADWR. OWNER_NAME filled on 19,079 of 19,336. No owner mailing address and no value field. maxRecordCount 2000.",
+   "checked": "2026-11-27"
+  },
+  {
+   "county": "GRAHAM",
+   "url": "https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/Parcels/FeatureServer/4",
+   "verified": true,
+   "record_count": 18821,
+   "fields": {
+    "apn": "APN",
+    "owner": "OWNER_NAME",
+    "address": [
+     "SITE_ADDRESS",
+     "SITE_CITY",
+     "SITE_ZIP"
+    ],
+    "acres": "ACRES_US"
+   },
+   "restrictions": "Arizona Department of Water Resources item licence: the State and the Department \"retain any intellectual property interest, including copyright\" and \"The Department requests that persons receiving and using this information not make it available to others for their re-use\"; third parties are told to request copies from the Department. The county assessor's own terms (and any A.R.S. 39-121.03 commercial-use request) were not read.",
+   "notes": "State-agency copy, not the county's own service: Arizona Department of Water Resources 'Parcels' (ArcGIS item c33b63281f80430f89db6f3401154674, modified 2026-08-20), one layer per county, described as obtained from the county and normalised by ADWR. OWNER_NAME filled on 18,821 of 18,821. No owner mailing address and no value field. maxRecordCount 2000.",
+   "checked": "2026-11-27"
+  },
+  {
+   "county": "GREENLEE",
+   "url": "https://services.arcgis.com/C34zQ7veRS0V1t04/arcgis/rest/services/Parcels/FeatureServer/5",
+   "verified": true,
+   "record_count": 4706,
+   "fields": {
+    "apn": "APN",
+    "owner": "OWNER_NAME",
+    "address": [
+     "SITE_ADDRESS",
+     "SITE_CITY",
+     "SITE_ZIP"
+    ],
+    "acres": "ACRES_US"
+   },
+   "restrictions": "Arizona Department of Water Resources item licence: the State and the Department \"retain any intellectual property interest, including copyright\" and \"The Department requests that persons receiving and using this information not make it available to others for their re-use\"; third parties are told to request copies from the Department. The county assessor's own terms (and any A.R.S. 39-121.03 commercial-use request) were not read.",
+   "notes": "State-agency copy, not the county's own service: Arizona Department of Water Resources 'Parcels' (ArcGIS item c33b63281f80430f89db6f3401154674, modified 2026-08-20), one layer per county, described as obtained from the county and normalised by ADWR. OWNER_NAME filled on 4,445 of 4,706. No owner mailing address and no value field. maxRecordCount 2000.",
+   "checked": "2026-11-27"
   }
  ],
  "summary": "Projects: no statewide ADOT planned-projects service verified, only the MAG (Phoenix region) TIP layers. Parcels: no statewide owner layer; Maricopa County Assessor parcels with owner and mailing address verified, plus a city-hosted copy of Pinal County. Pima (server returned 403), Yavapai (403) and Mohave not verified."

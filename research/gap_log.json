@@ -299,5 +299,68 @@
   "target": "adoption step",
   "tried": "scripts/adopt_states.py and adopt_sources.py",
   "result": "adoption output would have removed the 71 approvals the owner recorded on 2026-11-24 (commit cf90148) and seven project layers from layers.json; those data files were restored and only the CA and LA data files (additions only) were kept. Needs a code fix before adoption is run again"
+ },
+ {
+  "date": "2026-11-27",
+  "state": "US",
+  "target": "Vega's morning review",
+  "tried": "looked for research/review/missed.json and flags.json in the checkout",
+  "result": "neither file exists (no research/review folder), so there was nothing to handle"
+ },
+ {
+  "date": "2026-11-27",
+  "state": "NY",
+  "target": "county owner files",
+  "tried": "worked out the 24 counties missing from NYS Tax Parcels Public; county servers and the ArcGIS catalogue for the largest of them",
+  "result": "nothing switched on. Held: Saratoga (102,623, county's own 2026 roll, terms not found), Clinton (38,414, terms not found), Monroe (265,902, 2020 copy, county licence forbids selling the information without a written agreement), Schenectady (59,235, vendor copy, terms not found), Chemung (39,411, 2021, terms not found), Nassau (420,594, 2020 copy marked 'shall not be redistributed'). Dutchess has parcel IDs only. Niagara, Nassau, Cattaraugus and Essex servers did not answer; Franklin and Washington refused scripted requests (not worked around); Jefferson, Schoharie, Allegany, Orleans addresses are gone; 'wharcgisdeveloper' copies need a token"
+ },
+ {
+  "date": "2026-11-27",
+  "state": "MD",
+  "target": "county owner files",
+  "tried": "statewide iMAP layers and tables; county servers and the ArcGIS catalogue for Montgomery, Baltimore County, Howard, Frederick, Harford, Carroll, Charles, Washington, St. Mary's, Cecil, Wicomico, Calvert",
+  "result": "added Wicomico (48,656, City of Salisbury's copy with owner names, 'can be freely distributed'). Held: Washington (63,370, 'solely for the internal use of the Licensee'), Charles (74,627, 'for illustration purposes'), St. Mary's (51,892, stale personal copy, terms not found), Cecil (48,148, college copy, terms not found). No statewide layer has owner names. Montgomery, Carroll, Calvert: no owner field. Baltimore County, Howard, Frederick servers did not answer"
+ },
+ {
+  "date": "2026-11-27",
+  "state": "AZ",
+  "target": "county owner files",
+  "tried": "county servers and the ArcGIS catalogue for the 13 counties not on file",
+  "result": "added Navajo (86,947, county's own layer, CC BY 4.0). Held: Apache (57,674) and Gila (35,739), terms not found; Pima (445,971), Yuma (96,848), Cochise (122,935), Coconino (78,368), Santa Cruz (43,189), La Paz (19,336), Graham (18,821), Greenlee (4,706) are layers of one Arizona Department of Water Resources service whose licence asks users 'not make it available to others for their re-use' (owner and site address only, no mailing address). Pima and Yavapai servers answer with a bot check (not worked around); Yavapai's hosted layer has no owner; Mohave did not answer"
+ },
+ {
+  "date": "2026-11-27",
+  "state": "US",
+  "target": "metro areas with no regional map",
+  "tried": "Des Moines, Tulsa, Little Rock, Baton Rouge, Miami-Dade, Palm Beach, Charleston, Columbia SC, Greenville, Boise, Spokane, El Paso, Rochester, Syracuse, Hartford, Louisville, Grand Rapids, Madison, Kansas City, Kern, Stockton",
+  "result": "added Palm Beach TPA TIP FY2027-2031 (FL, 189, has a right-of-way dollar column) and Vision 2050 LRTP list (FL, 639), warranty-only licence. Held: Des Moines Area MPO capital programme FY2027-2030 (IA, 199) and long-range candidates (205), Greenville GPATS 2045 LRTP (SC, 390), Grand Rapids GVMC TIP FY2026-2029 (MI, 98) and 2050 MTP (151), terms not found; Baton Rouge MOVEBR (LA, 60, 'general reference purposes only'); Syracuse SMTC TIP 2026-2030 (NY, 39, 'for planning use only'); Madison draft TIP 2027-2031 (WI, 119, city data policy reserves rights). Nothing current for Tulsa, Little Rock, Miami-Dade TPO, Columbia, Spokane, El Paso, Rochester, Hartford, Kern, Stockton. Retry: Ada County Highway District 'FYP Road Projects' (Boise; server refused connections) and Kansas City capital projects (timed out)"
+ },
+ {
+  "date": "2026-11-27",
+  "state": "UT",
+  "target": "new kinds of sources",
+  "tried": "the Utah BUILD Statewide Vision Map account (Governor's Office of Planning and Budget, on UGRC's ArcGIS organisation)",
+  "result": "added Utah upcoming energy projects lines (9 records: TransWest Express, Energy Gateway South, Cross-Tie, Silver Rock, Uinta Basin Railway; CC BY 4.0). Held: Utah Project Portal (5,247 capital projects reported by local governments with cost and time frame; publisher's item has no terms and the state's map view says 'strictly for reference... within the BUILD Statewide Vision Map'; points sit at the sponsor's town, 385 at 0,0). Verified, not recorded separately: UWIP FY2027 water projects (3,664) and energy project points (33)"
+ },
+ {
+  "date": "2026-11-27",
+  "state": "US",
+  "target": "new kinds of sources",
+  "tried": "TVA's ArcGIS account (per-project transmission line open-house maps)",
+  "result": "verified and written to research/sources/ideas.md: Roane County TN, Crossville AL and Shooting Creek NC maps each have alternative routes, right-of-way strips and an 'Affected Tax Parcels' layer (222, 202 and 218 parcels with owner and mailing address); no licence text, needs a per-service sweep reader"
+ },
+ {
+  "date": "2026-11-27",
+  "state": "NE, HI",
+  "target": "sources that failed in today's refresh",
+  "tried": "Read the refresh output: Lincoln MPO 2050 LRTP roadway prioritization layer (NE) and HDOT Future (Design) Projects Socrata dataset xy86-hspc (HI)",
+  "result": "Lincoln: the publisher's item no longer exists (code 400 'Item does not exist or is inaccessible'); adoption dropped it from layers.json. HDOT: 404 at the Socrata address; it needs a Socrata reader anyway and is not a loaded ArcGIS layer. No replacement address searched for today - retry both. Parcel servers not answering during matching: UT Salt Lake County (timeouts), OR Jackson County (malformed response header); OK Cleveland County and MA statewide returned 'Invalid query parameters' on one project each."
+ },
+ {
+  "date": "2026-11-27",
+  "state": "AZ",
+  "target": "adoption step",
+  "tried": "python3 scripts/adopt_states.py NY MD AZ and scripts/adopt_sources.py, then compared every existing entry with the last commit",
+  "result": "adopt_states.py again dropped an approval the owner recorded on 2026-11-24 (AZ Maricopa: approved, approved_on, approved_note). The three fields were put back exactly as committed; no new approval was set. Everything else was additions only. The script still needs a fix so recorded approvals survive adoption; NY, MD, AZ were adopted alone to avoid touching other states."
  }
 ]

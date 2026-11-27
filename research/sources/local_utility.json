@@ -5785,6 +5785,56 @@
    "sample": "{\"PROJECT\": \"17-4\", \"LOCATION\": \"ESMT\", \"STATUS_CON\": \"In Service\", \"dist_date\": \"2010\", \"Comments\": \"Built\", \"Type\": \"Distribution\"}",
    "restrictions": null,
    "notes": "Large-diameter water transmission lines; the authority condemns pipeline easements. Item modified 2025-09."
+  },
+  {
+   "name": "Utah energy and mineral projects - upcoming transmission lines and rail (Office of Energy Development, July 2026)",
+   "authority": "Utah Office of Energy Development; published by the Governor's Office of Planning and Budget (BUILD Statewide Vision Map) with UGRC",
+   "states": [
+    "UT"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/Lines_EnergyMineralProjects_07282026/FeatureServer/92",
+   "verified": true,
+   "record_count": 9,
+   "geometry": "polyline",
+   "fields": {
+    "id": "OBJECTID",
+    "name": "Name",
+    "description": "OtherInfo",
+    "work_type": "ProjectType"
+   },
+   "planned_filter": "All nine records are under construction or planned as of July 2026; there is no status field, so the two cannot be told apart from the layer.",
+   "sample": "{\"Name\": \"Proposed 500 kV AC Cross-Tie Route\", \"ProjectType\": \"Transmission Line\", \"EnergyorMinerals\": \"Energy\", \"OtherInfo\": \"Cross-Tie Transmission Line Project - proposed kV AC Cross-Tie Route\"}",
+   "restrictions": null,
+   "notes": "Checked 2026-11-27. ArcGIS item 1459059c24734d068365066b9561f936 (owner Melissa.Lindholm@GOPB on the UGRC organisation's account, public, modified 2026-11). Terms read in full on the item: source attribution to OED; an 'as is' warranty disclaimer; 'USE CONSTRAINTS: This layer is intended strictly for general informational, research, and long-range infrastructure coordination purposes. It is NOT intended for engineering design, site construction, property boundary determinations...'; limitation of liability and an indemnity for the user's own redistribution; and 'LICENSE: Distributed under Creative Commons Attribution 4.0 International (CC BY 4.0)', which requires keeping the attribution to OED and the BUILD Statewide Vision Map and including the disclaimer. CC BY 4.0 allows commercial use and redistribution; nothing limits solicitation. Attribution is required if records are republished. Static snapshot received from OED as a KMZ on 2026-07-13, no update schedule. Records: TransWest Express segments 1-3 (WY to NV through Utah), Energy Gateway South 500 kV, Silver Rock proposed transmission corridor (Utah to Nevada), Cross-Tie 500 kV proposed route, and three Uinta Basin Railway branches (ProjectType 'Rail'). Alignments are generalised. PopupInfo holds HTML with length, voltage and the counties crossed. No cost, date or county field. A companion point layer (Points_EnergyMineralProjects_07282026/FeatureServer/91, 33 plants, mines and mills, same terms) was verified but not recorded: sites, not corridors."
+  },
+  {
+   "name": "Utah Project Portal (UPP) - local governments' capital infrastructure projects",
+   "authority": "Utah cities, counties, special districts and associations of governments, self-reported through the Utah Project Portal (upp.utah.gov); service kept by the Utah Geospatial Resource Center",
+   "states": [
+    "UT"
+   ],
+   "coverage": "statewide",
+   "kind": "arcgis",
+   "url": "https://services1.arcgis.com/99lidPhWCzftIe9K/arcgis/rest/services/project_portal_data/FeatureServer/0",
+   "verified": true,
+   "record_count": 5247,
+   "geometry": "point",
+   "fields": {
+    "id": "id",
+    "name": "name",
+    "description": "description",
+    "work_type": "projectTypeLabel",
+    "cost": "totalCost",
+    "status": "projectStatusLabel",
+    "date": "timeFrameLabel",
+    "county": "county"
+   },
+   "planned_filter": "projectStatus = 'notStarted'",
+   "sample": "{\"name\": \"Bridge Replacement\", \"description\": \"Bridge Replacement on 300W/Highland Drive\", \"totalCost\": 3000000, \"county\": \"Sevier\", \"city\": \"Glenwood\", \"projectTypeLabel\": \"Roads & Transportation\", \"projectSubTypeLabel\": \"Bridges\", \"timeFrameLabel\": \"Short-Term (1 Year)\", \"projectStatusLabel\": \"Not Started\", \"clientName\": \"Richfield City\"}",
+   "restrictions": "terms not found on the publisher's own item, and the state's map view words its use narrowly: the UGRC item (7d68760b70c34d18839bdb831dcd3a8b, owner UtahAGRC) has an empty licence and credit, unlike UGRC's other layers, which carry CC BY 4.0; the BUILD Statewide Vision Map view of the same service (item 1e63cd16c25045b88bf1af681c51c045) says 'This service is provided strictly for reference, regional coordination, and planning visualization within the BUILD Statewide Vision Map'. upp.utah.gov's own terms page was not read",
+   "notes": "Checked 2026-11-27. Updated automatically from the portal ('project-portal-skid'); latest dateModified is in 2026. A new kind of source: one statewide register of what every local government plans to build, with cost, priority and time frame. Status: Not Started 4,546, In Progress 206, Completed 495. Time frame: Long-Term (5+ Years) 2,240, Medium-Term (2-5 Years) 1,370, Short-Term (1 Year) 1,143. Type: Drinking Water 2,274, Wastewater & Sewer 821, Stormwater & Drainage 710, Secondary Water 356, Planning & Studies 180, Raw Water Source Development 171, Roads & Transportation 166 (111 not completed), Agriculture Off-Farm 149, Public Facilities 140, Public Safety 106, others under 50. projectSubTypeLabel refines the type (e.g. 'Bridges', 'Airports'); clientName is the sponsoring body, clientGroupName its association of governments, programNames e.g. 'Unified Water Infrastructure Plan'; fundingSources is a text list of sources and shares. Points are placed at the sponsor's town, not on the works, and 385 records without coordinates sit at 0,0 and must be dropped; matching parcels from these points would be unreliable, so the value is as an early-warning list by town. maxRecordCount 2000. A more precise snapshot of the water projects exists at Unified_Water_Infrastructure_Plan__UWIP_NEW/FeatureServer/14 (3,664 points, FY 2027 plan as of 2026-03-02, with Construction_timeline and Estimated_cost; CC BY 4.0 per its item 22bda86225cb44aa865b9ff61cf3ad36), verified but not recorded separately because its points are also town-level."
   }
  ],
  "unverified": [

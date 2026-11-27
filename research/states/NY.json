@@ -108,6 +108,130 @@
     "verified": true,
     "record_count": 3827530
   },
-  "parcels_counties": [],
+  "parcels_counties": [
+    {
+      "county": "SARATOGA",
+      "url": "https://services8.arcgis.com/L31p4Kvi5t2HjDqc/arcgis/rest/services/Parcels/FeatureServer/57",
+      "verified": true,
+      "record_count": 102623,
+      "fields": {
+        "apn": "PRINT_KEY",
+        "owner": "OWNER",
+        "mailing_address": [
+          "MAIL_1ADDR",
+          "MAIL_2ADDR",
+          "MAIL_CITY",
+          "MAIL_STATE",
+          "MAIL_ZIP"
+        ],
+        "address": "PROP_ADDR",
+        "market_value": "TOTAL_AV",
+        "acres": "ACRES"
+      },
+      "restrictions": "terms not found: ArcGIS item 8bf057f7be2245cbaccd7a480556bbd6 has empty licenseInfo and accessInformation, layer has empty description and copyrightText; no county GIS terms page located (guessed saratogacountyny.gov GIS URL returned 404)",
+      "notes": "Saratoga County's own ArcGIS Online org (L31p4Kvi5t2HjDqc; same org hosts county planning/public health/sheriff layers; item owner SC_guest1, sibling parcel items owned by Troy.Hilts.SCPlanning). Item title 'Parcels', modified 2026-09-28, data last edited 2026-07-06, ROLL_YEAR 2026. OWNER populated on 102051 of 102623. TOTAL_AV is total assessed value, not full market value (no full-market field on this layer; the county's older layer sara_cnty_prcl_2025/FeatureServer/572, roll 2025, 102415 records, has FULL_MARKE). SWISSBL is the 26-char SWIS+SBL id. maxRecordCount 2000. A vendor copy of the 2025 roll also exists (SpatialDataLogic Saratoga081225), not used.",
+      "checked": "2026-11-27"
+    },
+    {
+      "county": "CLINTON",
+      "url": "https://services3.arcgis.com/33FPYaVQYNa7sFJ5/arcgis/rest/services/Parcels_ClintonWeb1_view/FeatureServer/0",
+      "verified": true,
+      "record_count": 38414,
+      "fields": {
+        "apn": "PRINT_KEY",
+        "owner": "OWNER",
+        "address": "PROP_ADDR",
+        "acres": "ACRES"
+      },
+      "restrictions": "terms not found: ArcGIS item 76ad04049ba745d0815a7ac6ff3c1ba3 has empty licenseInfo and accessInformation, layer has empty description and copyrightText; clintoncountyny.gov did not respond so no county terms page was read",
+      "notes": "Published by ArcGIS user CutterL, who also publishes Clinton County zoning/APA layers and registers the county server cc-gisgw.clintoncountygov.com (item dedcab058e4f480bb09ce57003935f3c); taken to be Clinton County's own publication but the profile is blank. Item snippet: 'Clinton County NY online parcels data - View Layer'. Layer name Parcels_07_22_2026web, data last edited 2026-08-27. OWNER populated on all 38414. NO mailing address and no value fields; MORE_INFO links each parcel to the county's Beacon (Schneider) page, which was not queried. Uniqueness needs MUNI + PRINT_KEY (TaxID is the padded print key). maxRecordCount 2000.",
+      "checked": "2026-11-27"
+    },
+    {
+      "county": "MONROE",
+      "url": "https://services1.arcgis.com/yisUfwZZ4fyubK3R/arcgis/rest/services/Monroe_County_Parcels/FeatureServer/0",
+      "verified": true,
+      "record_count": 265902,
+      "fields": {
+        "apn": "PRINTKEY",
+        "owner": [
+          "OWNERNAME1",
+          "OWNERNAME2"
+        ],
+        "mailing_address": [
+          "OWNERSTREETADDRESS",
+          "OWNERPOBOX",
+          "OWNERCITYSTATEZIPCODE"
+        ],
+        "address": "PARCELADDRESS",
+        "market_value": "TOTALASSESSEDVALUE",
+        "acres": "ACRES"
+      },
+      "restrictions": "Monroe County licence on the item limits sale: 'you are hereby permitted by Monroe County to copy, distribute, and otherwise use the information with one exception: no one is permitted to sell this information except in accordance with a written agreement with Monroe County'. Also a third-party copy, not the county's own service.",
+      "notes": "ArcGIS item 4df0c92e0197446881f3ff56fe7964c5 owned by 'PlanningDesign' (profile name Christina McInerney; org also hosts Lockport zoning and Cattaraugus parcels, so apparently a consultant, not the county). Data is Monroe County DES GIS parcels: description says 'File creation date: Sunday, January 3, 2021', ROLLYEAR 2020, service last edited 2024-01-17, so about six years old. accessInformation credits Monroe County Real Property Department. Licence text is the county's 2006 disclaimer/copyright notice (warranty disclaimer plus the no-sale clause quoted in restrictions; nothing on solicitation or mailing lists). OWNERNAME1 populated on 265010 of 265902. TOTALASSESSEDVALUE is assessed value, not market. COUNTYSBL is the 26-char SWIS+SBL id; PRINTKEY repeats across towns so pair with SWIS. maxRecordCount 2000. No working county-hosted ArcGIS server found (guessed maps./gis.monroecounty.gov hosts did not resolve). A 2018 copy (item 7f33539a5a14437a9555f1ec2ef66107, U of Rochester) carries a stricter county note: 'not intended for second party distribution'.",
+      "checked": "2026-11-27"
+    },
+    {
+      "county": "SCHENECTADY",
+      "url": "https://services3.arcgis.com/DvTqoyLKkslnGFR5/arcgis/rest/services/Final21/FeatureServer/0",
+      "verified": true,
+      "record_count": 59235,
+      "fields": {
+        "apn": "PRINT_KEY",
+        "owner": "OWNER",
+        "mailing_address": [
+          "STREET",
+          "CITY_STATE"
+        ],
+        "address": "PROP_ADDR",
+        "market_value": "CURR_TOT",
+        "acres": "ACRES"
+      },
+      "restrictions": "terms not found: ArcGIS item 5c567f24adf54de7ad198e1519fc1a7f has empty licenseInfo and accessInformation, layer has no description or copyrightText; third-party vendor copy (Spatial Data Logic), not the county's own publication, and the county's terms for the underlying data were not found",
+      "notes": "Item 'Schenectady County New York Parcels Final21' owned by jkennedy_SpatialDataLogic (a permitting-software vendor), item modified 2026-04-17 but data last edited 2023-09-28; no roll-year field, so data age is roughly 2021-2023. OWNER populated on 59076 of 59235. CURR_TOT appears to be current total assessment, not market value. PRINT_KEY repeats across municipalities so pair with SWIS. maxRecordCount 2000. The county service listed in the NYS index (spatialags.vhb.com/.../29816_SIMS/SIMS_100222/MapServer/6) now returns 404.",
+      "checked": "2026-11-27"
+    },
+    {
+      "county": "CHEMUNG",
+      "url": "https://services5.arcgis.com/Zuw6weNBpZX2wFbS/arcgis/rest/services/Chemung_County_Parcels_Merged_9.1.2021/FeatureServer/0",
+      "verified": true,
+      "record_count": 39411,
+      "fields": {
+        "apn": "PrintKey",
+        "owner": "CURRENT_OW",
+        "address": "RPS_ADDR_1",
+        "acres": "Calc_Acre"
+      },
+      "restrictions": "terms not found: ArcGIS item 51e953ed767a484994010ec84c37ebda has empty licenseInfo and accessInformation, layer has empty description and copyrightText; no county terms page read",
+      "notes": "Item 'Chemung County Parcels Merged 9.1.2021' owned by kmeindl_ChemungCGC (Chemung County org Zuw6weNBpZX2wFbS); this is the URL the NYS GIS index item 'Parcels - NY - Chemung County' (278c975e37514cc9bfcad5dff05bf8d8) points to. Snippet: 'parcels merged from Missy, updated 9.1.2021'; data last edited 2022-03-14, so about five years old. CURRENT_OW populated on 39400 of 39411 (RPS_OWNER only 1886). NO mailing address and no value fields. Address is split: RPS_ADDR_1 on most rows, RPS_ADDRES on some; PARCEL_LOC is street-then-number. SwisSBL is the 26-char id. maxRecordCount 2000. Other Chemung layers checked have no owner (stcrpdb Chemung_County 2022; Chemung_County_Property_Parcels 2019).",
+      "checked": "2026-11-27"
+    },
+    {
+      "county": "NASSAU",
+      "url": "https://services6.arcgis.com/a523XM128lX5Nsff/arcgis/rest/services/Nassau_parcels/FeatureServer/6",
+      "verified": true,
+      "record_count": 420594,
+      "fields": {
+        "apn": "PRINT_KEY",
+        "owner": [
+          "PRIMARY_OW",
+          "ADD_OWNER"
+        ],
+        "mailing_address": [
+          "MAIL_ADDR",
+          "PO_BOX",
+          "MAIL_CITY",
+          "MAIL_STATE",
+          "MAIL_ZIP"
+        ],
+        "address": "PARCEL_ADD",
+        "market_value": "FULL_MARKE",
+        "acres": "CALC_ACRES"
+      },
+      "restrictions": "Not redistributable: item licence reads 'DATA IN THIS FILE SHALL NOT BE REDISTRIBUTED.' and the description says the county gave NYS permission 'to share this data with NY State agencies' only. Third-party re-upload of the state-agency-only file, not a county publication.",
+      "notes": "ArcGIS item e58af734cf9c4ca2941e63f1138ef327 owned by jdvorak_HC (not Nassau County); it is the NYS GIS Program Office restricted-distribution parcel file, 'Publication Date: June 2021', 2020 assessment roll (ROLL_YR 2020). copyrightText: 'Contributing counties, NYS Office of Information Technology Services GIS Program Office (GPO) and NYS ... ORPTS'. Owner and mailing fields are populated in the 3 samples; coverage not counted. ACRES is 0 in samples, CALC_ACRES is populated. maxRecordCount 2000. Same data with fewer fields was re-uploaded by Peconic Land Trust (item f9f5ac25e3aa432da32cdd7b6ef32f31), same restriction in its layer description. Nassau County's own server (legacygis.nassaucountyny.gov/arcgis/rest/services/Akanda/MapServer/1, from the NYS index) did not respond. Recorded so nobody mistakes these copies for open data.",
+      "checked": "2026-11-27"
+    }
+  ],
   "summary": "NYSDOT capital-program layers separate Planned/Development from In Construction (thin attributes, no cost). NYS Tax Parcels Public has owner name and mailing address but covers only 38 of 62 counties (includes NYC, Suffolk, Westchester, Erie; not Nassau or Monroe)."
 }
