@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin · EminentTracker</title>
+<meta name="robots" content="noindex">
+<meta name="description" content="Your EminentTracker account. Built by eminent domain attorneys, for eminent domain attorneys.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7.5' fill='%231b2333'/%3E%3Cpath d='M8 5h16v4.200H12.200v13.600H24V27H8z' fill='%23fff'/%3E%3Cpath d='M12.200 13.900H32v4.200H12.200z' fill='%23e0662e'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="auth-config.js"></script>
+<style>
+/* The admin console is a screen to work in, so it has its own sheet: Public Sans, navy ink, hairlines instead of cards.
+   Teal is the one colour for data; orange (the bar of the logo) only marks what needs a decision. */
+:root { --ink: #10202f; --muted: #5b6874; --faint: #8a949d; --line: #e3e7e5; --line-strong: #c9d0cc; --ground: #f6f8f7; --paper: #fff; --data: #17607a; --alert: #b9471a; --ok: #1f6b45;
+  --sans: "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--ground); color: var(--ink); font: 400 14px/1.45 var(--sans); -webkit-font-smoothing: antialiased; font-variant-numeric: tabular-nums; }
+a { color: inherit; text-underline-offset: 3px; }
+h1, h2, h3, p, dl, dd, ul { margin: 0; padding: 0; }
+button, select, input { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--data); outline-offset: 2px; border-radius: 3px; }
+
+.shell { display: grid; grid-template-columns: 216px minmax(0, 1fr); min-height: 100vh; }
+.side { position: sticky; top: 0; align-self: start; height: 100vh; display: flex; flex-direction: column; padding: 18px 12px; border-right: 1px solid var(--line); background: var(--ground); }
+.brand { display: flex; align-items: center; gap: 9px; padding: 0 8px 4px; text-decoration: none; font-size: 15px; }
+.brand svg { width: 22px; height: 22px; flex: none; }
+.brand b { font-weight: 700; letter-spacing: -0.01em; } .brand b span { font-weight: 400; }
+.scope { padding: 0 8px 18px 39px; font-size: 12px; color: var(--muted); }
+.side nav { display: grid; gap: 1px; }
+.side nav a { display: flex; justify-content: space-between; align-items: center; gap: 8px; min-height: 32px; padding: 0 8px; border-radius: 6px; text-decoration: none; color: var(--muted); }
+.side nav a:hover { color: var(--ink); }
+.side nav a[aria-current] { background: #e9edeb; color: var(--ink); font-weight: 600; }
+.side nav a i { font-style: normal; font-size: 12px; color: var(--faint); }
+.side nav a i.due { color: var(--alert); font-weight: 600; }
+.side .foot { margin-top: auto; padding: 12px 8px 0; border-top: 1px solid var(--line); font-size: 12px; color: var(--muted); display: grid; gap: 6px; overflow-wrap: anywhere; }
+.side .foot button { padding: 0; border: 0; background: none; text-align: left; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; color: inherit; }
+
+main { min-width: 0; padding: 22px 32px 64px; background: var(--paper); }
+.top { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; flex-wrap: wrap; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+.top h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.015em; }
+.top p { color: var(--muted); font-size: 13px; }
+.note { margin-top: 14px; padding: 10px 12px; border-left: 3px solid var(--alert); background: #fbf3ee; font-size: 13px; max-width: 92ch; }
+.note.quiet { border-left-color: var(--line-strong); background: var(--ground); color: var(--muted); }
+.err { color: var(--alert); margin-top: 14px; }
+
+/* figures: type on a hairline grid, no tiles */
+.figs { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-top: 18px; border-top: 1px solid var(--line); border-left: 1px solid var(--line); }
+.figs div { padding: 12px 14px 13px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); min-width: 0; }
+.figs dt { font-size: 12px; color: var(--muted); }
+.figs dd { margin-top: 2px; font-size: 24px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.2; }
+.figs dd.zero { color: var(--faint); font-weight: 600; }
+.figs dd.bad { color: var(--alert); }
+.figs span { display: block; margin-top: 2px; font-size: 12px; color: var(--muted); }
+
+.cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 0 32px; }
+section { margin-top: 28px; min-width: 0; }
+section > header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-bottom: 8px; border-bottom: 1px solid var(--ink); }
+section h2 { font-size: 14px; font-weight: 700; }
+section header p, section header a, section header button { font-size: 13px; color: var(--muted); }
+section header button { padding: 0; border: 0; background: none; text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.lede { margin-top: 10px; color: var(--muted); font-size: 13px; max-width: 92ch; }
+.wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; font-weight: 600; font-size: 12px; color: var(--muted); padding: 8px 14px 7px 0; border-bottom: 1px solid var(--line); white-space: nowrap; }
+td { padding: 9px 14px 9px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+th.n, td.n { text-align: right; } th:last-child, td:last-child { padding-right: 0; }
+td b { font-weight: 600; } td span { display: block; font-size: 12px; color: var(--muted); }
+td.empty { color: var(--muted); padding: 16px 0; }
+td.bar { width: 40%; } td.bar i { display: block; height: 10px; min-width: 1px; background: var(--data); border-radius: 1px; }
+td .msg { margin-top: 6px; max-width: 64ch; white-space: pre-wrap; overflow-wrap: anywhere; }
+.tag { display: inline-block; font-size: 12px; font-weight: 600; }
+.tag.ok { color: var(--ok); } .tag.bad { color: var(--alert); } .tag.off { color: var(--faint); font-weight: 400; }
+.tools { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-top: 12px; font-size: 13px; color: var(--muted); }
+select, input[type=search], input[type=text] { min-height: 32px; padding: 0 9px; border: 1px solid var(--line-strong); border-radius: 6px; background: #fff; }
+input[type=search] { width: 240px; max-width: 100%; }
+td select { max-width: 150px; } td select + select { display: block; margin-top: 5px; }
+td input[type=text] { display: block; width: 100%; max-width: 230px; margin: 6px 0; }
+.btn { display: inline-flex; align-items: center; min-height: 32px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 6px; background: #fff; font-weight: 600; font-size: 13px; text-decoration: none; cursor: pointer; white-space: nowrap; }
+.btn:hover { border-color: var(--ink); } .btn:disabled { color: var(--faint); cursor: default; }
+.btn.go { background: var(--ink); border-color: var(--ink); color: #fff; }
+.btn.danger { color: var(--alert); } .btn.danger:hover { border-color: var(--alert); }
+#f-pay { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+#accounts td:nth-child(3), #accounts td:nth-child(4), #subs td:nth-child(n+5), #bills td:first-child { white-space: nowrap; }
+td.acts { white-space: nowrap; } td.acts .btn + .btn { margin-left: 6px; }
+
+@media (max-width: 860px) {
+  .shell { grid-template-columns: 1fr; }
+  .side { position: static; height: auto; border-right: 0; border-bottom: 1px solid var(--line); padding: 14px 16px; }
+  .scope { padding-bottom: 10px; }
+  .side nav { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 2px; }
+  .side nav a { flex: none; min-height: 40px; padding: 0 12px; }
+  .side .foot { margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px 16px; }
+  main { padding: 18px 16px 48px; }
+  .figs, #f-pay { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .cols { grid-template-columns: 1fr; }
+  select, input[type=search], input[type=text], .btn { min-height: 40px; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside class="side">
+  <a class="brand" href="./" aria-label="EminentTracker home"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7.5" fill="#1b2333"/><path d="M8 5h16v4.200H12.200v13.600H24V27H8z" fill="#fff"/><path d="M12.200 13.900H32v4.200H12.200z" fill="#e0662e"/></svg><b>Eminent<span>Tracker</span></b></a>
+  <p class="scope">Admin console</p>
+  <nav aria-label="Admin sections" id="nav">
+    <a href="#overview">Overview</a>
+    <a href="#status">System status <i id="n-sys"></i></a>
+    <a href="#visitors">Site visits <i id="n-vis"></i></a>
+    <a href="#payments">Payments <i id="n-pay"></i></a>
+    <a href="#signups">Sign-ups <i id="n-sign"></i></a>
+    <a href="#accounts">Accounts <i id="n-acct"></i></a>
+    <a href="#support">Support cases <i id="n-case"></i></a>
+    <a href="#outreach">Postcards and lookups</a>
+    <a href="#data">Data sources</a>
+  </nav>
+  <div class="foot"><span id="who">Checking who is signed in…</span><a href="app/">Open the subscriber app</a><a href="account.html">Account settings</a><button type="button" id="out">Sign out</button></div>
+</aside>
+
+<main id="main">
+  <p class="err" id="err" role="alert" hidden></p>
+  <div id="panel" hidden>
+
+  <div data-view="overview">
+    <div class="top"><h1>Overview</h1><p id="asof"></p></div>
+    <p class="note" id="stripe-note" hidden></p>
+    <p class="note quiet" id="old-note" hidden>The admin database update has not been installed, so support cases and postcard orders cannot be read yet.</p>
+    <dl class="figs" id="f-overview"></dl>
+    <div class="cols">
+      <section><header><h2>Needs attention</h2><p id="watch-n"></p></header><div class="wrap"><table id="watch"><tbody></tbody></table></div></section>
+      <section><header><h2>Newest accounts</h2><a href="#accounts">All accounts</a></header><div class="wrap"><table id="newest"><tbody></tbody></table></div></section>
+    </div>
+    <div class="cols">
+      <section><header><h2>Open support cases</h2><a href="#support">All cases</a></header><div class="wrap"><table id="open-cases"><tbody></tbody></table></div></section>
+      <section><header><h2>Latest payments</h2><a href="#payments">All payments</a></header><div class="wrap"><table id="last-pay"><tbody></tbody></table></div></section>
+    </div>
+  </div>
+
+  <div data-view="status" hidden>
+    <div class="top"><h1>System status</h1><p><button class="btn" type="button" id="sys-again">Check again</button> <span id="sys-when"></span></p></div>
+    <p class="lede">Every part the service depends on, checked when this screen opens. "Needs attention" is something to fix; "Off" is a part that has not been switched on yet.</p>
+    <dl class="figs" id="f-sys"></dl>
+    <section><header><h2>Website and data</h2></header><div class="wrap"><table id="sys-data"><thead><tr><th>Part</th><th>State</th><th>Detail</th></tr></thead><tbody></tbody></table></div></section>
+    <section><header><h2>Accounts, database and server functions</h2></header><div class="wrap"><table id="sys-server"><thead><tr><th>Part</th><th>State</th><th>Detail</th></tr></thead><tbody></tbody></table></div></section>
+    <section><header><h2>Payments, postcards and lookups</h2></header><div class="wrap"><table id="sys-money"><thead><tr><th>Part</th><th>State</th><th>Detail</th></tr></thead><tbody></tbody></table></div></section>
+    <section><header><h2>Project sources that have gone quiet</h2><p id="sys-quiet-n"></p></header>
+      <p class="lede">Sources that failed on the last run or have not answered in four days. One is usually the agency's server; many at once means the daily run is failing. A source that answers but has no new projects is not a problem and is not listed.</p>
+      <div class="wrap"><table id="sys-quiet"><thead><tr><th>State</th><th>Source</th><th>Last answered</th><th>What went wrong</th></tr></thead><tbody></tbody></table></div></section>
+  </div>
+
+  <div data-view="visitors" hidden>
+    <div class="top"><h1>Site visits</h1><p><label>Period <select id="vis-days"><option value="1">Today and yesterday</option><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="90">Last 90 days</option><option value="365">Last 12 months</option></select></label></p></div>
+    <p class="note quiet" id="vis-off" hidden>Visit counting is not installed yet, or no visit has been recorded since it was switched on.</p>
+    <p class="lede">Counted by the site itself on every public page and in the subscriber app. Search-engine robots and your own visits as administrator are left out. A visitor is one browser; the same person on a phone and a laptop counts twice. City and state come from the visitor's internet address and are approximate: they show where the internet provider places the connection, which can be a neighbouring town, and are wrong for anyone on a VPN.</p>
+    <dl class="figs" id="f-vis"></dl>
+    <div class="cols">
+      <section><header><h2>Visits by day</h2><p>Eastern time</p></header><div class="wrap"><table id="v-days"><thead><tr><th>Day</th><th class="n">Page views</th><th class="n">Visitors</th><th aria-hidden="true"></th></tr></thead><tbody></tbody></table></div></section>
+      <section><header><h2>Where visitors came from</h2><p>The site that linked here</p></header><div class="wrap"><table id="v-src"><thead><tr><th>Source</th><th class="n">Visits</th><th class="n">Visitors</th><th class="n">Pages a visit</th></tr></thead><tbody></tbody></table></div></section>
+    </div>
+    <section><header><h2>Pages</h2><p>Most viewed first</p></header><div class="wrap"><table id="v-pages"><thead><tr><th>Page</th><th class="n">Views</th><th class="n">Visitors</th><th class="n">Average time</th><th class="n">Read to</th></tr></thead><tbody></tbody></table></div></section>
+    <div class="cols">
+      <section><header><h2>What visitors did</h2><p>Clicks that show intent</p></header><div class="wrap"><table id="v-events"><thead><tr><th>Action</th><th class="n">Times</th><th class="n">Visitors</th></tr></thead><tbody></tbody></table></div></section>
+      <section><header><h2>Campaign links</h2><p>Links tagged with utm_source</p></header><div class="wrap"><table id="v-camp"><thead><tr><th>Source</th><th>Medium</th><th>Campaign</th><th class="n">Views</th><th class="n">Visitors</th></tr></thead><tbody></tbody></table></div></section>
+    </div>
+    <div class="cols">
+      <section><header><h2>First page of a visit</h2><p>And how many left without a second page</p></header><div class="wrap"><table id="v-entry"><thead><tr><th>Page</th><th class="n">Visits</th><th class="n">Left at once</th></tr></thead><tbody></tbody></table></div></section>
+      <section><header><h2>Last page of a visit</h2></header><div class="wrap"><table id="v-exit"><thead><tr><th>Page</th><th class="n">Visits</th></tr></thead><tbody></tbody></table></div></section>
+    </div>
+    <div class="cols">
+      <section><header><h2>States</h2><p>From each visitor's internet address</p></header><div class="wrap"><table id="v-states"><thead><tr><th>State or region</th><th class="n">Visitors</th><th class="n">Views</th></tr></thead><tbody></tbody></table></div></section>
+      <section><header><h2>Cities</h2><p>Approximate: the city of the visitor's internet provider</p></header><div class="wrap"><table id="v-cities"><thead><tr><th>City</th><th class="n">Visitors</th><th class="n">Views</th></tr></thead><tbody></tbody></table></div></section>
+    </div>
+    <div class="cols">
+      <section><header><h2>Networks</h2><p>A firm's own network shows its name; most show an internet provider</p></header><div class="wrap"><table id="v-net"><thead><tr><th>Network</th><th class="n">Visitors</th><th class="n">Views</th></tr></thead><tbody></tbody></table></div></section>
+      <section><header><h2>Time zones</h2><p>From the browser's own setting</p></header><div class="wrap"><table id="v-tz"><thead><tr><th>Time zone</th><th class="n">Visitors</th><th class="n">Views</th></tr></thead><tbody></tbody></table></div></section>
+    </div>
+    <div class="cols">
+      <section><header><h2>Time of day</h2><p>Eastern time</p></header><div class="wrap"><table id="v-hours"><thead><tr><th>Hour</th><th class="n">Views</th><th aria-hidden="true"></th></tr></thead><tbody></tbody></table></div></section>
+    </div>
+    <div class="cols">
+      <section><header><h2>Devices</h2></header><div class="wrap"><table id="v-dev"><thead><tr><th>Device</th><th class="n">Visitors</th><th class="n">Views</th></tr></thead><tbody></tbody></table></div></section>
+      <section><header><h2>Browsers</h2></header><div class="wrap"><table id="v-br"><thead><tr><th>Browser</th><th class="n">Visitors</th><th class="n">Views</th></tr></thead><tbody></tbody></table></div></section>
+    </div>
+    <div class="cols">
+      <section><header><h2>Operating systems</h2></header><div class="wrap"><table id="v-os"><thead><tr><th>System</th><th class="n">Visitors</th><th class="n">Views</th></tr></thead><tbody></tbody></table></div></section>
+      <section><header><h2>Screen sizes and languages</h2></header><div class="wrap"><table id="v-scr"><thead><tr><th>Screen or language</th><th class="n">Visitors</th><th class="n">Views</th></tr></thead><tbody></tbody></table></div></section>
+    </div>
+    <section><header><h2>Latest activity</h2><p>Most recent 250 page views and actions</p></header>
+      <div class="wrap"><table id="v-recent"><thead><tr><th>When</th><th>Visitor</th><th>Page or action</th><th>Came from</th><th>Device</th><th>Location</th><th class="n">Stayed</th></tr></thead><tbody></tbody></table></div></section>
+  </div>
+
+  <div data-view="payments" hidden>
+    <div class="top"><h1>Payments</h1><p><span id="stripe-mode"></span> <a href="https://dashboard.stripe.com/subscriptions" target="_blank" rel="noopener">Open the Stripe dashboard</a></p></div>
+    <p class="note" id="stripe-note2" hidden></p>
+    <p class="lede">Read from Stripe each time this page loads. An account counts as paying only when Stripe holds a subscription for it that is active, in trial or being retried.</p>
+    <dl class="figs" id="f-pay"></dl>
+    <section><header><h2>Subscriptions in Stripe</h2><p id="subs-n"></p></header>
+      <div class="wrap"><table id="subs"><thead><tr><th>Customer</th><th>Plan</th><th class="n">Price</th><th>Status</th><th>Started</th><th>Renews</th></tr></thead><tbody></tbody></table></div></section>
+    <section><header><h2>Invoices and payments</h2><p>Most recent 50</p></header>
+      <div class="wrap"><table id="bills"><thead><tr><th>Date</th><th>Customer</th><th>For</th><th class="n">Amount</th><th>Status</th><th></th></tr></thead><tbody></tbody></table></div></section>
+    <section><header><h2>Where the site and Stripe disagree</h2><p id="mis-n"></p></header><div class="wrap"><table id="mis"><tbody></tbody></table></div></section>
+  </div>
+
+  <div data-view="signups" hidden>
+    <div class="top"><h1>Sign-ups</h1><p>Administrator accounts are not counted</p></div>
+    <dl class="figs" id="f-sign"></dl>
+    <div class="cols">
+      <section><header><h2>From sign-up to paying</h2></header><div class="wrap"><table id="funnel"><thead><tr><th>Step</th><th class="n">Accounts</th><th class="n">Of sign-ups</th></tr></thead><tbody></tbody></table></div></section>
+      <section><header><h2>New accounts by week</h2><p>Last 12 weeks</p></header><div class="wrap"><table id="weeks"><thead><tr><th>Week starting</th><th class="n">New</th><th aria-hidden="true"></th></tr></thead><tbody></tbody></table></div></section>
+    </div>
+    <section><header><h2>What people asked for at sign-up</h2></header><div class="wrap"><table id="asked"><thead><tr><th>Plan</th><th>State</th><th class="n">Accounts</th><th class="n">Paying</th></tr></thead><tbody></tbody></table></div></section>
+  </div>
+
+  <div data-view="accounts" hidden>
+    <div class="top"><h1>Accounts</h1><p><button class="btn" type="button" id="csv">Download CSV</button></p></div>
+    <p class="lede">Setting a plan here opens the app for an account without a payment. A hold closes the app for an account until you release it; Stripe keeps billing while it is held. Deleting removes the account for good and cancels its Stripe subscription. Changes take effect the next time that person signs in.</p>
+    <div class="tools"><input type="search" id="acct-find" placeholder="Email, name or firm" aria-label="Find an account">
+      <label>Show <select id="acct-show"><option value="">Everyone</option><option value="paying">Paying (verified by Stripe)</option><option value="free">Access opened by hand</option><option value="none">No access</option><option value="lapsed">Cancelled or unpaid</option><option value="held">On hold</option><option value="admin">Administrators</option></select></label><span id="acct-n"></span></div>
+    <section style="margin-top: 14px"><div class="wrap"><table id="accounts"><thead><tr><th>Account</th><th>Firm</th><th>Signed up</th><th>Last sign-in</th><th>Asked for</th><th>Billing</th><th>Access</th><th></th></tr></thead><tbody></tbody></table></div></section>
+  </div>
+
+  <div data-view="support" hidden>
+    <div class="top"><h1>Support cases</h1><p>Sent from the "Need help?" form on the account page</p></div>
+    <p class="note quiet" id="case-off" hidden>Support cases are not installed yet. They start arriving once the admin database update has been run.</p>
+    <dl class="figs" id="f-case"></dl>
+    <div class="tools"><label>Show <select id="case-show"><option value="open">Open</option><option value="closed">Closed</option><option value="">All</option></select></label></div>
+    <section style="margin-top: 14px"><div class="wrap"><table id="cases"><thead><tr><th>Received</th><th>From</th><th>Case</th><th>Status</th><th></th></tr></thead><tbody></tbody></table></div></section>
+  </div>
+
+  <div data-view="outreach" hidden>
+    <div class="top"><h1>Postcards and lookups</h1><p>Orders placed by subscribers, this month against last</p></div>
+    <p class="note quiet" id="use-off" hidden>The usage ledger is not installed yet. Orders appear here once postcards and owner lookups are switched on.</p>
+    <dl class="figs" id="f-use"></dl>
+    <section><header><h2>Postcard credits</h2><p>Paid for in advance; one credit mails one card</p></header>
+      <dl class="figs" id="f-credits" style="margin-top:0;border-top:0"></dl>
+      <div class="wrap"><table id="credits"><thead><tr><th>Firm</th><th class="n">Bought</th><th class="n">Used</th><th class="n">Returned</th><th class="n">Left</th><th class="n">Paid</th></tr></thead><tbody></tbody></table></div></section>
+    <section><header><h2>By firm, this month</h2></header>
+      <div class="wrap"><table id="use"><thead><tr><th>Firm</th><th class="n">Postcards</th><th class="n">Owner lookups</th><th class="n">Charged</th><th class="n">Our cost</th><th class="n">Not yet invoiced</th></tr></thead><tbody></tbody></table></div></section>
+  </div>
+
+  <div data-view="data" hidden>
+    <div class="top"><h1>Data sources</h1><p id="src-asof"></p></div>
+    <div class="tools"><label>State <select id="data-state"><option value="">All states</option></select></label><span id="data-state-note"></span></div>
+    <p class="lede" id="cov-note">What each state has today. "Live" means subscribers can open it.</p>
+    <section><header><h2>State coverage</h2></header>
+      <div class="wrap"><table id="cov"><thead><tr><th>State</th><th>Live</th><th class="n">Projects scoring 60+</th><th>Project source covers</th><th>Owner records</th><th>Held back</th></tr></thead><tbody></tbody></table></div></section>
+    <section><header><h2>Every source</h2><p id="src-n"></p></header>
+      <p class="lede" id="src-note">Loading the list of sources…</p>
+      <div class="tools"><select id="src-state" hidden><option value="">All states</option></select>
+        <label>Kind <select id="src-kind"><option value="">Projects and owners</option><option value="projects">Project sources</option><option value="owners">Owner files</option></select></label>
+        <label>Status <select id="src-status"><option value="">Any</option><option value="on">On</option><option value="held">Held</option><option value="off">Off</option></select></label></div>
+      <div class="wrap" style="margin-top: 10px"><table id="src"><thead><tr><th>State</th><th>Source</th><th>How it reports</th><th>Publishes</th><th>Status</th><th class="n">Loaded</th><th>Last answered</th></tr></thead><tbody></tbody></table></div></section>
+    <section><header><h2>Gaps still open</h2></header>
+      <p class="lede" id="gap-note"></p>
+      <div class="wrap"><table id="gaps"><thead><tr><th>State</th><th class="n">Project sources on</th><th>Counties with no owner file</th></tr></thead><tbody></tbody></table></div></section>
+  </div>
+
+  </div>
+</main>
+</div>
+<script type="module">
+import {authOn, supa} from "./auth.js";
+const CFG = window.ET_AUTH || {};
+const $ = id => document.getElementById(id), esc = t => String(t == null ? "" : t).replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const day = t => t ? new Date(t).toLocaleDateString(undefined, {year: "numeric", month: "short", day: "numeric"}) : "never";
+const DAY = 864e5, ago = t => t ? (Date.now() - new Date(t)) / DAY : Infinity;
+const usd = c => "$" + (c / 100).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+const num = n => Number(n || 0).toLocaleString();
+const STATES = "Alabama|Alaska|Arizona|Arkansas|California|Colorado|Connecticut|Delaware|Florida|Georgia|Hawaii|Idaho|Illinois|Indiana|Iowa|Kansas|Kentucky|Louisiana|Maine|Maryland|Massachusetts|Michigan|Minnesota|Mississippi|Missouri|Montana|Nebraska|Nevada|New Hampshire|New Jersey|New Mexico|New York|North Carolina|North Dakota|Ohio|Oklahoma|Oregon|Pennsylvania|Rhode Island|South Carolina|South Dakota|Tennessee|Texas|Utah|Vermont|Virginia|Washington|West Virginia|Wisconsin|Wyoming".split("|");
+// figures: [label, value, note, "bad" when it needs a decision]. A zero prints as a grey zero, not a blank.
+const figs = (id, list) => { $(id).innerHTML = list.map(([k, v, note, cls]) => `<div><dt>${k}</dt><dd class="${v === 0 || v === "$0.00" || v === "none" ? "zero" : (cls || "")}">${v}</dd>${note ? `<span>${esc(note)}</span>` : ""}</div>`).join(""); };
+const body = (id, html, cols, empty) => { document.querySelector("#" + id + " tbody").innerHTML = html || `<tr><td class="empty" colspan="${cols}">${empty}</td></tr>`; };
+const who = r => `<b>${esc(r.email)}</b><span>${esc(r.firm || r.full_name || "")}</span>`;
+const title = t => String(t || "").replace(/\b\w/g, c => c.toUpperCase());
+
+let ROWS = [], OLD = false, CASES = null, USE = null, STRIPE = null, STRIPE_WHY = "", PAYING = new Set();
+// What an account is to us. "Paying" is only ever said when Stripe holds a live subscription for the account.
+const kind = r => r.role === "admin" ? "admin" : r.held ? "held" : PAYING.has(r.id) ? "paying" : r.access === "active" ? "free" : (r.has_subscription ? "lapsed" : "none");
+const people = () => ROWS.filter(r => r.role !== "admin"), of = k => people().filter(r => kind(r) === k);
+
+// ---------- views ----------
+const VIEWS = [...document.querySelectorAll("[data-view]")].map(v => v.dataset.view);
+function route() {
+  const v = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : "overview";
+  document.querySelectorAll("[data-view]").forEach(el => { el.hidden = el.dataset.view !== v; });
+  document.querySelectorAll("#nav a").forEach(a => { if (a.hash === "#" + v) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+  document.title = document.querySelector(`[data-view="${v}"] h1`).textContent + " · EminentTracker admin"; scrollTo(0, 0);
+}
+addEventListener("hashchange", route);
+
+if (!authOn) location.replace("./");
+const s = await supa(), {data} = await s.auth.getSession();
+$("out").addEventListener("click", async () => { await s.auth.signOut(); location.replace("login.html"); });
+if (!data.session) location.replace("login.html");
+else if ((data.session.user.app_metadata || {}).role !== "admin") { $("who").textContent = data.session.user.email; $("err").textContent = "This account is not an administrator."; $("err").hidden = false; }
+else { $("who").textContent = data.session.user.email; try { localStorage.setItem("et_staff", "1"); } catch (e) {}      // an administrator's own browsing is not counted as a visit
+  route(); load(); loadVisits(); loadStatus(); }
+
+// One account action on the server: hold, release or delete.
+async function act(body) {
+  const {data: fresh} = await s.auth.getSession();
+  const r = await fetch(CFG.url + "/functions/v1/admin", {method: "POST", body: JSON.stringify(body), headers: {"Content-Type": "application/json", apikey: CFG.key, Authorization: "Bearer " + fresh.session.access_token}}).catch(() => null);
+  if (!r) throw new Error("The server could not be reached.");
+  if (r.status === 404) throw new Error("Holding and deleting are switched on when the server functions are deployed. Until then, set the account to No access.");
+  const out = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(out.error || "The server refused (" + r.status + ").");
+  return out;
+}
+async function stripeRead() {
+  try {
+    const {data: fresh} = await s.auth.getSession();
+    const r = await fetch(CFG.url + "/functions/v1/admin", {method: "POST", body: "{}", headers: {"Content-Type": "application/json", apikey: CFG.key, Authorization: "Bearer " + fresh.session.access_token}});
+    const out = await r.json().catch(() => ({}));
+    if (r.ok) return [out, ""];
+    return [null, r.status === 404 ? "Stripe is not connected to this console yet: the payment functions have not been deployed." : r.status === 503 ? "Stripe is not connected yet: no Stripe key has been added to the server." : "Stripe could not be read: " + (out.error || r.status) + "."];
+  } catch (e) { return [null, "Stripe could not be reached from this page."]; }
+}
+
+async function load() {
+  let res = await s.rpc("admin_accounts"); OLD = false;
+  if (res.error) { res = await s.rpc("admin_overview"); OLD = true; }
+  if (res.error) { $("err").textContent = "The account list could not be loaded: " + res.error.message; $("err").hidden = false; return; }
+  ROWS = res.data || []; $("err").hidden = true; $("panel").hidden = false; $("old-note").hidden = !OLD;
+  $("asof").textContent = "As of " + new Date().toLocaleString(undefined, {month: "short", day: "numeric", hour: "numeric", minute: "2-digit"});
+  const [st, cases, use] = await Promise.all([stripeRead(), s.from("support_cases").select("*").order("created_at", {ascending: false}).limit(500), usage()]);
+  [STRIPE, STRIPE_WHY] = st; PAYING = new Set(STRIPE ? STRIPE.paying_user_ids : []);
+  CASES = cases.error ? null : cases.data; USE = use;
+  draw();
+}
+async function usage() {
+  const first = new Date(); first.setDate(1); first.setHours(0, 0, 0, 0); const prev = new Date(first); prev.setMonth(prev.getMonth() - 1);
+  const {data: rows, error} = await s.from("usage").select("user_id, kind, mode, price_cents, cost_cents, invoiced, created_at").gte("created_at", prev.toISOString()).eq("mode", "live").limit(20000);
+  if (error) return null;
+  return {now: rows.filter(u => new Date(u.created_at) >= first), last: rows.filter(u => new Date(u.created_at) < first), all: rows};
+}
+const sum = (list, k) => list.reduce((a, u) => a + (u[k] || 0), 0), count = (list, k) => list.filter(u => u.kind === k).length;
+
+function draw() {
+  const P = people(), paying = of("paying"), free = of("free"), lapsed = of("lapsed"), none = of("none"), T = STRIPE ? STRIPE.totals : null;
+  const within = d => P.filter(r => ago(r.created_at) < d).length, open = CASES ? CASES.filter(c => c.status === "open") : [];
+  const noStripe = "No payments can be confirmed. " + STRIPE_WHY + " Until it is, this console counts no one as paying: every account with access below was opened by hand.";
+  for (const id of ["stripe-note", "stripe-note2"]) { $(id).hidden = !!STRIPE; $(id).textContent = noStripe; }
+  $("stripe-mode").textContent = STRIPE ? (STRIPE.live_mode ? "Stripe, live mode." : "Stripe, TEST mode: these are not real payments.") : "Stripe not connected.";
+
+  // nav counts
+  $("n-pay").textContent = T ? T.live : ""; $("n-sign").textContent = within(7) ? "+" + within(7) : ""; $("n-acct").textContent = ROWS.length;
+  $("n-case").textContent = open.length || ""; $("n-case").className = open.length ? "due" : "";
+
+  // ---- needs attention ----
+  const flags = [];
+  if (STRIPE) for (const m of STRIPE.mismatches) flags.push([`<b>${esc(m.email || "No account")}</b>`, m.what, "#payments"]);
+  if (STRIPE) for (const x of STRIPE.subscriptions.filter(x => x.status === "past_due")) flags.push([`<b>${esc(x.email || "")}</b>`, "Payment failed; Stripe is retrying the card.", "#payments"]);
+  for (const c of open) if (ago(c.created_at) > 2) flags.push([`<b>${esc(c.email)}</b>`, "Support case open for " + Math.floor(ago(c.created_at)) + " days: " + c.subject, "#support"]);
+  for (const r of lapsed) flags.push([who(r), "Subscription ended or payment failed. Access is closed.", "#accounts"]);
+  for (const r of none) if (r.chosen_plan && ago(r.created_at) > 1 && ago(r.created_at) < 30) flags.push([who(r), "Chose " + r.chosen_plan.replace(/ \(.*/, "").toLowerCase() + " " + Math.floor(ago(r.created_at)) + " days ago and has not paid.", "#accounts"]);
+  for (const r of paying.concat(free)) if (ago(r.last_sign_in_at) > 30) flags.push([who(r), r.last_sign_in_at ? "Has access but has not signed in for " + Math.floor(ago(r.last_sign_in_at)) + " days." : "Has access but has never signed in.", "#accounts"]);
+  for (const r of P) if (!r.confirmed && ago(r.created_at) > 2) flags.push([who(r), "Has not confirmed their email address.", "#accounts"]);
+  $("watch-n").textContent = flags.length ? flags.length + (flags.length === 1 ? " item" : " items") : "";
+  body("watch", flags.slice(0, 12).map(([a, why, href]) => `<tr><td>${a}</td><td>${esc(why)}</td><td><a href="${href}">Open</a></td></tr>`).join(""), 3, "Nothing needs attention.");
+
+  // ---- overview ----
+  figs("f-overview", [
+    ["Paying subscribers", T ? T.live : 0, T ? "live subscriptions in Stripe" : "Stripe not connected"],
+    ["Monthly plan revenue", T ? usd(T.mrr) : "$0.00", T ? "from Stripe, yearly plans as a twelfth" : "nothing confirmed"],
+    ["Collected, last 30 days", T ? usd(T.collected_30d) : "$0.00", T ? "paid invoices" : ""],
+    ["Site visits today", VIS ? num(VIS.totals.today_views) : "–", VIS ? num(VIS.totals.today_visitors) + " visitors" : "not installed"],
+    ["Accounts", P.length, within(7) + " new in 7 days"],
+    ["Access opened by hand", free.length, "no plan charge"],
+    ["Open support cases", CASES ? open.length : "–", CASES ? "" : "not installed", open.length ? "bad" : ""]]);
+  body("newest", P.slice().sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 6).map(r => `<tr><td>${who(r)}</td><td>${day(r.created_at)}</td><td>${label(r)}</td></tr>`).join(""), 3, "No accounts yet.");
+  body("open-cases", open.slice(0, 5).map(c => `<tr><td>${day(c.created_at)}</td><td><b>${esc(c.subject)}</b><span>${esc(c.email)}</span></td></tr>`).join(""), 2, CASES ? "No open cases." : "Support cases are not installed yet.");
+  body("last-pay", (STRIPE ? STRIPE.invoices : []).slice(0, 5).map(b => `<tr><td>${day(b.created * 1000)}</td><td>${esc(b.email || "")}<span>${esc(b.kind)}</span></td><td class="n">${usd(b.total)}</td><td>${bill(b)}</td></tr>`).join(""), 4, STRIPE ? "No payments yet." : "Stripe is not connected, so no payments are shown.");
+
+  // ---- payments ----
+  figs("f-pay", T ? [["Live subscriptions", T.live], ["Monthly plan revenue", usd(T.mrr), "yearly plans as a twelfth"], ["Collected, last 30 days", usd(T.collected_30d)],
+      ["Payment failing", T.past_due, "Stripe is retrying", T.past_due ? "bad" : ""], ["Unpaid invoices", usd(T.open_due), T.failed_30d + " failed in 30 days", T.open_due ? "bad" : ""],
+      ["Set to cancel", T.cancelling, "at the end of the period"], ["Cancelled, last 30 days", T.canceled_30d], ["Stripe balance", usd(T.available), usd(T.pending) + " on its way"]]
+    : [["Live subscriptions", 0, "Stripe not connected"], ["Monthly plan revenue", "$0.00"], ["Collected, last 30 days", "$0.00"], ["Unpaid invoices", "$0.00"]]);
+  const SUBS = STRIPE ? STRIPE.subscriptions : [];
+  $("subs-n").textContent = STRIPE ? SUBS.length + " in all" + (STRIPE.more ? ", most recent 100 shown" : "") : "";
+  const stat = x => ({active: '<span class="tag ok">Active</span>', trialing: '<span class="tag ok">In trial</span>', past_due: '<span class="tag bad">Payment failing</span>', canceled: '<span class="tag off">Cancelled</span>', unpaid: '<span class="tag bad">Unpaid</span>',
+    incomplete: '<span class="tag off">Never completed</span>', incomplete_expired: '<span class="tag off">Never completed</span>', paused: '<span class="tag off">Paused</span>'}[x.status] || esc(x.status)) + (x.cancels_at_period_end && x.status !== "canceled" ? "<span>cancels at period end</span>" : "");
+  body("subs", SUBS.map(x => `<tr><td><b>${esc(x.email || "Unknown customer")}</b>${x.user_id ? "" : "<span>no account on the site</span>"}</td>
+    <td>${x.plan === "all" ? "All 50 states" : x.plan === "single" ? "Single state" + (x.state ? "<span>" + esc(title(x.state)) + "</span>" : "") : "Not labelled"}</td>
+    <td class="n">${usd(x.amount)}<span>a ${esc(x.interval)}</span></td><td>${stat(x)}</td><td>${day(x.started * 1000)}</td><td>${x.status === "canceled" ? "–" : day(x.renews * 1000)}</td></tr>`).join(""),
+    6, STRIPE ? "Stripe has no subscriptions. No one has paid yet." : "Stripe is not connected, so no subscriptions can be shown.");
+  body("bills", (STRIPE ? STRIPE.invoices : []).map(b => `<tr><td>${day(b.created * 1000)}</td><td>${esc(b.email || "")}</td><td>${esc(b.kind)}</td><td class="n">${usd(b.total)}</td><td>${bill(b)}</td>
+    <td>${b.url ? `<a href="${esc(b.url)}" target="_blank" rel="noopener">Invoice</a>` : ""}</td></tr>`).join(""), 6, STRIPE ? "No invoices yet." : "Stripe is not connected, so no invoices can be shown.");
+  const MIS = STRIPE ? STRIPE.mismatches : [];
+  $("mis-n").textContent = STRIPE ? (MIS.length ? MIS.length + " to look at" : "") : "";
+  body("mis", MIS.map(m => `<tr><td><b>${esc(m.email || "No account")}</b></td><td>${esc(m.what)}</td></tr>`).join(""), 2, STRIPE ? "The site and Stripe agree on every account." : "Cannot be checked until Stripe is connected.");
+
+  // ---- sign-ups ----
+  const pct = n => P.length ? Math.round(100 * n / P.length) + "%" : "0%";
+  figs("f-sign", [["Accounts", P.length], ["New in 7 days", within(7)], ["New in 30 days", within(30)], ["Email confirmed", P.filter(r => r.confirmed).length],
+    ["Never signed in", P.filter(r => !r.last_sign_in_at).length], ["Signed up, no access", none.length, none.filter(r => r.chosen_plan).length + " chose a plan"]]);
+  body("funnel", [["Signed up", P.length], ["Confirmed their email", P.filter(r => r.confirmed).length], ["Chose a plan", P.filter(r => r.chosen_plan).length],
+    ["Agreed to the terms", P.filter(r => r.agreed_terms_at).length], ["Paying, verified by Stripe", paying.length]].map(([k, v]) => `<tr><td>${k}</td><td class="n">${v}</td><td class="n">${pct(v)}</td></tr>`).join(""), 3, "");
+  const monday = new Date(); monday.setHours(0, 0, 0, 0); monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
+  const weeks = [...Array(12)].map((_, i) => { const from = new Date(monday - i * 7 * DAY), to = new Date(+from + 7 * DAY); return [from, P.filter(r => new Date(r.created_at) >= from && new Date(r.created_at) < to).length]; });
+  const top = Math.max(1, ...weeks.map(w => w[1]));
+  body("weeks", weeks.map(([d, n]) => `<tr><td>${day(d)}</td><td class="n">${n}</td><td class="bar">${n ? `<i style="width:${Math.round(100 * n / top)}%"></i>` : ""}</td></tr>`).join(""), 3, "");
+  const asked = {}; for (const r of P) { const k = (r.chosen_plan ? r.chosen_plan.replace(/ \(.*/, "") : "Nothing chosen") + "|" + (r.chosen_plan && r.chosen_plan.startsWith("Single") ? (r.chosen_state || "no state given") : ""); (asked[k] = asked[k] || []).push(r); }
+  body("asked", Object.entries(asked).sort((a, b) => b[1].length - a[1].length).map(([k, list]) => `<tr><td>${esc(k.split("|")[0])}</td><td>${esc(k.split("|")[1])}</td><td class="n">${list.length}</td><td class="n">${list.filter(r => kind(r) === "paying").length}</td></tr>`).join(""), 4, "No sign-ups yet.");
+
+  drawAccounts(); drawCases(); drawUse();
+}
+const label = r => ({admin: "Administrator", held: '<span class="tag bad">On hold</span>', paying: '<span class="tag ok">Paying</span>', free: "Access opened by hand", lapsed: '<span class="tag bad">Cancelled or unpaid</span>', none: '<span class="tag off">No access</span>'}[kind(r)]);
+const bill = b => b.status === "paid" ? '<span class="tag ok">Paid</span>' : b.status === "open" ? `<span class="tag bad">${b.attempts ? "Payment failed" : "Unpaid"}</span>` : b.status === "void" ? '<span class="tag off">Voided</span>' : b.status === "uncollectible" ? '<span class="tag bad">Written off</span>' : '<span class="tag off">Draft</span>';
+
+function drawAccounts() {
+  const find = $("acct-find").value.trim().toLowerCase(), show = $("acct-show").value;
+  const rows = ROWS.filter(r => (!show || kind(r) === show) && (!find || [r.email, r.full_name, r.firm, r.location].join(" ").toLowerCase().includes(find)));
+  $("acct-n").textContent = rows.length + " of " + ROWS.length;
+  const sub = r => STRIPE && STRIPE.subscriptions.find(x => x.user_id === r.id && ["active", "trialing", "past_due"].includes(x.status));
+  const billing = r => { const k = kind(r), x = sub(r);
+    return k === "admin" ? "Administrator<span>not billed</span>" : k === "held" ? `<span class="tag bad">On hold</span><span>since ${day(r.held_at)}${PAYING.has(r.id) ? ", Stripe still billing" : ""}</span>` : k === "paying" ? `<span class="tag ok">Paying</span><span>${usd(x.amount)} a ${esc(x.interval)}, renews ${day(x.renews * 1000)}</span>`
+      : k === "free" ? `Opened by hand<span>${OLD ? "no plan charge" : r.has_card ? "card on file for outreach" : "no card on file"}</span>` : k === "lapsed" ? '<span class="tag bad">Cancelled or unpaid</span>' : '<span class="tag off">Not paying</span>'; };
+  body("accounts", rows.map(r => {
+    const cur = r.access === "active" ? (r.plan === "all" ? "all" : "single") : "none";
+    return `<tr data-id="${r.id}"><td><b>${esc(r.email)}</b><span>${esc(r.full_name || "")}${r.confirmed ? "" : " · email not confirmed"}${r.invited ? " · invited" : ""}${r.provider === "google" ? " · Google" : ""}</span></td>
+      <td>${esc(r.firm || "")}<span>${esc(r.location || "")}${r.phone ? " · " + esc(r.phone) : ""}</span></td>
+      <td>${day(r.created_at)}<span>${r.agreed_terms_at ? "agreed to terms" : "terms not agreed"}</span></td><td>${day(r.last_sign_in_at)}</td>
+      <td>${esc((r.chosen_plan || "").replace(/ \(.*/, ""))}<span>${esc(r.chosen_state || "")}</span></td><td>${billing(r)}</td>
+      <td><select data-plan aria-label="Plan for ${esc(r.email)}"><option value="none"${cur === "none" ? " selected" : ""}>No access</option><option value="single"${cur === "single" ? " selected" : ""}>Single state</option><option value="all"${cur === "all" ? " selected" : ""}>All states</option></select>
+        <select data-state aria-label="State for ${esc(r.email)}"${cur === "single" ? "" : " hidden"}>${STATES.map(n => `<option${(r.state || r.chosen_state || "").toLowerCase() === n.toLowerCase() ? " selected" : ""}>${n}</option>`).join("")}</select></td>
+      <td class="acts"><button class="btn" data-save>Save</button>${r.role === "admin" ? "" : `<button class="btn" data-hold="${r.held ? "release" : "hold"}">${r.held ? "Release hold" : "Hold"}</button><button class="btn danger" data-delete>Delete</button>`}</td></tr>`; }).join(""), 8, "No account matches.");
+}
+$("acct-find").addEventListener("input", drawAccounts); $("acct-show").addEventListener("change", drawAccounts);
+$("csv").addEventListener("click", () => {
+  const cols = ["email", "full_name", "firm", "location", "phone", "created_at", "last_sign_in_at", "chosen_plan", "chosen_state", "access", "plan", "state", "bill"];
+  const cell = v => { v = String(v == null ? "" : v); if (/^[=+\-@]/.test(v)) v = "'" + v; return '"' + v.replace(/"/g, '""') + '"'; };      // a leading = would run as a formula in a spreadsheet
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([[cols.concat("status").join(","), ...ROWS.map(r => cols.map(c => cell(r[c])).concat(cell(kind(r))).join(","))].join("\n")], {type: "text/csv"}));
+  a.download = "eminenttracker-accounts-" + new Date().toISOString().slice(0, 10) + ".csv"; a.click(); URL.revokeObjectURL(a.href);
+});
+document.querySelector("#accounts").addEventListener("change", e => { if (e.target.matches("[data-plan]")) e.target.closest("tr").querySelector("[data-state]").hidden = e.target.value !== "single"; });
+document.querySelector("#accounts").addEventListener("click", async e => {
+  const h = e.target.closest("[data-hold], [data-delete]");
+  if (h) {
+    const row = ROWS.find(r => r.id === h.closest("tr").dataset.id), del = h.hasAttribute("data-delete");
+    let body = {action: h.dataset.hold, user_id: row.id};
+    if (del) {
+      const typed = prompt("Delete " + row.email + "?\n\nThis removes the account, its saved postcard wording, purchased lookups and support cases, and cancels its Stripe subscription now. It cannot be undone.\n\nType the email address to confirm.");
+      if (typed === null) return;
+      if (typed.trim().toLowerCase() !== row.email.toLowerCase()) { $("err").textContent = "Not deleted: the email typed did not match."; $("err").hidden = false; return; }
+      body = {action: "delete", user_id: row.id, confirm_email: row.email};
+    }
+    h.disabled = true;
+    try { await act(body); $("err").hidden = true; await load(); } catch (x) { $("err").textContent = (del ? "Not deleted: " : "Not changed: ") + x.message; $("err").hidden = false; h.disabled = false; scrollTo(0, 0); }
+    return;
+  }
+  const b = e.target.closest("[data-save]"); if (!b) return;
+  const tr = b.closest("tr"), plan = tr.querySelector("[data-plan]").value, state = tr.querySelector("[data-state]").value;
+  b.disabled = true; b.textContent = "Saving…";
+  const {error} = await s.rpc("admin_set_access", {target: tr.dataset.id, new_access: plan === "none" ? "none" : "active", new_plan: plan === "all" ? "all" : "single", new_state: plan === "single" ? state.toLowerCase() : ""});
+  if (error) { $("err").textContent = "Not saved: " + error.message; $("err").hidden = false; b.disabled = false; b.textContent = "Save"; return; }
+  b.textContent = "Saved"; setTimeout(load, 700);
+});
+
+async function drawCredits() {
+  const {data: rows, error} = await s.from("credit_ledger").select("user_id, delta, reason, paid_cents, created_at").limit(50000);
+  if (error) { $("f-credits").innerHTML = ""; body("credits", "", 6, "Postcard credits are not installed yet."); return; }
+  const by = {}, tot = {bought: 0, used: 0, back: 0, paid: 0};
+  for (const r of rows) {
+    const f = by[r.user_id] = by[r.user_id] || {bought: 0, used: 0, back: 0, paid: 0};
+    if (r.reason === "purchase" || r.reason === "granted") { f.bought += r.delta; tot.bought += r.delta; f.paid += r.paid_cents || 0; tot.paid += r.paid_cents || 0; }
+    else if (r.reason === "postcard") { f.used -= r.delta; tot.used -= r.delta; }
+    else if (r.reason === "returned") { f.back += r.delta; tot.back += r.delta; }
+  }
+  const left = x => x.bought - x.used + x.back;
+  figs("f-credits", [["Credits sold", num(tot.bought), usd(tot.paid) + " collected"], ["Used on postcards", num(tot.used - tot.back)],
+    ["Still unspent", num(left(tot)), "cards you owe if every credit is used"], ["Mail cost of unspent credits", usd(left(tot) * 91), "at $0.91 a card"]]);
+  const name = Object.fromEntries(ROWS.map(r => [r.id, r]));
+  body("credits", Object.entries(by).sort((a, b) => left(b[1]) - left(a[1])).map(([id, f]) => `<tr><td>${name[id] ? who(name[id]) : "Account removed"}</td>
+    <td class="n">${num(f.bought)}</td><td class="n">${num(f.used)}</td><td class="n">${num(f.back)}</td><td class="n">${num(left(f))}</td><td class="n">${usd(f.paid)}</td></tr>`).join(""), 6, "No credits have been bought yet.");
+}
+
+function drawUse() {
+  drawCredits();
+  $("use-off").hidden = !!USE;
+  const now = USE ? USE.now : [], last = USE ? USE.last : [];
+  figs("f-use", [["Postcards mailed", count(now, "postcard"), count(last, "postcard") + " last month"], ["Owner lookups", count(now, "skip_trace"), count(last, "skip_trace") + " last month"],
+    ["Charged to firms", usd(sum(now, "price_cents")), usd(sum(last, "price_cents")) + " last month"], ["Our cost", usd(sum(now, "cost_cents"))],
+    ["Margin", usd(sum(now, "price_cents") - sum(now, "cost_cents"))], ["Not yet invoiced", usd(sum((USE ? USE.all : []).filter(u => !u.invoiced), "price_cents"))]]);
+  const name = Object.fromEntries(ROWS.map(r => [r.id, r])), firms = {};
+  for (const u of now) (firms[u.user_id] = firms[u.user_id] || []).push(u);
+  body("use", Object.entries(firms).sort((x, y) => sum(y[1], "price_cents") - sum(x[1], "price_cents")).map(([id, list]) => `<tr><td>${name[id] ? who(name[id]) : "Account removed"}</td>
+    <td class="n">${count(list, "postcard")}</td><td class="n">${count(list, "skip_trace")}</td><td class="n">${usd(sum(list, "price_cents"))}</td><td class="n">${usd(sum(list, "cost_cents"))}</td><td class="n">${usd(sum(list.filter(u => !u.invoiced), "price_cents"))}</td></tr>`).join(""),
+    6, "No postcards or lookups ordered this month.");
+}
+
+const TOPIC = {billing: "Billing", data: "Data or coverage", postcards: "Postcards", lookups: "Owner lookups", account: "Account or sign-in", other: "Other"};
+function drawCases() {
+  $("case-off").hidden = !!CASES;
+  const all = CASES || [], open = all.filter(c => c.status === "open"), oldest = open.length ? Math.floor(Math.max(...open.map(c => ago(c.created_at)))) : 0;
+  figs("f-case", [["Open", open.length, "", open.length ? "bad" : ""], ["Oldest open", open.length ? (oldest ? oldest + (oldest === 1 ? " day" : " days") : "today") : "none"],
+    ["Received in 7 days", all.filter(c => ago(c.created_at) < 7).length], ["Closed in 30 days", all.filter(c => c.status === "closed" && ago(c.closed_at) < 30).length]]);
+  const show = $("case-show").value, name = Object.fromEntries(ROWS.map(r => [r.id, r]));
+  body("cases", all.filter(c => !show || c.status === show).map(c => `<tr data-case="${c.id}"><td>${day(c.created_at)}<span>Case ${c.id}</span></td>
+    <td><b>${esc(c.email)}</b><span>${esc((name[c.user_id] || {}).firm || "")}</span></td>
+    <td><b>${esc(c.subject)}</b><span>${esc(TOPIC[c.topic] || c.topic)}</span><p class="msg">${esc(c.body)}</p>${c.admin_note ? `<span>Our note: ${esc(c.admin_note)}</span>` : ""}</td>
+    <td>${c.status === "open" ? '<span class="tag bad">Open</span>' : '<span class="tag off">Closed</span><span>' + day(c.closed_at) + "</span>"}</td>
+    <td><a class="btn" href="mailto:${encodeURIComponent(c.email)}?subject=${encodeURIComponent("Re: " + c.subject + " (EminentTracker case " + c.id + ")")}">Reply by email</a>
+      ${c.status === "open" ? `<input type="text" data-note aria-label="Closing note for case ${c.id}" placeholder="Note the person will see"><button class="btn go" data-close>Close case</button>` : `<button class="btn" data-reopen style="margin-left: 6px">Reopen</button>`}</td></tr>`).join(""),
+    5, show === "open" ? "No open cases." : "No cases.");
+}
+$("case-show").addEventListener("change", drawCases);
+document.querySelector("#cases").addEventListener("click", async e => {
+  const b = e.target.closest("[data-close], [data-reopen]"); if (!b) return;
+  const tr = b.closest("tr"), closing = b.hasAttribute("data-close"), note = closing ? tr.querySelector("[data-note]").value.trim() : null;
+  b.disabled = true;
+  const change = closing ? {status: "closed", admin_note: note || null, closed_at: new Date().toISOString()} : {status: "open", closed_at: null};
+  const {error} = await s.from("support_cases").update(change).eq("id", tr.dataset.case);
+  if (error) { $("err").textContent = "The case was not saved: " + error.message; $("err").hidden = false; b.disabled = false; return; }
+  Object.assign(CASES.find(c => String(c.id) === tr.dataset.case), change); draw();
+});
+
+// ---------- system status ----------
+const OKAY = '<span class="tag ok">Working</span>', BAD = '<span class="tag bad">Needs attention</span>', OFF = '<span class="tag off">Off</span>', QUERY = '<span class="tag off">Not checked</span>';
+const hoursAgo = t => t ? (Date.now() - new Date(/[zZ]|[+-]\d\d:?\d\d$/.test(t) ? t : t.replace(" ", "T") + "Z")) / 36e5 : Infinity;
+const since = t => { const h = hoursAgo(t); return !isFinite(h) ? "never" : h < 1 ? "under an hour ago" : h < 48 ? Math.round(h) + " hours ago" : Math.round(h / 24) + " days ago"; };
+async function loadStatus() {
+  $("sys-when").textContent = "Checking…";
+  const call = async (name, body, auth) => {
+    try {
+      const {data: fresh} = await s.auth.getSession();
+      const r = await fetch(CFG.url + "/functions/v1/" + name, {method: "POST", body: JSON.stringify(body || {}),
+        headers: Object.assign({"Content-Type": name === "track" ? "text/plain" : "application/json"}, auth ? {apikey: CFG.key, Authorization: "Bearer " + fresh.session.access_token} : {})});
+      return {status: r.status, json: auth && r.ok ? await r.json().catch(() => null) : null};
+    } catch (e) { return {status: 0, json: null}; }
+  };
+  const [site, health, fBilling, fOutreach, fHook, fTrack, db] = await Promise.all([
+    fetch("status.json?" + Date.now()).then(r => r.ok ? r.json() : null).catch(() => null), call("admin", {action: "health"}, true),
+    call("billing"), call("outreach"), call("stripe-webhook"), call("track"), s.rpc("admin_accounts")]);
+  const H = health.json, rows = {data: [], server: [], money: []}, tally = {ok: 0, bad: 0, off: 0};
+  const add = (group, part, state, detail) => { tally[state === OKAY ? "ok" : state === BAD ? "bad" : "off"]++; rows[group].push(`<tr><td><b>${part}</b></td><td>${state}</td><td>${detail}</td></tr>`); };
+
+  // website and data
+  if (!site) add("data", "Published website", BAD, "The status file written at each publish could not be read. It appears after the next publish.");
+  else {
+    add("data", "Published website", hoursAgo(site.published) < 30 ? OKAY : BAD, `Last published ${since(site.published)}. ${num(site.projects)} projects and ${num(site.leads)} parcel leads.`);
+    add("data", "Daily data collection", hoursAgo(site.last_collection) < 30 ? OKAY : BAD, `Agencies were last read ${since(site.last_collection)}. ${num(site.new_records_24h)} new project records in the day before publishing.`);
+    add("data", "Parcel matching", hoursAgo(site.last_match) < 30 ? OKAY : BAD, `Last ran ${since(site.last_match)}; ${num(site.matched_24h)} projects matched that day, ${num(site.waiting_to_match)} still waiting.`);
+    if (!site.sources_judged) add("data", "Project sources", QUERY, `${num(site.project_sources_on)} switched on. Whether each one answered is recorded from the next daily run; until then this cannot be judged.`);
+    else add("data", "Project sources", site.quiet_count > site.sources_judged * 0.1 ? BAD : OKAY, `${num(site.project_sources_on)} switched on. Of the ${num(site.sources_judged)} read on the last run, ${num(site.quiet_count)} failed or have not answered in four days.`);
+    add("data", "Owner files", OKAY, `${num(site.owner_files_on)} in use, ${num(site.owner_files_held)} held for a terms review.`);
+    const st = site.stages || {}, known = Object.entries(st).filter(([k]) => k !== "unknown").reduce((a, [, v]) => a + v, 0);
+    add("data", "Project stages", OKAY, `${num(known)} projects carry a stage backed by a date or the agency's status; ${num(st.unknown || 0)} show "stage not published"; ${num(site.stages_confirmed)} confirmed by an attorney.`);
+  }
+  // accounts, database, functions
+  add("server", "Sign-in", OKAY, "You are signed in, so Supabase sign-in is answering.");
+  add("server", "Database", db.error ? BAD : OKAY, db.error ? "The account list could not be read: " + esc(db.error.message) : num((db.data || []).length) + " accounts on file.");
+  const fn = (label, r, fine, what) => add("server", label, fine.includes(r.status) ? OKAY : BAD, fine.includes(r.status) ? what : r.status === 404 ? "Not deployed." : r.status === 0 ? "Did not answer." : "Answered " + r.status + ", which is not expected.");
+  fn("Payments function", fBilling, [401], "Deployed, and refusing callers who are not signed in.");
+  fn("Postcards and lookups function", fOutreach, [401], "Deployed, and refusing callers who are not signed in.");
+  fn("Stripe notifications function", fHook, [400], "Deployed, and refusing calls without Stripe's signature.");
+  fn("Visit counting function", fTrack, [204], "Deployed and accepting page views.");
+  add("server", "Admin function", health.status === 200 ? OKAY : BAD, health.status === 200 ? "Deployed and answering." : health.status === 404 ? "Not deployed." : "Answered " + health.status + ".");
+  if (H) {
+    const T = H.tables || {}, missing = Object.entries(T).filter(([, v]) => v === null).map(([k]) => k);
+    add("server", "Database tables", missing.length ? BAD : OKAY, missing.length ? "The server cannot read: " + esc(missing.join(", ")) + "." : `Usage ledger ${num(T.usage)} rows, support cases ${num(T.support_cases)}, visits ${num(T.visits)}, saved firm details ${num(T.firm_outreach)}.`);
+    add("server", "Visit counting", H.last_visit ? (hoursAgo(H.last_visit) < 72 ? OKAY : BAD) : OFF, H.last_visit ? "Last visit recorded " + since(H.last_visit) + "." : "No visit has been recorded yet.");
+    // payments, postcards, lookups
+    const S = H.stripe;
+    add("money", "Stripe key", H.stripe_key === "off" ? OFF : S && S.ok ? OKAY : BAD, H.stripe_key === "off" ? "No Stripe key is saved on the server." : S && S.ok ? (H.stripe_key === "live" ? "A live key is saved and Stripe answers." : "A TEST key is saved and Stripe answers. Real cards cannot be charged until the live key replaces it.") : "Stripe refused the key: " + esc((S || {}).why || ""));
+    if (S && S.ok && "charges" in S) add("money", "Stripe account", S.charges && S.payouts ? OKAY : BAD, S.charges && S.payouts ? "Verified: Stripe can charge cards and pay out to the bank." : "Stripe has not finished verifying the business. " + (S.charges ? "" : "It cannot charge cards yet. ") + (S.payouts ? "" : "It cannot pay out to a bank yet."));
+    add("money", "Stripe notifications", !H.webhook_secret ? (H.stripe_key === "off" ? OFF : BAD) : S && S.webhook_endpoints === 0 ? BAD : OKAY,
+      !H.webhook_secret ? "Not set up, so a payment cannot open an account by itself." + (H.stripe_key === "off" ? "" : ' <button class="btn go" type="button" data-stripe-setup>Set up now</button>')
+      : S && S.webhook_endpoints === 0 ? 'A signing secret is held, but Stripe has no enabled webhook pointing at this site. <button class="btn go" type="button" data-stripe-setup>Set up again</button>' : "Signing secret saved" + (S && S.webhook_endpoints ? " and Stripe has a webhook pointing at this site." : "."));
+    add("money", "Postcards (Lob)", H.lob_key === "off" ? OFF : H.lob && H.lob.ok ? OKAY : BAD, H.lob_key === "off" ? "No Lob key is saved, so postcards cannot be ordered." : H.lob && H.lob.ok ? (H.lob_key === "live" ? "A live key is saved and Lob answers. Orders are mailed." : "A test key is saved and Lob answers. Orders make proofs only; nothing is mailed.") : esc((H.lob || {}).why || "Lob did not answer."));
+    add("money", "Owner lookups (BatchData)", H.batchdata_key ? OKAY : OFF, H.batchdata_key ? "A key is saved. It is used the first time a subscriber buys a lookup." : "No BatchData key is saved, so lookups cannot be bought.");
+  } else add("money", "Payments, postcards and lookups", BAD, "The admin function did not answer, so these could not be checked.");
+  add("money", "Sign-up and reset emails", QUERY, "Sent by Supabase. This screen cannot test delivery; send yourself a password reset to check.");
+
+  for (const g of ["data", "server", "money"]) body("sys-" + g, rows[g].join(""), 3, "");
+  figs("f-sys", [["Working", tally.ok], ["Needs attention", tally.bad, "", tally.bad ? "bad" : ""], ["Off or not checked", tally.off]]);
+  $("n-sys").textContent = tally.bad || ""; $("n-sys").className = tally.bad ? "due" : "";
+  $("sys-when").textContent = "Checked " + new Date().toLocaleTimeString(undefined, {hour: "numeric", minute: "2-digit"});
+  const Q = site && site.sources_judged ? site.quiet_sources : [];
+  $("sys-quiet-n").textContent = site && site.sources_judged && site.quiet_count ? site.quiet_count + " sources" + (site.quiet_count > Q.length ? ", first " + Q.length + " shown" : "") : "";
+  body("sys-quiet", Q.map(x => `<tr><td>${esc(x.state)}</td><td>${esc(x.name)}</td><td>${x.updated ? since(x.updated) : "never"}</td><td>${esc(x.error || "No answer in four days")}</td></tr>`).join(""), 4,
+    !site ? "Not known until the next publish." : !site.sources_judged ? "Recorded from the next daily run." : "Every project source answered on the last run.");
+}
+$("sys-again").addEventListener("click", loadStatus);
+// One click registers this site's webhook with Stripe and switches on the cancel page. The server keeps the signing
+// secret Stripe returns; it never passes through this page.
+document.querySelector("#sys-money").addEventListener("click", async e => {
+  const b = e.target.closest("[data-stripe-setup]"); if (!b) return;
+  b.disabled = true; b.textContent = "Setting up…";
+  try { const out = await act({action: "stripe_setup"}); $("err").hidden = true; b.closest("td").textContent = out.done.join(" "); setTimeout(() => { loadStatus(); load(); }, 1200); }
+  catch (x) { $("err").textContent = "Stripe was not set up: " + x.message; $("err").hidden = false; b.disabled = false; b.textContent = "Try again"; scrollTo(0, 0); }
+});
+
+// ---------- site visits ----------
+const dur = s => !s ? "–" : s < 60 ? s + " s" : Math.floor(s / 60) + " min " + (s % 60 ? (s % 60) + " s" : "");
+const pageName = p => ({"/": "Home page", "/signup.html": "Sign up", "/login.html": "Sign in", "/account.html": "Account", "/app/": "Subscriber app", "/terms.html": "Terms", "/privacy.html": "Privacy", "/compliance.html": "Compliance", "/blog/": "Blog index"}[p] || p);
+const place = tz => !tz || tz === "Unknown" ? "Unknown" : ({"America/New_York": "US Eastern", "America/Detroit": "US Eastern", "America/Chicago": "US Central", "America/Denver": "US Mountain", "America/Phoenix": "Arizona", "America/Los_Angeles": "US Pacific", "America/Anchorage": "Alaska", "Pacific/Honolulu": "Hawaii"}[tz] || tz.replace(/_/g, " "));
+let VIS = null;
+async function loadVisits() {
+  const {data: t, error} = await s.rpc("admin_traffic", {days: +$("vis-days").value});
+  VIS = error ? null : t; drawVisits(); if (ROWS.length) draw();
+}
+$("vis-days").addEventListener("change", loadVisits);
+function drawVisits() {
+  const t = VIS, T = t ? t.totals : {}, S = t ? t.sessions : {}, all = t ? t.all_time : {};
+  $("vis-off").hidden = !!(t && all.views);
+  $("n-vis").textContent = t && T.today_views ? T.today_views + " today" : "";
+  const share = (n, of) => of ? Math.round(100 * n / of) + "%" : "0%";
+  figs("f-vis", [["Page views", num(T.views), "in this period"], ["Visitors", num(T.visitors), num(T.new_visitors) + " here for the first time"],
+    ["Visits", num(S.count), (S.pages_per || 0) + " pages a visit"], ["Left after one page", share(S.bounces || 0, S.count), num(S.bounces) + " visits"],
+    ["Average time on a page", dur(T.avg_seconds), "read to " + (T.avg_scroll || 0) + "% of the page"], ["Came back", num(S.returning), "visitors with more than one visit"],
+    ["Today", num(T.today_views), num(T.today_visitors) + " visitors"], ["On the site now", num(T.live), "in the last 5 minutes"],
+    ["Since counting began", num(all.views), all.since ? num(all.visitors) + " visitors since " + day(all.since) : "no visits yet"]]);
+  if (!t) { for (const id of ["v-days", "v-src", "v-pages", "v-events", "v-camp", "v-entry", "v-exit", "v-states", "v-cities", "v-net", "v-tz", "v-hours", "v-dev", "v-br", "v-os", "v-scr", "v-recent"]) body(id, "", 7, "Nothing recorded."); return; }
+  const top = Math.max(1, ...t.by_day.map(d => d.views));
+  body("v-days", t.by_day.slice().reverse().map(d => `<tr><td>${day(d.day + "T12:00:00")}</td><td class="n">${num(d.views)}</td><td class="n">${num(d.visitors)}</td><td class="bar"><i style="width:${Math.round(100 * d.views / top)}%"></i></td></tr>`).join(""), 4, "No visits in this period.");
+  body("v-src", t.sources.map(r => `<tr><td>${esc(r.name)}</td><td class="n">${num(r.sessions)}</td><td class="n">${num(r.visitors)}</td><td class="n">${r.pages_per}</td></tr>`).join(""), 4, "No visits in this period.");
+  body("v-pages", t.pages.map(r => `<tr><td><b>${esc(pageName(r.name))}</b>${pageName(r.name) === r.name ? "" : `<span>${esc(r.name)}</span>`}</td><td class="n">${num(r.views)}</td><td class="n">${num(r.visitors)}</td><td class="n">${dur(r.seconds)}</td><td class="n">${r.scroll ? r.scroll + "%" : "–"}</td></tr>`).join(""), 5, "No visits in this period.");
+  body("v-events", t.events.map(r => `<tr><td>${esc(r.name)}</td><td class="n">${num(r.times)}</td><td class="n">${num(r.visitors)}</td></tr>`).join(""), 3, "No sign-up, sign-in or email clicks yet.");
+  body("v-camp", t.campaigns.map(r => `<tr><td>${esc(r.source)}</td><td>${esc(r.medium)}</td><td>${esc(r.campaign)}</td><td class="n">${num(r.views)}</td><td class="n">${num(r.visitors)}</td></tr>`).join(""), 5, "No tagged links have been used. Add ?utm_source=apollo&utm_campaign=launch to links in your emails to see them here.");
+  body("v-entry", t.entries.map(r => `<tr><td>${esc(pageName(r.name))}</td><td class="n">${num(r.sessions)}</td><td class="n">${share(r.bounces, r.sessions)}</td></tr>`).join(""), 3, "No visits in this period.");
+  body("v-exit", t.exits.map(r => `<tr><td>${esc(pageName(r.name))}</td><td class="n">${num(r.sessions)}</td></tr>`).join(""), 2, "No visits in this period.");
+  const three = (id, rows, name) => body(id, rows.map(r => `<tr><td>${esc(name ? name(r.name) : r.name)}</td><td class="n">${num(r.visitors)}</td><td class="n">${num(r.views)}</td></tr>`).join(""), 3, "No visits in this period.");
+  const US = c => !c || c === "US";
+  three("v-states", (t.states || []).map(r => ({...r, name: US(r.country) ? r.name : r.name + ", " + r.country})).concat((t.countries || []).filter(c => !US(c.name)).map(c => ({...c, name: "Country: " + c.name}))));
+  three("v-cities", (t.cities || []).map(r => ({...r, name: [r.name, r.region, US(r.country) ? "" : r.country].filter(Boolean).join(", ")})));
+  three("v-net", t.networks || []);
+  three("v-tz", t.timezones, place);
+  three("v-dev", t.devices); three("v-br", t.browsers); three("v-os", t.systems);
+  three("v-scr", t.screens.concat(t.languages.map(l => ({...l, name: "Language: " + l.name}))));
+  const hours = [...Array(24)].map((_, h) => (t.by_hour.find(x => x.hour === h) || {views: 0}).views), peak = Math.max(1, ...hours);
+  body("v-hours", hours.map((n, h) => `<tr><td>${(h % 12) || 12} ${h < 12 ? "am" : "pm"}</td><td class="n">${num(n)}</td><td class="bar">${n ? `<i style="width:${Math.round(100 * n / peak)}%"></i>` : ""}</td></tr>`).join(""), 3, "");
+  const when = x => new Date(x).toLocaleString(undefined, {month: "short", day: "numeric", hour: "numeric", minute: "2-digit"});
+  body("v-recent", t.recent.map(r => `<tr><td>${when(r.at)}</td><td>${esc(r.visitor)}${r.is_new ? "<span>first visit</span>" : ""}</td>
+    <td>${r.kind === "event" ? `<b>${esc(r.event)}</b><span>on ${esc(pageName(r.path))}</span>` : esc(pageName(r.path))}</td>
+    <td>${esc(r.utm_source ? "Campaign: " + r.utm_source : r.ref_host || "")}</td><td>${esc(r.device || "")}<span>${esc([r.browser, r.os].filter(Boolean).join(", "))}</span></td>
+    <td>${r.city || r.region ? esc([r.city, r.region].filter(Boolean).join(", ")) + (r.country && r.country !== "US" ? ", " + esc(r.country) : "") : esc(place(r.tz))}${r.org ? `<span>${esc(r.org)}</span>` : ""}</td><td class="n">${r.kind === "event" ? "" : dur(r.seconds)}</td></tr>`).join(""), 7, "No visits in this period.");
+}
+
+// ---------- data sources (public files written at publish time) ----------
+fetch("coverage.json").then(r => r.json()).then(rows => {
+  const sum = k => rows.reduce((a, r) => a + (r[k] || 0), 0), all = sum("counties"), pct = n => Math.round(100 * n / all) + "%";
+  $("cov-note").textContent = `${rows.filter(r => r.live).length} of 50 states are live. Of ${num(all)} counties in the country, ${num(sum("counties_projects"))} (${pct(sum("counties_projects"))}) are covered by a state project source and ${num(sum("counties_owners"))} (${pct(sum("counties_owners"))}) by an owner file.`;
+  const pick = $("data-state");
+  rows.forEach(r => pick.add(new Option(r.state, r.code)));
+  const drawCov = () => body("cov", rows.filter(r => !pick.value || r.code === pick.value).map(r => `<tr><td><b>${esc(r.state)}</b><span>${esc(r.note || "")}</span></td><td>${r.live ? "Yes" : '<span class="tag off">No</span>'}</td>
+    <td class="n">${num(r.scored_projects)}</td><td>${r.projects ? "All " + r.counties + " counties" : '<span class="tag off">Not connected</span>'}</td>
+    <td>${r.counties_owners} of ${r.counties} counties<span>${esc(r.owners)}</span></td><td>${esc(r.held || "")}</td></tr>`).join(""), 6, "No state matches.");
+  pick.addEventListener("change", () => {       // the one state filter drives all three tables on this screen
+    drawCov(); const sel = $("src-state"); sel.value = pick.value; sel.dispatchEvent(new Event("change")); document.dispatchEvent(new Event("data-state"));
+    $("data-state-note").textContent = pick.value ? "Showing " + pick.options[pick.selectedIndex].text + " only" : "";
+  });
+  drawCov();
+}).catch(() => { $("cov-note").textContent = "The coverage table could not be loaded."; });
+
+fetch("sources.json").then(r => r.json()).then(reg => {
+  const S = reg.sources, sel = $("src-state");
+  [...new Set(S.map(x => x.state))].sort().forEach(c => sel.add(new Option(c, c)));
+  const n = (k, st) => S.filter(x => x.kind === k && (!st || x.status === st)).length;
+  $("src-asof").textContent = "Rebuilt " + (reg.generated || "at the last update");
+  $("src-note").textContent = `${S.length} sources on file: ${n("projects", "on")} project sources in use, ${n("owners", "on")} owner files in use, ${n("owners", "held")} owner files held for a terms review, ${n("owners", "off") + n("projects", "off")} switched off.`;
+  const drawSrc = () => {
+    const st = sel.value, k = $("src-kind").value, u = $("src-status").value;
+    const rows = S.filter(x => (!st || x.state === st) && (!k || x.kind === k) && (!u || x.status === u));
+    $("src-n").textContent = rows.length > 600 ? "First 600 of " + num(rows.length) : num(rows.length) + " shown";
+    body("src", rows.slice(0, 600).map(x => `<tr><td>${esc(x.state)}</td>
+      <td><b>${esc(x.name || "")}</b><span>${x.kind === "owners" ? "Owner file" : "Project source"}${x.covers ? " · " + esc(x.covers) : ""}</span>${x.url ? `<span><a href="${esc(x.url)}" rel="noopener" target="_blank">Open the source</a></span>` : ""}</td>
+      <td>${esc(x.how || "")}${x.filter ? `<span>Filter: ${esc(x.filter)}</span>` : ""}</td><td>${esc((x.reports || []).join(", ") || "not mapped")}</td>
+      <td>${x.status === "on" ? '<span class="tag ok">On</span>' : x.status === "held" ? '<span class="tag bad">Held</span>' : '<span class="tag off">Off</span>'}${x.why ? `<span>${esc(x.why)}</span>` : ""}</td><td class="n">${num(x.loaded)}</td><td>${esc((x.updated || "").slice(0, 10))}</td></tr>`).join(""), 7, "No source matches these filters.");
+  };
+  [sel, $("src-kind"), $("src-status")].forEach(e => e.addEventListener("change", drawSrc)); drawSrc();
+  const G = reg.gaps, open = G.reduce((a, g) => a + (g.missing_count || 0), 0), all = G.reduce((a, g) => a + g.counties, 0), noState = G.filter(g => !g.statewide_projects);
+  $("gap-note").textContent = `${num(open)} of ${num(all)} counties have no owner file yet. ${noState.map(g => g.state).join(", ") || "No state"} ${noState.length === 1 ? "has" : "have"} no statewide project source.`;
+  const drawGaps = () => body("gaps", G.filter(g => (g.missing_count || !g.statewide_projects) && (!$("data-state").value || g.code === $("data-state").value)).map(g => `<tr><td><b>${esc(g.state)}</b></td>
+    <td class="n">${g.projects_on}${g.statewide_projects ? "" : "<span>No statewide source</span>"}</td>
+    <td>${g.missing_count} of ${g.counties}<span>${g.missing.length ? esc(g.missing.join(", ")) : (g.partial_statewide ? "The state file covers " + esc(g.partial_statewide) + "; the rest are not named" : "")}</span></td></tr>`).join(""), 3, "No gaps for this selection.");
+  document.addEventListener("data-state", drawGaps); drawGaps();
+}).catch(() => { $("src-note").textContent = "The list of sources could not be loaded."; });
+</script>
+</body>
+</html>

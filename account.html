@@ -1,0 +1,284 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your firm · EminentTracker</title>
+<meta name="description" content="Your EminentTracker account. Built by eminent domain attorneys, for eminent domain attorneys.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7.5' fill='%231b2333'/%3E%3Cpath d='M8 5h16v4.200H12.200v13.600H24V27H8z' fill='%23fff'/%3E%3Cpath d='M12.200 13.900H32v4.200H12.200z' fill='%23e0662e'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="site.css">
+<script src="auth-config.js"></script>
+<script src="track.js" defer></script>
+</head>
+<body>
+
+<header class="bar">
+  <a class="brand" href="./" aria-label="EminentTracker home"><svg viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7.5" fill="#1b2333"/><path d="M8 5h16v4.200H12.200v13.600H24V27H8z" fill="#fff"/><path d="M12.200 13.900H32v4.200H12.200z" fill="#e0662e"/></svg><b>Eminent<span>Tracker</span></b></a>
+  <nav aria-label="Site">
+    <a href="./#how">What it does</a>
+    <a href="./#pricing">Pricing</a>
+    <a class="auth-only" href="login.html">Sign in</a>
+  </nav>
+</header>
+
+<main class="signup">
+  <div class="why">
+    <h1 style="font-size: var(--s-title)">Your firm</h1>
+    <p id="who">Checking who is signed in.</p>
+    <div class="sub" id="sub" hidden>
+      <p class="status" id="sub-status"></p>
+      <p style="margin-top: 20px" id="sub-open" hidden><a class="btn" href="app/">Open EminentTracker</a></p>
+      <p style="margin-top: 14px" id="sub-bill" hidden><button class="btn plain" type="button" id="bill">Change card or cancel</button></p>
+      <div id="sub-card" hidden>
+        <p style="margin-top: 16px; font-size: 14px">Your access has no subscription charge. Postcards and owner lookups are charged as you order them, so they need a card on file. Adding it charges nothing.</p>
+        <p style="margin-top: 14px"><button class="btn plain" type="button" id="card">Add a card for postcards and lookups</button></p>
+        <p class="status" id="card-status" role="status" hidden></p>
+      </div>
+      <div id="sub-pay" hidden>
+        <p style="margin-top: 16px; font-size: var(--s-small)" id="pay-what"></p>
+        <p style="margin-top: 14px"><button class="btn" type="button" id="pay">Pay and open my account</button></p>
+        <p style="margin-top: 12px; font-size: 14px">Your card is charged today and your account opens as soon as the payment goes through. The plan renews automatically each period until you cancel, which you can do here at any time.</p>
+        <p class="status" id="pay-status" role="status" hidden></p>
+        <p style="margin-top: 12px; font-size: 14px" id="sub-soon" hidden>Online payment is being switched on. Email <a href="mailto:info@eminenttracker.com?subject=EminentTracker%20subscription">info@eminenttracker.com</a> and we will activate your plan today.</p>
+      </div>
+    </div>
+    <p style="font-size: var(--s-small); margin-top: 20px"><a href="admin.html" id="admin-link" hidden>Admin</a> <button class="linkish" type="button" id="out">Sign out</button></p>
+    <section class="help" id="help" hidden>
+      <h2>Need help?</h2>
+      <p>Send us a question about billing, the data, postcards or your account. We answer by email at the address you sign in with.</p>
+      <form id="case" novalidate>
+        <label>What is it about?<select name="topic"><option value="billing">Billing</option><option value="data">Data or coverage</option><option value="postcards">Postcards</option><option value="lookups">Owner lookups</option><option value="account">Account or sign-in</option><option value="other" selected>Something else</option></select></label>
+        <label>Subject<input type="text" name="subject" minlength="3" maxlength="160" required></label>
+        <label>Your question<textarea name="body" minlength="10" maxlength="4000" required></textarea></label>
+        <p class="status" id="case-status" role="status" hidden></p>
+        <div class="send"><button class="btn plain" type="submit" id="case-go">Send to support</button></div>
+      </form>
+      <ul id="my-cases" hidden></ul>
+    </section>
+  </div>
+  <div>
+    <form class="card" id="firm" novalidate hidden>
+      <p class="status" id="nudge" hidden>Add your firm's details to finish setting up.</p>
+      <div class="grid">
+        <label>Your name<input type="text" name="name" autocomplete="name" required></label>
+        <label>Law firm<input type="text" name="firm" autocomplete="organization" required></label>
+        <label>Phone <span>(optional)</span><input type="tel" name="phone" autocomplete="tel"></label>
+        <label>Firm city and state<input type="text" name="location" autocomplete="address-level2"></label>
+        <label class="full">Firm website <span>(optional)</span><input type="text" name="website" autocomplete="url" inputmode="url"></label>
+        <fieldset class="full"><legend>Plan</legend>
+          <div class="choices plans-pick">
+            <label><input type="radio" name="plan" value="Single state ($499 a month)" checked> <span><b>Single state</b> $499 a month</span></label>
+            <label><input type="radio" name="plan" value="All 50 states ($999 a month)"> <span><b>All 50 states</b> $999 a month</span></label>
+          </div></fieldset>
+        <fieldset class="full"><legend>Billing</legend>
+          <div class="choices">
+            <label><input type="radio" name="bill" value="month" checked> Monthly</label>
+            <label><input type="radio" name="bill" value="year"> Yearly, save 20%</label>
+          </div></fieldset>
+        <label class="full" id="state-row">Your state<select name="plan_state"><option value="">Choose a state</option><option value="Alabama">Alabama</option><option value="Alaska">Alaska</option><option value="Arizona">Arizona</option><option value="Arkansas">Arkansas</option><option value="California">California</option><option value="Colorado">Colorado</option><option value="Connecticut">Connecticut</option><option value="Delaware">Delaware</option><option value="Florida">Florida</option><option value="Georgia">Georgia</option><option value="Hawaii">Hawaii</option><option value="Idaho">Idaho</option><option value="Illinois">Illinois</option><option value="Indiana">Indiana</option><option value="Iowa">Iowa</option><option value="Kansas">Kansas</option><option value="Kentucky">Kentucky</option><option value="Louisiana">Louisiana</option><option value="Maine">Maine</option><option value="Maryland">Maryland</option><option value="Massachusetts">Massachusetts</option><option value="Michigan">Michigan</option><option value="Minnesota">Minnesota</option><option value="Mississippi">Mississippi</option><option value="Missouri">Missouri</option><option value="Montana">Montana</option><option value="Nebraska">Nebraska</option><option value="Nevada">Nevada</option><option value="New Hampshire">New Hampshire</option><option value="New Jersey">New Jersey</option><option value="New Mexico">New Mexico</option><option value="New York">New York</option><option value="North Carolina">North Carolina</option><option value="North Dakota">North Dakota</option><option value="Ohio">Ohio</option><option value="Oklahoma">Oklahoma</option><option value="Oregon">Oregon</option><option value="Pennsylvania">Pennsylvania</option><option value="Rhode Island">Rhode Island</option><option value="South Carolina">South Carolina</option><option value="South Dakota">South Dakota</option><option value="Tennessee">Tennessee</option><option value="Texas">Texas</option><option value="Utah">Utah</option><option value="Vermont">Vermont</option><option value="Virginia">Virginia</option><option value="Washington">Washington</option><option value="West Virginia">West Virginia</option><option value="Wisconsin">Wisconsin</option><option value="Wyoming">Wyoming</option></select><span class="statefacts" id="state-facts" hidden></span></label>
+        <label class="full">Other states where you handle eminent domain matters <span>(optional)</span><input type="text" name="states" autocomplete="off"></label>
+        <fieldset class="full"><legend>Who do you represent?</legend>
+          <div class="choices">
+            <label><input type="radio" name="side" value="Property owners" checked> Property owners</label>
+            <label><input type="radio" name="side" value="Condemning authorities"> Condemning authorities</label>
+            <label><input type="radio" name="side" value="Both"> Both</label>
+          </div></fieldset>
+        <label class="full agree" id="agree-row" hidden><input type="checkbox" name="agree" value="yes"> <span>I am an attorney licensed in the United States, or I work under the supervision of one, and I agree to the <a href="terms.html" target="_blank" rel="noopener">Terms of use</a>, the <a href="privacy.html" target="_blank" rel="noopener">Privacy policy</a> and the <a href="compliance.html" target="_blank" rel="noopener">compliance rules</a>.</span></label>
+        <label class="full" id="newpass" hidden>New password <span>(8 characters or more)</span><input type="password" name="password" autocomplete="new-password" minlength="8"></label>
+        <p class="full status" id="status" role="status" hidden></p>
+        <div class="full send"><button class="btn" type="submit" id="go">Save</button></div>
+      </div>
+    </form>
+  </div>
+</main>
+
+<footer>
+  <div class="in">
+    <span>© 2026 EminentTracker, a product of Duerr Imports, LLC</span>
+    <nav aria-label="Footer"><a href="blog/">Blog</a><a href="terms.html">Terms of use</a><a href="privacy.html">Privacy</a><a href="compliance.html">Compliance</a><a href="privacy.html#owners">Property owners: opt out</a><a href="signup.html">Sign up</a><a class="auth-only" href="login.html">Sign in</a><a href="mailto:info@eminenttracker.com?subject=EminentTracker">Contact</a><a href="https://www.linkedin.com/company/eminenttracker/" target="_blank" rel="noopener">LinkedIn</a></nav>
+    <div class="rules">
+      <p><b>Rules this service is run under.</b> Subscribers agree to follow them; the software enforces the ones it can. <a href="compliance.html">Read the full compliance page.</a></p>
+      <ul>
+        <li>State rules of professional conduct on lawyer advertising and solicitation (ABA Model Rules 7.1 to 7.3 and each state’s version)</li>
+        <li>CAN-SPAM Act for commercial email</li>
+        <li>Telephone Consumer Protection Act, the National Do Not Call Registry and state telemarketing laws</li>
+        <li>Fair Credit Reporting Act: data may not be used for credit, employment, insurance or tenant decisions</li>
+        <li>Deceptive Mail Prevention and Enforcement Act and U.S. Postal Service mailing standards</li>
+        <li>State privacy laws and each public agency’s terms for using its records</li>
+      </ul>
+    </div>
+    <p class="legal">EminentTracker is a research and marketing tool for licensed attorneys. It is not a law firm, does not give legal advice and does not create an attorney-client relationship. Records come from public sources and can be incomplete or out of date. A project on a planning list may never take any land, and appearing here does not mean a property will be taken. Map data © OpenStreetMap contributors.</p>
+  </div>
+</footer>
+
+<script type="module">
+import {authOn, supa, firmOf, firmData, say, watch, valid} from "./auth.js";
+const CFG = window.ET_AUTH || {};
+const invited = /type=(invite|recovery)/.test(location.hash);      // read before the sign-in library clears the address
+const form = document.getElementById("firm"), status = document.getElementById("status"), who = document.getElementById("who");
+if (!authOn) location.replace("signup.html");
+const s = await supa();
+s.auth.onAuthStateChange(ev => { if (ev === "PASSWORD_RECOVERY") document.getElementById("newpass").hidden = false; });
+const {data} = await s.auth.getSession();
+if (!data.session) location.replace("login.html");
+else {
+  const user = data.session.user, f = firmOf(user);
+  who.textContent = "Signed in as " + user.email + ".";
+  // What the account may open is set by our server when Stripe confirms payment; nothing on this page can change it.
+  let plan = user.app_metadata || {}, active = plan.access === "active";
+  const q = new URLSearchParams(location.search), payStatus = document.getElementById("pay-status");
+  const showSub = () => {
+    active = plan.access === "active";
+    document.getElementById("admin-link").hidden = plan.role !== "admin";
+    document.getElementById("sub").hidden = false;
+    document.getElementById("sub-status").textContent = active
+      ? (plan.stripe_subscription || plan.role === "admin" ? "Subscription active: " : "Access open, no subscription charge: ") + (plan.plan === "all" ? "all 50 states" : "single state" + (plan.state ? ", " + plan.state.replace(/\b\w/g, c => c.toUpperCase()) : "")) + "."
+      : "No active subscription yet.";
+    document.getElementById("sub-open").hidden = !active;
+    document.getElementById("sub-pay").hidden = active;
+    document.getElementById("sub-bill").hidden = !(active && plan.stripe_customer);
+    document.getElementById("bill").textContent = plan.stripe_subscription ? "Change card or cancel" : "Change card";
+    if (plan.held) {      // put on hold by the administrator: say so, and do not offer to pay again
+      document.getElementById("sub-status").textContent = "This account is on hold. Email info@eminenttracker.com and we will sort it out.";
+      document.getElementById("sub-pay").hidden = true;
+    }
+    document.getElementById("sub-card").hidden = !(active && !plan.stripe_customer && plan.role !== "admin");
+  };
+  showSub();
+  const fn = async body => {
+    const {data: fresh} = await s.auth.getSession();
+    const r = await fetch(CFG.url + "/functions/v1/billing", {method: "POST", body: JSON.stringify(body),
+      headers: {"Content-Type": "application/json", apikey: CFG.key, Authorization: "Bearer " + fresh.session.access_token}});
+    const out = await r.json().catch(() => ({}));
+    if (!r.ok) { const e = new Error(out.error || "The payment page could not be opened (" + r.status + ")."); e.status = r.status; throw e; }
+    return out;
+  };
+  const chosen = () => { const d = Object.fromEntries(new FormData(form)); return {plan: d.plan || "", state: d.plan_state || "", bill: d.bill === "year" ? "year" : "month"}; };
+  const PRICE = {single: {month: "$499 a month", year: "$4,790.40 a year"}, all: {month: "$999 a month", year: "$9,590.40 a year"}};
+  const describe = () => {
+    const c = chosen(), all = c.plan.startsWith("All"), ok = all || (c.plan && c.state);
+    document.getElementById("pay-what").textContent = !ok ? "Choose a plan" + (c.plan ? " and your state" : "") + " in the form, then pay to open your account."
+      : (all ? "All 50 states" : "Single state, " + c.state) + ": " + PRICE[all ? "all" : "single"][c.bill] + ".";
+    return ok;
+  };
+  const pay = async () => {
+    if (!describe()) { say(payStatus, "Choose a plan" + (chosen().plan.startsWith("All") ? "" : " and your state") + " first.", true); return; }
+    if (!agreed && !form.elements.agree.checked) { say(payStatus, "Tick the box agreeing to the terms in the form first.", true); return; }
+    const b = document.getElementById("pay"); b.disabled = true; say(payStatus, "Opening the secure payment page…");
+    try {
+      const c = chosen(), change = {data: firmData(Object.fromEntries(new FormData(form)))};       // the plan paid for is the plan on file
+      if (!agreed) Object.assign(change.data, {agreed_terms_at: new Date().toISOString(), terms_version: "2026-11-24"});
+      await s.auth.updateUser(change);
+      location.href = (await fn({action: "checkout", plan: c.plan, state: c.state, bill: c.bill})).url;
+    } catch (e) {
+      b.disabled = false;
+      // not switched on yet, or not reachable: say so and offer the manual route instead of a bare error
+      if (!e.status || e.status === 503 || e.status === 404) { document.getElementById("sub-soon").hidden = false; say(payStatus, ""); } else say(payStatus, e.message, true);
+    }
+  };
+  document.getElementById("pay").addEventListener("click", pay);
+  document.getElementById("bill").addEventListener("click", async e => {
+    e.target.disabled = true;
+    try { location.href = (await fn({action: "portal"})).url; } catch (err) { e.target.disabled = false; say(payStatus, err.message, true); document.getElementById("sub-pay").hidden = false; }
+  });
+  document.getElementById("card").addEventListener("click", async e => {
+    const st = document.getElementById("card-status"); e.target.disabled = true; say(st, "Opening the secure card page…");
+    try { location.href = (await fn({action: "card"})).url; }
+    catch (err) { e.target.disabled = false; say(st, !err.status || err.status === 503 || err.status === 404 ? "Card payments are being switched on. Try again shortly." : err.message, true); }
+  });
+  if (q.get("card") && !plan.stripe_customer) {
+    // Back from Stripe with a card saved. The notice reaches us within a few seconds.
+    for (let i = 0; i < 15 && !plan.stripe_customer; i++) {
+      await new Promise(r => setTimeout(r, 2000));
+      const {data: again} = await s.auth.refreshSession();
+      if (again.session) plan = again.session.user.app_metadata || {};
+    }
+    showSub();
+  }
+  if (q.get("paid") && !active) {
+    // Back from Stripe. The payment notice reaches us within a few seconds; the sign-in is renewed until it shows.
+    document.getElementById("sub-status").textContent = "Payment received. Opening your account…";
+    document.getElementById("sub-pay").hidden = true;
+    for (let i = 0; i < 15 && !active; i++) {
+      await new Promise(r => setTimeout(r, 2000));
+      const {data: again} = await s.auth.refreshSession();
+      if (again.session) { plan = again.session.user.app_metadata || {}; active = plan.access === "active"; }
+    }
+    showSub();
+    if (!active) document.getElementById("sub-status").textContent = "Your payment went through, but the account has not opened yet. Reload this page in a minute. If it still shows this, email info@eminenttracker.com and we will open it by hand.";
+  }
+  // Support cases: filed here, answered by email. The list shows what this account has sent and any closing note.
+  const caseForm = document.getElementById("case"), caseStatus = document.getElementById("case-status"), mine = document.getElementById("my-cases");
+  const when = t => new Date(t).toLocaleDateString(undefined, {year: "numeric", month: "short", day: "numeric"});
+  const myCases = async () => {
+    const {data: list, error} = await s.from("support_cases").select("id, subject, status, admin_note, created_at").eq("user_id", user.id).order("created_at", {ascending: false}).limit(10);
+    if (error) return false;                                       // not installed yet: the section stays hidden
+    mine.replaceChildren(...list.map(c => { const li = document.createElement("li"), b = document.createElement("b");
+      b.textContent = c.subject; li.append(b, " " + (c.status === "open" ? "Open" : "Closed") + ", sent " + when(c.created_at) + (c.admin_note ? ". Our note: " + c.admin_note : "")); return li; }));
+    mine.hidden = !list.length; return true;
+  };
+  myCases().then(ok => { document.getElementById("help").hidden = !ok; });
+  caseForm.addEventListener("submit", async e => {
+    e.preventDefault();
+    const d = Object.fromEntries(new FormData(caseForm)), subject = d.subject.trim(), text = d.body.trim();
+    if (subject.length < 3 || text.length < 10) { say(caseStatus, "Add a subject and a few words about the problem.", true); return; }
+    const b = document.getElementById("case-go"); b.disabled = true;
+    const {error} = await s.from("support_cases").insert({topic: d.topic, subject, body: text});
+    b.disabled = false;
+    if (error) { say(caseStatus, "Your question could not be sent: " + error.message + " Email info@eminenttracker.com instead.", true); return; }
+    caseForm.reset(); say(caseStatus, "Sent. We will answer by email at " + user.email + "."); myCases();
+  });
+  for (const [k, v] of Object.entries(f)) { const el = form.elements[k]; if (!el) continue; if (k === "side" || k === "plan" || k === "bill") { if (v) form.querySelectorAll("[name=" + k + "]").forEach(r => r.checked = r.value === v); } else el.value = v; }
+  document.getElementById("nudge").hidden = !!(f.firm && f.plan);
+const COUNTS = {"Alabama": [4361, 14593, 14589, 10032], "Alaska": [27, 763, 633, 194], "Arizona": [142, 9271, 9220, 8451], "Arkansas": [177, 5561, 5561, 0], "California": [1703, 392, 386, 368], "Colorado": [275, 23696, 18221, 16672], "Connecticut": [395, 9091, 8874, 0], "Delaware": [230, 10995, 10987, 10589], "Florida": [1379, 140311, 140225, 58699], "Georgia": [1112, 23586, 23519, 22140], "Hawaii": [24, 172, 160, 0], "Idaho": [180, 0, 0, 0], "Illinois": [132, 2513, 2502, 2408], "Indiana": [456, 9372, 9321, 8829], "Iowa": [14, 542, 532, 430], "Kansas": [36, 0, 0, 0], "Kentucky": [270, 2026, 2022, 1925], "Louisiana": [65, 0, 0, 0], "Maine": [269, 32893, 0, 0], "Maryland": [211, 1647, 1644, 994], "Massachusetts": [471, 46447, 45846, 34618], "Michigan": [132, 320, 314, 95], "Minnesota": [117, 3939, 3382, 2407], "Mississippi": [97, 3411, 3409, 2678], "Missouri": [77, 1816, 1816, 1626], "Montana": [21, 0, 0, 0], "Nebraska": [35, 2866, 2858, 2665], "Nevada": [158, 8094, 8087, 7710], "New Hampshire": [95, 0, 0, 0], "New Jersey": [74, 0, 0, 0], "New Mexico": [35, 1446, 1360, 553], "New York": [123, 5898, 5872, 5592], "North Carolina": [2313, 103687, 103424, 92180], "North Dakota": [38, 2624, 0, 0], "Ohio": [401, 4810, 4788, 3014], "Oklahoma": [1196, 16682, 16645, 14187], "Oregon": [385, 7255, 7218, 6540], "Pennsylvania": [243, 29849, 15387, 12286], "Rhode Island": [463, 0, 0, 0], "South Carolina": [595, 0, 0, 0], "South Dakota": [38, 70, 70, 64], "Tennessee": [661, 2729, 2729, 0], "Texas": [7158, 224212, 220225, 184679], "Utah": [1033, 37351, 29568, 18229], "Vermont": [8, 783, 772, 732], "Virginia": [2213, 9971, 9898, 9081], "Washington": [505, 0, 0, 0], "West Virginia": [195, 3641, 3575, 3218], "Wisconsin": [72, 4050, 4033, 2696], "Wyoming": [31, 1516, 1341, 1226]};        // what each live state holds today, so a firm can judge it before paying
+const LIMITS = {"Alabama": {"counties": 67, "with_owners": 6, "law": null}, "Alaska": {"counties": 30, "with_owners": 30, "law": null}, "Arizona": {"counties": 15, "with_owners": 3, "law": null}, "Arkansas": {"counties": 75, "with_owners": 75, "law": null}, "California": {"counties": 58, "with_owners": 1, "law": "California removes owner names from public parcel records (Government Code 7928.205). Projects are listed, but no parcels or owners can be shown from public sources."}, "Colorado": {"counties": 64, "with_owners": 64, "law": null}, "Connecticut": {"counties": 8, "with_owners": 8, "law": null}, "Delaware": {"counties": 3, "with_owners": 2, "law": null}, "Florida": {"counties": 67, "with_owners": 67, "law": null}, "Georgia": {"counties": 159, "with_owners": 11, "law": null}, "Hawaii": {"counties": 5, "with_owners": 1, "law": null}, "Idaho": {"counties": 44, "with_owners": 0, "law": "Idaho Code 74-120 bars using public records as a mailing list. Owner records are not offered here, and paid owner lookups are not sold."}, "Illinois": {"counties": 102, "with_owners": 9, "law": null}, "Indiana": {"counties": 92, "with_owners": 6, "law": null}, "Iowa": {"counties": 99, "with_owners": 7, "law": null}, "Kansas": {"counties": 105, "with_owners": 0, "law": "K.S.A. 45-230 bars using names and addresses from public records to sell a service to the people listed. Owner records are not offered here."}, "Kentucky": {"counties": 120, "with_owners": 3, "law": null}, "Louisiana": {"counties": 64, "with_owners": 2, "law": null}, "Maine": {"counties": 16, "with_owners": 0, "law": "Maine publishes parcels without owner names. Parcels in a project's path are shown, but not who owns them."}, "Maryland": {"counties": 24, "with_owners": 4, "law": null}, "Massachusetts": {"counties": 14, "with_owners": 14, "law": null}, "Michigan": {"counties": 83, "with_owners": 8, "law": null}, "Minnesota": {"counties": 87, "with_owners": 60, "law": null}, "Mississippi": {"counties": 82, "with_owners": 82, "law": null}, "Missouri": {"counties": 115, "with_owners": 6, "law": null}, "Montana": {"counties": 56, "with_owners": 0, "law": "Montana law restricts using public records as mailing lists. Owner records are not offered here, and paid owner lookups are not sold."}, "Nebraska": {"counties": 93, "with_owners": 93, "law": null}, "Nevada": {"counties": 17, "with_owners": 1, "law": null}, "New Hampshire": {"counties": 10, "with_owners": 0, "law": "New Hampshire's statewide parcel map has no owner names, and no county source has been found."}, "New Jersey": {"counties": 21, "with_owners": 0, "law": "New Jersey's public parcel file has owner names removed (Daniel's Law). Projects are listed, but no owners can be shown from public sources."}, "New Mexico": {"counties": 33, "with_owners": 4, "law": null}, "New York": {"counties": 62, "with_owners": 38, "law": null}, "North Carolina": {"counties": 100, "with_owners": 100, "law": null}, "North Dakota": {"counties": 53, "with_owners": 0, "law": "North Dakota publishes parcels without owner names. Parcels in a project's path are shown, but not who owns them."}, "Ohio": {"counties": 88, "with_owners": 9, "law": null}, "Oklahoma": {"counties": 77, "with_owners": 14, "law": null}, "Oregon": {"counties": 36, "with_owners": 5, "law": null}, "Pennsylvania": {"counties": 67, "with_owners": 35, "law": null}, "Rhode Island": {"counties": 5, "with_owners": 2, "law": null}, "South Carolina": {"counties": 46, "with_owners": 0, "law": "S.C. Code 30-2-50 bars using public records for commercial solicitation. Owner records are not offered here, and paid owner lookups are not sold."}, "South Dakota": {"counties": 66, "with_owners": 2, "law": null}, "Tennessee": {"counties": 95, "with_owners": 1, "law": null}, "Texas": {"counties": 254, "with_owners": 254, "law": null}, "Utah": {"counties": 29, "with_owners": 6, "law": null}, "Vermont": {"counties": 14, "with_owners": 14, "law": null}, "Virginia": {"counties": 133, "with_owners": 12, "law": "Virginia's statewide parcel map has no owner names, so owners are available only in the counties and cities that publish their own."}, "Washington": {"counties": 39, "with_owners": 0, "law": "RCW 42.56.070(8) restricts commercial use of public-record lists of individuals, and the statewide parcel map carries no owner names. Owner records are not offered here, and paid owner lookups are not sold."}, "West Virginia": {"counties": 55, "with_owners": 55, "law": null}, "Wisconsin": {"counties": 72, "with_owners": 72, "law": null}, "Wyoming": {"counties": 23, "with_owners": 23, "law": null}};        // counties with owner records, and what the law keeps out of reach, by state
+const facts = document.getElementById("state-facts"), n = v => v.toLocaleString();
+// Built as elements, not markup: everything here is our own text, but nothing typed into the form can end up in it.
+const showFacts = () => {
+  const name = form.elements.plan_state.value, c = COUNTS[name], L = LIMITS[name] || {};
+  facts.hidden = !name; facts.replaceChildren();
+  const seen = document.getElementById("seen-row");
+  if (seen) { seen.hidden = !name; form.elements.seen.required = !!name && !seen.closest("[hidden]"); form.elements.seen.checked = false;
+    document.getElementById("seen-state").textContent = name || "this state"; }
+  if (!name) return;
+  const line = (text, strong) => { const p = document.createElement("span"); p.textContent = text; if (strong) p.className = "warn"; facts.append(p); };
+  const head = document.createElement("b"); head.textContent = "What " + name + " has today"; facts.append(head);
+  if (!c) { line("Nothing yet: " + name + " is not live. Do not subscribe for this state until it is.", true); }
+  else {
+    line(`${n(c[0])} planned projects.`);
+    line(c[1] ? `${n(c[1])} parcels in their path, ${n(c[2])} of them with a named owner.` : "No parcels yet: only the list of projects is available.", !c[1]);
+    line(c[3] ? `${n(c[3])} owners with a mailing address a postcard can reach.` : "No owners with a mailing address, so postcards cannot be sent here.", !c[3]);
+    if (L.counties) line(`Owner records cover ${n(L.with_owners || 0)} of ${n(L.counties)} counties.`, (L.with_owners || 0) * 2 < L.counties);
+  }
+  if (L.law) line(L.law, true);
+};
+form.elements.plan_state.addEventListener("change", showFacts);
+  const stateRow = document.getElementById("state-row");
+  const syncPlan = () => { stateRow.hidden = !form.elements.plan.value.startsWith("Single"); };
+  form.addEventListener("change", e => { if (e.target.name === "plan") syncPlan(); if (!active) describe(); }); syncPlan(); showFacts();
+  const agreed = !!(user.user_metadata || {}).agreed_terms_at, agreeRow = document.getElementById("agree-row");
+  agreeRow.hidden = agreed; form.elements.agree.required = !agreed;       // people who signed up with Google agree here
+  if (invited) { const np = document.getElementById("newpass"); np.hidden = false; np.querySelector("input").required = true;
+    document.getElementById("nudge").textContent = "Welcome. Choose a password and add your firm's details to finish setting up."; document.getElementById("nudge").hidden = false; }
+  form.hidden = false; watch(form);
+  if (!active) describe();
+  // Straight from sign-up: the plan and the terms are already on file, so go to payment without another click.
+  if (!active && q.get("pay") && agreed && describe()) pay();
+  form.addEventListener("submit", async e => {
+    e.preventDefault();
+    if (!valid(form)) return;
+    const d = Object.fromEntries(new FormData(form)), change = {data: firmData(d)};
+    if (!agreed) Object.assign(change.data, {agreed_terms_at: new Date().toISOString(), terms_version: "2026-11-24"});
+    if (d.password) change.password = d.password;
+    const {error} = await s.auth.updateUser(change);
+    say(status, error ? "Not saved: " + error.message : "Saved.", !!error);
+    if (!error) document.getElementById("nudge").hidden = true;
+  });
+}
+document.getElementById("out").addEventListener("click", async () => { await s.auth.signOut(); location.href = "./"; });
+</script>
+</body>
+</html>

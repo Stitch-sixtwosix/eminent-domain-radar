@@ -1,0 +1,1870 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EminentTracker</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7.5' fill='%231b2333'/%3E%3Cpath d='M8 7h16v4.2H12.2v13.6H24V29H8z' fill='%23fff' transform='translate(0 -2)'/%3E%3Cpath d='M12.2 13.9H32v4.2H12.2z' fill='%23e0662e'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+  :root {
+    /* "Framed sheet": the top bar and project list share one tinted frame; the work sits on a white sheet.
+       The frame takes a low-chroma green-grey, the colour of a survey map's land. Chrome carries no other colour. */
+    --paper: #f2f5f3;        /* the frame */
+    --surface: #ffffff;      /* the sheet and cards */
+    --rail: #f4f6f5;         /* raised strips inside the sheet */
+    --line: #e6e9e7;         /* sheet and card edges */
+    --line-strong: #cdd1ce;  /* control borders, one step stronger */
+    --ink: #131416;
+    --ink-2: #565a58;        /* secondary text, 7:1 on white */
+    --ink-3: #6a6e6b;        /* meta text, 5.1:1 on white, 4.7:1 on the frame */
+    --active: #e6eae7;       /* selected row: neutral */
+    --primary: #131416;
+    --link: #1b6c80;         /* the one accent: links and the active tab */
+    --hot: oklch(40% 0.13 38);           /* score 80+ : dark ink on a pale tint of the same hue */
+    --hot-bg: oklch(93% 0.045 45);
+    --hot-line: oklch(52% 0.15 40);      /* the alignment line: map, logo */
+    --warm: oklch(40% 0.085 75);         /* score 60-79 */
+    --warm-bg: oklch(94.5% 0.05 88);
+    --ok: oklch(40% 0.1 155);
+    --ok-bg: oklch(94.5% 0.045 155);
+    --danger: oklch(40% 0.14 28);
+    --danger-bg: oklch(95% 0.03 28);
+    --radius: 6px;
+    --ease-out: cubic-bezier(.23, 1, .32, 1);
+  }
+  * { box-sizing: border-box; }
+  [hidden] { display: none !important; }
+  html, body { height: 100%; margin: 0; }
+  body { font: 400 14px/1.45 "IBM Plex Sans", system-ui, sans-serif; color: var(--ink); background: var(--paper);
+         display: grid; grid-template-rows: auto 1fr; font-variant-numeric: tabular-nums;
+         -webkit-font-smoothing: antialiased; scrollbar-color: var(--line-strong) transparent; }
+  ::selection { background: var(--hot-bg); color: var(--ink); }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 3px; }
+  a { color: var(--link); text-underline-offset: 2px; text-decoration-thickness: 1px; }
+  code { font: 500 12.5px ui-monospace, SFMono-Regular, Menlo, monospace; background: var(--rail); padding: 1px 5px; border-radius: 4px; }
+
+  /* ---- top bar ---- */
+  header { display: flex; align-items: center; gap: 28px; padding: 0 16px 0 20px; height: 48px; min-width: 0; }
+  body { overflow-x: hidden; }   /* on the frame: no fill, no rule */
+  .id { font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: .95em; letter-spacing: -0.01em; }
+  .brand { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+  .logo { width: 28px; height: 28px; flex: none; }
+  .brand b { font-size: 18px; font-weight: 600; letter-spacing: -0.02em; }
+  .wordmark span { font-weight: 400; color: var(--ink-2); }   /* one word, two weights: the split stays readable */
+  .stats { display: flex; gap: 22px; flex: 1 1 0; justify-content: flex-end; flex-wrap: wrap; height: 20px; min-width: 0; overflow: hidden; color: var(--ink-2); font-size: 13px; white-space: nowrap; }
+  .stats b { color: var(--ink); font-weight: 600; margin-right: 5px; }
+  .mode { flex: 0 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 12px; color: var(--ink-2); border: 1px solid var(--line-strong); border-radius: 99px;
+          padding: 2px 10px; white-space: nowrap; }
+  .mode[data-live] { color: var(--danger); background: var(--danger-bg); border-color: transparent; font-weight: 500; }
+
+  /* ---- layout ---- */
+  main { display: grid; grid-template-columns: 356px minmax(0, 1fr); grid-template-rows: minmax(0, 46%) minmax(0, 54%); min-height: 0;
+         padding: 0 8px 8px 0; }                     /* the sheet is inset 8px from the right and bottom edges */
+  #sidebar { grid-row: 1 / 3; display: flex; flex-direction: column; min-height: 0; }   /* part of the frame */
+
+  /* ---- controls ---- */
+  select, input[type=search], button { font: inherit; color: var(--ink); background: var(--surface);
+          border: 1px solid var(--line-strong); border-radius: var(--radius); height: 32px; padding: 0 10px; min-width: 0; }
+  select { appearance: none; -webkit-appearance: none; padding-right: 28px; text-overflow: ellipsis;
+           background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23565a58' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m4.5 6.5 3.5 3.5 3.5-3.5'/%3E%3C/svg%3E");
+           background-repeat: no-repeat; background-position: right 8px center; background-size: 14px; }
+  input[type=search]::placeholder { color: var(--ink-3); }
+  button { cursor: pointer; font-weight: 500; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;
+           transition: transform 140ms var(--ease-out), background-color 140ms ease, border-color 140ms ease; }
+  button:active:not(:disabled) { transform: scale(.97); }
+  button:disabled { color: var(--ink-3); cursor: not-allowed; opacity: .7; }
+  button.primary { background: var(--primary); border-color: var(--primary); color: oklch(98.5% 0.004 258); }
+  @media (hover: hover) and (pointer: fine) {
+    button:hover:not(:disabled) { border-color: var(--ink-2); background: var(--rail); }
+    button.primary:hover:not(:disabled) { background: oklch(32% 0.03 258); border-color: oklch(32% 0.03 258); }
+    select:hover, input[type=search]:hover { border-color: var(--ink-3); }
+    .proj:hover { background: #eaeeeb; }
+    .proj.sel:hover { background: var(--active); }
+  }
+  button.sm { height: 26px; padding: 0 8px; font-size: 12.5px; }
+  button svg { width: 14px; height: 14px; flex: none; }
+  .filters { padding: 4px 12px 12px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .filters input, .filters .wide { grid-column: 1 / 3; }
+
+  /* ---- project list ---- */
+  #projects { overflow-y: auto; flex: 1; }
+  .count { padding: 4px 20px 8px; font-size: 12px; color: var(--ink-3); }
+  .proj { margin: 0 8px 2px 12px; padding: 9px 10px; border-radius: 8px; cursor: pointer; display: grid;
+          grid-template-columns: 38px 1fr; gap: 12px; align-items: start; }
+  .proj.sel { background: var(--active); }
+  .proj h3 { margin: 0 0 2px; font-size: 14px; font-weight: 500; line-height: 20px; overflow-wrap: anywhere; }
+  .proj.sel h3 { font-weight: 600; }
+  .meta { color: var(--ink-2); font-size: 12.5px; }
+  .score { font-weight: 600; font-size: 12.5px; text-align: center; border-radius: 4px; padding: 2px 0; min-width: 34px;
+           display: inline-block; flex: none; white-space: nowrap; }
+  .s-hot { background: var(--hot-bg); color: var(--hot); }
+  .s-warm { background: var(--warm-bg); color: var(--warm); }
+  .s-cool { color: var(--ink-2); box-shadow: inset 0 0 0 1px var(--line-strong); }
+
+  /* ---- map ---- */
+  /* the sheet: map above, leads below, one 1px edge, 16px corners, no shadow */
+  #map { min-height: 0; background: var(--rail); border-radius: 16px 16px 0 0; overflow: hidden;
+         box-shadow: inset 0 0 0 1px var(--line); }
+  .leaflet-container { font: inherit; }
+  /* quiet basemap so project lines lead. The filter sits on each tile image (rendered once and kept), not on the
+     pane: a filtered pane has to be redrawn whole on every frame of a zoom, which shows up as blank flashes. */
+  #map:not(.aerial) img.leaflet-tile { filter: saturate(.3) contrast(.94) brightness(1.04); }
+  .leaflet-tooltip { font: 500 12.5px "IBM Plex Sans", sans-serif; color: var(--ink); border: 1px solid var(--line-strong);
+                     border-radius: 5px; box-shadow: 0 4px 14px oklch(24% 0.03 258 / .14); }
+  .leaflet-bar a { color: var(--ink); font-family: "IBM Plex Sans", system-ui, sans-serif; font-weight: 500; }
+  .leaflet-bar { border: 1px solid var(--line-strong) !important; box-shadow: none !important; }
+  .leaflet-bottom.leaflet-right { right: 12px; bottom: 8px; }
+  .leaflet-control-attribution { border-radius: 4px; padding: 1px 7px !important; font-size: 11px; }
+
+  /* ---- detail / leads ---- */
+  #detail { border: 1px solid var(--line); border-radius: 0 0 16px 16px; overflow: hidden; background: var(--surface); display: flex;
+            flex-direction: column; min-height: 0; }
+  #detail-head { padding: 10px 16px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; border-bottom: 1px solid var(--line); }
+  #d-title { font-size: 18px; line-height: 24px; font-weight: 600; letter-spacing: -0.01em; flex: 1; min-width: 220px; margin: 0; text-wrap: balance; }
+  .check { display: inline-flex; align-items: center; gap: 6px; color: var(--ink-2); font-size: 13px; cursor: pointer; }
+  .check input { accent-color: var(--primary); width: 15px; height: 15px; margin: 0; }
+  #summary { padding: 9px 16px; color: var(--ink-2); font-size: 13px; border-bottom: 1px solid var(--line); background: var(--rail);
+             white-space: pre-line; max-width: none; }
+  #detail-scroll { overflow: auto; flex: 1; min-height: 0; }
+  #detail, #map { min-width: 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 13px; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th:first-child, td:first-child { padding-left: 16px; }
+  th { position: sticky; top: 0; z-index: 1; background: var(--surface); font-weight: 400; font-size: 12px; color: var(--ink-2);
+       white-space: nowrap; box-shadow: 0 1px 0 var(--line-strong); height: 36px; padding-top: 0; padding-bottom: 0; vertical-align: middle; }
+  td.num, th.num { text-align: right; white-space: nowrap; }
+  td .sub { color: var(--ink-3); font-size: 12px; margin-top: 1px; }
+  td.owner { font-weight: 500; min-width: 180px; }
+  td.owner .sub { font-weight: 400; }
+  .dash { color: var(--ink-3); }
+  .total { padding: 10px 16px; font-size: 12px; color: var(--ink-3); }
+  .lookup { color: var(--ink-3); font-weight: 400; }
+  td.acts { white-space: nowrap; }
+  td.acts button + button { margin-left: 4px; }
+  .done { color: var(--ok); background: var(--ok-bg); border-radius: 4px; padding: 2px 7px; font-size: 12px; font-weight: 500; display: inline-flex; align-items: center; gap: 4px; margin-right: 8px; }
+  .done svg { width: 13px; height: 13px; }
+  td select { height: 26px; font-size: 12.5px; padding: 0 24px 0 8px; background-position: right 6px center; }
+  .empty { padding: 36px 24px; color: var(--ink-2); text-align: center; max-width: 52ch; margin: 0 auto; }
+  .skel td div { height: 12px; border-radius: 4px; background: var(--line); animation: pulse 1.1s ease-in-out infinite alternate; }
+  @keyframes pulse { from { opacity: .45; } to { opacity: 1; } }
+
+  /* ---- parcel panel ---- */
+  tbody tr { cursor: pointer; }
+  tbody tr.sel { background: var(--active); }
+  tbody tr:focus-visible { outline: 2px solid var(--ink); outline-offset: -2px; }
+  #parcel { position: fixed; top: 48px; right: 0; bottom: 0; width: min(440px, 100vw); z-index: 1100; background: var(--surface);
+            border-left: 1px solid var(--line-strong); box-shadow: -12px 0 32px oklch(24% 0.03 258 / .12); display: flex;
+            flex-direction: column; transform: translateX(100%); visibility: hidden;
+            transition: transform 200ms var(--ease-out), visibility 0s 200ms; }
+  #parcel[data-open] { transform: none; visibility: visible; transition: transform 260ms cubic-bezier(.32, .72, 0, 1), visibility 0s; }
+  .p-head { padding: 14px 16px 12px; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; }
+  .p-head h2 { margin: 0; font-size: 16px; line-height: 22px; font-weight: 600; overflow-wrap: anywhere; }
+  .p-head .meta { grid-column: 1; }
+  .p-head button { grid-row: 1 / 3; grid-column: 2; align-self: start; width: 32px; padding: 0; justify-content: center; }
+  .p-body { overflow-y: auto; flex: 1; padding-bottom: 20px; }
+  .p-sec { padding: 14px 16px 2px; }
+  .p-sec h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; }
+  .p-sec p { margin: 0 0 8px; color: var(--ink-2); font-size: 13px; }
+  a.btn { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 8px; font-size: 12.5px; font-weight: 500; color: var(--surface);
+          background: var(--primary); border-radius: var(--radius); text-decoration: none; white-space: nowrap; }
+  a.btn svg { width: 14px; height: 14px; }
+  .p-sec .when { font-size: 13px; margin-bottom: 10px; display: grid; gap: 2px; }
+  .p-sec .when b { font-weight: 600; } .p-sec .when span { color: var(--ink-2); }
+  .points { width: 100%; font-size: 13px; }
+  .points th { position: static; box-shadow: none; height: auto; padding: 0 0 5px; border-bottom: 1px solid var(--line-strong); }
+  .points td { padding: 6px 0; border-bottom: 1px solid var(--line); }
+  .points td.num, .points th.num { padding-left: 14px; }
+  .points .sub { color: var(--ink-2); font-size: 12.5px; }
+  .points .total td { font-weight: 600; border-bottom: 0; font-size: 14px; }
+  .figs { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--line); border-radius: var(--radius); }
+  .figs div { padding: 9px 12px; border-left: 1px solid var(--line); }
+  .figs div:first-child { border-left: 0; }
+  .figs span { display: block; font-size: 12px; color: var(--ink-2); }
+  .figs b { font-size: 17px; font-weight: 600; letter-spacing: -0.01em; }
+  .facts { display: grid; grid-template-columns: 132px 1fr; gap: 5px 12px; margin: 0; font-size: 13px; }
+  .facts dt { color: var(--ink-2); } .facts dd { margin: 0; overflow-wrap: anywhere; }
+  .plain { list-style: none; margin: 0; padding: 0; font-size: 13px; }
+  .plain li { padding: 8px 0; border-top: 1px solid var(--line); }
+  .plain li:first-child { border-top: 0; padding-top: 0; }
+  .plain a { font-weight: 500; }
+  .plain .sub { color: var(--ink-2); font-size: 12.5px; margin-top: 1px; }
+  details.rec { margin: 14px 16px 0; font-size: 12.5px; }
+  details.rec summary { cursor: pointer; font-weight: 500; font-size: 13px; padding: 4px 0; }
+  details.rec .facts { margin-top: 6px; font-size: 12.5px; }
+  .dim { background: var(--ink); color: oklch(97% 0.004 258); border: 0; border-radius: 4px; padding: 1px 5px; font: 500 11.5px "IBM Plex Sans", sans-serif;
+         box-shadow: none; white-space: nowrap; }
+  .dim::before { display: none; }
+  .basemap { position: absolute; top: 10px; left: 54px; z-index: 500; display: flex; background: var(--surface); border: 1px solid var(--line-strong);
+             border-radius: var(--radius); padding: 2px; gap: 2px; }
+  .basemap button { height: 26px; padding: 0 10px; border: 0; font-size: 12.5px; background: transparent; }
+  .basemap button[aria-pressed=true] { background: var(--ink); color: oklch(98.5% 0.004 258); }
+  #map { position: relative; }
+
+  /* ---- stage list ---- */
+  .stages { list-style: none; margin: 0; padding: 0; display: flex; }
+  .stages li { flex: 1; position: relative; padding: 16px 8px 0 0; font-size: 12.5px; color: var(--ink-3); min-width: 0; }
+  .stages li::before { content: ""; position: absolute; top: 4px; left: 0; right: 0; height: 2px; background: var(--line-strong); }
+  .stages li::after { content: ""; position: absolute; top: 0; left: 0; width: 10px; height: 10px; border-radius: 50%;
+                      background: var(--surface); box-shadow: inset 0 0 0 2px var(--line-strong); }
+  .stages li:last-child::before { right: auto; width: 10px; }
+  .stages li[data-state=done] { color: var(--ink-2); }
+  .stages li[data-state=done]::before, .stages li[data-state=done]::after { background: var(--ink-2); box-shadow: none; }
+  .stages li[data-state=current] { color: var(--ink); font-weight: 600; }
+  .stages li[data-state=current]::after { background: var(--hot-line); box-shadow: 0 0 0 3px var(--hot-bg); }
+  .stages.col { flex-direction: column; }
+  .stages.col li { padding: 0 0 12px 22px; }
+  .stages.col li::before { top: 4px; bottom: -4px; left: 4px; right: auto; width: 2px; height: auto; }
+  .stages.col li::after { top: 3px; }
+  .stages.col li:last-child { padding-bottom: 0; }
+  .stages.col li:last-child::before { display: none; }
+  .stages.col li span { display: block; font-weight: 400; color: var(--ink-2); font-size: 12.5px; }
+  #stagebar { padding: 10px 16px 12px; border-bottom: 1px solid var(--line); }
+  #stagebar .when { font-size: 13px; margin-bottom: 10px; display: flex; flex-wrap: wrap; gap: 2px 16px; align-items: baseline; }
+  #stagebar .when b { font-weight: 600; }
+  #stagebar .when span { color: var(--ink-2); }
+
+  /* ---- view switch and outreach hub ---- */
+  .views { display: flex; flex: none; gap: 22px; align-self: stretch; }
+  .views button { flex: none; min-width: max-content; height: 100%; padding: 0 1px; border: 0; border-radius: 0; background: transparent;
+                  color: var(--ink-2); font-size: 14px; font-weight: 500; box-shadow: inset 0 -2px 0 transparent; }
+  .views button[aria-pressed=true] { color: var(--ink); font-weight: 600; box-shadow: inset 0 -2px 0 var(--ink); }
+  .views button:active:not(:disabled) { transform: none; }
+  @media (hover: hover) and (pointer: fine) { .views button:hover:not(:disabled) { background: transparent; color: var(--ink); } }
+  #hub { min-height: 0; padding: 0 8px 8px; display: flex; }
+  .hub { flex: 1; overflow-y: auto; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 24px 24px 48px; }
+  .hub > * { max-width: 1240px; margin-left: auto; margin-right: auto; }
+  .hub-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 16px; }
+  .hub-head h1 { margin: 0; font-size: 22px; line-height: 28px; font-weight: 600; letter-spacing: -0.015em; }
+  .hub .figs { grid-template-columns: repeat(var(--n, 5), 1fr); margin-bottom: 24px; border-radius: 8px; }
+  .hub .figs b { font-size: 26px; font-weight: 400; line-height: 34px; }
+  .hub > .panel, .hub-row { margin-bottom: 24px; }
+  .hub-row { display: grid; gap: 24px; }
+  .hub-row.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .hub-row.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hub-row.split { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  .hub-row .panel { display: flex; flex-direction: column; }
+  .hub-row .panel .row-acts { margin-top: auto; padding-top: 6px; }
+  .panel-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
+  .panel-head h3 { margin: 0; } .panel-head .meta { flex: 1; min-width: 200px; }
+  .tpl-view { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.15fr); gap: 24px; align-items: start; }
+  .tpl-view .mocks { display: contents; }
+  .tpl-view figure { margin: 0; min-width: 0; }
+  .tpl-view figcaption { font-size: 12px; color: var(--ink-3); margin-top: 6px; }
+  .tpl-view .letter { max-height: 260px; }
+  .panel { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 20px; min-width: 0; }
+  .panel h3 { margin: 0 0 6px; font-size: 16px; font-weight: 600; }
+  .panel p { margin: 0 0 10px; color: var(--ink-2); font-size: 13.5px; max-width: 68ch; }
+  .panel p b { color: var(--ink); font-weight: 600; }
+  .panel .row-acts { margin: 2px 0 0; }
+  .panel table { font-size: 13px; }
+  .panel th { position: static; box-shadow: none; height: auto; padding: 6px 12px 6px 0; border-bottom: 1px solid var(--line-strong); }
+  .panel td { padding: 7px 12px 7px 0; }
+  .panel th:first-child, .panel td:first-child { padding-left: 0; }
+  .panel .scroll { overflow-x: auto; margin-top: 12px; }
+  .panel h4 { margin: 14px 0 8px; font-size: 13px; font-weight: 600; }
+  .panel h4:first-of-type { margin-top: 10px; }
+  .mocks { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .mocks figure { margin: 0; min-width: 0; }
+  .mocks figcaption { font-size: 12px; color: var(--ink-3); margin-top: 5px; }
+  img.mock { display: block; width: 100%; height: auto; aspect-ratio: 3 / 2; border: 1px solid var(--line-strong); border-radius: 4px; }
+  .state { display: inline-block; font-size: 12px; font-weight: 500; border-radius: 4px; padding: 1px 7px; background: var(--rail); color: var(--ink-2); white-space: nowrap; }
+  .state.on { background: var(--ok-bg); color: var(--ok); } .state.warn { background: var(--warm-bg); color: var(--warm); }
+  .state.live { background: var(--danger-bg); color: var(--danger); }
+  @media (max-width: 1100px) { .tpl-view { grid-template-columns: 1fr 1fr; } .tpl-view > figure:last-child { grid-column: 1 / 3; } }
+  @media (max-width: 900px) { .hub-row.three, .hub-row.two, .hub-row.split, .tpl-view { grid-template-columns: 1fr; } .tpl-view > figure:last-child { grid-column: auto; }
+    .hub .figs { grid-template-columns: repeat(2, 1fr); } .hub { padding: 16px; } }
+
+  /* ---- template editor and letter ---- */
+  .tpl { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+  .tpl h3 { margin: 0 0 8px; font-size: 13px; font-weight: 600; }
+  .tpl h3:not(:first-child) { margin-top: 16px; }
+  .tpl .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .tpl label { display: grid; gap: 3px; font-size: 12px; color: var(--ink-2); }
+  .tpl label.wide { grid-column: 1 / 3; }
+  .tpl input, .tpl textarea { font: inherit; font-size: 13px; color: var(--ink); padding: 6px 9px; border: 1px solid var(--line-strong);
+          border-radius: var(--radius); background: var(--surface); width: 100%; min-width: 0; }
+  .tpl input { height: 32px; }
+  .tpl textarea { resize: vertical; line-height: 1.45; }
+  .chips { display: flex; flex-wrap: wrap; gap: 4px; margin: 6px 0 2px; }
+  .chips button { height: 24px; padding: 0 7px; font: 500 12px ui-monospace, SFMono-Regular, Menlo, monospace; border-color: var(--line); }
+  .letter { white-space: pre-wrap; font-size: 13px; line-height: 1.5; border: 1px solid var(--line); border-radius: var(--radius);
+            padding: 12px 14px; background: var(--paper); max-height: 300px; overflow-y: auto; overflow-wrap: anywhere; }
+  .letter b { font-weight: 600; }
+  .row-acts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .flag { display: inline-block; font-size: 11.5px; font-weight: 500; border-radius: 4px; padding: 0 6px; margin-left: 6px;
+          background: var(--danger-bg); color: var(--danger); white-space: nowrap; }
+  .flag.ok { background: var(--ok-bg); color: var(--ok); }
+  .usage { width: 100%; font-size: 13px; margin-bottom: 14px; }
+  .usage caption { text-align: left; font-weight: 600; font-size: 13px; padding-bottom: 6px; }
+  .usage th { position: static; box-shadow: none; height: auto; padding: 6px 12px; }
+  .usage th:first-child, .usage td:first-child { padding-left: 0; }
+  .contacts { list-style: none; margin: 8px 0 0; padding: 0; font-size: 13px; }
+  .contacts li { padding: 7px 0; border-top: 1px solid var(--line); }
+  .contacts b { font-weight: 500; }
+  dialog.wide { width: min(1040px, calc(100vw - 32px)); }
+  @media (max-width: 900px) { .tpl { grid-template-columns: 1fr; } }
+
+  /* ---- info tips ---- */
+  .info { all: unset; display: inline-grid; place-items: center; width: 16px; height: 16px; margin-left: 4px; border-radius: 50%;
+          color: var(--ink-3); cursor: help; vertical-align: -3px; }
+  .info svg { width: 14px; height: 14px; }
+  .info:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+  @media (hover: hover) and (pointer: fine) { .info:hover { color: var(--ink); } }
+  [data-tip] { cursor: help; }
+  #tip { position: fixed; z-index: 2000; max-width: 300px; padding: 9px 11px; border-radius: 6px; background: var(--ink);
+         color: oklch(97% 0.004 258); font-size: 12.5px; line-height: 1.45; white-space: pre-line; pointer-events: none;
+         box-shadow: 0 8px 24px oklch(24% 0.03 258 / .22); opacity: 0; transform: scale(.97);
+         transition: opacity 125ms ease, transform 125ms var(--ease-out); }
+  #tip[data-show] { opacity: 1; transform: scale(1); }
+  #tip[data-instant] { transition-duration: 0ms; }
+  #tip b { font-weight: 600; }
+  #tip .row { display: flex; justify-content: space-between; gap: 16px; }
+  #tip .row span:last-child { font-variant-numeric: tabular-nums; white-space: nowrap; }
+  #tip .sum { border-top: 1px solid oklch(100% 0 0 / .22); margin-top: 5px; padding-top: 5px; font-weight: 600; }
+  #breakdown { padding: 9px 16px 10px; border-bottom: 1px solid var(--line); font-size: 13px; display: flex; flex-wrap: wrap; gap: 4px 18px; align-items: baseline; }
+  #breakdown .lead { color: var(--ink-2); }
+  #breakdown .part { white-space: nowrap; }
+  #breakdown .part b { font-weight: 600; margin-left: 5px; }
+  #breakdown .eq { font-weight: 600; white-space: nowrap; }
+
+  /* ---- dialog ---- */
+  dialog { border: 1px solid var(--line-strong); border-radius: 8px; padding: 0; width: min(760px, calc(100vw - 32px));
+           color: var(--ink); background: var(--surface); box-shadow: 0 24px 60px oklch(24% 0.03 258 / .28);
+           opacity: 0; transform: scale(.97);
+           transition: opacity 150ms ease, transform 150ms var(--ease-out), overlay 150ms allow-discrete, display 150ms allow-discrete; }
+  dialog[open] { opacity: 1; transform: scale(1); transition-duration: 200ms; }
+  @starting-style { dialog[open] { opacity: 0; transform: scale(.97); } }
+  dialog::backdrop { background: oklch(24% 0.03 258 / 0); transition: background-color 150ms ease, overlay 150ms allow-discrete, display 150ms allow-discrete; }
+  dialog[open]::backdrop { background: oklch(24% 0.03 258 / .38); transition-duration: 200ms; }
+  @starting-style { dialog[open]::backdrop { background: oklch(24% 0.03 258 / 0); } }
+  .dlg-head { padding: 16px 20px 12px; border-bottom: 1px solid var(--line); }
+  .dlg-head h2 { margin: 0; font-size: 16px; font-weight: 600; }
+  .dlg-head p { margin: 3px 0 0; color: var(--ink-2); font-size: 13px; }
+  .dlg-body { padding: 16px 20px; max-height: 64vh; overflow-y: auto; }
+  .dlg-foot { padding: 12px 20px; border-top: 1px solid var(--line); background: var(--rail); display: flex; gap: 8px;
+              align-items: center; border-radius: 0 0 8px 8px; }
+  .dlg-foot .note { flex: 1; color: var(--ink-2); font-size: 12.5px; }
+  .to { display: grid; grid-template-columns: 96px 1fr; gap: 4px 12px; font-size: 13px; margin: 0 0 14px; }
+  .to dt { color: var(--ink-3); } .to dd { margin: 0; }
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .card-frame { aspect-ratio: 6.25 / 4.25; border: 1px solid var(--line-strong); border-radius: 4px; overflow: hidden;
+                position: relative; background: #fff; box-shadow: 0 2px 8px oklch(24% 0.03 258 / .1); }
+  .card-frame iframe { position: absolute; top: 0; left: 0; width: 600px; height: 408px; border: 0; transform-origin: 0 0; pointer-events: none; }
+  .cap { font-size: 12px; color: var(--ink-3); margin-top: 5px; }
+  .alert { border: 1px solid var(--line-strong); background: var(--rail); border-radius: var(--radius); padding: 9px 12px;
+           font-size: 13px; margin-bottom: 14px; }
+  .alert.bad { border-color: transparent; background: var(--danger-bg); color: var(--danger); }
+  .people { list-style: none; margin: 0; padding: 0; border: 1px solid var(--line); border-radius: var(--radius); }
+  .people li { display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  .people li:last-child { border-bottom: 0; }
+  .pick { width: 34px; padding-right: 0 !important; } .pick input { width: 15px; height: 15px; margin: 0; vertical-align: middle; accent-color: var(--ink); cursor: pointer; }
+  .lists td { vertical-align: middle; } .lists .row-acts { margin: 0; justify-content: flex-end; flex-wrap: nowrap; }
+  .lists b { font-weight: 600; } .steps { margin: 0; padding-left: 18px; color: var(--ink-2); } .steps li { margin: 2px 0; }
+  .chan { border: 1px solid var(--line); border-radius: var(--radius); padding: 10px 12px; margin-bottom: 10px; }
+  .chan > label { display: flex; align-items: center; gap: 8px; font-weight: 600; cursor: pointer; } .chan p { margin: 4px 0 0 23px; color: var(--ink-2); font-size: 13px; }
+  .chan.off > label { color: var(--ink-3); cursor: default; }
+  .camp.one { grid-template-columns: 1fr; } .camp select { font: inherit; color: var(--ink); height: 32px; padding: 0 8px; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--surface); }
+  .camp { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  .camp label { display: grid; gap: 4px; font-size: 12.5px; color: var(--ink-2); }
+  .camp input { font: inherit; color: var(--ink); height: 32px; padding: 0 10px; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--surface); }
+  .people .who { flex: 1; min-width: 0; } .people .who b { font-weight: 500; display: block; }
+
+  @media (max-width: 900px) {
+    header { height: auto; min-height: 48px; padding: 8px 16px; flex-wrap: wrap; gap: 6px 18px; }
+    .views { align-self: auto; height: 36px; }
+    main { padding: 0 8px 8px; }
+    #map { border-radius: 16px 16px 0 0; }
+    .stats { margin-left: 0; flex-wrap: wrap; gap: 4px 16px; }
+    main { grid-template-columns: 1fr; grid-template-rows: 42vh 40vh auto; overflow-y: auto; }
+    #sidebar { grid-row: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+    #detail { min-height: 60vh; }
+    .cards { grid-template-columns: 1fr; }
+    #parcel { top: 0; }
+  }
+  .demo .mode, .demo .done { display: none; }
+  #f-state { height: 32px; max-width: 170px; }
+  .timing { display: block; margin-bottom: 8px; padding: 8px 10px; border-left: 3px solid var(--line-strong); background: var(--surface-2, #f3f6f4); font-size: 13px; line-height: 1.45; }
+  .timing b { display: block; font-weight: 600; }
+  .timing.t-now, .timing.t-closing { border-left-color: #1f6b45; } .timing.t-soon { border-left-color: #17607a; }
+  .timing.t-early, .timing.t-late { border-left-color: #b9471a; } .timing.t-unknown { border-left-color: #8a949d; }
+  .tchip { font-weight: 600; } .tchip.t-now, .tchip.t-closing { color: #1f6b45; } .tchip.t-soon { color: #17607a; } .tchip.t-early, .tchip.t-late { color: #b9471a; } .tchip.t-unknown { color: #6b7780; }
+  .acct { flex: none; display: inline-flex; align-items: center; min-height: 32px; padding: 0 12px; border: 1px solid var(--line-strong); border-radius: 6px;
+          font-size: 13px; font-weight: 500; color: var(--ink); text-decoration: none; white-space: nowrap; }
+  .acct:hover { background: var(--line); }
+  .acct:focus-visible { outline: 2px solid var(--accent, #17607a); outline-offset: 2px; }
+  .demo .acct { display: none; }
+  #panes { display: none; }
+  @media (max-width: 720px) {
+    /* A phone shows one thing at a time: the project list, the map or the lead table, switched from a bar at the foot. */
+    header { padding: 8px 12px 4px; gap: 4px 14px; }
+    .stats, .mode { display: none; }
+    .views { margin-left: auto; }
+    main { display: flex; flex-direction: column; padding: 0 8px calc(60px + env(safe-area-inset-bottom)); overflow: hidden; }
+    main > * { flex: 1 1 auto; min-height: 0; }
+    body[data-pane="projects"] :is(#map, #detail), body[data-pane="map"] :is(#sidebar, #detail), body[data-pane="leads"] :is(#sidebar, #map) { display: none; }
+    #sidebar { border-bottom: 0; }
+    .filters { padding: 4px 4px 12px; }
+    .proj { padding-left: 8px; padding-right: 8px; }
+    #map, #detail { border-radius: 16px; }
+    #detail { min-height: 0; }
+    #detail-head { padding: 10px 12px; gap: 8px; }
+    #detail-head h1 { flex: 1 1 100%; font-size: 17px; order: -1; }
+    #btn-all { order: -2; }
+    #detail-head select { flex: 1 1 150px; min-width: 0; }
+    #detail-head button, #detail-head select { min-height: 40px; }
+    #summary, #breakdown, #stagebar { padding-left: 12px; padding-right: 12px; }
+    #panes { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 900; padding: 6px 8px calc(6px + env(safe-area-inset-bottom)); gap: 4px; background: var(--paper); }
+    body[data-view="hub"] #panes { display: none; }
+    #panes button { flex: 1; min-height: 44px; justify-content: center; text-align: center; border: 0; border-radius: 10px; background: transparent; color: var(--ink-2); font-weight: 500; font-size: 14px; }
+    #panes button[aria-pressed="true"] { background: var(--surface); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+    /* each lead is a card, not a row of a table that runs off the screen */
+    #leads-wrap thead { display: none; }
+    #leads-wrap table, #leads-wrap tbody { display: block; }
+    #leads-wrap tr { display: grid; grid-template-columns: auto 44px minmax(0, 1fr) auto; gap: 2px 10px; padding: 12px; border-bottom: 1px solid var(--line); }
+    #leads-wrap td { display: block; padding: 0; border: 0; grid-column: 3 / -1; font-size: 13px; }
+    #leads-wrap td.pick { grid-column: 1; grid-row: 1; width: auto; padding-top: 4px; }
+    #leads-wrap td.pick input { width: 20px; height: 20px; }
+    #leads-wrap td.c-score { grid-column: 2; grid-row: 1; }
+    #leads-wrap td.owner { grid-column: 3; grid-row: 1; font-size: 14px; }
+    #leads-wrap td.c-val { grid-column: 4; grid-row: 1; text-align: right; }
+    #leads-wrap td.c-prop, #leads-wrap td.c-match, #leads-wrap td.c-proj { color: var(--ink-2); }
+    #leads-wrap td.c-prop .sub, #leads-wrap td.c-match .sub { display: inline; margin-left: 6px; }
+    #leads-wrap td.acts { margin-top: 8px; }
+    #leads-wrap td.acts .sm { min-height: 36px; padding: 0 12px; }
+    #leads-wrap td.c-status { display: none; }
+    #leads-wrap tr.skel { display: flex; } #leads-wrap tr.skel td { flex: 1; }
+    .total { padding: 12px; }
+    #leads-wrap td.c-prop > .dash { display: none; } #leads-wrap td.c-prop > .dash + .sub { margin-left: 0; }
+    /* the timeline keeps its six dots; only the current stage is named, the rest are in the panel */
+    #stagebar .stages li { font-size: 0; padding-right: 0; } #stagebar .stages li[data-state=current] { font-size: 12.5px; white-space: nowrap; overflow: visible; }
+    #parcel { top: 0; left: 0; width: 100vw; }
+    #hub { padding: 0 8px 8px; min-width: 0; max-width: 100vw; }
+    .hub, .hub > *, .hub .panel, .hub-row { min-width: 0; max-width: 100%; }
+    .hub .panel { overflow: hidden; }
+    .hub-row, .hub-row.three, .hub-row.two, .hub-row.split, .tpl-view { grid-template-columns: minmax(0, 1fr); }
+    .panel-head { gap: 6px 14px; }
+    .hub { padding: 16px 12px 40px; border-radius: 16px; }
+    .hub .figs { grid-template-columns: 1fr 1fr; }
+    .hub .scroll { overflow-x: auto; }
+    .lists thead { display: none; } .lists table, .lists tbody { display: block; }
+    .lists tr { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px 8px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+    .lists td { display: block; padding: 0; border: 0; text-align: left; }
+    .lists td:first-child, .lists td:last-child { grid-column: 1 / -1; }
+    .lists td[data-l]::before { content: attr(data-l); display: block; font-size: 12px; color: var(--ink-2); }
+    .lists td[data-l] { font-size: 17px; font-variant-numeric: tabular-nums; }
+    .lists .row-acts { justify-content: flex-start; flex-wrap: wrap; } .lists .row-acts button { min-height: 40px; }
+    dialog { width: calc(100vw - 16px); max-width: none; margin: auto 8px 8px; max-height: 88vh; }
+    .camp { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {   /* keep the fades that explain state, drop the travel */
+    dialog, dialog[open], #tip { transform: none; }
+    #parcel, #parcel[data-open] { transition: none; }
+    button:active:not(:disabled) { transform: none; }
+    .skel td div { animation: none; }
+  }
+</style>
+<meta name="robots" content="noindex">
+<style>html.gate body { visibility: hidden; }</style>
+<script>document.documentElement.classList.add("gate"); window.ET_TOKEN = new Promise(r => window.__etToken = r);</script>
+<script src="../auth-config.js"></script>
+<script src="../track.js" defer></script>
+<script type="module">import {supa} from "../auth.js";
+const s = await supa(), got = await s.auth.getSession().catch(() => ({data: {}}));
+const session = got.data && got.data.session;
+const meta = (session && session.user.app_metadata) || {};
+if (!session) location.replace("../login.html?next=app");
+else if (meta.access !== "active") location.replace("../account.html?subscribe=1");
+else { document.documentElement.classList.remove("gate");
+  // The sign-in is renewed in the background, so a page left open still has a valid one when it orders something.
+  window.ET_FRESH = async () => { const g = await s.auth.getSession(); return g.data.session ? g.data.session.access_token : session.access_token; };
+  window.__etToken({token: session.access_token, plan: meta.plan, state: meta.state, admin: meta.role === "admin"}); }</script>
+</head>
+<body>
+<header>
+  <div class="brand"><svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7.5" fill="#1b2333"/><path d="M8 7h16v4.2H12.2v13.6H24V29H8z" fill="#fff" transform="translate(0 -2)"/><path d="M12.2 13.9H32v4.2H12.2z" fill="#e0662e"/></svg><b class="wordmark" aria-label="EminentTracker">Eminent<span>Tracker</span></b></div>
+  <select id="f-state" hidden aria-label="State"></select>
+  <nav class="views" id="views" hidden aria-label="Views">
+    <button type="button" data-view="leads" aria-pressed="true">Leads</button><button type="button" data-view="hub" aria-pressed="false">Outreach</button>
+  </nav>
+  <div class="stats">
+    <span><b id="st-projects">–</b>projects scoring 60+</span>
+    <span><b id="st-leads">–</b>parcel leads</span>
+    <span><b id="st-owners">–</b>with owner of record</span>
+    <span id="st-updated"></span>
+  </div>
+  <button id="btn-usage" hidden></button><button id="btn-template" hidden></button>
+  <span class="mode" id="mode" hidden></span>
+  <a class="acct" id="adminlink" href="../admin.html" hidden>Admin</a>
+  <a class="acct" id="acct" href="../account.html" hidden>My account</a>
+</header>
+<section id="hub" hidden aria-label="Outreach"></section>
+<main>
+  <aside id="sidebar">
+    <div class="filters">
+      <input id="f-q" type="search" placeholder="Search projects" aria-label="Search projects">
+      <select id="f-county" aria-label="County"><option value="">All counties</option></select>
+      <select id="f-type" aria-label="Project type"><option value="">All types</option></select>
+      <select id="f-source" aria-label="Source">
+        <option value="">All sources</option><option value="penndot">PennDOT</option>
+        <option value="federal_register">Federal Register</option><option value="legistar">Council legislation</option>
+      </select>
+      <select id="f-stage" aria-label="Project stage"><option value="">All stages</option></select>
+      <select id="f-score" aria-label="Minimum score" class="wide">
+        <option value="80">Score 80+</option><option value="60" selected>Score 60+</option>
+        <option value="40">Score 40+</option><option value="0">Any score</option>
+      </select>
+    </div>
+    <div id="projects" aria-live="polite"></div>
+  </aside>
+  <div id="map" aria-label="Map of planned projects">
+    <div class="basemap" role="group" aria-label="Basemap">
+      <button type="button" data-base="map" aria-pressed="true">Map</button><button type="button" data-base="aerial" aria-pressed="false">Aerial</button>
+    </div>
+  </div>
+  <section id="detail">
+    <div id="detail-head">
+      <button id="btn-all" hidden><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9.500 3.500 5 8l4.500 4.500"/></svg>All projects</button>
+      <h1 id="d-title">Top leads across all projects</h1>
+      <select id="f-outreach" aria-label="Outreach filter">
+        <option value="">All leads</option><option value="email">Email leads (company owners)</option>
+        <option value="postcard">Postcard-ready</option><option value="traced">Phone or email found</option><option value="none">Not contacted yet</option>
+        <option value="contacted">Already contacted</option>
+      </select>
+      <label class="check"><input type="checkbox" id="f-owner"> Owner known</label>
+      <button id="btn-list" hidden>Add to list</button>
+      <button id="btn-unlist" hidden>Remove from list</button>
+      <button id="btn-run-list" class="primary" hidden>Run campaign</button>
+      <button id="btn-campaign" hidden>Postcard campaign</button>
+      <button id="btn-csv"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v8m0 0L5 7m3 3 3-3M3 13h10"/></svg>Export CSV</button>
+    </div>
+    <div id="detail-scroll">
+      <div id="summary" hidden></div>
+      <div id="breakdown" hidden></div>
+      <div id="stagebar" hidden></div>
+      <div id="leads-wrap"></div>
+    </div>
+  </section>
+</main>
+
+<nav id="panes" aria-label="Leads view">
+  <button type="button" data-pane="projects" aria-pressed="false">Projects</button><button type="button" data-pane="map" aria-pressed="false">Map</button><button type="button" data-pane="leads" aria-pressed="true">Leads</button>
+</nav>
+<aside id="parcel" aria-label="Parcel details"></aside>
+<dialog id="dlg" aria-labelledby="dlg-title"></dialog>
+<div id="tip" role="tooltip"></div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>window.EDRADAR_STATIC = true; window.EDRADAR_PRIVATE = true; window.EDRADAR_STATES = ["alaska", "alabama", "arkansas", "arizona", "california", "colorado", "connecticut", "delaware", "florida", "georgia", "hawaii", "iowa", "idaho", "illinois", "indiana", "kansas", "kentucky", "louisiana", "massachusetts", "maryland", "maine", "michigan", "minnesota", "missouri", "mississippi", "montana", "north-carolina", "north-dakota", "nebraska", "new-hampshire", "new-jersey", "new-mexico", "nevada", "new-york", "ohio", "oklahoma", "oregon", "pennsylvania", "rhode-island", "south-carolina", "south-dakota", "tennessee", "texas", "utah", "virginia", "vermont", "washington", "wisconsin", "west-virginia", "wyoming"]; window.EDRADAR_BUILD = "20261127193617";</script>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money = n => n == null ? "" : n >= 1e9 ? "$" + (n / 1e9).toFixed(2) + "B" : n >= 1e6 ? "$" + (n / 1e6).toFixed(1) + "M" : "$" + Math.round(n).toLocaleString();
+const dollars = n => n == null ? '<span class="dash">–</span>' : "$" + Math.round(n).toLocaleString();
+const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const pname = n => (n || "").replace(/\s*\(MPMS \d+\)/, "").replace(/\s*\([^)]*$/, "").trim() || "Project";
+const mpms = n => ((n || "").match(/\(MPMS (\d+)\)/) || [])[1];
+const scoreClass = s => s >= 80 ? "s-hot" : s >= 60 ? "s-warm" : "s-cool";
+const scoreColor = s => s >= 80 ? "oklch(50% 0.16 38)" : s >= 60 ? "oklch(66% 0.13 70)" : "oklch(58% 0.02 258)";
+const REASON = {named_in_document: "Named in document", abuts_alignment: "Abuts alignment", within_buffer: "Nearby"};
+const safeUrl = u => /^https?:\/\//i.test(u || "") ? u : "#";
+const day = s => s ? new Date(/[zZ]|[+-]\d\d:?\d\d$/.test(s) ? s : s.replace(" ", "T") + "Z").toLocaleDateString(undefined, {month: "short", day: "numeric"}) : "";
+const signed = n => (n > 0 ? "+" : n < 0 ? "−" : "") + Math.abs(n).toLocaleString(undefined, {maximumFractionDigits: 1});
+const TIPS = {
+  score: "Lead score out of 100, in whole points from four parts. Need for private land: up to 60. Timing: up to 15, highest when right-of-way acquisition is under way and owners need counsel, lowest when it is too early or too late. Size of the project: up to 10. Where the parcel sits: 15 on the alignment or named in the document, 5 if only nearby. Hover any score, or open the lead, to see its points.",
+  owner: "Owner of record and mailing address from the county's public parcel file. Some county files are dated snapshots, so confirm ownership with the county before outreach.",
+  property: "Street address of the parcel where the county publishes one, with the county's parcel ID and county beneath.",
+  value: "The value the county publishes for the parcel. In most counties this is an assessed value, which is usually lower than market value.",
+  match: "Why this parcel is on the list: it abuts the mapped project alignment (within 20 m), is nearby (within 75 m), or is named in the source document. This is a proximity screen, not a right-of-way plan.",
+  project: "The planned project this parcel sits along. Select it to see the project on the map with all of its parcels.",
+  outreach: "Send a postcard through Lob or add a contact to your Apollo email sequence. Each send needs a confirmation, and is recorded so an owner is not contacted twice.",
+  status: "Your own tracking of the lead: new, reviewing, contacted, retained or rejected. It changes to contacted when outreach is sent.",
+};
+const infoBtn = key => `<button class="info" type="button" data-tip-key="${key}" aria-label="About this column"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="8" cy="8" r="6.25"/><path d="M8 7.25v3.5"/><circle cx="8" cy="5" r=".4" fill="currentColor"/></svg></button>`;
+const th = (label, key, cls) => `<th${cls ? ` class="${cls}"` : ""}>${label}${infoBtn(key)}</th>`;
+function partsHtml(title, parts, total) {
+  return `<b>${esc(title)}</b>` + parts.map(x => `<div class="row"><span>${esc(x.label)}${x.detail ? `<br><span style="opacity:.75">${esc(x.detail)}</span>` : ""}</span><span>${x.points} / ${x.max}</span></div>`).join("") +
+    `<div class="row sum"><span>Score</span><span>${total} / 100</span></div>`;
+}
+// Every lead score is the project's first three parts plus this parcel's own position points.
+const POSITION = {
+  named_in_document: [15, "Named in the source document"],
+  abuts_alignment: [15, "Abuts the mapped alignment (within 20 m)"],
+  within_buffer: [5, "Nearby but not abutting (20 to 75 m)"],
+};
+function leadPoints(r) {
+  const p = projects.find(x => x.id === r.project_id) || (SNAP && SNAP.projects.find(x => x.id === r.project_id)) || {};
+  const [pts, detail] = POSITION[r.match_reason] || [5, r.match_reason];
+  const parts = (p.score_parts || []).map(x => x.key === "position" ? {...x, points: pts, detail} : x);
+  return {parts, total: r.score, adds: parts.reduce((a, x) => a + x.points, 0)};
+}
+function pointsTable(r) {
+  const t = leadPoints(r);
+  return `<table class="points"><thead><tr><th>Part</th><th class="num">Points</th><th class="num">Out of</th></tr></thead><tbody>${t.parts.map(x =>
+    `<tr><td>${esc(x.label)}<div class="sub">${esc(x.detail || "")}</div></td><td class="num">${x.points}</td><td class="num">${x.max}</td></tr>`).join("")}
+    <tr class="total"><td>Lead score</td><td class="num">${t.total}</td><td class="num">100</td></tr></tbody></table>`;
+}
+function projectTip(p) { return partsHtml("Project score (for a parcel on the alignment)", p.score_parts || [], p.score); }
+function leadTip(r) {
+  const t = leadPoints(r);
+  return partsHtml("How this lead scored " + t.total, t.parts, t.total);
+}
+
+function lettingText(t) {
+  if (!t || !t.let_date) return "";
+  const d = new Date(t.let_date + "T12:00:00"), m = t.months_to_letting;
+  const when = d.toLocaleDateString(undefined, {month: "short", day: "numeric", year: "numeric"});
+  if (t.let_actual && m <= 0) return `Construction contract bid ${when}`;
+  const away = m <= 0 ? "due now" : m < 12 ? `in about ${m} month${m === 1 ? "" : "s"}` : `in about ${Math.floor(m / 12)} yr${m % 12 ? " " + (m % 12) + " mo" : ""}`;
+  return `Construction contract letting ${when}, ${away}`;
+}
+// When to reach an owner, from the project's stage and bid date. The server sends its verdict with each project.
+const WIN_OF = {row_acquisition: "now", condemnation_filed: "closing", design: "soon", environmental_review: "early", planning: "early", construction: "late", unknown: "unknown"};
+const WIN_LABEL = {now: "Right time", closing: "Act now", soon: "Approaching", early: "Too early", late: "Too late", unknown: "Timing not known"};
+const winOf = p => (p && p.timeline && p.timeline.window && p.timeline.window.key) || WIN_OF[(p && p.stage) || "unknown"] || "unknown";
+// the stage filter also takes a timing group: "@mail" is every project whose owners can be written to now
+const stageOk = (p, v) => !v || (v[0] === "@" ? (v === "@mail" ? ["now", "closing", "soon"].includes(winOf(p)) : winOf(p) === v.slice(1)) : (p || {}).stage === v);
+function stageHead(t) {
+  if (!t) return "";
+  const pos = t.position ? `<b>Stage ${t.position} of ${t.of}: ${esc(t.steps[t.position - 1].label)}</b>` : "<b>Stage not published</b>";
+  const let_ = lettingText(t);
+  const w = t.window, wHtml = w ? `<span class="timing t-${esc(w.key)}"><b>${esc(w.label)} to contact owners</b> ${esc(w.why)}</span>` : "";
+  return `<div class="when">${wHtml}${pos}${let_ ? `<span>${esc(let_)}</span>` : t.position ? "<span>No construction date published yet</span>" : ""}${t.program ? `<span>PennDOT program: ${esc(t.program)}${t.status ? ", " + esc(t.status.toLowerCase()) : ""}</span>` : ""}${t.basis ? `<span class="basis">${esc(t.basis)}</span>` : ""}</div>`;
+}
+const stageList = (t, col) => !t ? "" : `<ol class="stages${col ? " col" : ""}">${t.steps.map(x =>
+  `<li data-state="${x.state}"${x.state === "current" ? ' aria-current="step"' : ""}${col ? "" : ` data-tip-text="${esc(x.about)}"`}>${esc(x.label)}${col && x.state === "current" ? `<span>${esc(x.about)}</span>` : ""}</li>`).join("")}</ol>`;
+
+const ICON = {
+  card: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="1.75" y="3.5" width="12.5" height="9" rx="1.25"/><path d="M8 6v4M10 6.5h2.25M10 8.5h2.25" stroke-linecap="round"/></svg>',
+  mail: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" stroke-linecap="round"><rect x="1.75" y="3.5" width="12.5" height="9" rx="1.25"/><path d="m2.5 4.75 5.5 4 5.5-4"/></svg>',
+  check: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3.5 8.5 3 3 6-7"/></svg>',
+};
+
+const DEMO = new URLSearchParams(location.search).has("demo");
+const DEMO_OWNERS = [["SAMPLE FAMILY TRUST", "100 EXAMPLE RD, ANYTOWN, ST 00000"], ["DOE JOHN A & JANE B", "214 SAMPLE LN, ANYTOWN, ST 00000"],
+  ["RIVERBEND HOLDINGS LLC", "7 PLACEHOLDER AVE, ANYTOWN, ST 00000"], ["ROE RICHARD", "31 EXAMPLE CT, ANYTOWN, ST 00000"],
+  ["NORTHFIELD FARMS LP", "880 SAMPLE PIKE, ANYTOWN, ST 00000"], ["PUBLIC MARY & DAVID", "52 PLACEHOLDER ST, ANYTOWN, ST 00000"]];
+if (DEMO) document.documentElement.classList.add("demo");
+let leadTicket = 0, TOTAL_LEADS = 0, STATUSES = [], OUT = null, projects = [], selected = null, layers = {}, leadRows = [], listView = null;
+const picked = new Set();     // leads ticked in the table, to be saved to a client list
+let HOME = [[39.72, -80.52], [42.27, -74.69]];      // replaced by the extent of the open state's projects
+const map = L.map("map", {preferCanvas: true, zoomSnap: 0, zoomDelta: 0.5, scrollWheelZoom: false, minZoom: 5}).fitBounds(HOME);
+// Smooth zoom for trackpads and mouse wheels. Each scroll or pinch event moves a zoom *goal*; an animation loop
+// glides the map toward it every frame, keeping the point under the pointer fixed. It moves the view with Leaflet's
+// own _move, which rescales the tiles already on screen. (A plain setZoom here would reset the view on every event
+// and reload every tile, which is what makes zooming look like it jumps.)
+(() => {
+  let goal = null, anchorPoint = null, anchorLatLng = null, frame = 0, moving = false;
+  const step = () => {
+    frame = 0;
+    const z = map.getZoom(), next = Math.abs(goal - z) < 0.004 ? goal : z + (goal - z) * 0.28;
+    const offset = anchorPoint.subtract(map.getSize().divideBy(2));
+    const center = map.unproject(map.project(anchorLatLng, next).subtract(offset), next);
+    if (!moving) { map._moveStart(true, false); moving = true; }
+    // {pinch: true} is how Leaflet's own touch zoom moves the view: tiles on screen are only rescaled, and nothing
+    // is reloaded or discarded until the gesture ends. Without it every frame cancelled the tiles still loading.
+    map._move(center, next, {pinch: true, round: false});
+    if (next === goal) { map._moveEnd(true); moving = false; goal = null; }
+    else frame = requestAnimationFrame(step);
+  };
+  $("map").addEventListener("wheel", e => {
+    if (e.target.closest(".basemap, .leaflet-control")) return;
+    e.preventDefault();
+    const dy = e.deltaMode === 1 ? e.deltaY * 18 : e.deltaMode === 2 ? e.deltaY * 300 : e.deltaY;
+    const change = Math.max(-0.6, Math.min(0.6, -dy * (e.ctrlKey ? 0.014 : 0.005)));   // ctrlKey marks a pinch
+    if (goal === null) map.stop();                                                    // end any fly or pan in progress
+    goal = Math.max(map.getMinZoom(), Math.min(map.getMaxZoom(), (goal ?? map.getZoom()) + change));
+    const pt = map.mouseEventToContainerPoint(e);
+    if (!anchorPoint || !moving || pt.distanceTo(anchorPoint) > 4) { anchorPoint = pt; anchorLatLng = map.containerPointToLatLng(pt); }
+    if (!frame) frame = requestAnimationFrame(step);
+  }, {passive: false});
+})();
+// Each basemap is two layers. The sharp one loads tiles for the exact zoom, but only once a zoom gesture ends
+// (updateWhenZooming: false), so a fast zoom never starts and cancels tiles for every level it passes through.
+// Under it sits a coarse copy capped at zoom 7, about a dozen tiles for the whole state, which is always loaded.
+// While zooming, and wherever sharp tiles have not arrived yet, the coarse map shows through instead of a blank.
+const SOURCES = {
+  map: ["https://tile.openstreetmap.org/{z}/{x}/{y}.png", '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'],
+  aerial: ["https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}", "Imagery &copy; Esri, Maxar, Earthstar Geographics"],
+};
+const BASE = {}, UNDER = {};
+for (const [name, [url, attribution]] of Object.entries(SOURCES)) {
+  UNDER[name] = L.tileLayer(url, {maxZoom: 19, maxNativeZoom: 7, keepBuffer: 8, zIndex: 1});
+  BASE[name] = L.tileLayer(url, {maxZoom: 19, keepBuffer: 4, zIndex: 2, updateWhenZooming: false, attribution});
+}
+let baseName = "map", baseChosen = false;
+function setBase(name) {
+  if (name === baseName) return;
+  map.removeLayer(BASE[baseName]); map.removeLayer(UNDER[baseName]);
+  UNDER[name].addTo(map); BASE[name].addTo(map); baseName = name;
+  $("map").classList.toggle("aerial", name === "aerial");
+  document.querySelectorAll(".basemap button").forEach(b => b.setAttribute("aria-pressed", b.dataset.base === name));
+}
+UNDER.map.addTo(map); BASE.map.addTo(map);
+const parcelLayer = L.featureGroup().addTo(map);
+requestAnimationFrame(() => { map.invalidateSize(); if (!selected) map.fitBounds(HOME); });  // never undo a selection made first
+const group = L.featureGroup().addTo(map);
+
+// Two modes: live (FastAPI backend) and static (a published snapshot: data.json, read-only).
+const STATIC = !!window.EDRADAR_STATIC;
+let SNAP = null;
+// A signed-in subscriber on the published site can order postcards and owner lookups. Those requests go to our
+// server functions with the subscriber's own sign-in; everything else is read from the data file.
+const SUB = STATIC && !!window.ET_TOKEN;
+let LIVE = null;          // what the server says this firm may do, its saved wording and the lookups it has bought
+async function fn(body) {
+  const auth = window.ET_AUTH, token = window.ET_FRESH ? await window.ET_FRESH() : (await window.ET_TOKEN).token;
+  const r = await fetch(auth.url + "/functions/v1/outreach", {method: "POST", body: JSON.stringify(body),
+    headers: {"Content-Type": "application/json", apikey: auth.key, Authorization: "Bearer " + token}});
+  const out = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(out.error || "The request could not be completed (" + r.status + ")");
+  return out;
+}
+async function liveStatus(force) {
+  if (LIVE && !force) return LIVE;
+  try { LIVE = await fn({action: "status"}); }
+  catch (e) {        // the server is not answering: the app stays usable, with ordering switched off
+    const why = "Ordering is not available right now.";
+    LIVE = {off: true, lookups: {}, firm: {}, template: {}, firm_ready: false, postcard: {enabled: false, mode: "off", why, price: 1.45},
+            skiptrace: {enabled: false, why, price: 0.75, restricted: []}, usage: {postcards: 0, lookups: 0, billed: 0, pending: 0}, credits: {balance: 0, packs: []}};
+  }
+  return LIVE;
+}
+const pkey = l => [SNAP.state, l.parcel_county, l.apn || l.address].map(x => String(x || "").trim().toUpperCase().replace(/\s+/g, " ")).join("|");
+// An owner this firm paid to look up stands in where the county publishes none.
+function withBought(l) {
+  const t = SUB && LIVE && !l.owner && LIVE.lookups[pkey(l)];
+  return t && t.matched && t.name ? {...l, owner: t.name.toUpperCase(), mailing_address: t.mailing_address || l.mailing_address, owner_kind: "individual", mailable: !!t.mailing_address, looked_up: true} : l;
+}
+function fullLead(id) {
+  const l = SNAP.leads.find(x => x.id === id), p = SNAP.projects.find(x => x.id === l.project_id) || {};
+  return {...withBought(l), project: p.name, stage: p.stage, window: winOf(p), agency: p.agency, state: SNAP.state};
+}
+// The firm's own wording and return address. The operator's details in the data file are never used for a subscriber.
+const liveTpl = () => ({...SNAP.template, ...Object.fromEntries(Object.entries(LIVE.template || {}).filter(([, v]) => v)),
+  firm: Object.fromEntries(Object.keys(SNAP.template.firm).map(k => [k, (LIVE.firm || {})[k] || ""]))});
+async function subApi(route, opts) {
+  const method = (opts && opts.method) || "GET", live = await liveStatus();
+  const state = () => ({firm_ready: live.firm_ready, postcard: LIVE.postcard, skiptrace: LIVE.skiptrace, email: {enabled: false, why: "Email outreach runs from your own mail program."}});
+  if (route === "/api/outreach/status") return state();
+  if (route === "/api/outreach/template") {
+    if (method === "PUT") { const t = JSON.parse(opts.body); LIVE = await fn({action: "save_template", firm: t.firm, template: t}); }
+    return liveTpl();
+  }
+  if (route === "/api/outreach/hub") return {...SNAP.hub, status: state(), template: liveTpl(), live: LIVE};
+  if (route === "/api/usage") return fn({action: "usage"});
+  if (route === "/api/credits/checkout") return fn({action: "credits_checkout", pack: JSON.parse(opts.body).pack});
+  const m = route.match(/^\/api\/leads\/(\d+)\/(postcard|skip-trace)$/);
+  if (!m) return undefined;
+  const lead = fullLead(+m[1]);
+  if (m[2] === "postcard") {
+    if (method !== "POST") return {...await fn({action: "postcard_preview", lead}), project: lead.project};
+    const res = await fn({action: "postcard_send", lead});
+    await liveStatus(true);
+    return res;
+  }
+  const raw = SNAP.leads.find(x => x.id === +m[1]);
+  const res = await fn({action: "skiptrace_buy", lead_id: raw.id, parcel: {state: SNAP.state, county: raw.parcel_county, apn: raw.apn, address: raw.address, owner: raw.owner, mailing_address: raw.mailing_address}});
+  LIVE.lookups[pkey(raw)] = {...res, fetched_at: res.fetched_at || new Date().toISOString()};
+  return res;
+}
+async function api(path, opts) {
+  if (STATIC) return staticApi(path, opts);
+  const r = await fetch(path, opts);
+  if (!r.ok) {
+    let detail = "";
+    try { detail = (await r.json()).detail; } catch (e) {}
+    throw new Error(detail || path + " returned " + r.status);
+  }
+  return r.json();
+}
+function staticOutreach(l, f) {   // a snapshot has no outreach history, so "contacted" is always empty
+  if (f === "email") return l.owner_kind === "company" && (l.email_contacts ?? 1) > 0;
+  if (f === "postcard") return !!l.mailable && (l.owner_kind === "individual" || l.owner_kind === "company");
+  return f !== "contacted" && f !== "traced";
+}
+function ringMetrics(rings) {
+  const pts = rings.flat(), lat0 = pts.reduce((a, p) => a + p[1], 0) / pts.length * Math.PI / 180;
+  const kx = 111320 * Math.cos(lat0), ky = 110540, sides = [];
+  let area = 0, per = 0;
+  for (const ring of rings) {
+    let a = 0;
+    for (let i = 0; i < ring.length - 1; i++) {
+      const x1 = ring[i][0] * kx, y1 = ring[i][1] * ky, x2 = ring[i + 1][0] * kx, y2 = ring[i + 1][1] * ky, d = Math.hypot(x2 - x1, y2 - y1);
+      a += x1 * y2 - x2 * y1; per += d;
+      sides.push({feet: Math.round(d * 3.28084), mid: [(ring[i][1] + ring[i + 1][1]) / 2, (ring[i][0] + ring[i + 1][0]) / 2]});
+    }
+    area += a / 2;
+  }
+  sides.sort((a, b) => b.feet - a.feet);
+  return {acres: Math.abs(area) / 4046.8564, square_feet: Math.abs(area) * 10.7639, perimeter_feet: per * 3.28084, sides: sides.filter(x => x.feet >= 15).slice(0, 8)};
+}
+async function staticBoundary(l) {   // the page asks the county's public map server itself
+  const q = l.bq, layer = q && SNAP.layers[q.l];
+  if (!layer) return {rings: null, why: "This county's layer has no parcel ID to look the boundary up by."};
+  const get = async url => { const r = await fetch(url, {signal: AbortSignal.timeout(20000)}); if (!r.ok) throw new Error("status " + r.status); return r.json(); };
+  try {
+    let rings = [];
+    if (layer.provider === "carto_phl") {
+      const d = await get(layer.url + "?q=" + encodeURIComponent(`SELECT ST_AsGeoJSON(the_geom, 6) g FROM pwd_parcels WHERE brt_id='${String(q.v).replace(/\D/g, "")}' LIMIT 1`));
+      const g = d.rows && d.rows[0] && d.rows[0].g && JSON.parse(d.rows[0].g);
+      rings = !g ? [] : g.type === "MultiPolygon" ? g.coordinates.flat() : g.coordinates;
+    } else {
+      const ask = async extra => {
+        const d = await get(layer.url + "/query?" + new URLSearchParams({outFields: layer.field, returnGeometry: "true", outSR: 4326, geometryPrecision: 6, f: "json", ...extra}));
+        if (d.error) throw new Error(d.error.message || "query failed");
+        return d.features || [];
+      };
+      let feats = q.o != null ? (await ask({objectIds: q.o})).filter(f => String(f.attributes[layer.field]).trim() === String(q.v).trim()) : [];
+      if (!feats.length) feats = await ask({where: q.w});
+      rings = feats.flatMap(f => (f.geometry && f.geometry.rings) || []);
+    }
+    rings = rings.map(r => { const a = r[0], b = r[r.length - 1]; return a[0] === b[0] && a[1] === b[1] ? r : [...r, a]; });
+    return rings.length ? {...ringMetrics(rings), rings, why: null} : {rings: null, why: "The county layer has no boundary for this parcel ID."};
+  } catch (e) {
+    return {rings: null, why: `The county map server did not answer (${e.message}). Close and reopen the parcel to try again.`};
+  }
+}
+const KIND = {individual: "Individual", company: "Company or organization", government: "Public body", unknown: "Not published"};
+async function staticDetail(id) {
+  const byId = Object.fromEntries(SNAP.projects.map(p => [p.id, p]));
+  const raw = SNAP.leads.find(x => x.id === id), l = withBought(raw), fact = k => (l.facts.find(f => f[0] === k) || [])[1] || null;
+  const t = SUB && LIVE ? LIVE.lookups[pkey(raw)] : null, last = t && t.name ? t.name.toUpperCase().split(" ").pop() : "";
+  // a lookup by address can return a tenant: say whether the surname found is the one on the county's record
+  const skiptrace = t ? {...t, phones: t.phones || [], emails: t.emails || [], name_match: raw.owner ? !!last && raw.owner.toUpperCase().includes(last) : null} : null;
+  const others = !l.owner ? [] : SNAP.leads.filter(x => x.owner === l.owner && x.id !== l.id).slice(0, 12)
+    .map(x => ({id: x.id, score: x.score, apn: x.apn, address: x.address, county: x.parcel_county, market_value: x.market_value, project: (byId[x.project_id] || {}).name}));
+  const kind = l.owner_kind || "unknown", vals = [l, ...others].map(x => x.market_value).filter(Boolean);
+  return {lead: l, layer: l.bq ? SNAP.layers[l.bq.l].name : "county parcel file", boundary: await staticBoundary(l),
+    background: {facts: l.facts.map(([label, value]) => ({label, value})), record: []}, related: others,
+    contacts: (SNAP.contacts || {})[l.owner] || [], skiptrace,
+    owner: {name: l.owner, kind: KIND[kind], kind_key: kind, mailing_address: l.mailing_address, location: l.own[0], occupancy: l.own[1],
+            owned_since: fact("Last sale date"), purchase_price: fact("Last sale price"), parcels_in_list: 1 + others.length,
+            holdings_value: vals.reduce((a, b) => a + b, 0) || null}};
+}
+function staticCases(id) {
+  const l = SNAP.leads.find(x => x.id === id), p = SNAP.projects.find(x => x.id === l.project_id) || {};
+  const TYPE = {highway: "highway widening", bridge: "bridge replacement", interchange: "interchange", transit: "transit", rail: "railroad",
+    pipeline: "pipeline easement", transmission: '"transmission line" easement', water: "sewer OR water easement", utility: "utility easement",
+    redevelopment: "redevelopment authority blight", airport: "airport"};
+  const terms = ['"eminent domain"'];
+  if (p.source === "penndot") terms.push('"Department of Transportation"');
+  else if ((p.source || "").startsWith("legistar") && p.project_type !== "redevelopment") terms.push("condemnation");
+  terms.push(TYPE[p.project_type] || "condemnation", '"partial taking" OR "just compensation"');
+  const query = terms.join(" ");
+  return {query, results: [], why: "This search runs on CourtListener's own site.",
+    search_url: "https://www.courtlistener.com/?" + new URLSearchParams({q: query, type: "o", court: "pa pacommwct pasuperct", order_by: "score desc"})};
+}
+function staticLeads(q) {
+  const pid = q.get("project_id"), min = +(q.get("min_score") || 0), county = q.get("county"), own = q.get("owner_only"), stage = q.get("stage");
+  const byId = Object.fromEntries(SNAP.projects.map(p => [p.id, p]));
+  return SNAP.leads.filter(l => (!pid || l.project_id === +pid) && l.score >= min && stageOk(byId[l.project_id], stage) &&
+      (!county || (l.parcel_county || "").toUpperCase() === county) && (!own || l.owner) && staticOutreach(l, q.get("outreach")))
+    .map(l => { const p = byId[l.project_id] || {}; l = withBought(l); return {...l, project: p.name, project_type: p.project_type, stage: p.stage, agency: p.agency, source: p.source, url: p.url}; });
+}
+async function staticApi(path, opts) {
+  // The data file is requested with this page's build stamp, so a browser can never pair a new page with an old,
+  // cached data file (which is what left the hub stuck on "Loading").
+  if (!SNAP && window.EDRADAR_PRIVATE) {
+    // The data lives in a private store: it is fetched with this visitor's own sign-in and unpacked here.
+    const who = await window.ET_TOKEN, auth = window.ET_AUTH, live = window.EDRADAR_STATES || [];
+    // An all-states plan opens any live state (chosen in the bar, kept in the address); a single-state plan can only load its own.
+    const asked = new URLSearchParams(location.search).get("state");
+    const state = who.plan === "all" ? (live.includes(asked) ? asked : live[0]) : String(who.state || "").toLowerCase().replace(/ /g, "-");
+    if (!live.includes(state)) throw new Error("your plan's state is not live yet. We will email you as soon as it is");
+    if (who.plan === "all" && live.length > 1) {
+      const pick = $("f-state");
+      pick.innerHTML = live.map(x => `<option value="${x}"${x === state ? " selected" : ""}>${x.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())}</option>`).join("");
+      pick.hidden = false;
+      pick.onchange = () => { const u = new URL(location.href); u.searchParams.set("state", pick.value); u.searchParams.delete("project"); u.searchParams.delete("lead"); location.href = u; };
+    }
+    const r = await fetch(auth.url + "/storage/v1/object/authenticated/app-data/states/" + state + ".json.gz?v=" + encodeURIComponent(window.EDRADAR_BUILD || ""),
+                          {headers: {Authorization: "Bearer " + who.token, apikey: auth.key}});
+    if (!r.ok) throw new Error("the data could not be opened for this account (" + r.status + ")");
+    SNAP = await new Response(r.body.pipeThrough(new DecompressionStream("gzip"))).json();
+  }
+  if (SNAP && !SNAP.fitted) {            // frame the map on this state's projects
+    SNAP.fitted = true;
+    const pts = (SNAP.projects || []).filter(p => p.lat != null && p.lon != null);
+    if (pts.length) {
+      const lat = pts.map(p => p.lat), lon = pts.map(p => p.lon);
+      HOME = [[Math.min(...lat) - 0.15, Math.min(...lon) - 0.15], [Math.max(...lat) + 0.15, Math.max(...lon) + 0.15]];
+      if (!selected) map.fitBounds(HOME, {animate: false});
+    }
+  }
+  if (!SNAP) { const r = await fetch("data.json?v=" + encodeURIComponent(window.EDRADAR_BUILD || "")); if (!r.ok) throw new Error("data.json returned " + r.status); SNAP = await r.json(); }
+  const [route, qs] = path.split("?"), q = new URLSearchParams(qs || "");
+  if (SUB) { const live = await subApi(route, opts); if (live !== undefined) return live; }
+  if (route === "/api/stats") return SNAP.stats;
+  if (route === "/api/outreach/template") return SNAP.template;
+  if (route === "/api/outreach/hub") {
+    if (!SNAP.hub) throw new Error("This snapshot was published before the Outreach page existed. Reload the page to get the current one");
+    return SNAP.hub;
+  }
+  if (route === "/api/usage") return {...SNAP.hub.usage, rates: SNAP.hub.rates};
+  if (route === "/api/projects") {
+    const min = +(q.get("min_score") || 0), text = (q.get("q") || "").toLowerCase();
+    return SNAP.projects.filter(p => p.score >= min && (!q.get("county") || p.county === q.get("county")) &&
+      (!q.get("project_type") || p.project_type === q.get("project_type")) &&
+      (!q.get("source") || (p.source || "").startsWith(q.get("source"))) && stageOk(p, q.get("stage")) &&
+      (!text || ((p.name || "") + " " + (p.summary || "")).toLowerCase().includes(text))).slice(0, 500);
+  }
+  if (route === "/api/leads") return staticLeads(q).slice(0, 300);
+  const m = route.match(/^\/api\/leads\/(\d+)\/(detail|cases)$/);
+  if (m) return m[2] === "detail" ? staticDetail(+m[1]) : staticCases(+m[1]);
+  throw new Error("Not available in the published snapshot.");
+}
+function downloadCsv(rows) {
+  if (!rows.length) return;
+  const cols = Object.keys(rows[0]), cell = v => '"' + String(v ?? "").replace(/"/g, '""') + '"';
+  const blob = new Blob([[cols.join(","), ...rows.map(r => cols.map(c => cell(r[c])).join(","))].join("\n")], {type: "text/csv"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "eminent-tracker-leads.csv"; a.click();
+}
+
+// In the working app the state is chosen in the top bar and kept in the address (?state=OH). Empty means every state.
+const LIVE_STATE = STATIC ? "" : (new URLSearchParams(location.search).get("state") || "").toUpperCase();
+function projectParams() {
+  const p = new URLSearchParams({min_score: $("f-score").value});
+  if (LIVE_STATE) p.set("state", LIVE_STATE);
+  for (const [id, key] of [["f-county", "county"], ["f-type", "project_type"], ["f-source", "source"], ["f-stage", "stage"], ["f-q", "q"]])
+    if ($(id).value) p.set(key, $(id).value);
+  return p;
+}
+function leadParams() {
+  const p = new URLSearchParams();
+  if (LIVE_STATE) p.set("state", LIVE_STATE);
+  if (selected) p.set("project_id", selected.id);
+  else {
+    p.set("min_score", 60);
+    if ($("f-county").value) p.set("county", $("f-county").value);
+    if ($("f-stage").value) p.set("stage", $("f-stage").value);
+  }
+  if ($("f-owner").checked) p.set("owner_only", "true");
+  if ($("f-outreach").value) p.set("outreach", $("f-outreach").value);
+  if (listView) { p.set("list_id", listView.id); p.set("min_score", 0); p.delete("county"); p.delete("stage"); }
+  return p;
+}
+
+function drawProject(p) {
+  const g = p.geometry, color = scoreColor(p.score);
+  let layer = null;
+  if (g && g.paths) layer = L.polyline(g.paths.map(path => path.map(([x, y]) => [y, x])), {color, weight: 4, opacity: .9, lineCap: "round"});
+  else if (g && g.points) layer = L.featureGroup(g.points.map(([x, y]) =>
+      L.circleMarker([y, x], {radius: 6, color, fillColor: color, fillOpacity: .55, weight: 2})));
+  if (!layer) return;
+  layer.bindTooltip(pname(p.name), {sticky: true});
+  layer.on("click", () => select(p.id, false));
+  layer.addTo(group);
+  layers[p.id] = layer;
+}
+
+let framed = false;
+async function loadProjects() {
+  projects = await api("/api/projects?" + projectParams());
+  if (!STATIC && !framed && projects.length) {           // frame the map on whatever is loaded, not on one fixed state
+    framed = true;
+    const pts = projects.filter(p => p.lat != null && p.lon != null);
+    if (pts.length) {
+      const lat = pts.map(p => p.lat), lon = pts.map(p => p.lon);
+      HOME = [[Math.min(...lat) - 0.15, Math.min(...lon) - 0.15], [Math.max(...lat) + 0.15, Math.max(...lon) + 0.15]];
+      if (!selected) map.fitBounds(HOME, {animate: false});
+    }
+  }
+  group.clearLayers(); layers = {};
+  const box = $("projects");
+  if (!projects.length) {
+    box.innerHTML = `<div class="empty">No projects match these filters. Lower the minimum score or clear the search${STATIC ? "" : ", or run <code>edradar run</code> to pull new data"}.</div>`;
+    return;
+  }
+  box.innerHTML = `<div class="count">${projects.length.toLocaleString()} project${projects.length === 1 ? "" : "s"}, highest score first</div>` +
+    projects.map(p => `
+    <div class="proj" data-id="${p.id}" tabindex="0" role="button" aria-label="${esc(pname(p.name))}, score ${p.score}">
+      <span class="score ${scoreClass(p.score)}" data-tip-project="${p.id}">${p.score}</span>
+      <div><h3>${esc(pname(p.name))}</h3>
+        <div class="meta">${[p.county ? esc(p.county[0] + p.county.slice(1).toLowerCase()) + " County" : "", esc(p.agency || p.source), p.est_cost ? money(p.est_cost) : ""].filter(Boolean).join(" · ")}</div>
+        <div class="meta">${[esc(p.project_type), `<span class="tchip t-${esc(winOf(p))}">${esc(WIN_LABEL[winOf(p)])}</span>`, esc(p.stage && p.stage !== "unknown" ? p.stage.replace(/_/g, " ") : "stage not published"), p.matched_at ? p.lead_count.toLocaleString() + " parcels" : "not matched yet"].filter(Boolean).join(" · ")}</div></div>
+    </div>`).join("");
+  projects.forEach(drawProject);
+  if (selected && !projects.some(p => p.id === selected.id)) selected = null;
+  markSelected();
+}
+function markSelected() {
+  document.querySelectorAll(".proj").forEach(el => el.classList.toggle("sel", !!selected && +el.dataset.id === selected.id));
+}
+async function select(id, fromList = true, animate = true) {
+  closeParcel();
+  listView = null; picked.clear();
+  selected = projects.find(p => p.id === id) || null;
+  markSelected();
+  if (selected) {
+    const layer = layers[id];
+    if (layer) {   // pointer selections travel; keyboard selections (repeated fast) jump
+      const b = layer.getBounds().pad(0.6);
+      if (animate && !reduceMotion) map.flyToBounds(b, {maxZoom: 16, duration: 0.45, easeLinearity: 0.3});
+      else map.fitBounds(b, {maxZoom: 16, animate: false});
+    }
+    if (!fromList) document.querySelector(`.proj[data-id="${id}"]`)?.scrollIntoView({block: "nearest"});
+  }
+  await loadLeads();
+}
+
+function outreachCell(r) {
+  if (STATIC && !SUB) return "";
+  if (SUB) return `<td class="acts"><button class="sm" data-act="postcard" data-lead="${r.id}" ${r.owner ? "" : 'disabled title="No owner of record. Open the parcel to look the owner up."'}>${ICON.card}Postcard</button></td>`;
+  const done = (at, label) => `<span class="done">${ICON.check}${label} ${esc(day(at))}</span>`;
+  const btn = (kind, label, at, sentLabel) => at ? done(at, sentLabel)
+    : `<button class="sm" data-act="${kind}" data-lead="${r.id}" ${r.owner ? "" : 'disabled title="No owner of record for this parcel"'}>${ICON[kind === "postcard" ? "card" : "mail"]}${label}</button>`;
+  const emailBtn = r.email_at ? done(r.email_at, "Emailed")
+    : r.owner_kind === "company" && (r.email_contacts ?? 1) > 0
+      ? `<button class="sm" data-act="email" data-lead="${r.id}">${ICON.mail}Email${r.email_contacts ? ` (${r.email_contacts})` : ""}</button>`
+      : `<button class="sm" disabled title="${r.owner_kind === "company" ? "Apollo has no contacts at this owner" : "Email lookup covers company owners. Individual owners get postcards."}">${ICON.mail}Email</button>`;
+  const tested = !r.postcard_at && r.postcard_test_at ? `<div class="sub">Test proof made ${esc(day(r.postcard_test_at))}</div>` : "";
+  return `<td class="acts">${btn("postcard", "Postcard", r.postcard_at, "Mailed")}${emailBtn}${tested}</td>`;
+}
+function skeleton() {
+  $("leads-wrap").innerHTML = "<table><tbody>" + Array.from({length: 6}, (_, i) =>
+    `<tr class="skel"><td style="width:60px"><div></div></td><td><div style="width:${52 + i * 7 % 30}%"></div></td><td><div style="width:${40 + i * 11 % 35}%"></div></td><td><div style="width:50%"></div></td></tr>`).join("") + "</tbody></table>";
+}
+async function loadLeads() {
+  const p = selected;
+  $("d-title").textContent = p ? pname(p.name) : listView ? "List: " + listView.name : "Top leads across all projects";
+  $("btn-all").hidden = !p && !listView;
+  $("btn-run-list").hidden = !listView;
+  $("summary").hidden = !p;
+  if (p) $("summary").innerHTML = esc(p.summary || "") + (mpms(p.name) ? `\nPennDOT project number (MPMS): <span class="id">${mpms(p.name)}</span>` : "") +
+    (p.contact ? `\nAgency contact: ${esc(p.contact)}` : "") +
+    (p.url ? ` · <a href="${esc(safeUrl(p.url))}" target="_blank" rel="noopener">Source</a>` : "");
+  $("stagebar").hidden = !p;
+  if (p) $("stagebar").innerHTML = stageHead(p.timeline) + stageList(p.timeline, false);
+  $("breakdown").hidden = !p;
+  if (p) $("breakdown").innerHTML = `<span class="lead">How this project scored ${p.score} of 100</span>` +
+    (p.score_parts || []).map(x => `<span class="part" data-tip-text="${esc(x.detail || "")}">${esc(x.label)}<b>${x.points} / ${x.max}</b></span>`).join("");
+  if (!leadRows.length) skeleton();
+  const ticket = ++leadTicket;                      // a slower, older request must not overwrite a newer one
+  const rows = await api("/api/leads?" + leadParams());
+  if (ticket !== leadTicket) return;
+  if (DEMO) rows.forEach((r, i) => {            // marketing screenshots never show a real owner
+    const d = DEMO_OWNERS[i % DEMO_OWNERS.length];
+    if (r.owner) r.owner = d[0];
+    if (r.mailing_address) r.mailing_address = d[1];
+    if (r.address) r.address = d[1].split(",")[0];
+    r.apn = "00-000-" + String(100 + i);
+  });
+  leadRows = rows;
+  for (const id of [...picked]) if (!rows.some(r => r.id === id)) picked.delete(id);
+  syncPicked();
+  if (!leadRows.length) {
+    $("leads-wrap").innerHTML = `<div class="empty">${p && !p.matched_at
+      ? `This project has not been matched to parcels yet.${STATIC ? "" : " Run <code>edradar match</code> to find the parcels along it."}`
+      : listView ? "This list is empty. Go back to all projects, tick the leads you want and choose Add to list."
+      : "No parcel leads match. Clear the “Owner known” filter or pick another project."}</div>`;
+    return;
+  }
+  $("leads-wrap").innerHTML = `<table><thead><tr>${STATIC ? "" : '<th class="pick"><input type="checkbox" id="pick-all" aria-label="Select every lead shown"></th>'}${th("Score", "score")}${th("Owner of record", "owner")}${th("Property", "property")}
+    ${th("County value", "value", "num")}${th("Match", "match")}${p ? "" : th("Project", "project")}${STATIC ? (SUB ? "<th>Outreach</th>" : "") : th("Outreach", "outreach")}${STATIC ? "" : th("Status", "status")}</tr></thead><tbody>` +
+    leadRows.map(r => `<tr data-row="${r.id}" tabindex="0"${openLead === r.id ? ' class="sel"' : ""}>
+      ${STATIC ? "" : `<td class="pick"><input type="checkbox" data-pick="${r.id}" aria-label="Select ${esc(r.owner || r.apn)}"${picked.has(r.id) ? " checked" : ""}></td>`}
+      <td class="c-score"><span class="score ${scoreClass(r.score)}" data-tip-lead="${r.id}">${r.score}</span></td>
+      <td class="owner">${r.owner ? esc(r.owner) : '<span class="lookup">Look up at county</span>'}${r.mailing_address ? `<div class="sub">${esc(r.mailing_address)}</div>` : ""}</td>
+      <td class="c-prop">${r.address ? esc(r.address) : '<span class="dash">–</span>'}<div class="sub"><span class="id">${esc(r.apn)}</span>${r.parcel_county ? " · " + esc(r.parcel_county[0] + r.parcel_county.slice(1).toLowerCase()) : ""}</div></td>
+      <td class="num c-val">${dollars(r.market_value)}</td>
+      <td class="c-match">${esc(REASON[r.match_reason] || r.match_reason)}${r.distance_m != null ? `<div class="sub">${Math.round(r.distance_m)} m away</div>` : ""}</td>
+      ${p ? "" : `<td class="c-proj"><a href="#" data-project="${r.project_id}">${esc(pname(r.project))}</a></td>`}
+      ${outreachCell(r)}
+      ${STATIC ? "" : `<td class="c-status"><select data-status="${r.id}" aria-label="Lead status">${STATUSES.map(st =>
+        `<option${st === r.status ? " selected" : ""}>${st}</option>`).join("")}</select></td>`}</tr>`).join("") +
+    "</tbody></table>" + `<div class="total">${p ? `${leadRows.length.toLocaleString()} of ${p.lead_count.toLocaleString()} parcels for this project` : ($("f-outreach").value || $("f-owner").checked || $("f-county").value || $("f-stage").value) ? `${leadRows.length >= 300 ? "First 300" : leadRows.length.toLocaleString()} leads matching these filters` : `Top ${leadRows.length.toLocaleString()} of ${TOTAL_LEADS.toLocaleString()} leads`}, highest score first${leadRows.length >= 300 ? ". Export CSV for the full list" : ""}.</div>`;
+}
+
+/* ---- outreach template: one text drives the email, the printed letter and the postcard ---- */
+let TPL = null;
+const KEEP_UPPER = new Set(["LLC", "LP", "LLP", "PC", "INC", "II", "III", "IV", "USA", "PA", "NJ", "NY"]);
+const titleCase = t => (t || "").split(/\s+/).filter(Boolean).map(w => KEEP_UPPER.has(w.replace(/[.,]/g, "")) ? w : /[a-z]/.test(w) ? w : w.length > 3 || (/^[A-Z]+$/.test(w) && w.length > 1) ? w[0] + w.slice(1).toLowerCase() : w).join(" ");
+function mergeValues(r, tpl = TPL) {
+  const f = (tpl && tpl.firm) || {}, addr = r.address && /^\s*\d/.test(r.address) ? titleCase(r.address) : "";
+  return {
+    owner_name: titleCase(r.owner) || "the owner of record",
+    property: addr ? "your property at " + addr : "your property (parcel " + r.apn + ")",
+    property_address: addr || "parcel " + r.apn, parcel_id: String(r.apn || ""), county: titleCase(r.parcel_county),
+    project_name: (r.project || "").replace(/\s*\(MPMS \d+\)/, "").replace(/\s*\([^)]*$/, "").trim() || "a planned public project",
+    project_stage: ({planning: "planning", environmental_review: "environmental review", design: "design", row_acquisition: "right-of-way acquisition", condemnation_filed: "the condemnation stage", construction: "construction"})[r.stage] || "the agency's published plans", agency: r.agency || "the sponsoring agency",
+    firm_name: f.name || "[Your firm name]", attorney_name: f.attorney || f.name || "[Attorney name]",
+    firm_phone: f.phone || "[phone]", firm_email: f.email || "[email]", firm_website: f.website || "",
+  };
+}
+const renderTpl = (text, vals) => (text || "").replace(/\{\{\s*(\w+)\s*\}\}/g, (m, k) => k in vals ? vals[k] : m);
+function letterFor(r, tpl = TPL) {
+  const v = mergeValues(r, tpl);
+  return {subject: renderTpl(tpl.email_subject, v), body: renderTpl(tpl.letter, v), values: v};
+}
+function printLetter(r) {
+  const L_ = letterFor(r), f = TPL.firm, w = window.open("", "_blank");
+  if (!w) return;
+  const firmAddr = [f.address_line1, [f.city, f.state].filter(Boolean).join(", ") + (f.zip ? " " + f.zip : "")].filter(x => x && x.trim()).join("<br>");
+  w.document.write(`<!doctype html><title>Letter to ${esc(L_.values.owner_name)}</title><style>
+    body{font:12pt/1.5 Georgia,"Times New Roman",serif;color:#111;max-width:6.5in;margin:1in auto;padding:0 .25in}
+    header{border-bottom:1.5pt solid #111;padding-bottom:10pt;margin-bottom:28pt;font-family:Helvetica,Arial,sans-serif}
+    header b{font-size:15pt;display:block} header span{font-size:9.5pt;color:#333}
+    .to{margin:18pt 0;white-space:pre-line} .body{white-space:pre-wrap} .ad{margin-top:32pt;font:8pt Helvetica,Arial,sans-serif;color:#444}
+    @media print{body{margin:0 auto}}</style>
+    <header><b>${esc(L_.values.firm_name)}</b><span>${[firmAddr, esc(f.phone || ""), esc(f.email || ""), esc(f.website || "")].filter(Boolean).join(" · ")}</span></header>
+    <div>${new Date().toLocaleDateString(undefined, {year: "numeric", month: "long", day: "numeric"})}</div>
+    <div class="to">${esc(titleCase(r.owner) || "Property Owner")}\n${esc((r.mailing_address || "").replace(/,\s*/g, "\n"))}</div>
+    <div><b>Re: ${esc(L_.subject)}</b></div><div class="body">\n${esc(L_.body)}</div>
+    <div class="ad">ADVERTISEMENT. This letter is based on public planning records. No taking of your property has been announced.</div>`);
+  w.document.close(); w.focus(); w.print();
+}
+async function openTemplate() {
+  const t = JSON.parse(JSON.stringify(TPL)), sample = leadRows.find(r => r.owner && r.address) || leadRows.find(r => r.owner) || leadRows[0];
+  const inp = (key, label, wide) => `<label${wide ? ' class="wide"' : ""}>${label}<input data-firm="${key}" value="${esc(t.firm[key] || "")}"></label>`;
+  const area = (key, label, rows) => `<label class="wide">${label}<textarea data-text="${key}" rows="${rows}">${esc(t[key])}</textarea></label>`;
+  dlg.classList.add("wide");
+  dlg.innerHTML = `<div class="dlg-head"><h2 id="dlg-title">Outreach template</h2><p>Enter your firm once. The same text fills the email, the printed letter and the postcard for every owner.</p></div>
+    <div class="dlg-body"><div class="tpl"><div>
+      <h3>Your firm</h3><div class="grid">${inp("name", "Firm name", true)}${inp("attorney", "Attorney signing")}${inp("phone", "Phone")}${inp("email", "Email")}${inp("website", "Website")}
+        ${inp("address_line1", "Return address", true)}${inp("city", "City")}<label>State and ZIP<span style="display:grid;grid-template-columns:70px 1fr;gap:6px"><input data-firm="state" value="${esc(t.firm.state || "")}" aria-label="State"><input data-firm="zip" value="${esc(t.firm.zip || "")}" aria-label="ZIP"></span></label></div>
+      <h3>Letter and email</h3><div class="grid"><label class="wide">Subject<input data-text="email_subject" value="${esc(t.email_subject)}"></label>${area("letter", "Letter", 12)}</div>
+      <div class="meta">Click a field to insert it where the cursor is. It is replaced with each owner's details.</div>
+      <div class="chips">${Object.keys(t.fields).map(k => `<button type="button" data-field="${k}" data-tip-text="${esc(t.fields[k])}">{{${k}}}</button>`).join("")}</div>
+      <h3>Postcard</h3><div class="grid">${area("postcard_headline", "Front headline", 2)}${area("postcard_message", "Front message", 3)}${area("postcard_back", "Back message", 4)}</div>
+    </div><div>
+      <h3>Preview${sample ? " for " + esc(titleCase(sample.owner) || "a sample owner") : ""}</h3>
+      <div class="letter" id="t-prev"></div>
+      <h3>Postcard front</h3><div class="letter" id="t-card"></div>
+      <h3>Postcard back</h3><div class="letter" id="t-back"></div>
+    </div></div></div>
+    <div class="dlg-foot"><span class="note" id="t-note">${STATIC && !SUB ? "This published snapshot is read-only. Edits here are a preview and are not saved." : "Saved templates apply to every postcard, email and letter from now on."}</span>
+      <button data-close>Cancel</button><button class="primary" id="t-save"${STATIC && !SUB ? " disabled" : ""}>Save template</button></div>`;
+  dlg.showModal();
+  let last = dlg.querySelector('[data-text="letter"]');
+  const read = () => {
+    dlg.querySelectorAll("[data-firm]").forEach(el => t.firm[el.dataset.firm] = el.value.trim());
+    dlg.querySelectorAll("[data-text]").forEach(el => t[el.dataset.text] = el.value);
+  };
+  const preview = () => {
+    read();
+    if (!sample) return;
+    const v = mergeValues(sample, t);
+    $("t-prev").innerHTML = `<b>${esc(renderTpl(t.email_subject, v))}</b>\n\n${esc(renderTpl(t.letter, v))}`;
+    $("t-card").innerHTML = `<b>${esc(renderTpl(t.postcard_headline, v))}</b>\n${esc(renderTpl(t.postcard_message, v))}`;
+    $("t-back").textContent = renderTpl(t.postcard_back, v);
+  };
+  dlg.querySelector(".tpl").addEventListener("input", preview);
+  dlg.querySelector(".tpl").addEventListener("focusin", e => { if (e.target.matches("[data-text]")) last = e.target; });
+  dlg.querySelector(".chips").addEventListener("click", e => {
+    const b = e.target.closest("[data-field]");
+    if (!b) return;
+    const at = last.selectionStart ?? last.value.length;
+    last.setRangeText(`{{${b.dataset.field}}}`, at, last.selectionEnd ?? at, "end");
+    last.focus(); preview();
+  });
+  $("t-save").addEventListener("click", async ev => {
+    read(); ev.target.disabled = true; ev.target.textContent = "Saving…";
+    try {
+      TPL = await api("/api/outreach/template", {method: "PUT", headers: {"Content-Type": "application/json"}, body: JSON.stringify(t)});
+      OUT = await api("/api/outreach/status");
+      dlg.close();
+    } catch (e) { $("t-note").textContent = e.message; ev.target.disabled = false; ev.target.textContent = "Save template"; }
+  });
+  preview();
+}
+$("dlg").addEventListener("close", () => $("dlg").classList.remove("wide"));
+
+/* ---- outreach hub: postcards, email, skip tracing, template, billing and activity in one place ---- */
+let view = "leads";
+const phone = matchMedia("(max-width: 720px)");
+function setPane(name) {                       // on a phone the project list, the map and the lead table take turns
+  document.body.dataset.pane = name;
+  document.querySelectorAll("#panes button").forEach(b => b.setAttribute("aria-pressed", b.dataset.pane === name));
+  if (name === "map") { map.invalidateSize(); try { map.fitBounds(selected && layers[selected.id] ? layers[selected.id].getBounds() : HOME, {animate: false}); } catch (e) { map.fitBounds(HOME); } }
+}
+$("panes").addEventListener("click", e => { const b = e.target.closest("[data-pane]"); if (b) setPane(b.dataset.pane); });
+phone.addEventListener("change", () => map.invalidateSize());
+document.body.dataset.pane = "leads";
+function setView(name) {
+  view = name; document.body.dataset.view = name;
+  document.querySelector("main").hidden = name !== "leads";
+  $("hub").hidden = name !== "hub";
+  document.querySelectorAll("#views button").forEach(b => b.setAttribute("aria-pressed", b.dataset.view === name));
+  if (name === "hub") { closeParcel(); loadHub(); } else map.invalidateSize();
+}
+async function showLeads(filter) {
+  selected = null; listView = null; markSelected();
+  $("f-outreach").value = filter;
+  setView("leads");
+  await loadLeads();
+}
+function cardMocks(t, sample) {
+  const v = mergeValues(sample, t), f = t.firm || {}, x = v => esc(v).replace(/&#39;/g, "&apos;");
+  const addr = [f.address_line1, [f.city, f.state].filter(Boolean).join(", ") + (f.zip ? " " + f.zip : "")].filter(q => q && q.trim()).join(", ");
+  const headline = renderTpl(t.postcard_headline, v), h1 = headline.length <= 62 ? 33 : headline.length <= 90 ? 28 : 23;
+  const img = (label, bg, inner) => `<img class="mock" alt="${esc(label)}" src="data:image/svg+xml,${encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="12 12 576 384" width="576" height="384"><rect x="0" y="0" width="600" height="408" fill="${bg}"/><foreignObject x="29" y="29" width="542" height="350"><div xmlns="http://www.w3.org/1999/xhtml" style="position:relative;width:542px;height:350px;color:#14202b;font-family:Helvetica,Arial,sans-serif">${inner}</div></foreignObject></svg>`)}">`;
+  const front = img("Postcard front: " + headline, "#f4f5f7",
+    `<div style="font:700 ${h1}px/1.14 Georgia,'Times New Roman',serif;width:509px">${x(headline)}</div>
+     <div style="font-size:14.7px;line-height:1.4;margin-top:16px;width:490px">${x(renderTpl(t.postcard_message, v).slice(0, 420))}</div>
+     <div style="position:absolute;left:0;bottom:0;width:542px;border-top:2px solid #14202b;padding-top:9px;font-size:14px;font-weight:bold"><span style="float:right;font-weight:normal">${x(f.phone || "")}</span>${x(v.firm_name)}</div>`);
+  const back = img("Postcard back: " + renderTpl(t.postcard_back, v), "#ffffff",
+    `<div style="font-size:13.3px;line-height:1.42">${x(renderTpl(t.postcard_back, v).slice(0, 430))}</div>
+     <div style="position:absolute;left:0;bottom:0;width:206px;font-size:8.7px;line-height:1.3;color:#3d4a57">ADVERTISEMENT. ${x(v.firm_name)}${addr ? ", " + x(addr) : ""}. This notice is based on public planning records. No taking of your property has been announced, and receiving this card does not mean one will occur.</div>
+     <div style="position:absolute;left:246px;top:150px;font-size:8.5px;line-height:1.2">${x(v.firm_name.toUpperCase())}<br/>${x((f.address_line1 || "").toUpperCase())}<br/>${x(((f.city || "") + (f.state ? ", " + f.state : "") + " " + (f.zip || "")).toUpperCase())}</div>
+     <div style="position:absolute;right:20px;top:142px;border:1px solid #14202b;padding:9px 8px;font-size:10px;line-height:1.15;text-align:center">POSTAGE<br/>INDICIA</div>
+     <div style="position:absolute;left:246px;top:238px;font-size:14px;line-height:1.2">${x(sample.owner)}<br/>12 MAIN ST<br/>ANYTOWN, PA 19000-0000</div>`);
+  return `<div class="mocks"><figure>${front}<figcaption>Postcard front</figcaption></figure>
+    <figure>${back}<figcaption>Postcard back. The address block is added by the mail service.</figcaption></figure></div>`;
+}
+let HUB_LISTS = [];
+async function loadHub() {
+  const box = $("hub");
+  if (!box.innerHTML) box.innerHTML = `<div class="hub"><p class="meta">Loading outreach…</p></div>`;
+  try { renderHub(await api("/api/outreach/hub")); }
+  catch (e) { box.innerHTML = `<div class="hub"><div class="alert bad">Outreach could not be shown: ${esc(e.message)}.</div></div>`; }
+}
+// Back from buying credits: Stripe tells our server within a few seconds, so the balance is read again until it moves.
+let CREDIT_NOTE = "";
+if (SUB && /[?&]credits=/.test(location.search)) {
+  const bought = /credits=bought/.test(location.search);
+  CREDIT_NOTE = bought ? "Payment received. Your credits are being added." : "No credits were bought.";
+  history.replaceState(null, "", location.pathname + location.hash);
+  if (bought) (async () => {
+    const before = ((await liveStatus()).credits || {}).balance || 0;
+    for (let i = 0; i < 12; i++) {
+      await new Promise(r => setTimeout(r, 2500));
+      const now = ((await liveStatus(true)).credits || {}).balance || 0;
+      if (now > before || i === 11) { CREDIT_NOTE = now > before ? `${(now - before).toLocaleString()} credits added. You have ${now.toLocaleString()}.` : "Your payment went through but the credits have not appeared yet. Reload in a minute; if they are still missing, email us."; break; }
+    }
+    if (document.getElementById("hub") && document.querySelector(".hub")) loadHub && loadHub();
+  })();
+}
+document.addEventListener("click", async e => {
+  const b = e.target.closest && e.target.closest("[data-buy]"); if (!b) return;
+  const note = document.getElementById("buy-status"); b.disabled = true; if (note) note.textContent = "Opening the secure payment page…";
+  try { location.href = (await api("/api/credits/checkout", {method: "POST", body: JSON.stringify({pack: b.dataset.buy})})).url; }
+  catch (x) { b.disabled = false; if (note) note.textContent = x.message || "The payment page could not be opened."; }
+});
+function renderSubHub(h) {
+  const live = h.live, pc = h.status.postcard, sk = h.status.skiptrace, t = h.template, f = t.firm, r = h.ready, u = live.usage, cr = live.credits || {balance: 0, packs: []};
+  OUT = {...h.status, rates: h.rates}; TPL = t; HUB_LISTS = [];
+  const fig = (label, v) => `<div><span>${label}</span><b>${v}</b></div>`;
+  const sample = {owner: "SAMPLE OWNER", address: "12 MAIN ST", apn: "00-000-000", parcel_county: "MONTGOMERY", project: "US 22 Widening", stage: "planning", agency: "State DOT"};
+  const L_ = letterFor(sample, t), firmLine = [f.name, f.attorney, f.phone, f.email].filter(Boolean).join(" · ") || "Firm details not entered yet";
+  const pcState = pc.mode === "live" ? '<span class="state on">Postcards on</span>' : pc.mode === "test" ? '<span class="state warn">Postcards in test mode: proofs only</span>' : '<span class="state">Postcards off</span>';
+  $("hub").innerHTML = `<div class="hub">
+    <div class="hub-head"><h1>Outreach</h1>${pcState}<span class="state ${sk.enabled ? "on" : ""}">Owner lookups ${sk.enabled ? "on" : "off"}</span></div>
+    <div class="figs" style="--n:4">${fig("Postcards mailed this month", u.postcards.toLocaleString())}${fig("Owner lookups this month", u.lookups.toLocaleString())}${fig("Postcard credits left", cr.balance == null ? "Not needed" : cr.balance.toLocaleString())}${fig("Lookups on your next invoice", usd(u.pending))}</div>
+    ${CREDIT_NOTE ? `<div class="alert" style="margin-bottom:24px">${esc(CREDIT_NOTE)}</div>` : ""}
+    ${live.firm_ready ? "" : `<div class="alert" style="margin-bottom:24px">Add your firm's name and return address before mailing. <button class="sm" data-hub="template">Enter firm details</button></div>`}
+    <div class="hub-row two">
+      <div class="panel"><h3>Postcards</h3>
+        <p><b>${r.postcard_owners.toLocaleString()}</b> owners scoring ${r.min_score} or higher have a usable mailing address. Open a lead and choose Postcard to see the proof before anything is sent.</p>
+        <p>${pc.mode === "live" ? `Each card is printed and mailed first class in your firm's name, marked as attorney advertising. One card uses one credit.` : pc.mode === "test" ? "Test mode: each card is made as a proof. Nothing is mailed and no credit is used." : esc(pc.why || "")}</p>
+        <div class="row-acts"><button class="primary" data-hub="leads-postcard">Show these leads</button></div>
+        ${cr.balance == null ? "" : `<h4 style="margin-top:20px">Postcard credits: ${cr.balance.toLocaleString()} left</h4>
+        <p>Credits are bought before you mail. They are not refundable and do not expire.</p>
+        <div class="row-acts">${cr.packs.map(p => `<button data-buy="${esc(p.key)}">${p.credits.toLocaleString()} credits, ${usd(p.price)}<span class="meta" style="display:block;font-weight:400">${usd(p.each)} a card</span></button>`).join("")}</div>
+        <p class="meta" id="buy-status" role="status"></p>`}</div>
+      <div class="panel"><h3>Owner lookups</h3>
+        <p>Where a county does not publish owner names, a lookup finds the owner's name and mailing address from a commercial records service, with any phone number and email. For owners already on file it adds phone and email.</p>
+        <p>${sk.enabled ? `${usd(sk.price)} for each match, added to your next invoice. Nothing is charged when no match is found, and an answer you paid for is kept.` : esc(sk.why || "")}</p>
+        <div class="row-acts"><button data-hub="leads-">Go to Leads</button></div></div>
+    </div>
+    <div class="panel"><div class="panel-head"><h3>Template</h3><span class="meta">${esc(firmLine)}</span>
+        <button data-hub="template">Edit firm details and wording</button></div>
+      <div class="tpl-view">${cardMocks(t, sample)}
+        <figure><div class="letter"><b>${esc(L_.subject)}</b>\n\n${esc(L_.body)}</div><figcaption>Email and printed letter</figcaption></figure></div>
+      <p style="margin-top:12px">Shown with sample details. Each owner's name, property, project and stage are filled in when it is sent.</p></div>
+    <div class="panel"><h3>Usage and billing</h3>
+      <p>Postcards are paid for with credits you buy in advance. Owner lookups are added to your next subscription invoice; if they reach $50 before then, they are charged to your card at that point.</p>
+      <div class="row-acts"><button data-hub="usage">All usage</button><a class="btn" href="../account.html">Billing and card</a></div></div>
+  </div>`;
+}
+async function openSubUsage() {
+  dlg.innerHTML = `<div class="dlg-head"><h2 id="dlg-title">Usage and billing</h2><p>Every postcard and owner lookup your firm has ordered.</p></div><div class="dlg-body"><p class="meta">Loading…</p></div>
+    <div class="dlg-foot"><span class="note">A postcard uses one prepaid credit. Lookups appear on your next invoice.</span><button data-close>Close</button></div>`;
+  dlg.showModal();
+  let u;
+  try { u = await api("/api/usage"); } catch (e) { dlg.querySelector(".dlg-body").innerHTML = `<div class="alert bad">${esc(e.message)}</div>`; return; }
+  dlg.querySelector(".dlg-body").innerHTML = u.rows.length ? `<table class="usage"><thead><tr><th>Date</th><th>Item</th><th>Owner</th><th class="num">Charge</th><th>Status</th></tr></thead><tbody>${u.rows.map(x => `<tr>
+      <td style="white-space:nowrap">${esc(day(x.created_at))}</td><td>${x.kind === "skip_trace" ? "Owner lookup" : x.mode === "live" ? "Postcard" : "Postcard test proof"}</td><td>${esc(titleCase(x.owner || ""))}</td>
+      <td class="num">${x.kind === "postcard" && x.mode === "live" && x.price ? "1 credit" : usd(x.price)}</td><td>${x.kind === "postcard" ? (x.mode === "live" && x.price ? "Paid with a credit" : "No charge") : x.price ? (x.invoiced ? "Invoiced" : "On next invoice") : "No charge"}</td></tr>`).join("")}</tbody></table>`
+    : `<p class="meta">Nothing ordered yet. A postcard is recorded when it is mailed, an owner lookup when a match is found.</p>`;
+}
+function renderHub(h) {
+  if (SUB && h.live && !h.live.off) return renderSubHub(h);
+  const box = $("hub");
+  OUT = {...h.status, rates: h.rates}; TPL = h.template; HUB_LISTS = h.lists || [];
+  const pc = h.status.postcard, em = h.status.email, sk = h.status.skiptrace, r = h.ready, t = h.template, f = t.firm;
+  const fig = (label, v) => `<div><span>${label}</span><b>${v}</b></div>`;
+  const month = h.usage.this_month.reduce((a, x) => a + (x.billed || 0), 0);
+  const pcState = STATIC ? '<span class="state">Read-only snapshot: sending happens in the running app</span>' : pc.mode === "live" ? '<span class="state live">Live: cards are mailed and billed</span>' : pc.mode === "test" ? '<span class="state warn">Test mode: proofs only</span>' : '<span class="state">Off</span>';
+  const sample = {owner: "SAMPLE OWNER", address: "12 MAIN ST", apn: "00-000-000", parcel_county: "MONTGOMERY", project: "US 22 Widening", stage: "planning", agency: "PennDOT District 05"};
+  const L_ = letterFor(sample, t);
+  const firmLine = [f.name, f.attorney, f.phone, f.email].filter(Boolean).join(" · ") || "Firm details not entered yet";
+  const CH = {postcard: "Postcard", email: "Email"}, ST = {sent: "Sent", test: "Test proof"};
+  const usageRows = rows => rows.length ? rows.map(x => `<tr><td>${x.kind === "skip_trace" ? "Skip traces" : "Postcards"}</td><td class="num">${x.count}</td><td class="num">${usd(x.cost)}</td><td class="num">${usd(x.billed)}</td><td class="num">${usd(x.margin)}</td></tr>`).join("")
+    : `<tr><td colspan="5" class="meta">Nothing billable yet. Test proofs are free and are not recorded.</td></tr>`;
+  const contactsTable = h.contacts.length ? `<div class="scroll"><table><thead><tr><th>Contact</th><th>Owner</th><th>Email</th><th>Company phone</th></tr></thead><tbody>${h.contacts.map(c => `<tr>
+      <td>${esc(c.name || "")}<div class="sub">${esc(c.title || "")}</div></td><td>${esc(titleCase(c.owner))}</td>
+      <td>${c.email ? `<a href="mailto:${esc(c.email)}?subject=${encodeURIComponent(renderTpl(t.email_subject, mergeValues({...sample, owner: c.owner, address: "", apn: "on file"}, t)))}">${esc(c.email)}</a>` : '<span class="meta">not revealed</span>'}</td>
+      <td>${c.phone ? esc(c.phone) : '<span class="dash">–</span>'}</td></tr>`).join("")}</tbody></table></div>`
+    : `<p>${STATIC ? "Contacts found through Apollo are kept in the running app and are not published here." : "No contacts yet. Open a company-owned lead and choose Find contacts in Apollo."}</p>`;
+  box.innerHTML = `<div class="hub">
+    <div class="hub-head"><h1>Outreach</h1>${pcState}${STATIC ? "" : `<span class="state ${em.enabled ? "on" : ""}">Email ${em.enabled ? "on" : "off"}</span><span class="state ${sk.enabled ? "on" : ""}">Skip tracing ${sk.enabled ? "on" : "off"}</span>`}</div>
+    <div class="figs">${fig("Postcards mailed", h.sent.postcards.toLocaleString())}${fig("Test proofs", h.sent.test_proofs.toLocaleString())}${fig("Emails started", h.sent.emails.toLocaleString())}${fig("Owners skip traced", h.sent.skip_traces.toLocaleString())}${fig("Billed this month", usd(month))}</div>
+    <div class="panel lists"><div class="panel-head"><h3>Client lists</h3><span class="meta">Save the owners you want, then run postcards and email for the whole list in one step.</span></div>
+      ${STATIC ? "<p>Client lists are private to each firm, so they are kept in the running app and are not part of this public page.</p>"
+        : (h.lists || []).length ? `<div class="scroll"><table><thead><tr><th>List</th><th class="num">Owners</th><th class="num">Postcard-ready</th><th class="num">Email-ready</th><th class="num">Contacted</th><th></th></tr></thead><tbody>${h.lists.map(x => `<tr>
+          <td><b>${esc(x.name)}</b><div class="sub">${plural(x.leads, "parcel")} · created ${esc(day(x.created_at))}</div></td>
+          <td class="num" data-l="Owners">${x.owners}</td><td class="num" data-l="Postcard-ready">${x.postcard_ready}</td><td class="num" data-l="Email-ready">${x.email_ready}</td><td class="num" data-l="Contacted">${x.contacted}</td>
+          <td><div class="row-acts"><button class="primary" data-hub="list-run" data-id="${x.id}">Run campaign</button><button data-hub="list-open" data-id="${x.id}">View</button><button data-hub="list-delete" data-id="${x.id}" aria-label="Delete the list ${esc(x.name)}">Delete</button></div></td></tr>`).join("")}</tbody></table></div>`
+        : `<ol class="steps"><li>Open <b>Leads</b> and filter to the owners you want (a project, a county, postcard-ready, email leads).</li><li>Tick the rows, or leave them unticked to take everything shown, and choose <b>Add to list</b>.</li><li>Come back here and choose <b>Run campaign</b>.</li></ol>
+           <div class="row-acts" style="margin-top:10px"><button class="primary" data-hub="leads-">Go to Leads</button></div>`}</div>
+    <div class="hub-row three">
+      <div class="panel"><h3>Postcards</h3>
+        <p><b>${r.postcard_owners.toLocaleString()}</b> owners scoring ${r.min_score} or higher have a usable mailing address and have not been mailed. One card goes to each owner and address, highest score first.</p>
+        <p>${pc.enabled ? (pc.mode === "live" ? "Live: each card is mailed and billed to your Lob account." : "Test mode: Lob makes a proof of each card. Nothing is mailed or billed.") : esc(pc.why || "")}</p>
+        <div class="row-acts"><button class="primary" data-hub="campaign" ${pc.enabled ? "" : "disabled"}>${pc.mode === "live" ? "Start a postcard campaign" : "Run a test campaign"}</button><button data-hub="leads-postcard">Show these leads</button></div></div>
+      <div class="panel"><h3>Email</h3>
+        <p><b>${r.email_companies.toLocaleString()}</b> company owners can be looked up in Apollo. So far <b>${r.companies_with_contacts}</b> ${r.companies_with_contacts === 1 ? "company has" : "companies have"} named contacts and <b>${r.contacts_with_email}</b> ${r.contacts_with_email === 1 ? "contact has" : "contacts have"} a verified email.</p>
+        <p>${em.enabled ? "The contact you pick is added to your Apollo sequence, sent from " + esc(em.from || "your mailbox") + "." : esc(em.why || "")}</p>
+        <div class="row-acts"><button data-hub="leads-email">Show email leads</button></div></div>
+      <div class="panel"><h3>Skip tracing</h3>
+        <p><b>${r.individuals_untraced.toLocaleString()}</b> individual owners scoring ${r.min_score} or higher have not been looked up for a phone number or email. Each match is billed at ${usd(h.rates.skip_trace.price)}.</p>
+        <p>${sk.enabled ? "Each owner and address is looked up once and the answer is kept." : esc(sk.why || "")}</p>
+        <div class="row-acts"><button data-hub="leads-traced">Show owners with a phone or email</button></div></div>
+    </div>
+    <div class="panel"><div class="panel-head"><h3>Template</h3><span class="meta">${esc(firmLine)}</span>
+        <button data-hub="template">${STATIC ? "Open the editor (preview only)" : "Edit postcard and email wording"}</button></div>
+      <div class="tpl-view">${cardMocks(t, sample)}
+        <figure><div class="letter"><b>${esc(L_.subject)}</b>\n\n${esc(L_.body)}</div><figcaption>Email and printed letter</figcaption></figure></div>
+      <p style="margin-top:12px">Shown with sample details. Each owner's name, property, project and stage are filled in when it is sent.</p></div>
+    <div class="panel"><h3>Company contacts</h3>${contactsTable}</div>
+    <div class="panel"${STATIC ? " hidden" : ""}><h3>Usage and billing</h3>
+        <table><thead><tr><th>This month</th><th class="num">Count</th><th class="num">Your cost</th><th class="num">Billed</th><th class="num">Margin</th></tr></thead><tbody>${usageRows(h.usage.this_month)}</tbody></table>
+        <p style="margin-top:10px">Rates: postcard ${usd(h.rates.postcard.cost)} cost, ${usd(h.rates.postcard.price)} billed · skip trace ${usd(h.rates.skip_trace.cost)} cost, ${usd(h.rates.skip_trace.price)} billed.</p>
+        <div class="row-acts"><button data-hub="usage">All usage</button>${STATIC ? "" : '<a class="btn" href="/api/usage.csv">Download CSV</a>'}</div></div>
+    <div class="panel"><h3>Activity</h3>
+      ${h.activity.length ? `<div class="scroll"><table><thead><tr><th>Date</th><th>Owner</th><th>Channel</th><th>Status</th><th>Project</th><th>Result</th></tr></thead><tbody>${h.activity.map(a => `<tr>
+        <td style="white-space:nowrap">${esc(day(a.created_at))}</td><td>${esc(titleCase(a.owner))}<div class="sub">${esc(a.mailing_address || "")}</div></td>
+        <td>${CH[a.channel] || esc(a.channel)}</td><td><span class="state ${a.status === "sent" ? "on" : "warn"}">${ST[a.status] || esc(a.status)}</span></td>
+        <td>${esc(pname(a.project))}</td>
+        <td>${a.proof_url ? `<a href="${esc(safeUrl(a.proof_url))}" target="_blank" rel="noopener">Open proof</a>` : a.email ? esc(a.email) : '<span class="dash">–</span>'}${a.expected_delivery && a.status === "sent" ? `<div class="sub">due ${esc(a.expected_delivery)}</div>` : ""}</td></tr>`).join("")}</tbody></table></div>`
+        : `<p>Nothing has gone out yet. Postcards, test proofs and emails will be listed here as they are sent.</p>`}</div>
+  </div>`;
+}
+$("hub").addEventListener("click", e => {
+  const b = e.target.closest("[data-hub]");
+  if (!b) return;
+  const a = b.dataset.hub;
+  if (a === "campaign") openCampaign();
+  else if (a === "template") openTemplate();
+  else if (a === "usage") openUsage();
+  else if (a.startsWith("list-")) {
+    const list = HUB_LISTS.find(x => x.id === +b.dataset.id);
+    if (!list) return;
+    if (a === "list-run") openListCampaign(list);
+    else if (a === "list-open") openList(list.id, list.name);
+    else if (b.dataset.sure) jpost("/api/lists/" + list.id, null, "DELETE").then(loadHub);
+    else { b.dataset.sure = 1; b.textContent = "Delete for good?"; setTimeout(() => { if (b.isConnected) { delete b.dataset.sure; b.textContent = "Delete"; } }, 4000); }
+  }
+  else if (a.startsWith("leads-")) showLeads(a.slice(6));
+});
+$("views").addEventListener("click", e => { const b = e.target.closest("[data-view]"); if (b) setView(b.dataset.view); });
+$("dlg").addEventListener("close", () => { if (view === "hub") loadHub(); });
+
+/* ---- skip tracing (individual owners) and the usage ledger ---- */
+const usd = n => "$" + Number(n || 0).toFixed(2);
+const phoneFmt = n => { const d = String(n || "").replace(/\D/g, "").slice(-10); return d.length === 10 ? `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}` : String(n || ""); };
+function traceBlock(d, r, o) {
+  if (STATIC && !SUB) return "";
+  const t = d.skiptrace, st = OUT && OUT.skiptrace, find = SUB && o.kind_key === "unknown";
+  if (!SUB && o.kind_key !== "individual") return "";
+  if (SUB && !t && o.kind_key !== "individual" && !find) return "";
+  if (SUB && !t && st && (st.restricted || []).includes(SNAP.state)) return `<p style="margin-top:8px">Owner lookups are not offered in this state: its law limits using owner records for solicitation.</p>`;
+  if (!t) return `<div class="row-acts"><button class="sm" data-trace="${r.id}" ${st && st.enabled ? "" : "disabled"}>${find ? "Look up this owner" : SUB ? "Look up phone and email" : "Skip trace this owner"}</button>
+      <span class="meta">${st && st.enabled ? (SUB ? `${find ? "Finds the owner's name and mailing address, with any phone number and email, from a commercial records service." : "Finds phone numbers and email from a commercial records service."} ${usd(st.price)} is added to your next invoice if a match is found. Nothing is charged if none is.`
+        : `Looks up phone numbers and email. Billed to the client at ${usd(st.price)} if a match is found.`) : esc((st && st.why) || "")}</span></div>`;
+  if (!t.matched) return `<p style="margin-top:8px">Looked up ${esc(day(t.fetched_at))}: ${find ? "no owner was found for this parcel" : "no phone or email was found for this owner"}. Nothing was charged.</p>`;
+  return `<ul class="contacts"><li><b>${esc(t.name || "Name not returned")}</b>${t.name_match == null ? "" : t.name_match ? '<span class="flag ok">matches owner of record</span>' : '<span class="flag">name differs from owner of record</span>'}${t.litigator ? '<span class="flag">known TCPA litigator</span>' : ""}
+      <div class="sub">Looked up ${esc(day(t.fetched_at))}${t.mailing_address ? " · mail to " + esc(titleCase(t.mailing_address)) : ""}</div></li>
+    ${t.phones.map(p => `<li>${esc(phoneFmt(p.number))}<span class="meta"> · ${esc([p.type, p.reachable === false ? "not reachable" : "", p.score != null ? "confidence " + p.score : ""].filter(Boolean).join(" · "))}</span>${p.dnc ? '<span class="flag">Do Not Call</span>' : ""}${p.tcpa ? '<span class="flag">TCPA flagged</span>' : ""}</li>`).join("")}
+    ${t.emails.map(e => `<li><a href="mailto:${esc(e)}">${esc(e)}</a></li>`).join("")}</ul>
+    <p style="margin-top:8px">${t.name_match === false ? "The person found at this address has a different surname and may be a tenant or relative. " : ""}${t.name_match == null ? "This name comes from a commercial records service, not the county. Confirm it before you rely on it. " : ""}Your state's version of Rule 7.3 restricts live telephone solicitation by lawyers, and numbers marked Do Not Call must not be called. This data may not be used for credit, employment, insurance or tenant decisions.</p>`;
+}
+async function openUsage() {
+  if (SUB && LIVE && !LIVE.off) return openSubUsage();
+  dlg.innerHTML = `<div class="dlg-head"><h2 id="dlg-title">Usage and billing</h2><p>What each skip trace and mailed postcard cost, and what the client is charged.</p></div><div class="dlg-body"><p class="meta">Loading…</p></div>
+    <div class="dlg-foot"><span class="note">Rates are set under billing in config.yaml.</span>${STATIC ? "" : '<a class="btn" href="/api/usage.csv">Download CSV</a>'}<button data-close>Close</button></div>`;
+  dlg.showModal();
+  let u;
+  try { u = await api("/api/usage"); } catch (e) { dlg.querySelector(".dlg-body").innerHTML = `<div class="alert bad">${esc(e.message)}</div>`; return; }
+  const NAME = {skip_trace: "Skip traces", postcard: "Postcards"};
+  const table = (title, rows) => `<table class="usage"><caption>${title}</caption><thead><tr><th>Item</th><th class="num">Count</th><th class="num">Your cost</th><th class="num">Billed to client</th><th class="num">Margin</th></tr></thead><tbody>${
+    rows.length ? rows.map(x => `<tr><td>${esc(NAME[x.kind] || x.kind)}</td><td class="num">${x.count}</td><td class="num">${usd(x.cost)}</td><td class="num">${usd(x.billed)}</td><td class="num">${usd(x.margin)}</td></tr>`).join("")
+      : `<tr><td colspan="5" class="meta">Nothing billable yet. A skip trace is recorded when a match is found, a postcard when it is mailed with a live key.</td></tr>`}</tbody></table>`;
+  dlg.querySelector(".dlg-body").innerHTML = table("This month", u.this_month) + table("All time", u.all_time) +
+    `<p class="meta">Current rates: skip trace ${usd(u.rates.skip_trace.cost)} cost, ${usd(u.rates.skip_trace.price)} billed · postcard ${usd(u.rates.postcard.cost)} cost, ${usd(u.rates.postcard.price)} billed.</p>`;
+}
+
+/* ---- parcel panel: boundary on the map, land background, related parcels, similar cases ---- */
+const panel = $("parcel");
+let openLead = null;
+const X_ICON = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="m4 4 8 8M12 4l-8 8"/></svg>';
+function closeParcel() {
+  if (!openLead) return;
+  openLead = null; panel.removeAttribute("data-open"); parcelLayer.clearLayers();
+  document.querySelectorAll("tbody tr.sel").forEach(tr => tr.classList.remove("sel"));
+  if (!baseChosen) setBase("map");
+}
+function drawBoundary(b) {
+  parcelLayer.clearLayers();
+  if (!b || !b.rings) return;
+  const rings = b.rings.map(r => r.map(([x, y]) => [y, x]));
+  L.polygon(rings, {color: "oklch(24% 0.03 258)", weight: 6, opacity: .9, fill: false, interactive: false}).addTo(parcelLayer);
+  L.polygon(rings, {color: "#fff", weight: 2.5, fillColor: "oklch(62% 0.17 40)", fillOpacity: .22, interactive: false}).addTo(parcelLayer);
+  (b.sides || []).forEach(s => L.tooltip({permanent: true, direction: "center", className: "dim", interactive: false})
+    .setLatLng(s.mid).setContent(s.feet.toLocaleString() + " ft").addTo(parcelLayer));
+  const pad = innerWidth > 900 ? {paddingTopLeft: [40, 40], paddingBottomRight: [panel.offsetWidth - Math.max(0, innerWidth - $("map").getBoundingClientRect().right) + 40, 40]} : {padding: [30, 30]};
+  map.fitBounds(L.latLngBounds(rings.flat()), {...pad, maxZoom: 19, animate: !reduceMotion, duration: 0.45});
+}
+async function openParcel(leadId) {
+  const r = leadRows.find(x => x.id === leadId);
+  if (!r) return;
+  openLead = leadId; hideTip();
+  document.querySelectorAll("tbody tr").forEach(tr => tr.classList.toggle("sel", +tr.dataset.row === leadId));
+  const county = r.parcel_county ? r.parcel_county[0] + r.parcel_county.slice(1).toLowerCase() + " County" : "";
+  const head = `<div class="p-head"><h2>${r.owner ? esc(r.owner) : "Owner not published"}</h2>
+    <div class="meta">${[r.address ? esc(r.address) : "", `Parcel <span class="id">${esc(r.apn)}</span>`, esc(county)].filter(Boolean).join(" · ")}</div>
+    <button type="button" data-close-parcel aria-label="Close parcel details">${X_ICON}</button></div>`;
+  const scoreSec = `<div class="p-sec"><h3>How this lead scored ${r.score} of 100</h3>${pointsTable(r)}</div>`;
+  const why = `<div class="p-sec"><h3>Why it is on the list</h3><p>${esc(REASON[r.match_reason] || r.match_reason)}${r.distance_m != null ? `, ${Math.round(r.distance_m)} m from the alignment` : ""} of ${esc(pname(r.project))}${r.stage ? `, which is in ${esc(r.stage.replace(/_/g, " "))}` : ""}. Lead score ${r.score}.</p></div>`;
+  panel.innerHTML = head + `<div class="p-body">${why}${scoreSec}<div class="p-sec"><p>Loading the boundary and county record…</p></div></div>`;
+  panel.setAttribute("data-open", "");
+  let d;
+  try { d = await api(`/api/leads/${leadId}/detail`); }
+  catch (e) { if (openLead === leadId) panel.querySelector(".p-body").innerHTML = why + `<div class="p-sec"><div class="alert bad">${esc(e.message)}</div></div>`; return; }
+  if (openLead !== leadId) return;
+  const b = d.boundary, bg = d.background;
+  if (b.rings && !baseChosen) setBase("aerial");
+  drawBoundary(b);
+  const fig = (label, v) => `<div><span>${label}</span><b>${v}</b></div>`;
+  const shape = b.rings
+    ? `<div class="figs">${fig("Area", b.acres >= 0.1 ? b.acres.toFixed(2) + " ac" : Math.round(b.square_feet).toLocaleString() + " sq ft")}${fig("Square feet", Math.round(b.square_feet).toLocaleString())}${fig("Perimeter", Math.round(b.perimeter_feet).toLocaleString() + " ft")}</div>
+       <p style="margin-top:8px">Measured from the county's mapped boundary, outlined on the map with side lengths. A survey governs the legal dimensions.</p>`
+    : `<p>${esc(b.why)}</p>`;
+  const facts = bg.facts.length ? `<dl class="facts">${bg.facts.map(f => `<dt>${esc(f.label)}</dt><dd>${esc(f.value)}</dd>`).join("")}</dl>`
+    : `<p>The county's public file carries no land-use, sale or assessment detail for this parcel.</p>`;
+  const o = d.owner, proj = projects.find(x => x.id === r.project_id);
+  const row = (k, v) => v ? `<dt>${k}</dt><dd>${esc(v)}</dd>` : "";
+  const ownerSec = `<div class="p-sec"><h3>Owner of record</h3><dl class="facts">${row("Name", o.name)}${row("Type", o.kind)}${row("Mailing address", o.mailing_address)}${row("Based in", o.location)}${row("Occupancy", o.occupancy)}${row("Owned since", o.owned_since)}${row("Paid", o.purchase_price)}${row("Parcels on this list", o.parcels_in_list > 1 ? String(o.parcels_in_list) : "")}${row("Combined county value", o.parcels_in_list > 1 && o.holdings_value ? "$" + Math.round(o.holdings_value).toLocaleString() : "")}</dl>
+    <p style="margin-top:8px">${o.kind_key === "company" ? (STATIC ? "Company owners can be looked up in Apollo from the live app." : "Use Email on this row to look up decision-makers at this company in Apollo.") : o.kind_key === "government" ? "Public bodies are not offered outreach." : o.kind_key === "unknown" ? "This county does not publish owner names online. Look the parcel ID up at the county assessment office" + (SUB ? ", or use the owner lookup under Contact information." : ".") : "County parcel files publish no phone number or email. A postcard reaches the mailing address above."}</p></div>`;
+  const careOf = ((r.mailing_address || "").match(/\b(?:C\/O|ATTN:?|%)\s*([^,]+)/i) || [])[1];
+  const people = d.contacts || [];
+  const canFind = !STATIC && OUT && OUT.email.enabled && o.kind_key === "company";
+  const contactSec = `<div class="p-sec" id="p-contact"><h3>Contact information</h3><dl class="facts">${row("Mail to", o.mailing_address)}${row("Care of", careOf ? titleCase(careOf) : "")}${row("Property", r.address)}${row("Agency contact", proj && proj.contact)}${d.company && d.company.phone ? row("Company phone", d.company.phone) : ""}${d.company && d.company.website ? `<dt>Website</dt><dd><a href="${esc(safeUrl(d.company.website))}" target="_blank" rel="noopener">${esc(d.company.website.replace(/^https?:\/\/(www\.)?/, ""))}</a></dd>` : ""}</dl>
+    ${people.length ? `<ul class="contacts">${people.map(c => `<li><b>${esc(c.name || "Contact")}</b>${c.title ? " · " + esc(c.title) : ""}
+        <div class="sub">${[c.email ? `<a href="mailto:${esc(c.email)}">${esc(c.email)}</a>` : "email available in Apollo, not revealed yet", c.phone ? esc(c.phone) : "", c.linkedin ? `<a href="${esc(safeUrl(c.linkedin))}" target="_blank" rel="noopener">LinkedIn</a>` : ""].filter(Boolean).join(" · ")}</div></li>`).join("")}</ul>` : ""}
+    ${traceBlock(d, r, o)}
+    ${canFind ? `<div class="row-acts"><button class="sm" data-find-contacts="${r.id}">${people.length ? "Refresh contacts from Apollo" : "Find contacts in Apollo"}</button></div>` : ""}
+    <p style="margin-top:8px">${o.kind_key === "company" ? (people.length ? "People found at this company in Apollo. An email address appears once you add the person to a sequence." : STATIC ? "No Apollo contacts have been stored for this company yet." : OUT && OUT.email.enabled ? "No contacts looked up yet." : "Set an Apollo key to look up the people behind this company.") : o.kind_key === "individual" ? "For individual owners the public record gives a mailing address only. Phone numbers and email addresses are not in county files." : ""}</p></div>`;
+  const traced = d.skiptrace && d.skiptrace.matched && d.skiptrace.name_match ? d.skiptrace.emails[0] : "";
+  const L_ = TPL ? letterFor(r) : null, to = (people.find(c => c.email) || {}).email || traced || "";
+  const letterSec = L_ && o.kind_key !== "government" && o.kind_key !== "unknown" ? `<div class="p-sec"><h3>Outreach letter</h3>
+    <div class="letter"><b>${esc(L_.subject)}</b>\n\n${esc(L_.body)}</div>
+    <div class="row-acts"><a class="btn" href="mailto:${esc(to)}?subject=${encodeURIComponent(L_.subject)}&body=${encodeURIComponent(L_.body)}">${ICON.mail}Open as email</a>
+      <button class="sm" data-copy-letter="${r.id}">Copy</button><button class="sm" data-print-letter="${r.id}">Print letter</button>
+      ${STATIC && !SUB ? "" : `<button class="sm" data-act="postcard" data-lead="${r.id}">${ICON.card}Postcard</button>`}</div>
+    <p style="margin-top:8px">${to ? "The email opens addressed to " + esc(to) + "." : "No email address is on file, so the email opens without a recipient."} Edit the wording under Outreach template.</p></div>` : "";
+  const stageSec = proj && proj.timeline ? `<div class="p-sec"><h3>Project stage</h3>${stageHead(proj.timeline)}${stageList(proj.timeline, true)}</div>` : "";
+  const rel = d.related.length ? `<div class="p-sec"><h3>Other parcels held by this owner</h3><ul class="plain">${d.related.map(x =>
+      `<li>${esc(x.address || "Parcel " + x.apn)}<div class="sub">${[esc(x.project), "score " + x.score, x.market_value ? "$" + Math.round(x.market_value).toLocaleString() : ""].filter(Boolean).join(" · ")}</div></li>`).join("")}</ul></div>` : "";
+  const rec = bg.record.length ? `<details class="rec"><summary>Full county record (${bg.record.length} fields, ${esc(d.layer)})</summary><dl class="facts">${bg.record.map(f => `<dt>${esc(f.field)}</dt><dd>${esc(f.value)}</dd>`).join("")}</dl></details>` : "";
+  panel.querySelector(".p-body").innerHTML = why + scoreSec + ownerSec + contactSec + letterSec + stageSec +
+    `<div class="p-sec"><h3>Boundary</h3>${shape}</div><div class="p-sec"><h3>Land background</h3>${facts}</div>${rel}` +
+    `<div class="p-sec" id="p-cases"><h3>Similar cases</h3><p>Searching Pennsylvania appellate opinions…</p></div>${rec}`;
+  let c;
+  try { c = await api(`/api/leads/${leadId}/cases`); } catch (e) { c = {results: [], why: e.message, search_url: null}; }
+  if (openLead !== leadId) return;
+  const link = c.search_url ? `<a href="${esc(safeUrl(c.search_url))}" target="_blank" rel="noopener">Open this search on CourtListener</a>` : "";
+  $("p-cases").innerHTML = `<h3>Similar cases</h3>` + (c.results.length
+    ? `<ul class="plain">${c.results.map(x => `<li><a href="${esc(safeUrl(x.url))}" target="_blank" rel="noopener">${esc(x.name)}</a>
+        <div class="sub">${[esc(x.citation || ""), esc(x.court || ""), esc((x.date || "").slice(0, 4))].filter(Boolean).join(" · ")}</div>${x.snippet ? `<div class="sub">${esc(x.snippet)}</div>` : ""}</li>`).join("")}</ul>
+       <p style="margin-top:10px">Keyword matches for this kind of taking, not legal research. ${link}</p>`
+    : `<p>${esc(c.why || "No matching opinions were found.")}</p><p>${link}${c.query ? `<br>Search used: ${esc(c.query)}` : ""}</p>`);
+}
+panel.addEventListener("click", async e => {
+  if (e.target.closest("[data-close-parcel]")) return closeParcel();
+  const find = e.target.closest("[data-find-contacts]"), copy = e.target.closest("[data-copy-letter]"), print = e.target.closest("[data-print-letter]"), act = e.target.closest("[data-act]");
+  const lead = id => leadRows.find(x => x.id === +id);
+  if (act) return openPostcard(+act.dataset.lead);
+  if (print) return printLetter(lead(print.dataset.printLetter));
+  if (copy) {
+    const L_ = letterFor(lead(copy.dataset.copyLetter));
+    try { await navigator.clipboard.writeText(L_.subject + "\n\n" + L_.body); copy.textContent = "Copied"; } catch (err) { copy.textContent = "Copy failed"; }
+    setTimeout(() => { copy.textContent = "Copy"; }, 1600);
+  }
+  const tr = e.target.closest("[data-trace]");
+  if (tr) {
+    if (!tr.dataset.armed) { tr.dataset.armed = "1"; tr.textContent = `Confirm lookup (${usd(OUT.skiptrace.price)} if matched)`; tr.classList.add("primary"); return; }
+    tr.disabled = true; tr.textContent = "Looking up…";
+    try { await api(`/api/leads/${tr.dataset.trace}/skip-trace`, {method: "POST"}); if (SUB) await loadLeads(); await openParcel(+tr.dataset.trace); }
+    catch (err) { tr.disabled = false; tr.textContent = "Try again"; tr.insertAdjacentHTML("afterend", `<span class="meta">${esc(err.message)}</span>`); }
+    return;
+  }
+  if (find) {
+    find.disabled = true; find.textContent = "Searching Apollo…";
+    try { await api(`/api/leads/${find.dataset.findContacts}/email/contacts`); await openParcel(+find.dataset.findContacts); }
+    catch (err) { find.disabled = false; find.textContent = "Try again"; find.insertAdjacentHTML("afterend", `<span class="meta">${esc(err.message)}</span>`); }
+  }
+});
+document.addEventListener("keydown", e => {
+  if (e.key !== "Escape" || dlg.open) return;
+  if (openLead) closeParcel(); else if ((selected || listView) && view === "leads") showAllProjects();   // Escape steps back one level at a time
+});
+document.querySelector(".basemap").addEventListener("click", e => { const b = e.target.closest("[data-base]"); if (b) { baseChosen = true; setBase(b.dataset.base); } });
+
+/* ---- outreach dialogs ---- */
+const dlg = $("dlg");
+function fitCards() {
+  dlg.querySelectorAll(".card-frame").forEach(f => { f.firstElementChild.style.transform = `scale(${f.clientWidth / 600})`; });
+}
+async function openPostcard(leadId) {
+  const lead = leadRows.find(r => r.id === leadId);
+  dlg.innerHTML = `<div class="dlg-head"><h2 id="dlg-title">Postcard to ${esc(lead.owner)}</h2><p>Preparing the proof…</p></div>`;
+  dlg.showModal();
+  let pv;
+  try { pv = await api(`/api/leads/${leadId}/postcard`); }
+  catch (e) { dlg.innerHTML += `<div class="dlg-body"><div class="alert bad">${esc(e.message)}</div></div><div class="dlg-foot"><span class="note"></span><button value="cancel" data-close>Close</button></div>`; return; }
+  const pc = OUT.postcard, blocker = pv.blocker || (pc.enabled ? null : pc.why) || (pv.already_mailed ? "Your firm already mailed this owner a postcard on " + day(pv.already_mailed) + "." : null);
+  const to = pv.to;
+  dlg.innerHTML = `
+    <div class="dlg-head"><h2 id="dlg-title">Postcard to ${esc(lead.owner)}</h2><p>${esc(pv.project || "")}</p></div>
+    <div class="dlg-body">
+      ${blocker ? `<div class="alert bad">${esc(blocker)}</div>` : ""}
+      ${!blocker && pv.warning ? `<div class="alert">${esc(pv.warning)}</div>` : ""}
+      <dl class="to"><dt>Recipient</dt><dd>${esc(pv.to_name)}</dd>
+        <dt>Mail to</dt><dd>${to ? esc([to.line2, to.line1].filter(Boolean).join(", ")) + "<br>" + esc(`${to.city}, ${to.state} ${to.zip}`) : esc(lead.mailing_address || "No mailing address on file")}</dd></dl>
+      <div class="cards">
+        <div><div class="card-frame"><iframe title="Postcard front" sandbox="allow-same-origin" srcdoc="${esc(pv.front)}"></iframe></div><div class="cap">Front, 6 × 4 in</div></div>
+        <div><div class="card-frame"><iframe title="Postcard back" sandbox="allow-same-origin" srcdoc="${esc(pv.back)}"></iframe></div><div class="cap">Back. The address and postage print on the right half.</div></div>
+      </div>
+    </div>
+    <div class="dlg-foot"><span class="note">${pc.mode === "live" ? (SUB ? (pv.credits == null ? "This mails a real postcard." : pv.credits > 0 ? `This mails a real postcard and uses 1 of your ${pv.credits.toLocaleString()} credits. Credits are not refundable.` : "You have no postcard credits. Buy credits on the Outreach tab before sending.") : "Live mode: this mails a real postcard and bills your Lob account.")
+        : pc.mode === "test" ? "Test mode: a proof is made. Nothing is mailed or charged." : esc(pc.why || "")}</span>
+      <button data-close>Cancel</button>
+      <button class="primary" id="dlg-go" ${blocker ? "disabled" : ""}>${pc.mode === "live" ? "Mail postcard" : "Create test proof"}</button></div>`;
+  fitCards();
+  $("dlg-go").addEventListener("click", async ev => {
+    ev.target.disabled = true; ev.target.textContent = "Sending…";
+    try {
+      const res = await api(`/api/leads/${leadId}/postcard`, {method: "POST"});
+      dlg.querySelector(".dlg-body").innerHTML = `<div class="alert">${res.mode === "live" ? "Postcard queued for mailing" : "Test proof created"}${res.expected_delivery ? `, expected delivery ${esc(res.expected_delivery)}` : ""}.
+        ${res.proof_url ? `<a href="${esc(safeUrl(res.proof_url))}" target="_blank" rel="noopener">Open the proof</a>` : ""}</div>`;
+      dlg.querySelector(".dlg-foot").innerHTML = `<span class="note"></span><button data-close class="primary">Done</button>`;
+      await loadLeads();
+    } catch (e) {
+      dlg.querySelector(".dlg-body").insertAdjacentHTML("afterbegin", `<div class="alert bad">${esc(e.message)}</div>`);
+      ev.target.disabled = false; ev.target.textContent = "Try again";
+    }
+  });
+}
+async function openEmail(leadId) {
+  const lead = leadRows.find(r => r.id === leadId), em = OUT.email;
+  const head = `<div class="dlg-head"><h2 id="dlg-title">Email ${esc(lead.owner)}</h2><p>Adds one person to your Apollo sequence, sent from ${esc(em.from || "your connected mailbox")}.</p></div>`;
+  const foot = `<div class="dlg-foot"><span class="note">Searching is free. Adding a person reveals their email, which uses one Apollo credit.</span><button data-close>Close</button></div>`;
+  dlg.innerHTML = head + `<div class="dlg-body"><p class="meta">Looking for decision-makers at this owner…</p></div>` + foot;
+  dlg.showModal();
+  const body = dlg.querySelector(".dlg-body");
+  if (!em.enabled) { body.innerHTML = `<div class="alert bad">${esc(em.why)}</div>`; return; }
+  let people;
+  try { people = await api(`/api/leads/${leadId}/email/contacts`); }
+  catch (e) { body.innerHTML = `<div class="alert bad">${esc(e.message)}</div>`; return; }
+  if (!people.length) { body.innerHTML = `<div class="alert">Apollo has no contacts for this owner. A postcard will reach the mailing address on file.</div>`; return; }
+  body.innerHTML = `<ul class="people">${people.map(p => `<li><div class="who"><b>${esc(p.name)}</b><span class="meta">${esc([p.title, p.organization].filter(Boolean).join(" · "))}</span></div>
+    <button class="sm primary" data-person="${esc(p.person_id)}">Add to sequence</button></li>`).join("")}</ul>`;
+  body.addEventListener("click", async ev => {
+    const id = ev.target.dataset.person;
+    if (!id) return;
+    ev.target.disabled = true; ev.target.textContent = "Adding…";
+    try {
+      const res = await api(`/api/leads/${leadId}/email`, {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({person_id: id})});
+      body.innerHTML = `<div class="alert">${esc(res.name || "Contact")} (${esc(res.email)}) was added to the sequence.</div>`;
+      await loadLeads();
+    } catch (e) {
+      body.insertAdjacentHTML("afterbegin", `<div class="alert bad">${esc(e.message)}</div>`);
+      ev.target.disabled = false; ev.target.textContent = "Add to sequence";
+    }
+  });
+}
+/* ---- client lists: tick leads, save them to a named list, then run postcards and email for the whole list ---- */
+const jpost = (path, body, method = "POST") => api(path, {method, headers: {"Content-Type": "application/json"}, body: JSON.stringify(body || {})});
+const plural = (n, one, many) => `${n.toLocaleString()} ${n === 1 ? one : many || one + "s"}`;
+function syncPicked() {
+  const n = picked.size, all = $("pick-all");
+  $("btn-list").hidden = STATIC || !leadRows.length;
+  $("btn-list").textContent = n ? `Add ${n} to list` : "Add to list";
+  $("btn-unlist").hidden = !(listView && n);
+  if (all) { all.checked = n > 0 && n >= leadRows.length; all.indeterminate = n > 0 && n < leadRows.length; }
+}
+async function openList(id, name) {
+  selected = null; markSelected(); picked.clear(); listView = {id, name};
+  $("f-outreach").value = ""; $("f-owner").checked = false;
+  setView("leads");
+  await loadLeads();
+}
+async function openAddToList() {
+  const ids = picked.size ? [...picked] : leadRows.map(r => r.id);
+  const what = picked.size ? plural(ids.length, "selected lead") : `all ${plural(ids.length, "lead")} shown`;
+  dlg.innerHTML = `<div class="dlg-head"><h2 id="dlg-title">Add to a client list</h2><p>Saving ${what}. Tick rows in the table first to save only some of them.</p></div>
+    <div class="dlg-body"><div class="camp one" id="l-form"><p class="meta">Loading your lists…</p></div><div id="l-out"></div></div>
+    <div class="dlg-foot"><span class="note">A list can be run as one postcard and email campaign from Outreach.</span>
+      <button data-close>Cancel</button><button class="primary" id="l-go" disabled>Save to list</button></div>`;
+  dlg.showModal();
+  let lists = [];
+  try { lists = await api("/api/lists"); } catch (e) { $("l-out").innerHTML = `<div class="alert bad">${esc(e.message)}</div>`; }
+  const others = lists.filter(x => !listView || x.id !== listView.id);
+  $("l-form").innerHTML = (others.length ? `<label>List<select id="l-pick">${others.map(x => `<option value="${esc(x.name)}">${esc(x.name)} (${plural(x.owners, "owner")})</option>`).join("")}<option value="">New list…</option></select></label>` : "") +
+    `<label id="l-new"${others.length ? " hidden" : ""}>Name of the new list<input id="l-name" maxlength="80" placeholder="e.g. US 22 corridor owners" autocomplete="off"></label>`;
+  const name = () => ($("l-pick") && $("l-pick").value) || $("l-name").value.trim();
+  const sync = () => { if ($("l-pick")) $("l-new").hidden = !!$("l-pick").value; $("l-go").disabled = !name(); };
+  $("l-form").addEventListener("input", sync); sync();
+  if (!others.length) $("l-name").focus();
+  $("l-go").addEventListener("click", async ev => {
+    ev.target.disabled = true;
+    try {
+      const res = await jpost("/api/lists", {name: name(), lead_ids: ids});
+      picked.clear(); document.querySelectorAll("[data-pick]").forEach(c => c.checked = false); syncPicked();
+      $("l-form").hidden = true;
+      $("l-out").innerHTML = `<div class="alert">Saved. “${esc(res.name)}” now has ${plural(res.owners, "owner")}: ${res.postcard_ready} ready for a postcard, ${res.email_ready} ready for email.</div>`;
+      dlg.querySelector(".dlg-foot").innerHTML = `<span class="note"></span><button data-close>Keep adding</button><button class="primary" id="l-run">Run campaign</button>`;
+      $("l-run").addEventListener("click", () => openListCampaign(res));
+    } catch (e) { $("l-out").innerHTML = `<div class="alert bad">${esc(e.message)}</div>`; ev.target.disabled = false; }
+  });
+}
+async function openListCampaign(list) {
+  dlg.innerHTML = `<div class="dlg-head"><h2 id="dlg-title">Run campaign: ${esc(list.name)}</h2><p>One postcard per owner and address, and one email per company. Anyone already contacted is left out.</p></div>
+    <div class="dlg-body"><div id="c-out"><p class="meta">Checking everyone on the list…</p></div></div>
+    <div class="dlg-foot"><span class="note" id="c-note"></span><button data-close>Cancel</button><button class="primary" id="c-go" disabled>Run campaign</button></div>`;
+  if (!dlg.open) dlg.showModal();
+  let plan;
+  try { plan = await jpost(`/api/lists/${list.id}/campaign`, {dry_run: true}); }
+  catch (e) { $("c-out").innerHTML = `<div class="alert bad">${esc(e.message)}</div>`; return; }
+  const pc = plan.postcard, em = plan.email, live = pc.mode === "live";
+  const people = rows => rows.length ? `<ul class="people">${rows.slice(0, 5).map(r => `<li><div class="who"><b>${esc(r.owner)}</b><span class="meta">${esc(r.mailing_address || r.why || "")}</span></div>${r.score != null ? `<span class="score ${scoreClass(r.score)}">${r.score}</span>` : ""}</li>`).join("")}</ul>${rows.length > 5 ? `<p class="meta" style="margin:6px 0 0">and ${rows.length - 5} more.</p>` : ""}` : "";
+  const pcN = pc.recipients.length, emN = em.recipients.length;
+  $("c-out").innerHTML = `
+    <div class="chan ${pc.enabled && pcN ? "" : "off"}"><label><input type="checkbox" id="c-pc" ${pc.enabled && pcN ? "checked" : "disabled"}> Postcards: ${plural(pcN, "owner")}</label>
+      <p>${!pc.enabled ? esc(pc.why || "Postcards are off.") : !pcN ? "Nobody on this list is waiting for a postcard." : live ? `Live: ${plural(pcN, "card")} will be mailed and billed, about ${usd(pcN * OUT.rates.postcard.cost)} from Lob.` : "Test mode: Lob makes a proof of each card. Nothing is mailed or billed."}${pc.eligible > pcN ? ` The first ${pcN} of ${pc.eligible} go out in this run.` : ""}</p>${pc.enabled ? people(pc.recipients) : ""}</div>
+    <div class="chan ${em.enabled && emN ? "" : "off"}"><label><input type="checkbox" id="c-em" ${em.enabled && emN ? "checked" : "disabled"}> Email: ${plural(emN, "company", "companies")}</label>
+      <p>${!em.enabled ? esc(em.why || "Email is off.") : !emN ? "No company on this list is waiting for an email." : `The best contact at each company is added to your Apollo sequence, sent from ${esc(em.from || "your mailbox")}. Revealing each email uses one Apollo credit (${emN} in all).`}</p>${em.enabled ? people(em.recipients) : ""}</div>
+    ${plan.skipped.length ? `<details><summary class="meta">${plural(plan.skipped.length, "owner")} left out</summary>${people(plan.skipped)}</details>` : ""}`;
+  const chosen = () => ({postcards: $("c-pc").checked, email: $("c-em").checked});
+  const sync = () => {
+    const c = chosen(), n = (c.postcards ? pcN : 0) + (c.email ? emN : 0);
+    $("c-go").disabled = !n;
+    $("c-go").textContent = !n ? "Nothing to send" : c.postcards && live || c.email ? `Send to ${plural(n, "recipient")}` : `Create ${plural(n, "test proof")}`;
+    $("c-note").textContent = c.postcards && live ? "This mails real postcards. It cannot be undone." : c.email ? "Emails go out on your Apollo sequence's schedule." : "";
+  };
+  $("c-out").addEventListener("change", sync); sync();
+  $("c-go").addEventListener("click", async ev => {
+    ev.target.disabled = true; ev.target.textContent = "Running…";
+    try {
+      const res = await jpost(`/api/lists/${list.id}/campaign`, {...chosen(), dry_run: false});
+      const failed = [...res.postcard.failed, ...res.email.failed];
+      $("c-out").innerHTML = `<div class="alert">${plural(res.postcard.sent.length, res.postcard.mode === "live" ? "postcard mailed" : "test proof created", res.postcard.mode === "live" ? "postcards mailed" : "test proofs created")}, ${plural(res.email.sent.length, "email started", "emails started")}${failed.length ? `, ${failed.length} failed` : ""}.</div>${people(failed)}`;
+      dlg.querySelector(".dlg-foot").innerHTML = `<span class="note">Every item is in the Activity log under Outreach.</span><button data-close class="primary">Done</button>`;
+      if (view === "leads") loadLeads();
+    } catch (e) { $("c-out").insertAdjacentHTML("afterbegin", `<div class="alert bad">${esc(e.message)}</div>`); sync(); }
+  });
+}
+$("btn-list").addEventListener("click", openAddToList);
+$("btn-run-list").addEventListener("click", () => listView && openListCampaign(listView));
+$("btn-unlist").addEventListener("click", async () => {
+  if (!listView || !picked.size) return;
+  await jpost(`/api/lists/${listView.id}/remove`, {lead_ids: [...picked]});
+  picked.clear(); loadLeads();
+});
+
+async function openCampaign() {
+  const pc = OUT.postcard, scope = selected ? selected.name : $("f-county").value ? $("f-county").selectedOptions[0].text + " County" : "all projects";
+  dlg.innerHTML = `<div class="dlg-head"><h2 id="dlg-title">Postcard campaign</h2><p>One card per owner and mailing address, highest score first, for ${esc(scope)}.</p></div>
+    <div class="dlg-body">
+      <div class="camp"><label>Minimum lead score<input id="c-min" type="number" min="0" max="100" value="90"></label>
+        <label>Most cards to mail<input id="c-max" type="number" min="1" max="200" value="25"></label></div>
+      <div id="c-out"><p class="meta">Checking who is eligible…</p></div>
+    </div>
+    <div class="dlg-foot"><span class="note">${pc.mode === "live" ? "Live mode: this mails real postcards and bills your Lob account, about $1 a card."
+        : pc.mode === "test" ? "Test mode: Lob renders proofs. Nothing is mailed or billed." : esc(pc.why || "")}</span>
+      <button data-close>Cancel</button><button class="primary" id="c-go" disabled>Mail postcards</button></div>`;
+  dlg.showModal();
+  const body = () => ({min_score: +$("c-min").value || 0, limit: Math.max(1, Math.min(200, +$("c-max").value || 1)),
+                       project_id: selected ? selected.id : null, county: selected ? null : $("f-county").value || null});
+  let ticket = 0;
+  const preview = async () => {
+    const mine = ++ticket;
+    $("c-go").disabled = true;
+    let res;
+    try { res = await api("/api/postcards/campaign", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({...body(), dry_run: true})}); }
+    catch (e) { if (mine === ticket) $("c-out").innerHTML = `<div class="alert bad">${esc(e.message)}</div>`; return; }
+    if (mine !== ticket) return;
+    const n = res.eligible;
+    $("c-out").innerHTML = n ? `<p class="meta">${n} owner${n === 1 ? "" : "s"} would be mailed. Owners already mailed, public bodies and unreadable addresses are left out.</p>
+      <ul class="people">${res.recipients.slice(0, 8).map(r => `<li><div class="who"><b>${esc(r.owner)}</b><span class="meta">${esc(r.mailing_address)}</span></div><span class="score ${scoreClass(r.score)}">${r.score}</span></li>`).join("")}</ul>
+      ${n > 8 ? `<p class="meta" style="margin-top:8px">and ${n - 8} more.</p>` : ""}`
+      : `<div class="alert">No owners qualify at this score. Lower the minimum score or pick another project.</div>`;
+    $("c-go").textContent = pc.mode === "live" ? `Mail ${n} postcard${n === 1 ? "" : "s"}` : `Create ${n} test proof${n === 1 ? "" : "s"}`;
+    $("c-go").disabled = !n || !pc.enabled;
+  };
+  let t; for (const id of ["c-min", "c-max"]) $(id).addEventListener("input", () => { clearTimeout(t); t = setTimeout(preview, 300); });
+  $("c-go").addEventListener("click", async ev => {
+    ev.target.disabled = true; ev.target.textContent = "Sending…";
+    try {
+      const res = await api("/api/postcards/campaign", {method: "POST", headers: {"Content-Type": "application/json"}, body: JSON.stringify({...body(), dry_run: false})});
+      $("c-out").innerHTML = `<div class="alert">${res.sent.length} ${res.mode === "live" ? "postcard" : "test proof"}${res.sent.length === 1 ? "" : "s"} sent${res.failed.length ? `, ${res.failed.length} failed` : ""}.</div>` +
+        (res.failed.length ? `<ul class="people">${res.failed.map(f => `<li><div class="who"><b>${esc(f.owner)}</b><span class="meta">${esc(f.why)}</span></div></li>`).join("")}</ul>` : "");
+      dlg.querySelector(".dlg-foot").innerHTML = `<span class="note"></span><button data-close class="primary">Done</button>`;
+      await loadLeads();
+    } catch (e) { $("c-out").insertAdjacentHTML("afterbegin", `<div class="alert bad">${esc(e.message)}</div>`); preview(); }
+  });
+  preview();
+}
+dlg.addEventListener("click", e => { if (e.target === dlg || e.target.closest("[data-close]")) dlg.close(); });
+addEventListener("resize", () => dlg.open && fitCards());
+
+/* ---- info tips: delayed for the first, instant while moving between them; open on hover, focus and tap ---- */
+const tip = $("tip");
+let tipTimer, tipWarm = 0, tipFor = null;
+function tipContent(el) {
+  if (el.dataset.tipKey) return esc(TIPS[el.dataset.tipKey] || "");
+  if (el.dataset.tipText) return esc(el.dataset.tipText);
+  if (el.dataset.tipProject) { const p = projects.find(x => x.id === +el.dataset.tipProject); return p ? projectTip(p) : ""; }
+  if (el.dataset.tipLead) { const r = leadRows.find(x => x.id === +el.dataset.tipLead); return r ? leadTip(r) : ""; }
+  return "";
+}
+function showTip(el, instant) {
+  clearTimeout(tipTimer);
+  const open = () => {
+    const html = tipContent(el);
+    if (!html) return;
+    tip.innerHTML = html; tipFor = el;
+    const r = el.getBoundingClientRect(), w = tip.offsetWidth, h = tip.offsetHeight;
+    const left = Math.max(8, Math.min(innerWidth - w - 8, r.left + r.width / 2 - w / 2));
+    const below = r.bottom + 8 + h < innerHeight;
+    tip.style.left = left + "px";
+    tip.style.top = (below ? r.bottom + 8 : r.top - h - 8) + "px";
+    tip.style.transformOrigin = `${r.left + r.width / 2 - left}px ${below ? "top" : "bottom"}`;
+    tip.toggleAttribute("data-instant", Date.now() - tipWarm < 400);
+    tip.setAttribute("data-show", "");
+  };
+  instant || Date.now() - tipWarm < 400 ? open() : (tipTimer = setTimeout(open, 250));
+}
+function hideTip() { clearTimeout(tipTimer); if (tip.hasAttribute("data-show")) tipWarm = Date.now(); tip.removeAttribute("data-show"); tipFor = null; }
+const tipTarget = e => e.target.closest && e.target.closest("[data-tip-key],[data-tip-project],[data-tip-lead],[data-tip-text]");
+document.addEventListener("mouseover", e => { const el = tipTarget(e); if (el && el !== tipFor) showTip(el); });
+document.addEventListener("mouseout", e => { const el = tipTarget(e); if (el && !el.contains(e.relatedTarget)) hideTip(); });
+document.addEventListener("focusin", e => { const el = tipTarget(e); if (el) showTip(el, true); });
+document.addEventListener("focusout", hideTip);
+document.addEventListener("click", e => {
+  const el = e.target.closest && e.target.closest("[data-tip-key]");
+  if (el) { e.stopPropagation(); tipFor === el && tip.hasAttribute("data-show") ? hideTip() : showTip(el, true); } else hideTip();
+}, true);
+document.addEventListener("keydown", e => { if (e.key === "Escape") hideTip(); });
+document.addEventListener("scroll", hideTip, true);
+
+/* ---- events ---- */
+function showAllProjects() {
+  if (!selected && !listView) return;
+  selected = null; listView = null; picked.clear(); markSelected(); closeParcel();
+  reduceMotion ? map.fitBounds(HOME, {animate: false}) : map.flyToBounds(HOME, {duration: 0.45, easeLinearity: 0.3});
+  loadLeads();
+}
+$("projects").addEventListener("click", e => {
+  const el = e.target.closest(".proj");
+  if (!el) return;
+  if (phone.matches) setPane("leads");          // picking a project shows its parcels
+  selected && selected.id === +el.dataset.id ? showAllProjects() : select(+el.dataset.id);   // clicking the open project closes it
+});
+$("projects").addEventListener("keydown", e => {
+  if (e.key !== "Enter" && e.key !== " ") return;
+  const el = e.target.closest(".proj");
+  if (el) { e.preventDefault(); select(+el.dataset.id, true, false); }
+});
+$("leads-wrap").addEventListener("change", e => {
+  if (e.target.id === "pick-all") { for (const r of leadRows) e.target.checked ? picked.add(r.id) : picked.delete(r.id); document.querySelectorAll("[data-pick]").forEach(c => c.checked = e.target.checked); syncPicked(); }
+  else if (e.target.dataset.pick) { e.target.checked ? picked.add(+e.target.dataset.pick) : picked.delete(+e.target.dataset.pick); syncPicked(); }
+});
+$("leads-wrap").addEventListener("change", async e => {
+  const id = e.target.dataset.status;
+  if (id) await api("/api/leads/" + id, {method: "PATCH", headers: {"Content-Type": "application/json"}, body: JSON.stringify({status: e.target.value})});
+});
+$("leads-wrap").addEventListener("click", e => {
+  const link = e.target.closest("[data-project]"), act = e.target.closest("[data-act]");
+  if (link) { e.preventDefault(); select(+link.dataset.project, false); }
+  if (act) (act.dataset.act === "postcard" ? openPostcard : openEmail)(+act.dataset.lead);
+  const row = e.target.closest("tr[data-row]");
+  if (row && !link && !act && !e.target.closest("select, button, a, .pick")) openParcel(+row.dataset.row);
+});
+$("leads-wrap").addEventListener("keydown", e => {
+  if (e.key === "Enter" && e.target.matches("tr[data-row]")) openParcel(+e.target.dataset.row);
+});
+$("btn-all").addEventListener("click", showAllProjects);
+$("btn-csv").addEventListener("click", () => {
+  if (STATIC) downloadCsv(staticLeads(leadParams())); else location.href = "/api/leads.csv?" + leadParams();
+});
+$("f-owner").addEventListener("change", loadLeads);
+$("f-outreach").addEventListener("change", loadLeads);
+$("btn-campaign").addEventListener("click", openCampaign);
+$("btn-template").addEventListener("click", openTemplate);
+$("btn-usage").addEventListener("click", openUsage);
+let timer;
+for (const id of ["f-county", "f-type", "f-source", "f-stage", "f-score", "f-q"])
+  $(id).addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(async () => { await loadProjects(); await loadLeads(); }, 250); });
+
+(async () => {
+  skeleton();
+  const s = await api("/api/stats" + (LIVE_STATE ? "?state=" + LIVE_STATE : ""));
+  STATUSES = s.statuses; TOTAL_LEADS = s.leads;
+  if (!STATIC && (s.states || []).length > 1) {          // more than one state is loaded: offer the choice
+    const pick = $("f-state");
+    pick.innerHTML = '<option value="">All states</option>' + s.states.map(x => `<option value="${x.code}"${x.code === LIVE_STATE ? " selected" : ""}>${esc(x.name)} (${x.projects.toLocaleString()})</option>`).join("");
+    pick.hidden = false;
+    pick.onchange = () => { const u = new URL(location.href); pick.value ? u.searchParams.set("state", pick.value) : u.searchParams.delete("state"); u.searchParams.delete("project"); u.searchParams.delete("lead"); location.href = u; };
+  }
+  if (s.updated) $("st-updated").textContent = "Data from " + day(s.updated);
+  $("st-projects").textContent = s.projects.toLocaleString();
+  $("st-leads").textContent = s.leads.toLocaleString();
+  $("st-owners").textContent = s.leads_with_owner.toLocaleString();
+  const mode = $("mode");
+  if (window.ET_TOKEN) window.ET_TOKEN.then(t => { $("adminlink").hidden = !t.admin; });      // the administrator's figures live on their own page
+  if (window.ET_TOKEN) $("acct").hidden = false;      // signed-in firms on the published site: plan, billing, sign out
+  if (SUB) {
+    OUT = await api("/api/outreach/status");
+    mode.textContent = `Data from ${s.generated || "an earlier run"}` + (OUT.postcard.mode === "live" ? " · Postcards on" : OUT.postcard.mode === "test" ? " · Postcards in test mode" : "");
+    mode.hidden = false;
+  } else if (STATIC) { mode.textContent = `Snapshot of ${s.generated || "an earlier run"}, read-only`; mode.hidden = false; }
+  else {
+    OUT = await api("/api/outreach/status");
+    mode.textContent = "Postcards: " + ({live: "live", test: "test mode", off: "off"}[OUT.postcard.mode]) + " · Email: " + (OUT.email.enabled ? "on" : "off");
+    if (OUT.postcard.mode === "live") mode.dataset.live = "";
+    $("btn-campaign").hidden = false;
+    $("views").hidden = false;
+    mode.hidden = false;
+  }
+  TPL = await api("/api/outreach/template");
+  $("views").hidden = false;
+  const title = c => c[0] + c.slice(1).toLowerCase();
+  $("f-county").insertAdjacentHTML("beforeend", s.counties.map(c => `<option value="${esc(c)}">${esc(title(c))}</option>`).join(""));
+  $("f-type").insertAdjacentHTML("beforeend", s.types.map(c => `<option>${esc(c)}</option>`).join(""));
+  $("f-stage").insertAdjacentHTML("beforeend", `<optgroup label="When to contact owners"><option value="@mail">Right time or approaching</option><option value="@now">Right time: acquisition under way</option><option value="@closing">Act now: final acquisition</option><option value="@soon">Approaching: in design</option><option value="@early">Too early</option><option value="@late">Too late</option><option value="@unknown">Timing not known</option></optgroup><optgroup label="By stage">` + (s.stages || []).map((x, i) => `<option value="${esc(x.key)}">${i + 1}. ${esc(x.label)} (${x.projects})</option>`).join("") + "</optgroup>");
+  await loadProjects();
+  await loadLeads();
+  const want = new URLSearchParams(location.search);       // links can open the hub, a project or a parcel directly
+  if (want.get("view") === "hub") setView("hub");
+  else if (want.get("project")) { await select(+want.get("project"), true, false); if (want.get("lead")) openParcel(+want.get("lead")); }
+})().catch(e => { $("leads-wrap").innerHTML = `<div class="empty">The data could not be loaded: ${esc(e.message)}. Reload the page to try again.</div>`; });
+</script>
+</body>
+</html>
